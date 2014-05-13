@@ -1,0 +1,107 @@
+/*******************************************************************************
+ * Copyright (c) 2014 SRCC MSU
+ * 
+ * Distributed under the MIT License - see the accompanying file LICENSE.txt.
+ ******************************************************************************/
+
+package main.java.ru.parallel.octotron.utils;
+
+import java.util.List;
+
+import main.java.ru.parallel.octotron.core.OctoLink;
+import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
+import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+
+/**
+ * implements list container for entities<br>
+ * allows to filter entities basing on attributes
+ * and obtain list of attributes<br>
+ * only filtering for now, to be honest..<br>
+ * */
+public class LinkList extends AbsEntityList<OctoLink>
+{
+	public LinkList(List<OctoLink> list)
+	{
+		super(list);
+	}
+
+	public LinkList()
+	{
+		super();
+	}
+
+	public LinkList append(LinkList list2)
+	{
+		InnerAppend(list2.list);
+		return this;
+	}
+
+	public LinkList range(int from, int to)
+	{
+		return new LinkList(InnerRange(from, to));
+	}
+
+	public LinkList ranges(int... ranges)
+		throws ExceptionModelFail
+	{
+		return new LinkList(InnerRanges(ranges));
+	}
+
+	public LinkList Filter(SimpleAttribute att, EQueryType type)
+		throws ExceptionModelFail
+	{
+		return new LinkList(InnerFilter(att.GetName(), att.GetValue(), type));
+	}
+
+	public LinkList Filter(String name, Object value, EQueryType type)
+		throws ExceptionModelFail
+	{
+		return new LinkList(InnerFilter(name, value, type));
+	}
+
+	public LinkList Filter(SimpleAttribute att)
+		throws ExceptionModelFail
+	{
+		return new LinkList(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
+	}
+
+	public LinkList Filter(String name, Object value)
+		throws ExceptionModelFail
+	{
+		return new LinkList(InnerFilter(name, value, EQueryType.EQ));
+	}
+
+	public LinkList Filter(String name)
+		throws ExceptionModelFail
+	{
+		return new LinkList(InnerFilter(name));
+	}
+
+	public LinkList Uniq()
+	{
+		LinkList new_list = new LinkList(InnerUniq());
+		return new_list;
+	}
+
+	public ObjectList Target()
+		throws ExceptionModelFail
+	{
+		ObjectList new_list = new ObjectList();
+
+		for(OctoLink link : list)
+			new_list.add(link.Target());
+
+		return new_list;
+	}
+
+	public ObjectList Source()
+		throws ExceptionModelFail
+	{
+		ObjectList new_list = new ObjectList();
+
+		for(OctoLink link : list)
+			new_list.add(link.Source());
+
+		return new_list;
+	}
+}

@@ -6,6 +6,8 @@
 
 package main.java.ru.parallel.octotron.exec;
 
+import java.io.File;
+
 import main.java.ru.parallel.octotron.core.GraphService;
 import main.java.ru.parallel.octotron.impl.PersistenStorage;
 import main.java.ru.parallel.octotron.logic.ExecutionControler;
@@ -215,11 +217,13 @@ public class StartOctotron
 
 		System.err.println(error);
 
-		String error_file = "crash_" + JavaUtils.GetDate() + "_" + JavaUtils.GetTimestamp() + "_" + suffix + ".txt";
+		File error_file = new File("crash_" + JavaUtils.GetDate()
+			+ "_" + JavaUtils.GetTimestamp() + "_" + suffix + ".txt");
+		String error_fname = error_file.getAbsolutePath();
 
 		try
 		{
-			FileUtils.SaveToFile(error_file, error);
+			FileUtils.SaveToFile(error_fname, error);
 		}
 		catch (Exception e) // giving up now - exception during exception processing..
 		{
@@ -231,7 +235,7 @@ public class StartOctotron
 			String script = settings.GetScriptByKey("on_crash");
 
 			if(script != null)
-				FileUtils.ExecSilent(true, script, error_file);
+				FileUtils.ExecSilent(true, script, error_fname);
 		}
 		catch (ExceptionSystemError e) // giving up now - exception during exception processing..
 		{

@@ -41,7 +41,7 @@ public class AttributeProcessor
 		{
 			OctoObject obj = sensor.Resolve(graph_service);
 
-			if(obj.UpdateAttribute(sensor.GetValue()))
+			if(obj.UpdateAttribute(sensor.GetValue(), true))
 				changed.add(obj);
 		}
 

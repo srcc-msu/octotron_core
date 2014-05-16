@@ -51,14 +51,14 @@ public abstract class OctoEntity
 		return uid;
 	}
 
-	public boolean UpdateAttribute(SimpleAttribute att)
+	public boolean UpdateAttribute(SimpleAttribute att, boolean allow_overwrite)
 	{
-		return UpdateAttribute(att.GetName(), att.GetValue());
+		return UpdateAttribute(att.GetName(), att.GetValue(), allow_overwrite);
 	}
 
-	public boolean UpdateAttribute(String name, Object value)
+	public boolean UpdateAttribute(String name, Object value, boolean allow_overwrite)
 	{
-		return GetAttribute(name).Update(value);
+		return GetAttribute(name).Update(value, allow_overwrite);
 	}
 
 	public OctoAttribute GetAttribute(String name)

@@ -25,7 +25,7 @@ public class LocalErrors extends OctoRule
 	@Override
 	public EDependencyType GetDeps()
 	{
-		return EDependencyType.ALL;
+		return EDependencyType.SELF;
 	}
 
 	@Override

@@ -16,8 +16,7 @@ import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
  * */
 public interface ISensorData
 {
-	SimpleAttribute GetValue()
-		throws ExceptionModelFail;
+	SimpleAttribute GetValue();
 
 	OctoObject Resolve(GraphService graph_service);
 

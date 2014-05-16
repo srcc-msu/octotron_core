@@ -260,7 +260,7 @@ public class ExecutionControler
 		{
 			for(OctoAttribute attr : obj.GetAttributes())
 			{
-				long diff = cur_time - attr.GetTime();
+				long diff = cur_time - attr.GetATime();
 
 				if(diff > interval)
 				{

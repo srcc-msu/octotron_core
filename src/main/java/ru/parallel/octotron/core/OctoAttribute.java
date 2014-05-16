@@ -19,7 +19,8 @@ import main.java.ru.parallel.utils.JavaUtils;
 public class OctoAttribute extends SimpleAttribute
 {
 	private final GraphService graph_service;
-	private long change_time;
+	private long ctime = 0;
+	private long atime = 0;
 
 	OctoAttribute(GraphService graph_service, OctoEntity parent, String name, Object value)
 	{
@@ -27,10 +28,11 @@ public class OctoAttribute extends SimpleAttribute
 
 		this.graph_service = graph_service;
 
-		change_time = 0;
+		if(graph_service.TestMeta(parent, name, OctoAttribute.CTIME))
+			ctime = (Long)graph_service.GetMeta(parent, name, OctoAttribute.CTIME);
 
-		if(graph_service.TestMeta(parent, name, OctoAttribute.TIME_PREFIX))
-			change_time = (Long)graph_service.GetMeta(parent, name, OctoAttribute.TIME_PREFIX);
+		if(graph_service.TestMeta(parent, name, OctoAttribute.ATIME))
+			atime = (Long)graph_service.GetMeta(parent, name, OctoAttribute.ATIME);
 	}
 
 	private void CheckTypes(Object a_value)
@@ -55,58 +57,93 @@ public class OctoAttribute extends SimpleAttribute
 		}
 	}
 
-	private static final String TIME_PREFIX = "time";
-	private static final String LAST_PREFIX = "last";
-	private static final String LASTTIME_PREFIX = "lasttime";
+	private static final String ATIME = "atime";
+	private static final String CTIME = "ctime";
+	private static final String LAST_VAL = "last_val";
+	private static final String LAST_CTIME = "last_ctime";
 
 	public long GetTime()
 	{
-		return change_time;
+		return ctime;
+	}
+
+	public long GetATime()
+	{
+		return atime;
 	}
 
 	public double GetSpeed()
 	{
-		if(!graph_service.TestMeta(parent, name, OctoAttribute.LAST_PREFIX))
+		if(!graph_service.TestMeta(parent, name, OctoAttribute.LAST_VAL))
 			return 0.0;
-		if(!graph_service.TestMeta(parent, name, OctoAttribute.LASTTIME_PREFIX))
+		if(!graph_service.TestMeta(parent, name, OctoAttribute.LAST_CTIME))
 			return 0.0;
 
-		Object last_val = graph_service.GetMeta(parent, name, OctoAttribute.LAST_PREFIX);
-		long last_time = (Long)graph_service.GetMeta(parent, name, OctoAttribute.LASTTIME_PREFIX);
+		Object last_val = graph_service.GetMeta(parent, name, OctoAttribute.LAST_VAL);
+		long last_time = (Long)graph_service.GetMeta(parent, name, OctoAttribute.LAST_CTIME);
 
 		Class<?> my_class = value.getClass(); 
 
 		if(my_class.equals(Double.class))
 		{
 			Double diff = (Double)value - (Double)last_val;
-			return diff / (change_time - last_time);
+			return diff / (ctime - last_time);
 		}
 		else if(my_class.equals(Long.class))
 		{
 			Long diff = (Long)value - (Long)last_val;
-			return diff.doubleValue() / (change_time - last_time);
+			return diff.doubleValue() / (ctime - last_time);
 		}
 		else
 			throw new ExceptionModelFail("bad value type type for approximate comparison");
 	}
 
-	public Boolean Update(Object new_value)
+	private void RotateValue(Object new_value, long cur_time)
+	{
+		graph_service.SetMeta(parent, name, OctoAttribute.LAST_VAL, value);
+		graph_service.SetMeta(parent, name, OctoAttribute.LAST_CTIME, GetTime());
+
+		value = new_value;
+		ctime = cur_time;
+
+		graph_service.SetAttribute(parent, name, value);
+		graph_service.SetMeta(parent, name, OctoAttribute.CTIME, cur_time);
+	}
+
+	private void Touch(long cur_time)
+	{
+		graph_service.SetMeta(parent, name, OctoAttribute.ATIME, cur_time);
+		atime = cur_time;
+	}
+
+/**
+ * update the value if it has changed or has not been initialized</br>
+ * if allow_overwrite is true - update the time even if the value is the same</br>
+ * the flag is needed to prevent rule attribute chains from updating every second</br>
+ * that would be correct, but too slow</br>
+ * */
+	public Boolean Update(Object new_value, boolean allow_overwrite)
 	{
 		new_value = SimpleAttribute.ConformType(new_value);
 		CheckTypes(new_value);
 
+		long cur_time = JavaUtils.GetTimestamp();
+		Touch(cur_time);
+
+// if got a new value, or was not initialized
 		if(ne(new_value) || GetTime() == 0)
 		{
-			graph_service.SetMeta(parent, name, OctoAttribute.LAST_PREFIX, value);
-			graph_service.SetMeta(parent, name, OctoAttribute.LASTTIME_PREFIX, GetTime());
-
-			value = new_value;
-
-			graph_service.SetAttribute(parent, name, value);
-			graph_service.SetMeta(parent, name, OctoAttribute.TIME_PREFIX, JavaUtils.GetTimestamp());
-
+			RotateValue(new_value, cur_time);
 			return true;
 		}
+
+// this branch is used for sensor update strategy
+		if(allow_overwrite)
+			if(cur_time - GetTime() > 0)
+			{
+				RotateValue(new_value, cur_time);
+				return true;
+			}
 
 		return false;
 	}
@@ -228,7 +265,7 @@ public class OctoAttribute extends SimpleAttribute
 
 	public boolean IsValid()
 	{
-		return graph_service.TestMeta(parent, name, OctoAttribute.INVALID_KEY);
+		return !graph_service.TestMeta(parent, name, OctoAttribute.INVALID_KEY);
 	}
 
 	public void SetValid()

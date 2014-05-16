@@ -26,8 +26,8 @@ public class RuleProcessor
 	 * */
 	public ObjectList Process(ObjectList changed)
 	{
-		ObjectList in_n = changed.GetInNeighbors();
-		ObjectList out_n = changed.GetOutNeighbors();
+		ObjectList in_n = changed.GetInNeighbors().Uniq();
+		ObjectList out_n = changed.GetOutNeighbors().Uniq();
 
 		ObjectList comp_changed = new ObjectList();
 
@@ -38,17 +38,17 @@ public class RuleProcessor
 				comp_changed.add(obj);
 		}
 
-// in_n, in depends
+// in_n, for them we are 'out'
 		for(OctoObject obj : in_n)
 		{
-			if(obj.Update(EDependencyType.IN))
+			if(obj.Update(EDependencyType.OUT))
 				comp_changed.add(obj);
 		}
 
-// out_n, out depends
+// out_n, for them we are 'in'
 		for(OctoObject obj : out_n)
 		{
-			if(obj.Update(EDependencyType.OUT))
+			if(obj.Update(EDependencyType.IN))
 				comp_changed.add(obj);
 		}
 

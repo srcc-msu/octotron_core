@@ -27,7 +27,7 @@ public class AggregateMatch extends OctoRule
 	@Override
 	public EDependencyType GetDeps()
 	{
-		return EDependencyType.ALL;
+		return EDependencyType.OUT;
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public final class TimerProcessor
 
 			if(cur_time - set_time > timer.GetLong())
 			{
-				timer.Update(0);
+				timer.Update(0, true);
 				timers_timed_out.add(timer);
 
 				it.remove();

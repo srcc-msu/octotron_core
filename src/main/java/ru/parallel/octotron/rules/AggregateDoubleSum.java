@@ -25,7 +25,7 @@ public class AggregateDoubleSum extends OctoRule
 	@Override
 	public EDependencyType GetDeps()
 	{
-		return EDependencyType.ALL;
+		return EDependencyType.OUT;
 	}
 
 	@Override

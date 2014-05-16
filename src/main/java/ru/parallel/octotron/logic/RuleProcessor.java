@@ -6,7 +6,7 @@
 
 package main.java.ru.parallel.octotron.logic;
 
-import main.java.ru.parallel.octotron.core.*;
+import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.primitive.EDependencyType;
 import main.java.ru.parallel.octotron.utils.ObjectList;
 
@@ -16,7 +16,6 @@ import main.java.ru.parallel.octotron.utils.ObjectList;
  * */
 public class RuleProcessor
 {
-	public RuleProcessor() {}
 
 	/**
 	 * get all nearest neighbors for changed attributes<br>

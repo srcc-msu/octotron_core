@@ -14,8 +14,8 @@ import main.java.ru.parallel.octotron.primitive.EDependencyType;
 public class AggregateNotMatch extends OctoRule
 {
 	private static final long serialVersionUID = -1961148475047706792L;
-	private String detect_str;
-	private Object match;
+	private final String detect_str;
+	private final Object match;
 
 	public AggregateNotMatch(String attr, String detect_str, Object match)
 	{

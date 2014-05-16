@@ -28,26 +28,27 @@ public abstract class PathOperations
 	enum CHAIN_TYPE
 	{
 		E_START, E_OBJ_LIST, E_LINK_LIST, E_MATCH, E_ANY
-	};
+	}
 
 	private interface ITransform
 	{
-		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
-			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
+		AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+				, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
 				throws ExceptionParseError;
-	};
+	}
 
-/**
+	/**
  * contains information about tokens: types and transformation<br>
  * can be constructed from another token with additional params<br>
  * */
 	public static class PathToken
 	{
-		private String name;
+		private final String name;
 
-		private CHAIN_TYPE in, out;
+		private final CHAIN_TYPE in;
+		private final CHAIN_TYPE out;
 
-		private ITransform transform;
+		private final ITransform transform;
 		private List<Pair<SimpleAttribute, EQueryType>> params = null;
 
 		public final String GetName()
@@ -81,9 +82,7 @@ public abstract class PathOperations
 			this.transform = transform;
 		}
 
-		public PathToken(PathToken token, List<Pair<SimpleAttribute, EQueryType>> params)
-			throws ExceptionParseError
-		{
+		public PathToken(PathToken token, List<Pair<SimpleAttribute, EQueryType>> params) {
 			this.name = token.name;
 			this.in = token.in;
 			this.out = token.out;

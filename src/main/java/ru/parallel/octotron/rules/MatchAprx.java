@@ -14,9 +14,9 @@ import main.java.ru.parallel.octotron.primitive.EDependencyType;
 public class MatchAprx extends OctoRule
 {
 	private static final long serialVersionUID = -665317574895287470L;
-	private String param;
-	private Object match_value;
-	private Object aprx;
+	private final String param;
+	private final Object match_value;
+	private final Object aprx;
 
 	public MatchAprx(String attr, String param, Object match_value, Object aprx)
 	{

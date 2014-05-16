@@ -25,16 +25,16 @@ import main.java.ru.parallel.utils.FileUtils;
 
 public class PreparedResponse
 {
-	private static char ARG_CHAR = '$';
+	private static final char ARG_CHAR = '$';
 
-	private OctoResponse response;
+	private final OctoResponse response;
 
-	private List<String[]> composed_commands = new LinkedList<String[]>();
+	private final List<String[]> composed_commands = new LinkedList<String[]>();
 
 	private String attribute_values;
 	private String parent_attribute_values;
 
-	private long timestamp;
+	private final long timestamp;
 
 	public PreparedResponse(OctoResponse response, OctoEntity entity, long timestamp)
 	{
@@ -121,7 +121,7 @@ public class PreparedResponse
 
 			for(int i = 0; i < command.length; i++)
 			{
-				if(command[i].length() > 1 && command[i].charAt(0) == ARG_CHAR)
+				if(command[i].length() > 1 && command[i].charAt(0) == PreparedResponse.ARG_CHAR)
 					composed_command[i] = entity.GetAttribute(command[i].substring(1)).GetValue().toString();
 				else
 					composed_command[i] = command[i];

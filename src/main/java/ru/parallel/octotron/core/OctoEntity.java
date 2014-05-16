@@ -23,13 +23,13 @@ public abstract class OctoEntity
 /**
  * graph that stores this entity<br>
  * */
-	protected GraphService graph_service;
+	protected final GraphService graph_service;
 
 /**
  * unique identifier of the entity<br>
  * needed to access it from the \graph<br>
  * */
-	private Uid uid;
+	private final Uid uid;
 
 	public OctoEntity(GraphService graph_service)
 	{

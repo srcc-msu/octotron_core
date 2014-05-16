@@ -56,7 +56,6 @@ public abstract class AbsAttributeList<T extends SimpleAttribute> implements Ite
 
 	protected List<T> InnerRange(int from, int to)
 	{
-		List<T> new_list = list.subList(from, to);
-		return new_list;
+		return list.subList(from, to);
 	}
 }

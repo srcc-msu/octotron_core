@@ -21,26 +21,26 @@ public class TestAutoList extends Assert
 	{
 		try
 		{
-			graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
-			graph_service = new GraphService(graph);
+			TestAutoList.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+			TestAutoList.graph_service = new GraphService(TestAutoList.graph);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
 	@AfterClass
 	public static void Delete()
 	{
-		graph.Shutdown();
+		TestAutoList.graph.Shutdown();
 		try
 		{
-			graph.Delete();
+			TestAutoList.graph.Delete();
 		}
 		catch (ExceptionSystemError e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -49,21 +49,21 @@ public class TestAutoList extends Assert
 	{
 		ObjectList list = new ObjectList();
 
-		assertEquals("list is not empty", list.size(), 0);
+		Assert.assertEquals("list is not empty", list.size(), 0);
 
-		list.add(graph_service.AddObject());
-		assertEquals("list has no elements", list.size(), 1);
+		list.add(TestAutoList.graph_service.AddObject());
+		Assert.assertEquals("list has no elements", list.size(), 1);
 
-		list.add(graph_service.AddObject());
-		assertEquals("list has not get 2nd element", list.size(), 2);
+		list.add(TestAutoList.graph_service.AddObject());
+		Assert.assertEquals("list has not get 2nd element", list.size(), 2);
 
 		try
 		{
-			assertNotNull("add not worked correctly", list.get(0));
+			Assert.assertNotNull("add not worked correctly", list.get(0));
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -72,19 +72,19 @@ public class TestAutoList extends Assert
 	{
 		ObjectList list = new ObjectList();
 
-		list.add(graph_service.AddObject());
-		list.add(graph_service.AddObject());
-		list.add(graph_service.AddObject());
+		list.add(TestAutoList.graph_service.AddObject());
+		list.add(TestAutoList.graph_service.AddObject());
+		list.add(TestAutoList.graph_service.AddObject());
 
 		try
 		{
-			assertNotNull("got something wrong", list.get(0));
-			assertNotNull("got something wrong", list.get(1));
-			assertNotNull("got something wrong", list.get(2));
+			Assert.assertNotNull("got something wrong", list.get(0));
+			Assert.assertNotNull("got something wrong", list.get(1));
+			Assert.assertNotNull("got something wrong", list.get(2));
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -96,21 +96,20 @@ public class TestAutoList extends Assert
 		int N = 10;
 
 		for(int i = 0; i < N; i++)
-			list.add(graph_service.AddObject());
+			list.add(TestAutoList.graph_service.AddObject());
 
 		try
 		{
 			int i = 0;
 
 			for(OctoObject obj : list)
-				if(obj != null)
-					i++;
+				i++;
 
-			assertEquals("got something wrong", N, i);
+			Assert.assertEquals("got something wrong", N, i);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -123,8 +122,8 @@ public class TestAutoList extends Assert
 
 		for(int i = 0; i < N; i++)
 		{
-			list.add(graph_service.AddObject());
-			assertEquals("got something wrong", list.size(), i + 1);
+			list.add(TestAutoList.graph_service.AddObject());
+			Assert.assertEquals("got something wrong", list.size(), i + 1);
 		}
 	}
 
@@ -138,12 +137,12 @@ public class TestAutoList extends Assert
 
 		for(int i = 0; i < N; i++)
 		{
-			list1.add(graph_service.AddObject());
-			list2.add(graph_service.AddObject());
+			list1.add(TestAutoList.graph_service.AddObject());
+			list2.add(TestAutoList.graph_service.AddObject());
 		}
 
 		list1.append(list2);
 
-		assertEquals("got something wrong", list1.size(), N * 2);
+		Assert.assertEquals("got something wrong", list1.size(), N * 2);
 	}
 }

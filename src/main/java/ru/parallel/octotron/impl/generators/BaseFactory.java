@@ -23,15 +23,15 @@ import main.java.ru.parallel.utils.JavaUtils;
  * */
 public abstract class BaseFactory<T>
 {
-	protected GraphService graph_service;
+	protected final GraphService graph_service;
 
 /**
  * attribute template that will be used for all created entities<br>
  * must be cloned<br>
  * */
-	protected List<SimpleAttribute> attributes;
-	protected List<OctoRule> rules;
-	protected List<OctoReaction> reactions;
+	protected final List<SimpleAttribute> attributes;
+	protected final List<OctoRule> rules;
+	protected final List<OctoReaction> reactions;
 
 	protected BaseFactory(GraphService graph_service
 		, List<SimpleAttribute> attributes

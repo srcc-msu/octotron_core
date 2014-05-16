@@ -1,7 +1,5 @@
 package test.java;
 
-import java.io.IOException;
-
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,7 +28,7 @@ import main.java.ru.parallel.utils.FileUtils;
  * */
 public class TestNetwork extends Assert
 {
-	private static int HTTP_PORT = 4300;
+	private static final int HTTP_PORT = 4300;
 
 	private static IGraph graph;
 	private static LinkFactory links;
@@ -43,15 +41,15 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			http = HTTPServer.GetDummyServer(HTTP_PORT);
+			TestNetwork.http = HTTPServer.GetDummyServer(TestNetwork.HTTP_PORT);
 
-			graph = new Neo4jGraph("dbs/test_network", Neo4jGraph.Op.RECREATE);
-			graph_service = new GraphService(graph);
-			graph_service.EnableObjectIndex("AID");
-			graph_service.EnableLinkIndex("AID");
+			TestNetwork.graph = new Neo4jGraph("dbs/test_network", Neo4jGraph.Op.RECREATE);
+			TestNetwork.graph_service = new GraphService(TestNetwork.graph);
+			TestNetwork.graph_service.EnableObjectIndex("AID");
+			TestNetwork.graph_service.EnableLinkIndex("AID");
 
-			factory = new ObjectFactory(graph_service);
-			links = new LinkFactory(graph_service)
+			TestNetwork.factory = new ObjectFactory(TestNetwork.graph_service);
+			TestNetwork.links = new LinkFactory(TestNetwork.graph_service)
 				.Attributes(new SimpleAttribute("type", "a_link"));
 		}
 		catch (Exception e)
@@ -61,15 +59,15 @@ public class TestNetwork extends Assert
 		}
 	}
 
-	private static long SLEEP = 100;
+	private static final long SLEEP = 100;
 
 	@Before
 	public void Clean()
 	{
 		try
 		{
-			graph_service.Clean();
-			http.Clear();
+			TestNetwork.graph_service.Clean();
+			TestNetwork.http.Clear();
 		}
 		catch (Exception e)
 		{
@@ -81,26 +79,24 @@ public class TestNetwork extends Assert
 /**
  * get info about request and close it
  * */
-	private HTTPRequest GetHttpRequest(String str)
-		throws ExceptionSystemError
-	{
+	private HTTPRequest GetHttpRequest(String str) {
 		ParsedHttpRequest request = null;
 
 		try
 		{
-			http.Clear();
+			TestNetwork.http.Clear();
 
-			FileUtils.ExecSilent("curl", "-u:", "-sS", "127.0.0.1:" + HTTP_PORT + str);
-			Thread.sleep(SLEEP);
+			FileUtils.ExecSilent("curl", "-u:", "-sS", "127.0.0.1:" + TestNetwork.HTTP_PORT + str);
+			Thread.sleep(TestNetwork.SLEEP);
 
-			if((request = http.GetBlockingRequest()) != null)
+			if((request = TestNetwork.http.GetBlockingRequest()) != null)
 				request.GetHttpRequest().FinishString("");
 			else
-				fail("did not get the message");
+				Assert.fail("did not get the message");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 
 		return request.GetHttpRequest();
@@ -116,47 +112,47 @@ public class TestNetwork extends Assert
 
 		try
 		{
-			http.Clear();
+			TestNetwork.http.Clear();
 
 			String target = "/view/p";
 			String params = "path(obj==AID)";
 
 			for(int i = 0; i < COUNT; i++)
 			{
-				FileUtils.ExecSilent("curl", "-u:", "-sS", "127.0.0.1:" + HTTP_PORT + target + "?" + params  + i);
-				Thread.sleep(SLEEP);
+				FileUtils.ExecSilent("curl", "-u:", "-sS", "127.0.0.1:" + TestNetwork.HTTP_PORT + target + "?" + params  + i);
+				Thread.sleep(TestNetwork.SLEEP);
 			}
 
 			ParsedHttpRequest request;
 
 			for(int i = 0; i < COUNT; i++)
 			{
-				if((request = http.GetBlockingRequest()) != null)
+				if((request = TestNetwork.http.GetBlockingRequest()) != null)
 				{
-					assertEquals("got wrong target", request.GetHttpRequest().GetPath(), target);
-					assertEquals("got wrong params", request.GetHttpRequest().GetQuery(), params + i);
+					Assert.assertEquals("got wrong target", request.GetHttpRequest().GetPath(), target);
+					Assert.assertEquals("got wrong params", request.GetHttpRequest().GetQuery(), params + i);
 					request.GetHttpRequest().FinishString("");
 				}
 				else
-					fail("did not get the message");
+					Assert.fail("did not get the message");
 			}
 
-			if(http.GetRequest() != null)
-				fail("unexpected message");
+			if(TestNetwork.http.GetRequest() != null)
+				Assert.fail("unexpected message");
 		}
 
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
 	private RequestResult GetRequestResult(String str_request)
-		throws IOException, ExceptionSystemError, ExceptionParseError
+		throws ExceptionSystemError, ExceptionParseError
 	{
 		HTTPRequest request = GetHttpRequest(str_request);
 
-		return RequestParser.ParseFromHttp(request).GetParsedRequest().Execute(graph_service, null);
+		return RequestParser.ParseFromHttp(request).GetParsedRequest().Execute(TestNetwork.graph_service, null);
 	}
 
 	@Test
@@ -164,15 +160,15 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			factory.Create(10);
+			TestNetwork.factory.Create(10);
 			String test = GetRequestResult("/view/p?path=(obj==AID)").data;
 
 			if(test == null || test.length() == 0)
-				fail("empty response");
+				Assert.fail("empty response");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -181,17 +177,17 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList l = factory.Create(10);
+			ObjectList l = TestNetwork.factory.Create(10);
 			long AID = l.get(0).GetAttribute("AID").GetLong();
 
 			String test = GetRequestResult("/view/p?path=(obj=="+AID+")").data;
 
 			if(test == null || test.length() == 0)
-				fail("empty response");
+				Assert.fail("empty response");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -200,17 +196,17 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList l = factory.Create(10);
+			ObjectList l = TestNetwork.factory.Create(10);
 			long AID = l.get(0).GetAttribute("AID").GetLong();
 
 			String test = GetRequestResult("/view/p?path=obj(type==AID).q(AID=="+AID+")").data;
 
 			if(test == null || test.length() == 0)
-				fail("empty response");
+				Assert.fail("empty response");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -219,15 +215,15 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			factory.Create(10);
+			TestNetwork.factory.Create(10);
 			String test = GetRequestResult("/view/p?path=obj(type==AID).uniq()").data;
 
 			if(test == null || test.length() == 0)
-				fail("empty response");
+				Assert.fail("empty response");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -236,25 +232,25 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList objs = factory.Create(10);
+			ObjectList objs = TestNetwork.factory.Create(10);
 
-			links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+			TestNetwork.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
 			String test = GetRequestResult("/view/p?path=obj(type==AID).in_n()").data;
 			if(test == null || test.length() == 0)
-				fail("empty response in_n");
+				Assert.fail("empty response in_n");
 
 			test = GetRequestResult("/view/p?path=obj(type==AID).out_n()").data;
 			if(test == null || test.length() == 0)
-				fail("empty response out_n");
+				Assert.fail("empty response out_n");
 
 			test = GetRequestResult("/view/p?path=obj(type==AID).all_n()").data;
 			if(test == null || test.length() == 0)
-				fail("empty response all_n");
+				Assert.fail("empty response all_n");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -263,25 +259,25 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList objs = factory.Create(10);
+			ObjectList objs = TestNetwork.factory.Create(10);
 
-			links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+			TestNetwork.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
 			String test = GetRequestResult("/view/p?path=obj(type==AID).in_l()").data;
 			if(test == null || test.length() == 0)
-				fail("empty response in_l");
+				Assert.fail("empty response in_l");
 
 			test = GetRequestResult("/view/p?path=obj(type==AID).out_l()").data;
 			if(test == null || test.length() == 0)
-				fail("empty response out_l");
+				Assert.fail("empty response out_l");
 
 			test = GetRequestResult("/view/p?path=obj(type==AID).all_l()").data;
 			if(test == null || test.length() == 0)
-				fail("empty response all_l");
+				Assert.fail("empty response all_l");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -290,17 +286,17 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList objs = factory.Create(10);
+			ObjectList objs = TestNetwork.factory.Create(10);
 
-			links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+			TestNetwork.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
 			String test = GetRequestResult("/view/p?path=link(AID)").data;
 			if(test == null || test.length() == 0)
-				fail("empty response");
+				Assert.fail("empty response");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -309,21 +305,21 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList objs = factory.Create(10);
+			ObjectList objs = TestNetwork.factory.Create(10);
 
-			links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+			TestNetwork.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
 			String test = GetRequestResult("/view/p?path=link(AID).source()").data;
 			if(test == null || test.length() == 0)
-				fail("empty response source");
+				Assert.fail("empty response source");
 
 			test = GetRequestResult("/view/p?path=link(AID).target()").data;
 			if(test == null || test.length() == 0)
-				fail("empty response taregt");
+				Assert.fail("empty response taregt");
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 }

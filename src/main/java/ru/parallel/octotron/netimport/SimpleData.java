@@ -9,13 +9,12 @@ package main.java.ru.parallel.octotron.netimport;
 import main.java.ru.parallel.octotron.core.GraphService;
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 public class SimpleData implements ISensorData
 {
-	private OctoObject object;
-	private SimpleAttribute value;
+	private final OctoObject object;
+	private final SimpleAttribute value;
 
 	public SimpleData(OctoObject object, SimpleAttribute value)
 	{
@@ -25,7 +24,7 @@ public class SimpleData implements ISensorData
 
 	@Override
 	public SimpleAttribute GetValue()
-		throws ExceptionImportFail, ExceptionModelFail
+		throws ExceptionModelFail
 	{
 		return value;
 	}

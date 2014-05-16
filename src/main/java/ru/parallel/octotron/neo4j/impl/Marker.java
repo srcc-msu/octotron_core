@@ -8,17 +8,19 @@ package main.java.ru.parallel.octotron.neo4j.impl;
 
 import main.java.ru.parallel.octotron.impl.PersistenStorage;
 
-public class Marker implements java.io.Serializable
+import java.io.Serializable;
+
+public class Marker implements Serializable
 {
 	private static final long serialVersionUID = -6782296632908542424L;
 
-	private long AID;
+	private final long AID;
 	private long marker_id;
-	private long reaction_id;
+	private final long reaction_id;
 
-	private String description;
+	private final String description;
 
-	private boolean suppress;
+	private final boolean suppress;
 
 	public Marker(long AID, long reaction_id, String description, boolean suppress)
 	{

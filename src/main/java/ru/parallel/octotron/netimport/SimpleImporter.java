@@ -18,7 +18,7 @@ import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
 public class SimpleImporter implements IImporter
 {
 	private List<SimpleData> data = new LinkedList<SimpleData>();
-	private Object lock = new Object(); // personal lock for each instance
+	private final Object lock = new Object(); // personal lock for each instance
 
 	public void Put(OctoObject object, SimpleAttribute value)
 	{

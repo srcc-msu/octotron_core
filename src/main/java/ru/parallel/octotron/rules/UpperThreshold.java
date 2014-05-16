@@ -14,8 +14,8 @@ import main.java.ru.parallel.octotron.primitive.EDependencyType;
 public class UpperThreshold extends OctoRule
 {
 	private static final long serialVersionUID = 2191189080156471873L;
-	private String param;
-	private Object threshold;
+	private final String param;
+	private final Object threshold;
 
 	public UpperThreshold(String attr, String param, Object threshold)
 	{

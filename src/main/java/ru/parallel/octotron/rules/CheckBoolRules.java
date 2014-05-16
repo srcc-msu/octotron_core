@@ -17,7 +17,7 @@ import main.java.ru.parallel.octotron.primitive.EDependencyType;
 public class CheckBoolRules extends OctoRule
 {
 	private static final long serialVersionUID = -5698688420213900355L;
-	private String[] check_list;
+	private final String[] check_list;
 
 	public CheckBoolRules(String attr, String... check_list)
 	{

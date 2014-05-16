@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import main.java.ru.parallel.octotron.core.OctoAttribute;
 import main.java.ru.parallel.octotron.core.OctoEntity;
 import main.java.ru.parallel.octotron.impl.generators.CsvFiller;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
@@ -25,7 +26,7 @@ import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
  * */
 public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 {
-	protected List<T> list;
+	protected final List<T> list;
 
 	protected AbsEntityList()
 	{
@@ -169,8 +170,7 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected List<T> InnerRange(int from, int to)
 	{
-		List<T> new_list = list.subList(from, to);
-		return new_list;
+		return list.subList(from, to);
 	}
 
 	protected List<T> InnerRanges(int... ranges)
@@ -200,20 +200,24 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 
 	private boolean CheckOp(T obj, String name, Object value, EQueryType type)
 	{
+		if(!obj.TestAttribute(name))
+			return false;
+		OctoAttribute attr = obj.GetAttribute(name);
+
 		switch(type)
 		{
 		case EQ:
-			return obj.TestAttribute(name) && obj.GetAttribute(name).eq(value);
+			return attr.eq(value);
 		case NE:
-			return obj.TestAttribute(name) && obj.GetAttribute(name).ne(value);
+			return attr.ne(value);
 		case GE:
-			return obj.TestAttribute(name) && obj.GetAttribute(name).ge(value);
+			return attr.ge(value);
 		case GT:
-			return obj.TestAttribute(name) && obj.GetAttribute(name).gt(value);
+			return attr.gt(value);
 		case LE:
-			return obj.TestAttribute(name) && obj.GetAttribute(name).le(value);
+			return attr.le(value);
 		case LT:
-			return obj.TestAttribute(name) && obj.GetAttribute(name).lt(value);
+			return attr.lt(value);
 		case NONE:
 		case SET:
 		default:

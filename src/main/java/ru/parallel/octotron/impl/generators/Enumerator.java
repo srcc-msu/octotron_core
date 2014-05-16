@@ -23,12 +23,12 @@ public final class Enumerator
 
 			i++;
 			if(div != 0)
-				i = i % div;
+				i %= div;
 		}
 	}
 
 	public static void Sequence(AbsEntityList<? extends OctoEntity> list, String att)
 	{
-		Sequence(list, att, 0);
+		Enumerator.Sequence(list, att, 0);
 	}
 }

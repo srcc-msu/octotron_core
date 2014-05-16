@@ -18,26 +18,26 @@ public class TestGraphService extends Assert
 	{
 		try
 		{
-			graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
-			graph_service = new GraphService(graph);
+			TestGraphService.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+			TestGraphService.graph_service = new GraphService(TestGraphService.graph);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
 	@AfterClass
 	public static void Delete()
 	{
-		graph.Shutdown();
+		TestGraphService.graph.Shutdown();
 		try
 		{
-			graph.Delete();
+			TestGraphService.graph.Delete();
 		}
 		catch (ExceptionSystemError e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 }

@@ -6,6 +6,7 @@
 
 package main.java.ru.parallel.octotron.core;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,18 +14,17 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 
 import main.java.ru.parallel.octotron.primitive.EEventStatus;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
-public class OctoResponse implements java.io.Serializable
+public class OctoResponse implements Serializable
 {
 	private static final long serialVersionUID = 4220431577263770147L;
 
-	private EEventStatus status;
+	private final EEventStatus status;
 
-	private String description;
+	private final String description;
 
-	private List<String[]> commands = new LinkedList<String[]>();
-	private List<String> log_keys = new LinkedList<String>();
+	private final List<String[]> commands = new LinkedList<String[]>();
+	private final List<String> log_keys = new LinkedList<String>();
 
 	private String[] print_attributes = new String[0];
 	private String[] parent_print_attributes = new String[0];
@@ -35,9 +35,7 @@ public class OctoResponse implements java.io.Serializable
 		this.description = description;
 	}
 
-	public OctoResponse Log(String log_key)
-		throws ExceptionSystemError
-	{
+	public OctoResponse Log(String log_key) {
 		log_keys.add(log_key);
 
 		return this;

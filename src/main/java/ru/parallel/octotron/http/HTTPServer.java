@@ -31,11 +31,11 @@ import com.sun.net.httpserver.HttpServer;
  * */
 public class HTTPServer
 {
-	private Queue<ParsedHttpRequest> requests;
-	private Queue<ParsedHttpRequest> blocking_requests;
+	private final Queue<ParsedHttpRequest> requests;
+	private final Queue<ParsedHttpRequest> blocking_requests;
 
 	private HttpServer server;
-	private ExecutorService executor;
+	private final ExecutorService executor;
 
 /**
  * parse request to tokens and add parsed_request to message queue
@@ -139,9 +139,9 @@ public class HTTPServer
 
 		server.createContext("/", new DefaultHandler());
 
-		request.setAuthenticator(GetAuth("view", settings.GetViewCredentials()));
-		modify.setAuthenticator(GetAuth("modify", settings.GetModifyCredentials()));
-		control.setAuthenticator(GetAuth("control", settings.GetControlCredentials()));
+		request.setAuthenticator(HTTPServer.GetAuth("view", settings.GetViewCredentials()));
+		modify.setAuthenticator(HTTPServer.GetAuth("modify", settings.GetModifyCredentials()));
+		control.setAuthenticator(HTTPServer.GetAuth("control", settings.GetControlCredentials()));
 
 		server.start();
 

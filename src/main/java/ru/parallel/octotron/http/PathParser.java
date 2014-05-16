@@ -9,6 +9,7 @@ package main.java.ru.parallel.octotron.http;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,18 +43,18 @@ public final class PathParser
 		, PathOperations.source, PathOperations.target
 	};
 
-	static private final HashMap<EQueryType, String> DELIMS
+	private static final Map<EQueryType, String> DELIMS
 		= new HashMap<EQueryType, String>();
 
 	static
 	{
-		DELIMS.put(EQueryType.SET, "=");
-		DELIMS.put(EQueryType.EQ, "==");
-		DELIMS.put(EQueryType.NE, "!=");
-		DELIMS.put(EQueryType.LE, "<=");
-		DELIMS.put(EQueryType.GE, ">=");
-		DELIMS.put(EQueryType.LT, "<");
-		DELIMS.put(EQueryType.GT, ">");
+		PathParser.DELIMS.put(EQueryType.SET, "=");
+		PathParser.DELIMS.put(EQueryType.EQ, "==");
+		PathParser.DELIMS.put(EQueryType.NE, "!=");
+		PathParser.DELIMS.put(EQueryType.LE, "<=");
+		PathParser.DELIMS.put(EQueryType.GE, ">=");
+		PathParser.DELIMS.put(EQueryType.LT, "<");
+		PathParser.DELIMS.put(EQueryType.GT, ">");
 	}
 
 /**
@@ -62,7 +63,7 @@ public final class PathParser
 	private static Pair<SimpleAttribute, EQueryType> AttrFromString(String str, EQueryType type)
 		throws ExceptionParseError
 	{
-		String delim = DELIMS.get(type);
+		String delim = PathParser.DELIMS.get(type);
 
 		int idx = str.indexOf(delim);
 
@@ -91,7 +92,7 @@ public final class PathParser
 			if(type == EQueryType.NONE)
 				continue;
 
-			val = AttrFromString(str, type);
+			val = PathParser.AttrFromString(str, type);
 
 			if(val != null)
 				return val;
@@ -111,7 +112,7 @@ public final class PathParser
 		List<Pair<SimpleAttribute, EQueryType>> result
 			= new LinkedList<Pair<SimpleAttribute, EQueryType>>();
 
-		if(str == null || str.length() == 0)
+		if(str == null || str.isEmpty())
 			return result;
 
 		String[] attrs = str.split(",");
@@ -124,7 +125,7 @@ public final class PathParser
 		return result;
 	}
 
-	private static Pattern pattern = Pattern.compile("([a-zA-Z_-]+)\\(([^)]*)\\)\\.?");
+	private static final Pattern pattern = Pattern.compile("([a-zA-Z_-]+)\\(([^)]*)\\)\\.?");
 
 	private static List<PathToken> ParseTokens(String path)
 		throws ExceptionParseError
@@ -169,7 +170,7 @@ public final class PathParser
 	private static void TypeCheck(List<PathToken> tokens)
 		throws ExceptionParseError
 	{
-		if(tokens.size() == 0)
+		if(tokens.isEmpty())
 			throw new ExceptionParseError("empty request");
 
 		CHAIN_TYPE type = CHAIN_TYPE.E_START;

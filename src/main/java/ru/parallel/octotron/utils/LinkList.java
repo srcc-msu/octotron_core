@@ -72,8 +72,7 @@ public class LinkList extends AbsEntityList<OctoLink>
 
 	public LinkList Uniq()
 	{
-		LinkList new_list = new LinkList(InnerUniq());
-		return new_list;
+		return new LinkList(InnerUniq());
 	}
 
 	public ObjectList Target()

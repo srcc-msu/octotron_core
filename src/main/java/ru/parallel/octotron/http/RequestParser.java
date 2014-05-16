@@ -25,7 +25,7 @@ public class RequestParser
  * tokens that are allowed in the view request<br>
  * this requests are used to retrieve current model state<br>
  * */
-	static private final Operation[] VIEW_OPERATIONS =
+private static final Operation[] VIEW_OPERATIONS =
 	{
 		Operations.version
 		, Operations.count
@@ -38,7 +38,7 @@ public class RequestParser
  * tokens that are allowed in the modify requests<br>
  * this requests are used for import and manual model manipulations<br>
  * */
-	static private final Operation[] MODIFY_OPERATIONS =
+private static final Operation[] MODIFY_OPERATIONS =
 	{
 		Operations.import_token
 		, Operations.set, Operations.static_op
@@ -50,7 +50,7 @@ public class RequestParser
  * tokens that are allowed in the control request<br>
  * this requests are used for database administration operations<br>
  * */
-	static private final Operation[] CONTROL_OPERATIONS =
+private static final Operation[] CONTROL_OPERATIONS =
 	{
 		Operations.quit, Operations.mode
 		, Operations.snapshot
@@ -60,13 +60,13 @@ public class RequestParser
 /**
  * all available request types<br>
  * */
-	static private final Map<String, Operation[]> REQUEST_TYPES
+private static final Map<String, Operation[]> REQUEST_TYPES
 		= new HashMap<String, Operation[]>();
 	static
 	{
-		REQUEST_TYPES.put("view", VIEW_OPERATIONS);
-		REQUEST_TYPES.put("modify", MODIFY_OPERATIONS);
-		REQUEST_TYPES.put("control", CONTROL_OPERATIONS);
+		RequestParser.REQUEST_TYPES.put("view", RequestParser.VIEW_OPERATIONS);
+		RequestParser.REQUEST_TYPES.put("modify", RequestParser.MODIFY_OPERATIONS);
+		RequestParser.REQUEST_TYPES.put("control", RequestParser.CONTROL_OPERATIONS);
 	}
 
 /**
@@ -74,12 +74,10 @@ public class RequestParser
  * if the value is empty, null is stored in value<br>
  * string example: param1=value&param2&param3=value2<br>
  * */
-	private static Map<String, String> ParseParams(String query)
-		throws ExceptionParseError
-	{
+	private static Map<String, String> ParseParams(String query) {
 		Map<String, String> result = new HashMap<String, String>();
 
-		if(query == null || query.length() == 0)
+		if(query == null || query.isEmpty())
 			return result;
 
 		String[] operations = query.split("&");
@@ -118,7 +116,7 @@ public class RequestParser
 	{
 		try
 		{
-			Operation[] operations = REQUEST_TYPES.get(request_type);
+			Operation[] operations = RequestParser.REQUEST_TYPES.get(request_type);
 
 			if(operations == null)
 				throw new ExceptionParseError("wrong request type: " + request_type);
@@ -135,7 +133,7 @@ public class RequestParser
 			if(operation == null)
 				throw new ExceptionParseError("unknown operation: " + operation_name);
 
-			Map<String, String> params = ParseParams(query);
+			Map<String, String> params = RequestParser.ParseParams(query);
 
 			return new ParsedRequest(operation, params);
 		}
@@ -164,7 +162,7 @@ public class RequestParser
 			String request_type = matcher.group(1);
 			String operation_name = matcher.group(2);
 
-			ParsedRequest parsed_request = Parse(request_type, operation_name, http_request.GetQuery());
+			ParsedRequest parsed_request = RequestParser.Parse(request_type, operation_name, http_request.GetQuery());
 
 			return new ParsedHttpRequest(http_request, parsed_request);
 

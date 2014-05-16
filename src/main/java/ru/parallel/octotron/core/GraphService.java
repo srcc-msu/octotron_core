@@ -39,7 +39,7 @@ public class GraphService
 
 	private static final String NEXT_AID = "_static_next_AID";
 
-	private IGraph graph;
+	private final IGraph graph;
 
 	private OctoObject static_obj = null;
 
@@ -55,11 +55,11 @@ public class GraphService
  * */
 	private long NextAID()
 	{
-		if(!TestAttribute(static_obj, NEXT_AID))
-			SetAttribute(static_obj, NEXT_AID, 0L);
+		if(!TestAttribute(static_obj, GraphService.NEXT_AID))
+			SetAttribute(static_obj, GraphService.NEXT_AID, 0L);
 
-		long next_AID = GetAttribute(static_obj, NEXT_AID).GetLong();
-		SetAttribute(static_obj, NEXT_AID, next_AID + 1);
+		long next_AID = GetAttribute(static_obj, GraphService.NEXT_AID).GetLong();
+		SetAttribute(static_obj, GraphService.NEXT_AID, next_AID + 1);
 
 		return next_AID;
 	}
@@ -69,9 +69,9 @@ public class GraphService
 //---------------------------------
 	private static final String STATIC_PREFIX = "_static_";
 
-	public boolean IsStaticName(String name)
+	public static boolean IsStaticName(String name)
 	{
-		return name.startsWith(STATIC_PREFIX);
+		return name.startsWith(GraphService.STATIC_PREFIX);
 	}
 
 /**
@@ -83,14 +83,14 @@ public class GraphService
 		if(static_obj == null)
 		{
 			EnableObjectIndex("type");
-			ObjectList objects = GetObjects("type", STATIC_PREFIX);
+			ObjectList objects = GetObjects("type", GraphService.STATIC_PREFIX);
 
 			if(objects.size() == 0)
 			{
 // have to do it manually - no AID yet
 				static_obj = new OctoObject(this, graph.AddObject());
 
-				SetAttribute("type", STATIC_PREFIX);
+				SetAttribute("type", GraphService.STATIC_PREFIX);
 				SetAttribute("AID", NextAID());
 			}
 			else
@@ -333,27 +333,27 @@ public class GraphService
 
 	private static String ToMeta(String attr_name, String meta_name)
 	{
-		return attr_name + META_PREFIX + meta_name;
+		return attr_name + GraphService.META_PREFIX + meta_name;
 	}
 
 	public void SetMeta(OctoEntity entity, String attr_name, String meta_name, Object value)
 	{
-		SetRawAttribute(entity, ToMeta(attr_name, meta_name), value);
+		SetRawAttribute(entity, GraphService.ToMeta(attr_name, meta_name), value);
 	}
 
 	public Object GetMeta(OctoEntity entity, String attr_name, String meta_name)
 	{
-		return GetRawAttribute(entity, ToMeta(attr_name, meta_name));
+		return GetRawAttribute(entity, GraphService.ToMeta(attr_name, meta_name));
 	}
 
 	public boolean TestMeta(OctoEntity entity, String attr_name, String meta_name)
 	{
-		return TestRawAttribute(entity, ToMeta(attr_name, meta_name));
+		return TestRawAttribute(entity, GraphService.ToMeta(attr_name, meta_name));
 	}
 
 	public void DeleteMeta(OctoEntity entity, String attr_name, String meta_name)
 	{
-		DeleteRawAttribute(entity, ToMeta(attr_name, meta_name));
+		DeleteRawAttribute(entity, GraphService.ToMeta(attr_name, meta_name));
 	}
 
 // --------------------------------

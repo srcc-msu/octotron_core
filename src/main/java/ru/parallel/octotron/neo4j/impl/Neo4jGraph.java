@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +58,7 @@ public final class Neo4jGraph implements IGraph
 
 	private String db_name;
 
-	private static int COUNT_THRESHOLD = 100000; // write counts to commit new transaction
+	private static final int COUNT_THRESHOLD = 100000; // write counts to commit new transaction
 
 	private boolean bootstrap = false;
 
@@ -78,12 +77,11 @@ public final class Neo4jGraph implements IGraph
 	 * RECREATE - remove existing and create new<br>
 	 * CONNECT - connect to already running db (NIY)<br>
 	 */
-	public static enum Op
+	public enum Op
 	{
 		LOAD, CREATE, RECREATE, CONNECT
 	}
 
-	@SuppressWarnings("unused") // stupid eclipse, I KNOW IT
 	private Neo4jGraph(){}
 
 	/**
@@ -121,7 +119,7 @@ public final class Neo4jGraph implements IGraph
 	 * it is workaround for neo4j, since it requires a enum<br>
 	 * they will be reused with our own names<br>
 	 */
-	private static enum RelTypes implements RelationshipType
+	private enum RelTypes implements RelationshipType
 	{
 		TYPE_0,
 		TYPE_1,
@@ -143,19 +141,19 @@ public final class Neo4jGraph implements IGraph
 		TYPE_17,
 		TYPE_18,
 		TYPE_19
-	};
+	}
 
 	/**
 	 * service list that allows to iterate enum values<br>
 	 * */
-	private List<RelTypes> relations
+	private final List<RelTypes> relations
 		= new LinkedList<RelTypes>(Arrays.asList(RelTypes.values()));
 
 	/**
 	 * mapping between enum constants and strings<br>
 	 * */
-	private Hashtable<String, RelTypes> rel_str_mapping
-		= new Hashtable<String, RelTypes>();
+	private final Map<String, RelTypes> rel_str_mapping
+		= new HashMap<String, RelTypes>();
 
 	/**
 	 * register \\link_type as a new relation type<br>
@@ -165,7 +163,7 @@ public final class Neo4jGraph implements IGraph
 	private void RegisterLinkType(String link_type)
 		throws ExceptionDBError
 	{
-		if(relations.size() == 0)
+		if(relations.isEmpty())
 			throw new ExceptionDBError("no more relationships availiable");
 
 		rel_str_mapping.put(link_type, relations.remove(0));
@@ -219,7 +217,7 @@ public final class Neo4jGraph implements IGraph
 
 		index = new Neo4jIndex(this);
 
-		transaction = new NinjaTransaction(graph_db, COUNT_THRESHOLD);
+		transaction = new NinjaTransaction(graph_db, Neo4jGraph.COUNT_THRESHOLD);
 	}
 
 	/**
@@ -273,7 +271,7 @@ public final class Neo4jGraph implements IGraph
 
 		index = new Neo4jIndex(this);
 
-		transaction = new NinjaTransaction(graph_db, COUNT_THRESHOLD);
+		transaction = new NinjaTransaction(graph_db, Neo4jGraph.COUNT_THRESHOLD);
 	}
 
 	/**
@@ -320,7 +318,7 @@ public final class Neo4jGraph implements IGraph
 		Delete(this.db_name);
 	}
 
-	public void Delete(String name)
+	public static void Delete(String name)
 		throws ExceptionSystemError
 	{
 		File file = new File(name);
@@ -333,9 +331,9 @@ public final class Neo4jGraph implements IGraph
 	 * checks that uid type matches the given /type<br>
 	 * throws exception otherwise<br>
 	 * */
-	private void MatchType(Uid uid, EEntityType type)
+	private static void MatchType(Uid uid, EEntityType type)
 	{
-		if(!uid.getType().equals(type))
+		if(uid.getType() != type)
 			throw new ExceptionModelFail
 				("Mismatch entity type for operation");
 	}
@@ -390,7 +388,8 @@ public final class Neo4jGraph implements IGraph
 		transaction.Write();
 
 		Relationship rel;
-		Node source_node, target_node;
+		Node source_node;
+		Node target_node;
 
 		source_node = graph_db.getNodeById(source.getUid());
 		target_node = graph_db.getNodeById(target.getUid());
@@ -511,7 +510,7 @@ public final class Neo4jGraph implements IGraph
 		return obj;
 	}
 
-	private List<Uid> FromRelIter(Iterator<Relationship> it)
+	private static List<Uid> FromRelIter(Iterator<Relationship> it)
 	{
 		List<Uid> list = new LinkedList<Uid>();
 
@@ -525,8 +524,7 @@ public final class Neo4jGraph implements IGraph
 		return list;
 	}
 
-	@SuppressWarnings("unused")
-	private List<Uid> FromNodeIter(Iterator<Node> it)
+	private static List<Uid> FromNodeIter(Iterator<Node> it)
 	{
 		List<Uid> list = new LinkedList<Uid>();
 
@@ -767,17 +765,17 @@ public final class Neo4jGraph implements IGraph
 	}
 
 	@Override
-	public String ExportDot(ObjectList objects, String... ignoreList)
+	public String ExportDot(ObjectList objects)
 	{
 		List<Node> nodes = new LinkedList<Node>();
 
 		for(OctoObject obj : objects)
 			nodes.add(graph_db.getNodeById(obj.GetUID().getUid()));
 
-		return ExportDot(nodes, ignoreList);
+		return ExportDot(nodes);
 	}
 
-	private String ExportDot(Iterable<Node> nodes, String... ignoreList)
+	private static String ExportDot(Iterable<Node> nodes)
 	{
 		OutputStream out = new ByteArrayOutputStream();
 

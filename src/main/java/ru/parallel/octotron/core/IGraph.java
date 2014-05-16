@@ -16,38 +16,38 @@ import main.java.ru.parallel.octotron.utils.ObjectList;
  * */
 public interface IGraph
 {
-	public Uid AddObject();
+	Uid AddObject();
 
-	public List<Uid> GetOutLinks(Uid uid);
+	List<Uid> GetOutLinks(Uid uid);
 
-	public List<Uid> GetInLinks(Uid uid);
+	List<Uid> GetInLinks(Uid uid);
 
 	List<Object[]> GetObjectAttributes(Uid uid);
 	void DeleteObjectAttribute(Uid uid, String name);
 	boolean TestObjectAttribute(Uid uid, String name);
 
-	public void DeleteObject(Uid uid);
+	void DeleteObject(Uid uid);
 
 // ----------------------------------------------------------
 // **********************************************************
 // ----------------------------------------------------------
 
-	public Uid AddLink(Uid source, Uid target, String link_type);
+	Uid AddLink(Uid source, Uid target, String link_type);
 
-	public Uid GetLinkTarget(Uid uid);
-	public Uid GetLinkSource(Uid uid);
+	Uid GetLinkTarget(Uid uid);
+	Uid GetLinkSource(Uid uid);
 
 	List<Object[]> GetLinkAttributes(Uid uid);
 	void DeleteLinkAttribute(Uid uid, String name);
 	boolean TestLinkAttribute(Uid uid, String name);
 
-	public void DeleteLink(Uid uid);
+	void DeleteLink(Uid uid);
 
 // ----------------------------------------------------------
 // **********************************************************
 // ----------------------------------------------------------
 
-	public IIndex GetIndex();
+	IIndex GetIndex();
 
 	List<Uid> GetAllObjects();
 	List<Uid> GetAllLinks();
@@ -64,6 +64,6 @@ public interface IGraph
 // **********************************************************
 // ----------------------------------------------------------
 
-	String ExportDot(ObjectList objects, String... ignoreList);
+	String ExportDot(ObjectList objects);
 }
 

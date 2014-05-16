@@ -72,7 +72,7 @@ public class DBCreator
 	{
 		PersistenStorage.INSTANCE.Save(settings.GetDbPath() + settings.GetDbName());
 
-		FileUtils.SaveToFile(settings.GetDbPath() + settings.GetDbName() + HASH_FILE
+		FileUtils.SaveToFile(settings.GetDbPath() + settings.GetDbName() + DBCreator.HASH_FILE
 			, Integer.toString(settings.GetHash()));
 
 		int count = 0;

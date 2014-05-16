@@ -25,8 +25,8 @@ import main.java.ru.parallel.utils.JavaUtils;
  * */
 public class ImportManager
 {
-	private AttributeProcessor static_proc;
-	private RuleProcessor ruled_proc;
+	private final AttributeProcessor static_proc;
+	private final RuleProcessor ruled_proc;
 
 	public ImportManager(GraphService graph_service)
 	{
@@ -54,9 +54,7 @@ public class ImportManager
 		return ProcessRules(changed.Uniq());
 	}
 
-	public ObjectList ProcessRules(ObjectList changed)
-		throws ExceptionImportFail
-	{
+	public ObjectList ProcessRules(ObjectList changed) {
 		ObjectList rule_changed = ruled_proc.Process(changed).Uniq();
 
 		ObjectList changed_last = new ObjectList(rule_changed);
@@ -76,7 +74,7 @@ public class ImportManager
 		return all_changed;
 	}
 
-	private long last_timer_check = 0;
+	private final long last_timer_check = 0;
 	private static final long TIMER_CHECK_THRESHOLD = 2;
 
 	public ObjectList ProcessTimers()
@@ -85,7 +83,7 @@ public class ImportManager
 
 		ObjectList res = new ObjectList();
 
-		if(cur_time - last_timer_check > TIMER_CHECK_THRESHOLD)
+		if(cur_time - last_timer_check > ImportManager.TIMER_CHECK_THRESHOLD)
 		{
 			AttributeList timers_timed_out = TimerProcessor.Process();
 

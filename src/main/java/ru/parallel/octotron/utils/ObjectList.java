@@ -155,8 +155,7 @@ public class ObjectList extends AbsEntityList<OctoObject>
 
 	public ObjectList Uniq()
 	{
-		ObjectList new_list = new ObjectList(InnerUniq());
-		return new_list;
+		return new ObjectList(InnerUniq());
 	}
 
 	public LinkList GetInLinks()

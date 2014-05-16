@@ -27,25 +27,25 @@ public class TestNeo4jGraph extends Assert
 	{
 		try
 		{
-			graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+			TestNeo4jGraph.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
 	@AfterClass
 	public static void Delete()
 	{
-		graph.Shutdown();
+		TestNeo4jGraph.graph.Shutdown();
 		try
 		{
-			graph.Delete();
+			TestNeo4jGraph.graph.Delete();
 		}
 		catch (ExceptionSystemError e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -58,11 +58,11 @@ public class TestNeo4jGraph extends Assert
 	{
 		Uid obj1;
 
-		obj1 = graph.AddObject();
+		obj1 = TestNeo4jGraph.graph.AddObject();
 
 		// in our case Save() consist of shutting down db and then loading it, so no need in Load() call.
-		graph.Save();
-		graph.GetObjectAttributes(obj1);
+		TestNeo4jGraph.graph.Save();
+		TestNeo4jGraph.graph.GetObjectAttributes(obj1);
 
 	}
 
@@ -76,14 +76,14 @@ public class TestNeo4jGraph extends Assert
 		Uid obj1, obj2, link1, link2;
 
 		// first create two objects
-		obj1 = graph.AddObject();
-		obj2 = graph.AddObject();
+		obj1 = TestNeo4jGraph.graph.AddObject();
+		obj2 = TestNeo4jGraph.graph.AddObject();
 
 		boolean catched = false;
 
 		try
 		{
-			graph.SetObjectAttribute(obj1, "test_null", null);
+			TestNeo4jGraph.graph.SetObjectAttribute(obj1, "test_null", null);
 		}
 		catch(Exception e)
 		{
@@ -91,69 +91,69 @@ public class TestNeo4jGraph extends Assert
 			catched = true;
 		}
 
-		assertEquals("succeeded to set a null value", catched, true);
+		Assert.assertEquals("succeeded to set a null value", catched, true);
 
 		// then create two links and set attributes
-		link1 = graph.AddLink(obj1, obj2, "contain");
-		link2 = graph.AddLink(obj2, obj1, "contain");
+		link1 = TestNeo4jGraph.graph.AddLink(obj1, obj2, "contain");
+		link2 = TestNeo4jGraph.graph.AddLink(obj2, obj1, "contain");
 
 		// set attributes
-		graph.SetObjectAttribute(obj1, "test_int", 1);
-		graph.SetObjectAttribute(obj1, "test_str", "a");
+		TestNeo4jGraph.graph.SetObjectAttribute(obj1, "test_int", 1);
+		TestNeo4jGraph.graph.SetObjectAttribute(obj1, "test_str", "a");
 
-		graph.SetObjectAttribute(obj2, "test_double", 1.0);
-		graph.SetObjectAttribute(obj2, "test_bool", true);
+		TestNeo4jGraph.graph.SetObjectAttribute(obj2, "test_double", 1.0);
+		TestNeo4jGraph.graph.SetObjectAttribute(obj2, "test_bool", true);
 
-		graph.SetLinkAttribute(link1, "test_int", 1);
-		graph.SetLinkAttribute(link1, "test_str", "a");
+		TestNeo4jGraph.graph.SetLinkAttribute(link1, "test_int", 1);
+		TestNeo4jGraph.graph.SetLinkAttribute(link1, "test_str", "a");
 
-		graph.SetLinkAttribute(link2, "test_double", 1.0);
-		graph.SetLinkAttribute(link2, "test_bool", true);
+		TestNeo4jGraph.graph.SetLinkAttribute(link2, "test_double", 1.0);
+		TestNeo4jGraph.graph.SetLinkAttribute(link2, "test_bool", true);
 
 // check they exist
-		assertEquals("int attribute for object"
-			, graph.GetObjectAttribute(obj1, "test_int"), 1);
-		assertEquals("str attribute for object"
-			, graph.GetObjectAttribute(obj1, "test_str"), "a");
+		Assert.assertEquals("int attribute for object"
+			, TestNeo4jGraph.graph.GetObjectAttribute(obj1, "test_int"), 1);
+		Assert.assertEquals("str attribute for object"
+			, TestNeo4jGraph.graph.GetObjectAttribute(obj1, "test_str"), "a");
 
-		assertEquals("float attribute for object"
-			, (double)graph.GetObjectAttribute(obj2, "test_double"), 1.0, 0.1);
-		assertEquals("bool attribute for object"
-			, graph.GetObjectAttribute(obj2, "test_bool"), true);
+		Assert.assertEquals("float attribute for object"
+			, (double) TestNeo4jGraph.graph.GetObjectAttribute(obj2, "test_double"), 1.0, 0.1);
+		Assert.assertEquals("bool attribute for object"
+			, TestNeo4jGraph.graph.GetObjectAttribute(obj2, "test_bool"), true);
 
-		assertEquals("int attribute for link"
-			, graph.GetLinkAttribute(link1, "test_int"), 1);
-		assertEquals("str attribute for link"
-			, graph.GetLinkAttribute(link1, "test_str"), "a");
+		Assert.assertEquals("int attribute for link"
+			, TestNeo4jGraph.graph.GetLinkAttribute(link1, "test_int"), 1);
+		Assert.assertEquals("str attribute for link"
+			, TestNeo4jGraph.graph.GetLinkAttribute(link1, "test_str"), "a");
 
-		assertEquals("double attribute for link"
-			, (double)graph.GetLinkAttribute(link2, "test_double"), 1.0, 1.0);
-		assertEquals("bool attribute for link"
-			, graph.GetLinkAttribute(link2, "test_bool"), true);
+		Assert.assertEquals("double attribute for link"
+			, (double) TestNeo4jGraph.graph.GetLinkAttribute(link2, "test_double"), 1.0, 1.0);
+		Assert.assertEquals("bool attribute for link"
+			, TestNeo4jGraph.graph.GetLinkAttribute(link2, "test_bool"), true);
 	}
 
-	private static int ITER = 10;
+	private static final int ITER = 10;
 
 @Test
 	public void RelOrder()
 	{
 		Uid obj1, obj2;
 
-		obj1 = graph.AddObject();
-		obj2 = graph.AddObject();
+		obj1 = TestNeo4jGraph.graph.AddObject();
+		obj2 = TestNeo4jGraph.graph.AddObject();
 
-		for(int i = 0; i < ITER; i++)
+		for(int i = 0; i < TestNeo4jGraph.ITER; i++)
 		{
-			Uid link = graph.AddLink(obj1, obj2, "contain");
-			graph.SetLinkAttribute(link, "n", i);
+			Uid link = TestNeo4jGraph.graph.AddLink(obj1, obj2, "contain");
+			TestNeo4jGraph.graph.SetLinkAttribute(link, "n", i);
 		}
 
-		List<Uid> links = graph.GetInLinks(obj2);
+		List<Uid> links = TestNeo4jGraph.graph.GetInLinks(obj2);
 
-		for(int i = 0; i < ITER; i++)
+		for(int i = 0; i < TestNeo4jGraph.ITER; i++)
 		{
-			assertEquals("wrong edges"
-				, graph.GetLinkAttribute(links.get(i), "n"), i);
+			Assert.assertEquals("wrong edges"
+				, TestNeo4jGraph.graph.GetLinkAttribute(links.get(i), "n"), i);
 		}
 	}
 
@@ -166,30 +166,30 @@ public class TestNeo4jGraph extends Assert
 	{
 		Uid obj1, obj2, link1, link2, link_useless;
 
-		obj1 = graph.AddObject();
-		obj2 = graph.AddObject();
+		obj1 = TestNeo4jGraph.graph.AddObject();
+		obj2 = TestNeo4jGraph.graph.AddObject();
 
-		link1 = graph.AddLink(obj1
-			, obj2, "contain");
-		link2 = graph.AddLink(obj1
+		link1 = TestNeo4jGraph.graph.AddLink(obj1
+				, obj2, "contain");
+		link2 = TestNeo4jGraph.graph.AddLink(obj1
 				, obj2, "contain");
 
-		link_useless = graph.AddLink(obj2
+		link_useless = TestNeo4jGraph.graph.AddLink(obj2
 				, obj1, "contain");
 
-		graph.SetLinkAttribute(link1, "test_uniq", "i am 1");
-		graph.SetLinkAttribute(link2, "test_uniq", "i am 2");
+		TestNeo4jGraph.graph.SetLinkAttribute(link1, "test_uniq", "i am 1");
+		TestNeo4jGraph.graph.SetLinkAttribute(link2, "test_uniq", "i am 2");
 
-		graph.SetLinkAttribute(link_useless, "test_uniq", "i am useless");
+		TestNeo4jGraph.graph.SetLinkAttribute(link_useless, "test_uniq", "i am useless");
 
-		List<Uid> links = graph.GetOutLinks(obj1); // obj1
+		List<Uid> links = TestNeo4jGraph.graph.GetOutLinks(obj1); // obj1
 
-		assertEquals("number of edges do not match", links.size(), 2);
+		Assert.assertEquals("number of edges do not match", links.size(), 2);
 
-		assertEquals("wrong edges"
-			, graph.GetLinkAttribute(links.get(0), "test_uniq"), "i am 1");
-		assertEquals("wrong edges"
-			, graph.GetLinkAttribute(links.get(1), "test_uniq"), "i am 2");
+		Assert.assertEquals("wrong edges"
+			, TestNeo4jGraph.graph.GetLinkAttribute(links.get(0), "test_uniq"), "i am 1");
+		Assert.assertEquals("wrong edges"
+			, TestNeo4jGraph.graph.GetLinkAttribute(links.get(1), "test_uniq"), "i am 2");
 	}
 
 /**
@@ -200,32 +200,32 @@ public class TestNeo4jGraph extends Assert
 	{
 		Uid obj1, obj2, link1, link2, link_useless;
 
-		obj1 = graph.AddObject();
-		obj2 = graph.AddObject();
+		obj1 = TestNeo4jGraph.graph.AddObject();
+		obj2 = TestNeo4jGraph.graph.AddObject();
 
-		link1 = graph.AddLink(obj1
-			, obj2, "contain");
-		link2 = graph.AddLink(obj1
-			, obj2, "contain");
+		link1 = TestNeo4jGraph.graph.AddLink(obj1
+				, obj2, "contain");
+		link2 = TestNeo4jGraph.graph.AddLink(obj1
+				, obj2, "contain");
 
-		link_useless = graph.AddLink(obj2
-			, obj1, "contain");
+		link_useless = TestNeo4jGraph.graph.AddLink(obj2
+				, obj1, "contain");
 
-		graph.SetLinkAttribute(link1, "test_uniq", "i am 1");
-		graph.SetLinkAttribute(link2, "test_uniq", "i am 2");
+		TestNeo4jGraph.graph.SetLinkAttribute(link1, "test_uniq", "i am 1");
+		TestNeo4jGraph.graph.SetLinkAttribute(link2, "test_uniq", "i am 2");
 
-		graph.SetLinkAttribute(link_useless, "test_uniq", "i am useless");
+		TestNeo4jGraph.graph.SetLinkAttribute(link_useless, "test_uniq", "i am useless");
 
-		List<Uid> links = graph.GetInLinks(obj2); // obj2
+		List<Uid> links = TestNeo4jGraph.graph.GetInLinks(obj2); // obj2
 
-		assertEquals("number of edges do not match", links.size(), 2);
+		Assert.assertEquals("number of edges do not match", links.size(), 2);
 
  //order ??
-		assertEquals("wrong edges"
-			, graph.GetLinkAttribute(links.get(0), "test_uniq")
+		Assert.assertEquals("wrong edges"
+			, TestNeo4jGraph.graph.GetLinkAttribute(links.get(0), "test_uniq")
 			, "i am 1");
-		assertEquals("wrong edges"
-			, graph.GetLinkAttribute(links.get(1), "test_uniq")
+		Assert.assertEquals("wrong edges"
+			, TestNeo4jGraph.graph.GetLinkAttribute(links.get(1), "test_uniq")
 			, "i am 2");
 	}
 
@@ -237,11 +237,11 @@ public class TestNeo4jGraph extends Assert
 	{
 		Uid obj1 = null;
 
-		obj1 = graph.AddObject();
-		graph.SetObjectAttribute(obj1, "test", "ok");
+		obj1 = TestNeo4jGraph.graph.AddObject();
+		TestNeo4jGraph.graph.SetObjectAttribute(obj1, "test", "ok");
 
-		assertEquals("element changed after addition"
-			, graph.GetObjectAttribute(obj1, "test"), "ok");
+		Assert.assertEquals("element changed after addition"
+			, TestNeo4jGraph.graph.GetObjectAttribute(obj1, "test"), "ok");
 	}
 
 /**
@@ -252,15 +252,15 @@ public class TestNeo4jGraph extends Assert
 	{
 		Uid obj1, obj2, link;
 
-		obj1 = graph.AddObject();
-		obj2 = graph.AddObject();
+		obj1 = TestNeo4jGraph.graph.AddObject();
+		obj2 = TestNeo4jGraph.graph.AddObject();
 
-		link = graph.AddLink(obj1
-			, obj2, "contain");
+		link = TestNeo4jGraph.graph.AddLink(obj1
+				, obj2, "contain");
 
-		graph.SetLinkAttribute(link, "test", "ok");
+		TestNeo4jGraph.graph.SetLinkAttribute(link, "test", "ok");
 
-		assertEquals("link changed after addition"
-			, graph.GetLinkAttribute(link, "test"), "ok");
+		Assert.assertEquals("link changed after addition"
+			, TestNeo4jGraph.graph.GetLinkAttribute(link, "test"), "ok");
 	}
 }

@@ -116,7 +116,7 @@ public class OctoObject extends OctoEntity
 	{
 		List<OctoRule> rules = new LinkedList<OctoRule>();
 
-		for(long id : graph_service.GetArray(this, RULE_PREFIX))
+		for(long id : graph_service.GetArray(this, OctoObject.RULE_PREFIX))
 			rules.add(PersistenStorage.INSTANCE.GetRules().Get(id));
 
 		return rules;
@@ -126,7 +126,7 @@ public class OctoObject extends OctoEntity
 	{
 		List<OctoReaction> reactions = new LinkedList<OctoReaction>();
 
-		for(long id : graph_service.GetArray(this, REACTION_PREFIX))
+		for(long id : graph_service.GetArray(this, OctoObject.REACTION_PREFIX))
 			reactions.add(PersistenStorage.INSTANCE.GetReactions().Get(id));
 
 		return reactions;
@@ -136,7 +136,7 @@ public class OctoObject extends OctoEntity
 	{
 		List<Marker> markers = new LinkedList<Marker>();
 
-		for(long id : graph_service.GetArray(this, MARKER_PREFIX))
+		for(long id : graph_service.GetArray(this, OctoObject.MARKER_PREFIX))
 			markers.add(PersistenStorage.INSTANCE.GetMarkers().Get(id));
 
 		return markers;
@@ -144,7 +144,7 @@ public class OctoObject extends OctoEntity
 
 	public void AddRule(OctoRule rule)
 	{
-		graph_service.AddToArray(this, RULE_PREFIX, rule.GetID());
+		graph_service.AddToArray(this, OctoObject.RULE_PREFIX, rule.GetID());
 
 		DeclareAttribute(rule.GetAttr(), rule.GetDefaultValue());
 	}
@@ -157,8 +157,8 @@ public class OctoObject extends OctoEntity
 
 	public void AddReaction(OctoReaction reaction)
 	{
-		graph_service.AddToArray(this, REACTION_PREFIX, reaction.GetID());
-		graph_service.AddToArray(this, REACTION_EXECUTED_PREFIX, 0L);
+		graph_service.AddToArray(this, OctoObject.REACTION_PREFIX, reaction.GetID());
+		graph_service.AddToArray(this, OctoObject.REACTION_EXECUTED_PREFIX, 0L);
 	}
 
 	public void AddReactions(List<OctoReaction> reactions)
@@ -178,7 +178,7 @@ public class OctoObject extends OctoEntity
 	{
 		boolean changed = false;
 
-		List<Long> keys = graph_service.GetArray(this, RULE_PREFIX);
+		List<Long> keys = graph_service.GetArray(this, OctoObject.RULE_PREFIX);
 
 		for(long key : keys)
 		{
@@ -266,7 +266,7 @@ public class OctoObject extends OctoEntity
 				}
 			}
 
-			else if(!needed)
+			else
 			{
 				if(state == OctoReaction.STATE_NONE)
 				{
@@ -306,40 +306,40 @@ public class OctoObject extends OctoEntity
 
 	public long IsReactionExecuted(long key)
 	{
-		List<Long> id = graph_service.GetArray(this, REACTION_PREFIX);
-		List<Long> executed = graph_service.GetArray(this, REACTION_EXECUTED_PREFIX);
+		List<Long> id = graph_service.GetArray(this, OctoObject.REACTION_PREFIX);
+		List<Long> executed = graph_service.GetArray(this, OctoObject.REACTION_EXECUTED_PREFIX);
 
 		return executed.get(id.indexOf(key));
 	}
 
 	public void SetReactionExecuted(long key, long res)
 	{
-		List<Long> id = graph_service.GetArray(this, REACTION_PREFIX);
-		List<Long> executed = graph_service.GetArray(this, REACTION_EXECUTED_PREFIX);
+		List<Long> id = graph_service.GetArray(this, OctoObject.REACTION_PREFIX);
+		List<Long> executed = graph_service.GetArray(this, OctoObject.REACTION_EXECUTED_PREFIX);
 
 		int index = id.indexOf(key);
 		executed.set(index, res);
-		graph_service.SetArray(this, REACTION_EXECUTED_PREFIX, executed);
+		graph_service.SetArray(this, OctoObject.REACTION_EXECUTED_PREFIX, executed);
 	}
 
 	public long AddMarker(long reaction_id, String description, boolean suppress)
 	{
 		long AID = GetAttribute("AID").GetLong();
 		Marker marker = new Marker(AID, reaction_id, description, suppress);
-		graph_service.AddToArray(this, MARKER_PREFIX, marker.GetID());
+		graph_service.AddToArray(this, OctoObject.MARKER_PREFIX, marker.GetID());
 		return marker.GetID();
 	}
 
 	public void DelMarker(long marker_id)
 	{
-		List<Long> markers_id = graph_service.GetArray(this, MARKER_PREFIX);
+		List<Long> markers_id = graph_service.GetArray(this, OctoObject.MARKER_PREFIX);
 
 		if(!markers_id.contains(marker_id))
 			throw new ExceptionModelFail("can not delete: marker with id " + marker_id + " not found");
 
 		markers_id.remove(marker_id); // NOW it removes by value, not by index...
 
-		graph_service.SetArray(this, MARKER_PREFIX, markers_id);
+		graph_service.SetArray(this, OctoObject.MARKER_PREFIX, markers_id);
 
 		PersistenStorage.INSTANCE.GetMarkers().Delete(marker_id);
 	}

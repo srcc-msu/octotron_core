@@ -7,4 +7,4 @@
 package main.java.ru.parallel.octotron.utils;
 
 // order is important for parsing.. TODO - fix
-public enum EQueryType { EQ, NE, LE, GE, LT, GT, SET, NONE };
+public enum EQueryType { EQ, NE, LE, GE, LT, GT, SET, NONE }

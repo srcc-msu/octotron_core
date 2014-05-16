@@ -20,8 +20,8 @@ public class RequestResult
 		ERROR
 	}
 
-	public E_RESULT_TYPE type;
-	public String data;
+	public final E_RESULT_TYPE type;
+	public final String data;
 
 	public RequestResult(E_RESULT_TYPE type, String data)
 	{

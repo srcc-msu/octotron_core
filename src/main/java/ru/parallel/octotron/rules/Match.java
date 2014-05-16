@@ -14,8 +14,8 @@ import main.java.ru.parallel.octotron.primitive.EDependencyType;
 public class Match extends OctoRule
 {
 	private static final long serialVersionUID = -665317574895287470L;
-	private String param;
-	private Object match_value;
+	private final String param;
+	private final Object match_value;
 
 	public Match(String attr, String param, Object match_value)
 	{

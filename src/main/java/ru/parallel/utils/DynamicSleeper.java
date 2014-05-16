@@ -12,8 +12,8 @@ public class DynamicSleeper
 	private static final long MAX_SLEEP_TIME = 128;
 	private static final long GROWTH_RATE = 2;
 
-	private long min_sleep_time = MIN_SLEEP_TIME;
-	private long max_sleep_time = MAX_SLEEP_TIME;
+	private long min_sleep_time = DynamicSleeper.MIN_SLEEP_TIME;
+	private long max_sleep_time = DynamicSleeper.MAX_SLEEP_TIME;
 
 	private long sleep_time;
 
@@ -33,13 +33,13 @@ public class DynamicSleeper
 	public void Act()
 	{
 		if(sleep_time > min_sleep_time)
-			sleep_time /= GROWTH_RATE;
+			sleep_time /= DynamicSleeper.GROWTH_RATE;
 	}
 
 	public void Delay()
 	{
 		if(sleep_time < max_sleep_time)
-			sleep_time *= GROWTH_RATE;
+			sleep_time *= DynamicSleeper.GROWTH_RATE;
 	}
 
 	public void Sleep()

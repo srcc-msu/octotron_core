@@ -18,7 +18,7 @@ public final class TimerProcessor
 {
 	public static final TimerProcessor INSTANCE = new TimerProcessor();
 
-	private List<OctoAttribute> timers;
+	private final List<OctoAttribute> timers;
 
 	private TimerProcessor()
 	{
@@ -27,7 +27,7 @@ public final class TimerProcessor
 
 	public static void AddTimer(OctoAttribute timer)
 	{
-		INSTANCE.timers.add(timer);
+		TimerProcessor.INSTANCE.timers.add(timer);
 	}
 
 	public static AttributeList Process()
@@ -36,7 +36,7 @@ public final class TimerProcessor
 
 		long cur_time = JavaUtils.GetTimestamp(); // TODO: move into the cycle?
 
-		Iterator<OctoAttribute> it = INSTANCE.timers.iterator();
+		Iterator<OctoAttribute> it = TimerProcessor.INSTANCE.timers.iterator();
 
 		while (it.hasNext())
 		{

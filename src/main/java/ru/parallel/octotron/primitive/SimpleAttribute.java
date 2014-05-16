@@ -20,7 +20,7 @@ import main.java.ru.parallel.utils.JavaUtils;
  * */
 public class SimpleAttribute
 {
-	protected String name;
+	protected final String name;
 	protected Object value;
 	protected OctoEntity parent;
 
@@ -74,9 +74,8 @@ public class SimpleAttribute
 			return value_str.substring(1, value_str.length() - 1);
 		}
 
-		if(value == null)
-			try { value = Long.parseLong(value_str); }
-				catch(NumberFormatException ignore){}
+		try { value = Long.parseLong(value_str); }
+			catch(NumberFormatException ignore){}
 
 		if(value == null)
 			try { value = Double.parseDouble(value_str); }
@@ -96,16 +95,16 @@ public class SimpleAttribute
 	public static Object ConformType(Object value)
 	{
 		if(value instanceof Integer)
-			return Long.valueOf(((Integer) value).longValue());
+			return ((Integer) value).longValue();
 		else if(value instanceof Float)
-			return Double.valueOf(((Float) value).doubleValue());
+			return ((Float) value).doubleValue();
 		else
 			return value;
 	}
 
 	public static String ValueToStr(Object value)
 	{
-		value = ConformType(value);
+		value = SimpleAttribute.ConformType(value);
 
 		if(value instanceof Boolean)
 			return value.toString();

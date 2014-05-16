@@ -22,13 +22,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class GlobalSettings
 {
-	private int hash;
+	private final int hash;
 
 	private String db_name;
 	private String db_path;
 
-	private Map<String, String> log_map = new HashMap<String, String>();
-	private Map<String, String> script_map = new HashMap<String, String>();
+	private final Map<String, String> log_map = new HashMap<String, String>();
+	private final Map<String, String> script_map = new HashMap<String, String>();
 
 	private List<String> object_index;
 	private List<String> link_index;
@@ -98,9 +98,9 @@ public class GlobalSettings
 		http_port = JsonUtils.MustPresent(http_conf, "port").getAsInt();
 
 // --- credentials config
-		view_credentials = GetCredential(http_conf, "view");
-		modify_credentials = GetCredential(http_conf, "modify");
-		control_credentials = GetCredential(http_conf, "control");
+		view_credentials = GlobalSettings.GetCredential(http_conf, "view");
+		modify_credentials = GlobalSettings.GetCredential(http_conf, "modify");
+		control_credentials = GlobalSettings.GetCredential(http_conf, "control");
 	}
 
 	public int GetPort()

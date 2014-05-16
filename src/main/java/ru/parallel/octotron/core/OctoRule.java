@@ -10,10 +10,12 @@ import main.java.ru.parallel.octotron.impl.PersistenStorage;
 import main.java.ru.parallel.octotron.primitive.EDependencyType;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
-public abstract class OctoRule implements java.io.Serializable
+import java.io.Serializable;
+
+public abstract class OctoRule implements Serializable
 {
 	private static final long serialVersionUID = 6126662649331847764L;
-	protected String attr;
+	protected final String attr;
 	private long rule_id;
 
 	public OctoRule(String attr)

@@ -8,8 +8,8 @@ package main.java.ru.parallel.octotron.http;
 
 public class ParsedHttpRequest
 {
-	private ParsedRequest parsed_request;
-	private HTTPRequest http_request;
+	private final ParsedRequest parsed_request;
+	private final HTTPRequest http_request;
 
 	public ParsedHttpRequest(HTTPRequest http_request, ParsedRequest parsed_request)
 	{

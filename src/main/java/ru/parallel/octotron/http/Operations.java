@@ -6,7 +6,6 @@
 
 package main.java.ru.parallel.octotron.http;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,9 +44,9 @@ public abstract class Operations
 {
 	public static class Operation
 	{
-		private String name;
-		private boolean is_blocking;
-		private IExec exec;
+		private final String name;
+		private final boolean is_blocking;
+		private final IExec exec;
 
 		public Operation(String name, boolean is_blocking, IExec exec)
 		{
@@ -76,27 +75,25 @@ public abstract class Operations
 
 	private interface IExec
 	{
-		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+		Object Execute(GraphService graph_service, ExecutionControler control
+				, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError;
 	}
 
 	/**
 	 * tests if the \\attr declares a proper print format<br>
 	 * */
-	private static AutoFormat.E_FORMAT_PARAM AttrToFormat(String format)
-		throws ExceptionParseError
+	private static E_FORMAT_PARAM AttrToFormat(String format)
 	{
 		switch(format)
 		{
-			case "csv"   : return AutoFormat.E_FORMAT_PARAM.CSV;
-			case "comma" : return AutoFormat.E_FORMAT_PARAM.COMMA;
-			case "nl"	: return AutoFormat.E_FORMAT_PARAM.NL;
-			case "json"  : return AutoFormat.E_FORMAT_PARAM.JSON;
-			case "jsonp"  : return AutoFormat.E_FORMAT_PARAM.JSONP;
+			case "csv"   : return E_FORMAT_PARAM.CSV;
+			case "comma" : return E_FORMAT_PARAM.COMMA;
+			case "nl"    : return E_FORMAT_PARAM.NL;
+			case "json"  : return E_FORMAT_PARAM.JSON;
+			case "jsonp" : return E_FORMAT_PARAM.JSONP;
+			default      : return E_FORMAT_PARAM.NONE;
 		}
-
-		return AutoFormat.E_FORMAT_PARAM.NONE;
 	}
 
 	private static void RequiredParams(Map<String, String> params, String... names)
@@ -126,8 +123,8 @@ public abstract class Operations
 	private static void StrictParams(Map<String, String> params, String... names)
 		throws ExceptionParseError
 	{
-		RequiredParams(params, names);
-		AllParams(params, names);
+		Operations.RequiredParams(params, names);
+		Operations.AllParams(params, names);
 	}
 
 //----------------------------
@@ -145,7 +142,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params, "path");
+			Operations.StrictParams(params, "path");
 
 			String data = String.valueOf(objects.size());
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -164,8 +161,8 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			RequiredParams(params, "path");
-			AllParams(params, "path", "format", "callback", "attributes");
+			Operations.RequiredParams(params, "path");
+			Operations.AllParams(params, "path", "format", "callback", "attributes");
 
 			E_FORMAT_PARAM format = E_FORMAT_PARAM.NL;
 
@@ -174,7 +171,7 @@ public abstract class Operations
 			String format_str = params.get("format");
 
 			if(format_str != null)
-				format = AttrToFormat(format_str);
+				format = Operations.AttrToFormat(format_str);
 
 // check if attributes are specified
 
@@ -223,7 +220,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionDBError, ExceptionParseError
 		{
-			AllParams(params, "path");
+			Operations.AllParams(params, "path");
 
 			String data = AutoFormat.PrintEntitiesSpecial((ObjectList)objects);
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -240,11 +237,11 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params);
+			Operations.StrictParams(params);
 
 			List<Marker> markers = PersistenStorage.INSTANCE.GetMarkers().GetAll();
 
-			if(markers.size() == 0)
+			if(markers.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no markers");
 
 			StringBuilder res = new StringBuilder();
@@ -271,8 +268,8 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			RequiredParams(params);
-			AllParams(params, "format", "callback");
+			Operations.RequiredParams(params);
+			Operations.AllParams(params, "format", "callback");
 
 			E_FORMAT_PARAM format = E_FORMAT_PARAM.NL;
 
@@ -281,7 +278,7 @@ public abstract class Operations
 			String format_str = params.get("format");
 
 			if(format_str != null)
-				format = AttrToFormat(format_str);
+				format = Operations.AttrToFormat(format_str);
 
 			String callback = params.get("callback");
 
@@ -290,7 +287,7 @@ public abstract class Operations
 
 			List<OctoReaction> reactions = PersistenStorage.INSTANCE.GetReactions().GetAll();
 
-			if(reactions.size() == 0)
+			if(reactions.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no reactions");
 
 			List<Map<String, Object>> data = new LinkedList<Map<String, Object>>();
@@ -303,7 +300,7 @@ public abstract class Operations
 				map.put("check_attribute", reaction.GetCheckName());
 				map.put("check_value", reaction.GetCheckValue());
 				map.put("status", reaction.GetResponse().GetStatus().toString());
-				map.put("description", reaction.GetResponse().GetDescription().toString());
+				map.put("description", reaction.GetResponse().GetDescription());
 
 				data.add(map);
 			}
@@ -328,8 +325,8 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			RequiredParams(params);
-			AllParams(params, "format", "callback");
+			Operations.RequiredParams(params);
+			Operations.AllParams(params, "format", "callback");
 
 			E_FORMAT_PARAM format = E_FORMAT_PARAM.NL;
 
@@ -338,7 +335,7 @@ public abstract class Operations
 			String format_str = params.get("format");
 
 			if(format_str != null)
-				format = AttrToFormat(format_str);
+				format = Operations.AttrToFormat(format_str);
 
 			String callback = params.get("callback");
 
@@ -348,7 +345,7 @@ public abstract class Operations
 
 			List<OctoReaction> reactions = PersistenStorage.INSTANCE.GetReactions().GetAll();
 
-			if(reactions.size() == 0)
+			if(reactions.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no reactions");
 
 			List<Map<String, Object>> data = new LinkedList<Map<String, Object>>();
@@ -393,7 +390,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params, "path", "name", "value");
+			Operations.StrictParams(params, "path", "name", "value");
 
 			String name = params.get("name");
 			String value_str = params.get("value");
@@ -423,7 +420,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params, "path", "name", "value");
+			Operations.StrictParams(params, "path", "name", "value");
 
 			String name = params.get("name");
 			String value_str = params.get("value");
@@ -438,9 +435,9 @@ public abstract class Operations
 			String data = "";
 
 			if(count == 1)
-				data = String.format("set attribute for one object");
+				data = "set attribute for one object";
 			else if(count > 1)
-				data = String.format("set attribute for each of " + count + " objects");
+				data = "set attribute for each of " + count + " objects";
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
 		}
@@ -457,8 +454,8 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			AllParams(params, "name", "value");
-			RequiredParams(params, "name");
+			Operations.AllParams(params, "name", "value");
+			Operations.RequiredParams(params, "name");
 
 			String name = params.get("name");
 			String value_str = params.get("value");
@@ -492,7 +489,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params, "path", "name");
+			Operations.StrictParams(params, "path", "name");
 
 			String name = params.get("name");
 
@@ -503,9 +500,9 @@ public abstract class Operations
 			String data = "";
 
 			if(count == 1)
-				data = String.format("set valid attribute for one object");
+				data = "set valid attribute for one object";
 			else if(count > 1)
-				data = String.format("set valid attribute for each of " + count + " objects");
+				data = "set valid attribute for each of " + count + " objects";
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
 		}
@@ -522,7 +519,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params, "path", "name");
+			Operations.StrictParams(params, "path", "name");
 
 			String name = params.get("name");
 
@@ -533,9 +530,9 @@ public abstract class Operations
 			String data = "";
 
 			if(count == 1)
-				data = String.format("set invalid attribute for one object");
+				data = "set invalid attribute for one object";
 			else if(count > 1)
-				data = String.format("set invalid attribute for each of " + count + " objects");
+				data = "set invalid attribute for each of " + count + " objects";
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
 		}
@@ -552,8 +549,8 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			RequiredParams(params, "path", "reaction_id", "description");
-			AllParams(params, "path", "reaction_id", "description", "suppress");
+			Operations.RequiredParams(params, "path", "reaction_id", "description");
+			Operations.AllParams(params, "path", "reaction_id", "description", "suppress");
 
 			String reaction_id_str = params.get("reaction_id");
 			String description_str = params.get("description");
@@ -561,8 +558,7 @@ public abstract class Operations
 
 			long reaction_id = (long)SimpleAttribute.ValueFromStr(reaction_id_str);
 
-			String description = "";
-			description = (String)SimpleAttribute.ValueFromStr(description_str);
+			String description = (String)SimpleAttribute.ValueFromStr(description_str);
 
 			boolean suppress = false;
 			if(suppress_str != null)
@@ -590,7 +586,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params, "path", "id");
+			Operations.StrictParams(params, "path", "id");
 			String id_str = params.get("id");
 
 			long id = (long)SimpleAttribute.ValueFromStr(id_str);
@@ -617,7 +613,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			AllParams(params);
+			Operations.AllParams(params);
 
 			control.SetExit(true);
 
@@ -637,7 +633,7 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params, "silent");
+			Operations.StrictParams(params, "silent");
 
 			String mode_str = params.get("silent");
 
@@ -664,21 +660,14 @@ public abstract class Operations
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			AllParams(params);
+			Operations.AllParams(params);
 
 			double time;
 			String result;
 
-			try
-			{
 Timer.SStart();
-				result = control.MakeSnapshot();
+			result = control.MakeSnapshot();
 time = Timer.SEnd();
-			}
-			catch (IOException | ExceptionDBError e)
-			{
-				throw new ExceptionParseError(e);
-			}
 
 			result = "snapshot creation took "+ time + " sec" + System.lineSeparator() + result;
 
@@ -696,7 +685,7 @@ time = Timer.SEnd();
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			AllParams(params);
+			Operations.AllParams(params);
 
 			String result = control.GetStat();
 
@@ -721,8 +710,8 @@ time = Timer.SEnd();
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			RequiredParams(params, "format");
-			AllParams(params, "format", "path");
+			Operations.RequiredParams(params, "format");
+			Operations.AllParams(params, "format", "path");
 
 			String format = params.get("format");
 			String path = params.get("path");
@@ -762,7 +751,7 @@ time = Timer.SEnd();
 			, Map<String, String> params, AbsEntityList<?> objects)
 				throws ExceptionParseError
 		{
-			StrictParams(params, "interval");
+			Operations.StrictParams(params, "interval");
 
 			String value_str = params.get("interval");
 			long interval = (long)SimpleAttribute.ValueFromStr(value_str);

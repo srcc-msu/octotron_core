@@ -26,7 +26,7 @@ import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
  * */
 public class Neo4jIndex implements IIndex
 {
-	private Neo4jGraph graph;
+	private final Neo4jGraph graph;
 
 	public Neo4jIndex(Neo4jGraph graph)
 	{
@@ -99,7 +99,7 @@ public class Neo4jIndex implements IIndex
 		ReadableIndex<Node> node_auto_index = graph.GetInnerIndex()
 			.getNodeAutoIndexer().getAutoIndex();
 
-		return FromNodeIndex(node_auto_index.get(name, value));
+		return Neo4jIndex.FromNodeIndex(node_auto_index.get(name, value));
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class Neo4jIndex implements IIndex
 		ReadableIndex<Relationship> rel_auto_index = graph.GetInnerIndex()
 			.getRelationshipAutoIndexer().getAutoIndex();
 
-		return FromRelIndex(rel_auto_index.get(name, value));
+		return Neo4jIndex.FromRelIndex(rel_auto_index.get(name, value));
 	}
 
 // --------------------------------------------------------------------------
@@ -165,7 +165,7 @@ public class Neo4jIndex implements IIndex
 		ReadableIndex<Node> node_auto_index = graph.GetInnerIndex()
 			.getNodeAutoIndexer().getAutoIndex();
 
-		return FromNodeIndex(node_auto_index.query(name, pattern));
+		return Neo4jIndex.FromNodeIndex(node_auto_index.query(name, pattern));
 	}
 
 	@Override
@@ -174,7 +174,7 @@ public class Neo4jIndex implements IIndex
 		ReadableIndex<Relationship> rel_auto_index = graph.GetInnerIndex()
 			.getRelationshipAutoIndexer().getAutoIndex();
 
-		return FromRelIndex(rel_auto_index.query(name, pattern));
+		return Neo4jIndex.FromRelIndex(rel_auto_index.query(name, pattern));
 	}
 
 // -----------------------------------------------------------------------------

@@ -56,11 +56,9 @@ public class JavaUtils
 
 	public static <T> T[] ExtendMultiArrayChecked(Object[] a, Class<T[]> check)
 	{
-		Object[] plain = ExtendMultiArray(a);
+		Object[] plain = JavaUtils.ExtendMultiArray(a);
 
-		T[] result = Arrays.copyOf(plain, plain.length, check);
-
-		return result;
+		return Arrays.copyOf(plain, plain.length, check);
 	}
 
 	public static long GetTimestamp()

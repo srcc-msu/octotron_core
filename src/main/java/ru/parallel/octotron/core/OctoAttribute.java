@@ -18,7 +18,7 @@ import main.java.ru.parallel.utils.JavaUtils;
  * */
 public class OctoAttribute extends SimpleAttribute
 {
-	private GraphService graph_service;
+	private final GraphService graph_service;
 	private long change_time;
 
 	OctoAttribute(GraphService graph_service, OctoEntity parent, String name, Object value)
@@ -29,13 +29,13 @@ public class OctoAttribute extends SimpleAttribute
 
 		change_time = 0;
 
-		if(graph_service.TestMeta(parent, name, TIME_PREFIX))
-			change_time = (Long)graph_service.GetMeta(parent, name, TIME_PREFIX);
+		if(graph_service.TestMeta(parent, name, OctoAttribute.TIME_PREFIX))
+			change_time = (Long)graph_service.GetMeta(parent, name, OctoAttribute.TIME_PREFIX);
 	}
 
 	private void CheckTypes(Object a_value)
 	{
-		if(value.getClass() != a_value.getClass())
+		if(!value.getClass().equals(a_value.getClass()))
 		{
 			String error = String.format("mismatch types: %s=%s[%s] and %s[%s]"
 				, name, value, value.getClass().getName(), a_value, a_value.getClass().getName());
@@ -46,7 +46,7 @@ public class OctoAttribute extends SimpleAttribute
 
 	private void CheckType(Class<?> check_class)
 	{
-		if(value.getClass() != check_class)
+		if(!value.getClass().equals(check_class))
 		{
 			String error = String.format("mismatch types: %s=%s[%s] and [%s]"
 				, name, value, value.getClass().getName(), check_class.getName());
@@ -66,22 +66,22 @@ public class OctoAttribute extends SimpleAttribute
 
 	public double GetSpeed()
 	{
-		if(!graph_service.TestMeta(parent, name, LAST_PREFIX))
+		if(!graph_service.TestMeta(parent, name, OctoAttribute.LAST_PREFIX))
 			return 0.0;
-		if(!graph_service.TestMeta(parent, name, LASTTIME_PREFIX))
+		if(!graph_service.TestMeta(parent, name, OctoAttribute.LASTTIME_PREFIX))
 			return 0.0;
 
-		Object last_val = graph_service.GetMeta(parent, name, LAST_PREFIX); 
-		long last_time = (Long)graph_service.GetMeta(parent, name, LASTTIME_PREFIX);
+		Object last_val = graph_service.GetMeta(parent, name, OctoAttribute.LAST_PREFIX);
+		long last_time = (Long)graph_service.GetMeta(parent, name, OctoAttribute.LASTTIME_PREFIX);
 
 		Class<?> my_class = value.getClass(); 
 
-		if(my_class == Double.class)
+		if(my_class.equals(Double.class))
 		{
 			Double diff = (Double)value - (Double)last_val;
 			return diff / (change_time - last_time);
 		}
-		else if(my_class == Long.class)
+		else if(my_class.equals(Long.class))
 		{
 			Long diff = (Long)value - (Long)last_val;
 			return diff.doubleValue() / (change_time - last_time);
@@ -92,18 +92,18 @@ public class OctoAttribute extends SimpleAttribute
 
 	public Boolean Update(Object new_value)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckTypes(new_value);
 
 		if(ne(new_value) || GetTime() == 0)
 		{
-			graph_service.SetMeta(parent, name, LAST_PREFIX, value);
-			graph_service.SetMeta(parent, name, LASTTIME_PREFIX, GetTime());
+			graph_service.SetMeta(parent, name, OctoAttribute.LAST_PREFIX, value);
+			graph_service.SetMeta(parent, name, OctoAttribute.LASTTIME_PREFIX, GetTime());
 
 			value = new_value;
 
 			graph_service.SetAttribute(parent, name, value);
-			graph_service.SetMeta(parent, name, TIME_PREFIX, JavaUtils.GetTimestamp());
+			graph_service.SetMeta(parent, name, OctoAttribute.TIME_PREFIX, JavaUtils.GetTimestamp());
 
 			return true;
 		}
@@ -142,9 +142,9 @@ public class OctoAttribute extends SimpleAttribute
 	{
 		Class<?> my_class = value.getClass(); 
 
-		if(my_class == Double.class)
+		if(my_class.equals(Double.class))
 			return GetDouble();
-		else if(my_class == Long.class)
+		else if(my_class.equals(Long.class))
 			return GetLong().doubleValue();
 		else
 			throw new ExceptionModelFail("bad value type for casting to Double");
@@ -152,7 +152,7 @@ public class OctoAttribute extends SimpleAttribute
 
 	public final boolean eq(Object new_value)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckTypes(new_value);
 
 		return value.equals(new_value);
@@ -160,15 +160,15 @@ public class OctoAttribute extends SimpleAttribute
 
 	public final boolean aeq(Object new_value, Object aprx)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckTypes(new_value);
 
 		Class<?> my_class = value.getClass(); 
 
-		if(my_class == Double.class)
+		if(my_class.equals(Double.class))
 			return GetDouble() > (Double)new_value - (Double)aprx
 				&& GetDouble() < (Double)new_value + (Double)aprx;
-		else if(my_class == Long.class)
+		else if(my_class.equals(Long.class))
 			return GetLong() > (Long)new_value - (Long)aprx
 				&& GetLong() < (Long)new_value + (Long)aprx;
 		else
@@ -182,14 +182,14 @@ public class OctoAttribute extends SimpleAttribute
 
 	public final boolean gt(Object new_value)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckTypes(new_value);
 
 		Class<?> my_class = value.getClass(); 
 
-		if(my_class == Double.class)
+		if(my_class.equals(Double.class))
 			return GetDouble() > (Double)new_value;
-		else if(my_class == Long.class)
+		else if(my_class.equals(Long.class))
 			return GetLong() > (Long)new_value;
 		else
 			throw new ExceptionModelFail("bad value type type for comparison");
@@ -197,14 +197,14 @@ public class OctoAttribute extends SimpleAttribute
 
 	public final boolean lt(Object new_value)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckTypes(new_value);
 
 		Class<?> my_class = value.getClass(); 
 
-		if(my_class == Double.class)
+		if(my_class.equals(Double.class))
 			return GetDouble() < (Double)new_value;
-		else if(my_class == Long.class)
+		else if(my_class.equals(Long.class))
 			return GetLong() < (Long)new_value;
 		else
 			throw new ExceptionModelFail("bad value type type for comparison");
@@ -228,17 +228,17 @@ public class OctoAttribute extends SimpleAttribute
 
 	public boolean IsValid()
 	{
-		return graph_service.TestMeta(parent, name, INVALID_KEY);
+		return graph_service.TestMeta(parent, name, OctoAttribute.INVALID_KEY);
 	}
 
 	public void SetValid()
 	{
-		if(graph_service.TestMeta(parent, name, INVALID_KEY))
-			graph_service.DeleteMeta(parent, name, INVALID_KEY);
+		if(graph_service.TestMeta(parent, name, OctoAttribute.INVALID_KEY))
+			graph_service.DeleteMeta(parent, name, OctoAttribute.INVALID_KEY);
 	}
 
 	public void SetInvalid()
 	{
-		graph_service.SetMeta(parent, name, INVALID_KEY, true);
+		graph_service.SetMeta(parent, name, OctoAttribute.INVALID_KEY, true);
 	}
 }

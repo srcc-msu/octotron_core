@@ -21,7 +21,7 @@ import main.java.ru.parallel.octotron.utils.ObjectList;
  * */
 public class AttributeProcessor
 {
-	private GraphService graph_service;
+	private final GraphService graph_service;
 
 	public AttributeProcessor(GraphService graph_service)
 	{

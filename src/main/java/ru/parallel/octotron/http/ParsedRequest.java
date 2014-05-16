@@ -19,8 +19,8 @@ import main.java.ru.parallel.octotron.utils.AbsEntityList;
  * */
 public class ParsedRequest
 {
-	private Operation operation;
-	private Map<String, String> params;
+	private final Operation operation;
+	private final Map<String, String> params;
 
 	public ParsedRequest(Operation operation, Map<String, String> params)
 	{

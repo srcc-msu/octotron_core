@@ -19,7 +19,7 @@ import main.java.ru.parallel.octotron.utils.AbsEntityList;
  * */
 public class ParsedPath
 {
-	private List<PathToken> tokens;
+	private final List<PathToken> tokens;
 
 	public ParsedPath(List<PathToken> tokens)
 	{

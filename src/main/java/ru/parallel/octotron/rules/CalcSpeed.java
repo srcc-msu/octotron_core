@@ -14,7 +14,7 @@ import main.java.ru.parallel.octotron.primitive.EDependencyType;
 public class CalcSpeed extends OctoRule
 {
 	private static final long serialVersionUID = -5796823312858284235L;
-	private String measured_attr;
+	private final String measured_attr;
 
 	public CalcSpeed(String speed_attr, String measured_attr)
 	{

@@ -26,14 +26,14 @@ public class TestIndex extends Assert
 	@AfterClass
 	public static void Delete()
 	{
-		graph.Shutdown();
+		TestIndex.graph.Shutdown();
 		try
 		{
-			graph.Delete();
+			TestIndex.graph.Delete();
 		}
 		catch (ExceptionSystemError e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -42,12 +42,12 @@ public class TestIndex extends Assert
 	{
 		try
 		{
-			graph_service.Clean();
-			graph.GetTransaction().ForceWrite();
+			TestIndex.graph_service.Clean();
+			TestIndex.graph.GetTransaction().ForceWrite();
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -59,32 +59,30 @@ public class TestIndex extends Assert
 	{
 		try
 		{
-			graph = new Neo4jGraph("dbs/test_index", Neo4jGraph.Op.RECREATE);
-			graph_service = new GraphService(graph);
+			TestIndex.graph = new Neo4jGraph("dbs/test_index", Neo4jGraph.Op.RECREATE);
+			TestIndex.graph_service = new GraphService(TestIndex.graph);
 
-			SimpleAttribute[] obj_att = new SimpleAttribute[]
-			{
+			SimpleAttribute[] obj_att = {
 				new SimpleAttribute("object", "ok"),
 				new SimpleAttribute("att_obj", "value12345")
 			};
 
-			obj_factory = new ObjectFactory(graph_service).Attributes(obj_att);
+			TestIndex.obj_factory = new ObjectFactory(TestIndex.graph_service).Attributes(obj_att);
 
-			SimpleAttribute[] link_att = new SimpleAttribute[]
-			{
+			SimpleAttribute[] link_att = {
 				new SimpleAttribute("type", "contain"),
 				new SimpleAttribute("att_link", "value23456")
 			};
 
-			link_factory = new LinkFactory(graph_service).Attributes(link_att);
+			TestIndex.link_factory = new LinkFactory(TestIndex.graph_service).Attributes(link_att);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 
-		graph.GetIndex().EnableObjectIndex("att_obj");
-		graph.GetIndex().EnableLinkIndex("att_link");
+		TestIndex.graph.GetIndex().EnableObjectIndex("att_obj");
+		TestIndex.graph.GetIndex().EnableLinkIndex("att_link");
 	}
 
 	@Test
@@ -93,18 +91,18 @@ public class TestIndex extends Assert
 		int N = 10;
 		try
 		{
-			ObjectList objs = obj_factory.Create(N);
-			link_factory.EveryToEvery(objs, objs);
+			ObjectList objs = TestIndex.obj_factory.Create(N);
+			TestIndex.link_factory.EveryToEvery(objs, objs);
 
-			LinkList found = graph_service.GetLinks("att_link", "value23456");
-			LinkList not_found = graph_service.GetLinks("att_link", "aa");
+			LinkList found = TestIndex.graph_service.GetLinks("att_link", "value23456");
+			LinkList not_found = TestIndex.graph_service.GetLinks("att_link", "aa");
 
-			assertEquals("some links missing", found.size(), N);
-			assertEquals("excess links found", not_found.size(), 0);
+			Assert.assertEquals("some links missing", found.size(), N);
+			Assert.assertEquals("excess links found", not_found.size(), 0);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -114,17 +112,17 @@ public class TestIndex extends Assert
 		int N = 11;
 		try
 		{
-			obj_factory.Create(N);
+			TestIndex.obj_factory.Create(N);
 
-			ObjectList found = graph_service.GetObjects("att_obj", "value12345");
-			ObjectList not_found = graph_service.GetObjects("att_obj", "aa");
+			ObjectList found = TestIndex.graph_service.GetObjects("att_obj", "value12345");
+			ObjectList not_found = TestIndex.graph_service.GetObjects("att_obj", "aa");
 
-			assertEquals("some objects missing", found.size(), N);
-			assertEquals("excess objects found", not_found.size(), 0);
+			Assert.assertEquals("some objects missing", found.size(), N);
+			Assert.assertEquals("excess objects found", not_found.size(), 0);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -134,18 +132,18 @@ public class TestIndex extends Assert
 		int N = 12;
 		try
 		{
-			ObjectList objs = obj_factory.Create(N);
-			link_factory.EveryToEvery(objs, objs);
+			ObjectList objs = TestIndex.obj_factory.Create(N);
+			TestIndex.link_factory.EveryToEvery(objs, objs);
 
-			LinkList found = graph_service.GetLinks("att_link");
-			LinkList not_found = graph_service.GetLinks("wrong");
+			LinkList found = TestIndex.graph_service.GetLinks("att_link");
+			LinkList not_found = TestIndex.graph_service.GetLinks("wrong");
 
-			assertEquals("some links missing", found.size(), N);
-			assertEquals("excess links found", not_found.size(), 0);
+			Assert.assertEquals("some links missing", found.size(), N);
+			Assert.assertEquals("excess links found", not_found.size(), 0);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -155,17 +153,17 @@ public class TestIndex extends Assert
 		int N = 13;
 		try
 		{
-			obj_factory.Create(N);
+			TestIndex.obj_factory.Create(N);
 
-			ObjectList found = graph_service.GetObjects("att_obj");
-			ObjectList not_found = graph_service.GetObjects("wrong");
+			ObjectList found = TestIndex.graph_service.GetObjects("att_obj");
+			ObjectList not_found = TestIndex.graph_service.GetObjects("wrong");
 
-			assertEquals("some objects missing", found.size(), N);
-			assertEquals("excess objects found", not_found.size(), 0);
+			Assert.assertEquals("some objects missing", found.size(), N);
+			Assert.assertEquals("excess objects found", not_found.size(), 0);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -175,19 +173,19 @@ public class TestIndex extends Assert
 		int N = 14;
 		try
 		{
-			ObjectList objs = obj_factory.Create(N);
-			link_factory.EveryToEvery(objs, objs);
+			ObjectList objs = TestIndex.obj_factory.Create(N);
+			TestIndex.link_factory.EveryToEvery(objs, objs);
 
-			LinkList found = graph_service.QueryLinks("att_link", "*lue234*");
+			LinkList found = TestIndex.graph_service.QueryLinks("att_link", "*lue234*");
 
-			LinkList not_found = graph_service.QueryLinks("att_link", "f*lue234*");
+			LinkList not_found = TestIndex.graph_service.QueryLinks("att_link", "f*lue234*");
 
-			assertEquals("some links missing", found.size(), N);
-			assertEquals("excess links found", not_found.size(), 0);
+			Assert.assertEquals("some links missing", found.size(), N);
+			Assert.assertEquals("excess links found", not_found.size(), 0);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
@@ -197,85 +195,85 @@ public class TestIndex extends Assert
 		int N = 15;
 		try
 		{
-			obj_factory.Create(N);
+			TestIndex.obj_factory.Create(N);
 
-			ObjectList found = graph_service.QueryObjects("att_obj", "*lue123*");
-			ObjectList not_found = graph_service.QueryObjects("att_obj", "f*lue123*");
+			ObjectList found = TestIndex.graph_service.QueryObjects("att_obj", "*lue123*");
+			ObjectList not_found = TestIndex.graph_service.QueryObjects("att_obj", "f*lue123*");
 
-			assertEquals("some objects missing", found.size(), N);
-			assertEquals("excess objects found", not_found.size(), 0);
+			Assert.assertEquals("some objects missing", found.size(), N);
+			Assert.assertEquals("excess objects found", not_found.size(), 0);
 		}
 		catch (Exception e)
 		{
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 
 	@Test
 	public void TestSingleLink()
 	{
-		ObjectList objs = obj_factory.Create(2);
-		link_factory.OneToOne(objs.get(0), objs.get(1));
+		ObjectList objs = TestIndex.obj_factory.Create(2);
+		TestIndex.link_factory.OneToOne(objs.get(0), objs.get(1));
 
-		graph.GetIndex().GetLink("att_link", "value23456");
+		TestIndex.graph.GetIndex().GetLink("att_link", "value23456");
 
 		boolean catched = false;
 // this must throw
 		try
 		{
-			graph.GetIndex().GetLink("att_link", "gfgf");
+			TestIndex.graph.GetIndex().GetLink("att_link", "gfgf");
 		}
 		catch(ExceptionModelFail e)
 		{
 			catched = true;
 			//it is ok
 		}
-		assertEquals("found link that must not present", catched, true);
+		Assert.assertEquals("found link that must not present", catched, true);
 
-		link_factory.OneToOne(objs.get(1), objs.get(0));
+		TestIndex.link_factory.OneToOne(objs.get(1), objs.get(0));
 		catched = false;
 
 // this must throw - two possible links
 		try
 		{
-			graph.GetIndex().GetLink("att_link", "value23456");
+			TestIndex.graph.GetIndex().GetLink("att_link", "value23456");
 		}
 		catch(ExceptionModelFail e)
 		{
 			catched = true;
 			//it is ok
 		}
-		assertEquals("found link that must not present", catched, true);
+		Assert.assertEquals("found link that must not present", catched, true);
 	}
 
 	@Test
 	public void TestSingleObj()
 	{
-		obj_factory.Create(1);
+		TestIndex.obj_factory.Create(1);
 
-		graph.GetIndex().GetObject("att_obj", "value12345");
+		TestIndex.graph.GetIndex().GetObject("att_obj", "value12345");
 
 		boolean catched = false;
 
 // this must throw
 		try
 		{
-			graph.GetIndex().GetObject("att_obj", "gfgf");
+			TestIndex.graph.GetIndex().GetObject("att_obj", "gfgf");
 		}
 		catch(ExceptionModelFail e)
 		{
 			catched = true;
 			//it is ok
 		}
-		assertEquals("found link that must not present", catched, true);
+		Assert.assertEquals("found link that must not present", catched, true);
 
-		obj_factory.Create(1);
+		TestIndex.obj_factory.Create(1);
 		catched = false;
 
 // this must throw - two possible objects
 		try
 		{
-			graph.GetIndex().GetObject("att_obj", "value12345");
+			TestIndex.graph.GetIndex().GetObject("att_obj", "value12345");
 		}
 		catch(ExceptionModelFail e)
 		{
@@ -283,6 +281,6 @@ public class TestIndex extends Assert
 			//it is ok
 		}
 
-		assertEquals("found link that must not present", catched, true);
+		Assert.assertEquals("found link that must not present", catched, true);
 	}
 }

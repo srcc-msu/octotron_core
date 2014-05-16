@@ -10,17 +10,17 @@ import main.java.ru.parallel.utils.Timer;
 
 public class Statistics
 {
-	private Metric request_queue_60 = new Metric();
-	private Metric blocking_request_queue_60 = new Metric();
-	private Metric import_queue_60 = new Metric();
+	private final Metric request_queue_60 = new Metric();
+	private final Metric blocking_request_queue_60 = new Metric();
+	private final Metric import_queue_60 = new Metric();
 
-	private Metric sleep_60 = new Metric();
+	private final Metric sleep_60 = new Metric();
 
-	private Metric request_processed_60 = new Metric();
-	private Metric blocking_request_processed_60 = new Metric();
-	private Metric import_processed_60 = new Metric();
+	private final Metric request_processed_60 = new Metric();
+	private final Metric blocking_request_processed_60 = new Metric();
+	private final Metric import_processed_60 = new Metric();
 
-	private Timer timer_60 = new Timer();
+	private final Timer timer_60 = new Timer();
 
 	public Statistics()
 	{
@@ -69,7 +69,7 @@ public class Statistics
 			.append(metric.GetValue()).append(System.lineSeparator());
 
 		if(seconds > 0)
-			res.append(name + " per sec: ")
+			res.append(name).append(" per sec: ")
 				.append(String.format("%.2f", 1.0 * metric.GetValue() / seconds))
 					.append(System.lineSeparator());
 
@@ -80,25 +80,25 @@ public class Statistics
 	{
 		String res = "";
 
-		res += GetAvgs(sleep_60, "sleep time");
+		res += Statistics.GetAvgs(sleep_60, "sleep time");
 		res += System.lineSeparator();
 
-		res += GetAvgs(request_queue_60, "request queue");
+		res += Statistics.GetAvgs(request_queue_60, "request queue");
 		res += System.lineSeparator();
 
-		res += GetAvgs(blocking_request_queue_60, "blocking request queue");
+		res += Statistics.GetAvgs(blocking_request_queue_60, "blocking request queue");
 		res += System.lineSeparator();
 
-		res += GetAvgs(import_queue_60, "import queue");
+		res += Statistics.GetAvgs(import_queue_60, "import queue");
 		res += System.lineSeparator();
 
-		res += GetChange(request_processed_60, (int)timer_60.Get(), "requests");
+		res += Statistics.GetChange(request_processed_60, (int)timer_60.Get(), "requests");
 		res += System.lineSeparator();
 
-		res += GetChange(blocking_request_processed_60, (int)timer_60.Get(), "blocking requests");
+		res += Statistics.GetChange(blocking_request_processed_60, (int)timer_60.Get(), "blocking requests");
 		res += System.lineSeparator();
 
-		res += GetChange(import_processed_60, (int)timer_60.Get(), "imported");
+		res += Statistics.GetChange(import_processed_60, (int)timer_60.Get(), "imported");
 		res += System.lineSeparator();
 
 		return res;

@@ -26,12 +26,12 @@ import main.java.ru.parallel.utils.JavaUtils;
  * */
 public class ReactionInvoker
 {
-	private Queue<PreparedResponse> pending_response
+	private final Queue<PreparedResponse> pending_response
 		= new ConcurrentLinkedQueue<PreparedResponse>();
 
 	private Thread invoker;
 
-	private GlobalSettings settings;
+	private final GlobalSettings settings;
 
 	public ReactionInvoker(GlobalSettings settings)
 	{
@@ -100,7 +100,7 @@ public class ReactionInvoker
 
 		if(!silent)
 			pending_response.addAll(new_responses);
-		else if(new_responses.size() > 0)
+		else if(!new_responses.isEmpty())
 			System.err.println("silent mode, reactions ignored: " + new_responses.size());
 	}
 }

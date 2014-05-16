@@ -39,14 +39,12 @@ public abstract class FileUtils
 
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
-
 //		InputStream er = process.getErrorStream();
 
-		return br;
+		return new BufferedReader(isr);
 	}
 
-	private static Queue<Process> active_processes = new ConcurrentLinkedQueue<Process>();
+	private static final Queue<Process> active_processes = new ConcurrentLinkedQueue<Process>();
 	static
 	{
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -54,7 +52,7 @@ public abstract class FileUtils
 
 				int counter = 0;
 
-				for(Process p : active_processes)
+				for(Process p : FileUtils.active_processes)
 				{
 					p.destroy();
 					counter++;
@@ -67,10 +65,10 @@ public abstract class FileUtils
 		});
 	}
 
-	public static void ExecSilent(final String... command)
+	public static void ExecSilent(String... command)
 		throws ExceptionSystemError
 	{
-		ExecSilent(false, command);
+		FileUtils.ExecSilent(false, command);
 	}
 
 	public static void ExecSilent(boolean blocking, final String... command)
@@ -89,9 +87,9 @@ public abstract class FileUtils
 					ProcessBuilder pb = new ProcessBuilder(command);
 					pb.redirectErrorStream(true); // merge stdout and stderr of process
 
-					final Process process = pb.start();
+					Process process = pb.start();
 Timer.SStart();
-					active_processes.add(process);
+					FileUtils.active_processes.add(process);
 
 					InputStreamReader isr = new InputStreamReader(
 						process.getInputStream());
@@ -111,7 +109,7 @@ Timer.SPrint(command[0]);
 					br.close();
 					isr.close();
 
-					active_processes.remove(process);
+					FileUtils.active_processes.remove(process);
 				}
 				catch(IOException | InterruptedException e)
 				{
@@ -197,7 +195,7 @@ Timer.SPrint(command[0]);
 		if(file.isDirectory())
 		{
 			for(File child : file.listFiles())
-				WipeDir(child);
+				FileUtils.WipeDir(child);
 		}
 
 		if(!file.delete())

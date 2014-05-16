@@ -8,8 +8,8 @@ package main.java.ru.parallel.utils;
 
 public final class Timer
 {
-	private final static double NANOSECS = 1e9;
-	private final static int DEF_PRES = 6;
+	private static final double NANOSECS = 1.0e9;
+	private static final int DEF_PRES = 6;
 	private static double static_start;
 
 	private double start;
@@ -21,12 +21,12 @@ public final class Timer
 
 	public static double SGet()
 	{
-		return (System.nanoTime() - Timer.static_start) / NANOSECS;
+		return (System.nanoTime() - Timer.static_start) / Timer.NANOSECS;
 	}
 
 	public static double SPrint(String s)
 	{
-		return SPrint(s, DEF_PRES);
+		return Timer.SPrint(s, Timer.DEF_PRES);
 	}
 
 	public static double SPrint(String s, int pres)
@@ -35,14 +35,14 @@ public final class Timer
 
 		String format = "%s finished, took %." + pres + "f secs" + System.lineSeparator();
 
-		System.out.printf(format, s, (end - Timer.static_start) / NANOSECS);
+		System.out.printf(format, s, (end - Timer.static_start) / Timer.NANOSECS);
 
-		return (end - Timer.static_start) / NANOSECS;
+		return (end - Timer.static_start) / Timer.NANOSECS;
 	}
 
 	public static double SEnd()
 	{
-		return (System.nanoTime() - Timer.static_start) / NANOSECS;
+		return (System.nanoTime() - Timer.static_start) / Timer.NANOSECS;
 	}
 
 	public Timer()
@@ -57,7 +57,7 @@ public final class Timer
 
 	public double Get()
 	{
-		return (System.nanoTime() - start) / NANOSECS;
+		return (System.nanoTime() - start) / Timer.NANOSECS;
 	}
 
 	public double Print(String s)
@@ -65,9 +65,9 @@ public final class Timer
 		double end = System.nanoTime();
 
 		System.out.println(s + " finished, took " + (end - start)
-			/ NANOSECS + " secs");
+			/ Timer.NANOSECS + " secs");
 
-		return (end - start) / NANOSECS;
+		return (end - start) / Timer.NANOSECS;
 	}
 
 }

@@ -25,8 +25,8 @@ import com.sun.net.httpserver.HttpExchange;
  * */
 public class HTTPRequest
 {
-	private HttpExchange http_request;
-	private OutputStream http_request_writer;
+	private final HttpExchange http_request;
+	private final OutputStream http_request_writer;
 
 	private boolean finished = false;
 

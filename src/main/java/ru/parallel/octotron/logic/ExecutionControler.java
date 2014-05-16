@@ -40,11 +40,11 @@ public class ExecutionControler
 {
 	private boolean exit = false;
 
-	private IGraph graph;
-	private GraphService graph_service;
-	private ImportManager manager;
+	private final IGraph graph;
+	private final GraphService graph_service;
+	private final ImportManager manager;
 
-	private SimpleImporter http_importer;
+	private final SimpleImporter http_importer;
 	private HTTPServer http;
 
 	private Thread request_proccessor;
@@ -52,10 +52,10 @@ public class ExecutionControler
 	private ReactionInvoker rule_invoker;
 	private boolean silent = false;
 
-	private Queue<ParsedHttpRequest> request_queue
+	private final Queue<ParsedHttpRequest> request_queue
 		= new ConcurrentLinkedQueue<ParsedHttpRequest>();
 
-	private Queue<ParsedHttpRequest> blocking_request_queue
+	private final Queue<ParsedHttpRequest> blocking_request_queue
 		= new ConcurrentLinkedQueue<ParsedHttpRequest>();
 
 	private Statistics stat;
@@ -175,8 +175,7 @@ public class ExecutionControler
  * invoke reactions and sleep if needed<br>
  * */
 	private int ProcessImport(int max_count)
-		throws ExceptionImportFail, InterruptedException
-	{
+		throws ExceptionImportFail {
 		List<? extends ISensorData> http_packet = http_importer.Get(max_count);
 		int processed_http = http_packet.size();
 
@@ -190,7 +189,7 @@ public class ExecutionControler
 	private int ProcessRequests(Queue<ParsedHttpRequest> queue, int max_count)
 		throws IOException
 	{
-		if(queue.size() == 0)
+		if(queue.isEmpty())
 			return 0;
 
 		int count = 0;
@@ -220,9 +219,7 @@ public class ExecutionControler
  * create snapshot of all reactions with failed conditions<br>
  * and get their description<br>
  * */
-	public String MakeSnapshot()
-		throws IOException
-	{
+	public String MakeSnapshot() {
 		StringBuilder result = new StringBuilder();
 
 		ObjectList list = graph_service.GetAllObjects();

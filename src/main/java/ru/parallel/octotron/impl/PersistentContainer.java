@@ -18,7 +18,7 @@ public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 {
 	private static final long serialVersionUID = 3738367887222285089L;
 
-	private Map<KEY_T, VALUE_T> objects;
+	private final Map<KEY_T, VALUE_T> objects;
 
 	public PersistentContainer()
 	{

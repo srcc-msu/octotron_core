@@ -14,8 +14,8 @@ import main.java.ru.parallel.octotron.primitive.EDependencyType;
 public class ArgMatch extends OctoRule
 {
 	private static final long serialVersionUID = -665317574895287470L;
-	private String param;
-	private String match_arg;
+	private final String param;
+	private final String match_arg;
 
 	public ArgMatch(String attr, String param, String match_arg)
 	{

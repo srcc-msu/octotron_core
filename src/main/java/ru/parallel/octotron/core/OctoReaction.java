@@ -8,19 +8,21 @@ package main.java.ru.parallel.octotron.core;
 
 import main.java.ru.parallel.octotron.impl.PersistenStorage;
 
-public class OctoReaction implements java.io.Serializable
+import java.io.Serializable;
+
+public class OctoReaction implements Serializable
 {
 	private static final long serialVersionUID = 8900268116120488911L;
 
 	private long reaction_id;
 
-	private String check_name;
-	private Object check_value;
+	private final String check_name;
+	private final Object check_value;
 
-	private OctoResponse response;
-	private OctoResponse recover_response;
+	private final OctoResponse response;
+	private final OctoResponse recover_response;
 
-	private long delay;
+	private final long delay;
 
 	public OctoReaction(String check_name, Object check_value
 		, OctoResponse response, long delay, OctoResponse recover_response)

@@ -22,7 +22,7 @@ import main.java.ru.parallel.utils.JavaUtils;
 
 public class AutoFormat
 {
-	public enum E_FORMAT_PARAM {CSV, COMMA, NL, JSON, JSONP, NONE};
+	public enum E_FORMAT_PARAM {CSV, COMMA, NL, JSON, JSONP, NONE}
 
 	/**
 	 * print \\list objects with custom separators
@@ -105,7 +105,7 @@ public class AutoFormat
 				result.append(prefix);
 				if(entity.TestAttribute(attr.GetName()))
 				{
-					result.append('"' + attr.GetName() + '"');
+					result.append(JavaUtils.Quotify(attr.GetName()));
 					result.append(':');
 
 					Object value = entity.GetAttribute(attr.GetName()).GetValue();
@@ -139,7 +139,7 @@ public class AutoFormat
 		StringBuilder result = new StringBuilder();
 
 		for(SimpleAttribute param : attributes)
-			result.append(param.GetName() + ",");
+			result.append(param.GetName()).append(",");
 
 		result.append(System.lineSeparator());
 		result.append(PrintSeparated(list, attributes, ",", System.lineSeparator(), false, false));
@@ -254,7 +254,6 @@ public class AutoFormat
 		result.append(PrintJson(data))
 			.append(System.lineSeparator());
 
-
 		result.append("})");
 
 		return result.toString();
@@ -273,7 +272,7 @@ public class AutoFormat
 			List<String> names = new ArrayList<String>(dict.keySet());
 			Collections.sort(names);
 
-			result.append(prefix + "{");
+			result.append(prefix).append("{");
 
 			String inner_prefix = "";
 			for(String name : names)

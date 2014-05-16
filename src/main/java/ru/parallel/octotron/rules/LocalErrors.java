@@ -14,7 +14,7 @@ import main.java.ru.parallel.octotron.primitive.EDependencyType;
 public class LocalErrors extends OctoRule
 {
 	private static final long serialVersionUID = -1961148475047706792L;
-	private String detect_str;
+	private final String detect_str;
 
 	public LocalErrors(String attr, String detect_str)
 	{

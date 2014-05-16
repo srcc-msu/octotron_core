@@ -21,7 +21,7 @@ import main.java.ru.parallel.utils.JavaUtils;
  * */
 public class StartOctotron
 {
-	static private final int EXIT_ERROR = 1;
+	private static final int EXIT_ERROR = 1;
 	private static final int PROCESS_CHUNK = 1024; // seems ok
 
 /**
@@ -38,7 +38,7 @@ public class StartOctotron
 			if(args.length != 1)
 			{
 				System.err.println("specify the config file");
-				System.exit(EXIT_ERROR);
+				System.exit(StartOctotron.EXIT_ERROR);
 			}
 
 			fname = args[0];
@@ -52,15 +52,15 @@ public class StartOctotron
 		{
 			String json_config = FileUtils.FileToString(fname);
 			settings = new GlobalSettings(json_config);
-			CheckConfig(settings);
+			StartOctotron.CheckConfig(settings);
 		}
 		catch(ExceptionSystemError e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(EXIT_ERROR);
+			System.exit(StartOctotron.EXIT_ERROR);
 		}
 
-		Run(settings);
+		StartOctotron.Run(settings);
 	}
 
 /**
@@ -105,35 +105,34 @@ public class StartOctotron
 
 			PersistenStorage.INSTANCE.Load(path);
 
-			ProcessStart(settings);
+			StartOctotron.ProcessStart(settings);
 		}
 		catch(Exception start_exception)
 		{
-			ProcessCrash(settings, start_exception, "start");
+			StartOctotron.ProcessCrash(settings, start_exception, "start");
 			return;
 		}
 
 // --- main loop
-		Exception loop_exception = MainLoop(settings, exec_control);
+		Exception loop_exception = StartOctotron.MainLoop(settings, exec_control);
 
 		if(loop_exception != null)
 		{
-			ProcessCrash(settings, loop_exception, "mainloop");
+			StartOctotron.ProcessCrash(settings, loop_exception, "mainloop");
 		}
 
 // --- shutdown
-		Exception shutdown_exception = Shutdown(settings, graph, exec_control);
+		Exception shutdown_exception = StartOctotron.Shutdown(settings, graph, exec_control);
 
 		if(shutdown_exception != null)
 		{
-			ProcessCrash(settings, shutdown_exception, "shutdown");
+			StartOctotron.ProcessCrash(settings, shutdown_exception, "shutdown");
 		}
 	}
 
 /**
  * run the main program loop<br>
  * if it crashes - returns exception, otherwise returns nothing<br>
- * @param exec_control
  * */
 	private static Exception MainLoop(GlobalSettings settings, ExecutionControler exec_control)
 	{
@@ -143,9 +142,9 @@ public class StartOctotron
 		{
 			while(!exec_control.ShouldExit())
 			{
-				exec_control.Process(PROCESS_CHUNK); // it may sleep inside
+				exec_control.Process(StartOctotron.PROCESS_CHUNK); // it may sleep inside
 			}
-			ProcessFinish(settings);
+			StartOctotron.ProcessFinish(settings);
 		}
 		catch(Exception e)
 		{
@@ -213,7 +212,7 @@ public class StartOctotron
 		String error = catched_exception.getLocalizedMessage() + System.lineSeparator();
 
 		for(StackTraceElement elem : catched_exception.getStackTrace())
-			error += elem.toString() + System.lineSeparator();
+			error += elem + System.lineSeparator();
 
 		System.err.println(error);
 

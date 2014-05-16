@@ -15,9 +15,9 @@ public final class PersistenStorage
 {
 	public static final PersistenStorage INSTANCE = new PersistenStorage();
 
-	private PersistentMap<OctoRule> rules = new PersistentMap<OctoRule>();
-	private PersistentMap<OctoReaction> reactions = new PersistentMap<OctoReaction>();
-	private PersistentMap<Marker> markers = new PersistentMap<Marker>();
+	private final PersistentMap<OctoRule> rules = new PersistentMap<OctoRule>();
+	private final PersistentMap<OctoReaction> reactions = new PersistentMap<OctoReaction>();
+	private final PersistentMap<Marker> markers = new PersistentMap<Marker>();
 
 	private PersistenStorage() {}
 

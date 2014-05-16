@@ -14,14 +14,14 @@ import org.neo4j.graphdb.Transaction;
  * */
 public class NinjaTransaction
 {
-	private GraphDatabaseService db;
+	private final GraphDatabaseService db;
 
 	private Transaction transaction;
 
 	private int count = 0;
 	private boolean deleted = false;
 
-	private int count_threshold;
+	private final int count_threshold;
 
 /**
  * /alive_threshold - how many seconds transaction can be opened

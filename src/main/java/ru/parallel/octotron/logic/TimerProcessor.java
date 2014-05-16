@@ -11,8 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import main.java.ru.parallel.octotron.core.OctoAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.AttributeList;
 import main.java.ru.parallel.utils.JavaUtils;
 
@@ -33,7 +31,6 @@ public final class TimerProcessor
 	}
 
 	public static AttributeList Process()
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		AttributeList timers_timed_out = new AttributeList();
 

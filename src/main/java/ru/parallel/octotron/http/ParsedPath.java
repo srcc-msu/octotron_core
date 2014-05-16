@@ -11,8 +11,6 @@ import java.util.List;
 import main.java.ru.parallel.octotron.core.GraphService;
 import main.java.ru.parallel.octotron.http.PathOperations.PathToken;
 import main.java.ru.parallel.octotron.logic.ExecutionControler;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import main.java.ru.parallel.octotron.utils.AbsEntityList;
 
@@ -29,7 +27,7 @@ public class ParsedPath
 	}
 
 	public AbsEntityList<?> Execute(GraphService graph_service, ExecutionControler exec_control)
-		throws ExceptionModelFail, ExceptionDBError, ExceptionParseError
+		throws ExceptionParseError
 	{
 		AbsEntityList<?> entity_list = null;
 

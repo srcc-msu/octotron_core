@@ -68,7 +68,7 @@ public abstract class Operations
 
 		public Object Execute(GraphService graph_service, ExecutionControler control
 			, Map<String, String> params, AbsEntityList<?> objects)
-				throws ExceptionParseError, ExceptionDBError
+				throws ExceptionParseError
 		{
 			return exec.Execute(graph_service, control, params, objects);
 		}
@@ -78,7 +78,7 @@ public abstract class Operations
 	{
 		public Object Execute(GraphService graph_service, ExecutionControler control
 			, Map<String, String> params, AbsEntityList<?> objects)
-				throws ExceptionParseError, ExceptionDBError;
+				throws ExceptionParseError;
 	}
 
 	/**
@@ -400,10 +400,6 @@ public abstract class Operations
 
 			Object value = SimpleAttribute.ValueFromStr(value_str);
 
-			if(graph_service.IsSpecialName(name))
-				throw new ExceptionParseError("this name is reserved for service puprose: " +
-					name);
-
 			OctoEntity target = objects.Only();
 
 			if(target.GetUID().getType() != EEntityType.OBJECT)
@@ -425,7 +421,7 @@ public abstract class Operations
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
 			, Map<String, String> params, AbsEntityList<?> objects)
-				throws ExceptionParseError, ExceptionDBError
+				throws ExceptionParseError
 		{
 			StrictParams(params, "path", "name", "value");
 
@@ -434,7 +430,9 @@ public abstract class Operations
 			Object value = SimpleAttribute.ValueFromStr(value_str);
 
 			for(OctoEntity entity : objects)
-				entity.SetAttribute(new SimpleAttribute(name, value));
+			{
+				entity.DeclareAttribute(new SimpleAttribute(name, value));
+			}
 
 			int count = objects.size();
 			String data = "";
@@ -457,7 +455,7 @@ public abstract class Operations
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
 			, Map<String, String> params, AbsEntityList<?> objects)
-				throws ExceptionParseError, ExceptionDBError
+				throws ExceptionParseError
 		{
 			AllParams(params, "name", "value");
 			RequiredParams(params, "name");
@@ -468,15 +466,15 @@ public abstract class Operations
 			if(value_str != null)
 			{
 				Object value = SimpleAttribute.ValueFromStr(value_str);
-				graph_service.DeclareStaticAttribute(name, value);
+				graph_service.GetStatic().DeclareAttribute(name, value);
 			}
 			else
 			{
-				if(!graph_service.TestStaticAttribute(name))
+				if(!graph_service.GetStatic().TestAttribute(name))
 					return new RequestResult(E_RESULT_TYPE.TEXT, "attribute not found");
 
 				return new RequestResult(E_RESULT_TYPE.TEXT, name + "="
-					+ SimpleAttribute.ValueToStr(graph_service.GetStaticAttribute(name).GetValue()));
+					+ SimpleAttribute.ValueToStr(graph_service.GetStatic().GetAttribute(name).GetValue()));
 			}
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, "static attribute set");
@@ -492,14 +490,14 @@ public abstract class Operations
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
 			, Map<String, String> params, AbsEntityList<?> objects)
-				throws ExceptionParseError, ExceptionDBError
+				throws ExceptionParseError
 		{
 			StrictParams(params, "path", "name");
 
 			String name = params.get("name");
 
 			for(OctoEntity entity : objects)
-				entity.GetAttribute(name).SetValid(true);
+				entity.GetAttribute(name).SetValid();
 
 			int count = objects.size();
 			String data = "";
@@ -522,14 +520,14 @@ public abstract class Operations
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
 			, Map<String, String> params, AbsEntityList<?> objects)
-				throws ExceptionParseError, ExceptionDBError
+				throws ExceptionParseError
 		{
 			StrictParams(params, "path", "name");
 
 			String name = params.get("name");
 
 			for(OctoEntity entity : objects)
-				entity.GetAttribute(name).SetValid(false);
+				entity.GetAttribute(name).SetInvalid();
 
 			int count = objects.size();
 			String data = "";
@@ -552,7 +550,7 @@ public abstract class Operations
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
 			, Map<String, String> params, AbsEntityList<?> objects)
-				throws ExceptionParseError, ExceptionDBError
+				throws ExceptionParseError
 		{
 			RequiredParams(params, "path", "reaction_id", "description");
 			AllParams(params, "path", "reaction_id", "description", "suppress");
@@ -590,7 +588,7 @@ public abstract class Operations
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
 			, Map<String, String> params, AbsEntityList<?> objects)
-				throws ExceptionParseError, ExceptionDBError
+				throws ExceptionParseError
 		{
 			StrictParams(params, "path", "id");
 			String id_str = params.get("id");

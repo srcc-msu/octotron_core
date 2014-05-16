@@ -7,7 +7,6 @@
 package main.java.ru.parallel.octotron.neo4j.impl;
 
 import main.java.ru.parallel.octotron.impl.PersistenStorage;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 public class Marker implements java.io.Serializable
 {
@@ -22,7 +21,6 @@ public class Marker implements java.io.Serializable
 	private boolean suppress;
 
 	public Marker(long AID, long reaction_id, String description, boolean suppress)
-		throws ExceptionModelFail
 	{
 		this.AID = AID;
 		this.reaction_id = reaction_id;
@@ -33,7 +31,6 @@ public class Marker implements java.io.Serializable
 	}
 
 	private void Register()
-		throws ExceptionModelFail
 	{
 		marker_id = PersistenStorage.INSTANCE.GetMarkers().Add(this);
 	}

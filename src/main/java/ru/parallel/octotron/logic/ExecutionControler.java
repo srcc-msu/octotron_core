@@ -29,9 +29,7 @@ import main.java.ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import main.java.ru.parallel.octotron.netimport.ISensorData;
 import main.java.ru.parallel.octotron.netimport.SimpleImporter;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionImportFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import main.java.ru.parallel.octotron.reactions.PreparedResponse;
 import main.java.ru.parallel.octotron.utils.ObjectList;
@@ -156,7 +154,7 @@ public class ExecutionControler
 	private final DynamicSleeper sleeper = new DynamicSleeper();
 
 	public void Process(int max_count)
-		throws IOException, ExceptionModelFail, ExceptionDBError, ExceptionImportFail, InterruptedException
+		throws IOException, ExceptionImportFail, InterruptedException
 	{
 		stat.Process();
 
@@ -177,7 +175,7 @@ public class ExecutionControler
  * invoke reactions and sleep if needed<br>
  * */
 	private int ProcessImport(int max_count)
-		throws ExceptionModelFail, ExceptionDBError, ExceptionImportFail, InterruptedException
+		throws ExceptionImportFail, InterruptedException
 	{
 		List<? extends ISensorData> http_packet = http_importer.Get(max_count);
 		int processed_http = http_packet.size();
@@ -223,7 +221,7 @@ public class ExecutionControler
  * and get their description<br>
  * */
 	public String MakeSnapshot()
-		throws IOException, ExceptionModelFail, ExceptionDBError
+		throws IOException
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -252,7 +250,6 @@ public class ExecutionControler
 	}
 
 	public String CheckModTime(long interval)
-		throws ExceptionModelFail
 	{
 		StringBuilder result = new StringBuilder();
 

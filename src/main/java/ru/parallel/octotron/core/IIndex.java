@@ -10,7 +10,6 @@ import java.util.List;
 
 import main.java.ru.parallel.octotron.primitive.Uid;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 /**
  * interface for implementing index-like entity for<br>
@@ -36,10 +35,8 @@ public interface IIndex
  * get one entity, that has attribute /name = /value
  * if there are more than one such entities - throws exception
  * */
-	Uid GetObject(String name, Object value)
-		throws ExceptionModelFail;
-	Uid GetLink(String name, Object value)
-		throws ExceptionModelFail;
+	Uid GetObject(String name, Object value);
+	Uid GetLink(String name, Object value);
 
 /**
  * get all entities, that have attribute /name = /value

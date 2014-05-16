@@ -73,7 +73,6 @@ public class PreparedResponse
 	}
 
 	private void СomposeAttributes(OctoEntity entity)
-		throws ExceptionModelFail
 	{
 		String[] print_attributes = response.GetPrintAttributes();
 
@@ -87,7 +86,6 @@ public class PreparedResponse
 	}
 
 	private void СomposeParentAttributes(OctoEntity entity)
-		throws ExceptionModelFail
 	{
 		String[] print_attributes = response.GetParentPrintAttributes();
 

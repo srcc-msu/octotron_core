@@ -8,4 +8,5 @@
 *.mark
 *.pyc
 target
-
+.idea
+*.iml

@@ -16,7 +16,6 @@ import java.util.Map;
 
 import main.java.ru.parallel.octotron.core.OctoEntity;
 import main.java.ru.parallel.octotron.impl.generators.CsvFiller;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
 
@@ -95,7 +94,6 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
  * order of attributes is the same as order of objects<br>
  * */
 	public final AttributeList GetAttributes(String name)
-		throws ExceptionModelFail
 	{
 		AttributeList atts = new AttributeList();
 
@@ -112,10 +110,9 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
  * set the same attribute \name = \value to all list elements<br>
  * */
 	public final void SetAttributes(String name, Object value)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		for(T obj : list)
-			obj.SetAttribute(name, value);
+			obj.DeclareAttribute(name, value);
 	}
 
 /**
@@ -125,7 +122,6 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
  * if the model is correct<br>
  * */
 	public final T Only()
-		throws ExceptionModelFail
 	{
 		if(size() > 1)
 		{
@@ -178,7 +174,6 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 	}
 
 	protected List<T> InnerRanges(int... ranges)
-		throws ExceptionModelFail
 	{
 		if(ranges.length % 2 != 0)
 			throw new ExceptionModelFail("even amount of arguments must be provided");
@@ -227,7 +222,6 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 	}
 
 	List<T> InnerFilter(String name, Object value, EQueryType type)
-		throws ExceptionModelFail
 	{
 		if(name == null)
 			return list;
@@ -247,7 +241,6 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 	}
 
 	public List<T> InnerFilter(String name)
-		throws ExceptionModelFail
 	{
 		if(name == null)
 			return list;

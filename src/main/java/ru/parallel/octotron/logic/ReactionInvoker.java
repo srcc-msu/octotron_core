@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.core.OctoResponse;
 import main.java.ru.parallel.octotron.exec.GlobalSettings;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import main.java.ru.parallel.octotron.reactions.PreparedResponse;
@@ -88,7 +87,6 @@ public class ReactionInvoker
 	}
 
 	public void Invoke(ObjectList all_changed, boolean silent)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		ObjectList uniq_changed = all_changed.Uniq();
 

@@ -11,9 +11,7 @@ import java.util.List;
 import main.java.ru.parallel.octotron.core.GraphService;
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.netimport.ISensorData;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionImportFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.ObjectList;
 
 /**
@@ -35,7 +33,7 @@ public class AttributeProcessor
 	 * return list of values, that changed<br>
 	 * */
 	public ObjectList Process(List<? extends ISensorData> packet)
-		throws ExceptionModelFail, ExceptionDBError, ExceptionImportFail
+		throws ExceptionImportFail
 	{
 		ObjectList changed = new ObjectList();
 

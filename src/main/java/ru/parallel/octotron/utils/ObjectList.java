@@ -10,7 +10,6 @@ import java.util.List;
 
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 /**
  * implements list container for entities<br>
@@ -50,49 +49,41 @@ public class ObjectList extends AbsEntityList<OctoObject>
 	}
 
 	public ObjectList ranges(int... ranges)
-		throws ExceptionModelFail
 	{
 		return new ObjectList(InnerRanges(ranges));
 	}
 
 	public ObjectList elems(int... elems)
-		throws ExceptionModelFail
 	{
 		return new ObjectList(InnerElems(elems));
 	}
 
 	public ObjectList Filter(SimpleAttribute att, EQueryType type)
-		throws ExceptionModelFail
 	{
 		return new ObjectList(InnerFilter(att.GetName(), att.GetValue(), type));
 	}
 
 	public ObjectList Filter(String name, Object value, EQueryType type)
-		throws ExceptionModelFail
 	{
 		return new ObjectList(InnerFilter(name, value, type));
 	}
 
 	public ObjectList Filter(SimpleAttribute att)
-		throws ExceptionModelFail
 	{
 		return new ObjectList(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
 	}
 
 	public ObjectList Filter(String name, Object value)
-		throws ExceptionModelFail
 	{
 		return new ObjectList(InnerFilter(name, value, EQueryType.EQ));
 	}
 
 	public ObjectList Filter(String name)
-		throws ExceptionModelFail
 	{
 		return new ObjectList(InnerFilter(name));
 	}
 
 	public ObjectList GetInNeighbors(String link_name, Object link_value)
-		throws ExceptionModelFail
 	{
 		ObjectList new_list = new ObjectList();
 
@@ -103,7 +94,6 @@ public class ObjectList extends AbsEntityList<OctoObject>
 	}
 
 	public ObjectList GetOutNeighbors(String link_name, Object link_value)
-		throws ExceptionModelFail
 	{
 		ObjectList new_list = new ObjectList();
 
@@ -114,19 +104,16 @@ public class ObjectList extends AbsEntityList<OctoObject>
 	}
 
 	public ObjectList GetInNeighbors(SimpleAttribute attr)
-		throws ExceptionModelFail
 	{
 			return GetInNeighbors(attr.GetName(), attr.GetValue());
 	}
 
 	public ObjectList GetOutNeighbors(SimpleAttribute attr)
-		throws ExceptionModelFail
 	{
 		return GetOutNeighbors(attr.GetName(), attr.GetValue());
 	}
 
 	public ObjectList GetInNeighbors(String link_name)
-		throws ExceptionModelFail
 	{
 		ObjectList new_list = new ObjectList();
 
@@ -137,7 +124,6 @@ public class ObjectList extends AbsEntityList<OctoObject>
 	}
 
 	public ObjectList GetOutNeighbors(String link_name)
-		throws ExceptionModelFail
 	{
 		ObjectList new_list = new ObjectList();
 
@@ -148,7 +134,6 @@ public class ObjectList extends AbsEntityList<OctoObject>
 	}
 
 	public ObjectList GetInNeighbors()
-		throws ExceptionModelFail
 	{
 		ObjectList new_list = new ObjectList();
 
@@ -159,7 +144,6 @@ public class ObjectList extends AbsEntityList<OctoObject>
 	}
 
 	public ObjectList GetOutNeighbors()
-		throws ExceptionModelFail
 	{
 		ObjectList new_list = new ObjectList();
 
@@ -176,7 +160,6 @@ public class ObjectList extends AbsEntityList<OctoObject>
 	}
 
 	public LinkList GetInLinks()
-		throws ExceptionModelFail
 	{
 		LinkList new_list = new LinkList();
 
@@ -187,7 +170,6 @@ public class ObjectList extends AbsEntityList<OctoObject>
 	}
 
 	public LinkList GetOutLinks()
-		throws ExceptionModelFail
 	{
 		LinkList new_list = new LinkList();
 

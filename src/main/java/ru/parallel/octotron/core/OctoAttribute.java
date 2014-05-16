@@ -6,9 +6,7 @@
 
 package main.java.ru.parallel.octotron.core;
 
-import main.java.ru.parallel.octotron.primitive.EAttributeValueType;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.utils.JavaUtils;
 
@@ -16,275 +14,231 @@ import main.java.ru.parallel.utils.JavaUtils;
  * implementation of attribute<br>
  * stores a value retrieved from the graph<br>
  * can be used to set a new value<br>
- * implements {@link OctoAttribute} interface<br>
+ * does not distinguish int/long and float/double<br>
  * */
 public class OctoAttribute extends SimpleAttribute
 {
-	private EAttributeValueType value_type;
+	private GraphService graph_service;
 	private long change_time;
 
-	private static Long IToL(Object value)
-	{
-		return Long.valueOf(((Integer) value).longValue());
-	}
-
-	OctoAttribute(String name, Object value, long change_time, OctoEntity parent)
-		throws ExceptionModelFail
+	OctoAttribute(GraphService graph_service, OctoEntity parent, String name, Object value)
 	{
 		super(name, value, parent);
 
-		this.change_time = change_time;
+		this.graph_service = graph_service;
 
-		if(value instanceof Integer)
+		change_time = 0;
+
+		if(graph_service.TestMeta(parent, name, TIME_PREFIX))
+			change_time = (Long)graph_service.GetMeta(parent, name, TIME_PREFIX);
+	}
+
+	private void CheckTypes(Object a_value)
+	{
+		if(value.getClass() != a_value.getClass())
 		{
-			value_type = EAttributeValueType.LONG;
-			this.value = IToL(value);
+			String error = String.format("mismatch types: %s=%s[%s] and %s[%s]"
+				, name, value, value.getClass().getName(), a_value, a_value.getClass().getName());
+
+			throw new ExceptionModelFail(error);
 		}
-		else if(value instanceof Long)
-			value_type = EAttributeValueType.LONG;
-		else if(value instanceof Double)
-			value_type = EAttributeValueType.DOUBLE;
-		else if(value instanceof String)
-			value_type = EAttributeValueType.STRING;
-		else if(value instanceof Boolean)
-			value_type = EAttributeValueType.BOOLEAN;
-		else
-			throw new ExceptionModelFail("unsupported value type for attribute: "
-				+ name + "[" + value.getClass() + "]");
 	}
 
-	public void Commit()
-		throws ExceptionModelFail, ExceptionDBError
+	private void CheckType(Class<?> check_class)
 	{
-		GraphService graph_service = parent.GetGraph();
-
-		graph_service.SetAttribute(parent, name, value, change_time);
-	}
-
-	public void SetValue(Object new_value)
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		if(new_value instanceof Integer)
-			new_value = IToL(new_value);
-
-		if(value.getClass() != new_value.getClass())
-			throw new ExceptionModelFail(name + " : new value type for attribute mismatch");
-
-		value = new_value;
-		change_time = JavaUtils.GetTimestamp();
-
-		Commit();
-	}
-
-	public Boolean Update(Object new_value)
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		if(ne(new_value) || GetTime() == 0)
+		if(value.getClass() != check_class)
 		{
-			SetValue(new_value);
-			return true;
+			String error = String.format("mismatch types: %s=%s[%s] and [%s]"
+				, name, value, value.getClass().getName(), check_class.getName());
+
+			throw new ExceptionModelFail(error);
 		}
-
-		return false;
 	}
 
-	public EAttributeValueType GetValueType()
-	{
-		return value_type;
-	}
+	private static final String TIME_PREFIX = "time";
+	private static final String LAST_PREFIX = "last";
+	private static final String LASTTIME_PREFIX = "lasttime";
 
 	public long GetTime()
 	{
 		return change_time;
 	}
 
-	public boolean IsValid()
-		throws ExceptionModelFail
+	public double GetSpeed()
 	{
-		return parent.GetGraph().IsValid(parent, name);
+		if(!graph_service.TestMeta(parent, name, LAST_PREFIX))
+			return 0.0;
+		if(!graph_service.TestMeta(parent, name, LASTTIME_PREFIX))
+			return 0.0;
+
+		Object last_val = graph_service.GetMeta(parent, name, LAST_PREFIX); 
+		long last_time = (Long)graph_service.GetMeta(parent, name, LASTTIME_PREFIX);
+
+		Class<?> my_class = value.getClass(); 
+
+		if(my_class == Double.class)
+		{
+			Double diff = (Double)value - (Double)last_val;
+			return diff / (change_time - last_time);
+		}
+		else if(my_class == Long.class)
+		{
+			Long diff = (Long)value - (Long)last_val;
+			return diff.doubleValue() / (change_time - last_time);
+		}
+		else
+			throw new ExceptionModelFail("bad value type type for approximate comparison");
 	}
 
-	public void SetValid(boolean value)
-		throws ExceptionModelFail, ExceptionDBError
+	public Boolean Update(Object new_value)
 	{
-		parent.GetGraph().SetValid(parent, name, value);
-	}
+		new_value = ConformType(new_value);
+		CheckTypes(new_value);
 
+		if(ne(new_value) || GetTime() == 0)
+		{
+			graph_service.SetMeta(parent, name, LAST_PREFIX, value);
+			graph_service.SetMeta(parent, name, LASTTIME_PREFIX, GetTime());
+
+			value = new_value;
+
+			graph_service.SetAttribute(parent, name, value);
+			graph_service.SetMeta(parent, name, TIME_PREFIX, JavaUtils.GetTimestamp());
+
+			return true;
+		}
+
+		return false;
+	}
 	public final String GetString()
-		throws ExceptionModelFail
 	{
-		if(value_type != EAttributeValueType.STRING)
-			throw new ExceptionModelFail("trying to get String from " + name + " that has type " + value_type);
+		CheckType(String.class);
 
 		return (String) GetValue();
 	}
 
 	public final Long GetLong()
-		throws ExceptionModelFail
 	{
-		if(value_type != EAttributeValueType.LONG)
-			throw new ExceptionModelFail("trying to get Long from " + name + " that has type " + value_type);
+		CheckType(Long.class);
 
 		return (Long) GetValue();
 	}
 
 	public final Double GetDouble()
-		throws ExceptionModelFail
 	{
-		if(value_type != EAttributeValueType.DOUBLE)
-			throw new ExceptionModelFail("trying to get Dobule from " + name + " that has type " + value_type);
+		CheckType(Double.class);
 
 		return (Double) GetValue();
 	}
 
 	public final Boolean GetBoolean()
-		throws ExceptionModelFail
 	{
-		if(value_type != EAttributeValueType.BOOLEAN)
-			throw new ExceptionModelFail("trying to get Boolean from " + name + " that has type " + value_type);
+		CheckType(Boolean.class);
 
 		return (Boolean) GetValue();
 	}
 
 	public Double ToDouble()
-		throws ExceptionModelFail
 	{
-		switch(value_type)
-		{
-			case DOUBLE:
-				return GetDouble();
-			case LONG:
-				return GetLong().doubleValue();
-			case STRING:
-				throw new ExceptionModelFail("bad value type for casting to Double");
-			case BOOLEAN:
-				throw new ExceptionModelFail("bad value type for casting to Double");
-			default:
-				throw new ExceptionModelFail("bad value type for casting to Double");
-		}
+		Class<?> my_class = value.getClass(); 
+
+		if(my_class == Double.class)
+			return GetDouble();
+		else if(my_class == Long.class)
+			return GetLong().doubleValue();
+		else
+			throw new ExceptionModelFail("bad value type for casting to Double");
 	}
 
 	public final boolean eq(Object new_value)
-		throws ExceptionModelFail
 	{
-		if(new_value instanceof Integer)
-			new_value = IToL(new_value);
-
-		if(value.getClass() != new_value.getClass())
-			throw new ExceptionModelFail(
-				"comparing values types mismatch: "
-					+ name + "[" + value_type + "] and "
-					+ new_value + "["+ new_value.getClass() + "]");
+		new_value = ConformType(new_value);
+		CheckTypes(new_value);
 
 		return value.equals(new_value);
 	}
 
 	public final boolean aeq(Object new_value, Object aprx)
-		throws ExceptionModelFail
 	{
-		if(new_value instanceof Integer)
-			new_value = IToL(new_value);
+		new_value = ConformType(new_value);
+		CheckTypes(new_value);
 
-		if(value.getClass() != new_value.getClass())
-			throw new ExceptionModelFail(
-				"comparing values types mismatch: "
-					+ name + "[" + value_type + "] and "
-					+ new_value + "["+ new_value.getClass() + "]");
+		Class<?> my_class = value.getClass(); 
 
-		switch(value_type)
-		{
-			case DOUBLE:
-				return GetDouble() > (Double)new_value - (Double)aprx
-					&& GetDouble() < (Double)new_value + (Double)aprx;
-			case LONG:
-				return GetLong() > (Long)new_value - (Long)aprx
-					&& GetLong() < (Long)new_value + (Long)aprx;
-			case STRING:
-				throw new ExceptionModelFail("bad value type for comparison");
-			case BOOLEAN:
-				throw new ExceptionModelFail("bad value type for comparison");
-			default:
-				throw new ExceptionModelFail("bad value type for comparison");
-		}
+		if(my_class == Double.class)
+			return GetDouble() > (Double)new_value - (Double)aprx
+				&& GetDouble() < (Double)new_value + (Double)aprx;
+		else if(my_class == Long.class)
+			return GetLong() > (Long)new_value - (Long)aprx
+				&& GetLong() < (Long)new_value + (Long)aprx;
+		else
+			throw new ExceptionModelFail("bad value type type for approximate comparison");
 	}
 
 	public final boolean ne(Object new_value)
-		throws ExceptionModelFail
 	{
 		return !eq(new_value);
 	}
 
 	public final boolean gt(Object new_value)
-		throws ExceptionModelFail
 	{
-		if(new_value instanceof Integer)
-			new_value = IToL(new_value);
+		new_value = ConformType(new_value);
+		CheckTypes(new_value);
 
-		try
-		{
-			switch(value_type)
-			{
-				case DOUBLE:
-					return GetDouble() > (Double) new_value;
-				case LONG:
-					return GetLong() > (Long) new_value;
-				case STRING:
-					throw new ExceptionModelFail("bad value type for comparison");
-				case BOOLEAN:
-					throw new ExceptionModelFail("bad value type for comparison");
-				default:
-					throw new ExceptionModelFail("bad value type for comparison");
-			}
-		}
-		catch(ClassCastException e)
-		{
-			throw new ExceptionModelFail(
-				"comparing values types mismatch: "
-					+ name + "[" + value_type + "] and "
-					+ new_value + "["+ new_value.getClass() + "]");
-		}
+		Class<?> my_class = value.getClass(); 
+
+		if(my_class == Double.class)
+			return GetDouble() > (Double)new_value;
+		else if(my_class == Long.class)
+			return GetLong() > (Long)new_value;
+		else
+			throw new ExceptionModelFail("bad value type type for comparison");
 	}
 
 	public final boolean lt(Object new_value)
-		throws ExceptionModelFail
 	{
-		if(new_value instanceof Integer)
-			new_value = IToL(new_value);
+		new_value = ConformType(new_value);
+		CheckTypes(new_value);
 
-		try
-		{
-			switch(value_type)
-			{
-				case DOUBLE:
-					return GetDouble() < (Double) new_value;
-				case LONG:
-					return GetLong() < (Long) new_value;
-				case STRING:
-					throw new ExceptionModelFail("bad value type for comparison");
-				case BOOLEAN:
-					throw new ExceptionModelFail("bad value type for comparison");
-				default:
-					throw new ExceptionModelFail("bad value type for comparison");
-			}
-		}
-		catch(ClassCastException e)
-		{
-			throw new ExceptionModelFail(
-					"comparing values types mismatch: "
-						+ name + "[" + value_type + "] and "
-						+ new_value + "["+ new_value.getClass() + "]");
-		}
+		Class<?> my_class = value.getClass(); 
+
+		if(my_class == Double.class)
+			return GetDouble() < (Double)new_value;
+		else if(my_class == Long.class)
+			return GetLong() < (Long)new_value;
+		else
+			throw new ExceptionModelFail("bad value type type for comparison");
 	}
 
 	public final boolean ge(Object val)
-		throws ExceptionModelFail
 	{
 		return !lt(val);
 	}
 
 	public final boolean le(Object val)
-		throws ExceptionModelFail
 	{
 		return !gt(val);
+	}
+
+//-------------------
+//	      INVALID
+//-------------------
+
+	private static final String INVALID_KEY = "invalid";
+
+	public boolean IsValid()
+	{
+		return graph_service.TestMeta(parent, name, INVALID_KEY);
+	}
+
+	public void SetValid()
+	{
+		if(graph_service.TestMeta(parent, name, INVALID_KEY))
+			graph_service.DeleteMeta(parent, name, INVALID_KEY);
+	}
+
+	public void SetInvalid()
+	{
+		graph_service.SetMeta(parent, name, INVALID_KEY, true);
 	}
 }

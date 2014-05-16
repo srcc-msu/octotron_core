@@ -26,7 +26,6 @@ public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 	}
 
 	public KEY_T Add(KEY_T key, VALUE_T object)
-		throws ExceptionModelFail
 	{
 		if(objects.containsKey(key))
 			throw new ExceptionModelFail("object with such key alreay presents: " + key);
@@ -37,7 +36,6 @@ public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 	}
 
 	public VALUE_T Get(KEY_T key)
-		throws ExceptionModelFail
 	{
 		VALUE_T object = objects.get(key);
 
@@ -48,7 +46,6 @@ public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 	}
 
 	public VALUE_T Try(KEY_T key)
-		throws ExceptionModelFail
 	{
 		VALUE_T rule = objects.get(key);
 
@@ -59,7 +56,6 @@ public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 	}
 
 	public void Delete(KEY_T key)
-		throws ExceptionModelFail
 	{
 		VALUE_T object = objects.get(key);
 

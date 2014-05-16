@@ -1,7 +1,9 @@
 package test.java;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,31 +22,31 @@ public class TestAttrList extends Assert
 
 	@BeforeClass
 	public static void Init()
+		throws ExceptionSystemError
 	{
-		try
-		{
-			graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
-			graph_service = new GraphService(graph);
-			static_obj = graph_service.AddObject();
-		}
-		catch (Exception e)
-		{
-			fail(e.getMessage());
-		}
+		graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+		graph_service = new GraphService(graph);
 	}
 
 	@AfterClass
 	public static void Delete()
+		throws ExceptionSystemError
 	{
 		graph.Shutdown();
-		try
-		{
-			graph.Delete();
-		}
-		catch(ExceptionSystemError e)
-		{
-			fail(e.getMessage());
-		}
+		graph.Delete();
+	}
+
+	@Before
+	public void Create()
+	{
+		static_obj = graph_service.AddObject();
+	}
+
+	@After
+	public void Clean()
+	{
+		graph_service.Clean();
+		static_obj = null;
 	}
 
 	@Test
@@ -53,7 +55,7 @@ public class TestAttrList extends Assert
 		AttributeList list = new AttributeList();
 
 		assertEquals("list is no empty", list.size(), 0);
-		list.add(graph_service.SetAttribute(static_obj, "test", 0, 0));
+		list.add(static_obj.DeclareAttribute("test", 0));
 		assertEquals("list has no elements", list.size(), 1);
 
 		OctoAttribute elem = list.get(0);
@@ -65,9 +67,9 @@ public class TestAttrList extends Assert
 	{
 		AttributeList list = new AttributeList();
 
-		list.add(graph_service.SetAttribute(static_obj, "test1", 0, 0));
-		list.add(graph_service.SetAttribute(static_obj, "test2", 1.0, 0));
-		list.add(graph_service.SetAttribute(static_obj, "test3", "test", 0));
+		list.add(static_obj.DeclareAttribute("test1", 0));
+		list.add(static_obj.DeclareAttribute("test2", 1.0));
+		list.add(static_obj.DeclareAttribute("test3", "test"));
 
 		assertEquals("got something wrong", list.get(0).eq(0), true);
 		assertEquals("got something wrong", list.get(1).eq(1.0), true);
@@ -82,7 +84,7 @@ public class TestAttrList extends Assert
 		int N = 10;
 
 		for(int i = 0; i < N; i++)
-			list.add(graph_service.SetAttribute(static_obj, "test", i, 0));
+			list.add(static_obj.DeclareAttribute("test" + i, i));
 
 		int i = 0;
 		for(OctoAttribute att : list)
@@ -101,7 +103,7 @@ public class TestAttrList extends Assert
 
 		for(int i = 0; i < N; i++)
 		{
-			list.add(graph_service.SetAttribute(static_obj, "test", i, 0));
+			list.add(static_obj.DeclareAttribute("test" + i, i));
 			assertEquals("got something wrong", list.size(), i + 1);
 		}
 	}
@@ -114,7 +116,7 @@ public class TestAttrList extends Assert
 		int N = 10;
 
 		for(int i = 0; i < N; i++)
-			list.add(graph_service.SetAttribute(static_obj, "test", i, 0));
+			list.add(static_obj.DeclareAttribute("test" + i, i));
 
 		AttributeList le = list.le(5);
 		AttributeList lt = list.lt(5);
@@ -159,8 +161,8 @@ public class TestAttrList extends Assert
 
 		for(int i = 0; i < N; i++)
 		{
-			list1.add(graph_service.SetAttribute(static_obj, "test", i, 0));
-			list2.add(graph_service.SetAttribute(static_obj, "test", N + i, 0));
+			list1.add(static_obj.DeclareAttribute("test" + i, i));
+			list2.add(static_obj.DeclareAttribute("test" + N + i, N + i));
 		}
 
 		list1.append(list2);

@@ -7,7 +7,6 @@
 package main.java.ru.parallel.octotron.core;
 
 import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 /**
  * implementation of link, that resides in \graph<br>
@@ -26,13 +25,11 @@ public class OctoLink extends OctoEntity
 	}
 
 	public OctoObject Target()
-		throws ExceptionModelFail
 	{
 		return graph_service.GetLinkTarget(this);
 	}
 
 	public OctoObject Source()
-		throws ExceptionModelFail
 	{
 		return graph_service.GetLinkSource(this);
 	}

@@ -93,11 +93,21 @@ public class SimpleAttribute
 		return value;
 	}
 
-	public static String ValueToStr(Object value)
+	public static Object ConformType(Object value)
 	{
 		if(value instanceof Integer)
-			return value.toString();
-		else if(value instanceof Boolean)
+			return Long.valueOf(((Integer) value).longValue());
+		else if(value instanceof Float)
+			return Double.valueOf(((Float) value).doubleValue());
+		else
+			return value;
+	}
+
+	public static String ValueToStr(Object value)
+	{
+		value = ConformType(value);
+
+		if(value instanceof Boolean)
 			return value.toString();
 		else if(value instanceof Long)
 			return value.toString();

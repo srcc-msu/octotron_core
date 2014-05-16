@@ -115,7 +115,6 @@ public class Neo4jIndex implements IIndex
 
 	@Override
 	public Uid GetObject(String name, Object value)
-		throws ExceptionModelFail
 	{
 		ReadableIndex<Node> node_auto_index = graph.GetInnerIndex()
 			.getNodeAutoIndexer().getAutoIndex();
@@ -138,7 +137,6 @@ public class Neo4jIndex implements IIndex
 
 	@Override
 	public Uid GetLink(String name, Object value)
-		throws ExceptionModelFail
 	{
 		ReadableIndex<Relationship> rel_auto_index = graph.GetInnerIndex()
 			.getRelationshipAutoIndexer().getAutoIndex();

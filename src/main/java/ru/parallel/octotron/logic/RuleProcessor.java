@@ -8,8 +8,6 @@ package main.java.ru.parallel.octotron.logic;
 
 import main.java.ru.parallel.octotron.core.*;
 import main.java.ru.parallel.octotron.primitive.EDependencyType;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.ObjectList;
 
 /**
@@ -28,7 +26,6 @@ public class RuleProcessor
 	 * probably requires few calculation steps for attribute chains<br>
 	 * */
 	public ObjectList Process(ObjectList changed)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		ObjectList in_n = changed.GetInNeighbors();
 		ObjectList out_n = changed.GetOutNeighbors();

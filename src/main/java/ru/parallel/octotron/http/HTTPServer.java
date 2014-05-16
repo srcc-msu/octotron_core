@@ -113,20 +113,9 @@ public class HTTPServer
 	public HTTPServer(GlobalSettings settings)
 		throws ExceptionSystemError
 	{
-		this(settings, false);
-	}
-
-	public HTTPServer(GlobalSettings settings, boolean suppress_check)
-		throws ExceptionSystemError
-	{
-		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
-		{
-			if(suppress_check)
-				System.err.println("nodelay is not set to true, import will be slow. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");
-			else
-				throw new RuntimeException("nodelay is not set to true. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");
-		}
 		// why is it turned off by default >.<
+		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
+			System.err.println("nodelay is not set to true, import will be slow. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");
 
 		requests = new ConcurrentLinkedQueue<ParsedHttpRequest>();
 		blocking_requests = new ConcurrentLinkedQueue<ParsedHttpRequest>();

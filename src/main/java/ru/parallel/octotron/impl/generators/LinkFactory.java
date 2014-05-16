@@ -27,7 +27,6 @@ import main.java.ru.parallel.octotron.utils.ObjectList;
 public class LinkFactory extends BaseFactory<LinkFactory>
 {
 	public LinkFactory(GraphService graph_service)
-		throws ExceptionModelFail
 	{
 		super(graph_service);
 	}
@@ -58,7 +57,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * @throws ExceptionDBError
  * */
 	public OctoLink OneToOne(OctoObject from, OctoObject to)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 // find type attribute
 		SimpleAttribute type = null;
@@ -77,7 +75,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 
 // set all attributes
 		new_edge.DeclareAttributes(attributes);
-		new_edge.DeclareAttribute("AID", graph_service.NextAID());
 
 		return new_edge;
 	}
@@ -88,7 +85,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * create \from.length edges<br>
  * */
 	public LinkList EveryToOne(ObjectList from, OctoObject to)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		LinkList links = new LinkList();
 
@@ -104,7 +100,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * @throws ExceptionDBError
  * */
 	public LinkList OneToEvery(OctoObject from, ObjectList to)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		LinkList links = new LinkList();
 
@@ -121,7 +116,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * @throws ExceptionDBError
  * */
 	public LinkList EveryToEvery(ObjectList from, ObjectList to)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		if(from.size() != to.size())
 			throw new ExceptionModelFail
@@ -141,7 +135,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * create M*N edges, M == \from.length, N = \to.length<br>
  * */
 	public LinkList AllToAll(ObjectList from, ObjectList to)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		LinkList res_links = new LinkList();
 
@@ -158,7 +151,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * @throws ExceptionDBError
  * */
 	public LinkList EveryToChunks(ObjectList from, ObjectList to)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		if(to.size() % from.size() != 0 || to.size() < from.size())
 			throw new ExceptionModelFail
@@ -180,7 +172,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * @throws ExceptionDBError
  * */
 	public LinkList EveryToChunks_LastLess(ObjectList from, ObjectList to)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		int chunk = (to.size() / from.size() + 1);
 		int diff = to.size() - chunk * from.size();
@@ -206,7 +197,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * */
 	public LinkList ChunksToEvery_Guided(ObjectList from, ObjectList to
 		, int[] sizes)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		if(to.size() != sizes.length)
 			throw new ExceptionModelFail
@@ -244,7 +234,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * @throws ExceptionDBError
  * */
 	public LinkList ChunksToEvery(ObjectList from, ObjectList to)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		if(from.size() % to.size() != 0 || from.size() < to.size())
 			throw new ExceptionModelFail
@@ -267,7 +256,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * */
 	public LinkList ChunksToEvery_LastLess(ObjectList from, ObjectList to
 		, Object... addition)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		int chunk = (from.size() / to.size() + 1);
 		int diff = from.size() - chunk * to.size();
@@ -293,7 +281,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * */
 	public LinkList EveryToChunks_Guided(ObjectList from, ObjectList to
 		, int[] sizes)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		if(from.size() != sizes.length)
 			throw new ExceptionModelFail

@@ -9,7 +9,6 @@ package main.java.ru.parallel.octotron.netimport;
 import main.java.ru.parallel.octotron.core.GraphService;
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
@@ -33,7 +32,6 @@ public class SimpleData implements ISensorData
 
 	@Override
 	public OctoObject Resolve(GraphService graph_service)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		return object;
 	}

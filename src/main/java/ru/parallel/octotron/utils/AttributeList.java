@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import main.java.ru.parallel.octotron.core.OctoAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 /**
  * implements list container for attributes<br>
@@ -41,7 +40,6 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 	}
 
 	public AttributeList ge(Object val)
-		throws ExceptionModelFail
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -53,7 +51,6 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 	}
 
 	public AttributeList le(Object val)
-		throws ExceptionModelFail
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -65,7 +62,6 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 	}
 
 	public AttributeList gt(Object val)
-		throws ExceptionModelFail
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -77,7 +73,6 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 	}
 
 	public AttributeList lt(Object val)
-		throws ExceptionModelFail
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -89,7 +84,6 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 	}
 
 	public AttributeList eq(Object val)
-		throws ExceptionModelFail
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -101,7 +95,6 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 	}
 
 	public AttributeList ne(Object val)
-		throws ExceptionModelFail
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 

@@ -8,19 +8,17 @@ package main.java.ru.parallel.octotron.http;
 
 import java.util.List;
 
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import main.java.ru.parallel.octotron.core.GraphService;
 import main.java.ru.parallel.octotron.logic.ExecutionControler;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import main.java.ru.parallel.octotron.utils.AbsEntityList;
 import main.java.ru.parallel.octotron.utils.EQueryType;
 import main.java.ru.parallel.octotron.utils.LinkList;
 import main.java.ru.parallel.octotron.utils.ObjectList;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * contains all operations, that can be invoked via request<br>
@@ -36,7 +34,7 @@ public abstract class PathOperations
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail, ExceptionParseError, ExceptionDBError;
+				throws ExceptionParseError;
 	};
 
 /**
@@ -69,7 +67,7 @@ public abstract class PathOperations
 
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj)
-				throws ExceptionModelFail, ExceptionParseError, ExceptionDBError
+				throws ExceptionParseError
 		{
 			return transform.Transform(graph_service, exec_control, obj, params);
 		}
@@ -108,7 +106,7 @@ public abstract class PathOperations
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail, ExceptionParseError
+				throws ExceptionParseError
 		{
 			if(params.size() != 1) // TODO
 				throw new ExceptionParseError("query accepts only one filter");
@@ -138,7 +136,7 @@ public abstract class PathOperations
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail, ExceptionParseError
+				throws ExceptionParseError
 		{
 			if(params.size() != 1)
 				throw new ExceptionParseError
@@ -165,7 +163,7 @@ public abstract class PathOperations
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail, ExceptionParseError
+				throws ExceptionParseError
 		{
 			if(params.size() != 1)
 				throw new ExceptionParseError
@@ -288,7 +286,6 @@ public abstract class PathOperations
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail
 		{
 			return ((ObjectList)obj).GetInLinks();
 		}
@@ -302,7 +299,6 @@ public abstract class PathOperations
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail
 		{
 			return ((ObjectList)obj).GetOutLinks();
 		}
@@ -315,7 +311,6 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail
 		{
 			return ((ObjectList)obj).GetInLinks().append(((ObjectList)obj).GetOutLinks());
 		}
@@ -329,7 +324,6 @@ public abstract class PathOperations
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail
 		{
 			return ((LinkList)obj).Source();
 		}
@@ -343,7 +337,6 @@ public abstract class PathOperations
 	{
 		public AbsEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
 			, Object obj, List<Pair<SimpleAttribute, EQueryType>> params)
-				throws ExceptionModelFail
 		{
 			return ((LinkList)obj).Target();
 		}

@@ -13,8 +13,6 @@ import main.java.ru.parallel.octotron.core.OctoAttribute;
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.core.OctoRule;
 import main.java.ru.parallel.octotron.primitive.EDependencyType;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 public class CheckBoolRules extends OctoRule
 {
@@ -35,7 +33,6 @@ public class CheckBoolRules extends OctoRule
 
 	@Override
 	public Object Compute(OctoObject object)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		int sum = 0;
 
@@ -52,7 +49,6 @@ public class CheckBoolRules extends OctoRule
 
 	@Override
 	public Object GetDefaultValue()
-		throws ExceptionModelFail
 	{
 		return 0;
 	}

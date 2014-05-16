@@ -17,10 +17,7 @@ import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.core.OctoReaction;
 import main.java.ru.parallel.octotron.core.OctoRule;
 import main.java.ru.parallel.octotron.neo4j.impl.Marker;
-import main.java.ru.parallel.octotron.primitive.EAttributeValueType;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.utils.JavaUtils;
 
 public class AutoFormat
@@ -33,7 +30,6 @@ public class AutoFormat
 	 * */
 	public static String PrintSeparated(AbsEntityList<?> list, AbsAttributeList<?> attributes
 		, String attr_sep, String line_sep, boolean show_name, boolean separate_objects)
-		throws ExceptionModelFail
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -83,7 +79,6 @@ public class AutoFormat
 	 * if \\attributes list is empty - print all attributes
 	 * */
 	public static String PrintJson(AbsEntityList<?> list, AbsAttributeList<?> attributes)
-		throws ExceptionModelFail
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -113,18 +108,8 @@ public class AutoFormat
 					result.append('"' + attr.GetName() + '"');
 					result.append(':');
 
-					if(entity.GetAttribute(attr.GetName()).GetValueType()
-						== EAttributeValueType.STRING)
-					{
-						result.append('"')
-							.append(entity.GetAttribute(attr.GetName()).GetString())
-							.append('"');
-					}
-					else
-					{
-						Object value = entity.GetAttribute(attr.GetName()).GetValue();
-						result.append(SimpleAttribute.ValueToStr(value));
-					}
+					Object value = entity.GetAttribute(attr.GetName()).GetValue();
+					result.append(SimpleAttribute.ValueToStr(value));
 				}
 				else
 					result.append("\"not found\":null");
@@ -150,7 +135,6 @@ public class AutoFormat
 	}
 
 	public static String PrintCSV(AbsEntityList<?> list, AbsAttributeList<?> attributes)
-		throws ExceptionModelFail
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -164,19 +148,16 @@ public class AutoFormat
 	}
 
 	public static String PrintNL(AbsEntityList<?> list, AbsAttributeList<?> attributes)
-		throws ExceptionModelFail
 	{
 		return PrintSeparated(list, attributes, System.lineSeparator(), System.lineSeparator(), true, true);
 	}
 
 	public static String PrintComma(AbsEntityList<?> list, AbsAttributeList<?> attributes)
-		throws ExceptionModelFail
 	{
 		return PrintSeparated(list, attributes, ",", ",", true, false);
 	}
 
 	public static String PrintEntities(AbsEntityList<?> list, AbsAttributeList<?> attributes, E_FORMAT_PARAM format, String callback)
-		throws ExceptionModelFail
 	{
 		switch (format)
 		{
@@ -201,7 +182,6 @@ public class AutoFormat
 	}
 
 	public static String PrintEntitiesSpecial(ObjectList list)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -211,18 +191,6 @@ public class AutoFormat
 				.append(System.lineSeparator()).append(System.lineSeparator());
 
 			for(OctoAttribute attr : object.GetAttributes().AlphabeticSort())
-			{
-				result.append(attr.GetName()).append('=');
-				Object value = object.GetAttribute(attr.GetName()).GetValue();
-				result.append(SimpleAttribute.ValueToStr(value));
-
-				result.append(System.lineSeparator());
-			}
-
-			result.append(System.lineSeparator()).append("----  special attributes   ----")
-				.append(System.lineSeparator()).append(System.lineSeparator());
-
-			for(OctoAttribute attr : object.GetSpecialAttributes().AlphabeticSort())
 			{
 				result.append(attr.GetName()).append('=');
 				Object value = object.GetAttribute(attr.GetName()).GetValue();

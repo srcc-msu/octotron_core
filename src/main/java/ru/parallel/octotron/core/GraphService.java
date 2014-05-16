@@ -7,31 +7,35 @@
 package main.java.ru.parallel.octotron.core;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.LinkedList;
-
-import org.apache.commons.lang3.ArrayUtils;
+import java.util.List;
 
 import main.java.ru.parallel.octotron.primitive.EEntityType;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
 import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.AttributeList;
 import main.java.ru.parallel.octotron.utils.LinkList;
 import main.java.ru.parallel.octotron.utils.ObjectList;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+/**
+ * provides additional features over raw graph interface<br>
+ * such as: static object, aid counter, meta attributes and arrays<br>
+ * ensures all objects have a correct AID<br>
+ * provides meta-attributes mechanic
+ * */
 public class GraphService
 {
-	public static final String RULE_PREFIX = "_RULE_";
+/*	public static final String RULE_PREFIX = "_RULE_";
 	public static final String REACTION_PREFIX = "_REACTION_";
 	public static final String MARKER_PREFIX = "_MARKER_";
 
 	private static final String REACTION_EXECUTED = "_executed_";
 	private static final String INVALID_ATTRIBUTE = "_invalid_";
 
-	private static final String STATIC_PREFIX = "_static_";
-	private static final String TIME_PREFIX = "_time_";
+	private static final String TIME_PREFIX = "_time_";*/
 
 	private static final String NEXT_AID = "_static_next_AID";
 
@@ -40,47 +44,106 @@ public class GraphService
 	private OctoObject static_obj = null;
 
 	public GraphService(IGraph graph)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		this.graph = graph;
 		InitStatic();
 	}
 
-	public long NextAID()
+/**
+ * return next value for AID counter from static object<br>
+ * increment and store new value in db<br>
+ * */
+	private long NextAID()
 	{
 		if(!TestAttribute(static_obj, NEXT_AID))
-			DeclareStaticAttribute(NEXT_AID, 0L);
+			SetAttribute(static_obj, NEXT_AID, 0L);
 
-		long next_AID = GetStaticAttribute(NEXT_AID).GetLong();
-		DeclareStaticAttribute(NEXT_AID, next_AID + 1);
+		long next_AID = GetAttribute(static_obj, NEXT_AID).GetLong();
+		SetAttribute(static_obj, NEXT_AID, next_AID + 1);
 
 		return next_AID;
 	}
 
+//---------------------------------
+//          STATIC
+//---------------------------------
+	private static final String STATIC_PREFIX = "_static_";
+
+	public boolean IsStaticName(String name)
+	{
+		return name.startsWith(STATIC_PREFIX);
+	}
+
+/**
+ * create static object if it does not exist<br>
+ * otherwise - find existing in the graph <br>
+ * */
+	private void InitStatic()
+	{
+		if(static_obj == null)
+		{
+			EnableObjectIndex("type");
+			ObjectList objects = GetObjects("type", STATIC_PREFIX);
+
+			if(objects.size() == 0)
+			{
+// have to do it manually - no AID yet
+				static_obj = new OctoObject(this, graph.AddObject());
+
+				SetAttribute("type", STATIC_PREFIX);
+				SetAttribute("AID", NextAID());
+			}
+			else
+				static_obj = objects.Only();
+		}
+	}
+
+	OctoAttribute SetAttribute(String name, Object value)
+	{
+		return SetAttribute(static_obj, name, value);
+	}
+
+	OctoAttribute GetAttribute(String name)
+	{
+		return GetAttribute(static_obj, name);
+	}
+
+	boolean TestAttribute(String name)
+	{
+		return TestAttribute(static_obj, name);
+	}
+
+	public OctoObject GetStatic()
+	{
+		return static_obj;
+	}
+
+//---------------------
+//       LINKS AND OBJECTS
+//---------------------
 	public OctoLink AddLink(OctoObject source, OctoObject target, String link_type)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		OctoLink link = new OctoLink(this, graph.AddLink(source.GetUID(), target.GetUID(), link_type));
 
-		link.SetAttribute("source", source.GetAttribute("AID").GetLong());
-		link.SetAttribute("target", target.GetAttribute("AID").GetLong());
+		SetAttribute(link, "source", source.GetAttribute("AID").GetLong());
+		SetAttribute(link, "target", target.GetAttribute("AID").GetLong());
+		SetAttribute(link, "AID", NextAID());
 
 		return link;
 	}
 
 	public OctoObject AddObject()
 	{
-		return new OctoObject(this, graph.AddObject());
+		OctoObject object = new OctoObject(this, graph.AddObject());
+		SetAttribute(object, "AID", NextAID());
+
+		return object;
 	}
 
 	public void Delete(OctoEntity entity)
-		throws ExceptionModelFail
 	{
 		if(entity.GetUID().getUid() == static_obj.GetUID().getUid())
-		{
-			System.err.println("i refuse to delete my own static object");
-			return;
-		}
+			throw new ExceptionModelFail("can not delete static object");
 
 		Uid uid = entity.GetUID();
 
@@ -96,17 +159,30 @@ public class GraphService
 			throw new ExceptionModelFail("unknown entity type");
 	}
 
-	public boolean TestAttribute(OctoEntity entity, String name)
-		throws ExceptionModelFail
+	public LinkList GetInLinks(OctoObject object)
 	{
-		if(name.startsWith(STATIC_PREFIX))
-			return TestStaticAttribute(name);
+		LinkList list = new LinkList();
 
-		return TestRawAttribute(entity, name);
+		for(Uid uid : graph.GetInLinks(object.GetUID()))
+			list.add(new OctoLink(this, uid));
+
+		return list;
 	}
 
+	public LinkList GetOutLink(OctoObject object)
+	{
+		LinkList list = new LinkList();
+
+		for(Uid uid : graph.GetOutLinks(object.GetUID()))
+			list.add(new OctoLink(this, uid));
+
+		return list;
+	}
+
+//--------------------
+//    RAW ATTRIBUTES
+//--------------------
 	private boolean TestRawAttribute(OctoEntity entity, String name)
-		throws ExceptionModelFail
 	{
 		Uid uid = entity.GetUID();
 
@@ -122,14 +198,7 @@ public class GraphService
 			throw new ExceptionModelFail("unknown entity type");
 	}
 
-	public void DeleteAttribute(OctoEntity entity, String name)
-		throws ExceptionModelFail
-	{
-		DeleteRawAttribute(entity, name);
-	}
-
 	private void DeleteRawAttribute(OctoEntity entity, String name)
-		throws ExceptionModelFail
 	{
 		Uid uid = entity.GetUID();
 
@@ -145,56 +214,23 @@ public class GraphService
 			throw new ExceptionModelFail("unknown entity type");
 	}
 
-	public OctoAttribute GetAttribute(OctoEntity entity, String name)
-		throws ExceptionModelFail
+	private void SetRawAttribute(OctoEntity entity, String name, Object value)
 	{
-		if(name.startsWith(STATIC_PREFIX))
-			return GetStaticAttribute(name);
+		Uid uid = entity.GetUID();
 
-		long change_time = 0;
-
-		Object value = GetRawAttribute(entity, name);
-
-		if(!IsSpecialName(name))
-			change_time = (long)GetRawAttribute(entity, TIME_PREFIX + name);
-
-		return new OctoAttribute(name, value, change_time, entity);
-	}
-
-	public AttributeList GetAttributes(OctoEntity entity)
-		throws ExceptionModelFail
-	{
-		List<Object[]> pairs = GetRawAttributes(entity);
-
-		AttributeList list = new AttributeList();
-
-		for(Object[] pair : pairs)
+		if(uid.getType() == EEntityType.OBJECT)
 		{
-			String name = (String)pair[0];
-
-			if(!IsSpecialName(name))
-			{
-				long change_time = (long)GetRawAttribute(entity, TIME_PREFIX + name);
-				list.add(new OctoAttribute(name, pair[1], change_time, entity));
-			}
+			graph.SetObjectAttribute(uid, name, value);
 		}
-
-		return list;
-	}
-
-	public LinkList GetInLinks(OctoObject object)
-		throws ExceptionModelFail
-	{
-		LinkList list = new LinkList();
-
-		for(Uid uid : graph.GetInLinks(object.GetUID()))
-			list.add(new OctoLink(this, uid));
-
-		return list;
+		else if(uid.getType() == EEntityType.LINK)
+		{
+			graph.SetLinkAttribute(uid, name, value);
+		}
+		else
+			throw new ExceptionModelFail("unknown entity type");
 	}
 
 	private Object GetRawAttribute(OctoEntity entity, String name)
-		throws ExceptionModelFail
 	{
 		Uid uid = entity.GetUID();
 		Object value;
@@ -210,7 +246,6 @@ public class GraphService
 	}
 
 	private List<Object[]> GetRawAttributes(OctoEntity entity)
-		throws ExceptionModelFail
 	{
 		Uid uid = entity.GetUID();
 
@@ -230,21 +265,38 @@ public class GraphService
 		return pairs;
 	}
 
-	public boolean IsSpecialName(String name)
+//------------------
+//    ATTRIBUTES
+//------------------
+
+	boolean TestAttribute(OctoEntity entity, String name)
 	{
-		return name.startsWith(TIME_PREFIX)
-			|| name.startsWith(STATIC_PREFIX)
+		if(IsStaticName(name))
+			entity = static_obj;
 
-			|| name.startsWith(REACTION_EXECUTED)
-			|| name.startsWith(INVALID_ATTRIBUTE)
-
-			|| name.startsWith(RULE_PREFIX)
-			|| name.startsWith(REACTION_PREFIX)
-			|| name.startsWith(MARKER_PREFIX);
+		return TestRawAttribute(entity, name);
 	}
 
-	public AttributeList GetSpecialAttributes(OctoEntity entity)
-		throws ExceptionModelFail
+	void DeleteAttribute(OctoEntity entity, String name)
+	{
+		if(IsStaticName(name))
+			entity = static_obj;
+
+		DeleteRawAttribute(entity, name);
+	}
+
+	OctoAttribute GetAttribute(OctoEntity entity, String name)
+	{
+		if(IsStaticName(name))
+			entity = static_obj;
+
+		return new OctoAttribute(this, entity, name, GetRawAttribute(entity, name));
+	}
+
+/**
+ * does not show arrays<br>
+ * */
+	AttributeList GetAttributes(OctoEntity entity)
 	{
 		List<Object[]> pairs = GetRawAttributes(entity);
 
@@ -252,101 +304,59 @@ public class GraphService
 
 		for(Object[] pair : pairs)
 		{
-			String name = (String)pair[0];
-
-			if(IsSpecialName(name) && !IsArrayName(name))
-			{
-				list.add(new OctoAttribute(name, pair[1], 0, entity));
-			}
+			if(!pair[1].getClass().isArray())
+				list.add(new OctoAttribute(this, entity, (String)pair[0], pair[1]));
 		}
 
 		return list;
 	}
 
+/**
+ * set the attribute to the object<br>
+ * if attribute is static - set the attribute to the static object instead<br>
+ * */
+	OctoAttribute SetAttribute(OctoEntity entity, String name, Object value)
+	{
+		if(IsStaticName(name))
+			entity = static_obj;
+
+		SetRawAttribute(entity, name, value);
+
+		return new OctoAttribute(this, entity, name, value);
+	}
+
 // ---------------------------------
-//		  INVALIDATION
+//        META ATTRIBUTES
 //---------------------------------
 
-	public boolean IsValid(OctoEntity entity, String name)
-		throws ExceptionModelFail
+	private static final String META_PREFIX = "_meta_";
+
+	private static String ToMeta(String attr_name, String meta_name)
 	{
-		return !TestAttribute(entity, INVALID_ATTRIBUTE + name);
+		return attr_name + META_PREFIX + meta_name;
 	}
 
-	public void SetValid(OctoEntity entity, String name, boolean value)
-		throws ExceptionModelFail, ExceptionDBError
+	public void SetMeta(OctoEntity entity, String attr_name, String meta_name, Object value)
 	{
-		if(value)
-		{
-			if(TestAttribute(entity, INVALID_ATTRIBUTE + name))
-				DeleteAttribute(entity, INVALID_ATTRIBUTE + name);
-		}
-		else
-			SetRawAttribute(entity, INVALID_ATTRIBUTE + name, "invalid");
+		SetRawAttribute(entity, ToMeta(attr_name, meta_name), value);
 	}
 
-// ---------------------------------
-//			STATIC
-//---------------------------------
-
-	public void DeclareStaticAttribute(String name, Object value)
-		throws ExceptionModelFail, ExceptionDBError
+	public Object GetMeta(OctoEntity entity, String attr_name, String meta_name)
 	{
-		if(!name.startsWith(STATIC_PREFIX))
-			throw new ExceptionModelFail
-				("static attribute must starts with prefix: " + STATIC_PREFIX);
-
-		SetRawAttribute(static_obj, name, value);
+		return GetRawAttribute(entity, ToMeta(attr_name, meta_name));
 	}
 
-	public boolean TestStaticAttribute(String name)
-		throws ExceptionModelFail
+	public boolean TestMeta(OctoEntity entity, String attr_name, String meta_name)
 	{
-		if(!name.startsWith(STATIC_PREFIX))
-			throw new ExceptionModelFail
-				("static attribute must starts with prefix: " + STATIC_PREFIX);
-
-		return TestRawAttribute(static_obj, name);
+		return TestRawAttribute(entity, ToMeta(attr_name, meta_name));
 	}
 
-	public boolean IsStaticName(String name)
-		throws ExceptionModelFail
+	public void DeleteMeta(OctoEntity entity, String attr_name, String meta_name)
 	{
-		return name.startsWith(STATIC_PREFIX);
+		DeleteRawAttribute(entity, ToMeta(attr_name, meta_name));
 	}
 
-	public OctoAttribute GetStaticAttribute(String name)
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		if(!name.startsWith(STATIC_PREFIX))
-			throw new ExceptionModelFail
-				("static attribute must starts with prefix: " + STATIC_PREFIX);
-
-		return new OctoAttribute(name, GetRawAttribute(static_obj, name), 0, static_obj);
-	}
-
-	private void InitStatic()
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		if(static_obj == null)
-		{
-			EnableObjectIndex("type");
-			ObjectList objects = GetObjects("type", STATIC_PREFIX);
-
-			if(objects.size() == 0)
-			{
-				static_obj = AddObject();
-
-				SetAttribute(static_obj, "type", STATIC_PREFIX, 0);
-
-				SetAttribute(static_obj, "AID", NextAID(), 0);
-			}
-			else
-				static_obj = objects.Only();
-		}
-	}
-
-// ---------------------------------
+// --------------------------------
 //			CACHE
 //---------------------------------
 
@@ -391,13 +401,11 @@ public class GraphService
 	}
 
 	public OctoLink GetLink(OctoAttribute att)
-		throws ExceptionModelFail
 	{
 		return GetLink(att.GetName(), att.GetValue());
 	}
 
 	public OctoLink GetLink(String name, Object value)
-		throws ExceptionModelFail
 	{
 		Uid uid = graph.GetIndex().GetLink(name, value);
 		return new OctoLink(this, uid);
@@ -419,13 +427,11 @@ public class GraphService
 	}
 
 	public OctoObject GetObject(SimpleAttribute att)
-		throws ExceptionModelFail
 	{
 		return GetObject(att.GetName(), att.GetValue());
 	}
 
 	public OctoObject GetObject(String name, Object value)
-		throws ExceptionModelFail
 	{
 		Uid uid = graph.GetIndex().GetObject(name, value);
 		return new OctoObject(this, uid);
@@ -446,17 +452,6 @@ public class GraphService
 		return ObjectsFromUid(graph.GetIndex().GetObjects(name, value));
 	}
 
-	public LinkList GetOutLink(OctoObject object)
-		throws ExceptionModelFail
-	{
-		LinkList list = new LinkList();
-
-		for(Uid uid : graph.GetOutLinks(object.GetUID()))
-			list.add(new OctoLink(this, uid));
-
-		return list;
-	}
-
 	public LinkList QueryLinks(String name, String value)
 	{
 		return LinksFromUid(graph.GetIndex().QueryLinks(name, value));
@@ -467,77 +462,21 @@ public class GraphService
 		return ObjectsFromUid(graph.GetIndex().QueryObjects(name, value));
 	}
 
-	public OctoAttribute SetAttribute(OctoEntity entity, String name
-		, Object value, long change_time)
-			throws ExceptionModelFail, ExceptionDBError
-	{
-		if(IsSpecialName(name))
-			throw new ExceptionModelFail("this name is reserved for service puprose: " + name);
-
-		SetRawAttribute(entity, name, value);
-		SetRawAttribute(entity, TIME_PREFIX + name, change_time);
-
-		return new OctoAttribute(name, value, change_time, entity);
-	}
-
-	private void SetRawAttribute(OctoEntity entity, String name, Object value)
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		Uid uid = entity.GetUID();
-
-		if(uid.getType() == EEntityType.OBJECT)
-		{
-			graph.SetObjectAttribute(uid, name, value);
-		}
-		else if(uid.getType() == EEntityType.LINK)
-		{
-			graph.SetLinkAttribute(uid, name, value);
-		}
-		else
-			throw new ExceptionModelFail("unknown entity type");
-	}
-
 	public OctoObject GetLinkTarget(OctoLink link)
-		throws ExceptionModelFail
 	{
 		return new OctoObject(this, graph.GetLinkTarget(link.GetUID()));
 	}
 
 	public OctoObject GetLinkSource(OctoLink link)
-		throws ExceptionModelFail
 	{
 		return new OctoObject(this, graph.GetLinkSource(link.GetUID()));
-	}
-
-// ---------------------------------
-//				REACTIONS
-// ---------------------------------
-
-	public int IsReactionExecuted(OctoEntity entity, long key)
-		throws ExceptionModelFail
-	{
-		return (int)GetRawAttribute(entity, REACTION_EXECUTED + key);
-	}
-
-	public void SetReactionExecuted(OctoEntity entity, long id, int res)
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		SetRawAttribute(entity, REACTION_EXECUTED + id, res);
 	}
 
 // ---------------------------------
 //			ARRAYS
 // ---------------------------------
 
-	private boolean IsArrayName(String name)
-	{
-		return name.startsWith(RULE_PREFIX)
-			|| name.startsWith(REACTION_PREFIX)
-			|| name.startsWith(MARKER_PREFIX);
-	}
-
 	public void SetArray(OctoEntity entity, String prefix, List<Long> list)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		Long[] array = Arrays.copyOf(list.toArray(), list.size(), Long[].class);
 
@@ -545,7 +484,6 @@ public class GraphService
 	}
 
 	public List<Long> GetArray(OctoEntity entity, String prefix)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		if(!TestAttribute(entity, prefix))
 			return new LinkedList<Long>();
@@ -557,7 +495,6 @@ public class GraphService
 	}
 
 	public void AddToArray(OctoEntity entity, String prefix, Long value)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		List<Long> list = GetArray(entity, prefix);
 		list.add(value);
@@ -565,10 +502,13 @@ public class GraphService
 	}
 
 	public void CleanArray(OctoEntity entity, String prefix)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		DeleteAttribute(entity, prefix);
 	}
+
+// ---------------------------------
+//			 Utility
+// ---------------------------------
 
 	public void Clean()
 	{
@@ -578,10 +518,6 @@ public class GraphService
 				obj.Delete();
 		}
 	}
-
-// ---------------------------------
-//			 Utility
-// ---------------------------------
 
 	public String ExportDot()
 	{

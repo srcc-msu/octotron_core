@@ -11,7 +11,6 @@ import main.java.ru.parallel.octotron.impl.generators.LinkFactory;
 import main.java.ru.parallel.octotron.impl.generators.ObjectFactory;
 import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 /**
@@ -26,38 +25,25 @@ public class TestNode extends Assert
 
 	@BeforeClass
 	public static void Init()
+		throws ExceptionSystemError
 	{
-		try
-		{
-			graph = new Neo4jGraph("dbs/test_node", Neo4jGraph.Op.RECREATE);
-			graph_service = new GraphService(graph);
-		}
-		catch (Exception e)
-		{
-			fail(e.getMessage());
-		}
+		graph = new Neo4jGraph("dbs/test_node", Neo4jGraph.Op.RECREATE);
+		graph_service = new GraphService(graph);
 
-		try
+		SimpleAttribute[] obj_att = new SimpleAttribute[]
 		{
-			SimpleAttribute[] obj_att = new SimpleAttribute[]
-			{
-				new SimpleAttribute("object", "ok")
-			};
+			new SimpleAttribute("object", "ok")
+		};
 
-			obj_factory = new ObjectFactory(graph_service).Attributes(obj_att);
+		obj_factory = new ObjectFactory(graph_service).Attributes(obj_att);
 
-			SimpleAttribute[] link_att = new SimpleAttribute[]
-			{
-				new SimpleAttribute("link", "ok"),
-				new SimpleAttribute("type", "contain"),
-			};
-
-			link_factory = new LinkFactory(graph_service).Attributes(link_att);
-		}
-		catch (ExceptionModelFail e)
+		SimpleAttribute[] link_att = new SimpleAttribute[]
 		{
-			fail(e.getMessage());
-		}
+			new SimpleAttribute("link", "ok"),
+			new SimpleAttribute("type", "contain"),
+		};
+
+		link_factory = new LinkFactory(graph_service).Attributes(link_att);
 	}
 
 	@AfterClass
@@ -83,32 +69,24 @@ public class TestNode extends Assert
 	{
 		int N = 10;
 
-		try
-		{
-			OctoObject node = obj_factory.Create();
+		OctoObject node = obj_factory.Create();
 
-			link_factory.EveryToOne(obj_factory.Create(N), node);
+		link_factory.EveryToOne(obj_factory.Create(N), node);
 
-			assertEquals("in links not match, any type"
-				, node.GetInLinks().size(), N);
+		assertEquals("in links not match, any type"
+			, node.GetInLinks().size(), N);
 
-			assertEquals("in links not match, exact type"
-				, node.GetInLinks().Filter("link").size(), N);
+		assertEquals("in links not match, exact type"
+			, node.GetInLinks().Filter("link").size(), N);
 
-			assertEquals("in links not match, exact type and value"
-				, node.GetInLinks().Filter("link", "ok").size(), N);
+		assertEquals("in links not match, exact type and value"
+			, node.GetInLinks().Filter("link", "ok").size(), N);
 
-			assertEquals("in links not match, exact type, wrong value"
-				, node.GetInLinks().Filter("link", "fail").size(), 0);
+		assertEquals("in links not match, exact type, wrong value"
+			, node.GetInLinks().Filter("link", "fail").size(), 0);
 
-			assertEquals("in links not match, wrong type, wrong value"
-				, node.GetInLinks().Filter("fail", "fail").size(), 0);
-		}
-		catch (Exception e)
-		{
-			System.out.print(e.getMessage());
-			fail(e.getMessage());
-		}
+		assertEquals("in links not match, wrong type, wrong value"
+			, node.GetInLinks().Filter("fail", "fail").size(), 0);
 	}
 
 	/**
@@ -149,36 +127,29 @@ public class TestNode extends Assert
 	{
 		int N = 10;
 
-		try
-		{
-			OctoObject node = obj_factory.Create();
+		OctoObject node = obj_factory.Create();
 
-			link_factory.EveryToOne(obj_factory.Create(N), node);
+		link_factory.EveryToOne(obj_factory.Create(N), node);
 
-			assertEquals("in neighbors not match, any type"
-				, node.GetInNeighbors()
-					.size(), N);
+		assertEquals("in neighbors not match, any type"
+			, node.GetInNeighbors()
+				.size(), N);
 
-			assertEquals("in neighbors not match, exact type"
-				, node.GetInNeighbors()
-					.Filter("object").size(), N);
+		assertEquals("in neighbors not match, exact type"
+			, node.GetInNeighbors()
+				.Filter("object").size(), N);
 
-			assertEquals("in neighbors not match, exact type and value"
-				, node.GetInNeighbors()
-					.Filter("object", "ok").size(), N);
+		assertEquals("in neighbors not match, exact type and value"
+			, node.GetInNeighbors()
+				.Filter("object", "ok").size(), N);
 
-			assertEquals("in neighbors not match, exact type, wrong value"
-				, node.GetInNeighbors()
-					.Filter("object", "fail").size(), 0);
+		assertEquals("in neighbors not match, exact type, wrong value"
+			, node.GetInNeighbors()
+				.Filter("object", "fail").size(), 0);
 
-			assertEquals("in neighbors not match, wrong type, wrong value"
-				, node.GetInNeighbors()
-					.Filter("fail", "fail").size(), 0);
-		}
-		catch (Exception e)
-		{
-			fail(e.getMessage());
-		}
+		assertEquals("in neighbors not match, wrong type, wrong value"
+			, node.GetInNeighbors()
+				.Filter("fail", "fail").size(), 0);
 	}
 
 	/**
@@ -189,36 +160,30 @@ public class TestNode extends Assert
 	{
 		int N = 10;
 
-		try
-		{
-			OctoObject node = obj_factory.Create();
+		OctoObject node = obj_factory.Create();
 
-			link_factory.OneToEvery(node, obj_factory.Create(N));
+		link_factory.OneToEvery(node, obj_factory.Create(N));
 
-			assertEquals("in neighbors not match, any type"
-				, node.GetOutNeighbors()
-					.size(), N);
+		assertEquals("in neighbors not match, any type"
+			, node.GetOutNeighbors()
+				.size(), N);
 
-			assertEquals("in neighbors not match, exact type"
-				, node.GetOutNeighbors()
-					.Filter("object").size(), N);
+		assertEquals("in neighbors not match, exact type"
+			, node.GetOutNeighbors()
+				.Filter("object").size(), N);
 
-			assertEquals("in neighbors not match, exact type and value"
-				, node.GetOutNeighbors()
-					.Filter("object", "ok").size(), N);
+		assertEquals("in neighbors not match, exact type and value"
+			, node.GetOutNeighbors()
+				.Filter("object", "ok").size(), N);
 
-			assertEquals("in neighbors not match, exact type, wrong value"
-				, node.GetOutNeighbors()
-					.Filter("object", "fail").size(), 0);
+		assertEquals("in neighbors not match, exact type, wrong value"
+			, node.GetOutNeighbors()
+				.Filter("object", "fail").size(), 0);
 
-			assertEquals("in neighbors not match, wrong type, wrong value"
-				, node.GetOutNeighbors()
-					.Filter("fail", "fail").size(), 0);
-		}
-		catch (Exception e)
-		{
-			fail(e.getMessage());
-		}
+		assertEquals("in neighbors not match, wrong type, wrong value"
+			, node.GetOutNeighbors()
+				.Filter("fail", "fail").size(), 0);
+
 	}
 
 /**
@@ -228,30 +193,23 @@ public class TestNode extends Assert
 	@Test
 	public void GetAttribute()
 	{
-		try
-		{
-			OctoObject node = obj_factory.Create();
+		OctoObject node = obj_factory.Create();
 
-			node.SetAttribute("test_long", 1);
-			node.SetAttribute("test_str", "a");
+		node.DeclareAttribute("test_long", 1);
+		node.DeclareAttribute("test_str", "a");
 
-			node.SetAttribute("test_double", 1.0);
-			node.SetAttribute("test_bool", true);
+		node.DeclareAttribute("test_double", 1.0);
+		node.DeclareAttribute("test_bool", true);
 
-			assertEquals("int attribute for object"
-				, node.GetAttribute("test_long").GetLong(), Long.valueOf(1));
-			assertEquals("int attribute for object"
-				, node.GetAttribute("test_str").GetString(), "a");
+		assertEquals("int attribute for object"
+			, node.GetAttribute("test_long").GetLong(), Long.valueOf(1));
+		assertEquals("int attribute for object"
+			, node.GetAttribute("test_str").GetString(), "a");
 
-			assertEquals("int attribute for object"
-				, node.GetAttribute("test_double").GetDouble(), 1.0, 0.1);
-			assertEquals("int attribute for object"
-				, node.GetAttribute("test_bool").GetBoolean(), true);
-		}
-		catch (Exception e)
-		{
-			fail(e.getMessage());
-		}
+		assertEquals("int attribute for object"
+			, node.GetAttribute("test_double").GetDouble(), 1.0, 0.1);
+		assertEquals("int attribute for object"
+			, node.GetAttribute("test_bool").GetBoolean(), true);
 	}
 
 /**
@@ -260,20 +218,13 @@ public class TestNode extends Assert
 	@Test
 	public void RemoveAttribute()
 	{
-		try
-		{
-			OctoObject node = obj_factory.Create();
+		OctoObject node = obj_factory.Create();
 
-			node.SetAttribute("test_test", 1);
-			node.RemoveAttribute("test_test");
+		node.DeclareAttribute("test_test", 1);
+		node.RemoveAttribute("test_test");
 
-			assertEquals("attribute presents - wrong"
-				, node.TestAttribute("test_test"), false);
-		}
-		catch (Exception e)
-		{
-			fail(e.getMessage());
-		}
+		assertEquals("attribute presents - wrong"
+			, node.TestAttribute("test_test"), false);
 	}
 
 /**
@@ -282,22 +233,14 @@ public class TestNode extends Assert
 	@Test
 	public void TestAttribute()
 	{
-		try
-		{
-			OctoObject node = obj_factory.Create();
+		OctoObject node = obj_factory.Create();
 
-			node.SetAttribute("test_test", 1);
-			assertEquals("attribute not presents - wrong"
-				, node.TestAttribute("test_test"), true);
+		node.DeclareAttribute("test_test", 1);
+		assertEquals("attribute not presents - wrong"
+			, node.TestAttribute("test_test"), true);
 
-			node.RemoveAttribute("test_test");
-			assertEquals("attribute presents - wrong"
-				, node.TestAttribute("test_test"), false);
-		}
-		catch (Exception e)
-		{
-			fail(e.getMessage());
-		}
+		node.RemoveAttribute("test_test");
+		assertEquals("attribute presents - wrong"
+			, node.TestAttribute("test_test"), false);
 	}
-
 }

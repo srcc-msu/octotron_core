@@ -14,7 +14,6 @@ import main.java.ru.parallel.octotron.core.OctoEntity;
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.netimport.ISensorData;
 import main.java.ru.parallel.octotron.primitive.EEntityType;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.AttributeList;
@@ -43,7 +42,7 @@ public class ImportManager
 	 * invoke rules, according to all changed attributes
 	 * */
 	public ObjectList Process(List<? extends ISensorData> packet)
-		throws ExceptionModelFail, ExceptionImportFail
+		throws ExceptionImportFail
 	{
 		ObjectList changed = static_proc.Process(packet);
 
@@ -56,7 +55,7 @@ public class ImportManager
 	}
 
 	public ObjectList ProcessRules(ObjectList changed)
-		throws ExceptionModelFail, ExceptionImportFail
+		throws ExceptionImportFail
 	{
 		ObjectList rule_changed = ruled_proc.Process(changed).Uniq();
 
@@ -72,7 +71,7 @@ public class ImportManager
 		}
 
 		ObjectList all_changed = new ObjectList(changed);
-		all_changed.append(rule_changed);
+		all_changed.append(rule_changed).Uniq();
 
 		return all_changed;
 	}
@@ -81,7 +80,6 @@ public class ImportManager
 	private static final long TIMER_CHECK_THRESHOLD = 2;
 
 	public ObjectList ProcessTimers()
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		long cur_time = JavaUtils.GetTimestamp();
 

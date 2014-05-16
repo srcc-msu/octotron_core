@@ -30,51 +30,32 @@ public class TestGenerators extends Assert
 
 	@BeforeClass
 	public static void Init()
+		throws ExceptionSystemError
 	{
-		try
-		{
-			graph = new Neo4jGraph("dbs/test_primitives", Neo4jGraph.Op.RECREATE);
-			graph_service = new GraphService(graph);
-		}
-		catch (Exception e)
-		{
-			fail(e.getMessage());
-		}
+		graph = new Neo4jGraph("dbs/test_primitives", Neo4jGraph.Op.RECREATE);
+		graph_service = new GraphService(graph);
 
-		try
+		SimpleAttribute[] obj_att = new SimpleAttribute[]
 		{
-			SimpleAttribute[] obj_att = new SimpleAttribute[]
-			{
-				new SimpleAttribute("object", "ok")
-			};
+			new SimpleAttribute("object", "ok")
+		};
 
-			obj_factory = new ObjectFactory(graph_service).Attributes(obj_att);
+		obj_factory = new ObjectFactory(graph_service).Attributes(obj_att);
 
-			SimpleAttribute[] link_att = new SimpleAttribute[]
-			{
-				new SimpleAttribute("type", "contain")
-			};
-
-			link_factory = new LinkFactory(graph_service).Attributes(link_att);
-		}
-		catch (ExceptionModelFail e)
+		SimpleAttribute[] link_att = new SimpleAttribute[]
 		{
-			fail(e.getMessage());
-		}
+			new SimpleAttribute("type", "contain")
+		};
+
+		link_factory = new LinkFactory(graph_service).Attributes(link_att);
 	}
 
 	@AfterClass
 	public static void Delete()
+		throws ExceptionSystemError
 	{
 		graph.Shutdown();
-		try
-		{
-			graph.Delete();
-		}
-		catch (ExceptionSystemError e)
-		{
-			fail(e.getMessage());
-		}
+		graph.Delete();
 	}
 
 /**

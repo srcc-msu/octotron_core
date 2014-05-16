@@ -14,7 +14,6 @@ import main.java.ru.parallel.octotron.logic.TimerProcessor;
 import main.java.ru.parallel.octotron.neo4j.impl.Marker;
 import main.java.ru.parallel.octotron.primitive.EDependencyType;
 import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.LinkList;
 import main.java.ru.parallel.octotron.utils.ObjectList;
@@ -26,6 +25,11 @@ import main.java.ru.parallel.utils.JavaUtils;
  * */
 public class OctoObject extends OctoEntity
 {
+	private static final String RULE_PREFIX = "_rule";
+	private static final String REACTION_PREFIX = "_reaction";
+	private static final String REACTION_EXECUTED_PREFIX = "_reaction_executed";
+	private static final String MARKER_PREFIX = "_marker";
+
 	/**
 	 * this constructor MUST not be used manually for -<br>
 	 * creating new items -<br>
@@ -37,20 +41,17 @@ public class OctoObject extends OctoEntity
 	}
 
 	public LinkList GetInLinks()
-		throws ExceptionModelFail
 	{
 		return graph_service.GetInLinks(this);
 	}
 
 	public LinkList GetOutLinks()
-		throws ExceptionModelFail
 	{
 		return graph_service.GetOutLink(this);
 	}
 
 	public ObjectList GetInNeighbors(String link_name
 		, Object link_value)
-		throws ExceptionModelFail
 	{
 		ObjectList objects = new ObjectList();
 
@@ -62,7 +63,6 @@ public class OctoObject extends OctoEntity
 
 	public ObjectList GetOutNeighbors(String link_name
 		, Object link_value)
-		throws ExceptionModelFail
 	{
 		ObjectList objects = new ObjectList();
 
@@ -73,7 +73,6 @@ public class OctoObject extends OctoEntity
 	}
 
 	public ObjectList GetInNeighbors(String link_name)
-		throws ExceptionModelFail
 	{
 		ObjectList objects = new ObjectList();
 
@@ -84,7 +83,6 @@ public class OctoObject extends OctoEntity
 	}
 
 	public ObjectList GetOutNeighbors(String link_name)
-		throws ExceptionModelFail
 	{
 		ObjectList objects = new ObjectList();
 
@@ -95,7 +93,6 @@ public class OctoObject extends OctoEntity
 	}
 
 	public ObjectList GetInNeighbors()
-		throws ExceptionModelFail
 	{
 		ObjectList objects = new ObjectList();
 
@@ -106,7 +103,6 @@ public class OctoObject extends OctoEntity
 	}
 
 	public ObjectList GetOutNeighbors()
-		throws ExceptionModelFail
 	{
 		ObjectList objects = new ObjectList();
 
@@ -117,80 +113,72 @@ public class OctoObject extends OctoEntity
 	}
 
 	public List<OctoRule> GetRules()
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		List<OctoRule> rules = new LinkedList<OctoRule>();
 
-		for(long id : graph_service.GetArray(this, GraphService.RULE_PREFIX))
+		for(long id : graph_service.GetArray(this, RULE_PREFIX))
 			rules.add(PersistenStorage.INSTANCE.GetRules().Get(id));
 
 		return rules;
 	}
 
 	public List<OctoReaction> GetReactions()
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		List<OctoReaction> reactions = new LinkedList<OctoReaction>();
 
-		for(long id : graph_service.GetArray(this, GraphService.REACTION_PREFIX))
+		for(long id : graph_service.GetArray(this, REACTION_PREFIX))
 			reactions.add(PersistenStorage.INSTANCE.GetReactions().Get(id));
 
 		return reactions;
 	}
 
 	public List<Marker> GetMarkers()
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		List<Marker> markers = new LinkedList<Marker>();
 
-		for(long id : graph_service.GetArray(this, GraphService.MARKER_PREFIX))
+		for(long id : graph_service.GetArray(this, MARKER_PREFIX))
 			markers.add(PersistenStorage.INSTANCE.GetMarkers().Get(id));
 
 		return markers;
 	}
 
 	public void AddRule(OctoRule rule)
-		throws ExceptionModelFail, ExceptionDBError
 	{
-		graph_service.AddToArray(this, GraphService.RULE_PREFIX, rule.GetID());
+		graph_service.AddToArray(this, RULE_PREFIX, rule.GetID());
 
-		SetAttribute(rule.GetAttr(), rule.GetDefaultValue());
+		DeclareAttribute(rule.GetAttr(), rule.GetDefaultValue());
 	}
 
 	public void AddRules(List<OctoRule> rules)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		for(OctoRule rule : rules)
 			AddRule(rule);
 	}
 
 	public void AddReaction(OctoReaction reaction)
-		throws ExceptionModelFail, ExceptionDBError
 	{
-		graph_service.AddToArray(this, GraphService.REACTION_PREFIX, reaction.GetID());
-		graph_service.SetReactionExecuted(this, reaction.GetID(), OctoReaction.STATE_NONE);
+		graph_service.AddToArray(this, REACTION_PREFIX, reaction.GetID());
+		graph_service.AddToArray(this, REACTION_EXECUTED_PREFIX, 0L);
 	}
 
 	public void AddReactions(List<OctoReaction> reactions)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		for(OctoReaction reaction : reactions)
 			AddReaction(reaction);
 	}
 
 	public void SetTimer(String name, long expires)
-		throws ExceptionModelFail, ExceptionDBError
 	{
-		OctoAttribute attr = SetAttribute(name, expires);
+		OctoAttribute attr = DeclareAttribute(name, expires);
+
 		TimerProcessor.AddTimer(attr);
 	}
 
 	public boolean Update(EDependencyType dep)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		boolean changed = false;
 
-		List<Long> keys = graph_service.GetArray(this, GraphService.RULE_PREFIX);
+		List<Long> keys = graph_service.GetArray(this, RULE_PREFIX);
 
 		for(long key : keys)
 		{
@@ -209,7 +197,6 @@ public class OctoObject extends OctoEntity
 	}
 
 	public List<OctoResponse> PreparePendingReactions()
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		List<Marker> markers = GetMarkers();
 
@@ -230,7 +217,7 @@ public class OctoObject extends OctoEntity
 			}
 
 			boolean needed = reaction.ReactionNeeded(this);
-			int state = IsReactionExecuted(reaction.GetID());
+			long state = IsReactionExecuted(reaction.GetID());
 
 			if(needed && skip_marker != null)
 			{
@@ -303,7 +290,6 @@ public class OctoObject extends OctoEntity
 	}
 
 	public List<OctoResponse> GetFails()
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		List<OctoResponse> fails = new LinkedList<OctoResponse>();
 
@@ -318,38 +304,42 @@ public class OctoObject extends OctoEntity
 		return fails;
 	}
 
-	public int IsReactionExecuted(long key)
-		throws ExceptionModelFail
+	public long IsReactionExecuted(long key)
 	{
-		return graph_service.IsReactionExecuted(this, key);
+		List<Long> id = graph_service.GetArray(this, REACTION_PREFIX);
+		List<Long> executed = graph_service.GetArray(this, REACTION_EXECUTED_PREFIX);
+
+		return executed.get(id.indexOf(key));
 	}
 
-	public void SetReactionExecuted(long key, int res)
-		throws ExceptionModelFail, ExceptionDBError
+	public void SetReactionExecuted(long key, long res)
 	{
-		graph_service.SetReactionExecuted(this, key, res);
+		List<Long> id = graph_service.GetArray(this, REACTION_PREFIX);
+		List<Long> executed = graph_service.GetArray(this, REACTION_EXECUTED_PREFIX);
+
+		int index = id.indexOf(key);
+		executed.set(index, res);
+		graph_service.SetArray(this, REACTION_EXECUTED_PREFIX, executed);
 	}
 
 	public long AddMarker(long reaction_id, String description, boolean suppress)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		long AID = GetAttribute("AID").GetLong();
 		Marker marker = new Marker(AID, reaction_id, description, suppress);
-		graph_service.AddToArray(this, GraphService.MARKER_PREFIX, marker.GetID());
+		graph_service.AddToArray(this, MARKER_PREFIX, marker.GetID());
 		return marker.GetID();
 	}
 
 	public void DelMarker(long marker_id)
-		throws ExceptionModelFail, ExceptionDBError
 	{
-		List<Long> markers_id = graph_service.GetArray(this, GraphService.MARKER_PREFIX);
+		List<Long> markers_id = graph_service.GetArray(this, MARKER_PREFIX);
 
 		if(!markers_id.contains(marker_id))
 			throw new ExceptionModelFail("can not delete: marker with id " + marker_id + " not found");
 
 		markers_id.remove(marker_id); // NOW it removes by value, not by index...
 
-		graph_service.SetArray(this, GraphService.MARKER_PREFIX, markers_id);
+		graph_service.SetArray(this, MARKER_PREFIX, markers_id);
 
 		PersistenStorage.INSTANCE.GetMarkers().Delete(marker_id);
 	}

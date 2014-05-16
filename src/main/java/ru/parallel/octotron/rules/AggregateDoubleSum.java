@@ -10,7 +10,6 @@ import main.java.ru.parallel.octotron.core.OctoAttribute;
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.core.OctoRule;
 import main.java.ru.parallel.octotron.primitive.EDependencyType;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 public class AggregateDoubleSum extends OctoRule
 {
@@ -18,7 +17,6 @@ public class AggregateDoubleSum extends OctoRule
 	private String detect_str;
 
 	public AggregateDoubleSum(String attr, String detect_str)
-		throws ExceptionModelFail
 	{
 		super(attr);
 		this.detect_str = detect_str;
@@ -32,7 +30,6 @@ public class AggregateDoubleSum extends OctoRule
 
 	@Override
 	public Object Compute(OctoObject object)
-		throws ExceptionModelFail
 	{
 		double sum = 0.0;
 
@@ -46,7 +43,6 @@ public class AggregateDoubleSum extends OctoRule
 
 	@Override
 	public Object GetDefaultValue()
-		throws ExceptionModelFail
 	{
 		return 0.0;
 	}

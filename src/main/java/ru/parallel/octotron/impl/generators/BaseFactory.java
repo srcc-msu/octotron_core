@@ -14,7 +14,6 @@ import main.java.ru.parallel.octotron.core.GraphService;
 import main.java.ru.parallel.octotron.core.OctoReaction;
 import main.java.ru.parallel.octotron.core.OctoRule;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.utils.JavaUtils;
 
 /**
@@ -47,7 +46,6 @@ public abstract class BaseFactory<T>
 	}
 
 	public BaseFactory(GraphService graph_service)
-		throws ExceptionModelFail
 	{
 		this(graph_service
 			, new LinkedList<SimpleAttribute>()

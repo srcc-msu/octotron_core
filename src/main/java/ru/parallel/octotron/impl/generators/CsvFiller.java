@@ -62,7 +62,7 @@ public final class CsvFiller
 
 					Object val = SimpleAttribute.ValueFromStr(str_val);
 
-					entity.SetAttribute(fields[i], val);
+					entity.DeclareAttribute(fields[i], val);
 				}
 
 				read++;

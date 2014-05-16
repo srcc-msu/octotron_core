@@ -90,7 +90,7 @@ public final class Neo4jGraph implements IGraph
 	 * load graph with \\name name<br>
 	 * */
 	public Neo4jGraph(String name, Op op)
-		throws ExceptionDBError, ExceptionModelFail, ExceptionSystemError
+		throws ExceptionSystemError
 	{
 		this(name, op, false);
 	}
@@ -99,7 +99,7 @@ public final class Neo4jGraph implements IGraph
 	 * load graph with \\name name<br>
 	 * */
 	public Neo4jGraph(String name, Op op, boolean bootstrap)
-		throws ExceptionDBError, ExceptionModelFail, ExceptionSystemError
+		throws ExceptionSystemError
 	{
 		this.bootstrap = bootstrap;
 
@@ -334,7 +334,6 @@ public final class Neo4jGraph implements IGraph
 	 * throws exception otherwise<br>
 	 * */
 	private void MatchType(Uid uid, EEntityType type)
-		throws ExceptionModelFail
 	{
 		if(!uid.getType().equals(type))
 			throw new ExceptionModelFail
@@ -357,7 +356,6 @@ public final class Neo4jGraph implements IGraph
 	 * */
 	@Override
 	public void DeleteObject(Uid uid)
-		throws ExceptionModelFail
 	{
 		transaction.Delete();
 
@@ -378,7 +376,6 @@ public final class Neo4jGraph implements IGraph
 	 * */
 	@Override
 	public void DeleteLink(Uid uid)
-		throws ExceptionModelFail
 	{
 		transaction.Delete();
 
@@ -389,7 +386,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public Uid AddLink(Uid source, Uid target, String link_type)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		transaction.Write();
 
@@ -408,8 +404,7 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public void SetObjectAttribute(Uid uid, String name, Object value)
-			throws ExceptionModelFail, ExceptionDBError
-	{
+		{
 		transaction.Write();
 
 		MatchType(uid, EEntityType.OBJECT);
@@ -432,7 +427,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public Object GetObjectAttribute(Uid uid, String name)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 
@@ -465,7 +459,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public void SetLinkAttribute(Uid uid, String name, Object value)
-		throws ExceptionModelFail
 	{
 		transaction.Write();
 
@@ -484,7 +477,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public Object GetLinkAttribute(Uid uid, String name)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 
@@ -550,7 +542,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public List<Uid> GetOutLinks(Uid uid)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 
@@ -571,7 +562,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public List<Uid> GetInLinks(Uid uid)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 
@@ -623,7 +613,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public Uid GetLinkTarget(Uid uid)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 
@@ -646,7 +635,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public Uid GetLinkSource(Uid uid)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 
@@ -668,7 +656,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public List<Object[]> GetObjectAttributes(Uid uid)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 		MatchType(uid, EEntityType.OBJECT);
@@ -685,7 +672,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public List<Object[]> GetLinkAttributes(Uid uid)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 		MatchType(uid, EEntityType.LINK);
@@ -702,7 +688,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public void DeleteObjectAttribute(Uid uid, String name)
-		throws ExceptionModelFail
 	{
 		transaction.Write();
 		MatchType(uid, EEntityType.OBJECT);
@@ -717,7 +702,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public void DeleteLinkAttribute(Uid uid, String name)
-		throws ExceptionModelFail
 	{
 		transaction.Write();
 		MatchType(uid, EEntityType.OBJECT);
@@ -732,7 +716,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public boolean TestObjectAttribute(Uid uid, String name)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 		MatchType(uid, EEntityType.OBJECT);
@@ -753,7 +736,6 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public boolean TestLinkAttribute(Uid uid, String name)
-		throws ExceptionModelFail
 	{
 		transaction.Read();
 		MatchType(uid, EEntityType.LINK);

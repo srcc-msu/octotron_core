@@ -13,8 +13,6 @@ import main.java.ru.parallel.octotron.core.OctoLink;
 import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.impl.PersistenStorage;
 import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import main.java.ru.parallel.octotron.utils.LinkList;
 import main.java.ru.parallel.octotron.utils.ObjectList;
@@ -45,8 +43,7 @@ public class DBCreator
 	}
 
 	public void Begin()
-		throws ExceptionDBError, ExceptionModelFail, ExceptionSystemError
-
+		throws ExceptionSystemError
 	{
 		graph = new Neo4jGraph(settings.GetDbPath() + settings.GetDbName() + "_neo4j", Neo4jGraph.Op.RECREATE);
 		graph_service = new GraphService(graph);
@@ -78,28 +75,24 @@ public class DBCreator
 		FileUtils.SaveToFile(settings.GetDbPath() + settings.GetDbName() + HASH_FILE
 			, Integer.toString(settings.GetHash()));
 
-		int spec = 0;
-		int usual = 0;
+		int count = 0;
 
 		ObjectList objects = graph_service.GetAllObjects();
 		LinkList links = graph_service.GetAllLinks();
 
 		for(OctoObject obj : objects)
 		{
-			spec += obj.GetAttributes().size();
-			usual += obj.GetSpecialAttributes().size();
+			count += obj.GetAttributes().size();
 		}
 
 		for(OctoLink link : links)
 		{
-			spec += link.GetAttributes().size();
-			usual += link.GetSpecialAttributes().size();
+			count += link.GetAttributes().size();
 		}
 
 		System.out.println("Created objects: " + objects.size());
 		System.out.println("Created links: " + links.size());
-		System.out.println("Created attributes: " + usual);
-		System.out.println("Created special attrbiutes: " + spec);
+		System.out.println("Created attributes: " + count);
 
 		System.out.println("done");
 		graph.Shutdown();

@@ -7,7 +7,6 @@
 package main.java.ru.parallel.octotron.core;
 
 import main.java.ru.parallel.octotron.impl.PersistenStorage;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 public class OctoReaction implements java.io.Serializable
 {
@@ -25,7 +24,6 @@ public class OctoReaction implements java.io.Serializable
 
 	public OctoReaction(String check_name, Object check_value
 		, OctoResponse response, long delay, OctoResponse recover_response)
-			throws ExceptionModelFail
 	{
 		this.check_name = check_name;
 		this.check_value = check_value;
@@ -40,27 +38,23 @@ public class OctoReaction implements java.io.Serializable
 
 	public OctoReaction(String check_name, Object check_value
 		, OctoResponse response, OctoResponse recover_response)
-			throws ExceptionModelFail
 	{
 		this(check_name, check_value, response, 0, recover_response);
 	}
 
 	public OctoReaction(String check_name, Object check_value
 		, OctoResponse response, long delay)
-			throws ExceptionModelFail
 	{
 		this(check_name, check_value, response, delay, null);
 	}
 
 	public OctoReaction(String check_name, Object check_value
 		, OctoResponse response)
-			throws ExceptionModelFail
 	{
 		this(check_name, check_value, response, 0, null);
 	}
 
 	private void Register()
-		throws ExceptionModelFail
 	{
 		reaction_id = PersistenStorage.INSTANCE.GetReactions().Add(this);
 	}
@@ -95,9 +89,9 @@ public class OctoReaction implements java.io.Serializable
 		return check_name;
 	}
 
-	public static final int STATE_NONE = 0;
-	public static final int STATE_STARTED = 1;
-	public static final int STATE_EXECUTED = 2;
+	public static final long STATE_NONE = 0;
+	public static final long STATE_STARTED = 1;
+	public static final long STATE_EXECUTED = 2;
 
 	public static final String DELAY_PREFIX = "_DELAY_";
 
@@ -105,7 +99,6 @@ public class OctoReaction implements java.io.Serializable
  * reaction is needed if the \check_name attribute is false
  * */
 	public boolean ReactionNeeded(OctoEntity entity)
-		throws ExceptionModelFail
 	{
 		OctoAttribute attr = entity.GetAttribute(check_name);
 

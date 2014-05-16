@@ -31,7 +31,7 @@ public class StartOctotron
  * */
 	public static void main(String[] args)
 	{
-		String fname = null; // insert your config file path here - for debug purpose
+		String fname = "cheb_src/config.json"; // insert your config file path here - for debug purpose
 
 		if(fname == null)
 		{

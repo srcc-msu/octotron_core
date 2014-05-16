@@ -14,8 +14,6 @@ import main.java.ru.parallel.octotron.core.OctoObject;
 import main.java.ru.parallel.octotron.core.OctoReaction;
 import main.java.ru.parallel.octotron.core.OctoRule;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.ObjectList;
 
 /**
@@ -40,7 +38,6 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	}
 
 	public ObjectFactory(GraphService graph_service)
-		throws ExceptionModelFail
 	{
 		super(graph_service);
 	}
@@ -49,15 +46,12 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * create single vertices
 	 * */
 	public OctoObject Create()
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		OctoObject vertex = graph_service.AddObject();
 
 		vertex.DeclareAttributes(attributes);
 		vertex.AddRules(rules);
 		vertex.AddReactions(reactions);
-
-		vertex.DeclareAttribute("AID", graph_service.NextAID());
 
 		return vertex;
 	}
@@ -66,7 +60,6 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * create \count vertices with additional attributes
 	 * */
 	public ObjectList Create(int count)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		ObjectList vertices = new ObjectList();
 

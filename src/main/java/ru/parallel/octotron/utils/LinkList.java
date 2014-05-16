@@ -10,7 +10,6 @@ import java.util.List;
 
 import main.java.ru.parallel.octotron.core.OctoLink;
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 /**
  * implements list container for entities<br>
@@ -42,37 +41,31 @@ public class LinkList extends AbsEntityList<OctoLink>
 	}
 
 	public LinkList ranges(int... ranges)
-		throws ExceptionModelFail
 	{
 		return new LinkList(InnerRanges(ranges));
 	}
 
 	public LinkList Filter(SimpleAttribute att, EQueryType type)
-		throws ExceptionModelFail
 	{
 		return new LinkList(InnerFilter(att.GetName(), att.GetValue(), type));
 	}
 
 	public LinkList Filter(String name, Object value, EQueryType type)
-		throws ExceptionModelFail
 	{
 		return new LinkList(InnerFilter(name, value, type));
 	}
 
 	public LinkList Filter(SimpleAttribute att)
-		throws ExceptionModelFail
 	{
 		return new LinkList(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
 	}
 
 	public LinkList Filter(String name, Object value)
-		throws ExceptionModelFail
 	{
 		return new LinkList(InnerFilter(name, value, EQueryType.EQ));
 	}
 
 	public LinkList Filter(String name)
-		throws ExceptionModelFail
 	{
 		return new LinkList(InnerFilter(name));
 	}
@@ -84,7 +77,6 @@ public class LinkList extends AbsEntityList<OctoLink>
 	}
 
 	public ObjectList Target()
-		throws ExceptionModelFail
 	{
 		ObjectList new_list = new ObjectList();
 
@@ -95,7 +87,6 @@ public class LinkList extends AbsEntityList<OctoLink>
 	}
 
 	public ObjectList Source()
-		throws ExceptionModelFail
 	{
 		ObjectList new_list = new ObjectList();
 

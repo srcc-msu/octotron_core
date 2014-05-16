@@ -8,7 +8,6 @@ package main.java.ru.parallel.octotron.core;
 
 import main.java.ru.parallel.octotron.impl.PersistenStorage;
 import main.java.ru.parallel.octotron.primitive.EDependencyType;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 public abstract class OctoRule implements java.io.Serializable
@@ -23,8 +22,7 @@ public abstract class OctoRule implements java.io.Serializable
 		Register();
 	}
 
-	private final void Register()
-		throws ExceptionModelFail
+	private void Register()
 	{
 		rule_id = PersistenStorage.INSTANCE.GetRules().Add(this);
 	}
@@ -35,14 +33,12 @@ public abstract class OctoRule implements java.io.Serializable
 	}
 
 	public Object Compute(OctoObject object)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		throw new ExceptionModelFail
 			("this rule is not applicable for objects");
 	}
 
 	public Object Compute(OctoLink link)
-		throws ExceptionModelFail
 	{
 		throw new ExceptionModelFail
 			("this rule is not applicable for links");
@@ -59,7 +55,6 @@ public abstract class OctoRule implements java.io.Serializable
 	}
 
 	public Object GetDefaultValue()
-		throws ExceptionModelFail
 	{
 		throw new ExceptionModelFail("default value for rule not specified");
 	}

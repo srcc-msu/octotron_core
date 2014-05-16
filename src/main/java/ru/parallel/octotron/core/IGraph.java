@@ -8,8 +8,6 @@ package main.java.ru.parallel.octotron.core;
 import java.util.List;
 
 import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.ObjectList;
 
 /**
@@ -20,43 +18,30 @@ public interface IGraph
 {
 	public Uid AddObject();
 
-	public List<Uid> GetOutLinks(Uid uid)
-		throws ExceptionModelFail;
+	public List<Uid> GetOutLinks(Uid uid);
 
-	public List<Uid> GetInLinks(Uid uid)
-		throws ExceptionModelFail;
+	public List<Uid> GetInLinks(Uid uid);
 
-	List<Object[]> GetObjectAttributes(Uid uid)
-		throws ExceptionModelFail;
-	void DeleteObjectAttribute(Uid uid, String name)
-		throws ExceptionModelFail;
-	boolean TestObjectAttribute(Uid uid, String name)
-		throws ExceptionModelFail;
+	List<Object[]> GetObjectAttributes(Uid uid);
+	void DeleteObjectAttribute(Uid uid, String name);
+	boolean TestObjectAttribute(Uid uid, String name);
 
-	public void DeleteObject(Uid uid)
-		throws ExceptionModelFail;
+	public void DeleteObject(Uid uid);
 
 // ----------------------------------------------------------
 // **********************************************************
 // ----------------------------------------------------------
 
-	public Uid AddLink(Uid source, Uid target, String link_type)
-		throws ExceptionModelFail, ExceptionDBError;
+	public Uid AddLink(Uid source, Uid target, String link_type);
 
-	public Uid GetLinkTarget(Uid uid)
-		throws ExceptionModelFail;
-	public Uid GetLinkSource(Uid uid)
-		throws ExceptionModelFail;
+	public Uid GetLinkTarget(Uid uid);
+	public Uid GetLinkSource(Uid uid);
 
-	List<Object[]> GetLinkAttributes(Uid uid)
-		throws ExceptionModelFail;
-	void DeleteLinkAttribute(Uid uid, String name)
-		throws ExceptionModelFail;
-	boolean TestLinkAttribute(Uid uid, String name)
-		throws ExceptionModelFail;
+	List<Object[]> GetLinkAttributes(Uid uid);
+	void DeleteLinkAttribute(Uid uid, String name);
+	boolean TestLinkAttribute(Uid uid, String name);
 
-	public void DeleteLink(Uid uid)
-		throws ExceptionModelFail;
+	public void DeleteLink(Uid uid);
 
 // ----------------------------------------------------------
 // **********************************************************
@@ -67,17 +52,13 @@ public interface IGraph
 	List<Uid> GetAllObjects();
 	List<Uid> GetAllLinks();
 
-	void SetObjectAttribute(Uid uid, String name, Object value)
-		throws ExceptionModelFail, ExceptionDBError;
+	void SetObjectAttribute(Uid uid, String name, Object value);
 
-	Object GetObjectAttribute(Uid uid, String name)
-		throws ExceptionModelFail;
+	Object GetObjectAttribute(Uid uid, String name);
 
-	Object GetLinkAttribute(Uid uid, String name)
-		throws ExceptionModelFail;
+	Object GetLinkAttribute(Uid uid, String name);
 
-	void SetLinkAttribute(Uid uid, String name, Object value)
-		throws ExceptionModelFail;
+	void SetLinkAttribute(Uid uid, String name, Object value);
 
 // ----------------------------------------------------------
 // **********************************************************

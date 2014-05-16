@@ -10,10 +10,8 @@ import java.util.List;
 
 import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
 import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.AttributeList;
-import main.java.ru.parallel.utils.JavaUtils;
 
 /**
  * some entity, that resides in model<br>
@@ -54,91 +52,57 @@ public abstract class OctoEntity
 	}
 
 	public boolean UpdateAttribute(SimpleAttribute att)
-		throws ExceptionModelFail, ExceptionDBError
 	{
-		return GetAttribute(att.GetName()).Update(att.GetValue());
+		return UpdateAttribute(att.GetName(), att.GetValue());
+	}
+
+	public boolean UpdateAttribute(String name, Object value)
+	{
+		return GetAttribute(name).Update(value);
 	}
 
 	public OctoAttribute GetAttribute(String name)
-		throws ExceptionModelFail
 	{
 		return graph_service.GetAttribute(this, name);
 	}
 
 	public AttributeList GetAttributes()
-		throws ExceptionModelFail
 	{
 		return graph_service.GetAttributes(this);
 	}
 
-	public OctoAttribute SetAttribute(String name, Object value)
-		throws ExceptionModelFail, ExceptionDBError
+	public OctoAttribute DeclareAttribute(String name, Object value)
 	{
-		return graph_service.SetAttribute(this, name, value, JavaUtils.GetTimestamp());
+		if(!graph_service.IsStaticName(name) && TestAttribute(name))
+			throw new ExceptionModelFail("attribute " + name + " already declared");
+
+		return graph_service.SetAttribute(this, name, SimpleAttribute.ConformType(value));
 	}
 
-	public void SetAttribute(SimpleAttribute att)
-		throws ExceptionModelFail, ExceptionDBError
+	public OctoAttribute DeclareAttribute(SimpleAttribute att)
 	{
-		SetAttribute(att.GetName(), att.GetValue());
-	}
-
-	public void SetAttributes(List<SimpleAttribute> attributes)
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		for(SimpleAttribute att : attributes)
-			SetAttribute(att);
-	}
-
-	public void DeclareAttribute(String name, Object value)
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		graph_service.SetAttribute(this, name, value, 0);
-	}
-
-	public void DeclareAttribute(SimpleAttribute att)
-		throws ExceptionModelFail, ExceptionDBError
-	{
-		DeclareAttribute(att.GetName(), att.GetValue());
+		return DeclareAttribute(att.GetName(), att.GetValue());
 	}
 
 	public void DeclareAttributes(List<SimpleAttribute> attributes)
-		throws ExceptionModelFail, ExceptionDBError
 	{
 		for(SimpleAttribute att : attributes)
 		{
-			if(graph_service.IsStaticName(att.GetName()))
-				graph_service.DeclareStaticAttribute(att.GetName(), att.GetValue());
-			else
-				DeclareAttribute(att);
+			DeclareAttribute(att);
 		}
 	}
 
-	public AttributeList GetSpecialAttributes()
-		throws ExceptionModelFail
-	{
-		return graph_service.GetSpecialAttributes(this);
-	}
-
-	public GraphService GetGraph()
-	{
-		return graph_service;
-	}
-
 	public void Delete()
-		throws ExceptionModelFail
 	{
 		graph_service.Delete(this);
 	}
 
 	public void RemoveAttribute(String name)
-		throws ExceptionModelFail
 	{
 		graph_service.DeleteAttribute(this, name);
 	}
 
 	public boolean TestAttribute(String name)
-		throws ExceptionModelFail
 	{
 		return graph_service.TestAttribute(this, name);
 	}

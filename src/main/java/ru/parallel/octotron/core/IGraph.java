@@ -9,6 +9,7 @@ import java.util.List;
 
 import main.java.ru.parallel.octotron.primitive.Uid;
 import main.java.ru.parallel.octotron.utils.ObjectList;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * interface for graph features<br>
@@ -22,7 +23,7 @@ public interface IGraph
 
 	List<Uid> GetInLinks(Uid uid);
 
-	List<Object[]> GetObjectAttributes(Uid uid);
+	List<Pair<String, Object>> GetObjectAttributes(Uid uid);
 	void DeleteObjectAttribute(Uid uid, String name);
 	boolean TestObjectAttribute(Uid uid, String name);
 
@@ -37,7 +38,7 @@ public interface IGraph
 	Uid GetLinkTarget(Uid uid);
 	Uid GetLinkSource(Uid uid);
 
-	List<Object[]> GetLinkAttributes(Uid uid);
+	List<Pair<String, Object>> GetLinkAttributes(Uid uid);
 	void DeleteLinkAttribute(Uid uid, String name);
 	boolean TestLinkAttribute(Uid uid, String name);
 

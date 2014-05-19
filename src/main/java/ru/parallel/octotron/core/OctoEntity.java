@@ -12,6 +12,7 @@ import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
 import main.java.ru.parallel.octotron.primitive.Uid;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.AttributeList;
+import main.java.ru.parallel.octotron.utils.BaseAttributeList;
 
 /**
  * some entity, that resides in model<br>
@@ -69,6 +70,11 @@ public abstract class OctoEntity
 	public AttributeList GetAttributes()
 	{
 		return graph_service.GetAttributes(this);
+	}
+
+	public BaseAttributeList GetMetaAttributes()
+	{
+		return graph_service.GetMeta(this);
 	}
 
 	public OctoAttribute DeclareAttribute(String name, Object value)

@@ -28,6 +28,7 @@ import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import main.java.ru.parallel.octotron.utils.ObjectList;
 import main.java.ru.parallel.utils.FileUtils;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -441,10 +442,10 @@ public final class Neo4jGraph implements IGraph
 			{
 				StringBuilder rep = new StringBuilder();
 
-				for(Object[] att : GetObjectAttributes(uid))
-					rep.append(att[0])
+				for(Pair<String, Object> att : GetObjectAttributes(uid))
+					rep.append(att.getKey())
 						.append(" : ")
-						.append(att[1])
+						.append(att.getValue())
 						.append(System.lineSeparator());
 
 				throw new ExceptionModelFail("attribute not found: " + name + System.lineSeparator() + rep);
@@ -493,10 +494,10 @@ public final class Neo4jGraph implements IGraph
 			{
 				StringBuilder rep = new StringBuilder();
 
-				for(Object[] att : GetLinkAttributes(uid))
-					rep.append(att[0])
+				for(Pair<String, Object> att : GetLinkAttributes(uid))
+					rep.append(att.getKey())
 						.append(" : ")
-						.append(att[1])
+						.append(att.getValue())
 						.append(System.lineSeparator());
 
 				throw new ExceptionModelFail("attribute not found: " + name + System.lineSeparator() + rep);
@@ -653,33 +654,33 @@ public final class Neo4jGraph implements IGraph
 	}
 
 	@Override
-	public List<Object[]> GetObjectAttributes(Uid uid)
+	public List<Pair<String, Object>> GetObjectAttributes(Uid uid)
 	{
 		transaction.Read();
 		MatchType(uid, EEntityType.OBJECT);
 
-		List<Object[]> attrs = new LinkedList<Object[]>();
+		List<Pair<String, Object>> attrs = new LinkedList<Pair<String, Object>>();
 
 		Node node = graph_db.getNodeById(uid.getUid());
 
 		for (String name : node.getPropertyKeys())
-			attrs.add(new Object[]{name, node.getProperty(name)});
+			attrs.add(Pair.of(name, node.getProperty(name)));
 
 		return attrs;
 	}
 
 	@Override
-	public List<Object[]> GetLinkAttributes(Uid uid)
+	public List<Pair<String, Object>> GetLinkAttributes(Uid uid)
 	{
 		transaction.Read();
 		MatchType(uid, EEntityType.LINK);
 
-		List<Object[]> attrs = new LinkedList<Object[]>();
+		List<Pair<String, Object>> attrs = new LinkedList<Pair<String, Object>>();
 
 		Relationship rel = graph_db.getRelationshipById(uid.getUid());
 
 		for (String name : rel.getPropertyKeys())
-			attrs.add(new Object[]{name, rel.getProperty(name)});
+			attrs.add(Pair.of(name, rel.getProperty(name)));
 
 		return attrs;
 	}

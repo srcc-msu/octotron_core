@@ -221,7 +221,7 @@ public class AutoFormat
 			}
 
 			result.append(System.lineSeparator()).append("----  markers  ----")
-				.append(System.lineSeparator()).append(System.lineSeparator());
+					.append(System.lineSeparator()).append(System.lineSeparator());
 
 			for(Marker marker : object.GetMarkers())
 			{
@@ -231,6 +231,18 @@ public class AutoFormat
 					+ " suppressed = " + marker. IsSuppress()
 					+ System.lineSeparator();
 				result.append(str);
+			}
+
+			result.append(System.lineSeparator()).append("----  meta  ----")
+				.append(System.lineSeparator()).append(System.lineSeparator());
+
+			for(SimpleAttribute attr : object.GetMetaAttributes())
+			{
+				result.append(attr.GetName()).append('=');
+				Object value = object.GetAttribute(attr.GetName()).GetValue();
+				result.append(SimpleAttribute.ValueToStr(value));
+
+				result.append(System.lineSeparator());
 			}
 		}
 

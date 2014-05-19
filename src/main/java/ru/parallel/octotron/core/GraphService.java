@@ -15,10 +15,12 @@ import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
 import main.java.ru.parallel.octotron.primitive.Uid;
 import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import main.java.ru.parallel.octotron.utils.AttributeList;
+import main.java.ru.parallel.octotron.utils.BaseAttributeList;
 import main.java.ru.parallel.octotron.utils.LinkList;
 import main.java.ru.parallel.octotron.utils.ObjectList;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * provides additional features over raw graph interface<br>
@@ -245,11 +247,11 @@ public class GraphService
 		return value;
 	}
 
-	private List<Object[]> GetRawAttributes(OctoEntity entity)
+	private List<Pair<String, Object>> GetRawAttributes(OctoEntity entity)
 	{
 		Uid uid = entity.GetUID();
 
-		List<Object[]> pairs;
+		List<Pair<String, Object>> pairs;
 
 		if(uid.getType() == EEntityType.OBJECT)
 		{
@@ -294,18 +296,18 @@ public class GraphService
 	}
 
 /**
- * does not show arrays<br>
+ * does not show arrays and meta attributes<br>
  * */
 	AttributeList GetAttributes(OctoEntity entity)
 	{
-		List<Object[]> pairs = GetRawAttributes(entity);
+		List<Pair<String, Object>> pairs = GetRawAttributes(entity);
 
 		AttributeList list = new AttributeList();
 
-		for(Object[] pair : pairs)
+		for(Pair<String, Object> pair : pairs)
 		{
-			if(!pair[1].getClass().isArray())
-				list.add(new OctoAttribute(this, entity, (String)pair[0], pair[1]));
+			if(!IsMeta(pair.getKey()) && !pair.getValue().getClass().isArray())
+				list.add(new OctoAttribute(this, entity, pair.getKey(), pair.getValue()));
 		}
 
 		return list;
@@ -333,7 +335,12 @@ public class GraphService
 
 	private static String ToMeta(String attr_name, String meta_name)
 	{
-		return attr_name + GraphService.META_PREFIX + meta_name;
+		return GraphService.META_PREFIX + attr_name + '_' + meta_name;
+	}
+
+	private static boolean IsMeta(String attr_name)
+	{
+		return attr_name.startsWith(GraphService.META_PREFIX);
 	}
 
 	public void SetMeta(OctoEntity entity, String attr_name, String meta_name, Object value)
@@ -354,6 +361,19 @@ public class GraphService
 	public void DeleteMeta(OctoEntity entity, String attr_name, String meta_name)
 	{
 		DeleteRawAttribute(entity, GraphService.ToMeta(attr_name, meta_name));
+	}
+
+	public BaseAttributeList GetMeta(OctoEntity entity)
+	{
+		List<Pair<String, Object>> attributes = GetRawAttributes(entity);
+
+		BaseAttributeList result = new BaseAttributeList();
+
+		for(Pair<String, Object> attribute : attributes)
+			if(IsMeta(attribute.getKey()))
+				result.add(new SimpleAttribute(attribute.getKey(), attribute.getValue(), entity));
+
+		return result;
 	}
 
 // --------------------------------

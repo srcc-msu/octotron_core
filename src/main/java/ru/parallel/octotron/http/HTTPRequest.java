@@ -108,6 +108,7 @@ public class HTTPRequest
 		catch (IOException ignore)
 		{
 			System.err.println("could not read from a request");
+			System.err.println(ignore);
 		}
 		finally
 		{
@@ -118,6 +119,7 @@ public class HTTPRequest
 			catch (IOException ignore)
 			{
 				System.err.println("could not close a request");
+				System.err.println(ignore);
 			}
 		}
 
@@ -127,12 +129,14 @@ public class HTTPRequest
 // send headers and data
 		try
 		{
-			http_request.sendResponseHeaders(return_code, data.length());
-			http_request_writer.write(data.getBytes());
+			byte[] raw_data = data.getBytes();
+			http_request.sendResponseHeaders(return_code, raw_data.length);
+			http_request_writer.write(raw_data);
 		}
 		catch (IOException ignore) // most likely a client closed without reading
 		{
 			System.err.println("could not write all data");
+			System.err.println(ignore);
 		}
 		finally
 		{
@@ -143,6 +147,7 @@ public class HTTPRequest
 			catch(IOException ignore) // may fail to close because did not write enough bytes
 			{
 				System.err.println("could not close a writer");
+				System.err.println(ignore);
 			}
 		}
 

@@ -82,6 +82,9 @@ public class OctoAttribute extends SimpleAttribute
 		Object last_val = graph_service.GetMeta(parent, name, OctoAttribute.LAST_VAL);
 		long last_time = (Long)graph_service.GetMeta(parent, name, OctoAttribute.LAST_CTIME);
 
+		if(ctime - last_time == 0)
+			return 0.0;
+
 		Class<?> my_class = value.getClass(); 
 
 		if(my_class.equals(Double.class))

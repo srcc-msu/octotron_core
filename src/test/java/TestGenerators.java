@@ -5,16 +5,16 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.OctoLink;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.impl.generators.LinkFactory;
-import main.java.ru.parallel.octotron.impl.generators.ObjectFactory;
-import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoLink;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.generators.LinkFactory;
+import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.utils.ObjectList;
 
 /**
  * test some common cases -attributes, factories

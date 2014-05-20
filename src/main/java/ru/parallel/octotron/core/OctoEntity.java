@@ -32,7 +32,7 @@ public abstract class OctoEntity
  * */
 	private final Uid uid;
 
-	public OctoEntity(GraphService graph_service)
+	OctoEntity(GraphService graph_service)
 	{
 		this(graph_service, null);
 	}
@@ -41,7 +41,7 @@ public abstract class OctoEntity
  * this constructor MUST not be used for creating new items -<br>
  * it is needed to obtain the existing from the \graph<br>
  * */
-	public OctoEntity(GraphService graph_service, Uid uid)
+	OctoEntity(GraphService graph_service, Uid uid)
 	{
 		this.graph_service = graph_service;
 		this.uid = uid;
@@ -74,7 +74,7 @@ public abstract class OctoEntity
 
 	public BaseAttributeList GetMetaAttributes()
 	{
-		return graph_service.GetMeta(this);
+		return graph_service.GetAllMeta(this);
 	}
 
 	public OctoAttribute DeclareAttribute(String name, Object value)

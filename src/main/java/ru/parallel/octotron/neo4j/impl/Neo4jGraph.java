@@ -703,7 +703,7 @@ public final class Neo4jGraph implements IGraph
 	public void DeleteLinkAttribute(Uid uid, String name)
 	{
 		transaction.Write();
-		MatchType(uid, EEntityType.OBJECT);
+		MatchType(uid, EEntityType.LINK);
 
 		Relationship rel = graph_db.getRelationshipById(uid.getUid());
 

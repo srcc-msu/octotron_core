@@ -5,13 +5,13 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.impl.generators.LinkFactory;
-import main.java.ru.parallel.octotron.impl.generators.ObjectFactory;
-import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.generators.LinkFactory;
+import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 public class TestNode extends Assert
 {
@@ -175,31 +175,7 @@ public class TestNode extends Assert
 
 	}
 
-/**
- * set different attributes for the object and check if
- * we can get correct values
- * */
-	@Test
-	public void GetAttribute()
-	{
-		OctoObject node = TestNode.obj_factory.Create();
 
-		node.DeclareAttribute("test_long", 1);
-		node.DeclareAttribute("test_str", "a");
-
-		node.DeclareAttribute("test_double", 1.0);
-		node.DeclareAttribute("test_bool", true);
-
-		Assert.assertEquals("int attribute for object"
-			, node.GetAttribute("test_long").GetLong(), Long.valueOf(1));
-		Assert.assertEquals("int attribute for object"
-			, node.GetAttribute("test_str").GetString(), "a");
-
-		Assert.assertEquals("int attribute for object"
-			, node.GetAttribute("test_double").GetDouble(), 1.0, 0.1);
-		Assert.assertEquals("int attribute for object"
-			, node.GetAttribute("test_bool").GetBoolean(), true);
-	}
 
 /**
  * set attribute, remove it and ensure it does not exists
@@ -216,20 +192,4 @@ public class TestNode extends Assert
 			, node.TestAttribute("test_test"), false);
 	}
 
-/**
- * test if attribute set and remove works with test
- * */
-	@Test
-	public void TestAttribute()
-	{
-		OctoObject node = TestNode.obj_factory.Create();
-
-		node.DeclareAttribute("test_test", 1);
-		Assert.assertEquals("attribute not presents - wrong"
-			, node.TestAttribute("test_test"), true);
-
-		node.RemoveAttribute("test_test");
-		Assert.assertEquals("attribute presents - wrong"
-			, node.TestAttribute("test_test"), false);
-	}
 }

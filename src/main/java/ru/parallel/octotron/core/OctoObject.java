@@ -47,7 +47,7 @@ public class OctoObject extends OctoEntity
 
 	public LinkList GetOutLinks()
 	{
-		return graph_service.GetOutLink(this);
+		return graph_service.GetOutLinks(this);
 	}
 
 	public ObjectList GetInNeighbors(String link_name

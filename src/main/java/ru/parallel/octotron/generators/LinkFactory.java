@@ -76,6 +76,9 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 // set all attributes
 		new_edge.DeclareAttributes(attributes);
 
+		new_edge.DeclareAttribute("source", from.GetAttribute("AID").GetLong());
+		new_edge.DeclareAttribute("target", to.GetAttribute("AID").GetLong());
+
 		return new_edge;
 	}
 

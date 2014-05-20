@@ -10,10 +10,7 @@ import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.AttributeList;
-import ru.parallel.octotron.utils.BaseAttributeList;
-import ru.parallel.octotron.utils.LinkList;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -91,27 +88,18 @@ public class GraphService
 // have to do it manually - no AID yet
 				static_obj = new OctoObject(this, graph.AddObject());
 
-				SetAttribute("type", GraphService.STATIC_PREFIX);
-				SetAttribute("AID", NextAID());
+				SetRawAttribute(static_obj, "type", GraphService.STATIC_PREFIX);
+				SetRawAttribute(static_obj, "AID", NextAID());
 			}
 			else
 				static_obj = objects.Only();
 		}
 	}
 
-	OctoAttribute SetAttribute(String name, Object value)
+	private void DeleteStatic()
 	{
-		return SetAttribute(static_obj, name, value);
-	}
-
-	OctoAttribute GetAttribute(String name)
-	{
-		return GetAttribute(static_obj, name);
-	}
-
-	boolean TestAttribute(String name)
-	{
-		return TestAttribute(static_obj, name);
+		graph.DeleteObject(static_obj.GetUID());
+		static_obj = null;
 	}
 
 	public OctoObject GetStatic()
@@ -125,9 +113,6 @@ public class GraphService
 	public OctoLink AddLink(OctoObject source, OctoObject target, String link_type)
 	{
 		OctoLink link = new OctoLink(this, graph.AddLink(source.GetUID(), target.GetUID(), link_type));
-
-		SetAttribute(link, "source", source.GetAttribute("AID").GetLong());
-		SetAttribute(link, "target", target.GetAttribute("AID").GetLong());
 		SetAttribute(link, "AID", NextAID());
 
 		return link;
@@ -143,13 +128,13 @@ public class GraphService
 
 	public void Delete(OctoEntity entity)
 	{
-		if(entity.GetUID().getUid() == static_obj.GetUID().getUid())
-			throw new ExceptionModelFail("can not delete static object");
-
 		Uid uid = entity.GetUID();
 
 		if(uid.getType() == EEntityType.OBJECT)
 		{
+			if(IsStaticObject(entity))
+				throw new ExceptionModelFail("can not delete static object");
+
 			graph.DeleteObject(uid);
 		}
 		else if(uid.getType() == EEntityType.LINK)
@@ -170,7 +155,7 @@ public class GraphService
 		return list;
 	}
 
-	public LinkList GetOutLink(OctoObject object)
+	public LinkList GetOutLinks(OctoObject object)
 	{
 		LinkList list = new LinkList();
 
@@ -318,12 +303,24 @@ public class GraphService
  * */
 	OctoAttribute SetAttribute(OctoEntity entity, String name, Object value)
 	{
+		if(IsStaticObject(entity))
+			if(!IsStaticName(name))
+				throw new ExceptionModelFail("properties for static object must start with " + STATIC_PREFIX);
+
 		if(IsStaticName(name))
 			entity = static_obj;
 
 		SetRawAttribute(entity, name, value);
 
 		return new OctoAttribute(this, entity, name, value);
+	}
+
+	private boolean IsStaticObject(OctoEntity entity)
+	{
+		if(entity.GetUID().getType() != EEntityType.OBJECT)
+			return false;
+
+		return entity.GetUID().getUid() == static_obj.GetUID().getUid();
 	}
 
 // ---------------------------------
@@ -362,7 +359,7 @@ public class GraphService
 		DeleteRawAttribute(entity, GraphService.ToMeta(attr_name, meta_name));
 	}
 
-	public BaseAttributeList GetMeta(OctoEntity entity)
+	public BaseAttributeList GetAllMeta(OctoEntity entity)
 	{
 		List<Pair<String, Object>> attributes = GetRawAttributes(entity);
 
@@ -416,7 +413,13 @@ public class GraphService
 
 	public ObjectList GetAllObjects()
 	{
-		return ObjectsFromUid(graph.GetAllObjects());
+		ObjectList result = new ObjectList();
+
+		for(OctoObject object : ObjectsFromUid(graph.GetAllObjects()))
+			if(!IsStaticObject(object))
+				result.add(object);
+
+		return result;
 	}
 
 	public OctoLink GetLink(OctoAttribute att)
@@ -532,10 +535,13 @@ public class GraphService
 	public void Clean()
 	{
 		for(OctoObject obj : GetAllObjects())
-		{
-			if(obj.GetUID().getUid() != static_obj.GetUID().getUid())
-				obj.Delete();
-		}
+			Delete(obj);
+
+		for(OctoLink link : GetAllLinks())
+			Delete(link);
+
+		DeleteStatic();
+		InitStatic();
 	}
 
 	public String ExportDot()

@@ -6,21 +6,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.IGraph;
-import main.java.ru.parallel.octotron.http.HTTPRequest;
-import main.java.ru.parallel.octotron.http.HTTPServer;
-import main.java.ru.parallel.octotron.http.ParsedHttpRequest;
-import main.java.ru.parallel.octotron.http.RequestParser;
-import main.java.ru.parallel.octotron.http.RequestResult;
-import main.java.ru.parallel.octotron.impl.generators.LinkFactory;
-import main.java.ru.parallel.octotron.impl.generators.ObjectFactory;
-import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.FileUtils;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.IGraph;
+import ru.parallel.octotron.http.HTTPRequest;
+import ru.parallel.octotron.http.HTTPServer;
+import ru.parallel.octotron.http.ParsedHttpRequest;
+import ru.parallel.octotron.http.RequestParser;
+import ru.parallel.octotron.http.RequestResult;
+import ru.parallel.octotron.generators.LinkFactory;
+import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.FileUtils;
 
 /**
  * sometimes tests can fail.. race condition

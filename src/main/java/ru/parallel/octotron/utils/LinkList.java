@@ -4,12 +4,12 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.utils;
+package ru.parallel.octotron.utils;
 
 import java.util.List;
 
-import main.java.ru.parallel.octotron.core.OctoLink;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.OctoLink;
+import ru.parallel.octotron.primitive.SimpleAttribute;
 
 /**
  * implements list container for entities<br>

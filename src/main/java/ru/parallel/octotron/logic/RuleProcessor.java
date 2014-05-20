@@ -4,11 +4,11 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.logic;
+package ru.parallel.octotron.logic;
 
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.primitive.EDependencyType;
-import main.java.ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.utils.ObjectList;
 
 /**
  * Processes changed static attributes<br>

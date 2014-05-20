@@ -4,22 +4,22 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.logic;
+package ru.parallel.octotron.logic;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.core.OctoResponse;
-import main.java.ru.parallel.octotron.exec.GlobalSettings;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.octotron.reactions.PreparedResponse;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.DynamicSleeper;
-import main.java.ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.reactions.PreparedResponse;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.DynamicSleeper;
+import ru.parallel.utils.JavaUtils;
 
 /**
  * provides background execution of all needed reactions

@@ -4,15 +4,15 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.http;
+package ru.parallel.octotron.http;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import main.java.ru.parallel.octotron.http.Operations.Operation;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.http.Operations.Operation;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 
 /**
  * class for parsing http-compatible query<br>

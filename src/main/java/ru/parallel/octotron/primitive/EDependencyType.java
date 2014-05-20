@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.primitive;
+package ru.parallel.octotron.primitive;
 
 /**
  * shows if the rule depends only on owner attributes or on any neighbors<br>

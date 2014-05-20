@@ -4,17 +4,17 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.exec;
+package ru.parallel.octotron.exec;
 
 import java.io.File;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.impl.PersistenStorage;
-import main.java.ru.parallel.octotron.logic.ExecutionControler;
-import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.utils.FileUtils;
-import main.java.ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.logic.ExecutionControler;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.utils.FileUtils;
+import ru.parallel.utils.JavaUtils;
 
 /**
  * main executable function<br>

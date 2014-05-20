@@ -4,12 +4,13 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.core;
-import java.util.List;
+package ru.parallel.octotron.core;
 
-import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.utils.ObjectList;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
 
 /**
  * interface for graph features<br>

@@ -4,15 +4,15 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.http;
+package ru.parallel.octotron.http;
 
 import java.util.Map;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.http.Operations.Operation;
-import main.java.ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
-import main.java.ru.parallel.octotron.logic.ExecutionControler;
-import main.java.ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.http.Operations.Operation;
+import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
+import ru.parallel.octotron.logic.ExecutionControler;
+import ru.parallel.octotron.utils.AbsEntityList;
 
 /**
  * parsed request with correct tokens list<br>

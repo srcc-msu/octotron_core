@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.impl.generators;
+package ru.parallel.octotron.generators;
 
 public enum EFactoryDistribution
 {

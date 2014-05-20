@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.logic;
+package ru.parallel.octotron.logic;
 
 public final class Metric
 {

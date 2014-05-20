@@ -4,23 +4,22 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.core;
+package ru.parallel.octotron.core;
+
+import ru.parallel.octotron.primitive.EEntityType;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.utils.AttributeList;
+import ru.parallel.octotron.utils.BaseAttributeList;
+import ru.parallel.octotron.utils.LinkList;
+import ru.parallel.octotron.utils.ObjectList;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import main.java.ru.parallel.octotron.primitive.EEntityType;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.utils.AttributeList;
-import main.java.ru.parallel.octotron.utils.BaseAttributeList;
-import main.java.ru.parallel.octotron.utils.LinkList;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * provides additional features over raw graph interface<br>
@@ -41,9 +40,9 @@ public class GraphService
 
 	private static final String NEXT_AID = "_static_next_AID";
 
-	private final IGraph graph;
+	private final ru.parallel.octotron.core.IGraph graph;
 
-	private OctoObject static_obj = null;
+	private ru.parallel.octotron.core.OctoObject static_obj = null;
 
 	public GraphService(IGraph graph)
 	{

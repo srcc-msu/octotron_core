@@ -4,21 +4,21 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.logic;
+package ru.parallel.octotron.logic;
 
 import java.util.List;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.OctoAttribute;
-import main.java.ru.parallel.octotron.core.OctoEntity;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.netimport.ISensorData;
-import main.java.ru.parallel.octotron.primitive.EEntityType;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionImportFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.utils.AttributeList;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoEntity;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.netimport.ISensorData;
+import ru.parallel.octotron.primitive.EEntityType;
+import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.utils.AttributeList;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.JavaUtils;
 
 /**
  * main manager class, that does all data processing

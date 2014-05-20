@@ -4,17 +4,17 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.impl.generators;
+package ru.parallel.octotron.generators;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.OctoReaction;
-import main.java.ru.parallel.octotron.core.OctoRule;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.utils.JavaUtils;
 
 /**
  * Abstract factory for constructing entities with<br>

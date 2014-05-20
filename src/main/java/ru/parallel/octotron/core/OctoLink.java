@@ -4,9 +4,9 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.core;
+package ru.parallel.octotron.core;
 
-import main.java.ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.primitive.Uid;
 
 /**
  * implementation of link, that resides in \graph<br>

@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.logic;
+package ru.parallel.octotron.logic;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,25 +16,25 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.IGraph;
-import main.java.ru.parallel.octotron.core.OctoAttribute;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.core.OctoResponse;
-import main.java.ru.parallel.octotron.exec.GlobalSettings;
-import main.java.ru.parallel.octotron.http.HTTPServer;
-import main.java.ru.parallel.octotron.http.ParsedHttpRequest;
-import main.java.ru.parallel.octotron.http.RequestResult;
-import main.java.ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
-import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import main.java.ru.parallel.octotron.netimport.ISensorData;
-import main.java.ru.parallel.octotron.netimport.SimpleImporter;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionImportFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.octotron.reactions.PreparedResponse;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.DynamicSleeper;
-import main.java.ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.IGraph;
+import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.http.HTTPServer;
+import ru.parallel.octotron.http.ParsedHttpRequest;
+import ru.parallel.octotron.http.RequestResult;
+import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.netimport.ISensorData;
+import ru.parallel.octotron.netimport.SimpleImporter;
+import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.reactions.PreparedResponse;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.DynamicSleeper;
+import ru.parallel.utils.JavaUtils;
 
 public class ExecutionControler
 {

@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.http;
+package ru.parallel.octotron.http;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ import java.net.HttpURLConnection;
 
 import org.apache.commons.io.IOUtils;
 
-import main.java.ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
+import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;

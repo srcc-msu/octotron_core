@@ -4,19 +4,19 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.http;
+package ru.parallel.octotron.http;
 
 import java.util.List;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.logic.ExecutionControler;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import main.java.ru.parallel.octotron.utils.AbsEntityList;
-import main.java.ru.parallel.octotron.utils.EQueryType;
-import main.java.ru.parallel.octotron.utils.LinkList;
-import main.java.ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.logic.ExecutionControler;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.utils.EQueryType;
+import ru.parallel.octotron.utils.LinkList;
+import ru.parallel.octotron.utils.ObjectList;
 
 import org.apache.commons.lang3.tuple.Pair;
 

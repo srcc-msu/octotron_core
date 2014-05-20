@@ -4,12 +4,12 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.netimport;
+package ru.parallel.octotron.netimport;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 public class SimpleData implements ISensorData
 {

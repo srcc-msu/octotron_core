@@ -4,15 +4,15 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.logic;
+package ru.parallel.octotron.logic;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import main.java.ru.parallel.octotron.core.OctoAttribute;
-import main.java.ru.parallel.octotron.utils.AttributeList;
-import main.java.ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.utils.AttributeList;
+import ru.parallel.utils.JavaUtils;
 
 public final class TimerProcessor
 {

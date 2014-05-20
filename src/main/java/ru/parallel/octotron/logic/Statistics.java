@@ -4,9 +4,9 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.logic;
+package ru.parallel.octotron.logic;
 
-import main.java.ru.parallel.utils.Timer;
+import ru.parallel.utils.Timer;
 
 public class Statistics
 {

@@ -4,23 +4,23 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.reactions;
+package ru.parallel.octotron.reactions;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import main.java.ru.parallel.octotron.core.OctoEntity;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.core.OctoResponse;
-import main.java.ru.parallel.octotron.exec.GlobalSettings;
-import main.java.ru.parallel.octotron.primitive.EEntityType;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.FileUtils;
+import ru.parallel.octotron.core.OctoEntity;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.primitive.EEntityType;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.FileUtils;
 
 
 public class PreparedResponse

@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.http;
+package ru.parallel.octotron.http;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,11 +16,11 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import main.java.ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
-import main.java.ru.parallel.octotron.http.PathOperations.PathToken;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import main.java.ru.parallel.octotron.utils.EQueryType;
+import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
+import ru.parallel.octotron.http.PathOperations.PathToken;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.utils.EQueryType;
 
 /**
  * class for parsing http-compatible query<br>

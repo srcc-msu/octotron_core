@@ -4,20 +4,20 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.core;
+package ru.parallel.octotron.core;
+
+import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.logic.TimerProcessor;
+import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.utils.LinkList;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.JavaUtils;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import main.java.ru.parallel.octotron.impl.PersistenStorage;
-import main.java.ru.parallel.octotron.logic.TimerProcessor;
-import main.java.ru.parallel.octotron.neo4j.impl.Marker;
-import main.java.ru.parallel.octotron.primitive.EDependencyType;
-import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.utils.LinkList;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.JavaUtils;
 
 /**
  * implementation of object according to real \graph<br>

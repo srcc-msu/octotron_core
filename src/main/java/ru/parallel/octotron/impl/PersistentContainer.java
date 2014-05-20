@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.impl;
+package ru.parallel.octotron.impl;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 {

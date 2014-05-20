@@ -4,11 +4,11 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.reactions;
+package ru.parallel.octotron.reactions;
 
-import main.java.ru.parallel.octotron.core.OctoResponse;
-import main.java.ru.parallel.octotron.primitive.EEventStatus;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.primitive.EEventStatus;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 public final class CommonReactions
 {

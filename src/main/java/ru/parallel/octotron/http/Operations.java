@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.http;
+package ru.parallel.octotron.http;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,27 +15,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.OctoEntity;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.core.OctoReaction;
-import main.java.ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
-import main.java.ru.parallel.octotron.impl.PersistenStorage;
-import main.java.ru.parallel.octotron.logic.ExecutionControler;
-import main.java.ru.parallel.octotron.neo4j.impl.Marker;
-import main.java.ru.parallel.octotron.primitive.EEntityType;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.octotron.utils.AbsEntityList;
-import main.java.ru.parallel.octotron.utils.AutoFormat;
-import main.java.ru.parallel.octotron.utils.AutoFormat.E_FORMAT_PARAM;
-import main.java.ru.parallel.octotron.utils.BaseAttributeList;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.JavaUtils;
-import main.java.ru.parallel.utils.Timer;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoEntity;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
+import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.logic.ExecutionControler;
+import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.primitive.EEntityType;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionDBError;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.utils.AutoFormat;
+import ru.parallel.octotron.utils.AutoFormat.E_FORMAT_PARAM;
+import ru.parallel.octotron.utils.BaseAttributeList;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.JavaUtils;
+import ru.parallel.utils.Timer;
 
 /**
  * implementation of all available http operations<br>

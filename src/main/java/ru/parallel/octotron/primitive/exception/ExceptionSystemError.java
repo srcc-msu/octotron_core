@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.primitive.exception;
+package ru.parallel.octotron.primitive.exception;
 
 /**
  * thrown when something went wrong on the system level<br>

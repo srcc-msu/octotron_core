@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.impl;
+package ru.parallel.octotron.impl;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

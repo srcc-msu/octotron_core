@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.http;
+package ru.parallel.octotron.http;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,9 +16,9 @@ import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import main.java.ru.parallel.octotron.exec.GlobalSettings;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpContext;

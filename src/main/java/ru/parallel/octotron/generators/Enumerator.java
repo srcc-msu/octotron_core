@@ -4,10 +4,10 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.impl.generators;
+package ru.parallel.octotron.generators;
 
-import main.java.ru.parallel.octotron.core.OctoEntity;
-import main.java.ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.core.OctoEntity;
+import ru.parallel.octotron.utils.AbsEntityList;
 
 public final class Enumerator
 {

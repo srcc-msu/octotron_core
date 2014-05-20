@@ -4,14 +4,14 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.reactions;
+package ru.parallel.octotron.reactions;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.utils.JavaUtils;
 
 
 public class FileLog

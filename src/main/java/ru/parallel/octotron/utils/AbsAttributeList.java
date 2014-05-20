@@ -4,12 +4,12 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.utils;
+package ru.parallel.octotron.utils;
 
 import java.util.Iterator;
 import java.util.List;
 
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.SimpleAttribute;
 
 public abstract class AbsAttributeList<T extends SimpleAttribute> implements Iterable<T>
 {

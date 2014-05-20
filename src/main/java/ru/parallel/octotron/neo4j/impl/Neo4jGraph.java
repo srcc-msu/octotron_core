@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.neo4j.impl;
+package ru.parallel.octotron.neo4j.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,16 +17,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import main.java.ru.parallel.octotron.core.IGraph;
-import main.java.ru.parallel.octotron.core.IIndex;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.primitive.EEntityType;
-import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.FileUtils;
+import ru.parallel.octotron.core.IGraph;
+import ru.parallel.octotron.core.IIndex;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.primitive.EEntityType;
+import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.primitive.exception.ExceptionDBError;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.FileUtils;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.neo4j.graphdb.Direction;

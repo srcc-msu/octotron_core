@@ -4,12 +4,12 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.impl;
+package ru.parallel.octotron.impl;
 
-import main.java.ru.parallel.octotron.core.OctoReaction;
-import main.java.ru.parallel.octotron.core.OctoRule;
-import main.java.ru.parallel.octotron.neo4j.impl.Marker;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 public final class PersistenStorage
 {

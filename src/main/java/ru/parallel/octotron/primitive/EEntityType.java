@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.primitive;
+package ru.parallel.octotron.primitive;
 
 /**
  * entity type, used to detect IAutoObject/IAutoLink from IAutoEntity<br>

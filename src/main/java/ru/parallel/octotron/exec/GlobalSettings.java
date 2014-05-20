@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.exec;
+package ru.parallel.octotron.exec;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import main.java.ru.parallel.utils.JsonUtils;
+import ru.parallel.utils.JsonUtils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

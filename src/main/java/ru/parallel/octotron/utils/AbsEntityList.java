@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.utils;
+package ru.parallel.octotron.utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,11 +14,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import main.java.ru.parallel.octotron.core.OctoAttribute;
-import main.java.ru.parallel.octotron.core.OctoEntity;
-import main.java.ru.parallel.octotron.impl.generators.CsvFiller;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoEntity;
+import ru.parallel.octotron.generators.CsvFiller;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 
 /**
  * base class for entity-specific lists<br>

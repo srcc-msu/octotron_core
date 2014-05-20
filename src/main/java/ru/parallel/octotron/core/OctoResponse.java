@@ -4,16 +4,14 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.core;
+package ru.parallel.octotron.core;
+
+import ru.parallel.octotron.primitive.EEventStatus;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-
-
-import org.apache.commons.lang3.ArrayUtils;
-
-import main.java.ru.parallel.octotron.primitive.EEventStatus;
 
 public class OctoResponse implements Serializable
 {

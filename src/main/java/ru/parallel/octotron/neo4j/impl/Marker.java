@@ -4,9 +4,9 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.neo4j.impl;
+package ru.parallel.octotron.neo4j.impl;
 
-import main.java.ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.impl.PersistenStorage;
 
 import java.io.Serializable;
 

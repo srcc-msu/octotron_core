@@ -4,15 +4,15 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.rules;
+package ru.parallel.octotron.rules;
 
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import main.java.ru.parallel.octotron.core.OctoAttribute;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.core.OctoRule;
-import main.java.ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.primitive.EDependencyType;
 
 public class CheckBoolRules extends OctoRule
 {

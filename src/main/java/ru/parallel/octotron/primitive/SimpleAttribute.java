@@ -4,15 +4,15 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.primitive;
+package ru.parallel.octotron.primitive;
 
 import java.text.DecimalFormat;
 
-import main.java.ru.parallel.octotron.core.OctoAttribute;
-import main.java.ru.parallel.octotron.core.OctoEntity;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import main.java.ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoEntity;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.utils.JavaUtils;
 
 /**
  * base class for attributes, contains some common operations<br>

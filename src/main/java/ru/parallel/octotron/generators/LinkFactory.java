@@ -4,21 +4,21 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.impl.generators;
+package ru.parallel.octotron.generators;
 
 import java.util.Arrays;
 import java.util.List;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.OctoLink;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.core.OctoReaction;
-import main.java.ru.parallel.octotron.core.OctoRule;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.utils.LinkList;
-import main.java.ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoLink;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionDBError;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.utils.LinkList;
+import ru.parallel.octotron.utils.ObjectList;
 
 /**
  * advanced factory for constructing multiple edges,<br>

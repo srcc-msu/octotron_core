@@ -4,15 +4,15 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.core;
+package ru.parallel.octotron.core;
+
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.utils.AttributeList;
+import ru.parallel.octotron.utils.BaseAttributeList;
 
 import java.util.List;
-
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.utils.AttributeList;
-import main.java.ru.parallel.octotron.utils.BaseAttributeList;
 
 /**
  * some entity, that resides in model<br>

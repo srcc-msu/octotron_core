@@ -4,19 +4,19 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.exec;
+package ru.parallel.octotron.exec;
 
 import java.io.FileNotFoundException;
 
-import main.java.ru.parallel.octotron.core.GraphService;
-import main.java.ru.parallel.octotron.core.OctoLink;
-import main.java.ru.parallel.octotron.core.OctoObject;
-import main.java.ru.parallel.octotron.impl.PersistenStorage;
-import main.java.ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import main.java.ru.parallel.octotron.utils.LinkList;
-import main.java.ru.parallel.octotron.utils.ObjectList;
-import main.java.ru.parallel.utils.FileUtils;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoLink;
+import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.utils.LinkList;
+import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.utils.FileUtils;
 
 /**
  * DSL usage sample and also main class for T60 model creation<br>

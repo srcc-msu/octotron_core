@@ -4,12 +4,12 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.core;
+package ru.parallel.octotron.core;
+
+import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.primitive.exception.ExceptionDBError;
 
 import java.util.List;
-
-import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionDBError;
 
 /**
  * interface for implementing index-like entity for<br>

@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.netimport;
+package ru.parallel.octotron.netimport;
 
 import java.util.List;
 

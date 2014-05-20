@@ -4,17 +4,17 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.impl.generators;
+package ru.parallel.octotron.generators;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-import main.java.ru.parallel.octotron.core.OctoEntity;
-import main.java.ru.parallel.octotron.primitive.SimpleAttribute;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import main.java.ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.core.OctoEntity;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.utils.AbsEntityList;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**

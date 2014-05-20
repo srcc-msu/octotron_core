@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.octotron.neo4j.impl;
+package ru.parallel.octotron.neo4j.impl;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,10 +14,10 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.*;
 
-import main.java.ru.parallel.octotron.core.IIndex;
-import main.java.ru.parallel.octotron.primitive.EEntityType;
-import main.java.ru.parallel.octotron.primitive.Uid;
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.IIndex;
+import ru.parallel.octotron.primitive.EEntityType;
+import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 /**
  * provides access to index for searching elements in the graph

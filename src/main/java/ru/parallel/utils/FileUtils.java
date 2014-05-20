@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package main.java.ru.parallel.utils;
+package ru.parallel.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import main.java.ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 public abstract class FileUtils
 {

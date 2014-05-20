@@ -236,7 +236,7 @@ public class AutoFormat
 			result.append(System.lineSeparator()).append("----  meta  ----")
 				.append(System.lineSeparator()).append(System.lineSeparator());
 
-			for(SimpleAttribute attr : object.GetMetaAttributes())
+			for(SimpleAttribute attr : object.GetMetaAttributes().AlphabeticSort())
 			{
 				result.append(attr.GetName()).append('=');
 				Object value = object.GetAttribute(attr.GetName()).GetValue();

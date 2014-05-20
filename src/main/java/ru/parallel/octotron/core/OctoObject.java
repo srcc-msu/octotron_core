@@ -169,6 +169,9 @@ public class OctoObject extends OctoEntity
 
 	public void SetTimer(String name, long expires)
 	{
+		if(TestAttribute(name))
+			graph_service.DeleteAttribute(this, name);
+
 		OctoAttribute attr = DeclareAttribute(name, expires);
 
 		TimerProcessor.AddTimer(attr);

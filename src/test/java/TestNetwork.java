@@ -19,7 +19,7 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
 
 /**
@@ -177,7 +177,7 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList l = TestNetwork.factory.Create(10);
+			OctoObjectList l = TestNetwork.factory.Create(10);
 			long AID = l.get(0).GetAttribute("AID").GetLong();
 
 			String test = GetRequestResult("/view/p?path=(obj=="+AID+")").data;
@@ -196,7 +196,7 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList l = TestNetwork.factory.Create(10);
+			OctoObjectList l = TestNetwork.factory.Create(10);
 			long AID = l.get(0).GetAttribute("AID").GetLong();
 
 			String test = GetRequestResult("/view/p?path=obj(type==AID).q(AID=="+AID+")").data;
@@ -232,7 +232,7 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList objs = TestNetwork.factory.Create(10);
+			OctoObjectList objs = TestNetwork.factory.Create(10);
 
 			TestNetwork.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
@@ -259,7 +259,7 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList objs = TestNetwork.factory.Create(10);
+			OctoObjectList objs = TestNetwork.factory.Create(10);
 
 			TestNetwork.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
@@ -286,7 +286,7 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList objs = TestNetwork.factory.Create(10);
+			OctoObjectList objs = TestNetwork.factory.Create(10);
 
 			TestNetwork.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
@@ -305,7 +305,7 @@ public class TestNetwork extends Assert
 	{
 		try
 		{
-			ObjectList objs = TestNetwork.factory.Create(10);
+			OctoObjectList objs = TestNetwork.factory.Create(10);
 
 			TestNetwork.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 

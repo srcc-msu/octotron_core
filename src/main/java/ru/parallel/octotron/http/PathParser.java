@@ -20,7 +20,7 @@ import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
 import ru.parallel.octotron.http.PathOperations.PathToken;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.EQueryType;
+import ru.parallel.octotron.utils.IEntityList;
 
 /**
  * class for parsing http-compatible query<br>
@@ -43,24 +43,24 @@ public final class PathParser
 		, PathOperations.source, PathOperations.target
 	};
 
-	private static final Map<EQueryType, String> DELIMS
-		= new HashMap<EQueryType, String>();
+	private static final Map<IEntityList.EQueryType, String> DELIMS
+		= new HashMap<IEntityList.EQueryType, String>();
 
 	static
 	{
-		PathParser.DELIMS.put(EQueryType.SET, "=");
-		PathParser.DELIMS.put(EQueryType.EQ, "==");
-		PathParser.DELIMS.put(EQueryType.NE, "!=");
-		PathParser.DELIMS.put(EQueryType.LE, "<=");
-		PathParser.DELIMS.put(EQueryType.GE, ">=");
-		PathParser.DELIMS.put(EQueryType.LT, "<");
-		PathParser.DELIMS.put(EQueryType.GT, ">");
+		PathParser.DELIMS.put(IEntityList.EQueryType.SET, "=");
+		PathParser.DELIMS.put(IEntityList.EQueryType.EQ, "==");
+		PathParser.DELIMS.put(IEntityList.EQueryType.NE, "!=");
+		PathParser.DELIMS.put(IEntityList.EQueryType.LE, "<=");
+		PathParser.DELIMS.put(IEntityList.EQueryType.GE, ">=");
+		PathParser.DELIMS.put(IEntityList.EQueryType.LT, "<");
+		PathParser.DELIMS.put(IEntityList.EQueryType.GT, ">");
 	}
 
 /**
  * parse BaseAttribute from string "name=value"<br>
  * */
-	private static Pair<SimpleAttribute, EQueryType> AttrFromString(String str, EQueryType type)
+	private static Pair<SimpleAttribute, IEntityList.EQueryType> AttrFromString(String str, IEntityList.EQueryType type)
 		throws ExceptionParseError
 	{
 		String delim = PathParser.DELIMS.get(type);
@@ -81,15 +81,15 @@ public final class PathParser
 			return null;
 	}
 
-	private static Pair<SimpleAttribute, EQueryType> OpFromStr(String str)
+	private static Pair<SimpleAttribute, IEntityList.EQueryType> OpFromStr(String str)
 		throws ExceptionParseError
 	{
-		Pair<SimpleAttribute, EQueryType> val;
+		Pair<SimpleAttribute, IEntityList.EQueryType> val;
 
 // enum.values() preserve order - it is important for parsing = and ==
-		for(EQueryType type : EQueryType.values())
+		for(IEntityList.EQueryType type : IEntityList.EQueryType.values())
 		{
-			if(type == EQueryType.NONE)
+			if(type == IEntityList.EQueryType.NONE)
 				continue;
 
 			val = PathParser.AttrFromString(str, type);
@@ -98,7 +98,7 @@ public final class PathParser
 				return val;
 		}
 
-		return Pair.of(new SimpleAttribute(str, null), EQueryType.NONE);
+		return Pair.of(new SimpleAttribute(str, null), IEntityList.EQueryType.NONE);
 	}
 
 /**
@@ -106,11 +106,11 @@ public final class PathParser
  * name=val,name2,name3=val<br>
  * may be empty<br>
  * */
-	private static List<Pair<SimpleAttribute, EQueryType>> StrToAttrList(String str)
+	private static List<Pair<SimpleAttribute, IEntityList.EQueryType>> StrToAttrList(String str)
 		throws ExceptionParseError
 	{
-		List<Pair<SimpleAttribute, EQueryType>> result
-			= new LinkedList<Pair<SimpleAttribute, EQueryType>>();
+		List<Pair<SimpleAttribute, IEntityList.EQueryType>> result
+			= new LinkedList<Pair<SimpleAttribute, IEntityList.EQueryType>>();
 
 		if(str == null || str.isEmpty())
 			return result;

@@ -14,7 +14,7 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 
 /**
  * test some common cases -attributes, factories
@@ -64,7 +64,7 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestFactoryAttributes()
 	{
-		ObjectList obj = null;
+		OctoObjectList obj = null;
 		OctoLink link = null;
 
 		SimpleAttribute[] attr1 = { new SimpleAttribute("test1", 0) };
@@ -93,7 +93,7 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestObjectsCreate()
 	{
-		ObjectList obj = null;
+		OctoObjectList obj = null;
 
 		obj = TestGenerators.obj_factory.Create(TestGenerators.N);
 		Assert.assertEquals("created more objects", obj.size(), TestGenerators.N);
@@ -111,7 +111,7 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestLinkCreate()
 	{
-		ObjectList obj = null;
+		OctoObjectList obj = null;
 
 		OctoLink link = null;
 
@@ -129,7 +129,7 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorOneToOne()
 	{
-		ObjectList obj = TestGenerators.obj_factory.Create(2);
+		OctoObjectList obj = TestGenerators.obj_factory.Create(2);
 
 		TestGenerators.link_factory.OneToOne(obj.get(0), obj.get(1));
 
@@ -146,7 +146,7 @@ public class TestGenerators extends Assert
 	public void TestConnectorOneToAll()
 	{
 		OctoObject obj = TestGenerators.obj_factory.Create();
-		ObjectList objs = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs = TestGenerators.obj_factory.Create(TestGenerators.N);
 
 		TestGenerators.link_factory.OneToEvery(obj, objs);
 
@@ -165,7 +165,7 @@ public class TestGenerators extends Assert
 	public void TestConnectorAllToOne()
 	{
 		OctoObject obj = TestGenerators.obj_factory.Create();
-		ObjectList objs = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs = TestGenerators.obj_factory.Create(TestGenerators.N);
 
 		TestGenerators.link_factory.EveryToOne(objs, obj);
 
@@ -183,8 +183,8 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorEveryToEvery()
 	{
-		ObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
-		ObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
 
 		TestGenerators.link_factory.EveryToEvery(objs1, objs2);
 
@@ -204,8 +204,8 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorAllToAll()
 	{
-		ObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
-		ObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
 
 		TestGenerators.link_factory.AllToAll(objs1, objs2);
 
@@ -225,8 +225,8 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorAllToChunks()
 	{
-		ObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
-		ObjectList objs2 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N);
+		OctoObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs2 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N);
 
 		TestGenerators.link_factory.EveryToChunks(objs1, objs2);
 
@@ -249,8 +249,8 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorChunksToEvery()
 	{
-		ObjectList objs1 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N);
-		ObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs1 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N);
+		OctoObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
 
 		TestGenerators.link_factory.ChunksToEvery(objs1, objs2);
 
@@ -271,8 +271,8 @@ public class TestGenerators extends Assert
 	{
 		int K = 6;
 
-		ObjectList objs1 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N - K);
-		ObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs1 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N - K);
+		OctoObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
 
 		TestGenerators.link_factory.ChunksToEvery_LastLess(objs1, objs2);
 
@@ -295,8 +295,8 @@ public class TestGenerators extends Assert
 	{
 		int K = 6;
 
-		ObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
-		ObjectList objs2 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N - K);
+		OctoObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs2 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N - K);
 
 		TestGenerators.link_factory.EveryToChunks_LastLess(objs1, objs2);
 
@@ -326,13 +326,13 @@ public class TestGenerators extends Assert
 		for(int i : arr)
 			sum += i;
 
-		ObjectList objs_from1 = TestGenerators.obj_factory.Create(len);
-		ObjectList objs_from2 = TestGenerators.obj_factory.Create(len);
-		ObjectList objs_from3 = TestGenerators.obj_factory.Create(len);
+		OctoObjectList objs_from1 = TestGenerators.obj_factory.Create(len);
+		OctoObjectList objs_from2 = TestGenerators.obj_factory.Create(len);
+		OctoObjectList objs_from3 = TestGenerators.obj_factory.Create(len);
 
-		ObjectList objs_to1 = TestGenerators.obj_factory.Create(sum);
-		ObjectList objs_to2 = TestGenerators.obj_factory.Create(sum + 1);
-		ObjectList objs_to3 = TestGenerators.obj_factory.Create(sum - 1);
+		OctoObjectList objs_to1 = TestGenerators.obj_factory.Create(sum);
+		OctoObjectList objs_to2 = TestGenerators.obj_factory.Create(sum + 1);
+		OctoObjectList objs_to3 = TestGenerators.obj_factory.Create(sum - 1);
 
 		TestGenerators.link_factory.EveryToChunks_Guided(objs_from1, objs_to1, arr);
 		TestGenerators.link_factory.EveryToChunks_Guided(objs_from2, objs_to2, arr);
@@ -366,13 +366,13 @@ public class TestGenerators extends Assert
 		for(int i : arr)
 			sum += i;
 
-		ObjectList objs_from1 = TestGenerators.obj_factory.Create(sum);
-		ObjectList objs_from2 = TestGenerators.obj_factory.Create(sum + 1);
-		ObjectList objs_from3 = TestGenerators.obj_factory.Create(sum - 1);
+		OctoObjectList objs_from1 = TestGenerators.obj_factory.Create(sum);
+		OctoObjectList objs_from2 = TestGenerators.obj_factory.Create(sum + 1);
+		OctoObjectList objs_from3 = TestGenerators.obj_factory.Create(sum - 1);
 
-		ObjectList objs_to1 = TestGenerators.obj_factory.Create(len);
-		ObjectList objs_to2 = TestGenerators.obj_factory.Create(len);
-		ObjectList objs_to3 = TestGenerators.obj_factory.Create(len);
+		OctoObjectList objs_to1 = TestGenerators.obj_factory.Create(len);
+		OctoObjectList objs_to2 = TestGenerators.obj_factory.Create(len);
+		OctoObjectList objs_to3 = TestGenerators.obj_factory.Create(len);
 
 		TestGenerators.link_factory.ChunksToEvery_Guided(objs_from1, objs_to1, arr);
 		TestGenerators.link_factory.ChunksToEvery_Guided(objs_from2, objs_to2, arr);

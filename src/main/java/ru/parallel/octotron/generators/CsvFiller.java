@@ -14,7 +14,7 @@ import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.utils.IEntityList;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
@@ -26,7 +26,7 @@ public final class CsvFiller
 {
 	private CsvFiller() {}
 
-	public static void Read(String file_name, AbsEntityList<? extends OctoEntity> list)
+	public static void Read(String file_name, IEntityList<? extends OctoEntity> list)
 		throws ExceptionParseError, IOException
 	{
 		CSVReader reader = new CSVReader(new FileReader(file_name));

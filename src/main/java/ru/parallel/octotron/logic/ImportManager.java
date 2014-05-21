@@ -16,8 +16,8 @@ import ru.parallel.octotron.netimport.ISensorData;
 import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.AttributeList;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoAttributeList;
+import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.JavaUtils;
 
 /**
@@ -41,24 +41,24 @@ public class ImportManager
 	 * calculate computational attributes, that changed from static
 	 * invoke rules, according to all changed attributes
 	 * */
-	public ObjectList Process(List<? extends ISensorData> packet)
+	public OctoObjectList Process(List<? extends ISensorData> packet)
 		throws ExceptionImportFail
 	{
-		ObjectList changed = static_proc.Process(packet);
+		OctoObjectList changed = static_proc.Process(packet);
 
 		changed.append(ProcessTimers());
 
 		if(changed.size() <= 0)
-			return new ObjectList();
+			return new OctoObjectList();
 
 		return ProcessRules(changed.Uniq());
 	}
 
-	public ObjectList ProcessRules(ObjectList changed) {
-		ObjectList rule_changed = ruled_proc.Process(changed).Uniq();
+	public OctoObjectList ProcessRules(OctoObjectList changed) {
+		OctoObjectList rule_changed = ruled_proc.Process(changed).Uniq();
 
-		ObjectList changed_last = new ObjectList(rule_changed);
-		ObjectList changed_now = null;
+		OctoObjectList changed_last = new OctoObjectList(rule_changed);
+		OctoObjectList changed_now = null;
 
 		while(changed_last.size() > 0)
 		{
@@ -68,7 +68,7 @@ public class ImportManager
 			changed_last = changed_now;
 		}
 
-		ObjectList all_changed = new ObjectList(changed);
+		OctoObjectList all_changed = new OctoObjectList(changed);
 		all_changed.append(rule_changed).Uniq();
 
 		return all_changed;
@@ -77,15 +77,15 @@ public class ImportManager
 	private final long last_timer_check = 0;
 	private static final long TIMER_CHECK_THRESHOLD = 2;
 
-	public ObjectList ProcessTimers()
+	public OctoObjectList ProcessTimers()
 	{
 		long cur_time = JavaUtils.GetTimestamp();
 
-		ObjectList res = new ObjectList();
+		OctoObjectList res = new OctoObjectList();
 
 		if(cur_time - last_timer_check > ImportManager.TIMER_CHECK_THRESHOLD)
 		{
-			AttributeList timers_timed_out = TimerProcessor.Process();
+			OctoAttributeList timers_timed_out = TimerProcessor.Process();
 
 			for(OctoAttribute attr : timers_timed_out)
 			{

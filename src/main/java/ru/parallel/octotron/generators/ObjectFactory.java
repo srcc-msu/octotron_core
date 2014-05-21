@@ -14,7 +14,7 @@ import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 
 /**
  * Basic Vertex factory, creates one or multiple edges<br>
@@ -59,9 +59,9 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	/**
 	 * create \count vertices with additional attributes
 	 * */
-	public ObjectList Create(int count)
+	public OctoObjectList Create(int count)
 	{
-		ObjectList vertices = new ObjectList();
+		OctoObjectList vertices = new OctoObjectList();
 
 		for(int i = 0; i < count; i++)
 			vertices.add(this.Create());

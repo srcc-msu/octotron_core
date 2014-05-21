@@ -17,8 +17,8 @@ import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.LinkList;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoLinkList;
+import ru.parallel.octotron.utils.OctoObjectList;
 
 /**
  * advanced factory for constructing multiple edges,<br>
@@ -87,9 +87,9 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * adds new attributes
  * create \from.length edges<br>
  * */
-	public LinkList EveryToOne(ObjectList from, OctoObject to)
+	public OctoLinkList EveryToOne(OctoObjectList from, OctoObject to)
 	{
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		for(int i = 0; i < from.size(); i++)
 			links.add(OneToOne(from.get(i), to));
@@ -102,9 +102,9 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * create \to.length edges<br>
  * @throws ExceptionDBError
  * */
-	public LinkList OneToEvery(OctoObject from, ObjectList to)
+	public OctoLinkList OneToEvery(OctoObject from, OctoObjectList to)
 	{
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		for(int i = 0; i < to.size(); i++)
 			links.add(OneToOne(from, to.get(i)));
@@ -118,14 +118,14 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * if \from.length != \to.length - error<br>
  * @throws ExceptionDBError
  * */
-	public LinkList EveryToEvery(ObjectList from, ObjectList to)
+	public OctoLinkList EveryToEvery(OctoObjectList from, OctoObjectList to)
 	{
 		if(from.size() != to.size())
 			throw new ExceptionModelFail
 				("all-to-all connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		for(int i = 0; i < from.size(); i++)
 			links.add(OneToOne(from.get(i), to.get(i)));
@@ -137,9 +137,9 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * connect every object from \from list with every object from \to list<br>
  * create M*N edges, M == \from.length, N = \to.length<br>
  * */
-	public LinkList AllToAll(ObjectList from, ObjectList to)
+	public OctoLinkList AllToAll(OctoObjectList from, OctoObjectList to)
 	{
-		LinkList res_links = new LinkList();
+		OctoLinkList res_links = new OctoLinkList();
 
 		for(int i = 0; i < from.size(); i++)
 			res_links.append(OneToEvery(from.get(i), to));
@@ -153,14 +153,14 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * \to.length must be divisible by \from.length<br>
  * @throws ExceptionDBError
  * */
-	public LinkList EveryToChunks(ObjectList from, ObjectList to)
+	public OctoLinkList EveryToChunks(OctoObjectList from, OctoObjectList to)
 	{
 		if(to.size() % from.size() != 0 || to.size() < from.size())
 			throw new ExceptionModelFail
 				("every-to-chunks connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		for(int i = 0; i < to.size(); i++)
 			links.add(OneToOne(from.get(i / (to.size() / from.size())), to.get(i)));
@@ -174,7 +174,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * for last object M can be less than usual
  * @throws ExceptionDBError
  * */
-	public LinkList EveryToChunks_LastLess(ObjectList from, ObjectList to)
+	public OctoLinkList EveryToChunks_LastLess(OctoObjectList from, OctoObjectList to)
 	{
 		int chunk = (to.size() / from.size() + 1);
 		int diff = to.size() - chunk * from.size();
@@ -184,7 +184,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("every-to-chunks-less connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		for(int i = 0; i < to.size(); i++)
 			links.add(OneToOne(from.get(i / chunk), to.get(i)));
@@ -198,7 +198,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * M comes from \size arrays
 	 * @throws ExceptionDBError
 	 * */
-	public LinkList ChunksToEvery_Guided(ObjectList from, ObjectList to
+	public OctoLinkList ChunksToEvery_Guided(OctoObjectList from, OctoObjectList to
 		, int[] sizes)
 	{
 		if(to.size() != sizes.length)
@@ -206,7 +206,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("ChunksToEvery_Guided connector, not enough elements in guiding array: from="
 					+ from.size() + " sizes.length=" + sizes.length);
 
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		int counter = 0;
 
@@ -236,14 +236,14 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * \to.length must be divisible by \from.length<br>
  * @throws ExceptionDBError
  * */
-	public LinkList ChunksToEvery(ObjectList from, ObjectList to)
+	public OctoLinkList ChunksToEvery(OctoObjectList from, OctoObjectList to)
 	{
 		if(from.size() % to.size() != 0 || from.size() < to.size())
 			throw new ExceptionModelFail
 				("chunks-to-all connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		for(int i = 0; i < from.size(); i++)
 			links.add(OneToOne(from.get(i), to.get(i / (from.size() / to.size()))));
@@ -257,7 +257,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * \to.length must be divisible by \from.length<br>
 	 * @throws ExceptionDBError
 	 * */
-	public LinkList ChunksToEvery_LastLess(ObjectList from, ObjectList to
+	public OctoLinkList ChunksToEvery_LastLess(OctoObjectList from, OctoObjectList to
 		, Object... addition)
 	{
 		int chunk = (from.size() / to.size() + 1);
@@ -268,7 +268,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("chunks-to-all connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size() + " diff=" + diff + " chunk=" + chunk);
 
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		for(int i = 0; i < from.size(); i++)
 			links.add(OneToOne(from.get(i), to.get(i / chunk)));
@@ -282,7 +282,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * M comes from \size arrays
 	 * @throws ExceptionDBError
 	 * */
-	public LinkList EveryToChunks_Guided(ObjectList from, ObjectList to
+	public OctoLinkList EveryToChunks_Guided(OctoObjectList from, OctoObjectList to
 		, int[] sizes)
 	{
 		if(from.size() != sizes.length)
@@ -290,7 +290,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("EveryToChunks_Guided connector, not enough elements in guiding array: from="
 					+ from.size() + " sizes.length=" + sizes.length);
 
-		LinkList links = new LinkList();
+		OctoLinkList links = new OctoLinkList();
 
 		int counter = 0;
 

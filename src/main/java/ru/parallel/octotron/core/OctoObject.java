@@ -12,8 +12,8 @@ import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.LinkList;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoLinkList;
+import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.LinkedList;
@@ -40,20 +40,20 @@ public class OctoObject extends OctoEntity
 		super(graph, uid);
 	}
 
-	public LinkList GetInLinks()
+	public OctoLinkList GetInLinks()
 	{
 		return graph_service.GetInLinks(this);
 	}
 
-	public LinkList GetOutLinks()
+	public OctoLinkList GetOutLinks()
 	{
 		return graph_service.GetOutLinks(this);
 	}
 
-	public ObjectList GetInNeighbors(String link_name
+	public OctoObjectList GetInNeighbors(String link_name
 		, Object link_value)
 	{
-		ObjectList objects = new ObjectList();
+		OctoObjectList objects = new OctoObjectList();
 
 		for(OctoLink link : GetInLinks().Filter(link_name, link_value))
 			objects.add(link.Source());
@@ -61,10 +61,10 @@ public class OctoObject extends OctoEntity
 		return objects;
 	}
 
-	public ObjectList GetOutNeighbors(String link_name
+	public OctoObjectList GetOutNeighbors(String link_name
 		, Object link_value)
 	{
-		ObjectList objects = new ObjectList();
+		OctoObjectList objects = new OctoObjectList();
 
 		for(OctoLink link : GetOutLinks().Filter(link_name, link_value))
 			objects.add(link.Target());
@@ -72,9 +72,9 @@ public class OctoObject extends OctoEntity
 		return objects;
 	}
 
-	public ObjectList GetInNeighbors(String link_name)
+	public OctoObjectList GetInNeighbors(String link_name)
 	{
-		ObjectList objects = new ObjectList();
+		OctoObjectList objects = new OctoObjectList();
 
 		for(OctoLink link : GetInLinks().Filter(link_name))
 			objects.add(link.Source());
@@ -82,9 +82,9 @@ public class OctoObject extends OctoEntity
 		return objects;
 	}
 
-	public ObjectList GetOutNeighbors(String link_name)
+	public OctoObjectList GetOutNeighbors(String link_name)
 	{
-		ObjectList objects = new ObjectList();
+		OctoObjectList objects = new OctoObjectList();
 
 		for(OctoLink link : GetOutLinks().Filter(link_name))
 			objects.add(link.Target());
@@ -92,9 +92,9 @@ public class OctoObject extends OctoEntity
 		return objects;
 	}
 
-	public ObjectList GetInNeighbors()
+	public OctoObjectList GetInNeighbors()
 	{
-		ObjectList objects = new ObjectList();
+		OctoObjectList objects = new OctoObjectList();
 
 		for(OctoLink link : GetInLinks())
 			objects.add(link.Source());
@@ -102,9 +102,9 @@ public class OctoObject extends OctoEntity
 		return objects;
 	}
 
-	public ObjectList GetOutNeighbors()
+	public OctoObjectList GetOutNeighbors()
 	{
-		ObjectList objects = new ObjectList();
+		OctoObjectList objects = new OctoObjectList();
 
 		for(OctoLink link : GetOutLinks())
 			objects.add(link.Target());

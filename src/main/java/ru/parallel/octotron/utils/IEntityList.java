@@ -8,11 +8,7 @@ package ru.parallel.octotron.utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoEntity;
@@ -24,43 +20,29 @@ import ru.parallel.octotron.primitive.exception.ExceptionParseError;
  * base class for entity-specific lists<br>
  * contains some general operations<br>
  * */
-public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
+public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 {
 	protected final List<T> list;
 
-	protected AbsEntityList()
+	protected IEntityList()
 	{
-		list = new ArrayList<T>();
+		list = new LinkedList<T>();
 	}
 
-	protected AbsEntityList(List<T> list)
+	protected IEntityList(List<T> list)
 	{
 		this.list = list;
 	}
 
-/**
- * add element to the list<br>
- * */
+	protected IEntityList(IEntityList<T> list)
+	{
+		this.list = new LinkedList<T>();
+		this.list.addAll(list.list);
+	}
+
 	public final void add(T t)
 	{
 		list.add(t);
-	}
-
-/**
- * remove element by index<br>
- * */
-	public final void remove(int index)
-	{
-		list.remove(index);
-	}
-
-/**
- * remove \count elements starting from index \start<br>
- * */
-	public final void remove(int start, int count)
-	{
-		for(int i = 0; i < count; i++)
-			list.remove(start);
 	}
 
 /**
@@ -81,9 +63,6 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 		return list.size();
 	}
 
-/**
- * get list iterator for some java fun<br>
- * */
 	public final Iterator<T> iterator()
 	{
 		return list.iterator();
@@ -94,9 +73,9 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
  * in any list object<br>
  * order of attributes is the same as order of objects<br>
  * */
-	public final AttributeList GetAttributes(String name)
+	public final OctoAttributeList GetAttributes(String name)
 	{
-		AttributeList atts = new AttributeList();
+		OctoAttributeList atts = new OctoAttributeList();
 
 		for(T att : list)
 		{
@@ -126,7 +105,7 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 	{
 		if(size() > 1)
 		{
-			System.err.println(AutoFormat.PrintNL(this, new AttributeList()));
+			System.err.println(AutoFormat.PrintNL(this, new OctoAttributeList()));
 
 			throw new ExceptionModelFail("list contains few elements");
 		}
@@ -140,7 +119,6 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 /**
  * allows to set different attributes to all list elements from csv file<br>
  * see {@link CsvFiller} for details
- * @throws ExceptionParseError
  * */
 	public final void SetAttributesFromCsv(String file_name)
 		throws ExceptionParseError
@@ -159,18 +137,19 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 		}
 	}
 
-/**
- * modifies the class list
- * */
 	protected List<T> InnerAppend(List<T> list2)
 	{
-		list.addAll(list2);
-		return list;
+		List<T> new_list = new LinkedList<T>(list);
+
+		new_list.addAll(list2);
+		return new_list;
 	}
 
 	protected List<T> InnerRange(int from, int to)
 	{
-		return list.subList(from, to);
+		List<T> new_list = new LinkedList<T>(list);
+
+		return new_list.subList(from, to);
 	}
 
 	protected List<T> InnerRanges(int... ranges)
@@ -178,7 +157,7 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 		if(ranges.length % 2 != 0)
 			throw new ExceptionModelFail("even amount of arguments must be provided");
 
-		List<T> new_list = new ArrayList<T>();
+		List<T> new_list = new LinkedList<T>();
 
 		for(int i = 0; i < ranges.length; i += 2)
 			new_list.addAll(list.subList(ranges[i], ranges[i+1]));
@@ -188,12 +167,10 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected List<T> InnerElems(int... elems)
 	{
-		List<T> new_list = new ArrayList<T>();
+		List<T> new_list = new LinkedList<T>();
 
 		for(int elem : elems)
-		{
 			new_list.add(list.get(elem));
-		}
 
 		return new_list;
 	}
@@ -202,26 +179,27 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 	{
 		if(!obj.TestAttribute(name))
 			return false;
+
 		OctoAttribute attr = obj.GetAttribute(name);
 
 		switch(type)
 		{
-		case EQ:
-			return attr.eq(value);
-		case NE:
-			return attr.ne(value);
-		case GE:
-			return attr.ge(value);
-		case GT:
-			return attr.gt(value);
-		case LE:
-			return attr.le(value);
-		case LT:
-			return attr.lt(value);
-		case NONE:
-		case SET:
-		default:
-			throw new ExceptionModelFail("unsupported operation for list filter: " + type);
+			case EQ:
+				return attr.eq(value);
+			case NE:
+				return attr.ne(value);
+			case GE:
+				return attr.ge(value);
+			case GT:
+				return attr.gt(value);
+			case LE:
+				return attr.le(value);
+			case LT:
+				return attr.lt(value);
+			case NONE:
+			case SET:
+			default:
+				throw new ExceptionModelFail("unsupported operation for list filter: " + type);
 		}
 	}
 
@@ -233,7 +211,7 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 		if(value == null)
 			return InnerFilter(name);
 
-		List<T> new_list = new ArrayList<T>();
+		List<T> new_list = new LinkedList<T>();
 
 		for(T obj : list)
 		{
@@ -249,7 +227,7 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 		if(name == null)
 			return list;
 
-		List<T> new_list = new ArrayList<T>();
+		List<T> new_list = new LinkedList<T>();
 
 		for(T obj : list)
 		{
@@ -267,9 +245,12 @@ public abstract class AbsEntityList<T extends OctoEntity> implements Iterable<T>
 		for (T elem : list)
 			map.put(elem.GetUID().getUid(), elem);
 
-		List<T> new_list = new ArrayList<T>();
+		List<T> new_list = new LinkedList<T>();
 		new_list.addAll(map.values());
 
 		return new_list;
 	}
+
+	// order is important for parsing.. TODO - fix
+	public static enum EQueryType { EQ, NE, LE, GE, LT, GT, SET, NONE }
 }

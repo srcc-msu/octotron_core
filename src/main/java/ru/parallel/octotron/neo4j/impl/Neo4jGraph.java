@@ -25,7 +25,7 @@ import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -766,7 +766,7 @@ public final class Neo4jGraph implements IGraph
 	}
 
 	@Override
-	public String ExportDot(ObjectList objects)
+	public String ExportDot(OctoObjectList objects)
 	{
 		List<Node> nodes = new LinkedList<Node>();
 

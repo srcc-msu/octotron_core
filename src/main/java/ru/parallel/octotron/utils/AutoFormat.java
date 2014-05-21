@@ -28,14 +28,14 @@ public class AutoFormat
 	 * print \\list objects with custom separators
 	 * if \\attributes list is empty - print all attributes
 	 * */
-	public static String PrintSeparated(AbsEntityList<?> list, AbsAttributeList<?> attributes
+	public static String PrintSeparated(IEntityList<?> list, IAttributeList<?> attributes
 		, String attr_sep, String line_sep, boolean show_name, boolean separate_objects)
 	{
 		StringBuilder result = new StringBuilder();
 
 		for(OctoEntity entity : list)
 		{
-			AbsAttributeList<?> target;
+			IAttributeList<?> target;
 
 			if(attributes.size() > 0)
 				target = attributes.AlphabeticSort();
@@ -78,7 +78,7 @@ public class AutoFormat
 	 * example: [{"attr_1"=0, "attr2"="test"},{"attr_name"=1.0}]
 	 * if \\attributes list is empty - print all attributes
 	 * */
-	public static String PrintJson(AbsEntityList<?> list, AbsAttributeList<?> attributes)
+	public static String PrintJson(IEntityList<?> list, IAttributeList<?> attributes)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -93,7 +93,7 @@ public class AutoFormat
 
 			String prefix = "";
 
-			AbsAttributeList<?> target;
+			IAttributeList<?> target;
 
 			if(attributes.size() > 0)
 				target = attributes.AlphabeticSort();
@@ -124,7 +124,7 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintJsonP(AbsEntityList<?> list, AbsAttributeList<?> attributes, String callback)
+	public static String PrintJsonP(IEntityList<?> list, IAttributeList<?> attributes, String callback)
 	{
 		String result = callback + "({" + System.lineSeparator();
 		result += "\"modified\" : " + JavaUtils.GetTimestamp() + "," + System.lineSeparator();
@@ -134,7 +134,7 @@ public class AutoFormat
 		return result;
 	}
 
-	public static String PrintCSV(AbsEntityList<?> list, AbsAttributeList<?> attributes)
+	public static String PrintCSV(IEntityList<?> list, IAttributeList<?> attributes)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -147,17 +147,17 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintNL(AbsEntityList<?> list, AbsAttributeList<?> attributes)
+	public static String PrintNL(IEntityList<?> list, IAttributeList<?> attributes)
 	{
 		return PrintSeparated(list, attributes, System.lineSeparator(), System.lineSeparator(), true, true);
 	}
 
-	public static String PrintComma(AbsEntityList<?> list, AbsAttributeList<?> attributes)
+	public static String PrintComma(IEntityList<?> list, IAttributeList<?> attributes)
 	{
 		return PrintSeparated(list, attributes, ",", ",", true, false);
 	}
 
-	public static String PrintEntities(AbsEntityList<?> list, AbsAttributeList<?> attributes, E_FORMAT_PARAM format, String callback)
+	public static String PrintEntities(IEntityList<?> list, IAttributeList<?> attributes, E_FORMAT_PARAM format, String callback)
 	{
 		switch (format)
 		{
@@ -181,7 +181,7 @@ public class AutoFormat
 		}
 	}
 
-	public static String PrintEntitiesSpecial(ObjectList list)
+	public static String PrintEntitiesSpecial(OctoObjectList list)
 	{
 		StringBuilder result = new StringBuilder();
 

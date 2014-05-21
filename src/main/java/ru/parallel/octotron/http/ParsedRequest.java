@@ -12,7 +12,7 @@ import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.http.Operations.Operation;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.ExecutionControler;
-import ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.utils.IEntityList;
 
 /**
  * parsed request with correct tokens list<br>
@@ -32,7 +32,7 @@ public class ParsedRequest
 	{
 		try
 		{
-			AbsEntityList<?> entity_list = null;
+			IEntityList<?> entity_list = null;
 
 			String path = params.get("path");
 

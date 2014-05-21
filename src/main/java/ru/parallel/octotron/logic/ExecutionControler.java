@@ -32,7 +32,7 @@ import ru.parallel.octotron.netimport.SimpleImporter;
 import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.reactions.PreparedResponse;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.JavaUtils;
 
@@ -179,7 +179,7 @@ public class ExecutionControler
 		List<? extends ISensorData> http_packet = http_importer.Get(max_count);
 		int processed_http = http_packet.size();
 
-		ObjectList changed = manager.Process(http_packet);
+		OctoObjectList changed = manager.Process(http_packet);
 
 		rule_invoker.Invoke(changed, silent);
 
@@ -222,7 +222,7 @@ public class ExecutionControler
 	public String MakeSnapshot() {
 		StringBuilder result = new StringBuilder();
 
-		ObjectList list = graph_service.GetAllObjects();
+		OctoObjectList list = graph_service.GetAllObjects();
 
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
 
@@ -250,7 +250,7 @@ public class ExecutionControler
 	{
 		StringBuilder result = new StringBuilder();
 
-		ObjectList list = graph_service.GetAllObjects();
+		OctoObjectList list = graph_service.GetAllObjects();
 
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
 

@@ -4,7 +4,7 @@ import org.junit.*;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,31 +15,17 @@ public class GraphServiceTest
 	private static Neo4jGraph graph;
 
 	@BeforeClass
-	public static void Init()
+	public static void Init() throws Exception
 	{
-		try
-		{
-			GraphServiceTest.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
-			GraphServiceTest.graph_service = new GraphService(GraphServiceTest.graph);
-		}
-		catch (Exception e)
-		{
-			Assert.fail(e.getMessage());
-		}
+		GraphServiceTest.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+		GraphServiceTest.graph_service = new GraphService(GraphServiceTest.graph);
 	}
 
 	@AfterClass
-	public static void Delete()
+	public static void Delete() throws Exception
 	{
 		GraphServiceTest.graph.Shutdown();
-		try
-		{
-			GraphServiceTest.graph.Delete();
-		}
-		catch (ExceptionSystemError e)
-		{
-			Assert.fail(e.getMessage());
-		}
+		GraphServiceTest.graph.Delete();
 	}
 
 	@After
@@ -457,7 +443,7 @@ public class GraphServiceTest
 	@Test
 	public void TestGetAllLinks() throws Exception
 	{
-		ObjectList objects = new ObjectList();
+		OctoObjectList objects = new OctoObjectList();
 
 		final int N = 10;
 		for(int i = 0; i < N; i++)

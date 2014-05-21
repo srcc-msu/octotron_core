@@ -29,11 +29,11 @@ import ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.utils.IEntityList;
 import ru.parallel.octotron.utils.AutoFormat;
 import ru.parallel.octotron.utils.AutoFormat.E_FORMAT_PARAM;
-import ru.parallel.octotron.utils.BaseAttributeList;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.utils.SimpleAttributeList;
 import ru.parallel.utils.JavaUtils;
 import ru.parallel.utils.Timer;
 
@@ -66,7 +66,7 @@ public abstract class Operations
 		}
 
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			return exec.Execute(graph_service, control, params, objects);
@@ -76,7 +76,7 @@ public abstract class Operations
 	private interface IExec
 	{
 		Object Execute(GraphService graph_service, ExecutionControler control
-				, Map<String, String> params, AbsEntityList<?> objects)
+				, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError;
 	}
 
@@ -139,7 +139,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path");
@@ -158,7 +158,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
@@ -176,7 +176,7 @@ public abstract class Operations
 // check if attributes are specified
 
 			String attributes_str = params.get("attributes");
-			BaseAttributeList attributes = new BaseAttributeList();
+			SimpleAttributeList attributes = new SimpleAttributeList();
 
 			if(attributes_str != null)
 				for(String name : attributes_str.split(","))
@@ -217,12 +217,12 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionDBError, ExceptionParseError
 		{
 			Operations.AllParams(params, "path");
 
-			String data = AutoFormat.PrintEntitiesSpecial((ObjectList)objects);
+			String data = AutoFormat.PrintEntitiesSpecial((OctoObjectList)objects);
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
 		}
 	});
@@ -234,7 +234,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params);
@@ -265,7 +265,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params);
@@ -322,7 +322,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params);
@@ -387,7 +387,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name", "value");
@@ -417,7 +417,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name", "value");
@@ -451,7 +451,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params, "name", "value");
@@ -486,7 +486,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name");
@@ -516,7 +516,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name");
@@ -546,7 +546,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path", "reaction_id", "description");
@@ -566,7 +566,7 @@ public abstract class Operations
 
 			StringBuilder res = new StringBuilder();
 
-			for(OctoObject object : (ObjectList)objects)
+			for(OctoObject object : (OctoObjectList)objects)
 				res.append("marker id=")
 					.append(object.AddMarker(reaction_id, description, suppress))
 					.append(System.lineSeparator());
@@ -583,7 +583,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "id");
@@ -610,7 +610,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -630,7 +630,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "silent");
@@ -657,7 +657,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -682,7 +682,7 @@ time = Timer.SEnd();
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -707,7 +707,7 @@ time = Timer.SEnd();
 
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "format");
@@ -734,7 +734,7 @@ time = Timer.SEnd();
 			}
 			else
 			{
-				ObjectList target = (ObjectList) objects;
+				OctoObjectList target = (OctoObjectList) objects;
 				return new RequestResult(E_RESULT_TYPE.TEXT, graph_service.ExportDot(target));
 			}
 		}
@@ -748,7 +748,7 @@ time = Timer.SEnd();
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionControler control
-			, Map<String, String> params, AbsEntityList<?> objects)
+			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "interval");

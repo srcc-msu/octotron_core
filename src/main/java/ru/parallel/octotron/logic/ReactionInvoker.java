@@ -17,7 +17,7 @@ import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.reactions.PreparedResponse;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.JavaUtils;
 
@@ -86,9 +86,9 @@ public class ReactionInvoker
 		invoker.interrupt();
 	}
 
-	public void Invoke(ObjectList all_changed, boolean silent)
+	public void Invoke(OctoObjectList all_changed, boolean silent)
 	{
-		ObjectList uniq_changed = all_changed.Uniq();
+		OctoObjectList uniq_changed = all_changed.Uniq();
 
 		List<PreparedResponse> new_responses = new LinkedList<PreparedResponse>();
 

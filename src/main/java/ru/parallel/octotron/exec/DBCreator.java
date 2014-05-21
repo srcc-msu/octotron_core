@@ -14,8 +14,8 @@ import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.impl.PersistenStorage;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.LinkList;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoLinkList;
+import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
 
 /**
@@ -77,8 +77,8 @@ public class DBCreator
 
 		int count = 0;
 
-		ObjectList objects = graph_service.GetAllObjects();
-		LinkList links = graph_service.GetAllLinks();
+		OctoObjectList objects = graph_service.GetAllObjects();
+		OctoLinkList links = graph_service.GetAllLinks();
 
 		for(OctoObject obj : objects)
 		{

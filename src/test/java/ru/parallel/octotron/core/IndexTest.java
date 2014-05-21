@@ -6,8 +6,8 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.LinkList;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoLinkList;
+import ru.parallel.octotron.utils.OctoObjectList;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -51,14 +51,7 @@ public class IndexTest extends Assert
 	public static void Delete() throws Exception
 	{
 		IndexTest.graph.Shutdown();
-		try
-		{
-			IndexTest.graph.Delete();
-		}
-		catch (ExceptionSystemError e)
-		{
-			Assert.fail(e.getMessage());
-		}
+		IndexTest.graph.Delete();
 	}
 
 	@After
@@ -72,11 +65,11 @@ public class IndexTest extends Assert
 	{
 		int N = 10;
 
-		ObjectList objs = IndexTest.obj_factory.Create(N);
+		OctoObjectList objs = IndexTest.obj_factory.Create(N);
 		IndexTest.link_factory.EveryToEvery(objs, objs);
 
-		LinkList found = IndexTest.graph_service.GetLinks("att_link", "value23456");
-		LinkList not_found = IndexTest.graph_service.GetLinks("att_link", "aa");
+		OctoLinkList found = IndexTest.graph_service.GetLinks("att_link", "value23456");
+		OctoLinkList not_found = IndexTest.graph_service.GetLinks("att_link", "aa");
 
 		Assert.assertEquals(N, found.size());
 		Assert.assertEquals(0, not_found.size());
@@ -89,8 +82,8 @@ public class IndexTest extends Assert
 
 		IndexTest.obj_factory.Create(N);
 
-		ObjectList found = IndexTest.graph_service.GetObjects("att_obj", "value12345");
-		ObjectList not_found = IndexTest.graph_service.GetObjects("att_obj", "aa");
+		OctoObjectList found = IndexTest.graph_service.GetObjects("att_obj", "value12345");
+		OctoObjectList not_found = IndexTest.graph_service.GetObjects("att_obj", "aa");
 
 		Assert.assertEquals(N, found.size());
 		Assert.assertEquals(0, not_found.size());
@@ -101,11 +94,11 @@ public class IndexTest extends Assert
 	{
 		int N = 12;
 
-		ObjectList objs = IndexTest.obj_factory.Create(N);
+		OctoObjectList objs = IndexTest.obj_factory.Create(N);
 		IndexTest.link_factory.EveryToEvery(objs, objs);
 
-		LinkList found = IndexTest.graph_service.GetLinks("att_link");
-		LinkList not_found = IndexTest.graph_service.GetLinks("wrong");
+		OctoLinkList found = IndexTest.graph_service.GetLinks("att_link");
+		OctoLinkList not_found = IndexTest.graph_service.GetLinks("wrong");
 
 		Assert.assertEquals(N, found.size());
 		Assert.assertEquals(0, not_found.size());
@@ -118,8 +111,8 @@ public class IndexTest extends Assert
 
 		IndexTest.obj_factory.Create(N);
 
-		ObjectList found = IndexTest.graph_service.GetObjects("att_obj");
-		ObjectList not_found = IndexTest.graph_service.GetObjects("wrong");
+		OctoObjectList found = IndexTest.graph_service.GetObjects("att_obj");
+		OctoObjectList not_found = IndexTest.graph_service.GetObjects("wrong");
 
 		Assert.assertEquals(N, found.size());
 		Assert.assertEquals(0, not_found.size());
@@ -130,12 +123,12 @@ public class IndexTest extends Assert
 	{
 		int N = 14;
 
-		ObjectList objs = IndexTest.obj_factory.Create(N);
+		OctoObjectList objs = IndexTest.obj_factory.Create(N);
 		IndexTest.link_factory.EveryToEvery(objs, objs);
 
-		LinkList found = IndexTest.graph_service.QueryLinks("att_link", "*lue234*");
+		OctoLinkList found = IndexTest.graph_service.QueryLinks("att_link", "*lue234*");
 
-		LinkList not_found = IndexTest.graph_service.QueryLinks("att_link", "f*lue234*");
+		OctoLinkList not_found = IndexTest.graph_service.QueryLinks("att_link", "f*lue234*");
 
 		Assert.assertEquals(N, found.size());
 		Assert.assertEquals(0, not_found.size());
@@ -148,8 +141,8 @@ public class IndexTest extends Assert
 
 		IndexTest.obj_factory.Create(N);
 
-		ObjectList found = IndexTest.graph_service.QueryObjects("att_obj", "*lue123*");
-		ObjectList not_found = IndexTest.graph_service.QueryObjects("att_obj", "f*lue123*");
+		OctoObjectList found = IndexTest.graph_service.QueryObjects("att_obj", "*lue123*");
+		OctoObjectList not_found = IndexTest.graph_service.QueryObjects("att_obj", "f*lue123*");
 
 		Assert.assertEquals(N, found.size());
 		Assert.assertEquals(0, not_found.size());
@@ -158,7 +151,7 @@ public class IndexTest extends Assert
 	@Test
 	public void TestSingleLink() throws Exception
 	{
-		ObjectList objs = IndexTest.obj_factory.Create(2);
+		OctoObjectList objs = IndexTest.obj_factory.Create(2);
 		IndexTest.link_factory.OneToOne(objs.get(0), objs.get(1));
 
 		IndexTest.graph.GetIndex().GetLink("att_link", "value23456");

@@ -9,8 +9,8 @@ package ru.parallel.octotron.core;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.AttributeList;
-import ru.parallel.octotron.utils.BaseAttributeList;
+import ru.parallel.octotron.utils.OctoAttributeList;
+import ru.parallel.octotron.utils.SimpleAttributeList;
 
 import java.util.List;
 
@@ -67,12 +67,12 @@ public abstract class OctoEntity
 		return graph_service.GetAttribute(this, name);
 	}
 
-	public AttributeList GetAttributes()
+	public OctoAttributeList GetAttributes()
 	{
 		return graph_service.GetAttributes(this);
 	}
 
-	public BaseAttributeList GetMetaAttributes()
+	public SimpleAttributeList GetMetaAttributes()
 	{
 		return graph_service.GetAllMeta(this);
 	}

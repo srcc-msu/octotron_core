@@ -12,7 +12,7 @@ import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.netimport.ISensorData;
 import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 
 /**
  * Processes input data<br>
@@ -32,10 +32,10 @@ public class AttributeProcessor
 	 * process each sensor value from the \packet<br>
 	 * return list of values, that changed<br>
 	 * */
-	public ObjectList Process(List<? extends ISensorData> packet)
+	public OctoObjectList Process(List<? extends ISensorData> packet)
 		throws ExceptionImportFail
 	{
-		ObjectList changed = new ObjectList();
+		OctoObjectList changed = new OctoObjectList();
 
 		for(ISensorData sensor : packet)
 		{

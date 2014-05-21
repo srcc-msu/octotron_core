@@ -8,7 +8,7 @@ package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.EDependencyType;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 
 /**
  * Processes changed static attributes<br>
@@ -24,12 +24,12 @@ public class RuleProcessor
 	 * return new changed attributes<br>
 	 * probably requires few calculation steps for attribute chains<br>
 	 * */
-	public ObjectList Process(ObjectList changed)
+	public OctoObjectList Process(OctoObjectList changed)
 	{
-		ObjectList in_n = changed.GetInNeighbors().Uniq();
-		ObjectList out_n = changed.GetOutNeighbors().Uniq();
+		OctoObjectList in_n = changed.GetInNeighbors().Uniq();
+		OctoObjectList out_n = changed.GetOutNeighbors().Uniq();
 
-		ObjectList comp_changed = new ObjectList();
+		OctoObjectList comp_changed = new OctoObjectList();
 
 // parents, self depends
 		for(OctoObject obj : changed)

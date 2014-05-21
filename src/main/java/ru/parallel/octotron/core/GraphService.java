@@ -81,7 +81,7 @@ public class GraphService
 		if(static_obj == null)
 		{
 			EnableObjectIndex("type");
-			ObjectList objects = GetObjects("type", GraphService.STATIC_PREFIX);
+			OctoObjectList objects = GetObjects("type", GraphService.STATIC_PREFIX);
 
 			if(objects.size() == 0)
 			{
@@ -145,9 +145,9 @@ public class GraphService
 			throw new ExceptionModelFail("unknown entity type");
 	}
 
-	public LinkList GetInLinks(OctoObject object)
+	public OctoLinkList GetInLinks(OctoObject object)
 	{
-		LinkList list = new LinkList();
+		OctoLinkList list = new OctoLinkList();
 
 		for(Uid uid : graph.GetInLinks(object.GetUID()))
 			list.add(new OctoLink(this, uid));
@@ -155,9 +155,9 @@ public class GraphService
 		return list;
 	}
 
-	public LinkList GetOutLinks(OctoObject object)
+	public OctoLinkList GetOutLinks(OctoObject object)
 	{
-		LinkList list = new LinkList();
+		OctoLinkList list = new OctoLinkList();
 
 		for(Uid uid : graph.GetOutLinks(object.GetUID()))
 			list.add(new OctoLink(this, uid));
@@ -282,11 +282,11 @@ public class GraphService
 /**
  * does not show arrays and meta attributes<br>
  * */
-	AttributeList GetAttributes(OctoEntity entity)
+	OctoAttributeList GetAttributes(OctoEntity entity)
 	{
 		List<Pair<String, Object>> pairs = GetRawAttributes(entity);
 
-		AttributeList list = new AttributeList();
+		OctoAttributeList list = new OctoAttributeList();
 
 		for(Pair<String, Object> pair : pairs)
 		{
@@ -359,11 +359,11 @@ public class GraphService
 		DeleteRawAttribute(entity, GraphService.ToMeta(attr_name, meta_name));
 	}
 
-	public BaseAttributeList GetAllMeta(OctoEntity entity)
+	public SimpleAttributeList GetAllMeta(OctoEntity entity)
 	{
 		List<Pair<String, Object>> attributes = GetRawAttributes(entity);
 
-		BaseAttributeList result = new BaseAttributeList();
+		SimpleAttributeList result = new SimpleAttributeList();
 
 		for(Pair<String, Object> attribute : attributes)
 			if(IsMeta(attribute.getKey()))
@@ -376,24 +376,24 @@ public class GraphService
 //			CACHE
 //---------------------------------
 
-	private LinkList LinksFromUid(List<Uid> uids)
+	private OctoLinkList LinksFromUid(List<Uid> uids)
 	{
 		List<OctoLink> list = new LinkedList<OctoLink>();
 
 		for(Uid uid : uids)
 			list.add(new OctoLink(this, uid));
 
-		return new LinkList(list);
+		return new OctoLinkList(list);
 	}
 
-	private ObjectList ObjectsFromUid(List<Uid> uids)
+	private OctoObjectList ObjectsFromUid(List<Uid> uids)
 	{
 		List<OctoObject> list = new LinkedList<OctoObject>();
 
 		for(Uid uid : uids)
 			list.add(new OctoObject(this, uid));
 
-		return new ObjectList(list);
+		return new OctoObjectList(list);
 	}
 
 	public void EnableLinkIndex(String name)
@@ -406,14 +406,14 @@ public class GraphService
 		graph.GetIndex().EnableObjectIndex(name);
 	}
 
-	public LinkList GetAllLinks()
+	public OctoLinkList GetAllLinks()
 	{
 		return LinksFromUid(graph.GetAllLinks());
 	}
 
-	public ObjectList GetAllObjects()
+	public OctoObjectList GetAllObjects()
 	{
-		ObjectList result = new ObjectList();
+		OctoObjectList result = new OctoObjectList();
 
 		for(OctoObject object : ObjectsFromUid(graph.GetAllObjects()))
 			if(!IsStaticObject(object))
@@ -433,17 +433,17 @@ public class GraphService
 		return new OctoLink(this, uid);
 	}
 
-	public LinkList GetLinks(SimpleAttribute att)
+	public OctoLinkList GetLinks(SimpleAttribute att)
 	{
 		return GetLinks(att.GetName(), att.GetValue());
 	}
 
-	public LinkList GetLinks(String name)
+	public OctoLinkList GetLinks(String name)
 	{
 		return LinksFromUid(graph.GetIndex().GetLinks(name));
 	}
 
-	public LinkList GetLinks(String name, Object value)
+	public OctoLinkList GetLinks(String name, Object value)
 	{
 		return LinksFromUid(graph.GetIndex().GetLinks(name, value));
 	}
@@ -459,27 +459,27 @@ public class GraphService
 		return new OctoObject(this, uid);
 	}
 
-	public ObjectList GetObjects(SimpleAttribute att)
+	public OctoObjectList GetObjects(SimpleAttribute att)
 	{
 		return GetObjects(att.GetName(), att.GetValue());
 	}
 
-	public ObjectList GetObjects(String name)
+	public OctoObjectList GetObjects(String name)
 	{
 		return ObjectsFromUid(graph.GetIndex().GetObjects(name));
 	}
 
-	public ObjectList GetObjects(String name, Object value)
+	public OctoObjectList GetObjects(String name, Object value)
 	{
 		return ObjectsFromUid(graph.GetIndex().GetObjects(name, value));
 	}
 
-	public LinkList QueryLinks(String name, String value)
+	public OctoLinkList QueryLinks(String name, String value)
 	{
 		return LinksFromUid(graph.GetIndex().QueryLinks(name, value));
 	}
 
-	public ObjectList QueryObjects(String name, String value)
+	public OctoObjectList QueryObjects(String name, String value)
 	{
 		return ObjectsFromUid(graph.GetIndex().QueryObjects(name, value));
 	}
@@ -549,7 +549,7 @@ public class GraphService
 		return graph.ExportDot(GetAllObjects());
 	}
 
-	public String ExportDot(ObjectList list)
+	public String ExportDot(OctoObjectList list)
 	{
 		return graph.ExportDot(list);
 	}

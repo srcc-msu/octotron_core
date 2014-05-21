@@ -12,7 +12,7 @@ import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.http.PathOperations.PathToken;
 import ru.parallel.octotron.logic.ExecutionControler;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.utils.IEntityList;
 
 /**
  * parsed request with correct tokens list<br>
@@ -26,10 +26,10 @@ public class ParsedPath
 		this.tokens = tokens;
 	}
 
-	public AbsEntityList<?> Execute(GraphService graph_service, ExecutionControler exec_control)
+	public IEntityList<?> Execute(GraphService graph_service, ExecutionControler exec_control)
 		throws ExceptionParseError
 	{
-		AbsEntityList<?> entity_list = null;
+		IEntityList<?> entity_list = null;
 
 		for(PathToken token : tokens)
 		{

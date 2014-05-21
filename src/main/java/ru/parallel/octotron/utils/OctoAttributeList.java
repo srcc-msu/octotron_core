@@ -7,8 +7,6 @@
 package ru.parallel.octotron.utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,27 +17,24 @@ import ru.parallel.octotron.core.OctoAttribute;
  * and provides some additional functionality, like filtering<br>
  * only filtering for now, to be honest..<br>
  * */
-public class AttributeList extends AbsAttributeList<OctoAttribute>
+public class OctoAttributeList extends IAttributeList<OctoAttribute>
 {
-	public AttributeList()
+	public OctoAttributeList()
 	{
-		list = new LinkedList<OctoAttribute>();
+		super();
 	}
 
-	private AttributeList(List<OctoAttribute> _list)
+	private OctoAttributeList(List<OctoAttribute> list)
 	{
-		this.list = _list;
+		super(list);
 	}
 
-	public AttributeList(AttributeList list2)
+	public OctoAttributeList(OctoAttributeList list)
 	{
-		this();
-
-		for(OctoAttribute att : list2.list)
-			list.add(att);
+		super(list);
 	}
 
-	public AttributeList ge(Object val)
+	public OctoAttributeList ge(Object val)
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -47,10 +42,10 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 			if(att.ge(val))
 				new_list.add(att);
 
-		return new AttributeList(new_list);
+		return new OctoAttributeList(new_list);
 	}
 
-	public AttributeList le(Object val)
+	public OctoAttributeList le(Object val)
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -58,10 +53,10 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 			if(att.le(val))
 				new_list.add(att);
 
-		return new AttributeList(new_list);
+		return new OctoAttributeList(new_list);
 	}
 
-	public AttributeList gt(Object val)
+	public OctoAttributeList gt(Object val)
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -69,10 +64,10 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 			if(att.gt(val))
 				new_list.add(att);
 
-		return new AttributeList(new_list);
+		return new OctoAttributeList(new_list);
 	}
 
-	public AttributeList lt(Object val)
+	public OctoAttributeList lt(Object val)
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -80,10 +75,10 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 			if(att.lt(val))
 				new_list.add(att);
 
-		return new AttributeList(new_list);
+		return new OctoAttributeList(new_list);
 	}
 
-	public AttributeList eq(Object val)
+	public OctoAttributeList eq(Object val)
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -91,10 +86,10 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 			if(att.eq(val))
 				new_list.add(att);
 
-		return new AttributeList(new_list);
+		return new OctoAttributeList(new_list);
 	}
 
-	public AttributeList ne(Object val)
+	public OctoAttributeList ne(Object val)
 	{
 		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
 
@@ -102,37 +97,25 @@ public class AttributeList extends AbsAttributeList<OctoAttribute>
 			if(att.ne(val))
 				new_list.add(att);
 
-		return new AttributeList(new_list);
+		return new OctoAttributeList(new_list);
 	}
 
-	public AttributeList append(AttributeList list2)
+	public OctoAttributeList append(OctoAttributeList list2)
 	{
-		list.addAll(list2.list);
-
-		return this;
-	}
-
-@Override
-	public AttributeList range(int from, int to)
-	{
-		List<OctoAttribute> new_list = list.subList(from, to);
-		return new AttributeList(new_list);
+		return new OctoAttributeList(InnerAppend(list2.list));
 	}
 
 @Override
-	public AttributeList AlphabeticSort()
+	public OctoAttributeList range(int from, int to)
 	{
-		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>(list);
+		return new OctoAttributeList(InnerRange(from, to));
+	}
 
-		Collections.sort(new_list, new Comparator<OctoAttribute>()
-		{
-			public int compare(OctoAttribute o1, OctoAttribute o2)
-			{
-				return o1.GetName().compareTo(o2.GetName());
-			}
-		});
+@Override
+	public OctoAttributeList AlphabeticSort()
+	{
+		return new OctoAttributeList(InnerAlphabeticSort());
 
-		return new AttributeList(new_list);
 	}
 }
 

@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.utils.AttributeList;
+import ru.parallel.octotron.utils.OctoAttributeList;
 import ru.parallel.utils.JavaUtils;
 
 public final class TimerProcessor
@@ -30,9 +30,9 @@ public final class TimerProcessor
 		TimerProcessor.INSTANCE.timers.add(timer);
 	}
 
-	public static AttributeList Process()
+	public static OctoAttributeList Process()
 	{
-		AttributeList timers_timed_out = new AttributeList();
+		OctoAttributeList timers_timed_out = new OctoAttributeList();
 
 		long cur_time = JavaUtils.GetTimestamp(); // TODO: move into the cycle?
 

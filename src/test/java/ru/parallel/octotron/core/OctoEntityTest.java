@@ -14,31 +14,17 @@ public class OctoEntityTest
 	private static Neo4jGraph graph;
 
 	@BeforeClass
-	public static void Init()
+	public static void Init() throws Exception
 	{
-		try
-		{
-			OctoEntityTest.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
-			OctoEntityTest.graph_service = new GraphService(OctoEntityTest.graph);
-		}
-		catch (Exception e)
-		{
-			Assert.fail(e.getMessage());
-		}
+		OctoEntityTest.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+		OctoEntityTest.graph_service = new GraphService(OctoEntityTest.graph);
 	}
 
 	@AfterClass
-	public static void Delete()
+	public static void Delete() throws Exception
 	{
 		OctoEntityTest.graph.Shutdown();
-		try
-		{
-			OctoEntityTest.graph.Delete();
-		}
-		catch (ExceptionSystemError e)
-		{
-			Assert.fail(e.getMessage());
-		}
+		OctoEntityTest.graph.Delete();
 	}
 
 	@Test

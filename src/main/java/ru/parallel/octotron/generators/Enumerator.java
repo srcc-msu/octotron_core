@@ -7,13 +7,13 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.utils.AbsEntityList;
+import ru.parallel.octotron.utils.IEntityList;
 
 public final class Enumerator
 {
 	private Enumerator(){}
 
-	public static void Sequence(AbsEntityList<? extends OctoEntity> list, String att, int div)
+	public static void Sequence(IEntityList<? extends OctoEntity> list, String att, int div)
 	{
 		int i = 0;
 
@@ -27,7 +27,7 @@ public final class Enumerator
 		}
 	}
 
-	public static void Sequence(AbsEntityList<? extends OctoEntity> list, String att)
+	public static void Sequence(IEntityList<? extends OctoEntity> list, String att)
 	{
 		Enumerator.Sequence(list, att, 0);
 	}

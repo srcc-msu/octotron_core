@@ -19,7 +19,7 @@ import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.ObjectList;
+import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
 
 
@@ -100,7 +100,7 @@ public class PreparedResponse
 
 		OctoObject p_entity = (OctoObject)entity;
 
-		ObjectList parents = p_entity.GetInNeighbors("type", "contain");
+		OctoObjectList parents = p_entity.GetInNeighbors("type", "contain");
 
 		if(parents.size() > 1)
 			System.err.println("could not traceback parents - ambiguity");

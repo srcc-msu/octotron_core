@@ -3,6 +3,11 @@ package ru.parallel.octotron.core;
 import org.junit.*;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.utils.ObjectList;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public class GraphServiceTest
 {
@@ -217,7 +222,6 @@ public class GraphServiceTest
 	@Test
 	public void TestAddObject() throws Exception
 	{
-
 		Assert.assertEquals(0, graph_service.GetAllObjects().size());
 		graph_service.AddObject();
 		Assert.assertEquals(1, graph_service.GetAllObjects().size());
@@ -230,6 +234,16 @@ public class GraphServiceTest
 	{
 		OctoObject object1 = graph_service.AddObject();
 		OctoObject object2 = graph_service.AddObject();
+
+		Assert.assertEquals(0, graph_service.GetAllLinks().size());
+		OctoLink link1 = graph_service.AddLink(object1, object2, "test");
+		Assert.assertEquals(1, graph_service.GetAllLinks().size());
+		OctoLink link2 = graph_service.AddLink(object1, object2, "test");
+		Assert.assertEquals(2, graph_service.GetAllLinks().size());
+		graph_service.Delete(link1);
+		Assert.assertEquals(1, graph_service.GetAllLinks().size());
+		graph_service.Delete(link2);
+		Assert.assertEquals(0, graph_service.GetAllLinks().size());
 
 		Assert.assertEquals(2, graph_service.GetAllObjects().size());
 		graph_service.Delete(object2);
@@ -419,37 +433,143 @@ public class GraphServiceTest
 	@Test
 	public void TestGetAllLinks() throws Exception
 	{
+		ObjectList objects = new ObjectList();
 
+		final int N = 10;
+		for(int i = 0; i < N; i++)
+		{
+			objects.add(graph_service.AddObject());
+		}
+
+		Assert.assertEquals(0, graph_service.GetAllLinks().size());
+
+		for(int i = 0; i < N; i++)
+		{
+			graph_service.AddLink(objects.get(i), objects.get((i * 2) % N), "test");
+			Assert.assertEquals(i + 1, graph_service.GetAllLinks().size());
+		}
 	}
 
 	@Test
 	public void TestGetAllObjects() throws Exception
 	{
+		final int N = 10;
 
+		// static must not be visible
+		Assert.assertEquals(0, graph_service.GetAllObjects().size());
+
+		for(int i = 0; i < N; i++)
+		{
+			graph_service.AddObject();
+
+			Assert.assertEquals(i + 1, graph_service.GetAllObjects().size());
+		}
 	}
 
 	@Test
 	public void TestSetArray() throws Exception
 	{
+		final int N = 10;
 
+		List<Long> data = new LinkedList<Long>();
+
+		OctoObject object = graph_service.AddObject();
+
+		for(long i = 0; i < N; i++)
+			data.add(i);
+
+		Assert.assertEquals(1, graph_service.GetAttributes(object).size());
+
+		graph_service.SetArray(object, "test", data);
+
+		// array must not be visible
+		Assert.assertEquals(1, graph_service.GetAttributes(object).size());
 	}
 
 	@Test
 	public void TestGetArray() throws Exception
 	{
+		final int N = 10;
 
+		List<Long> data1 = new LinkedList<Long>();
+		List<Long> data2 = new LinkedList<Long>();
+
+		OctoObject object1 = graph_service.AddObject();
+		OctoObject object2 = graph_service.AddObject();
+
+		for(long i = 0; i < N; i++)
+		{
+			data1.add(i);
+			data2.add(i * 2);
+		}
+
+		graph_service.SetArray(object1, "test", data1);
+		graph_service.SetArray(object2, "test", data2);
+
+		List<Long> test1 = graph_service.GetArray(object1, "test");
+		List<Long> test2 = graph_service.GetArray(object2, "test");
+
+		for(int i = 0; i < N; i++)
+		{
+			Assert.assertEquals(Long.valueOf((long)i), test1.get(i));
+			Assert.assertEquals(Long.valueOf((long)i * 2), test2.get(i));
+		}
 	}
 
 	@Test
 	public void TestAddToArray() throws Exception
 	{
+		final int N = 10;
 
+		List<Long> data = new LinkedList<Long>();
+		data.add(0L);
+
+		OctoObject object = graph_service.AddObject();
+
+		graph_service.SetArray(object, "test", data);
+
+		for(long iter = 1; iter < N; iter++)
+		{
+			graph_service.AddToArray(object, "test", iter);
+			List<Long> test = graph_service.GetArray(object, "test");
+
+			for(int i = 0; i <= iter; i++)
+				Assert.assertEquals(Long.valueOf((long)i), test.get(i));
+		}
 	}
 
 	@Test
 	public void TestCleanArray() throws Exception
 	{
+		final int N = 10;
 
+		List<Long> data1 = new LinkedList<Long>();
+		List<Long> data2 = new LinkedList<Long>();
+
+		OctoObject object1 = graph_service.AddObject();
+		OctoObject object2 = graph_service.AddObject();
+
+		for(long i = 0; i < N; i++)
+		{
+			data1.add(i);
+			data2.add(i * 2);
+		}
+
+		graph_service.SetArray(object1, "test", data1);
+		graph_service.SetArray(object2, "test", data2);
+
+		Assert.assertEquals(N, graph_service.GetArray(object1, "test").size());
+		Assert.assertEquals(N, graph_service.GetArray(object2, "test").size());
+
+		graph_service.CleanArray(object1, "test");
+
+		Assert.assertEquals(0, graph_service.GetArray(object1, "test").size());
+		Assert.assertEquals(N, graph_service.GetArray(object2, "test").size());
+
+		graph_service.CleanArray(object2, "test");
+
+		Assert.assertEquals(0, graph_service.GetArray(object1, "test").size());
+		Assert.assertEquals(0, graph_service.GetArray(object2, "test").size());
 	}
 
 	@Test

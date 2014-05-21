@@ -41,7 +41,7 @@ public final class TimerProcessor
 		while (it.hasNext())
 		{
 			OctoAttribute timer = it.next();
-			long set_time = timer.GetTime();
+			long set_time = timer.GetCTime();
 
 			if(cur_time - set_time > timer.GetLong())
 			{

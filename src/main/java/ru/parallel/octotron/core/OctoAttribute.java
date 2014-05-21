@@ -18,6 +18,8 @@ import ru.parallel.utils.JavaUtils;
  * */
 public class OctoAttribute extends SimpleAttribute
 {
+	public static final double DELTA = 0.001;
+
 	private final GraphService graph_service;
 	private long ctime = 0;
 	private long atime = 0;
@@ -62,7 +64,7 @@ public class OctoAttribute extends SimpleAttribute
 	private static final String LAST_VAL = "last_val";
 	private static final String LAST_CTIME = "last_ctime";
 
-	public long GetTime()
+	public long GetCTime()
 	{
 		return ctime;
 	}
@@ -85,7 +87,10 @@ public class OctoAttribute extends SimpleAttribute
 		if(ctime - last_time == 0)
 			return 0.0;
 
-		Class<?> my_class = value.getClass(); 
+		if(last_time == 0)
+			return 0.0;
+
+		Class<?> my_class = value.getClass();
 
 		if(my_class.equals(Double.class))
 		{
@@ -104,7 +109,7 @@ public class OctoAttribute extends SimpleAttribute
 	private void RotateValue(Object new_value, long cur_time)
 	{
 		graph_service.SetMeta(parent, name, OctoAttribute.LAST_VAL, value);
-		graph_service.SetMeta(parent, name, OctoAttribute.LAST_CTIME, GetTime());
+		graph_service.SetMeta(parent, name, OctoAttribute.LAST_CTIME, GetCTime());
 
 		value = new_value;
 		ctime = cur_time;
@@ -124,6 +129,7 @@ public class OctoAttribute extends SimpleAttribute
  * if allow_overwrite is true - update the time even if the value is the same</br>
  * the flag is needed to prevent rule attribute chains from updating every second</br>
  * that would be correct, but too slow</br>
+ * TODO: rethink
  * */
 	public Boolean Update(Object new_value, boolean allow_overwrite)
 	{
@@ -133,20 +139,12 @@ public class OctoAttribute extends SimpleAttribute
 		long cur_time = JavaUtils.GetTimestamp();
 		Touch(cur_time);
 
-// if got a new value, or was not initialized
-		if(ne(new_value) || GetTime() == 0)
+// if got a new value, or was not initialized or allow_overwrite is on
+		if(ne(new_value) || GetCTime() == 0 || allow_overwrite)
 		{
 			RotateValue(new_value, cur_time);
 			return true;
 		}
-
-// this branch is used for sensor update strategy
-		if(allow_overwrite)
-			if(cur_time - GetTime() > 0)
-			{
-				RotateValue(new_value, cur_time);
-				return true;
-			}
 
 		return false;
 	}

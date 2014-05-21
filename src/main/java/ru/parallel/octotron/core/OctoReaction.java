@@ -104,7 +104,7 @@ public class OctoReaction implements Serializable
 	{
 		OctoAttribute attr = entity.GetAttribute(check_name);
 
-		if(attr.GetTime() <= 0 || !attr.IsValid())
+		if(attr.GetCTime() <= 0 || !attr.IsValid())
 			return false;
 
 		return attr.eq(check_value);

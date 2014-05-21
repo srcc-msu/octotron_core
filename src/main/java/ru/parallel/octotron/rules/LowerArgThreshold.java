@@ -35,7 +35,7 @@ public class LowerArgThreshold extends OctoRule
 	{
 		OctoAttribute attr = object.GetAttribute(param);
 
-		if(attr.GetTime() == 0 || !attr.IsValid())
+		if(attr.GetCTime() == 0 || !attr.IsValid())
 			return GetDefaultValue();
 
 		return attr.gt(object.GetAttribute(arg_threshold).GetValue());

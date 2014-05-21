@@ -40,7 +40,7 @@ public class CheckBoolRules extends OctoRule
 		{
 			OctoAttribute attr = object.GetAttribute(attr_name);
 
-			if(!attr.GetBoolean() && attr.IsValid() && attr.GetTime() != 0)
+			if(!attr.GetBoolean() && attr.IsValid() && attr.GetCTime() != 0)
 				sum++;
 		}
 

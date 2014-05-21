@@ -34,7 +34,7 @@ public class LocalErrors extends OctoRule
 		int sum = 0;
 
 		for(OctoAttribute attr : object.GetAttributes())
-			if(attr.GetName().contains(detect_str) && attr.IsValid() && attr.GetTime() != 0)
+			if(attr.GetName().contains(detect_str) && attr.IsValid() && attr.GetCTime() != 0)
 				sum += attr.GetLong();
 
 		return sum;

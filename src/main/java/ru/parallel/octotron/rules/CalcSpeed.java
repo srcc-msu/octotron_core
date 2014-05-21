@@ -33,7 +33,7 @@ public class CalcSpeed extends OctoRule
 	{
 		OctoAttribute attr = object.GetAttribute(measured_attr);
 
-		if(!attr.IsValid() || attr.GetTime() == 0)
+		if(!attr.IsValid() || attr.GetCTime() == 0)
 			return GetDefaultValue();
 
 		return attr.GetSpeed();

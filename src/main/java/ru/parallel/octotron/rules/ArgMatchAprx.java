@@ -37,7 +37,7 @@ public class ArgMatchAprx extends OctoRule
 	{
 		OctoAttribute attr = object.GetAttribute(param);
 
-		if(attr.GetTime() == 0 || !attr.IsValid())
+		if(attr.GetCTime() == 0 || !attr.IsValid())
 			return GetDefaultValue();
 
 		return attr.aeq(object.GetAttribute(match_arg).GetValue(), aprx);

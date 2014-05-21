@@ -254,7 +254,7 @@ public class OctoObject extends OctoEntity
 				else if(state == OctoReaction.STATE_STARTED)
 				{
 					long delay = reaction.GetDelay();
-					long event_time = this.GetAttribute(OctoReaction.DELAY_PREFIX + reaction.GetCheckName()).GetTime();
+					long event_time = this.GetAttribute(OctoReaction.DELAY_PREFIX + reaction.GetCheckName()).GetCTime();
 
 					if(current_time - event_time > delay)
 					{

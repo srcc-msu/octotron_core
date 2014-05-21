@@ -2,17 +2,17 @@ package ru.parallel.octotron.core;
 
 import org.junit.*;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.utils.ObjectList;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class GraphServiceTest
 {
-	static GraphService graph_service;
-	static Neo4jGraph graph;
+	private static GraphService graph_service;
+	private static Neo4jGraph graph;
 
 	@BeforeClass
 	public static void Init()
@@ -51,8 +51,8 @@ public class GraphServiceTest
 	@Test
 	public void TestIsStaticName() throws Exception
 	{
-		Assert.assertFalse(graph_service.IsStaticName("test"));
-		Assert.assertTrue(graph_service.IsStaticName("_static_test"));
+		Assert.assertFalse(GraphService.IsStaticName("test"));
+		Assert.assertTrue(GraphService.IsStaticName("_static_test"));
 	}
 
 	@Test
@@ -84,6 +84,18 @@ public class GraphServiceTest
 		Assert.assertTrue(graph_service.TestAttribute(object1, "exist"));
 		Assert.assertTrue(graph_service.TestAttribute(object2, "exist"));
 		Assert.assertTrue(graph_service.TestAttribute(link, "exist"));
+
+		boolean catched = false;
+
+		try
+		{
+			graph_service.SetAttribute(graph_service.GetStatic(), "test", "");
+		}
+		catch(ExceptionModelFail ignore)
+		{
+			catched = true; // no usual names for static
+		}
+		Assert.assertTrue(catched);
 	}
 
 	@Test
@@ -168,6 +180,18 @@ public class GraphServiceTest
 
 		Assert.assertFalse(graph_service.TestAttribute(object1, "object"));
 		Assert.assertFalse(graph_service.TestAttribute(link, "link"));
+
+		boolean catched = false;
+
+		try
+		{
+			graph_service.Delete(graph_service.GetStatic());
+		}
+		catch(ExceptionModelFail ignore)
+		{
+			catched = true; // no deleting static
+		}
+		Assert.assertTrue(catched);
 	}
 
 	@Test
@@ -577,8 +601,8 @@ public class GraphServiceTest
 	{
 		OctoObject obj1 = graph_service.AddObject();
 		OctoObject obj2 = graph_service.AddObject();
-		OctoObject obj3 = graph_service.AddObject();
-		OctoLink link = graph_service.AddLink(obj1, obj2, "test");
+		graph_service.AddObject();
+		graph_service.AddLink(obj1, obj2, "test");
 
 		graph_service.Clean();
 

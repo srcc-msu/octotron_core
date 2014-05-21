@@ -37,7 +37,7 @@ public class AggregateNotMatch extends OctoRule
 
 		for(OctoObject obj : object.GetOutNeighbors("type", "contain"))
 			for(OctoAttribute att : obj.GetAttributes())
-				if(att.GetName().contains(detect_str) && att.IsValid() && att.GetTime() != 0)
+				if(att.GetName().contains(detect_str) && att.IsValid() && att.GetCTime() != 0)
 					if(att.ne(match))
 						sum++;
 

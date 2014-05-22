@@ -24,17 +24,8 @@ import java.util.List;
  * ensures all objects have a correct AID<br>
  * provides meta-attributes mechanic
  * */
-public class GraphService
+public final class GraphService
 {
-/*	public static final String RULE_PREFIX = "_RULE_";
-	public static final String REACTION_PREFIX = "_REACTION_";
-	public static final String MARKER_PREFIX = "_MARKER_";
-
-	private static final String REACTION_EXECUTED = "_executed_";
-	private static final String INVALID_ATTRIBUTE = "_invalid_";
-
-	private static final String TIME_PREFIX = "_time_";*/
-
 	private static final String NEXT_AID = "_static_next_AID";
 
 	private final ru.parallel.octotron.core.IGraph graph;

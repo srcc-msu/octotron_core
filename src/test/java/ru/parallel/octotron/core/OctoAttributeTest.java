@@ -6,7 +6,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 public class OctoAttributeTest
 {

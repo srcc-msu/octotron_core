@@ -3,7 +3,6 @@ package ru.parallel.octotron.core;
 import org.junit.*;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.utils.OctoObjectList;
 
 import java.util.LinkedList;

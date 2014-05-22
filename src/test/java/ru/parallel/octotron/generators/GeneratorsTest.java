@@ -1,60 +1,55 @@
-package test.java;
+package ru.parallel.octotron.generators;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoLink;
 import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.generators.LinkFactory;
-import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.utils.OctoObjectList;
 
 /**
  * test some common cases -attributes, factories
  * */
-public class TestGenerators extends Assert
+public class GeneratorsTest extends Assert
 {
-	static Neo4jGraph graph;
-	static ObjectFactory obj_factory;
-	static LinkFactory link_factory;
-
-	static final int N = 10; // some testing param
+	private static Neo4jGraph graph;
 	private static GraphService graph_service;
 
+	private static ObjectFactory obj_factory;
+	private static LinkFactory link_factory;
+
+	static final int N = 10; // some testing param
+
 	@BeforeClass
-	public static void Init()
-		throws ExceptionSystemError
+	public static void Init() throws Exception
 	{
-		TestGenerators.graph = new Neo4jGraph("dbs/test_primitives", Neo4jGraph.Op.RECREATE);
-		TestGenerators.graph_service = new GraphService(TestGenerators.graph);
+		GeneratorsTest.graph = new Neo4jGraph("dbs/test_primitives", Neo4jGraph.Op.RECREATE);
+		GeneratorsTest.graph_service = new GraphService(GeneratorsTest.graph);
 
 		SimpleAttribute[] obj_att = new SimpleAttribute[]
 		{
 			new SimpleAttribute("object", "ok")
 		};
 
-		TestGenerators.obj_factory = new ObjectFactory(TestGenerators.graph_service).Attributes(obj_att);
+		GeneratorsTest.obj_factory = new ObjectFactory(GeneratorsTest.graph_service).Attributes(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("type", "contain")
 		};
 
-		TestGenerators.link_factory = new LinkFactory(TestGenerators.graph_service).Attributes(link_att);
+		GeneratorsTest.link_factory = new LinkFactory(GeneratorsTest.graph_service).Attributes(link_att);
 	}
 
 	@AfterClass
-	public static void Delete()
-		throws ExceptionSystemError
+	public static void Delete() throws Exception
 	{
-		TestGenerators.graph.Shutdown();
-		TestGenerators.graph.Delete();
+		GeneratorsTest.graph.Shutdown();
+		GeneratorsTest.graph.Delete();
 	}
 
 /**
@@ -71,10 +66,10 @@ public class TestGenerators extends Assert
 		SimpleAttribute[] attr2 = { new SimpleAttribute("test2", 0) };
 		SimpleAttribute[] attr3 = { new SimpleAttribute("test3", 0) };
 
-		ObjectFactory f1 = new ObjectFactory(TestGenerators.graph_service).Attributes(attr1).Attributes(attr2, attr3);
+		ObjectFactory f1 = new ObjectFactory(GeneratorsTest.graph_service).Attributes(attr1).Attributes(attr2, attr3);
 		obj = f1.Create(1);
 
-		LinkFactory f2 = new LinkFactory(TestGenerators.graph_service).Attributes(attr2, attr3).Attributes(attr1);
+		LinkFactory f2 = new LinkFactory(GeneratorsTest.graph_service).Attributes(attr2, attr3).Attributes(attr1);
 		link = f2.Attributes(new SimpleAttribute("type", "1")).OneToOne(obj.get(0), obj.get(0));
 
 		Assert.assertEquals("misisng obj attribute", obj.get(0).TestAttribute("test1"), true);
@@ -95,10 +90,10 @@ public class TestGenerators extends Assert
 	{
 		OctoObjectList obj = null;
 
-		obj = TestGenerators.obj_factory.Create(TestGenerators.N);
-		Assert.assertEquals("created more objects", obj.size(), TestGenerators.N);
+		obj = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
+		Assert.assertEquals("created more objects", obj.size(), GeneratorsTest.N);
 
-		for(int i = 0; i < TestGenerators.N; i++)
+		for(int i = 0; i < GeneratorsTest.N; i++)
 		{
 			Assert.assertEquals("created something wrong"
 				, obj.get(i).GetAttribute("object").GetValue(), "ok");
@@ -115,9 +110,9 @@ public class TestGenerators extends Assert
 
 		OctoLink link = null;
 
-		obj = TestGenerators.obj_factory.Create(2);
+		obj = GeneratorsTest.obj_factory.Create(2);
 
-		link = TestGenerators.link_factory.OneToOne(obj.get(0), obj.get(1));
+		link = GeneratorsTest.link_factory.OneToOne(obj.get(0), obj.get(1));
 
 		Assert.assertEquals("created something wrong"
 			, link.GetAttribute("type").GetString(), "contain");
@@ -129,9 +124,9 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorOneToOne()
 	{
-		OctoObjectList obj = TestGenerators.obj_factory.Create(2);
+		OctoObjectList obj = GeneratorsTest.obj_factory.Create(2);
 
-		TestGenerators.link_factory.OneToOne(obj.get(0), obj.get(1));
+		GeneratorsTest.link_factory.OneToOne(obj.get(0), obj.get(1));
 
 		Assert.assertEquals("link does not exist"
 			, obj.get(0).GetOutLinks().Filter("type", "contain").size(), 1);
@@ -145,15 +140,15 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorOneToAll()
 	{
-		OctoObject obj = TestGenerators.obj_factory.Create();
-		OctoObjectList objs = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObject obj = GeneratorsTest.obj_factory.Create();
+		OctoObjectList objs = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
 
-		TestGenerators.link_factory.OneToEvery(obj, objs);
+		GeneratorsTest.link_factory.OneToEvery(obj, objs);
 
 		Assert.assertEquals("link does not exist"
-			, obj.GetOutLinks().Filter("type", "contain").size(), TestGenerators.N);
+			, obj.GetOutLinks().Filter("type", "contain").size(), GeneratorsTest.N);
 
-		for(int i = 0; i < TestGenerators.N; i++)
+		for(int i = 0; i < GeneratorsTest.N; i++)
 			Assert.assertEquals("link does not exist"
 				, objs.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 	}
@@ -164,15 +159,15 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorAllToOne()
 	{
-		OctoObject obj = TestGenerators.obj_factory.Create();
-		OctoObjectList objs = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObject obj = GeneratorsTest.obj_factory.Create();
+		OctoObjectList objs = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
 
-		TestGenerators.link_factory.EveryToOne(objs, obj);
+		GeneratorsTest.link_factory.EveryToOne(objs, obj);
 
 		Assert.assertEquals("link does not exist"
-			, obj.GetInLinks().Filter("type", "contain").size(), TestGenerators.N);
+			, obj.GetInLinks().Filter("type", "contain").size(), GeneratorsTest.N);
 
-		for(int i = 0; i < TestGenerators.N; i++)
+		for(int i = 0; i < GeneratorsTest.N; i++)
 			Assert.assertEquals("link does not exist"
 				, objs.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 	}
@@ -183,12 +178,12 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorEveryToEvery()
 	{
-		OctoObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
-		OctoObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs1 = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
+		OctoObjectList objs2 = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
 
-		TestGenerators.link_factory.EveryToEvery(objs1, objs2);
+		GeneratorsTest.link_factory.EveryToEvery(objs1, objs2);
 
-		for(int i = 0; i < TestGenerators.N; i++)
+		for(int i = 0; i < GeneratorsTest.N; i++)
 		{
 			Assert.assertEquals("link does not exist"
 				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
@@ -204,18 +199,18 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorAllToAll()
 	{
-		OctoObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
-		OctoObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs1 = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
+		OctoObjectList objs2 = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
 
-		TestGenerators.link_factory.AllToAll(objs1, objs2);
+		GeneratorsTest.link_factory.AllToAll(objs1, objs2);
 
-		for(int i = 0; i < TestGenerators.N; i++)
+		for(int i = 0; i < GeneratorsTest.N; i++)
 		{
 			Assert.assertEquals("link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), TestGenerators.N);
+				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), GeneratorsTest.N);
 
 			Assert.assertEquals("link does not exist"
-				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), TestGenerators.N);
+				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), GeneratorsTest.N);
 		}
 	}
 
@@ -225,18 +220,18 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorAllToChunks()
 	{
-		OctoObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
-		OctoObjectList objs2 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N);
+		OctoObjectList objs1 = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
+		OctoObjectList objs2 = GeneratorsTest.obj_factory.Create(2 * GeneratorsTest.N * GeneratorsTest.N);
 
-		TestGenerators.link_factory.EveryToChunks(objs1, objs2);
+		GeneratorsTest.link_factory.EveryToChunks(objs1, objs2);
 
-		for(int i = 0; i < TestGenerators.N; i++)
+		for(int i = 0; i < GeneratorsTest.N; i++)
 		{
 			Assert.assertEquals("link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 2* TestGenerators.N);
+				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 2* GeneratorsTest.N);
 		}
 
-		for(int i = 0; i < 2* TestGenerators.N * TestGenerators.N; i++)
+		for(int i = 0; i < 2* GeneratorsTest.N * GeneratorsTest.N; i++)
 		{
 			Assert.assertEquals("link does not exist"
 				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
@@ -249,18 +244,18 @@ public class TestGenerators extends Assert
 	@Test
 	public void TestConnectorChunksToEvery()
 	{
-		OctoObjectList objs1 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N);
-		OctoObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs1 = GeneratorsTest.obj_factory.Create(2 * GeneratorsTest.N * GeneratorsTest.N);
+		OctoObjectList objs2 = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
 
-		TestGenerators.link_factory.ChunksToEvery(objs1, objs2);
+		GeneratorsTest.link_factory.ChunksToEvery(objs1, objs2);
 
-		for(int i = 0; i < 2* TestGenerators.N * TestGenerators.N; i++)
+		for(int i = 0; i < 2* GeneratorsTest.N * GeneratorsTest.N; i++)
 			Assert.assertEquals("out link does not exist"
 				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 
-		for(int i = 0; i < TestGenerators.N; i++)
+		for(int i = 0; i < GeneratorsTest.N; i++)
 			Assert.assertEquals("in link does not exist"
-				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 2* TestGenerators.N);
+				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 2* GeneratorsTest.N);
 	}
 
 	/**
@@ -271,21 +266,21 @@ public class TestGenerators extends Assert
 	{
 		int K = 6;
 
-		OctoObjectList objs1 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N - K);
-		OctoObjectList objs2 = TestGenerators.obj_factory.Create(TestGenerators.N);
+		OctoObjectList objs1 = GeneratorsTest.obj_factory.Create(2 * GeneratorsTest.N * GeneratorsTest.N - K);
+		OctoObjectList objs2 = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
 
-		TestGenerators.link_factory.ChunksToEvery_LastLess(objs1, objs2);
+		GeneratorsTest.link_factory.ChunksToEvery_LastLess(objs1, objs2);
 
-		for(int i = 0; i < 2* TestGenerators.N * TestGenerators.N -K; i++)
+		for(int i = 0; i < 2* GeneratorsTest.N * GeneratorsTest.N -K; i++)
 			Assert.assertEquals("out link does not exist"
 				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 
-		for(int i = 0; i < TestGenerators.N -1; i++)
+		for(int i = 0; i < GeneratorsTest.N -1; i++)
 			Assert.assertEquals("in link does not exist"
-					, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 2* TestGenerators.N);
+					, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 2* GeneratorsTest.N);
 
 		Assert.assertEquals("in link does not exist"
-				, objs2.get(TestGenerators.N -1).GetInLinks().Filter("type", "contain").size(), 2* TestGenerators.N -K);
+				, objs2.get(GeneratorsTest.N -1).GetInLinks().Filter("type", "contain").size(), 2* GeneratorsTest.N -K);
 	}
 	/**
 	 * check that {@link LinkFactory#EveryToChunks_LastLess} creates correct link
@@ -295,19 +290,19 @@ public class TestGenerators extends Assert
 	{
 		int K = 6;
 
-		OctoObjectList objs1 = TestGenerators.obj_factory.Create(TestGenerators.N);
-		OctoObjectList objs2 = TestGenerators.obj_factory.Create(2 * TestGenerators.N * TestGenerators.N - K);
+		OctoObjectList objs1 = GeneratorsTest.obj_factory.Create(GeneratorsTest.N);
+		OctoObjectList objs2 = GeneratorsTest.obj_factory.Create(2 * GeneratorsTest.N * GeneratorsTest.N - K);
 
-		TestGenerators.link_factory.EveryToChunks_LastLess(objs1, objs2);
+		GeneratorsTest.link_factory.EveryToChunks_LastLess(objs1, objs2);
 
-		for(int i = 0; i < TestGenerators.N -1; i++)
+		for(int i = 0; i < GeneratorsTest.N -1; i++)
 			Assert.assertEquals("link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 2* TestGenerators.N);
+				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 2* GeneratorsTest.N);
 
 		Assert.assertEquals("link does not exist"
-			, objs1.get(TestGenerators.N -1).GetOutLinks().Filter("type", "contain").size(), 2* TestGenerators.N - K);
+			, objs1.get(GeneratorsTest.N -1).GetOutLinks().Filter("type", "contain").size(), 2* GeneratorsTest.N - K);
 
-		for(int i = 0; i < 2* TestGenerators.N * TestGenerators.N - K; i++)
+		for(int i = 0; i < 2* GeneratorsTest.N * GeneratorsTest.N - K; i++)
 			Assert.assertEquals("link does not exist"
 				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 	}
@@ -326,22 +321,22 @@ public class TestGenerators extends Assert
 		for(int i : arr)
 			sum += i;
 
-		OctoObjectList objs_from1 = TestGenerators.obj_factory.Create(len);
-		OctoObjectList objs_from2 = TestGenerators.obj_factory.Create(len);
-		OctoObjectList objs_from3 = TestGenerators.obj_factory.Create(len);
+		OctoObjectList objs_from1 = GeneratorsTest.obj_factory.Create(len);
+		OctoObjectList objs_from2 = GeneratorsTest.obj_factory.Create(len);
+		OctoObjectList objs_from3 = GeneratorsTest.obj_factory.Create(len);
 
-		OctoObjectList objs_to1 = TestGenerators.obj_factory.Create(sum);
-		OctoObjectList objs_to2 = TestGenerators.obj_factory.Create(sum + 1);
-		OctoObjectList objs_to3 = TestGenerators.obj_factory.Create(sum - 1);
+		OctoObjectList objs_to1 = GeneratorsTest.obj_factory.Create(sum);
+		OctoObjectList objs_to2 = GeneratorsTest.obj_factory.Create(sum + 1);
+		OctoObjectList objs_to3 = GeneratorsTest.obj_factory.Create(sum - 1);
 
-		TestGenerators.link_factory.EveryToChunks_Guided(objs_from1, objs_to1, arr);
-		TestGenerators.link_factory.EveryToChunks_Guided(objs_from2, objs_to2, arr);
+		GeneratorsTest.link_factory.EveryToChunks_Guided(objs_from1, objs_to1, arr);
+		GeneratorsTest.link_factory.EveryToChunks_Guided(objs_from2, objs_to2, arr);
 		System.err.println("^^ above warning is ok ^^");
 
 		boolean detected = false;
 		try
 		{
-			TestGenerators.link_factory.EveryToChunks_Guided(objs_from3, objs_to3, arr);
+			GeneratorsTest.link_factory.EveryToChunks_Guided(objs_from3, objs_to3, arr);
 		}
 		catch(ExceptionModelFail e) { detected = true; }
 
@@ -366,23 +361,23 @@ public class TestGenerators extends Assert
 		for(int i : arr)
 			sum += i;
 
-		OctoObjectList objs_from1 = TestGenerators.obj_factory.Create(sum);
-		OctoObjectList objs_from2 = TestGenerators.obj_factory.Create(sum + 1);
-		OctoObjectList objs_from3 = TestGenerators.obj_factory.Create(sum - 1);
+		OctoObjectList objs_from1 = GeneratorsTest.obj_factory.Create(sum);
+		OctoObjectList objs_from2 = GeneratorsTest.obj_factory.Create(sum + 1);
+		OctoObjectList objs_from3 = GeneratorsTest.obj_factory.Create(sum - 1);
 
-		OctoObjectList objs_to1 = TestGenerators.obj_factory.Create(len);
-		OctoObjectList objs_to2 = TestGenerators.obj_factory.Create(len);
-		OctoObjectList objs_to3 = TestGenerators.obj_factory.Create(len);
+		OctoObjectList objs_to1 = GeneratorsTest.obj_factory.Create(len);
+		OctoObjectList objs_to2 = GeneratorsTest.obj_factory.Create(len);
+		OctoObjectList objs_to3 = GeneratorsTest.obj_factory.Create(len);
 
-		TestGenerators.link_factory.ChunksToEvery_Guided(objs_from1, objs_to1, arr);
-		TestGenerators.link_factory.ChunksToEvery_Guided(objs_from2, objs_to2, arr);
+		GeneratorsTest.link_factory.ChunksToEvery_Guided(objs_from1, objs_to1, arr);
+		GeneratorsTest.link_factory.ChunksToEvery_Guided(objs_from2, objs_to2, arr);
 
 		System.err.println("^^ above warning is ok ^^");
 
 		boolean detected = false;
 		try
 		{
-			TestGenerators.link_factory.ChunksToEvery_Guided(objs_from3, objs_to3, arr);
+			GeneratorsTest.link_factory.ChunksToEvery_Guided(objs_from3, objs_to3, arr);
 		}
 		catch(ExceptionModelFail e) { detected = true; }
 

@@ -1,27 +1,21 @@
 package ru.parallel.octotron.core;
 
+import org.junit.*;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.utils.OctoLinkList;
 import ru.parallel.octotron.utils.OctoObjectList;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 public class IndexTest extends Assert
 {
-	static ObjectFactory obj_factory;
-	static LinkFactory link_factory;
-
-	private static GraphService graph_service;
 	private static Neo4jGraph graph;
+	private static GraphService graph_service;
+
+	private static ObjectFactory obj_factory;
+	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception

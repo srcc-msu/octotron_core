@@ -1,58 +1,47 @@
-package test.java;
+package ru.parallel.octotron.core;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
-public class TestNode extends Assert
+public class OctoObjectTest extends Assert
 {
-	static Neo4jGraph graph;
-	static ObjectFactory obj_factory;
-	static LinkFactory link_factory;
+	private static Neo4jGraph graph;
 	private static GraphService graph_service;
 
+	private static ObjectFactory obj_factory;
+	private static LinkFactory link_factory;
+
 	@BeforeClass
-	public static void Init()
-		throws ExceptionSystemError
+	public static void Init() throws Exception
 	{
-		TestNode.graph = new Neo4jGraph("dbs/test_node", Neo4jGraph.Op.RECREATE);
-		TestNode.graph_service = new GraphService(TestNode.graph);
+		OctoObjectTest.graph = new Neo4jGraph("dbs/test_node", Neo4jGraph.Op.RECREATE);
+		OctoObjectTest.graph_service = new GraphService(OctoObjectTest.graph);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
 		};
 
-		TestNode.obj_factory = new ObjectFactory(TestNode.graph_service).Attributes(obj_att);
+		OctoObjectTest.obj_factory = new ObjectFactory(OctoObjectTest.graph_service).Attributes(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("link", "ok"),
 			new SimpleAttribute("type", "contain"),
 		};
 
-		TestNode.link_factory = new LinkFactory(TestNode.graph_service).Attributes(link_att);
+		OctoObjectTest.link_factory = new LinkFactory(OctoObjectTest.graph_service).Attributes(link_att);
 	}
 
 	@AfterClass
-	public static void Delete()
+	public static void Delete() throws Exception
 	{
-		TestNode.graph.Shutdown();
-		try
-		{
-			TestNode.graph.Delete();
-		}
-		catch (ExceptionSystemError e)
-		{
-			Assert.fail(e.getMessage());
-		}
+		OctoObjectTest.graph.Shutdown();
+		OctoObjectTest.graph.Delete();
 	}
 
 	/**
@@ -64,9 +53,9 @@ public class TestNode extends Assert
 	{
 		int N = 10;
 
-		OctoObject node = TestNode.obj_factory.Create();
+		OctoObject node = OctoObjectTest.obj_factory.Create();
 
-		TestNode.link_factory.EveryToOne(TestNode.obj_factory.Create(N), node);
+		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
 		Assert.assertEquals("in links not match, any type"
 			, node.GetInLinks().size(), N);
@@ -89,9 +78,9 @@ public class TestNode extends Assert
 	{
 		int N = 10;
 
-		OctoObject node = TestNode.obj_factory.Create();
+		OctoObject node = OctoObjectTest.obj_factory.Create();
 
-		TestNode.link_factory.OneToEvery(node, TestNode.obj_factory.Create(N));
+		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
 		Assert.assertEquals("out links not match, any type"
 			, node.GetOutLinks().size(), N);
@@ -119,9 +108,9 @@ public class TestNode extends Assert
 	{
 		int N = 10;
 
-		OctoObject node = TestNode.obj_factory.Create();
+		OctoObject node = OctoObjectTest.obj_factory.Create();
 
-		TestNode.link_factory.EveryToOne(TestNode.obj_factory.Create(N), node);
+		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
 		Assert.assertEquals("in neighbors not match, any type"
 			, node.GetInNeighbors()
@@ -149,9 +138,9 @@ public class TestNode extends Assert
 	{
 		int N = 10;
 
-		OctoObject node = TestNode.obj_factory.Create();
+		OctoObject node = OctoObjectTest.obj_factory.Create();
 
-		TestNode.link_factory.OneToEvery(node, TestNode.obj_factory.Create(N));
+		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
 		Assert.assertEquals("in neighbors not match, any type"
 			, node.GetOutNeighbors()
@@ -183,7 +172,7 @@ public class TestNode extends Assert
 	@Test
 	public void RemoveAttribute()
 	{
-		OctoObject node = TestNode.obj_factory.Create();
+		OctoObject node = OctoObjectTest.obj_factory.Create();
 
 		node.DeclareAttribute("test_test", 1);
 		node.RemoveAttribute("test_test");

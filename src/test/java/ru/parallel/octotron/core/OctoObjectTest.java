@@ -164,8 +164,6 @@ public class OctoObjectTest extends Assert
 
 	}
 
-
-
 /**
  * set attribute, remove it and ensure it does not exists
  * */
@@ -180,5 +178,4 @@ public class OctoObjectTest extends Assert
 		Assert.assertEquals("attribute presents - wrong"
 			, node.TestAttribute("test_test"), false);
 	}
-
 }

@@ -13,6 +13,7 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
+import ru.parallel.utils.JavaUtils;
 
 /**
  * sometimes tests can fail.. race condition
@@ -85,10 +86,11 @@ public class RequestEmulationTest extends Assert
 		RequestEmulationTest.http.Clear();
 
 		String target = "/view/p";
-		String params = "path(obj==AID)";
 
 		for(int i = 0; i < COUNT; i++)
 		{
+			String params = "path=obj(AID==" + i + ")";
+
 			FileUtils.ExecSilent("curl", "-u:", "-sS", "127.0.0.1:" + RequestEmulationTest.HTTP_PORT + target + "?" + params  + i);
 			Thread.sleep(RequestEmulationTest.SLEEP);
 		}
@@ -99,6 +101,8 @@ public class RequestEmulationTest extends Assert
 		{
 			if((request = RequestEmulationTest.http.GetBlockingRequest()) != null)
 			{
+				String params = "path=obj(AID==" + i + ")";
+
 				Assert.assertEquals("got wrong target", request.GetHttpRequest().GetPath(), target);
 				Assert.assertEquals("got wrong params", request.GetHttpRequest().GetQuery(), params + i);
 				request.GetHttpRequest().FinishString("");
@@ -124,8 +128,8 @@ public class RequestEmulationTest extends Assert
 		RequestEmulationTest.factory.Create(10);
 		String test = GetRequestResult("/view/p?path=(obj==AID)").data;
 
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response");
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response");
 	}
 
 	@Test
@@ -136,8 +140,8 @@ public class RequestEmulationTest extends Assert
 
 		String test = GetRequestResult("/view/p?path=(obj=="+AID+")").data;
 
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response");
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response");
 	}
 
 	@Test
@@ -146,40 +150,43 @@ public class RequestEmulationTest extends Assert
 		OctoObjectList l = RequestEmulationTest.factory.Create(10);
 		long AID = l.get(0).GetAttribute("AID").GetLong();
 
-		String test = GetRequestResult("/view/p?path=obj(type==AID).q(AID=="+AID+")").data;
+		String test = GetRequestResult("/view/p?path=obj(AID).q(AID=="+AID+")").data;
 
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response");
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response");
 	}
 
 	@Test
 	public void HttpUniqRequest() throws Exception
 	{
 		RequestEmulationTest.factory.Create(10);
-		String test = GetRequestResult("/view/p?path=obj(type==AID).uniq()").data;
+		String test = GetRequestResult("/view/p?path=obj(AID).uniq()").data;
 
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response");
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response");
 	}
 
 	@Test
 	public void HttpNeighbourRequest() throws Exception
 	{
 		OctoObjectList objs = RequestEmulationTest.factory.Create(10);
-
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+	while(JavaUtils.GetTimestamp() > 0)
+	{
+		http.GetBlockingRequest().GetParsedRequest().Execute(graph_service, null);
 
-		String test = GetRequestResult("/view/p?path=obj(type==AID).in_n()").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response in_n");
+	}
+		String test = GetRequestResult("/view/p?path=obj(AID).in_n()").data;
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response in_n");
 
-		test = GetRequestResult("/view/p?path=obj(type==AID).out_n()").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response out_n");
+		test = GetRequestResult("/view/p?path=obj(AID).out_n()").data;
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response out_n");
 
-		test = GetRequestResult("/view/p?path=obj(type==AID).all_n()").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response all_n");
+		test = GetRequestResult("/view/p?path=obj(AID).all_n()").data;
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response all_n");
 	}
 
 	@Test
@@ -189,17 +196,17 @@ public class RequestEmulationTest extends Assert
 
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
-		String test = GetRequestResult("/view/p?path=obj(type==AID).in_l()").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response in_l");
+		String test = GetRequestResult("/view/p?path=obj(AID).in_l()").data;
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response in_l");
 
-		test = GetRequestResult("/view/p?path=obj(type==AID).out_l()").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response out_l");
+		test = GetRequestResult("/view/p?path=obj(AID).out_l()").data;
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response out_l");
 
-		test = GetRequestResult("/view/p?path=obj(type==AID).all_l()").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response all_l");
+		test = GetRequestResult("/view/p?path=obj(AID).all_l()").data;
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response all_l");
 	}
 
 	@Test
@@ -210,8 +217,8 @@ public class RequestEmulationTest extends Assert
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
 		String test = GetRequestResult("/view/p?path=link(AID)").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response");
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response");
 	}
 
 	@Test
@@ -222,11 +229,11 @@ public class RequestEmulationTest extends Assert
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
 		String test = GetRequestResult("/view/p?path=link(AID).source()").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response source");
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response source");
 
 		test = GetRequestResult("/view/p?path=link(AID).target()").data;
-		if(test == null || test.length() == 0)
-			Assert.fail("empty response taregt");
+		if(test == null || !test.contains("AID"))
+			Assert.fail("bad response taregt");
 	}
 }

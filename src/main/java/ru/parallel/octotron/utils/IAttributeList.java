@@ -82,11 +82,4 @@ public abstract class IAttributeList<T extends SimpleAttribute> implements Itera
 
 		return new_list;
 	}
-
-	protected List<T> InnerRange(int from, int to)
-	{
-		List<T> new_list = new LinkedList<T>(list);
-
-		return new_list.subList(from, to);
-	}
 }

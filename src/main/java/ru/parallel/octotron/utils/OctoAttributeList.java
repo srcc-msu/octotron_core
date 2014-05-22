@@ -106,12 +106,6 @@ public class OctoAttributeList extends IAttributeList<OctoAttribute>
 	}
 
 @Override
-	public OctoAttributeList range(int from, int to)
-	{
-		return new OctoAttributeList(InnerRange(from, to));
-	}
-
-@Override
 	public OctoAttributeList AlphabeticSort()
 	{
 		return new OctoAttributeList(InnerAlphabeticSort());

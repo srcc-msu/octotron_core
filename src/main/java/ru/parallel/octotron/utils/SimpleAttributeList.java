@@ -34,12 +34,6 @@ public class SimpleAttributeList extends IAttributeList<SimpleAttribute>
 	}
 
 @Override
-	public SimpleAttributeList range(int from, int to)
-	{
-		return new SimpleAttributeList(InnerRange(from, to));
-	}
-
-@Override
 	public SimpleAttributeList AlphabeticSort()
 	{
 		return new SimpleAttributeList(InnerAlphabeticSort());

@@ -200,6 +200,20 @@ public class GraphServiceTest
 	}
 
 	@Test
+	public void TestAddSelfLink() throws Exception
+	{
+		OctoObject object = graph_service.AddObject();
+
+		Assert.assertEquals(0, object.GetOutLinks().size());
+		Assert.assertEquals(0, object.GetInLinks().size());
+
+		graph_service.AddLink(object, object, "test");
+
+		Assert.assertEquals(1, object.GetOutLinks().size());
+		Assert.assertEquals(1, object.GetInLinks().size());
+	}
+
+	@Test
 	public void TestAddLink() throws Exception
 	{
 		OctoObject object1 = graph_service.AddObject();

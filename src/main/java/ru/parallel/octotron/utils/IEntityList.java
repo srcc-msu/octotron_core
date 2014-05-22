@@ -147,9 +147,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected List<T> InnerRange(int from, int to)
 	{
-		List<T> new_list = new LinkedList<T>(list);
-
-		return new_list.subList(from, to);
+		return new LinkedList<T>(list.subList(from, to));
 	}
 
 	protected List<T> InnerRanges(int... ranges)

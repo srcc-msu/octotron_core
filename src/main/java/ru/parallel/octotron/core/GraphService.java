@@ -369,22 +369,22 @@ public final class GraphService
 
 	private OctoLinkList LinksFromUid(List<Uid> uids)
 	{
-		List<OctoLink> list = new LinkedList<OctoLink>();
+		OctoLinkList list = new OctoLinkList();
 
 		for(Uid uid : uids)
 			list.add(new OctoLink(this, uid));
 
-		return new OctoLinkList(list);
+		return list;
 	}
 
 	private OctoObjectList ObjectsFromUid(List<Uid> uids)
 	{
-		List<OctoObject> list = new LinkedList<OctoObject>();
+		OctoObjectList list = new OctoObjectList();
 
 		for(Uid uid : uids)
 			list.add(new OctoObject(this, uid));
 
-		return new OctoObjectList(list);
+		return list;
 	}
 
 	public void EnableLinkIndex(String name)

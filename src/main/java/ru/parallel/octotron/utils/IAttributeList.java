@@ -30,37 +30,29 @@ public abstract class IAttributeList<T extends SimpleAttribute> implements Itera
 		this.list.addAll(list.list);
 	}
 
-	public void add(T t)
+	public final void add(T t)
 	{
 		list.add(t);
 	}
 
-	public T get(int n)
+	public final T get(int n)
 	{
 		return list.get(n);
 	}
 
-	public int size()
+	public final int size()
 	{
 		return list.size();
 	}
 
-	public Iterator<T> iterator()
+	public final Iterator<T> iterator()
 	{
 		return list.iterator();
 	}
 
-	public IAttributeList<T> range(int i, int size)
-	{
-		throw new RuntimeException("??");
-	}
+	public abstract IAttributeList<T> AlphabeticSort();
 
-	public IAttributeList<T> AlphabeticSort()
-	{
-		throw new RuntimeException("??");
-	}
-
-	protected List<T> InnerAppend(List<T> list2)
+	protected final List<T> InnerAppend(List<T> list2)
 	{
 		List<T> new_list = new LinkedList<T>(list);
 
@@ -68,7 +60,7 @@ public abstract class IAttributeList<T extends SimpleAttribute> implements Itera
 		return new_list;
 	}
 
-	protected List<T> InnerAlphabeticSort()
+	protected final List<T> InnerAlphabeticSort()
 	{
 		List<T> new_list = new LinkedList<T>(list);
 

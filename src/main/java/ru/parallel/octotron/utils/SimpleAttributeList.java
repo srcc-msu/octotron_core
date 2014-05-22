@@ -28,11 +28,6 @@ public class SimpleAttributeList extends IAttributeList<SimpleAttribute>
 		super(list);
 	}
 
-	public SimpleAttributeList append(SimpleAttributeList list2)
-	{
-		return new SimpleAttributeList(InnerAppend(list2.list));
-	}
-
 @Override
 	public SimpleAttributeList AlphabeticSort()
 	{

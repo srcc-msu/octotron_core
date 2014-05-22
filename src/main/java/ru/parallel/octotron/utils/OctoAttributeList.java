@@ -100,16 +100,10 @@ public class OctoAttributeList extends IAttributeList<OctoAttribute>
 		return new OctoAttributeList(new_list);
 	}
 
-	public OctoAttributeList append(OctoAttributeList list2)
-	{
-		return new OctoAttributeList(InnerAppend(list2.list));
-	}
-
 @Override
 	public OctoAttributeList AlphabeticSort()
 	{
 		return new OctoAttributeList(InnerAlphabeticSort());
-
 	}
 }
 

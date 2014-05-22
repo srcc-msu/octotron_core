@@ -24,7 +24,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		super();
 	}
 
-	public OctoObjectList(List<OctoObject> list)
+	private OctoObjectList(List<OctoObject> list)
 	{
 		super(list);
 	}
@@ -84,7 +84,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		OctoObjectList new_list = new OctoObjectList();
 
 		for(OctoObject obj : list)
-			new_list.append(obj.GetInNeighbors(link_name, link_value));
+			new_list = new_list.append(obj.GetInNeighbors(link_name, link_value));
 
 		return new_list;
 	}
@@ -94,7 +94,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		OctoObjectList new_list = new OctoObjectList();
 
 		for(OctoObject obj : list)
-			new_list.append(obj.GetOutNeighbors(link_name, link_value));
+			new_list = new_list.append(obj.GetOutNeighbors(link_name, link_value));
 
 		return new_list;
 	}
@@ -114,7 +114,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		OctoObjectList new_list = new OctoObjectList();
 
 		for(OctoObject obj : list)
-			new_list.append(obj.GetInNeighbors(link_name));
+			new_list = new_list.append(obj.GetInNeighbors(link_name));
 
 		return new_list;
 	}
@@ -124,7 +124,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		OctoObjectList new_list = new OctoObjectList();
 
 		for(OctoObject obj : list)
-			new_list.append(obj.GetOutNeighbors(link_name));
+			new_list = new_list.append(obj.GetOutNeighbors(link_name));
 
 		return new_list;
 	}
@@ -134,7 +134,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		OctoObjectList new_list = new OctoObjectList();
 
 		for(OctoObject obj : list)
-			new_list.append(obj.GetInNeighbors());
+			new_list = new_list.append(obj.GetInNeighbors());
 
 		return new_list;
 	}
@@ -144,7 +144,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		OctoObjectList new_list = new OctoObjectList();
 
 		for(OctoObject obj : list)
-			new_list.append(obj.GetOutNeighbors());
+			new_list = new_list.append(obj.GetOutNeighbors());
 
 		return new_list;
 	}
@@ -159,7 +159,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		OctoLinkList new_list = new OctoLinkList();
 
 		for(OctoObject obj : list)
-			new_list.append(obj.GetInLinks());
+			new_list = new_list.append(obj.GetInLinks());
 
 		return new_list;
 	}
@@ -169,7 +169,7 @@ public class OctoObjectList extends IEntityList<OctoObject>
 		OctoLinkList new_list = new OctoLinkList();
 
 		for(OctoObject obj : list)
-			new_list.append(obj.GetOutLinks());
+			new_list = new_list.append(obj.GetOutLinks());
 
 		return new_list;
 	}

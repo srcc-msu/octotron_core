@@ -43,62 +43,55 @@ public final class PathParser
 		, PathOperations.source, PathOperations.target
 	};
 
-	private static final Map<IEntityList.EQueryType, String> DELIMS
-		= new HashMap<IEntityList.EQueryType, String>();
+	private static final Map<String, IEntityList.EQueryType> DELIMS
+		= new HashMap<String, IEntityList.EQueryType>();
 
 	static
 	{
-		PathParser.DELIMS.put(IEntityList.EQueryType.SET, "=");
-		PathParser.DELIMS.put(IEntityList.EQueryType.EQ, "==");
-		PathParser.DELIMS.put(IEntityList.EQueryType.NE, "!=");
-		PathParser.DELIMS.put(IEntityList.EQueryType.LE, "<=");
-		PathParser.DELIMS.put(IEntityList.EQueryType.GE, ">=");
-		PathParser.DELIMS.put(IEntityList.EQueryType.LT, "<");
-		PathParser.DELIMS.put(IEntityList.EQueryType.GT, ">");
+		PathParser.DELIMS.put("==", IEntityList.EQueryType.EQ);
+		PathParser.DELIMS.put("!=", IEntityList.EQueryType.NE);
+		PathParser.DELIMS.put("<=", IEntityList.EQueryType.LE);
+		PathParser.DELIMS.put(">=", IEntityList.EQueryType.GE);
+		PathParser.DELIMS.put("<", IEntityList.EQueryType.LT);
+		PathParser.DELIMS.put(">", IEntityList.EQueryType.GT);
 	}
 
+
+// matched <id><any chars !=<>.><value>
+	private static final Pattern op_pattern_op = Pattern.compile("^([a-zA-Z_\\-0-9\\.]+)([!=<>]+)([a-zA-Z_\\-0-9\\.\"']+)$");
+	private static final Pattern op_pattern_word = Pattern.compile("^([a-zA-Z_\\-0-9\\.]+)$");
+
 /**
- * parse BaseAttribute from string "name=value"<br>
+ * parse SimpleAttribute from string "<name><op><value>"<br>
  * */
-	private static Pair<SimpleAttribute, IEntityList.EQueryType> AttrFromString(String str, IEntityList.EQueryType type)
+	public static Pair<SimpleAttribute, IEntityList.EQueryType> AttrFromString(String str)
 		throws ExceptionParseError
 	{
-		String delim = PathParser.DELIMS.get(type);
+		if(str.length() == 0)
+			return null;
 
-		int idx = str.indexOf(delim);
+		Matcher matcher = op_pattern_op.matcher(str);
 
-		if(idx != -1)
+		if(matcher.find())
 		{
-			String name = str.substring(0, idx);
+			String name = matcher.group(1);
+			String op = matcher.group(2);
+			Object value = SimpleAttribute.ValueFromStr(matcher.group(3));
 
-			String val_str = str.substring(idx + delim.length(), str.length());
+			IEntityList.EQueryType type = DELIMS.get(op);
 
-			Object value = SimpleAttribute.ValueFromStr(val_str);
+			if(type == null)
+				throw new ExceptionParseError("unsupported operation: " + op);
 
 			return Pair.of(new SimpleAttribute(name, value), type);
 		}
-		else
-			return null;
-	}
 
-	private static Pair<SimpleAttribute, IEntityList.EQueryType> OpFromStr(String str)
-		throws ExceptionParseError
-	{
-		Pair<SimpleAttribute, IEntityList.EQueryType> val;
+		matcher = op_pattern_word.matcher(str);
 
-// enum.values() preserve order - it is important for parsing = and ==
-		for(IEntityList.EQueryType type : IEntityList.EQueryType.values())
-		{
-			if(type == IEntityList.EQueryType.NONE)
-				continue;
+		if(matcher.find())
+			return Pair.of(new SimpleAttribute(str, null), IEntityList.EQueryType.NONE);
 
-			val = PathParser.AttrFromString(str, type);
-
-			if(val != null)
-				return val;
-		}
-
-		return Pair.of(new SimpleAttribute(str, null), IEntityList.EQueryType.NONE);
+		throw new ExceptionParseError("can not parse: " + str);
 	}
 
 /**
@@ -119,13 +112,13 @@ public final class PathParser
 
 		for(String attr : attrs)
 		{
-			result.add(OpFromStr(attr.replaceAll("\\s","")));
+			result.add(AttrFromString(attr.replaceAll("\\s", ""))); // whitespace characters
 		}
 
 		return result;
 	}
 
-	private static final Pattern pattern = Pattern.compile("([a-zA-Z_-]+)\\(([^)]*)\\)\\.?");
+	private static final Pattern token_pattern = Pattern.compile("([a-zA-Z_\\-]+)\\(([^)]*)\\)\\.?");
 
 	private static List<PathToken> ParseTokens(String path)
 		throws ExceptionParseError
@@ -133,7 +126,7 @@ public final class PathParser
 		List<PathToken> result = new LinkedList<PathToken>();
 
 // matches <id>(<anything but closing bracket>)<optional dot>
-		Matcher matcher = pattern.matcher(path);
+		Matcher matcher = token_pattern.matcher(path);
 
 		while(matcher.find())
 		{

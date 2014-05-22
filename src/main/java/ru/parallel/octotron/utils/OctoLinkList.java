@@ -19,7 +19,7 @@ import ru.parallel.octotron.primitive.SimpleAttribute;
  * */
 public class OctoLinkList extends IEntityList<OctoLink>
 {
-	public OctoLinkList(List<OctoLink> list)
+	private OctoLinkList(List<OctoLink> list)
 	{
 		super(list);
 	}

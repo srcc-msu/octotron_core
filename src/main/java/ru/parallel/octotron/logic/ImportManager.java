@@ -46,7 +46,7 @@ public class ImportManager
 	{
 		OctoObjectList changed = static_proc.Process(packet);
 
-		changed.append(ProcessTimers());
+		changed = changed.append(ProcessTimers());
 
 		if(changed.size() <= 0)
 			return new OctoObjectList();
@@ -63,13 +63,12 @@ public class ImportManager
 		while(changed_last.size() > 0)
 		{
 			changed_now = ruled_proc.Process(changed_last).Uniq();
-			rule_changed.append(changed_now);
+			rule_changed = rule_changed.append(changed_now);
 
 			changed_last = changed_now;
 		}
 
-		OctoObjectList all_changed = new OctoObjectList(changed);
-		all_changed.append(rule_changed).Uniq();
+		OctoObjectList all_changed = changed.append(rule_changed).Uniq();
 
 		return all_changed;
 	}

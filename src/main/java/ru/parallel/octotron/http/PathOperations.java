@@ -140,9 +140,6 @@ public abstract class PathOperations
 				throw new ExceptionParseError
 					("index operation must be quering a single indexed value");
 
-			if(params.get(0).getRight() == IEntityList.EQueryType.SET)
-				throw new ExceptionParseError("use == operator instead of =");
-
 			SimpleAttribute attr = params.get(0).getLeft();
 
 			if(attr.GetValue() != null)
@@ -166,9 +163,6 @@ public abstract class PathOperations
 			if(params.size() != 1)
 				throw new ExceptionParseError
 					("index operation must be quering a single indexed value");
-
-			if(params.get(0).getRight() == IEntityList.EQueryType.SET)
-				throw new ExceptionParseError("use == operator instead of =");
 
 			SimpleAttribute attr = params.get(0).getLeft();
 
@@ -213,12 +207,7 @@ public abstract class PathOperations
 				throw new ExceptionParseError("in_n accepts only one or zero params");
 
 			if(params.size() == 1)
-			{
-				if(params.get(0).getRight() == IEntityList.EQueryType.SET)
-					throw new ExceptionParseError("use == operator instead of =");
-
 				return ((OctoObjectList)obj).GetInNeighbors(params.get(0).getLeft());
-			}
 
 			return ((OctoObjectList)obj).GetInNeighbors();
 		}
@@ -238,12 +227,7 @@ public abstract class PathOperations
 				throw new ExceptionParseError("out_n accepts only one or zero params");
 
 			if(params.size() == 1)
-			{
-				if(params.get(0).getRight() == IEntityList.EQueryType.SET)
-					throw new ExceptionParseError("use == operator instead of =");
-
 				return ((OctoObjectList)obj).GetOutNeighbors(params.get(0).getLeft());
-			}
 
 			return ((OctoObjectList)obj).GetOutNeighbors();
 		}
@@ -263,13 +247,8 @@ public abstract class PathOperations
 				throw new ExceptionParseError("all_n accepts only one or zero params");
 
 			if(params.size() == 1)
-			{
-				if(params.get(0).getRight() == IEntityList.EQueryType.SET)
-					throw new ExceptionParseError("use == operator instead of =");
-
 				return ((OctoObjectList)obj).GetOutNeighbors(params.get(0).getLeft())
 					.append(((OctoObjectList)obj).GetOutNeighbors(params.get(0).getLeft()));
-			}
 
 			return ((OctoObjectList)obj).GetOutNeighbors()
 				.append(((OctoObjectList)obj).GetOutNeighbors());

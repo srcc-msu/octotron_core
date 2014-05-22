@@ -11,6 +11,7 @@ import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
@@ -115,21 +116,28 @@ public class RequestEmulationTest extends Assert
 			Assert.fail("unexpected message");
 	}
 
-	private RequestResult GetRequestResult(String str_request) throws Exception
+	private String GetRequestResult(String str_request) throws Exception
 	{
 		HTTPRequest request = GetHttpRequest(str_request);
 
-		return RequestParser.ParseFromHttp(request).GetParsedRequest().Execute(RequestEmulationTest.graph_service, null);
+		RequestResult result = RequestParser.ParseFromHttp(request)
+			.GetParsedRequest()
+			.Execute(RequestEmulationTest.graph_service, null);
+
+		if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
+			throw new ExceptionParseError(result.data);
+
+		return result.data;
 	}
 
 	@Test
 	public void HttpRequest() throws Exception
 	{
 		RequestEmulationTest.factory.Create(10);
-		String test = GetRequestResult("/view/p?path=(obj==AID)").data;
+		String test = GetRequestResult("/view/p?path=obj(AID)");
 
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response");
+			Assert.fail("bad response: " + test);
 	}
 
 	@Test
@@ -138,10 +146,10 @@ public class RequestEmulationTest extends Assert
 		OctoObjectList l = RequestEmulationTest.factory.Create(10);
 		long AID = l.get(0).GetAttribute("AID").GetLong();
 
-		String test = GetRequestResult("/view/p?path=(obj=="+AID+")").data;
+		String test = GetRequestResult("/view/p?path=obj(AID)");
 
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response");
+			Assert.fail("bad response: " + test);
 	}
 
 	@Test
@@ -150,20 +158,20 @@ public class RequestEmulationTest extends Assert
 		OctoObjectList l = RequestEmulationTest.factory.Create(10);
 		long AID = l.get(0).GetAttribute("AID").GetLong();
 
-		String test = GetRequestResult("/view/p?path=obj(AID).q(AID=="+AID+")").data;
+		String test = GetRequestResult("/view/p?path=obj(AID).q(AID=="+AID+")");
 
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response");
+			Assert.fail("bad response: " + test);
 	}
 
 	@Test
 	public void HttpUniqRequest() throws Exception
 	{
 		RequestEmulationTest.factory.Create(10);
-		String test = GetRequestResult("/view/p?path=obj(AID).uniq()").data;
+		String test = GetRequestResult("/view/p?path=obj(AID).uniq()");
 
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response");
+			Assert.fail("bad response: " + test);
 	}
 
 	@Test
@@ -171,22 +179,18 @@ public class RequestEmulationTest extends Assert
 	{
 		OctoObjectList objs = RequestEmulationTest.factory.Create(10);
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
-	while(JavaUtils.GetTimestamp() > 0)
-	{
-		http.GetBlockingRequest().GetParsedRequest().Execute(graph_service, null);
 
-	}
-		String test = GetRequestResult("/view/p?path=obj(AID).in_n()").data;
+		String test = GetRequestResult("/view/p?path=obj(AID).in_n()");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response in_n");
+			Assert.fail("bad response in_n: " + test);
 
-		test = GetRequestResult("/view/p?path=obj(AID).out_n()").data;
+		test = GetRequestResult("/view/p?path=obj(AID).out_n()");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response out_n");
+			Assert.fail("bad response out_n: " + test);
 
-		test = GetRequestResult("/view/p?path=obj(AID).all_n()").data;
+		test = GetRequestResult("/view/p?path=obj(AID).all_n()");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response all_n");
+			Assert.fail("bad response all_n: " + test);
 	}
 
 	@Test
@@ -196,17 +200,17 @@ public class RequestEmulationTest extends Assert
 
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
-		String test = GetRequestResult("/view/p?path=obj(AID).in_l()").data;
+		String test = GetRequestResult("/view/p?path=obj(AID).in_l()");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response in_l");
+			Assert.fail("bad response in_l: " + test);
 
-		test = GetRequestResult("/view/p?path=obj(AID).out_l()").data;
+		test = GetRequestResult("/view/p?path=obj(AID).out_l()");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response out_l");
+			Assert.fail("bad response out_l: " + test);
 
-		test = GetRequestResult("/view/p?path=obj(AID).all_l()").data;
+		test = GetRequestResult("/view/p?path=obj(AID).all_l()");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response all_l");
+			Assert.fail("bad response all_l: " + test);
 	}
 
 	@Test
@@ -216,9 +220,9 @@ public class RequestEmulationTest extends Assert
 
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
-		String test = GetRequestResult("/view/p?path=link(AID)").data;
+		String test = GetRequestResult("/view/p?path=link(AID)");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response");
+			Assert.fail("bad response: " + test);
 	}
 
 	@Test
@@ -228,12 +232,12 @@ public class RequestEmulationTest extends Assert
 
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
-		String test = GetRequestResult("/view/p?path=link(AID).source()").data;
+		String test = GetRequestResult("/view/p?path=link(AID).source()");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response source");
+			Assert.fail("bad response source: " + test);
 
-		test = GetRequestResult("/view/p?path=link(AID).target()").data;
+		test = GetRequestResult("/view/p?path=link(AID).target()");
 		if(test == null || !test.contains("AID"))
-			Assert.fail("bad response taregt");
+			Assert.fail("bad response target: " + test);
 	}
 }

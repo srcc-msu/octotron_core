@@ -145,46 +145,18 @@ public class OctoAttributeListTest
 	}
 
 	@Test
-	public void TestAppend()
-	{
-		OctoAttributeList list1 = new OctoAttributeList();
-		OctoAttributeList list2 = new OctoAttributeList();
-		OctoAttributeList list3;
-
-		int N = 10;
-
-		for(int i = 0; i < N; i++)
-		{
-			list1.add(OctoAttributeListTest.static_obj.DeclareAttribute("test" + i, i));
-			list2.add(OctoAttributeListTest.static_obj.DeclareAttribute("test" + N + i, N + i));
-		}
-
-		list3 = list1.append(list2);
-
-		Assert.assertEquals("got something wrong", list1.size(), N);
-		Assert.assertEquals("got something wrong", list2.size(), N);
-		Assert.assertEquals("got something wrong", list3.size(), N * 2);
-
-		int i = 0;
-
-		for(OctoAttribute att : list3)
-		{
-			Assert.assertEquals("got something wrong", att.eq(i), true);
-			i++;
-		}
-	}
-
-	@Test
 	public void TestSort()
 	{
 		OctoAttributeList list = new OctoAttributeList();
 
 		list.add(OctoAttributeListTest.static_obj.DeclareAttribute("b", ""));
+		list.add(OctoAttributeListTest.static_obj.DeclareAttribute("c", ""));
 		list.add(OctoAttributeListTest.static_obj.DeclareAttribute("a", ""));
 
 		list = list.AlphabeticSort();
 
 		Assert.assertEquals("a", list.get(0).GetName());
 		Assert.assertEquals("b", list.get(1).GetName());
+		Assert.assertEquals("c", list.get(2).GetName());
 	}
 }

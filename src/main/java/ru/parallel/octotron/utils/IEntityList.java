@@ -45,19 +45,11 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		list.add(t);
 	}
 
-/**
- * get \n element from the list<br>
- * probably slow, should not be used much<br>
- * ... but other operations are even slower<br>
- * */
 	public final T get(int n)
 	{
 		return list.get(n);
 	}
 
-/**
- * get list size<br>
- * */
 	public final int size()
 	{
 		return list.size();
@@ -69,21 +61,21 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 	}
 
 /**
- * get \CAttributeList, containing all attributes with name \name<br>
+ * get \OctoAttributeList, containing all attributes with name \name<br>
  * in any list object<br>
  * order of attributes is the same as order of objects<br>
  * */
 	public final OctoAttributeList GetAttributes(String name)
 	{
-		OctoAttributeList atts = new OctoAttributeList();
+		OctoAttributeList attributes = new OctoAttributeList();
 
 		for(T att : list)
 		{
 			if(att.TestAttribute(name))
-				atts.add(att.GetAttribute(name));
+				attributes.add(att.GetAttribute(name));
 		}
 
-		return atts;
+		return attributes;
 	}
 
 /**
@@ -195,13 +187,12 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 			case LT:
 				return attr.lt(value);
 			case NONE:
-			case SET:
 			default:
 				throw new ExceptionModelFail("unsupported operation for list filter: " + type);
 		}
 	}
 
-	List<T> InnerFilter(String name, Object value, EQueryType type)
+	protected List<T> InnerFilter(String name, Object value, EQueryType type)
 	{
 		if(name == null)
 			return list;
@@ -220,7 +211,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		return new_list;
 	}
 
-	public List<T> InnerFilter(String name)
+	protected List<T> InnerFilter(String name)
 	{
 		if(name == null)
 			return list;
@@ -236,7 +227,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		return new_list;
 	}
 
-	public List<T> InnerUniq()
+	protected List<T> InnerUniq()
 	{
 		Map<Long, T> map = new LinkedHashMap<Long, T>();
 
@@ -249,6 +240,5 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		return new_list;
 	}
 
-	// order is important for parsing.. TODO - fix
-	public static enum EQueryType { EQ, NE, LE, GE, LT, GT, SET, NONE }
+	public static enum EQueryType { EQ, NE, LE, GE, LT, GT, NONE }
 }

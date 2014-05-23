@@ -34,7 +34,7 @@ public class RequestEmulationTest
 	{
 		RequestEmulationTest.http = HTTPServer.GetDummyServer(RequestEmulationTest.HTTP_PORT);
 
-		RequestEmulationTest.graph = new Neo4jGraph("dbs/test_network", Neo4jGraph.Op.RECREATE);
+		RequestEmulationTest.graph = new Neo4jGraph( "dbs/" + RequestEmulationTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		RequestEmulationTest.graph_service = new GraphService(RequestEmulationTest.graph);
 		RequestEmulationTest.graph_service.EnableObjectIndex("AID");
 		RequestEmulationTest.graph_service.EnableLinkIndex("AID");

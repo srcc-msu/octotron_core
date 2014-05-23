@@ -22,25 +22,25 @@ public class IndexTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		IndexTest.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
-		IndexTest.graph_service = new GraphService(IndexTest.graph);
+		IndexTest.graph = new Neo4jGraph( "dbs/" + IndexTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
+		graph_service = new GraphService(IndexTest.graph);
 
-		IndexTest.graph.GetIndex().EnableObjectIndex("att_obj");
-		IndexTest.graph.GetIndex().EnableLinkIndex("att_link");
+		IndexTest.graph_service.EnableObjectIndex("att_obj");
+		IndexTest.graph_service.EnableLinkIndex("att_link");
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok"),
 			new SimpleAttribute("att_obj", "value12345")
 		};
 
-		IndexTest.obj_factory = new ObjectFactory(IndexTest.graph_service).Attributes(obj_att);
+		IndexTest.obj_factory = new ObjectFactory(graph_service).Attributes(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("type", "contain"),
 			new SimpleAttribute("att_link", "value23456")
 		};
 
-		IndexTest.link_factory = new LinkFactory(IndexTest.graph_service).Attributes(link_att);
+		IndexTest.link_factory = new LinkFactory(graph_service).Attributes(link_att);
 	}
 
 	@AfterClass
@@ -53,7 +53,7 @@ public class IndexTest
 	@After
 	public void Clean() throws Exception
 	{
-		graph_service.Clean();
+		IndexTest.graph_service.Clean();
 	}
 
 	@Test
@@ -150,13 +150,13 @@ public class IndexTest
 		OctoObjectList objs = IndexTest.obj_factory.Create(2);
 		IndexTest.link_factory.OneToOne(objs.get(0), objs.get(1));
 
-		IndexTest.graph.GetIndex().GetLink("att_link", "value23456");
+		IndexTest.graph_service.GetLink("att_link", "value23456");
 
 		boolean catched = false;
 // this must throw
 		try
 		{
-			IndexTest.graph.GetIndex().GetLink("att_link", "gfgf");
+			IndexTest.graph_service.GetLink("att_link", "gfgf");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -170,7 +170,7 @@ public class IndexTest
 // this must throw - two possible links
 		try
 		{
-			IndexTest.graph.GetIndex().GetLink("att_link", "value23456");
+			IndexTest.graph_service.GetLink("att_link", "value23456");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -184,14 +184,14 @@ public class IndexTest
 	{
 		IndexTest.obj_factory.Create(1);
 
-		IndexTest.graph.GetIndex().GetObject("att_obj", "value12345");
+		IndexTest.graph_service.GetObject("att_obj", "value12345");
 
 		boolean catched = false;
 
 // this must throw
 		try
 		{
-			IndexTest.graph.GetIndex().GetObject("att_obj", "gfgf");
+			IndexTest.graph_service.GetObject("att_obj", "gfgf");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -205,7 +205,7 @@ public class IndexTest
 // this must throw - two possible objects
 		try
 		{
-			IndexTest.graph.GetIndex().GetObject("att_obj", "value12345");
+			IndexTest.graph_service.GetObject("att_obj", "value12345");
 		}
 		catch(ExceptionModelFail ignore)
 		{

@@ -206,10 +206,10 @@ public final class Neo4jGraph implements IGraph
 		Map<String, String> config = new HashMap<String, String>();
 		config.put("keep_logical_logs", "false");//MAX_LOG_SIZE + "G size");
 
-		this.db_name = name;
+		db_name = name;
 
 		graph_db = new GraphDatabaseFactory()
-			.newEmbeddedDatabaseBuilder(this.db_name)
+			.newEmbeddedDatabaseBuilder(db_name)
 			.setConfig(config)
 			.newGraphDatabase();
 
@@ -219,6 +219,8 @@ public final class Neo4jGraph implements IGraph
 		index = new Neo4jIndex(this);
 
 		transaction = new NinjaTransaction(graph_db, Neo4jGraph.COUNT_THRESHOLD);
+
+		System.out.println("db created: " + db_name);
 	}
 
 	/**
@@ -244,7 +246,7 @@ public final class Neo4jGraph implements IGraph
 	public void Load(String name)
 		throws ExceptionDBError
 	{
-		String err = "Database "+name+" does not exist!";
+		String err = "Database " + name + " does not exist!";
 
 		File file = new File(name);
 		if (file.exists())
@@ -260,15 +262,15 @@ public final class Neo4jGraph implements IGraph
 		}
 		else throw new ExceptionDBError(err);
 
-		this.db_name = name;
+		db_name = name;
 
 		graph_db = new GraphDatabaseFactory()
-			.newEmbeddedDatabase(this.db_name);
+			.newEmbeddedDatabase(db_name);
 
 		if(bootstrap)
 			DoBootstrap();
 
-		System.out.println("graph loaded");
+		System.out.println("db loaded: " + db_name);
 
 		index = new Neo4jIndex(this);
 
@@ -294,7 +296,7 @@ public final class Neo4jGraph implements IGraph
 		throws ExceptionDBError
 	{
 		Shutdown();
-		Load(this.db_name);
+		Load(db_name);
 	}
 
 	/**
@@ -306,17 +308,17 @@ public final class Neo4jGraph implements IGraph
 
 		graph_db.shutdown();
 
-		System.out.println("db shutdown");
+		System.out.println("db shutdown: " + db_name);
 	}
 
 	/**
 	 * delete current database<br>
-	 * this means delete all files from \this.db_name directory<br>
+	 * this means delete all files from \db_name directory<br>
 	 * */
 	public void Delete()
 		throws ExceptionSystemError
 	{
-		Delete(this.db_name);
+		Delete(db_name);
 	}
 
 	public static void Delete(String name)
@@ -344,7 +346,7 @@ public final class Neo4jGraph implements IGraph
 	{
 		transaction.Write();
 
-		Node node = this.graph_db.createNode();
+		Node node = graph_db.createNode();
 
 		return new Uid(node.getId(), EEntityType.OBJECT);
 	}

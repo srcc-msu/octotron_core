@@ -18,7 +18,7 @@ public class GraphServiceTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		GraphServiceTest.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+		GraphServiceTest.graph = new Neo4jGraph( "dbs/" + GraphServiceTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		GraphServiceTest.graph_service = new GraphService(GraphServiceTest.graph);
 	}
 

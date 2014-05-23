@@ -14,7 +14,7 @@ public class OctoAttributeTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		OctoAttributeTest.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+		OctoAttributeTest.graph = new Neo4jGraph( "dbs/" + OctoAttributeTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		OctoAttributeTest.graph_service = new GraphService(OctoAttributeTest.graph);
 	}
 

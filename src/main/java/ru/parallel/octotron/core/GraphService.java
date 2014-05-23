@@ -413,7 +413,7 @@ public final class GraphService
 		return result;
 	}
 
-	public OctoLink GetLink(OctoAttribute att)
+	public OctoLink GetLink(SimpleAttribute att)
 	{
 		return GetLink(att.GetName(), att.GetValue());
 	}

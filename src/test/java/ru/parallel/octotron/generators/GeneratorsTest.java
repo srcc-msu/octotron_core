@@ -27,7 +27,7 @@ public class GeneratorsTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		GeneratorsTest.graph = new Neo4jGraph("dbs/test_primitives", Neo4jGraph.Op.RECREATE);
+		GeneratorsTest.graph = new Neo4jGraph( "dbs/" + GeneratorsTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		GeneratorsTest.graph_service = new GraphService(GeneratorsTest.graph);
 
 		SimpleAttribute[] obj_att = new SimpleAttribute[]

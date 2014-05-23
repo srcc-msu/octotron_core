@@ -19,7 +19,7 @@ public class OctoLinkTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		OctoLinkTest.graph = new Neo4jGraph("dbs/test_node", Neo4jGraph.Op.RECREATE);
+		OctoLinkTest.graph = new Neo4jGraph( "dbs/" + OctoLinkTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		OctoLinkTest.graph_service = new GraphService(OctoLinkTest.graph);
 
 		SimpleAttribute[] obj_att = {

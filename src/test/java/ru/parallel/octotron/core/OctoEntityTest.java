@@ -29,7 +29,7 @@ public class OctoEntityTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		OctoEntityTest.graph = new Neo4jGraph("dbs/test_node", Neo4jGraph.Op.RECREATE);
+		OctoEntityTest.graph = new Neo4jGraph( "dbs/" + OctoEntityTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		OctoEntityTest.graph_service = new GraphService(OctoEntityTest.graph);
 
 		SimpleAttribute[] obj_att = {

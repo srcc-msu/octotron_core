@@ -19,7 +19,7 @@ public class OctoAttributeListTest
 	public static void Init()
 		throws ExceptionSystemError
 	{
-		OctoAttributeListTest.graph = new Neo4jGraph("dbs/test_neo4j", Neo4jGraph.Op.RECREATE);
+		OctoAttributeListTest.graph = new Neo4jGraph( "dbs/" + OctoAttributeListTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		OctoAttributeListTest.graph_service = new GraphService(OctoAttributeListTest.graph);
 	}
 

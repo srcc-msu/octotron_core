@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core;
 
+import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.Uid;
 
 /**
@@ -22,6 +23,12 @@ public class OctoLink extends OctoEntity
 	OctoLink(GraphService graph, Uid uid)
 	{
 		super(graph, uid);
+	}
+
+	@Override
+	public long Update(EDependencyType dep)
+	{
+		return 0;
 	}
 
 	public OctoObject Target()

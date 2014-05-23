@@ -49,7 +49,7 @@ public class OctoObjectTest extends Assert
 	 * currently checks only if count matches, it is not correct
 	 * */
 	@Test
-	public void GetInLinks()
+	public void TestGetInLinks()
 	{
 		int N = 10;
 
@@ -74,7 +74,57 @@ public class OctoObjectTest extends Assert
 	}
 
 	@Test
-	public void GetOutLinks()
+	public void TestGetInNeighborsParam()
+	{
+		int N = 10;
+
+		OctoObject node = OctoObjectTest.obj_factory.Create();
+
+		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
+
+		Assert.assertEquals("in links not match, any type"
+			, node.GetInNeighbors().size(), N);
+
+		Assert.assertEquals("in links not match, exact type"
+			, node.GetInNeighbors("link").size(), N);
+
+		Assert.assertEquals("in links not match, exact type and value"
+			, node.GetInNeighbors("link", "ok").size(), N);
+
+		Assert.assertEquals("in links not match, exact type, wrong value"
+			, node.GetInNeighbors("link", "fail").size(), 0);
+
+		Assert.assertEquals("in links not match, wrong type, wrong value"
+			, node.GetInNeighbors("fail", "fail").size(), 0);
+	}
+
+	@Test
+	public void TestGetOutNeighborsParam()
+	{
+		int N = 10;
+
+		OctoObject node = OctoObjectTest.obj_factory.Create();
+
+		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
+
+		Assert.assertEquals("in links not match, any type"
+			, node.GetOutNeighbors().size(), N);
+
+		Assert.assertEquals("in links not match, exact type"
+			, node.GetOutNeighbors("link").size(), N);
+
+		Assert.assertEquals("in links not match, exact type and value"
+			, node.GetOutNeighbors("link", "ok").size(), N);
+
+		Assert.assertEquals("in links not match, exact type, wrong value"
+			, node.GetOutNeighbors("link", "fail").size(), 0);
+
+		Assert.assertEquals("in links not match, wrong type, wrong value"
+			, node.GetOutNeighbors("fail", "fail").size(), 0);
+	}
+
+	@Test
+	public void TestGetOutLinks()
 	{
 		int N = 10;
 
@@ -104,7 +154,7 @@ public class OctoObjectTest extends Assert
 	 * do not check links
 	 * */
 	@Test
-	public void GetInNeighbors()
+	public void TestGetInNeighbors()
 	{
 		int N = 10;
 
@@ -134,7 +184,7 @@ public class OctoObjectTest extends Assert
 	}
 
 	@Test
-	public void GetOutNeighbors()
+	public void TestGetOutNeighbors()
 	{
 		int N = 10;
 
@@ -164,18 +214,4 @@ public class OctoObjectTest extends Assert
 
 	}
 
-/**
- * set attribute, remove it and ensure it does not exists
- * */
-	@Test
-	public void RemoveAttribute()
-	{
-		OctoObject node = OctoObjectTest.obj_factory.Create();
-
-		node.DeclareAttribute("test_test", 1);
-		node.RemoveAttribute("test_test");
-
-		Assert.assertEquals("attribute presents - wrong"
-			, node.TestAttribute("test_test"), false);
-	}
 }

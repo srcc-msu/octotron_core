@@ -7,6 +7,7 @@
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.EDependencyType;
@@ -29,9 +30,9 @@ public class CalcSpeed extends OctoRule
 	}
 
 	@Override
-	public Object Compute(OctoObject object)
+	public Object Compute(OctoEntity entity)
 	{
-		OctoAttribute attr = object.GetAttribute(measured_attr);
+		OctoAttribute attr = entity.GetAttribute(measured_attr);
 
 		if(!attr.IsValid() || attr.GetCTime() == 0)
 			return GetDefaultValue();

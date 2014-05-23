@@ -7,6 +7,7 @@
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.EDependencyType;
@@ -33,14 +34,14 @@ public class ArgMatchAprx extends OctoRule
 	}
 
 	@Override
-	public Object Compute(OctoObject object)
+	public Object Compute(OctoEntity entity)
 	{
-		OctoAttribute attr = object.GetAttribute(param);
+		OctoAttribute attr = entity.GetAttribute(param);
 
 		if(attr.GetCTime() == 0 || !attr.IsValid())
 			return GetDefaultValue();
 
-		return attr.aeq(object.GetAttribute(match_arg).GetValue(), aprx);
+		return attr.aeq(entity.GetAttribute(match_arg).GetValue(), aprx);
 	}
 
 	@Override

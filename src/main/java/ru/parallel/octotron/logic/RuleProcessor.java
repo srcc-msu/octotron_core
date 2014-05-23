@@ -34,21 +34,21 @@ public class RuleProcessor
 // parents, self depends
 		for(OctoObject obj : changed)
 		{
-			if(obj.Update(EDependencyType.SELF))
+			if(obj.Update(EDependencyType.SELF) > 0)
 				comp_changed.add(obj);
 		}
 
 // in_n, for them we are 'out'
 		for(OctoObject obj : in_n)
 		{
-			if(obj.Update(EDependencyType.OUT))
+			if(obj.Update(EDependencyType.OUT) > 0)
 				comp_changed.add(obj);
 		}
 
 // out_n, for them we are 'in'
 		for(OctoObject obj : out_n)
 		{
-			if(obj.Update(EDependencyType.IN))
+			if(obj.Update(EDependencyType.IN) > 0)
 				comp_changed.add(obj);
 		}
 

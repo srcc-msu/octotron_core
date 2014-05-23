@@ -10,6 +10,7 @@ package ru.parallel.octotron.rules;
 import org.apache.commons.lang3.ArrayUtils;
 
 import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.EDependencyType;
@@ -32,13 +33,13 @@ public class CheckBoolRules extends OctoRule
 	}
 
 	@Override
-	public Object Compute(OctoObject object)
+	public Object Compute(OctoEntity entity)
 	{
 		int sum = 0;
 
 		for(String attr_name : check_list)
 		{
-			OctoAttribute attr = object.GetAttribute(attr_name);
+			OctoAttribute attr = entity.GetAttribute(attr_name);
 
 			if(!attr.GetBoolean() && attr.IsValid() && attr.GetCTime() != 0)
 				sum++;

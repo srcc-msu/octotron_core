@@ -8,10 +8,11 @@ package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoObjectRule;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.EDependencyType;
 
-public class AggregateIntSum extends OctoRule
+public class AggregateIntSum extends OctoObjectRule
 {
 	private static final long serialVersionUID = -1961148475047706792L;
 	private final String detect_str;

@@ -7,6 +7,7 @@
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.OctoAttribute;
+import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.EDependencyType;
@@ -29,11 +30,11 @@ public class LocalErrors extends OctoRule
 	}
 
 	@Override
-	public Object Compute(OctoObject object)
+	public Object Compute(OctoEntity entity)
 	{
 		int sum = 0;
 
-		for(OctoAttribute attr : object.GetAttributes())
+		for(OctoAttribute attr : entity.GetAttributes())
 			if(attr.GetName().contains(detect_str) && attr.IsValid() && attr.GetCTime() != 0)
 				sum += attr.GetLong();
 

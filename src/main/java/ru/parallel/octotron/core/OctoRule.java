@@ -18,15 +18,15 @@ public abstract class OctoRule implements Serializable
 	protected final String attr;
 	private long rule_id;
 
-	public OctoRule(String attr)
+	protected OctoRule(String attr)
 	{
 		this.attr = attr;
-		Register();
+		rule_id = PersistenStorage.INSTANCE.GetRules().Add(this);
 	}
 
-	private void Register()
+	protected OctoRule()
 	{
-		rule_id = PersistenStorage.INSTANCE.GetRules().Add(this);
+		throw new ExceptionModelFail("super(attribute_name) must be called in the constructor");
 	}
 
 	public final long GetID()
@@ -34,30 +34,13 @@ public abstract class OctoRule implements Serializable
 		return rule_id;
 	}
 
-	public Object Compute(OctoObject object)
-	{
-		throw new ExceptionModelFail
-			("this rule is not applicable for objects");
-	}
-
-	public Object Compute(OctoLink link)
-	{
-		throw new ExceptionModelFail
-			("this rule is not applicable for links");
-	}
-
-	public EDependencyType GetDeps()
-	{
-		return EDependencyType.ALL;
-	}
-
 	public final String GetAttr()
 	{
 		return attr;
 	}
 
-	public Object GetDefaultValue()
-	{
-		throw new ExceptionModelFail("default value for rule not specified");
-	}
+	public abstract Object Compute(OctoEntity entity);
+	public abstract Object GetDefaultValue();
+	public abstract EDependencyType GetDeps();
+
 }

@@ -47,13 +47,13 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * */
 	public OctoObject Create()
 	{
-		OctoObject vertex = graph_service.AddObject();
+		OctoObject object = graph_service.AddObject();
 
-		vertex.DeclareAttributes(attributes);
-		vertex.AddRules(rules);
-		vertex.AddReactions(reactions);
+		object.DeclareAttributes(attributes);
+		object.AddRules(rules);
+		object.AddReactions(reactions);
 
-		return vertex;
+		return object;
 	}
 
 	/**
@@ -61,12 +61,12 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * */
 	public OctoObjectList Create(int count)
 	{
-		OctoObjectList vertices = new OctoObjectList();
+		OctoObjectList objects = new OctoObjectList();
 
 		for(int i = 0; i < count; i++)
-			vertices.add(this.Create());
+			objects.add(this.Create());
 
-		return vertices;
+		return objects;
 	}
 
 	@Override

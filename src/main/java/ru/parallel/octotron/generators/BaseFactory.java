@@ -45,7 +45,7 @@ public abstract class BaseFactory<T>
 		this.reactions = reactions;
 	}
 
-	public BaseFactory(GraphService graph_service)
+	protected BaseFactory(GraphService graph_service)
 	{
 		this(graph_service
 			, new LinkedList<SimpleAttribute>()
@@ -61,16 +61,6 @@ public abstract class BaseFactory<T>
 		return Clone(new_attributes, rules, reactions);
 	}
 
-	public T Attributes(SimpleAttribute[]... additions)
-	{
-		SimpleAttribute[] addition = JavaUtils.ExtendMultiArrayChecked(additions, SimpleAttribute[].class);
-
-		List<SimpleAttribute> new_attributes = new LinkedList<SimpleAttribute>(attributes);
-		new_attributes.addAll(Arrays.asList(addition));
-
-		return Clone(new_attributes, rules, reactions);
-	}
-
 	public T Rules(OctoRule... addition)
 	{
 		List<OctoRule> new_rules = new LinkedList<OctoRule>(rules);
@@ -79,28 +69,8 @@ public abstract class BaseFactory<T>
 		return Clone(attributes, new_rules, reactions);
 	}
 
-	public T Rules(OctoRule[]... additions)
-	{
-		OctoRule[] addition = JavaUtils.ExtendMultiArrayChecked(additions, OctoRule[].class);
-
-		List<OctoRule> new_rules = new LinkedList<OctoRule>(rules);
-		new_rules.addAll(Arrays.asList(addition));
-
-		return Clone(attributes, new_rules, reactions);
-	}
-
 	public T Reactions(OctoReaction... addition)
 	{
-		List<OctoReaction> new_reactions = new LinkedList<OctoReaction>(reactions);
-		new_reactions.addAll(Arrays.asList(addition));
-
-		return Clone(attributes, rules, new_reactions);
-	}
-
-	public T Reactions(OctoReaction[]... additions)
-	{
-		OctoReaction[] addition = JavaUtils.ExtendMultiArrayChecked(additions, OctoReaction[].class);
-
 		List<OctoReaction> new_reactions = new LinkedList<OctoReaction>(reactions);
 		new_reactions.addAll(Arrays.asList(addition));
 

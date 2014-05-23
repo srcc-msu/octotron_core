@@ -38,7 +38,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	{
 		super(graph_service, attributes, rules, reactions);
 	}
-
+/*
 @Override
 	public LinkFactory Rules(OctoRule... params)
 	{
@@ -49,12 +49,11 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	public LinkFactory Reactions(OctoReaction... params)
 	{
 		throw new ExceptionModelFail("links do not have reactions");
-	}
+	}*/
 
 /**
  * connect one \from object with one \to objects<br>
  * set correct type, if "type" attribute is set correctly
- * @throws ExceptionDBError
  * */
 	public OctoLink OneToOne(OctoObject from, OctoObject to)
 	{
@@ -71,15 +70,17 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 			throw new ExceptionModelFail("link type not set");
 
 // create edge
-		OctoLink new_edge = graph_service.AddLink(from, to, (String)type.GetValue());
+		OctoLink link = graph_service.AddLink(from, to, (String)type.GetValue());
 
 // set all attributes
-		new_edge.DeclareAttributes(attributes);
+		link.DeclareAttributes(attributes);
+		link.AddRules(rules);
+		link.AddReactions(reactions);
 
-		new_edge.DeclareAttribute("source", from.GetAttribute("AID").GetLong());
-		new_edge.DeclareAttribute("target", to.GetAttribute("AID").GetLong());
+		link.DeclareAttribute("source", from.GetAttribute("AID").GetLong());
+		link.DeclareAttribute("target", to.GetAttribute("AID").GetLong());
 
-		return new_edge;
+		return link;
 	}
 
 /**
@@ -100,7 +101,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 /**
  * connect one \from object with all \to objects<br>
  * create \to.length edges<br>
- * @throws ExceptionDBError
  * */
 	public OctoLinkList OneToEvery(OctoObject from, OctoObjectList to)
 	{

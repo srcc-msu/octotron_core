@@ -16,7 +16,7 @@ import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
  * */
 public interface ISensorData
 {
-	SimpleAttribute GetValue();
+	SimpleAttribute GetData();
 
 	OctoObject Resolve(GraphService graph_service);
 

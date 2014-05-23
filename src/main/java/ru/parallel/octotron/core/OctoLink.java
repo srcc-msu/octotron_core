@@ -11,7 +11,6 @@ import ru.parallel.octotron.primitive.Uid;
 
 /**
  * implementation of link, that resides in \graph<br>
- * implements {@link OctoLink} interface<br>
  * */
 public class OctoLink extends OctoEntity
 {
@@ -28,7 +27,7 @@ public class OctoLink extends OctoEntity
 	@Override
 	public long Update(EDependencyType dep)
 	{
-		return 0;
+		return 0; // TODO
 	}
 
 	public OctoObject Target()

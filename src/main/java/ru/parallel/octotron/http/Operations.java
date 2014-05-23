@@ -593,7 +593,7 @@ public abstract class Operations
 
 			OctoObject entity = (OctoObject)objects.Only();
 
-			entity.DelMarker(id);
+			entity.DeleteMarker(id);
 
 			String data = "deleted marker with id: " + id;
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);

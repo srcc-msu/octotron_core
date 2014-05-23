@@ -119,9 +119,6 @@ public class NinjaTransaction
 
 /**
  * fail and commit transaction
- * TODO: is it ok? or should add exception..
- * probably no, since the function is called \Fail and
- * it can be expected to result in failed transaction
  * */
 	public void Fail()
 	{

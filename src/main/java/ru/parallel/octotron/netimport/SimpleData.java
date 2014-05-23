@@ -23,7 +23,7 @@ public class SimpleData implements ISensorData
 	}
 
 	@Override
-	public SimpleAttribute GetValue()
+	public SimpleAttribute GetData()
 		throws ExceptionModelFail
 	{
 		return value;

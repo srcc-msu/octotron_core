@@ -66,16 +66,6 @@ public abstract class OctoEntity
 		return uid.getUid() == ((OctoEntity)object).GetUID().getUid();
 	}
 
-	public boolean UpdateAttribute(SimpleAttribute att, boolean allow_overwrite)
-	{
-		return UpdateAttribute(att.GetName(), att.GetValue(), allow_overwrite);
-	}
-
-	public boolean UpdateAttribute(String name, Object value, boolean allow_overwrite)
-	{
-		return GetAttribute(name).Update(value, allow_overwrite);
-	}
-
 	public OctoAttribute GetAttribute(String name)
 	{
 		return graph_service.GetAttribute(this, name);
@@ -195,6 +185,7 @@ public abstract class OctoEntity
 		TimerProcessor.AddTimer(attr);
 	}
 
+	// TODO move reactions to meta syntax
 	public List<OctoResponse> PreparePendingReactions()
 	{
 		List<Marker> markers = GetMarkers();
@@ -237,11 +228,11 @@ public abstract class OctoEntity
 					{
 						result.add(reaction.GetResponse());
 
-						SetReactionExecuted(reaction.GetID(), OctoReaction.STATE_EXECUTED);
+						SetReactionState(reaction.GetID(), OctoReaction.STATE_EXECUTED);
 					}
 					else
 					{
-						SetReactionExecuted(reaction.GetID(), OctoReaction.STATE_STARTED);
+						SetReactionState(reaction.GetID(), OctoReaction.STATE_STARTED);
 
 						SetTimer(OctoReaction.DELAY_PREFIX
 							+ reaction.GetCheckName(), delay + 1);
@@ -256,7 +247,7 @@ public abstract class OctoEntity
 					{
 						result.add(reaction.GetResponse());
 
-						SetReactionExecuted(reaction.GetID(), OctoReaction.STATE_EXECUTED);
+						SetReactionState(reaction.GetID(), OctoReaction.STATE_EXECUTED);
 					}
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)
@@ -273,14 +264,14 @@ public abstract class OctoEntity
 				}
 				else if(state == OctoReaction.STATE_STARTED)
 				{
-					SetReactionExecuted(reaction.GetID(), OctoReaction.STATE_NONE);
+					SetReactionState(reaction.GetID(), OctoReaction.STATE_NONE);
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)
 				{
 					if(reaction.GetRecoverResponse() != null)
 						result.add(reaction.GetRecoverResponse());
 
-					SetReactionExecuted(reaction.GetID(), OctoReaction.STATE_NONE);
+					SetReactionState(reaction.GetID(), OctoReaction.STATE_NONE);
 				}
 			}
 		}
@@ -311,7 +302,7 @@ public abstract class OctoEntity
 		return executed.get(id.indexOf(key));
 	}
 
-	public void SetReactionExecuted(long key, long res)
+	public void SetReactionState(long key, long res)
 	{
 		List<Long> id = graph_service.GetArray(this, OctoEntity.REACTION_PREFIX);
 		List<Long> executed = graph_service.GetArray(this, OctoEntity.REACTION_EXECUTED_PREFIX);
@@ -329,7 +320,7 @@ public abstract class OctoEntity
 		return marker.GetID();
 	}
 
-	public void DelMarker(long marker_id)
+	public void DeleteMarker(long marker_id)
 	{
 		List<Long> markers_id = graph_service.GetArray(this, OctoEntity.MARKER_PREFIX);
 

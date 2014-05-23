@@ -1,6 +1,8 @@
 package ru.parallel.octotron.core;
 
 import org.junit.*;
+import static org.junit.Assert.*;
+
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
@@ -9,7 +11,7 @@ import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.utils.OctoLinkList;
 import ru.parallel.octotron.utils.OctoObjectList;
 
-public class IndexTest extends Assert
+public class IndexTest
 {
 	private static Neo4jGraph graph;
 	private static GraphService graph_service;
@@ -65,8 +67,8 @@ public class IndexTest extends Assert
 		OctoLinkList found = IndexTest.graph_service.GetLinks("att_link", "value23456");
 		OctoLinkList not_found = IndexTest.graph_service.GetLinks("att_link", "aa");
 
-		Assert.assertEquals(N, found.size());
-		Assert.assertEquals(0, not_found.size());
+		assertEquals(N, found.size());
+		assertEquals(0, not_found.size());
 	}
 
 	@Test
@@ -79,8 +81,8 @@ public class IndexTest extends Assert
 		OctoObjectList found = IndexTest.graph_service.GetObjects("att_obj", "value12345");
 		OctoObjectList not_found = IndexTest.graph_service.GetObjects("att_obj", "aa");
 
-		Assert.assertEquals(N, found.size());
-		Assert.assertEquals(0, not_found.size());
+		assertEquals(N, found.size());
+		assertEquals(0, not_found.size());
 	}
 
 	@Test
@@ -94,8 +96,8 @@ public class IndexTest extends Assert
 		OctoLinkList found = IndexTest.graph_service.GetLinks("att_link");
 		OctoLinkList not_found = IndexTest.graph_service.GetLinks("wrong");
 
-		Assert.assertEquals(N, found.size());
-		Assert.assertEquals(0, not_found.size());
+		assertEquals(N, found.size());
+		assertEquals(0, not_found.size());
 	}
 
 	@Test
@@ -108,8 +110,8 @@ public class IndexTest extends Assert
 		OctoObjectList found = IndexTest.graph_service.GetObjects("att_obj");
 		OctoObjectList not_found = IndexTest.graph_service.GetObjects("wrong");
 
-		Assert.assertEquals(N, found.size());
-		Assert.assertEquals(0, not_found.size());
+		assertEquals(N, found.size());
+		assertEquals(0, not_found.size());
 	}
 
 	@Test
@@ -124,8 +126,8 @@ public class IndexTest extends Assert
 
 		OctoLinkList not_found = IndexTest.graph_service.QueryLinks("att_link", "f*lue234*");
 
-		Assert.assertEquals(N, found.size());
-		Assert.assertEquals(0, not_found.size());
+		assertEquals(N, found.size());
+		assertEquals(0, not_found.size());
 	}
 
 	@Test
@@ -138,8 +140,8 @@ public class IndexTest extends Assert
 		OctoObjectList found = IndexTest.graph_service.QueryObjects("att_obj", "*lue123*");
 		OctoObjectList not_found = IndexTest.graph_service.QueryObjects("att_obj", "f*lue123*");
 
-		Assert.assertEquals(N, found.size());
-		Assert.assertEquals(0, not_found.size());
+		assertEquals(N, found.size());
+		assertEquals(0, not_found.size());
 	}
 
 	@Test
@@ -160,7 +162,7 @@ public class IndexTest extends Assert
 		{
 			catched = true;
 		}
-		Assert.assertEquals(true, catched);
+		assertEquals(true, catched);
 
 		IndexTest.link_factory.OneToOne(objs.get(1), objs.get(0));
 		catched = false;
@@ -174,7 +176,7 @@ public class IndexTest extends Assert
 		{
 			catched = true;
 		}
-		Assert.assertEquals(true, catched);
+		assertEquals(true, catched);
 	}
 
 	@Test
@@ -195,7 +197,7 @@ public class IndexTest extends Assert
 		{
 			catched = true;
 		}
-		Assert.assertEquals(true, catched);
+		assertEquals(true, catched);
 
 		IndexTest.obj_factory.Create(1);
 		catched = false;
@@ -210,6 +212,6 @@ public class IndexTest extends Assert
 			catched = true;
 		}
 
-		Assert.assertEquals(true, catched);
+		assertEquals(true, catched);
 	}
 }

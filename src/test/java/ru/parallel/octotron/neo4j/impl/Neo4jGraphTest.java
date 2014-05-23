@@ -1,17 +1,15 @@
 package ru.parallel.octotron.neo4j.impl;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import static org.junit.Assert.*;
+
 import ru.parallel.octotron.primitive.Uid;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 import java.util.List;
 
 public class Neo4jGraphTest
 {
-	static Neo4jGraph graph;
+	private static Neo4jGraph graph;
 
 	@BeforeClass
 	public static void Init() throws Exception
@@ -67,7 +65,7 @@ public class Neo4jGraphTest
 			catched = true;
 		}
 
-		Assert.assertEquals("succeeded to set a null value", catched, true);
+		assertEquals("succeeded to set a null value", catched, true);
 
 		// then create two links and set attributes
 		link1 = Neo4jGraphTest.graph.AddLink(obj1, obj2, "contain");
@@ -87,24 +85,24 @@ public class Neo4jGraphTest
 		Neo4jGraphTest.graph.SetLinkAttribute(link2, "test_bool", true);
 
 // check they exist
-		Assert.assertEquals("int attribute for object"
+		assertEquals("int attribute for object"
 			, Neo4jGraphTest.graph.GetObjectAttribute(obj1, "test_int"), 1);
-		Assert.assertEquals("str attribute for object"
+		assertEquals("str attribute for object"
 			, Neo4jGraphTest.graph.GetObjectAttribute(obj1, "test_str"), "a");
 
-		Assert.assertEquals("float attribute for object"
+		assertEquals("float attribute for object"
 			, (double) Neo4jGraphTest.graph.GetObjectAttribute(obj2, "test_double"), 1.0, 0.1);
-		Assert.assertEquals("bool attribute for object"
+		assertEquals("bool attribute for object"
 			, Neo4jGraphTest.graph.GetObjectAttribute(obj2, "test_bool"), true);
 
-		Assert.assertEquals("int attribute for link"
+		assertEquals("int attribute for link"
 			, Neo4jGraphTest.graph.GetLinkAttribute(link1, "test_int"), 1);
-		Assert.assertEquals("str attribute for link"
+		assertEquals("str attribute for link"
 			, Neo4jGraphTest.graph.GetLinkAttribute(link1, "test_str"), "a");
 
-		Assert.assertEquals("double attribute for link"
+		assertEquals("double attribute for link"
 			, (double) Neo4jGraphTest.graph.GetLinkAttribute(link2, "test_double"), 1.0, 1.0);
-		Assert.assertEquals("bool attribute for link"
+		assertEquals("bool attribute for link"
 			, Neo4jGraphTest.graph.GetLinkAttribute(link2, "test_bool"), true);
 	}
 
@@ -128,7 +126,7 @@ public class Neo4jGraphTest
 
 		for(int i = 0; i < Neo4jGraphTest.ITER; i++)
 		{
-			Assert.assertEquals("wrong edges"
+			assertEquals("wrong edges"
 				, Neo4jGraphTest.graph.GetLinkAttribute(links.get(i), "n"), i);
 		}
 	}
@@ -160,11 +158,11 @@ public class Neo4jGraphTest
 
 		List<Uid> links = Neo4jGraphTest.graph.GetOutLinks(obj1); // obj1
 
-		Assert.assertEquals("number of edges do not match", links.size(), 2);
+		assertEquals("number of edges do not match", links.size(), 2);
 
-		Assert.assertEquals("wrong edges"
+		assertEquals("wrong edges"
 			, Neo4jGraphTest.graph.GetLinkAttribute(links.get(0), "test_uniq"), "i am 1");
-		Assert.assertEquals("wrong edges"
+		assertEquals("wrong edges"
 			, Neo4jGraphTest.graph.GetLinkAttribute(links.get(1), "test_uniq"), "i am 2");
 	}
 
@@ -194,13 +192,13 @@ public class Neo4jGraphTest
 
 		List<Uid> links = Neo4jGraphTest.graph.GetInLinks(obj2); // obj2
 
-		Assert.assertEquals("number of edges do not match", links.size(), 2);
+		assertEquals("number of edges do not match", links.size(), 2);
 
 		//order ??
-		Assert.assertEquals("wrong edges"
+		assertEquals("wrong edges"
 			, Neo4jGraphTest.graph.GetLinkAttribute(links.get(0), "test_uniq")
 			, "i am 1");
-		Assert.assertEquals("wrong edges"
+		assertEquals("wrong edges"
 			, Neo4jGraphTest.graph.GetLinkAttribute(links.get(1), "test_uniq")
 			, "i am 2");
 	}
@@ -211,12 +209,11 @@ public class Neo4jGraphTest
 	@Test
 	public void GetObject()
 	{
-		Uid obj1 = null;
+		Uid obj1 = Neo4jGraphTest.graph.AddObject();
 
-		obj1 = Neo4jGraphTest.graph.AddObject();
 		Neo4jGraphTest.graph.SetObjectAttribute(obj1, "test", "ok");
 
-		Assert.assertEquals("element changed after addition"
+		assertEquals("element changed after addition"
 			, Neo4jGraphTest.graph.GetObjectAttribute(obj1, "test"), "ok");
 	}
 
@@ -236,7 +233,7 @@ public class Neo4jGraphTest
 
 		Neo4jGraphTest.graph.SetLinkAttribute(link, "test", "ok");
 
-		Assert.assertEquals("link changed after addition"
+		assertEquals("link changed after addition"
 			, Neo4jGraphTest.graph.GetLinkAttribute(link, "test"), "ok");
 	}
 }

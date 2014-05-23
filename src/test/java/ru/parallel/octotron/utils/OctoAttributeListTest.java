@@ -1,6 +1,8 @@
 package ru.parallel.octotron.utils;
 
 import org.junit.*;
+import static org.junit.Assert.*;
+
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoObject;
@@ -47,12 +49,12 @@ public class OctoAttributeListTest
 	{
 		OctoAttributeList list = new OctoAttributeList();
 
-		Assert.assertEquals("list is no empty", list.size(), 0);
+		assertEquals("list is no empty", list.size(), 0);
 		list.add(OctoAttributeListTest.static_obj.DeclareAttribute("test", 0));
-		Assert.assertEquals("list has no elements", list.size(), 1);
+		assertEquals("list has no elements", list.size(), 1);
 
 		OctoAttribute elem = list.get(0);
-		Assert.assertEquals("add not worked correctly", elem.eq(0), true);
+		assertEquals("add not worked correctly", elem.eq(0), true);
 	}
 
 	@Test
@@ -64,9 +66,9 @@ public class OctoAttributeListTest
 		list.add(OctoAttributeListTest.static_obj.DeclareAttribute("test2", 1.0));
 		list.add(OctoAttributeListTest.static_obj.DeclareAttribute("test3", "test"));
 
-		Assert.assertEquals("got something wrong", list.get(0).eq(0), true);
-		Assert.assertEquals("got something wrong", list.get(1).eq(1.0), true);
-		Assert.assertEquals("got something wrong", list.get(2).eq("test"), true);
+		assertEquals("got something wrong", list.get(0).eq(0), true);
+		assertEquals("got something wrong", list.get(1).eq(1.0), true);
+		assertEquals("got something wrong", list.get(2).eq("test"), true);
 	}
 
 	@Test
@@ -82,7 +84,7 @@ public class OctoAttributeListTest
 		int i = 0;
 		for(OctoAttribute att : list)
 		{
-			Assert.assertEquals("got something wrong", att.eq(i), true);
+			assertEquals("got something wrong", att.eq(i), true);
 			i++;
 		}
 	}
@@ -97,7 +99,7 @@ public class OctoAttributeListTest
 		for(int i = 0; i < N; i++)
 		{
 			list.add(OctoAttributeListTest.static_obj.DeclareAttribute("test" + i, i));
-			Assert.assertEquals("got something wrong", list.size(), i + 1);
+			assertEquals("got something wrong", list.size(), i + 1);
 		}
 	}
 
@@ -118,30 +120,30 @@ public class OctoAttributeListTest
 		OctoAttributeList eq = list.eq(5);
 		OctoAttributeList ne = list.ne(5);
 
-		Assert.assertEquals("le size failed", le.size(), 6);
-		Assert.assertEquals("lt size failed", lt.size(), 5);
-		Assert.assertEquals("ge size failed", ge.size(), 5);
-		Assert.assertEquals("gt size failed", gt.size(), 4);
-		Assert.assertEquals("eq size failed", eq.size(), 1);
-		Assert.assertEquals("ne size failed", ne.size(), 9);
+		assertEquals("le size failed", le.size(), 6);
+		assertEquals("lt size failed", lt.size(), 5);
+		assertEquals("ge size failed", ge.size(), 5);
+		assertEquals("gt size failed", gt.size(), 4);
+		assertEquals("eq size failed", eq.size(), 1);
+		assertEquals("ne size failed", ne.size(), 9);
 
 		for(OctoAttribute att : le)
-			Assert.assertEquals("le failed", att.le(5), true);
+			assertEquals("le failed", att.le(5), true);
 
 		for(OctoAttribute att : lt)
-			Assert.assertEquals("lt failed", att.lt(5), true);
+			assertEquals("lt failed", att.lt(5), true);
 
 		for(OctoAttribute att : ge)
-			Assert.assertEquals("ge failed", att.ge(5), true);
+			assertEquals("ge failed", att.ge(5), true);
 
 		for(OctoAttribute att : gt)
-			Assert.assertEquals("gt failed", att.gt(5), true);
+			assertEquals("gt failed", att.gt(5), true);
 
 		for(OctoAttribute att : eq)
-			Assert.assertEquals("eq failed", att.eq(5), true);
+			assertEquals("eq failed", att.eq(5), true);
 
 		for(OctoAttribute att : ne)
-			Assert.assertEquals("ne failed", att.ne(5), true);
+			assertEquals("ne failed", att.ne(5), true);
 	}
 
 	@Test
@@ -155,8 +157,8 @@ public class OctoAttributeListTest
 
 		list = list.AlphabeticSort();
 
-		Assert.assertEquals("a", list.get(0).GetName());
-		Assert.assertEquals("b", list.get(1).GetName());
-		Assert.assertEquals("c", list.get(2).GetName());
+		assertEquals("a", list.get(0).GetName());
+		assertEquals("b", list.get(1).GetName());
+		assertEquals("c", list.get(2).GetName());
 	}
 }

@@ -3,6 +3,7 @@ package ru.parallel.octotron.core;
 import org.junit.*;
 import static org.junit.Assert.*;
 
+import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.logic.TimerProcessor;
@@ -47,6 +48,10 @@ public class OctoEntityTest
 		OctoEntityTest.graph.Delete();
 	}
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+
+
 	@Test
 	public void TestDeclareAttribute() throws Exception
 	{
@@ -63,7 +68,7 @@ public class OctoEntityTest
 		{
 			catched = true;
 		}
-		Assert.assertTrue(catched);
+		assertTrue(catched);
 	}
 
 
@@ -78,7 +83,7 @@ public class OctoEntityTest
 		entity.DeclareAttribute("test_test", 1);
 		entity.RemoveAttribute("test_test");
 
-		Assert.assertEquals("attribute presents - wrong"
+		assertEquals("attribute presents - wrong"
 			, entity.TestAttribute("test_test"), false);
 	}
 

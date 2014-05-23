@@ -1,9 +1,8 @@
 package ru.parallel.octotron.core;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import static org.junit.Assert.*;
+
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
@@ -33,14 +32,14 @@ public class OctoAttributeTest
 		OctoAttribute attribute1 = object.DeclareAttribute("test1", "");
 		OctoAttribute attribute2 = object.DeclareAttribute("test2", "");
 
-		Assert.assertEquals(0, attribute1.GetCTime());
-		Assert.assertEquals(0, attribute2.GetCTime());
+		assertEquals(0, attribute1.GetCTime());
+		assertEquals(0, attribute2.GetCTime());
 
 		graph_service.SetMeta(object, "test1", "ctime", 1L);
 
 // reread from the graph
-		Assert.assertEquals(1, object.GetAttribute("test1").GetCTime());
-		Assert.assertEquals(0, object.GetAttribute("test2").GetCTime());
+		assertEquals(1, object.GetAttribute("test1").GetCTime());
+		assertEquals(0, object.GetAttribute("test2").GetCTime());
 	}
 
 	@Test
@@ -50,14 +49,14 @@ public class OctoAttributeTest
 		OctoAttribute attribute1 = object.DeclareAttribute("test1", "");
 		OctoAttribute attribute2 = object.DeclareAttribute("test2", "");
 
-		Assert.assertEquals(0, attribute1.GetATime());
-		Assert.assertEquals(0, attribute2.GetATime());
+		assertEquals(0, attribute1.GetATime());
+		assertEquals(0, attribute2.GetATime());
 
 		graph_service.SetMeta(object, "test1", "atime", 1L);
 
 // reread from the graph
-		Assert.assertEquals(1L, object.GetAttribute("test1").GetATime());
-		Assert.assertEquals(0, object.GetAttribute("test2").GetATime());
+		assertEquals(1L, object.GetAttribute("test1").GetATime());
+		assertEquals(0, object.GetAttribute("test2").GetATime());
 	}
 
 	@Test
@@ -67,15 +66,15 @@ public class OctoAttributeTest
 		OctoAttribute attribute_l = object.DeclareAttribute("test1", 1L);
 		OctoAttribute attribute_d = object.DeclareAttribute("test2", 1.0);
 
-		Assert.assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
-		Assert.assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
 
 		attribute_l.Update(2L, true);
 		attribute_d.Update(2.0, true);
 
 // speed not available now - requires 2 updates
-		Assert.assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
-		Assert.assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
 
 		Thread.sleep(2000); // 2sec
 
@@ -83,15 +82,15 @@ public class OctoAttributeTest
 		attribute_d.Update(4.0, true);
 
 // speed must be positive
-		Assert.assertTrue(attribute_l.GetSpeed() > 0.0);
-		Assert.assertTrue(attribute_d.GetSpeed() > 0.0);
+		assertTrue(attribute_l.GetSpeed() > 0.0);
+		assertTrue(attribute_d.GetSpeed() > 0.0);
 
 		attribute_l.Update(4L, true);
 		attribute_d.Update(4.0, true);
 
 // must be 0
-		Assert.assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
-		Assert.assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
 	}
 
 	@Test
@@ -103,34 +102,34 @@ public class OctoAttributeTest
 		OctoAttribute attribute3 = object.DeclareAttribute("test3", "");
 		OctoAttribute attribute4 = object.DeclareAttribute("test4", "");
 
-		Assert.assertEquals(0, attribute1.GetCTime());
-		Assert.assertEquals(0, attribute2.GetCTime());
-		Assert.assertEquals(0, attribute3.GetCTime());
-		Assert.assertEquals(0, attribute4.GetCTime());
+		assertEquals(0, attribute1.GetCTime());
+		assertEquals(0, attribute2.GetCTime());
+		assertEquals(0, attribute3.GetCTime());
+		assertEquals(0, attribute4.GetCTime());
 
 		attribute1.Update("", false);
 		// ctime changed - first update
-		Assert.assertNotEquals(0, attribute1.GetCTime());
+		assertNotEquals(0, attribute1.GetCTime());
 		// atime always changes
-		Assert.assertNotEquals(0, attribute1.GetATime());
+		assertNotEquals(0, attribute1.GetATime());
 
 		attribute2.Update("", true);
 		// ctime changed - first update
-		Assert.assertNotEquals(0, attribute2.GetCTime());
+		assertNotEquals(0, attribute2.GetCTime());
 		// atime always changes
-		Assert.assertNotEquals(0, attribute2.GetATime());
+		assertNotEquals(0, attribute2.GetATime());
 
 		attribute3.Update("a", false);
 		// ctime changed with a new value
-		Assert.assertNotEquals(0, attribute3.GetCTime());
+		assertNotEquals(0, attribute3.GetCTime());
 		// atime always changes
-		Assert.assertNotEquals(0, attribute3.GetATime());
+		assertNotEquals(0, attribute3.GetATime());
 
 		attribute4.Update("a", true);
 		// ctime changed with a new value
-		Assert.assertNotEquals(0, attribute4.GetCTime());
+		assertNotEquals(0, attribute4.GetCTime());
 		// atime always changes
-		Assert.assertNotEquals(0, attribute4.GetATime());
+		assertNotEquals(0, attribute4.GetATime());
 
 		long attribute1_ctime = attribute1.GetCTime();
 		long attribute2_ctime = attribute2.GetCTime();
@@ -141,19 +140,19 @@ public class OctoAttributeTest
 
 		attribute1.Update("", false);
 		// ctime not changed
-		Assert.assertEquals(attribute1_ctime, attribute1.GetCTime());
+		assertEquals(attribute1_ctime, attribute1.GetCTime());
 
 		attribute2.Update("", true);
 		// ctime changed with allow_overwrite
-		Assert.assertNotEquals(attribute2_ctime, attribute2.GetCTime());
+		assertNotEquals(attribute2_ctime, attribute2.GetCTime());
 
 		attribute3.Update("a", false);
 		// ctime not changed
-		Assert.assertEquals(attribute3_ctime, attribute3.GetCTime());
+		assertEquals(attribute3_ctime, attribute3.GetCTime());
 
 		attribute4.Update("a", true);
 		// ctime changed with allow_overwrite
-		Assert.assertNotEquals(attribute4_ctime, attribute4.GetCTime());
+		assertNotEquals(attribute4_ctime, attribute4.GetCTime());
 	}
 
 	@Test
@@ -161,7 +160,7 @@ public class OctoAttributeTest
 	{
 		OctoObject object = graph_service.AddObject();
 		OctoAttribute attribute = object.DeclareAttribute("test", "test");
-		Assert.assertEquals("test", attribute.GetString());
+		assertEquals("test", attribute.GetString());
 	}
 
 	@Test
@@ -170,8 +169,8 @@ public class OctoAttributeTest
 		OctoObject object = graph_service.AddObject();
 		OctoAttribute attribute1 = object.DeclareAttribute("test1", 1L);
 		OctoAttribute attribute2 = object.DeclareAttribute("test2", 1);
-		Assert.assertEquals(Long.valueOf(1L), attribute1.GetLong());
-		Assert.assertEquals(Long.valueOf(1L), attribute2.GetLong());
+		assertEquals(Long.valueOf(1L), attribute1.GetLong());
+		assertEquals(Long.valueOf(1L), attribute2.GetLong());
 	}
 
 	@Test
@@ -181,8 +180,8 @@ public class OctoAttributeTest
 		OctoAttribute attribute1 = object.DeclareAttribute("test1", 1.0);
 		OctoAttribute attribute2 = object.DeclareAttribute("test2", 1.0f);
 
-		Assert.assertEquals(1.0, attribute1.GetDouble(), OctoAttribute.DELTA);
-		Assert.assertEquals(1.0, attribute2.GetDouble(), OctoAttribute.DELTA);
+		assertEquals(1.0, attribute1.GetDouble(), OctoAttribute.DELTA);
+		assertEquals(1.0, attribute2.GetDouble(), OctoAttribute.DELTA);
 	}
 
 	@Test
@@ -190,7 +189,7 @@ public class OctoAttributeTest
 	{
 		OctoObject object = graph_service.AddObject();
 		OctoAttribute attribute = object.DeclareAttribute("test", false);
-		Assert.assertEquals(false, attribute.GetBoolean());
+		assertEquals(false, attribute.GetBoolean());
 	}
 
 	@Test
@@ -200,8 +199,8 @@ public class OctoAttributeTest
 		OctoAttribute attribute1 = object.DeclareAttribute("test1", 1);
 		OctoAttribute attribute2 = object.DeclareAttribute("test2", 1L);
 
-		Assert.assertEquals(1.0, attribute1.ToDouble(), OctoAttribute.DELTA);
-		Assert.assertEquals(1.0, attribute2.ToDouble(), OctoAttribute.DELTA);
+		assertEquals(1.0, attribute1.ToDouble(), OctoAttribute.DELTA);
+		assertEquals(1.0, attribute2.ToDouble(), OctoAttribute.DELTA);
 	}
 
 	@Test
@@ -212,9 +211,9 @@ public class OctoAttributeTest
 		OctoAttribute attribute_l = object.DeclareAttribute("test2", 1L);
 		OctoAttribute attribute_s = object.DeclareAttribute("test3", "1");
 
-		Assert.assertEquals(true, attribute_i.eq(1L));
-		Assert.assertEquals(true, attribute_l.eq(1L));
-		Assert.assertEquals(true, attribute_s.eq("1"));
+		assertEquals(true, attribute_i.eq(1L));
+		assertEquals(true, attribute_l.eq(1L));
+		assertEquals(true, attribute_s.eq("1"));
 	}
 
 	@Test
@@ -224,8 +223,8 @@ public class OctoAttributeTest
 		OctoAttribute attribute_f = object.DeclareAttribute("test1", 1.0f);
 		OctoAttribute attribute_d = object.DeclareAttribute("test2", 1.0);
 
-		Assert.assertEquals(true, attribute_f.aeq(1.0, OctoAttribute.DELTA));
-		Assert.assertEquals(true, attribute_d.aeq(1.0, OctoAttribute.DELTA));
+		assertEquals(true, attribute_f.aeq(1.0, OctoAttribute.DELTA));
+		assertEquals(true, attribute_d.aeq(1.0, OctoAttribute.DELTA));
 	}
 
 	@Test
@@ -236,9 +235,9 @@ public class OctoAttributeTest
 		OctoAttribute attribute_l = object.DeclareAttribute("test2", 1L);
 		OctoAttribute attribute_s = object.DeclareAttribute("test3", "1");
 
-		Assert.assertEquals(true, attribute_i.ne(0L));
-		Assert.assertEquals(true, attribute_l.ne(0L));
-		Assert.assertEquals(true, attribute_s.ne("0"));
+		assertEquals(true, attribute_i.ne(0L));
+		assertEquals(true, attribute_l.ne(0L));
+		assertEquals(true, attribute_s.ne("0"));
 	}
 
 	@Test
@@ -250,15 +249,15 @@ public class OctoAttributeTest
 		OctoAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
 		OctoAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
 
-		Assert.assertEquals(true, attribute_i.gt(0L));
-		Assert.assertEquals(true, attribute_l.gt(0L));
-		Assert.assertEquals(true, attribute_f.gt(0.0));
-		Assert.assertEquals(true, attribute_d.gt(0.0));
+		assertEquals(true, attribute_i.gt(0L));
+		assertEquals(true, attribute_l.gt(0L));
+		assertEquals(true, attribute_f.gt(0.0));
+		assertEquals(true, attribute_d.gt(0.0));
 
-		Assert.assertEquals(false, attribute_i.gt(2L));
-		Assert.assertEquals(false, attribute_l.gt(2L));
-		Assert.assertEquals(false, attribute_f.gt(2.0));
-		Assert.assertEquals(false, attribute_d.gt(2.0));
+		assertEquals(false, attribute_i.gt(2L));
+		assertEquals(false, attribute_l.gt(2L));
+		assertEquals(false, attribute_f.gt(2.0));
+		assertEquals(false, attribute_d.gt(2.0));
 	}
 
 	@Test
@@ -270,15 +269,15 @@ public class OctoAttributeTest
 		OctoAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
 		OctoAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
 
-		Assert.assertEquals(true, attribute_i.lt(2L));
-		Assert.assertEquals(true, attribute_l.lt(2L));
-		Assert.assertEquals(true, attribute_f.lt(2.0));
-		Assert.assertEquals(true, attribute_d.lt(2.0));
+		assertEquals(true, attribute_i.lt(2L));
+		assertEquals(true, attribute_l.lt(2L));
+		assertEquals(true, attribute_f.lt(2.0));
+		assertEquals(true, attribute_d.lt(2.0));
 
-		Assert.assertEquals(false, attribute_i.lt(0L));
-		Assert.assertEquals(false, attribute_l.lt(0L));
-		Assert.assertEquals(false, attribute_f.lt(0.0));
-		Assert.assertEquals(false, attribute_d.lt(0.0));
+		assertEquals(false, attribute_i.lt(0L));
+		assertEquals(false, attribute_l.lt(0L));
+		assertEquals(false, attribute_f.lt(0.0));
+		assertEquals(false, attribute_d.lt(0.0));
 	}
 
 	@Test
@@ -290,15 +289,15 @@ public class OctoAttributeTest
 		OctoAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
 		OctoAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
 
-		Assert.assertEquals(true, attribute_i.ge(0L));
-		Assert.assertEquals(true, attribute_l.ge(0L));
-		Assert.assertEquals(true, attribute_f.ge(0.0));
-		Assert.assertEquals(true, attribute_d.ge(0.0));
+		assertEquals(true, attribute_i.ge(0L));
+		assertEquals(true, attribute_l.ge(0L));
+		assertEquals(true, attribute_f.ge(0.0));
+		assertEquals(true, attribute_d.ge(0.0));
 
-		Assert.assertEquals(false, attribute_i.ge(2L));
-		Assert.assertEquals(false, attribute_l.ge(2L));
-		Assert.assertEquals(false, attribute_f.ge(2.0));
-		Assert.assertEquals(false, attribute_d.ge(2.0));
+		assertEquals(false, attribute_i.ge(2L));
+		assertEquals(false, attribute_l.ge(2L));
+		assertEquals(false, attribute_f.ge(2.0));
+		assertEquals(false, attribute_d.ge(2.0));
 	}
 
 	@Test
@@ -310,15 +309,15 @@ public class OctoAttributeTest
 		OctoAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
 		OctoAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
 
-		Assert.assertEquals(true, attribute_i.le(2L));
-		Assert.assertEquals(true, attribute_l.le(2L));
-		Assert.assertEquals(true, attribute_f.le(2.0));
-		Assert.assertEquals(true, attribute_d.le(2.0));
+		assertEquals(true, attribute_i.le(2L));
+		assertEquals(true, attribute_l.le(2L));
+		assertEquals(true, attribute_f.le(2.0));
+		assertEquals(true, attribute_d.le(2.0));
 
-		Assert.assertEquals(false, attribute_i.le(0L));
-		Assert.assertEquals(false, attribute_l.le(0L));
-		Assert.assertEquals(false, attribute_f.le(0.0));
-		Assert.assertEquals(false, attribute_d.le(0.0));
+		assertEquals(false, attribute_i.le(0L));
+		assertEquals(false, attribute_l.le(0L));
+		assertEquals(false, attribute_f.le(0.0));
+		assertEquals(false, attribute_d.le(0.0));
 	}
 
 	@Test
@@ -327,19 +326,19 @@ public class OctoAttributeTest
 		OctoObject object = graph_service.AddObject();
 		OctoAttribute attribute = object.DeclareAttribute("test", 0);
 
-		Assert.assertTrue(attribute.IsValid());
+		assertTrue(attribute.IsValid());
 
 		attribute.SetInvalid();
-		Assert.assertFalse(attribute.IsValid());
+		assertFalse(attribute.IsValid());
 
 		attribute.SetValid();
-		Assert.assertTrue(attribute.IsValid());
+		assertTrue(attribute.IsValid());
 
 		attribute.SetInvalid();
-		Assert.assertFalse(attribute.IsValid());
+		assertFalse(attribute.IsValid());
 
 		attribute.SetValid();
-		Assert.assertTrue(attribute.IsValid());
+		assertTrue(attribute.IsValid());
 	}
 
 	private void SingleTypeCheck(Object object1, Object object2, boolean must_throw)
@@ -358,7 +357,7 @@ public class OctoAttributeTest
 			catched = true;
 		}
 
-		Assert.assertEquals(must_throw, catched); // can update to the same type
+		assertEquals(must_throw, catched); // can update to the same type
 	}
 
 	@Test

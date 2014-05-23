@@ -1,7 +1,7 @@
 package ru.parallel.octotron.core;
 
 import org.junit.*;
-import org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
@@ -38,8 +38,8 @@ public class GraphServiceTest
 	@Test
 	public void TestIsStaticName() throws Exception
 	{
-		Assert.assertFalse(GraphService.IsStaticName("test"));
-		Assert.assertTrue(GraphService.IsStaticName("_static_test"));
+		assertFalse(GraphService.IsStaticName("test"));
+		assertTrue(GraphService.IsStaticName("_static_test"));
 	}
 
 	@Test
@@ -50,27 +50,27 @@ public class GraphServiceTest
 
 		OctoLink link = graph_service.AddLink(object1, object2, "test");
 
-		Assert.assertFalse(graph_service.TestAttribute(object1, "exist"));
-		Assert.assertFalse(graph_service.TestAttribute(object2, "exist"));
-		Assert.assertFalse(graph_service.TestAttribute(link, "exist"));
+		assertFalse(graph_service.TestAttribute(object1, "exist"));
+		assertFalse(graph_service.TestAttribute(object2, "exist"));
+		assertFalse(graph_service.TestAttribute(link, "exist"));
 
 		graph_service.SetAttribute(object1, "exist", "");
 
-		Assert.assertTrue(graph_service.TestAttribute(object1, "exist"));
-		Assert.assertFalse(graph_service.TestAttribute(object2, "exist"));
-		Assert.assertFalse(graph_service.TestAttribute(link, "exist"));
+		assertTrue(graph_service.TestAttribute(object1, "exist"));
+		assertFalse(graph_service.TestAttribute(object2, "exist"));
+		assertFalse(graph_service.TestAttribute(link, "exist"));
 
 		graph_service.SetAttribute(link, "exist", "");
 
-		Assert.assertTrue(graph_service.TestAttribute(object1, "exist"));
-		Assert.assertFalse(graph_service.TestAttribute(object2, "exist"));
-		Assert.assertTrue(graph_service.TestAttribute(link, "exist"));
+		assertTrue(graph_service.TestAttribute(object1, "exist"));
+		assertFalse(graph_service.TestAttribute(object2, "exist"));
+		assertTrue(graph_service.TestAttribute(link, "exist"));
 
 		graph_service.SetAttribute(object2, "exist", "");
 
-		Assert.assertTrue(graph_service.TestAttribute(object1, "exist"));
-		Assert.assertTrue(graph_service.TestAttribute(object2, "exist"));
-		Assert.assertTrue(graph_service.TestAttribute(link, "exist"));
+		assertTrue(graph_service.TestAttribute(object1, "exist"));
+		assertTrue(graph_service.TestAttribute(object2, "exist"));
+		assertTrue(graph_service.TestAttribute(link, "exist"));
 
 		boolean catched = false;
 
@@ -82,7 +82,7 @@ public class GraphServiceTest
 		{
 			catched = true; // no usual names for static
 		}
-		Assert.assertTrue(catched);
+		assertTrue(catched);
 	}
 
 	@Test
@@ -97,14 +97,14 @@ public class GraphServiceTest
 		graph_service.SetAttribute(object1, "test_double", 1.0);
 		graph_service.SetAttribute(object1, "test_bool", true);
 
-		Assert.assertEquals(Long.valueOf(1L)
+		assertEquals(Long.valueOf(1L)
 			, graph_service.GetAttribute(object1, "test_long").GetLong());
 
-		Assert.assertEquals("a", graph_service.GetAttribute(object1, "test_str").GetString());
+		assertEquals("a", graph_service.GetAttribute(object1, "test_str").GetString());
 
-		Assert.assertEquals(1.0, graph_service.GetAttribute(object1, "test_double").GetDouble(), 0.1);
+		assertEquals(1.0, graph_service.GetAttribute(object1, "test_double").GetDouble(), 0.1);
 
-		Assert.assertEquals(true, graph_service.GetAttribute(object1, "test_bool").GetBoolean());
+		assertEquals(true, graph_service.GetAttribute(object1, "test_bool").GetBoolean());
 
 		OctoLink link = graph_service.AddLink(object1, object2, "test");
 
@@ -114,14 +114,14 @@ public class GraphServiceTest
 		graph_service.SetAttribute(link, "test_double", 1.0);
 		graph_service.SetAttribute(link, "test_bool", true);
 
-		Assert.assertEquals(Long.valueOf(1L)
+		assertEquals(Long.valueOf(1L)
 			,graph_service.GetAttribute(link, "test_long").GetLong());
 
-		Assert.assertEquals("a", graph_service.GetAttribute(link, "test_str").GetString());
+		assertEquals("a", graph_service.GetAttribute(link, "test_str").GetString());
 
-		Assert.assertEquals(1.0, graph_service.GetAttribute(link, "test_double").GetDouble(), 0.1);
+		assertEquals(1.0, graph_service.GetAttribute(link, "test_double").GetDouble(), 0.1);
 
-		Assert.assertEquals(true, graph_service.GetAttribute(link, "test_bool").GetBoolean());
+		assertEquals(true, graph_service.GetAttribute(link, "test_bool").GetBoolean());
 	}
 
 	@Test
@@ -132,16 +132,16 @@ public class GraphServiceTest
 
 		graph_service.SetAttribute(object1, "object", "");
 
-		Assert.assertFalse(graph_service.TestAttribute(object1, "not_exist"));
-		Assert.assertFalse(graph_service.TestAttribute(object1, "link"));
-		Assert.assertTrue(graph_service.TestAttribute(object1, "object"));
+		assertFalse(graph_service.TestAttribute(object1, "not_exist"));
+		assertFalse(graph_service.TestAttribute(object1, "link"));
+		assertTrue(graph_service.TestAttribute(object1, "object"));
 
 		OctoLink link = graph_service.AddLink(object1, object2, "test");
 		graph_service.SetAttribute(link, "link", "");
 
-		Assert.assertFalse(graph_service.TestAttribute(link, "not_exist"));
-		Assert.assertFalse(graph_service.TestAttribute(link, "object"));
-		Assert.assertTrue(graph_service.TestAttribute(link, "link"));
+		assertFalse(graph_service.TestAttribute(link, "not_exist"));
+		assertFalse(graph_service.TestAttribute(link, "object"));
+		assertTrue(graph_service.TestAttribute(link, "link"));
 	}
 
 	@Test
@@ -155,18 +155,18 @@ public class GraphServiceTest
 		graph_service.SetAttribute(object1, "object", "");
 		graph_service.SetAttribute(link, "link", "");
 
-		Assert.assertTrue(graph_service.TestAttribute(object1, "object"));
-		Assert.assertTrue(graph_service.TestAttribute(link, "link"));
+		assertTrue(graph_service.TestAttribute(object1, "object"));
+		assertTrue(graph_service.TestAttribute(link, "link"));
 
 		graph_service.DeleteAttribute(object1, "object");
 
-		Assert.assertFalse(graph_service.TestAttribute(object1, "object"));
-		Assert.assertTrue (graph_service.TestAttribute(link, "link"));
+		assertFalse(graph_service.TestAttribute(object1, "object"));
+		assertTrue (graph_service.TestAttribute(link, "link"));
 
 		graph_service.DeleteAttribute(link, "link");
 
-		Assert.assertFalse(graph_service.TestAttribute(object1, "object"));
-		Assert.assertFalse(graph_service.TestAttribute(link, "link"));
+		assertFalse(graph_service.TestAttribute(object1, "object"));
+		assertFalse(graph_service.TestAttribute(link, "link"));
 
 		boolean catched = false;
 
@@ -178,7 +178,7 @@ public class GraphServiceTest
 		{
 			catched = true; // no deleting static
 		}
-		Assert.assertTrue(catched);
+		assertTrue(catched);
 	}
 
 	@Test
@@ -191,14 +191,14 @@ public class GraphServiceTest
 		graph_service.SetAttribute(object1, "_static_object", "");
 		graph_service.SetAttribute(link, "_static_link", "");
 
-		Assert.assertEquals("", graph_service.GetAttribute(object1, "_static_object").GetString());
-		Assert.assertEquals("", graph_service.GetAttribute(object1, "_static_link").GetString());
+		assertEquals("", graph_service.GetAttribute(object1, "_static_object").GetString());
+		assertEquals("", graph_service.GetAttribute(object1, "_static_link").GetString());
 
-		Assert.assertEquals("", graph_service.GetAttribute(object2, "_static_object").GetString());
-		Assert.assertEquals("", graph_service.GetAttribute(object2, "_static_link").GetString());
+		assertEquals("", graph_service.GetAttribute(object2, "_static_object").GetString());
+		assertEquals("", graph_service.GetAttribute(object2, "_static_link").GetString());
 
-		Assert.assertEquals("", graph_service.GetAttribute(link, "_static_object").GetString());
-		Assert.assertEquals("", graph_service.GetAttribute(link, "_static_link").GetString());
+		assertEquals("", graph_service.GetAttribute(link, "_static_object").GetString());
+		assertEquals("", graph_service.GetAttribute(link, "_static_link").GetString());
 	}
 
 	@Test
@@ -206,13 +206,13 @@ public class GraphServiceTest
 	{
 		OctoObject object = graph_service.AddObject();
 
-		Assert.assertEquals(0, object.GetOutLinks().size());
-		Assert.assertEquals(0, object.GetInLinks().size());
+		assertEquals(0, object.GetOutLinks().size());
+		assertEquals(0, object.GetInLinks().size());
 
 		graph_service.AddLink(object, object, "test");
 
-		Assert.assertEquals(1, object.GetOutLinks().size());
-		Assert.assertEquals(1, object.GetInLinks().size());
+		assertEquals(1, object.GetOutLinks().size());
+		assertEquals(1, object.GetInLinks().size());
 	}
 
 	@Test
@@ -221,37 +221,37 @@ public class GraphServiceTest
 		OctoObject object1 = graph_service.AddObject();
 		OctoObject object2 = graph_service.AddObject();
 
-		Assert.assertEquals(0, graph_service.GetAllLinks().size());
+		assertEquals(0, graph_service.GetAllLinks().size());
 
 		graph_service.AddLink(object1, object2, "test");
 
-		Assert.assertEquals(0, graph_service.GetInLinks(object1).size());
-		Assert.assertEquals(1, graph_service.GetOutLinks(object1).size());
+		assertEquals(0, graph_service.GetInLinks(object1).size());
+		assertEquals(1, graph_service.GetOutLinks(object1).size());
 
-		Assert.assertEquals(1, graph_service.GetInLinks(object2).size());
-		Assert.assertEquals(0, graph_service.GetOutLinks(object2).size());
+		assertEquals(1, graph_service.GetInLinks(object2).size());
+		assertEquals(0, graph_service.GetOutLinks(object2).size());
 
-		Assert.assertEquals(1, graph_service.GetAllLinks().size());
+		assertEquals(1, graph_service.GetAllLinks().size());
 
 		graph_service.AddLink(object2, object1, "test");
 
-		Assert.assertEquals(1, graph_service.GetInLinks(object1).size());
-		Assert.assertEquals(1, graph_service.GetOutLinks(object1).size());
+		assertEquals(1, graph_service.GetInLinks(object1).size());
+		assertEquals(1, graph_service.GetOutLinks(object1).size());
 
-		Assert.assertEquals(1, graph_service.GetInLinks(object2).size());
-		Assert.assertEquals(1, graph_service.GetOutLinks(object2).size());
+		assertEquals(1, graph_service.GetInLinks(object2).size());
+		assertEquals(1, graph_service.GetOutLinks(object2).size());
 
-		Assert.assertEquals(2, graph_service.GetAllLinks().size());
+		assertEquals(2, graph_service.GetAllLinks().size());
 	}
 
 	@Test
 	public void TestAddObject() throws Exception
 	{
-		Assert.assertEquals(0, graph_service.GetAllObjects().size());
+		assertEquals(0, graph_service.GetAllObjects().size());
 		graph_service.AddObject();
-		Assert.assertEquals(1, graph_service.GetAllObjects().size());
+		assertEquals(1, graph_service.GetAllObjects().size());
 		graph_service.AddObject();
-		Assert.assertEquals(2, graph_service.GetAllObjects().size());
+		assertEquals(2, graph_service.GetAllObjects().size());
 	}
 
 	@Test
@@ -260,21 +260,21 @@ public class GraphServiceTest
 		OctoObject object1 = graph_service.AddObject();
 		OctoObject object2 = graph_service.AddObject();
 
-		Assert.assertEquals(0, graph_service.GetAllLinks().size());
+		assertEquals(0, graph_service.GetAllLinks().size());
 		OctoLink link1 = graph_service.AddLink(object1, object2, "test");
-		Assert.assertEquals(1, graph_service.GetAllLinks().size());
+		assertEquals(1, graph_service.GetAllLinks().size());
 		OctoLink link2 = graph_service.AddLink(object1, object2, "test");
-		Assert.assertEquals(2, graph_service.GetAllLinks().size());
+		assertEquals(2, graph_service.GetAllLinks().size());
 		graph_service.Delete(link1);
-		Assert.assertEquals(1, graph_service.GetAllLinks().size());
+		assertEquals(1, graph_service.GetAllLinks().size());
 		graph_service.Delete(link2);
-		Assert.assertEquals(0, graph_service.GetAllLinks().size());
+		assertEquals(0, graph_service.GetAllLinks().size());
 
-		Assert.assertEquals(2, graph_service.GetAllObjects().size());
+		assertEquals(2, graph_service.GetAllObjects().size());
 		graph_service.Delete(object2);
-		Assert.assertEquals(1, graph_service.GetAllObjects().size());
+		assertEquals(1, graph_service.GetAllObjects().size());
 		graph_service.Delete(object1);
-		Assert.assertEquals(0, graph_service.GetAllObjects().size());
+		assertEquals(0, graph_service.GetAllObjects().size());
 	}
 
 	@Test
@@ -283,17 +283,17 @@ public class GraphServiceTest
 		OctoObject object1 = graph_service.AddObject();
 		OctoObject object2 = graph_service.AddObject();
 
-		Assert.assertEquals(0, graph_service.GetInLinks(object1).size());
-		Assert.assertEquals(0, graph_service.GetInLinks(object2).size());
+		assertEquals(0, graph_service.GetInLinks(object1).size());
+		assertEquals(0, graph_service.GetInLinks(object2).size());
 
 		OctoLink link1 = graph_service.AddLink(object1, object2, "test");
 
-		Assert.assertEquals(link1.GetUID().getUid()
+		assertEquals(link1.GetUID().getUid()
 			, graph_service.GetInLinks(object2).Only().GetUID().getUid());
 
 		OctoLink link2 = graph_service.AddLink(object2, object1, "test");
 
-		Assert.assertEquals(link2.GetUID().getUid()
+		assertEquals(link2.GetUID().getUid()
 			, graph_service.GetInLinks(object1).Only().GetUID().getUid());
 	}
 
@@ -303,17 +303,17 @@ public class GraphServiceTest
 		OctoObject object1 = graph_service.AddObject();
 		OctoObject object2 = graph_service.AddObject();
 
-		Assert.assertEquals(0, graph_service.GetInLinks(object1).size());
-		Assert.assertEquals(0, graph_service.GetInLinks(object2).size());
+		assertEquals(0, graph_service.GetInLinks(object1).size());
+		assertEquals(0, graph_service.GetInLinks(object2).size());
 
 		OctoLink link1 = graph_service.AddLink(object1, object2, "test");
 
-		Assert.assertEquals(link1.GetUID().getUid()
+		assertEquals(link1.GetUID().getUid()
 			, graph_service.GetOutLinks(object1).Only().GetUID().getUid());
 
 		OctoLink link2 = graph_service.AddLink(object2, object1, "test");
 
-		Assert.assertEquals(link2.GetUID().getUid()
+		assertEquals(link2.GetUID().getUid()
 			, graph_service.GetOutLinks(object2).Only().GetUID().getUid());
 	}
 
@@ -325,9 +325,9 @@ public class GraphServiceTest
 		OctoLink link = graph_service.AddLink(object1, object2, "test");
 
 // everyone has AID
-		Assert.assertEquals(1, object1.GetAttributes().size());
-		Assert.assertEquals(1, object2.GetAttributes().size());
-		Assert.assertEquals(1, link.GetAttributes().size());
+		assertEquals(1, object1.GetAttributes().size());
+		assertEquals(1, object2.GetAttributes().size());
+		assertEquals(1, link.GetAttributes().size());
 
 		final int N = 10;
 
@@ -339,15 +339,15 @@ public class GraphServiceTest
 
 		for(long i = 0; i < N; i++)
 		{
-			Assert.assertEquals(Long.valueOf(i)
+			assertEquals(Long.valueOf(i)
 				, graph_service.GetAttribute(object1, "test" + i).GetLong());
-			Assert.assertEquals(Long.valueOf(N + i)
+			assertEquals(Long.valueOf(N + i)
 				, graph_service.GetAttribute(link, "test" + i).GetLong());
 		}
 
-		Assert.assertEquals(1 + N, object1.GetAttributes().size());
-		Assert.assertEquals(1 + 0, object2.GetAttributes().size());
-		Assert.assertEquals(1 + N, link.GetAttributes().size());
+		assertEquals(1 + N, object1.GetAttributes().size());
+		assertEquals(1 + 0, object2.GetAttributes().size());
+		assertEquals(1 + N, link.GetAttributes().size());
 	}
 
 	@Test
@@ -358,33 +358,33 @@ public class GraphServiceTest
 		OctoLink link = graph_service.AddLink(object1, object2, "test");
 
 // everyone has AID
-		Assert.assertEquals(1, object1.GetAttributes().size());
-		Assert.assertEquals(1, object2.GetAttributes().size());
-		Assert.assertEquals(1, link.GetAttributes().size());
+		assertEquals(1, object1.GetAttributes().size());
+		assertEquals(1, object2.GetAttributes().size());
+		assertEquals(1, link.GetAttributes().size());
 
-		Assert.assertEquals(0, graph_service.GetAllMeta(object1).size());
-		Assert.assertEquals(0, graph_service.GetAllMeta(object2).size());
-		Assert.assertEquals(0, graph_service.GetAllMeta(link).size());
+		assertEquals(0, graph_service.GetAllMeta(object1).size());
+		assertEquals(0, graph_service.GetAllMeta(object2).size());
+		assertEquals(0, graph_service.GetAllMeta(link).size());
 
 		graph_service.SetAttribute(object1, "object", "");
 		graph_service.SetAttribute(link, "link", "");
 
 // everyone has AID
-		Assert.assertEquals(2, object1.GetAttributes().size());
-		Assert.assertEquals(1, object2.GetAttributes().size());
-		Assert.assertEquals(2, link.GetAttributes().size());
+		assertEquals(2, object1.GetAttributes().size());
+		assertEquals(1, object2.GetAttributes().size());
+		assertEquals(2, link.GetAttributes().size());
 
 		graph_service.SetMeta(object1, "object", "object_meta", 0);
 		graph_service.SetMeta(link, "link", "link_meta", 0);
 
-		Assert.assertEquals(1, graph_service.GetAllMeta(object1).size());
-		Assert.assertEquals(0, graph_service.GetAllMeta(object2).size());
-		Assert.assertEquals(1, graph_service.GetAllMeta(link).size());
+		assertEquals(1, graph_service.GetAllMeta(object1).size());
+		assertEquals(0, graph_service.GetAllMeta(object2).size());
+		assertEquals(1, graph_service.GetAllMeta(link).size());
 
 // everyone has AID
-		Assert.assertEquals(2, object1.GetAttributes().size());
-		Assert.assertEquals(1, object2.GetAttributes().size());
-		Assert.assertEquals(2, link.GetAttributes().size());
+		assertEquals(2, object1.GetAttributes().size());
+		assertEquals(1, object2.GetAttributes().size());
+		assertEquals(2, link.GetAttributes().size());
 	}
 
 	@Test
@@ -404,11 +404,11 @@ public class GraphServiceTest
 		graph_service.SetMeta(link, "link", "link_meta_1", 1);
 		graph_service.SetMeta(link, "link", "link_meta_2", 2);
 
-		Assert.assertEquals(1, graph_service.GetMeta(object1, "object", "object_meta_1"));
-		Assert.assertEquals(2, graph_service.GetMeta(object1, "object", "object_meta_2"));
+		assertEquals(1, graph_service.GetMeta(object1, "object", "object_meta_1"));
+		assertEquals(2, graph_service.GetMeta(object1, "object", "object_meta_2"));
 
-		Assert.assertEquals(1, graph_service.GetMeta(link, "link", "link_meta_1"));
-		Assert.assertEquals(2, graph_service.GetMeta(link, "link", "link_meta_2"));
+		assertEquals(1, graph_service.GetMeta(link, "link", "link_meta_1"));
+		assertEquals(2, graph_service.GetMeta(link, "link", "link_meta_2"));
 	}
 
 	@Test
@@ -427,11 +427,11 @@ public class GraphServiceTest
 		graph_service.SetMeta(object1, "object", "object_meta", 1);
 		graph_service.SetMeta(link, "link", "link_meta", 1);
 
-		Assert.assertTrue (graph_service.TestMeta(object1, "object", "object_meta"));
-		Assert.assertFalse(graph_service.TestMeta(object1, "object2", "object_meta"));
+		assertTrue (graph_service.TestMeta(object1, "object", "object_meta"));
+		assertFalse(graph_service.TestMeta(object1, "object2", "object_meta"));
 
-		Assert.assertTrue (graph_service.TestMeta(link, "link", "link_meta"));
-		Assert.assertFalse(graph_service.TestMeta(link, "link2", "link_meta"));
+		assertTrue (graph_service.TestMeta(link, "link", "link_meta"));
+		assertFalse(graph_service.TestMeta(link, "link2", "link_meta"));
 	}
 
 	@Test
@@ -451,8 +451,8 @@ public class GraphServiceTest
 		graph_service.DeleteMeta(object1, "object", "object_meta");
 		graph_service.DeleteMeta(link, "link", "link_meta");
 
-		Assert.assertFalse(graph_service.TestMeta(object1, "object", "object_meta"));
-		Assert.assertFalse(graph_service.TestMeta(link, "link", "link_meta"));
+		assertFalse(graph_service.TestMeta(object1, "object", "object_meta"));
+		assertFalse(graph_service.TestMeta(link, "link", "link_meta"));
 	}
 
 	@Test
@@ -466,12 +466,12 @@ public class GraphServiceTest
 			objects.add(graph_service.AddObject());
 		}
 
-		Assert.assertEquals(0, graph_service.GetAllLinks().size());
+		assertEquals(0, graph_service.GetAllLinks().size());
 
 		for(int i = 0; i < N; i++)
 		{
 			graph_service.AddLink(objects.get(i), objects.get((i * 2) % N), "test");
-			Assert.assertEquals(i + 1, graph_service.GetAllLinks().size());
+			assertEquals(i + 1, graph_service.GetAllLinks().size());
 		}
 	}
 
@@ -481,13 +481,13 @@ public class GraphServiceTest
 		final int N = 10;
 
 		// static must not be visible
-		Assert.assertEquals(0, graph_service.GetAllObjects().size());
+		assertEquals(0, graph_service.GetAllObjects().size());
 
 		for(int i = 0; i < N; i++)
 		{
 			graph_service.AddObject();
 
-			Assert.assertEquals(i + 1, graph_service.GetAllObjects().size());
+			assertEquals(i + 1, graph_service.GetAllObjects().size());
 		}
 	}
 
@@ -503,12 +503,12 @@ public class GraphServiceTest
 		for(long i = 0; i < N; i++)
 			data.add(i);
 
-		Assert.assertEquals(1, graph_service.GetAttributes(object).size());
+		assertEquals(1, graph_service.GetAttributes(object).size());
 
 		graph_service.SetArray(object, "test", data);
 
 		// array must not be visible
-		Assert.assertEquals(1, graph_service.GetAttributes(object).size());
+		assertEquals(1, graph_service.GetAttributes(object).size());
 	}
 
 	@Test
@@ -536,8 +536,8 @@ public class GraphServiceTest
 
 		for(int i = 0; i < N; i++)
 		{
-			Assert.assertEquals(Long.valueOf((long)i), test1.get(i));
-			Assert.assertEquals(Long.valueOf((long)i * 2), test2.get(i));
+			assertEquals(Long.valueOf((long)i), test1.get(i));
+			assertEquals(Long.valueOf((long)i * 2), test2.get(i));
 		}
 	}
 
@@ -559,7 +559,7 @@ public class GraphServiceTest
 			List<Long> test = graph_service.GetArray(object, "test");
 
 			for(int i = 0; i <= iter; i++)
-				Assert.assertEquals(Long.valueOf((long)i), test.get(i));
+				assertEquals(Long.valueOf((long)i), test.get(i));
 		}
 	}
 
@@ -583,18 +583,18 @@ public class GraphServiceTest
 		graph_service.SetArray(object1, "test", data1);
 		graph_service.SetArray(object2, "test", data2);
 
-		Assert.assertEquals(N, graph_service.GetArray(object1, "test").size());
-		Assert.assertEquals(N, graph_service.GetArray(object2, "test").size());
+		assertEquals(N, graph_service.GetArray(object1, "test").size());
+		assertEquals(N, graph_service.GetArray(object2, "test").size());
 
 		graph_service.CleanArray(object1, "test");
 
-		Assert.assertEquals(0, graph_service.GetArray(object1, "test").size());
-		Assert.assertEquals(N, graph_service.GetArray(object2, "test").size());
+		assertEquals(0, graph_service.GetArray(object1, "test").size());
+		assertEquals(N, graph_service.GetArray(object2, "test").size());
 
 		graph_service.CleanArray(object2, "test");
 
-		Assert.assertEquals(0, graph_service.GetArray(object1, "test").size());
-		Assert.assertEquals(0, graph_service.GetArray(object2, "test").size());
+		assertEquals(0, graph_service.GetArray(object1, "test").size());
+		assertEquals(0, graph_service.GetArray(object2, "test").size());
 	}
 
 	@Test
@@ -607,15 +607,15 @@ public class GraphServiceTest
 
 		graph_service.Clean();
 
-		Assert.assertEquals("unexpected objects found"
+		assertEquals("unexpected objects found"
 			, 0
 			, graph_service.GetAllObjects().size());
 
-		Assert.assertEquals("some links found"
+		assertEquals("some links found"
 			, 0
 			, graph_service.GetAllLinks().size());
 
-		Assert.assertEquals("static has unexpected attributes"
+		assertEquals("static has unexpected attributes"
 			, 3 // type, AID, next_AID
 			, graph_service.GetStatic().GetAttributes().size());
 	}

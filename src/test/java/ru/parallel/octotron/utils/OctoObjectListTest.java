@@ -1,9 +1,8 @@
 package ru.parallel.octotron.utils;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import static org.junit.Assert.*;
+
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
@@ -32,15 +31,15 @@ public class OctoObjectListTest
 	{
 		OctoObjectList list = new OctoObjectList();
 
-		Assert.assertEquals("list is not empty", list.size(), 0);
+		assertEquals("list is not empty", list.size(), 0);
 
 		list.add(OctoObjectListTest.graph_service.AddObject());
-		Assert.assertEquals("list has no elements", list.size(), 1);
+		assertEquals("list has no elements", list.size(), 1);
 
 		list.add(OctoObjectListTest.graph_service.AddObject());
-		Assert.assertEquals("list has not get 2nd element", list.size(), 2);
+		assertEquals("list has not get 2nd element", list.size(), 2);
 
-		Assert.assertNotNull("add not worked correctly", list.get(0));
+		assertNotNull("add not worked correctly", list.get(0));
 	}
 
 	@Test
@@ -52,9 +51,9 @@ public class OctoObjectListTest
 		list.add(OctoObjectListTest.graph_service.AddObject());
 		list.add(OctoObjectListTest.graph_service.AddObject());
 
-		Assert.assertNotNull("got something wrong", list.get(0));
-		Assert.assertNotNull("got something wrong", list.get(1));
-		Assert.assertNotNull("got something wrong", list.get(2));
+		assertNotNull("got something wrong", list.get(0));
+		assertNotNull("got something wrong", list.get(1));
+		assertNotNull("got something wrong", list.get(2));
 	}
 
 	@Test
@@ -73,7 +72,7 @@ public class OctoObjectListTest
 		for(OctoObject obj : list)
 			i++;
 
-		Assert.assertEquals("got something wrong", N, i);
+		assertEquals("got something wrong", N, i);
 	}
 
 	@Test
@@ -86,7 +85,7 @@ public class OctoObjectListTest
 		for(int i = 0; i < N; i++)
 		{
 			list.add(OctoObjectListTest.graph_service.AddObject());
-			Assert.assertEquals("got something wrong", list.size(), i + 1);
+			assertEquals("got something wrong", list.size(), i + 1);
 		}
 	}
 
@@ -102,12 +101,12 @@ public class OctoObjectListTest
 			list.add(OctoObjectListTest.graph_service.AddObject());
 		}
 
-		Assert.assertEquals(N, list.range(0, N).size());
-		Assert.assertEquals(N/2, list.range(0, N/2).size());
-		Assert.assertEquals(N/2, list.range(N/2, N).size());
+		assertEquals(N, list.range(0, N).size());
+		assertEquals(N/2, list.range(0, N/2).size());
+		assertEquals(N/2, list.range(N/2, N).size());
 
-		Assert.assertEquals(1, list.range(0, 1).size());
-		Assert.assertEquals(0, list.range(0, 0).size());
+		assertEquals(1, list.range(0, 1).size());
+		assertEquals(0, list.range(0, 0).size());
 	}
 
 	@Test
@@ -127,8 +126,8 @@ public class OctoObjectListTest
 
 		list3 = list1.append(list2);
 
-		Assert.assertEquals("got something wrong", list1.size(), N);
-		Assert.assertEquals("got something wrong", list2.size(), N);
-		Assert.assertEquals("got something wrong", list3.size(), N * 2);
+		assertEquals("got something wrong", list1.size(), N);
+		assertEquals("got something wrong", list2.size(), N);
+		assertEquals("got something wrong", list3.size(), N * 2);
 	}
 }

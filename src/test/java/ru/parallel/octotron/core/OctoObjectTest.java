@@ -1,15 +1,14 @@
 package ru.parallel.octotron.core;
 
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import static org.junit.Assert.*;
+
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 
-public class OctoObjectTest extends Assert
+public class OctoObjectTest
 {
 	private static Neo4jGraph graph;
 	private static GraphService graph_service;
@@ -57,19 +56,19 @@ public class OctoObjectTest extends Assert
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
-		Assert.assertEquals("in links not match, any type"
+		assertEquals("in links not match, any type"
 			, node.GetInLinks().size(), N);
 
-		Assert.assertEquals("in links not match, exact type"
+		assertEquals("in links not match, exact type"
 			, node.GetInLinks().Filter("link").size(), N);
 
-		Assert.assertEquals("in links not match, exact type and value"
+		assertEquals("in links not match, exact type and value"
 			, node.GetInLinks().Filter("link", "ok").size(), N);
 
-		Assert.assertEquals("in links not match, exact type, wrong value"
+		assertEquals("in links not match, exact type, wrong value"
 			, node.GetInLinks().Filter("link", "fail").size(), 0);
 
-		Assert.assertEquals("in links not match, wrong type, wrong value"
+		assertEquals("in links not match, wrong type, wrong value"
 			, node.GetInLinks().Filter("fail", "fail").size(), 0);
 	}
 
@@ -82,19 +81,19 @@ public class OctoObjectTest extends Assert
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
-		Assert.assertEquals("in links not match, any type"
+		assertEquals("in links not match, any type"
 			, node.GetInNeighbors().size(), N);
 
-		Assert.assertEquals("in links not match, exact type"
+		assertEquals("in links not match, exact type"
 			, node.GetInNeighbors("link").size(), N);
 
-		Assert.assertEquals("in links not match, exact type and value"
+		assertEquals("in links not match, exact type and value"
 			, node.GetInNeighbors("link", "ok").size(), N);
 
-		Assert.assertEquals("in links not match, exact type, wrong value"
+		assertEquals("in links not match, exact type, wrong value"
 			, node.GetInNeighbors("link", "fail").size(), 0);
 
-		Assert.assertEquals("in links not match, wrong type, wrong value"
+		assertEquals("in links not match, wrong type, wrong value"
 			, node.GetInNeighbors("fail", "fail").size(), 0);
 	}
 
@@ -107,19 +106,19 @@ public class OctoObjectTest extends Assert
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
-		Assert.assertEquals("in links not match, any type"
+		assertEquals("in links not match, any type"
 			, node.GetOutNeighbors().size(), N);
 
-		Assert.assertEquals("in links not match, exact type"
+		assertEquals("in links not match, exact type"
 			, node.GetOutNeighbors("link").size(), N);
 
-		Assert.assertEquals("in links not match, exact type and value"
+		assertEquals("in links not match, exact type and value"
 			, node.GetOutNeighbors("link", "ok").size(), N);
 
-		Assert.assertEquals("in links not match, exact type, wrong value"
+		assertEquals("in links not match, exact type, wrong value"
 			, node.GetOutNeighbors("link", "fail").size(), 0);
 
-		Assert.assertEquals("in links not match, wrong type, wrong value"
+		assertEquals("in links not match, wrong type, wrong value"
 			, node.GetOutNeighbors("fail", "fail").size(), 0);
 	}
 
@@ -132,19 +131,19 @@ public class OctoObjectTest extends Assert
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
-		Assert.assertEquals("out links not match, any type"
+		assertEquals("out links not match, any type"
 			, node.GetOutLinks().size(), N);
 
-		Assert.assertEquals("out links not match, exact type"
+		assertEquals("out links not match, exact type"
 			, node.GetOutLinks().Filter("link").size(), N);
 
-		Assert.assertEquals("out links not match, exact type and value"
+		assertEquals("out links not match, exact type and value"
 			, node.GetOutLinks().Filter("link", "ok").size(), N);
 
-		Assert.assertEquals("out links not match, exact type, wrong value"
+		assertEquals("out links not match, exact type, wrong value"
 			, node.GetOutLinks().Filter("link", "fail").size(), 0);
 
-		Assert.assertEquals("out links not match, wrong type, wrong value"
+		assertEquals("out links not match, wrong type, wrong value"
 			, node.GetOutLinks().Filter("fail", "fail").size(), 0);
 	}
 
@@ -162,23 +161,23 @@ public class OctoObjectTest extends Assert
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
-		Assert.assertEquals("in neighbors not match, any type"
+		assertEquals("in neighbors not match, any type"
 			, node.GetInNeighbors()
 				.size(), N);
 
-		Assert.assertEquals("in neighbors not match, exact type"
+		assertEquals("in neighbors not match, exact type"
 			, node.GetInNeighbors()
 				.Filter("object").size(), N);
 
-		Assert.assertEquals("in neighbors not match, exact type and value"
+		assertEquals("in neighbors not match, exact type and value"
 			, node.GetInNeighbors()
 				.Filter("object", "ok").size(), N);
 
-		Assert.assertEquals("in neighbors not match, exact type, wrong value"
+		assertEquals("in neighbors not match, exact type, wrong value"
 			, node.GetInNeighbors()
 				.Filter("object", "fail").size(), 0);
 
-		Assert.assertEquals("in neighbors not match, wrong type, wrong value"
+		assertEquals("in neighbors not match, wrong type, wrong value"
 			, node.GetInNeighbors()
 				.Filter("fail", "fail").size(), 0);
 	}
@@ -192,23 +191,23 @@ public class OctoObjectTest extends Assert
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
-		Assert.assertEquals("in neighbors not match, any type"
+		assertEquals("in neighbors not match, any type"
 			, node.GetOutNeighbors()
 				.size(), N);
 
-		Assert.assertEquals("in neighbors not match, exact type"
+		assertEquals("in neighbors not match, exact type"
 			, node.GetOutNeighbors()
 				.Filter("object").size(), N);
 
-		Assert.assertEquals("in neighbors not match, exact type and value"
+		assertEquals("in neighbors not match, exact type and value"
 			, node.GetOutNeighbors()
 				.Filter("object", "ok").size(), N);
 
-		Assert.assertEquals("in neighbors not match, exact type, wrong value"
+		assertEquals("in neighbors not match, exact type, wrong value"
 			, node.GetOutNeighbors()
 				.Filter("object", "fail").size(), 0);
 
-		Assert.assertEquals("in neighbors not match, wrong type, wrong value"
+		assertEquals("in neighbors not match, wrong type, wrong value"
 			, node.GetOutNeighbors()
 				.Filter("fail", "fail").size(), 0);
 

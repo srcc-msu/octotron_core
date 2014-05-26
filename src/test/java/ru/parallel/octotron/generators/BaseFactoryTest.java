@@ -7,15 +7,13 @@ import ru.parallel.octotron.core.*;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.EEventStatus;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.rules.Match;
-import ru.parallel.octotron.utils.OctoObjectList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * test some common cases -attributes, factories
+ * test some common cases - attributes, factories
  * */
 public class BaseFactoryTest
 {
@@ -63,9 +61,9 @@ public class BaseFactoryTest
 		assertTrue(obj.TestAttribute("test2"));
 		assertTrue(obj.TestAttribute("test3"));
 
-		assertTrue("misisng link attribute", link.TestAttribute("test1"));
-		assertTrue("misisng link attribute", link.TestAttribute("test2"));
-		assertTrue("misisng link attribute", link.TestAttribute("test3"));
+		assertTrue("missing link attribute", link.TestAttribute("test1"));
+		assertTrue("missing link attribute", link.TestAttribute("test2"));
+		assertTrue("missing link attribute", link.TestAttribute("test3"));
 	}
 
 	@Test

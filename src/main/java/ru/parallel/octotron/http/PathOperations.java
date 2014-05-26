@@ -9,7 +9,7 @@ package ru.parallel.octotron.http;
 import java.util.List;
 
 import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.logic.ExecutionControler;
+import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
@@ -31,7 +31,7 @@ public abstract class PathOperations
 
 	private interface ITransform
 	{
-		IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 				, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError;
 	}
@@ -65,7 +65,7 @@ public abstract class PathOperations
 			return out;
 		}
 
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj)
 				throws ExceptionParseError
 		{
@@ -102,7 +102,7 @@ public abstract class PathOperations
 	public static final PathToken q = new PathToken("q", CHAIN_TYPE.E_MATCH
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
@@ -132,7 +132,7 @@ public abstract class PathOperations
 	public static final PathToken obj = new PathToken("obj", CHAIN_TYPE.E_START
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
@@ -156,7 +156,7 @@ public abstract class PathOperations
 	public static final PathToken link = new PathToken("link", CHAIN_TYPE.E_START
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
@@ -179,7 +179,7 @@ public abstract class PathOperations
 	public static final PathToken uniq = new PathToken("uniq", CHAIN_TYPE.E_MATCH
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
@@ -199,7 +199,7 @@ public abstract class PathOperations
 	public static final PathToken in_n = new PathToken("in_n", CHAIN_TYPE.E_OBJ_LIST
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError, ExceptionModelFail
 		{
@@ -219,7 +219,7 @@ public abstract class PathOperations
 	public static final PathToken out_n = new PathToken("out_n", CHAIN_TYPE.E_OBJ_LIST
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError, ExceptionModelFail
 		{
@@ -239,7 +239,7 @@ public abstract class PathOperations
 	public static final PathToken all_n = new PathToken("all_n", CHAIN_TYPE.E_OBJ_LIST
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError, ExceptionModelFail
 		{
@@ -261,7 +261,7 @@ public abstract class PathOperations
 	public static final PathToken in_l = new PathToken("in_l", CHAIN_TYPE.E_OBJ_LIST
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ((OctoObjectList)obj).GetInLinks();
@@ -274,7 +274,7 @@ public abstract class PathOperations
 	public static final PathToken out_l = new PathToken("out_l", CHAIN_TYPE.E_OBJ_LIST, CHAIN_TYPE.E_LINK_LIST
 		, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ((OctoObjectList)obj).GetOutLinks();
@@ -287,7 +287,7 @@ public abstract class PathOperations
 	public static final PathToken all_l = new PathToken("all_l", CHAIN_TYPE.E_OBJ_LIST, CHAIN_TYPE.E_LINK_LIST
 		, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ((OctoObjectList)obj).GetInLinks().append(((OctoObjectList)obj).GetOutLinks());
 		}
@@ -299,7 +299,7 @@ public abstract class PathOperations
 	public static final PathToken source = new PathToken("source", CHAIN_TYPE.E_LINK_LIST, CHAIN_TYPE.E_OBJ_LIST
 		, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ((OctoLinkList)obj).Source();
@@ -312,7 +312,7 @@ public abstract class PathOperations
 	public static final PathToken target = new PathToken("target", CHAIN_TYPE.E_LINK_LIST, CHAIN_TYPE.E_OBJ_LIST
 		, new ITransform()
 	{
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionControler exec_control
+		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ((OctoLinkList)obj).Target();

@@ -10,7 +10,7 @@ import java.io.File;
 
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.impl.PersistenStorage;
-import ru.parallel.octotron.logic.ExecutionControler;
+import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.utils.FileUtils;
@@ -92,7 +92,7 @@ public class StartOctotron
 	private static void Run(GlobalSettings settings)
 	{
 		Neo4jGraph graph = null;
-		ExecutionControler exec_control = null;
+		ExecutionController exec_control = null;
 
 		String path = settings.GetDbPath() + settings.GetDbName();
 
@@ -101,7 +101,7 @@ public class StartOctotron
 		{
 			graph = new Neo4jGraph(path + "_neo4j", Neo4jGraph.Op.LOAD);
 
-			exec_control = new ExecutionControler(graph, new GraphService(graph), settings);
+			exec_control = new ExecutionController(graph, new GraphService(graph), settings);
 
 			PersistenStorage.INSTANCE.Load(path);
 
@@ -134,7 +134,7 @@ public class StartOctotron
  * run the main program loop<br>
  * if it crashes - returns exception, otherwise returns nothing<br>
  * */
-	private static Exception MainLoop(GlobalSettings settings, ExecutionControler exec_control)
+	private static Exception MainLoop(GlobalSettings settings, ExecutionController exec_control)
 	{
 		System.out.println("main loop started");
 
@@ -157,7 +157,7 @@ public class StartOctotron
 /**
  * shutdown the graph and all execution processes<br>
  * */
-	public static Exception Shutdown(GlobalSettings settings, Neo4jGraph graph, ExecutionControler exec_control)
+	public static Exception Shutdown(GlobalSettings settings, Neo4jGraph graph, ExecutionController exec_control)
 	{
 		String path = settings.GetDbPath() + settings.GetDbName();
 

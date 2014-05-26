@@ -29,6 +29,7 @@ import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.netimport.ISensorData;
 import ru.parallel.octotron.netimport.SimpleImporter;
+import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.reactions.PreparedResponse;
@@ -36,7 +37,7 @@ import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.JavaUtils;
 
-public class ExecutionControler
+public class ExecutionController
 {
 	private boolean exit = false;
 
@@ -47,7 +48,7 @@ public class ExecutionControler
 	private final SimpleImporter http_importer;
 	private HTTPServer http;
 
-	private Thread request_proccessor;
+	private Thread request_processor;
 
 	private ReactionInvoker rule_invoker;
 	private boolean silent = false;
@@ -60,12 +61,13 @@ public class ExecutionControler
 
 	private Statistics stat;
 
-	public ExecutionControler(IGraph graph, GraphService graph_service, GlobalSettings settings)
+	public ExecutionController(IGraph graph, GraphService graph_service, GlobalSettings settings)
 		throws ExceptionSystemError
 	{
 		this.graph = graph;
 		this.graph_service = graph_service;
-		this.manager = new ImportManager(graph_service);
+
+		manager = new ImportManager(graph_service);
 
 		http_importer = new SimpleImporter();
 
@@ -73,9 +75,9 @@ public class ExecutionControler
 
 		BackgroundRequestProcess();
 
-		this.rule_invoker = new ReactionInvoker(settings);
+		rule_invoker = new ReactionInvoker(settings);
 
-		this.stat = new Statistics();
+		stat = new Statistics();
 	}
 
 /**
@@ -83,7 +85,7 @@ public class ExecutionControler
  * */
 	private void BackgroundRequestProcess()
 	{
-		request_proccessor = new Thread()
+		request_processor = new Thread()
 		{
 			public void run()
 			{
@@ -117,13 +119,13 @@ public class ExecutionControler
 			}
 		};
 
-		request_proccessor.setName("request_proccessor");
-		request_proccessor.start();
+		request_processor.setName("request_processor");
+		request_processor.start();
 	}
 
-	public SimpleImporter GetImporter()
+	public void Import(OctoObject object, SimpleAttribute attribute)
 	{
-		return http_importer;
+		http_importer.Put(object, attribute);
 	}
 
 	public void SetExit(boolean exit)
@@ -143,8 +145,8 @@ public class ExecutionControler
 
 	public void Finish()
 	{
-		if(request_proccessor != null)
-			request_proccessor.interrupt();
+		if(request_processor != null)
+			request_processor.interrupt();
 
 		rule_invoker.Finish();
 		http.Finish();

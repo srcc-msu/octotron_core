@@ -21,7 +21,7 @@ import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.impl.PersistenStorage;
-import ru.parallel.octotron.logic.ExecutionControler;
+import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
@@ -65,7 +65,7 @@ public abstract class Operations
 			return is_blocking;
 		}
 
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -75,7 +75,7 @@ public abstract class Operations
 
 	private interface IExec
 	{
-		Object Execute(GraphService graph_service, ExecutionControler control
+		Object Execute(GraphService graph_service, ExecutionController control
 				, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError;
 	}
@@ -138,7 +138,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -157,7 +157,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -216,7 +216,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionDBError, ExceptionParseError
 		{
@@ -233,7 +233,7 @@ public abstract class Operations
 	public static final Operation show_m = new Operation("show_m", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -264,7 +264,7 @@ public abstract class Operations
 	public static final Operation show_r = new Operation("show_r", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -321,7 +321,7 @@ public abstract class Operations
 	public static final Operation version = new Operation("version", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -386,7 +386,7 @@ public abstract class Operations
 	public static final Operation import_token = new Operation("import", false, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -402,7 +402,7 @@ public abstract class Operations
 			if(target.GetUID().getType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("can not import value to a link");
 			else
-				control.GetImporter().Put((OctoObject)target, new SimpleAttribute(name, value));
+				control.Import((OctoObject)target, new SimpleAttribute(name, value));
 
 			String data = "added to import queue";
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -416,7 +416,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -450,7 +450,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -485,7 +485,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -515,7 +515,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -545,7 +545,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -582,7 +582,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -609,7 +609,7 @@ public abstract class Operations
  * */	public static final Operation quit = new Operation("quit", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -629,7 +629,7 @@ public abstract class Operations
 	public static final Operation mode = new Operation("mode", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -656,7 +656,7 @@ public abstract class Operations
 	public static final Operation snapshot = new Operation("snapshot", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -681,7 +681,7 @@ time = Timer.SEnd();
 	public static final Operation stat = new Operation("stat", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -706,7 +706,7 @@ time = Timer.SEnd();
 		private String cached_result = null;
 
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{
@@ -747,7 +747,7 @@ time = Timer.SEnd();
 	public static final Operation mod_time = new Operation("mod_time", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionControler control
+		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
 				throws ExceptionParseError
 		{

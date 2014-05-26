@@ -11,7 +11,7 @@ import java.util.Map;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.http.Operations.Operation;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
-import ru.parallel.octotron.logic.ExecutionControler;
+import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.utils.IEntityList;
 
 /**
@@ -28,7 +28,7 @@ public class ParsedRequest
 		this.params = params;
 	}
 
-	public RequestResult Execute(GraphService graph_service, ExecutionControler exec_control)
+	public RequestResult Execute(GraphService graph_service, ExecutionController exec_control)
 	{
 		try
 		{

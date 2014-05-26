@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.primitive;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 import ru.parallel.octotron.core.OctoAttribute;
@@ -22,33 +23,16 @@ public class SimpleAttribute
 {
 	protected final String name;
 	protected Object value;
-	protected OctoEntity parent;
-
-	public SimpleAttribute(String name, Object value, OctoEntity parent)
-	{
-		this.name = name;
-		this.value = value;
-		this.parent = parent;
-	}
 
 	public SimpleAttribute(String name, Object value)
 	{
-		this(name, value, null);
+		this.name = name;
+		this.value = value;
 	}
 
 	public final String GetName()
 	{
 		return name;
-	}
-
-	public final OctoEntity GetParent()
-	{
-		return parent;
-	}
-
-	public final void SetParent(OctoEntity parent)
-	{
-		this.parent = parent;
 	}
 
 	public final Object GetValue()

@@ -21,12 +21,15 @@ public class OctoAttribute extends SimpleAttribute
 	public static final double EPSILON = 0.00001;
 
 	private final GraphService graph_service;
+	protected OctoEntity parent;
 	private long ctime = 0;
 	private long atime = 0;
 
 	OctoAttribute(GraphService graph_service, OctoEntity parent, String name, Object value)
 	{
-		super(name, value, parent);
+		super(name, value);
+
+		this.parent = parent;
 
 		this.graph_service = graph_service;
 
@@ -278,5 +281,15 @@ public class OctoAttribute extends SimpleAttribute
 	public void SetInvalid()
 	{
 		graph_service.SetMeta(parent, name, OctoAttribute.INVALID_KEY, true);
+	}
+
+	public final OctoEntity GetParent()
+	{
+		return parent;
+	}
+
+	public final void SetParent(OctoEntity parent)
+	{
+		this.parent = parent;
 	}
 }

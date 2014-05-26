@@ -358,7 +358,7 @@ public final class GraphService
 
 		for(Pair<String, Object> attribute : attributes)
 			if(IsMeta(attribute.getKey()))
-				result.add(new SimpleAttribute(attribute.getKey(), attribute.getValue(), entity));
+				result.add(new SimpleAttribute(attribute.getKey(), attribute.getValue()));
 
 		return result;
 	}

@@ -58,7 +58,7 @@ public final class PathParser
 
 
 // matched <id><any chars !=<>.><value>
-	private static final Pattern op_pattern_op = Pattern.compile("^([a-zA-Z_\\-0-9\\.]+)([!=<>]+)([a-zA-Z_\\-0-9\\.\"']+)$");
+	private static final Pattern op_pattern_op = Pattern.compile("^([a-zA-Z_\\-0-9\\.]+)([!=<>]+)(.+)$");
 	private static final Pattern op_pattern_word = Pattern.compile("^([a-zA-Z_\\-0-9\\.]+)$");
 
 /**

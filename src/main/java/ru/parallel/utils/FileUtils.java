@@ -44,10 +44,11 @@ public abstract class FileUtils
 		return new BufferedReader(isr);
 	}
 
-	private static final Queue<Process> active_processes = new ConcurrentLinkedQueue<Process>();
+	private static final Queue<Process> active_processes = new ConcurrentLinkedQueue<>();
 	static
 	{
 		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
 			public void run() {
 
 				int counter = 0;
@@ -167,7 +168,7 @@ Timer.SPrint(command[0]);
 			FileReader fr = new FileReader(fname);
 			BufferedReader reader = new BufferedReader(fr);
 
-			List<String> text = new LinkedList<String>();
+			List<String> text = new LinkedList<>();
 			String line;
 
 			while ((line = reader.readLine()) != null)

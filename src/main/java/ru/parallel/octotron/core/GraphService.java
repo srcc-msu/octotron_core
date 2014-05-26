@@ -499,12 +499,12 @@ public final class GraphService
 	public List<Long> GetArray(OctoEntity entity, String prefix)
 	{
 		if(!TestAttribute(entity, prefix))
-			return new LinkedList<Long>();
+			return new LinkedList<>();
 
 		Object value = GetRawAttribute(entity, prefix);
 		long[] ints = (long[])value;
 
-		return new LinkedList<Long>(Arrays.asList(ArrayUtils.toObject(ints)));
+		return new LinkedList<>(Arrays.asList(ArrayUtils.toObject(ints)));
 	}
 
 	public void AddToArray(OctoEntity entity, String prefix, Long value)

@@ -82,7 +82,7 @@ public abstract class OctoEntity
 
 	public OctoAttribute DeclareAttribute(String name, Object value)
 	{
-		if(!graph_service.IsStaticName(name) && TestAttribute(name))
+		if(!GraphService.IsStaticName(name) && TestAttribute(name))
 			throw new ExceptionModelFail("attribute " + name + " already declared");
 
 		return graph_service.SetAttribute(this, name, SimpleAttribute.ConformType(value));
@@ -120,7 +120,7 @@ public abstract class OctoEntity
 
 	public List<OctoRule> GetRules()
 	{
-		List<OctoRule> rules = new LinkedList<OctoRule>();
+		List<OctoRule> rules = new LinkedList<>();
 
 		for(long id : graph_service.GetArray(this, OctoEntity.RULE_PREFIX))
 			rules.add(PersistenStorage.INSTANCE.GetRules().Get(id));
@@ -130,7 +130,7 @@ public abstract class OctoEntity
 
 	public List<OctoReaction> GetReactions()
 	{
-		List<OctoReaction> reactions = new LinkedList<OctoReaction>();
+		List<OctoReaction> reactions = new LinkedList<>();
 
 		for(long id : graph_service.GetArray(this, OctoEntity.REACTION_PREFIX))
 			reactions.add(PersistenStorage.INSTANCE.GetReactions().Get(id));
@@ -140,7 +140,7 @@ public abstract class OctoEntity
 
 	public List<Marker> GetMarkers()
 	{
-		List<Marker> markers = new LinkedList<Marker>();
+		List<Marker> markers = new LinkedList<>();
 
 		for(long id : graph_service.GetArray(this, OctoEntity.MARKER_PREFIX))
 			markers.add(PersistenStorage.INSTANCE.GetMarkers().Get(id));
@@ -189,7 +189,7 @@ public abstract class OctoEntity
 	{
 		List<Marker> markers = GetMarkers();
 
-		List<OctoResponse> result = new LinkedList<OctoResponse>();
+		List<OctoResponse> result = new LinkedList<>();
 
 		long current_time = JavaUtils.GetTimestamp();
 
@@ -280,7 +280,7 @@ public abstract class OctoEntity
 
 	public List<OctoResponse> GetFails()
 	{
-		List<OctoResponse> fails = new LinkedList<OctoResponse>();
+		List<OctoResponse> fails = new LinkedList<>();
 
 		for(OctoReaction reaction : GetReactions())
 		{

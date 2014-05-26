@@ -1,9 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 SRCC MSU
+ *
+ * Distributed under the MIT License - see the accompanying file LICENSE.txt.
+ ******************************************************************************/
+
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.*;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.rules.CalcSpeed;
 import ru.parallel.octotron.rules.MirrorLong;
 import ru.parallel.octotron.utils.OctoObjectList;
 

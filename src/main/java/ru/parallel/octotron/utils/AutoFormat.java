@@ -204,7 +204,9 @@ public class AutoFormat
 
 			for(OctoRule rule : object.GetRules())
 			{
-				String str = " ID: " + rule.GetID() + " attribute: \"" + rule.GetAttr() + "\"\n";
+				String str = " ID: " + rule.GetID() + " attribute: \""
+					+ rule.GetAttr() + "\"" + System.lineSeparator();
+
 				result.append(str);
 			}
 
@@ -281,7 +283,7 @@ public class AutoFormat
 
 		for(Map<String, Object> dict : data)
 		{
-			List<String> names = new ArrayList<String>(dict.keySet());
+			List<String> names = new ArrayList<>(dict.keySet());
 			Collections.sort(names);
 
 			result.append(prefix).append("{");
@@ -313,7 +315,7 @@ public class AutoFormat
 
 		for(Map<String, Object> map : data)
 		{
-			List<String> names = new ArrayList<String>(map.keySet());
+			List<String> names = new ArrayList<>(map.keySet());
 			Collections.sort(names);
 
 			result.append(prefix);

@@ -18,9 +18,9 @@ public class CheckBoolRules extends OctoRule
 	private static final long serialVersionUID = -5698688420213900355L;
 	private final String[] check_list;
 
-	public CheckBoolRules(String attr, String... check_list)
+	public CheckBoolRules(String attribute_name, String... check_list)
 	{
-		super(attr);
+		super(attribute_name);
 		this.check_list =  ArrayUtils.clone(check_list);
 	}
 

@@ -16,9 +16,9 @@ public class AggregateDoubleSum extends OctoObjectRule
 	private static final long serialVersionUID = -1961148475047706792L;
 	private final String detect_str;
 
-	public AggregateDoubleSum(String attr, String detect_str)
+	public AggregateDoubleSum(String attribute_name, String detect_str)
 	{
-		super(attr);
+		super(attribute_name);
 		this.detect_str = detect_str;
 	}
 

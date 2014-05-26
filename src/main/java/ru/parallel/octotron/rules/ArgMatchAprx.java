@@ -18,9 +18,9 @@ public class ArgMatchAprx extends OctoRule
 	private final String match_arg;
 	private final Object aprx;
 
-	public ArgMatchAprx(String attr, String param, String match_arg, Object aprx)
+	public ArgMatchAprx(String attribute_name, String param, String match_arg, Object aprx)
 	{
-		super(attr);
+		super(attribute_name);
 		this.param = param;
 		this.match_arg = match_arg;
 		this.aprx = aprx;

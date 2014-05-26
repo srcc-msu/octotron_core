@@ -17,9 +17,9 @@ public class LowerArgThreshold extends OctoRule
 	private final String param;
 	private final String arg_threshold;
 
-	public LowerArgThreshold(String attr, String param, String arg_threshold)
+	public LowerArgThreshold(String attribute_name, String param, String arg_threshold)
 	{
-		super(attr);
+		super(attribute_name);
 		this.param = param;
 		this.arg_threshold = arg_threshold;
 	}

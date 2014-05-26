@@ -8,11 +8,14 @@ package ru.parallel.octotron.core;
 
 public abstract class OctoObjectRule extends OctoRule
 {
+	private static final long serialVersionUID = -1936097371431183834L;
+
 	protected OctoObjectRule(String attribute_name)
 	{
 		super(attribute_name);
 	}
 
+	@Override
 	public Object Compute(OctoEntity entity)
 	{
 		return Compute((OctoObject)entity);

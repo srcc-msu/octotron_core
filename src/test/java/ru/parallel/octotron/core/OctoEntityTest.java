@@ -129,8 +129,9 @@ public class OctoEntityTest
 
 	private class DummyRule extends OctoRule
 	{
+		private static final long serialVersionUID = -6085542113382606406L;
 		private EDependencyType dep_type;
-		private long n = 0l;
+		private long n = 0L;
 
 		DummyRule(String name, EDependencyType dep_type)
 		{
@@ -152,7 +153,7 @@ public class OctoEntityTest
 		@Override
 		public Object GetDefaultValue()
 		{
-			return 0l;
+			return 0L;
 		}
 
 		@Override
@@ -210,7 +211,7 @@ public class OctoEntityTest
 
 		entity.DeclareAttribute("test", 0);
 
-		List<OctoReaction> reactions = new LinkedList<OctoReaction>();
+		List<OctoReaction> reactions = new LinkedList<>();
 
 		reactions.add(new OctoReaction("test", 1
 			, new OctoResponse(EEventStatus.INFO, "test")));
@@ -235,7 +236,7 @@ public class OctoEntityTest
 
 		entity.DeclareAttribute("test", 0);
 
-		List<OctoRule> rules = new LinkedList<OctoRule>();
+		List<OctoRule> rules = new LinkedList<>();
 
 		rules.add(new DummyRule("test1", EDependencyType.ALL));
 		rules.add(new DummyRule("test2", EDependencyType.ALL));

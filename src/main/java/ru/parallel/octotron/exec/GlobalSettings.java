@@ -27,8 +27,8 @@ public class GlobalSettings
 	private String db_name;
 	private String db_path;
 
-	private final Map<String, String> log_map = new HashMap<String, String>();
-	private final Map<String, String> script_map = new HashMap<String, String>();
+	private final Map<String, String> log_map = new HashMap<>();
+	private final Map<String, String> script_map = new HashMap<>();
 
 	private List<String> object_index;
 	private List<String> link_index;
@@ -80,8 +80,8 @@ public class GlobalSettings
 // --- graph settings
 		JsonObject graph_conf = JsonUtils.MustPresent(root, "graph").getAsJsonObject();
 
-		object_index = new LinkedList<String>();
-		link_index = new LinkedList<String>();
+		object_index = new LinkedList<>();
+		link_index = new LinkedList<>();
 
 		if(graph_conf.get("object_index") != null)
 			for(JsonElement elem : JsonUtils.MustPresent(graph_conf, "object_index").getAsJsonArray())

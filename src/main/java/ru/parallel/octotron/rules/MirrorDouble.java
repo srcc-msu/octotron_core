@@ -1,17 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2014 SRCC MSU
+ *
+ * Distributed under the MIT License - see the accompanying file LICENSE.txt.
+ ******************************************************************************/
+
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.primitive.SimpleAttribute;
 
 public class MirrorDouble extends Mirror
 {
-	private String mirror_attribute;
-	private SimpleAttribute mirror_parent;
+	private static final long serialVersionUID = 6775057142882668785L;
 
 	public MirrorDouble(String mirror_attribute, SimpleAttribute mirror_parent)
 	{
 		super(mirror_attribute, mirror_parent);
-		this.mirror_attribute = mirror_attribute;
-		this.mirror_parent = mirror_parent;
 	}
 
 	public MirrorDouble(String mirror_attribute, String mirror_parent_name, Object mirror_parent_value)

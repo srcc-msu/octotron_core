@@ -19,7 +19,7 @@ import ru.parallel.octotron.primitive.SimpleAttribute;
 public class SimpleImporter implements IImporter
 {
 	private List<Pair<OctoObject, SimpleAttribute>> data
-		= new LinkedList<Pair<OctoObject, SimpleAttribute>>();
+		= new LinkedList<>();
 	private final Object lock = new Object(); // personal lock for each instance
 
 	public void Put(OctoObject object, SimpleAttribute value)
@@ -40,7 +40,7 @@ public class SimpleImporter implements IImporter
 				List<Pair<OctoObject, SimpleAttribute>> out
 					= data.subList(0, max_count);
 
-				data = new LinkedList<Pair<OctoObject, SimpleAttribute>>
+				data = new LinkedList<>
 					(data.subList(max_count + 1, data.size()));
 
 				return out;
@@ -48,7 +48,7 @@ public class SimpleImporter implements IImporter
 			else
 			{
 				List<Pair<OctoObject, SimpleAttribute>> out = data;
-				data = new LinkedList<Pair<OctoObject, SimpleAttribute>>();
+				data = new LinkedList<>();
 
 				return out;
 			}

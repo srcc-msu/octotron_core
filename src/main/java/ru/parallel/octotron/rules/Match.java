@@ -17,9 +17,9 @@ public class Match extends OctoRule
 	private final String param;
 	private final Object match_value;
 
-	public Match(String attr, String param, Object match_value)
+	public Match(String attribute_name, String param, Object match_value)
 	{
-		super(attr);
+		super(attribute_name);
 		this.param = param;
 		this.match_value = match_value;
 	}

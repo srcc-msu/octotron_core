@@ -111,7 +111,7 @@ public abstract class Operations
 	private static void AllParams(Map<String, String> params, String... names)
 		throws ExceptionParseError
 	{
-		Set<String> check_set = new HashSet<String>(Arrays.asList(names));
+		Set<String> check_set = new HashSet<>(Arrays.asList(names));
 
 		for(String name : params.keySet())
 		{
@@ -290,11 +290,11 @@ public abstract class Operations
 			if(reactions.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no reactions");
 
-			List<Map<String, Object>> data = new LinkedList<Map<String, Object>>();
+			List<Map<String, Object>> data = new LinkedList<>();
 
 			for(OctoReaction reaction : reactions)
 			{
-				Map<String, Object> map = new HashMap<String, Object>();
+				Map<String, Object> map = new HashMap<>();
 
 				map.put("RID", reaction.GetID());
 				map.put("check_attribute", reaction.GetCheckName());
@@ -348,7 +348,7 @@ public abstract class Operations
 			if(reactions.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no reactions");
 
-			List<Map<String, Object>> data = new LinkedList<Map<String, Object>>();
+			List<Map<String, Object>> data = new LinkedList<>();
 
 			try
 			{
@@ -356,7 +356,7 @@ public abstract class Operations
 
 				for(Entry<String, String> entry : versions.entrySet())
 				{
-					Map<String, Object> version_line = new HashMap<String, Object>();
+					Map<String, Object> version_line = new HashMap<>();
 					version_line.put(entry.getKey(), entry.getValue());
 					data.add(version_line);
 				}
@@ -402,7 +402,7 @@ public abstract class Operations
 			if(target.GetUID().getType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("can not import value to a link");
 			else
-				control.Import((OctoObject)target, new SimpleAttribute(name, value));
+				control.Import((OctoObject) target, new SimpleAttribute(name, value));
 
 			String data = "added to import queue";
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);

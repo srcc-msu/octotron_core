@@ -17,9 +17,9 @@ public class UpperThreshold extends OctoRule
 	private final String param;
 	private final Object threshold;
 
-	public UpperThreshold(String attr, String param, Object threshold)
+	public UpperThreshold(String attribute_name, String param, Object threshold)
 	{
-		super(attr);
+		super(attribute_name);
 		this.param = param;
 		this.threshold = threshold;
 	}

@@ -27,7 +27,7 @@ import ru.parallel.utils.JavaUtils;
 public class ReactionInvoker
 {
 	private final Queue<PreparedResponse> pending_response
-		= new ConcurrentLinkedQueue<PreparedResponse>();
+		= new ConcurrentLinkedQueue<>();
 
 	private Thread invoker;
 
@@ -43,6 +43,7 @@ public class ReactionInvoker
 	{
 		invoker = new Thread()
 		{
+			@Override
 			public void run()
 			{
 				DynamicSleeper sleeper = new DynamicSleeper();
@@ -95,7 +96,7 @@ public class ReactionInvoker
 	{
 		OctoObjectList uniq_changed = all_changed.Uniq();
 
-		List<PreparedResponse> new_responses = new LinkedList<PreparedResponse>();
+		List<PreparedResponse> new_responses = new LinkedList<>();
 
 		for(OctoObject obj : uniq_changed)
 			for(OctoResponse response : obj.PreparePendingReactions())

@@ -12,7 +12,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import ru.parallel.octotron.utils.OctoObjectList;
 
 /**
@@ -22,13 +21,6 @@ import ru.parallel.octotron.utils.OctoObjectList;
  * */
 public class AttributeProcessor
 {
-	private final GraphService graph_service;
-
-	public AttributeProcessor(GraphService graph_service)
-	{
-		this.graph_service = graph_service;
-	}
-
 	/**
 	 * process each sensor value from the \packet<br>
 	 * return list of values, that changed<br>

@@ -16,7 +16,7 @@ public abstract class IAttributeList<T extends SimpleAttribute> implements Itera
 
 	protected IAttributeList()
 	{
-		list = new LinkedList<T>();
+		list = new LinkedList<>();
 	}
 
 	protected IAttributeList(List<T> list)
@@ -26,7 +26,7 @@ public abstract class IAttributeList<T extends SimpleAttribute> implements Itera
 
 	protected IAttributeList(IAttributeList<T> list)
 	{
-		this.list = new LinkedList<T>();
+		this.list = new LinkedList<>();
 		this.list.addAll(list.list);
 	}
 
@@ -45,6 +45,7 @@ public abstract class IAttributeList<T extends SimpleAttribute> implements Itera
 		return list.size();
 	}
 
+	@Override
 	public final Iterator<T> iterator()
 	{
 		return list.iterator();
@@ -54,7 +55,7 @@ public abstract class IAttributeList<T extends SimpleAttribute> implements Itera
 
 	protected final List<T> InnerAppend(List<T> list2)
 	{
-		List<T> new_list = new LinkedList<T>(list);
+		List<T> new_list = new LinkedList<>(list);
 
 		new_list.addAll(list2);
 		return new_list;
@@ -62,10 +63,11 @@ public abstract class IAttributeList<T extends SimpleAttribute> implements Itera
 
 	protected final List<T> InnerAlphabeticSort()
 	{
-		List<T> new_list = new LinkedList<T>(list);
+		List<T> new_list = new LinkedList<>(list);
 
 		Collections.sort(new_list, new Comparator<T>()
 		{
+			@Override
 			public int compare(T o1, T o2)
 			{
 				return o1.GetName().compareTo(o2.GetName());

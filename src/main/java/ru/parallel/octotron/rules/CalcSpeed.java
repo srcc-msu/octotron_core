@@ -14,12 +14,12 @@ import ru.parallel.octotron.primitive.EDependencyType;
 public class CalcSpeed extends OctoRule
 {
 	private static final long serialVersionUID = -5796823312858284235L;
-	private final String measured_attr;
+	private final String measured_attribute;
 
-	public CalcSpeed(String speed_attr, String measured_attr)
+	public CalcSpeed(String attribute_name, String measured_attribute)
 	{
-		super(speed_attr);
-		this.measured_attr = measured_attr;
+		super(attribute_name);
+		this.measured_attribute = measured_attribute;
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class CalcSpeed extends OctoRule
 	@Override
 	public Object Compute(OctoEntity entity)
 	{
-		OctoAttribute attr = entity.GetAttribute(measured_attr);
+		OctoAttribute attr = entity.GetAttribute(measured_attribute);
 
 		if(!attr.IsValid() || attr.GetCTime() == 0)
 			return GetDefaultValue();

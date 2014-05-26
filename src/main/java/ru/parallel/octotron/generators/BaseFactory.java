@@ -14,7 +14,6 @@ import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.utils.JavaUtils;
 
 /**
  * Abstract factory for constructing entities with<br>
@@ -55,7 +54,7 @@ public abstract class BaseFactory<T>
 
 	public T Attributes(SimpleAttribute... addition)
 	{
-		List<SimpleAttribute> new_attributes = new LinkedList<SimpleAttribute>(attributes);
+		List<SimpleAttribute> new_attributes = new LinkedList<>(attributes);
 		new_attributes.addAll(Arrays.asList(addition));
 
 		return Clone(new_attributes, rules, reactions);
@@ -63,7 +62,7 @@ public abstract class BaseFactory<T>
 
 	public T Rules(OctoRule... addition)
 	{
-		List<OctoRule> new_rules = new LinkedList<OctoRule>(rules);
+		List<OctoRule> new_rules = new LinkedList<>(rules);
 		new_rules.addAll(Arrays.asList(addition));
 
 		return Clone(attributes, new_rules, reactions);
@@ -71,7 +70,7 @@ public abstract class BaseFactory<T>
 
 	public T Reactions(OctoReaction... addition)
 	{
-		List<OctoReaction> new_reactions = new LinkedList<OctoReaction>(reactions);
+		List<OctoReaction> new_reactions = new LinkedList<>(reactions);
 		new_reactions.addAll(Arrays.asList(addition));
 
 		return Clone(attributes, rules, new_reactions);

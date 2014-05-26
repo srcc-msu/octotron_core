@@ -31,18 +31,13 @@ public class StartOctotron
  * */
 	public static void main(String[] args)
 	{
-		String fname = "cheb_src/config.json"; // insert your config file path here - for debug purpose
-
-		if(fname == null)
+		if(args.length != 1)
 		{
-			if(args.length != 1)
-			{
-				System.err.println("specify the config file");
-				System.exit(StartOctotron.EXIT_ERROR);
-			}
-
-			fname = args[0];
+			System.err.println("specify the config file");
+			System.exit(StartOctotron.EXIT_ERROR);
 		}
+
+		String fname = args[0];
 
 		System.out.println("statring octotron using config file: " + fname);
 

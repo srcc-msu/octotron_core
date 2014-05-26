@@ -148,13 +148,13 @@ public final class Neo4jGraph implements IGraph
 	 * service list that allows to iterate enum values<br>
 	 * */
 	private final List<RelTypes> relations
-		= new LinkedList<RelTypes>(Arrays.asList(RelTypes.values()));
+		= new LinkedList<>(Arrays.asList(RelTypes.values()));
 
 	/**
 	 * mapping between enum constants and strings<br>
 	 * */
 	private final Map<String, RelTypes> rel_str_mapping
-		= new HashMap<String, RelTypes>();
+		= new HashMap<>();
 
 	/**
 	 * register \\link_type as a new relation type<br>
@@ -203,7 +203,7 @@ public final class Neo4jGraph implements IGraph
 			}
 		}
 
-		Map<String, String> config = new HashMap<String, String>();
+		Map<String, String> config = new HashMap<>();
 		config.put("keep_logical_logs", "false");//MAX_LOG_SIZE + "G size");
 
 		db_name = name;
@@ -484,14 +484,13 @@ public final class Neo4jGraph implements IGraph
 
 		MatchType(uid, EEntityType.LINK);
 
-		Object obj = null;
-
 		try
 		{
 			Relationship rel = graph_db.getRelationshipById(uid.getUid());
 
 			if(rel.hasProperty(name))
-				obj = rel.getProperty(name);
+				return rel.getProperty(name);
+
 			else
 			{
 				StringBuilder rep = new StringBuilder();
@@ -509,13 +508,11 @@ public final class Neo4jGraph implements IGraph
 		{
 			throw new ExceptionModelFail("element not found");
 		}
-
-		return obj;
 	}
 
 	private static List<Uid> FromRelIter(Iterator<Relationship> it)
 	{
-		List<Uid> list = new LinkedList<Uid>();
+		List<Uid> list = new LinkedList<>();
 
 		while(it.hasNext())
 		{
@@ -529,7 +526,7 @@ public final class Neo4jGraph implements IGraph
 
 	private static List<Uid> FromNodeIter(Iterator<Node> it)
 	{
-		List<Uid> list = new LinkedList<Uid>();
+		List<Uid> list = new LinkedList<>();
 
 		while(it.hasNext())
 		{
@@ -586,7 +583,7 @@ public final class Neo4jGraph implements IGraph
 	{
 		transaction.Read();
 
-		List<Uid> list = new LinkedList<Uid>();
+		List<Uid> list = new LinkedList<>();
 
 		for(Node node : GlobalGraphOperations.at(graph_db).getAllNodes())
 		{
@@ -602,7 +599,7 @@ public final class Neo4jGraph implements IGraph
 	{
 		transaction.Read();
 
-		List<Uid> list = new LinkedList<Uid>();
+		List<Uid> list = new LinkedList<>();
 
 		for(Relationship rel : GlobalGraphOperations.at(graph_db).getAllRelationships())
 		{
@@ -661,7 +658,7 @@ public final class Neo4jGraph implements IGraph
 		transaction.Read();
 		MatchType(uid, EEntityType.OBJECT);
 
-		List<Pair<String, Object>> attrs = new LinkedList<Pair<String, Object>>();
+		List<Pair<String, Object>> attrs = new LinkedList<>();
 
 		Node node = graph_db.getNodeById(uid.getUid());
 
@@ -677,7 +674,7 @@ public final class Neo4jGraph implements IGraph
 		transaction.Read();
 		MatchType(uid, EEntityType.LINK);
 
-		List<Pair<String, Object>> attrs = new LinkedList<Pair<String, Object>>();
+		List<Pair<String, Object>> attrs = new LinkedList<>();
 
 		Relationship rel = graph_db.getRelationshipById(uid.getUid());
 
@@ -770,7 +767,7 @@ public final class Neo4jGraph implements IGraph
 	@Override
 	public String ExportDot(OctoObjectList objects)
 	{
-		List<Node> nodes = new LinkedList<Node>();
+		List<Node> nodes = new LinkedList<>();
 
 		for(OctoObject obj : objects)
 			nodes.add(graph_db.getNodeById(obj.GetUID().getUid()));

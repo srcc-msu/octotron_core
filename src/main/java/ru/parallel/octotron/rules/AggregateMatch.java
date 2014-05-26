@@ -17,9 +17,9 @@ public class AggregateMatch extends OctoObjectRule
 	private final String detect_str;
 	private final Object match;
 
-	public AggregateMatch(String attr, String detect_str, Object match)
+	public AggregateMatch(String attribute_name, String detect_str, Object match)
 	{
-		super(attr);
+		super(attribute_name);
 		this.detect_str = detect_str;
 		this.match = match;
 	}

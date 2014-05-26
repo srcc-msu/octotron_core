@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.utils;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import ru.parallel.octotron.primitive.SimpleAttribute;

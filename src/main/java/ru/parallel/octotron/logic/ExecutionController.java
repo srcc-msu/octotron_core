@@ -48,10 +48,10 @@ public class ExecutionController
 	private boolean silent = false;
 
 	private final Queue<ParsedHttpRequest> request_queue
-		= new ConcurrentLinkedQueue<ParsedHttpRequest>();
+		= new ConcurrentLinkedQueue<>();
 
 	private final Queue<ParsedHttpRequest> blocking_request_queue
-		= new ConcurrentLinkedQueue<ParsedHttpRequest>();
+		= new ConcurrentLinkedQueue<>();
 
 	private Statistics stat;
 
@@ -92,6 +92,7 @@ public class ExecutionController
 	{
 		request_processor = new Thread()
 		{
+			@Override
 			public void run()
 			{
 				ParsedHttpRequest request;
@@ -347,7 +348,7 @@ public class ExecutionController
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-		Map<String, String> version = new HashMap<String, String>();
+		Map<String, String> version = new HashMap<>();
 
 		try
 		{

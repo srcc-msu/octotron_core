@@ -26,7 +26,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected IEntityList()
 	{
-		list = new LinkedList<T>();
+		list = new LinkedList<>();
 	}
 
 	protected IEntityList(List<T> list)
@@ -36,7 +36,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected IEntityList(IEntityList<T> list)
 	{
-		this.list = new LinkedList<T>();
+		this.list = new LinkedList<>();
 		this.list.addAll(list.list);
 	}
 
@@ -55,6 +55,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		return list.size();
 	}
 
+	@Override
 	public final Iterator<T> iterator()
 	{
 		return list.iterator();
@@ -131,7 +132,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected List<T> InnerAppend(List<T> list2)
 	{
-		List<T> new_list = new LinkedList<T>(list);
+		List<T> new_list = new LinkedList<>(list);
 
 		new_list.addAll(list2);
 		return new_list;
@@ -139,7 +140,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected List<T> InnerRange(int from, int to)
 	{
-		return new LinkedList<T>(list.subList(from, to));
+		return new LinkedList<>(list.subList(from, to));
 	}
 
 	protected List<T> InnerRanges(int... ranges)
@@ -147,7 +148,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		if(ranges.length % 2 != 0)
 			throw new ExceptionModelFail("even amount of arguments must be provided");
 
-		List<T> new_list = new LinkedList<T>();
+		List<T> new_list = new LinkedList<>();
 
 		for(int i = 0; i < ranges.length; i += 2)
 			new_list.addAll(list.subList(ranges[i], ranges[i+1]));
@@ -157,7 +158,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected List<T> InnerElems(int... elems)
 	{
-		List<T> new_list = new LinkedList<T>();
+		List<T> new_list = new LinkedList<>();
 
 		for(int elem : elems)
 			new_list.add(list.get(elem));
@@ -200,7 +201,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		if(value == null)
 			return InnerFilter(name);
 
-		List<T> new_list = new LinkedList<T>();
+		List<T> new_list = new LinkedList<>();
 
 		for(T obj : list)
 		{
@@ -216,7 +217,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		if(name == null)
 			return list;
 
-		List<T> new_list = new LinkedList<T>();
+		List<T> new_list = new LinkedList<>();
 
 		for(T obj : list)
 		{
@@ -229,12 +230,12 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 
 	protected List<T> InnerUniq()
 	{
-		Map<Long, T> map = new LinkedHashMap<Long, T>();
+		Map<Long, T> map = new LinkedHashMap<>();
 
 		for (T elem : list)
 			map.put(elem.GetUID().getUid(), elem);
 
-		List<T> new_list = new LinkedList<T>();
+		List<T> new_list = new LinkedList<>();
 		new_list.addAll(map.values());
 
 		return new_list;

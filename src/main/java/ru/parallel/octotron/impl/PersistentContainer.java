@@ -22,7 +22,7 @@ public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 
 	public PersistentContainer()
 	{
-		this.objects = new HashMap<KEY_T, VALUE_T>();
+		this.objects = new HashMap<>();
 	}
 
 	public KEY_T Add(KEY_T key, VALUE_T object)
@@ -67,7 +67,7 @@ public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 
 	public List<VALUE_T> GetAll()
 	{
-		List<VALUE_T> res = new LinkedList<VALUE_T>();
+		List<VALUE_T> res = new LinkedList<>();
 		res.addAll(objects.values());
 		return res;
 	}

@@ -15,7 +15,6 @@ import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.utils.OctoAttributeList;
 import ru.parallel.octotron.utils.OctoObjectList;
@@ -31,7 +30,7 @@ public class ImportManager
 
 	public ImportManager(GraphService graph_service)
 	{
-		this.static_proc = new AttributeProcessor(graph_service);
+		this.static_proc = new AttributeProcessor();
 		this.ruled_proc = new RuleProcessor();
 	}
 
@@ -59,7 +58,7 @@ public class ImportManager
 		OctoObjectList rule_changed = ruled_proc.Process(changed).Uniq();
 
 		OctoObjectList changed_last = new OctoObjectList(rule_changed);
-		OctoObjectList changed_now = null;
+		OctoObjectList changed_now;
 
 		while(changed_last.size() > 0)
 		{
@@ -69,9 +68,7 @@ public class ImportManager
 			changed_last = changed_now;
 		}
 
-		OctoObjectList all_changed = changed.append(rule_changed).Uniq();
-
-		return all_changed;
+		return changed.append(rule_changed).Uniq();
 	}
 
 	private final long last_timer_check = 0;

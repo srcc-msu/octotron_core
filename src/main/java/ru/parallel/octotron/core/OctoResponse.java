@@ -21,8 +21,8 @@ public class OctoResponse implements Serializable
 
 	private final String description;
 
-	private final List<String[]> commands = new LinkedList<String[]>();
-	private final List<String> log_keys = new LinkedList<String>();
+	private final List<String[]> commands = new LinkedList<>();
+	private final List<String> log_keys = new LinkedList<>();
 
 	private String[] print_attributes = new String[0];
 	private String[] parent_print_attributes = new String[0];

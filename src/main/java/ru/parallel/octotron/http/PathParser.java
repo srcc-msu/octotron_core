@@ -44,7 +44,7 @@ public final class PathParser
 	};
 
 	private static final Map<String, IEntityList.EQueryType> DELIMS
-		= new HashMap<String, IEntityList.EQueryType>();
+		= new HashMap<>();
 
 	static
 	{
@@ -103,7 +103,7 @@ public final class PathParser
 		throws ExceptionParseError
 	{
 		List<Pair<SimpleAttribute, IEntityList.EQueryType>> result
-			= new LinkedList<Pair<SimpleAttribute, IEntityList.EQueryType>>();
+			= new LinkedList<>();
 
 		if(str == null || str.isEmpty())
 			return result;
@@ -123,7 +123,7 @@ public final class PathParser
 	private static List<PathToken> ParseTokens(String path)
 		throws ExceptionParseError
 	{
-		List<PathToken> result = new LinkedList<PathToken>();
+		List<PathToken> result = new LinkedList<>();
 
 // matches <id>(<anything but closing bracket>)<optional dot>
 		Matcher matcher = token_pattern.matcher(path);

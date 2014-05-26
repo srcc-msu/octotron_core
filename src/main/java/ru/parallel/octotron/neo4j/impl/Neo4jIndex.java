@@ -75,7 +75,7 @@ public class Neo4jIndex implements IIndex
 
 	private static List<Uid> FromRelIndex(IndexHits<Relationship> it)
 	{
-		List<Uid> list = new LinkedList<Uid>();
+		List<Uid> list = new LinkedList<>();
 
 		for(Relationship rel : it)
 			list.add(new Uid(rel.getId(), EEntityType.LINK));
@@ -85,7 +85,7 @@ public class Neo4jIndex implements IIndex
 
 	private static List<Uid> FromNodeIndex(IndexHits<Node> it)
 	{
-		List<Uid> list = new LinkedList<Uid>();
+		List<Uid> list = new LinkedList<>();
 
 		for(Node node : it)
 			list.add(new Uid(node.getId(), EEntityType.OBJECT));

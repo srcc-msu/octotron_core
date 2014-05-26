@@ -18,9 +18,9 @@ public class MatchAprx extends OctoRule
 	private final Object match_value;
 	private final Object aprx;
 
-	public MatchAprx(String attr, String param, Object match_value, Object aprx)
+	public MatchAprx(String attribute_name, String param, Object match_value, Object aprx)
 	{
-		super(attr);
+		super(attribute_name);
 		this.param = param;
 		this.match_value = match_value;
 		this.aprx = aprx;

@@ -61,7 +61,7 @@ private static final Operation[] CONTROL_OPERATIONS =
  * all available request types<br>
  * */
 private static final Map<String, Operation[]> REQUEST_TYPES
-		= new HashMap<String, Operation[]>();
+		= new HashMap<>();
 	static
 	{
 		RequestParser.REQUEST_TYPES.put("view", RequestParser.VIEW_OPERATIONS);
@@ -75,7 +75,7 @@ private static final Map<String, Operation[]> REQUEST_TYPES
  * string example: param1=value&param2&param3=value2<br>
  * */
 	private static Map<String, String> ParseParams(String query) {
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> result = new HashMap<>();
 
 		if(query == null || query.isEmpty())
 			return result;

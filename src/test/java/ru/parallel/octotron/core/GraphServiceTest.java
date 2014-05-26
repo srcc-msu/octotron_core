@@ -496,7 +496,7 @@ public class GraphServiceTest
 	{
 		final int N = 10;
 
-		List<Long> data = new LinkedList<Long>();
+		List<Long> data = new LinkedList<>();
 
 		OctoObject object = graph_service.AddObject();
 
@@ -516,8 +516,8 @@ public class GraphServiceTest
 	{
 		final int N = 10;
 
-		List<Long> data1 = new LinkedList<Long>();
-		List<Long> data2 = new LinkedList<Long>();
+		List<Long> data1 = new LinkedList<>();
+		List<Long> data2 = new LinkedList<>();
 
 		OctoObject object1 = graph_service.AddObject();
 		OctoObject object2 = graph_service.AddObject();
@@ -536,8 +536,8 @@ public class GraphServiceTest
 
 		for(int i = 0; i < N; i++)
 		{
-			assertEquals(Long.valueOf((long)i), test1.get(i));
-			assertEquals(Long.valueOf((long)i * 2), test2.get(i));
+			assertEquals(Long.valueOf(i), test1.get(i));
+			assertEquals(Long.valueOf(i * 2), test2.get(i));
 		}
 	}
 
@@ -546,7 +546,7 @@ public class GraphServiceTest
 	{
 		final int N = 10;
 
-		List<Long> data = new LinkedList<Long>();
+		List<Long> data = new LinkedList<>();
 		data.add(0L);
 
 		OctoObject object = graph_service.AddObject();
@@ -559,7 +559,7 @@ public class GraphServiceTest
 			List<Long> test = graph_service.GetArray(object, "test");
 
 			for(int i = 0; i <= iter; i++)
-				assertEquals(Long.valueOf((long)i), test.get(i));
+				assertEquals(Long.valueOf(i), test.get(i));
 		}
 	}
 
@@ -568,8 +568,8 @@ public class GraphServiceTest
 	{
 		final int N = 10;
 
-		List<Long> data1 = new LinkedList<Long>();
-		List<Long> data2 = new LinkedList<Long>();
+		List<Long> data1 = new LinkedList<>();
+		List<Long> data2 = new LinkedList<>();
 
 		OctoObject object1 = graph_service.AddObject();
 		OctoObject object2 = graph_service.AddObject();

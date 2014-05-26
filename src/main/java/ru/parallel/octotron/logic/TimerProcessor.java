@@ -22,7 +22,7 @@ public final class TimerProcessor
 
 	private TimerProcessor()
 	{
-		timers = new LinkedList<OctoAttribute>();
+		timers = new LinkedList<>();
 	}
 
 	public static void AddTimer(OctoAttribute timer)

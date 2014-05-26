@@ -7,7 +7,6 @@
 package ru.parallel.octotron.utils;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import ru.parallel.octotron.core.OctoAttribute;
@@ -36,7 +35,7 @@ public class OctoAttributeList extends IAttributeList<OctoAttribute>
 
 	public OctoAttributeList ge(Object val)
 	{
-		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
+		List<OctoAttribute> new_list = new ArrayList<>();
 
 		for(OctoAttribute att : list)
 			if(att.ge(val))
@@ -47,7 +46,7 @@ public class OctoAttributeList extends IAttributeList<OctoAttribute>
 
 	public OctoAttributeList le(Object val)
 	{
-		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
+		List<OctoAttribute> new_list = new ArrayList<>();
 
 		for(OctoAttribute att : list)
 			if(att.le(val))
@@ -58,7 +57,7 @@ public class OctoAttributeList extends IAttributeList<OctoAttribute>
 
 	public OctoAttributeList gt(Object val)
 	{
-		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
+		List<OctoAttribute> new_list = new ArrayList<>();
 
 		for(OctoAttribute att : list)
 			if(att.gt(val))
@@ -69,7 +68,7 @@ public class OctoAttributeList extends IAttributeList<OctoAttribute>
 
 	public OctoAttributeList lt(Object val)
 	{
-		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
+		List<OctoAttribute> new_list = new ArrayList<>();
 
 		for(OctoAttribute att : list)
 			if(att.lt(val))
@@ -80,7 +79,7 @@ public class OctoAttributeList extends IAttributeList<OctoAttribute>
 
 	public OctoAttributeList eq(Object val)
 	{
-		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
+		List<OctoAttribute> new_list = new ArrayList<>();
 
 		for(OctoAttribute att : list)
 			if(att.eq(val))
@@ -91,7 +90,7 @@ public class OctoAttributeList extends IAttributeList<OctoAttribute>
 
 	public OctoAttributeList ne(Object val)
 	{
-		List<OctoAttribute> new_list = new ArrayList<OctoAttribute>();
+		List<OctoAttribute> new_list = new ArrayList<>();
 
 		for(OctoAttribute att : list)
 			if(att.ne(val))

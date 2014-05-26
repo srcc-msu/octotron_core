@@ -17,9 +17,9 @@ public class AggregateNotMatch extends OctoObjectRule
 	private final String detect_str;
 	private final Object match;
 
-	public AggregateNotMatch(String attr, String detect_str, Object match)
+	public AggregateNotMatch(String attribute_name, String detect_str, Object match)
 	{
-		super(attr);
+		super(attribute_name);
 		this.detect_str = detect_str;
 		this.match = match;
 	}

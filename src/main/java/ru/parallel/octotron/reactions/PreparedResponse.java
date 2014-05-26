@@ -29,7 +29,7 @@ public class PreparedResponse
 
 	private final OctoResponse response;
 
-	private final List<String[]> composed_commands = new LinkedList<String[]>();
+	private final List<String[]> composed_commands = new LinkedList<>();
 
 	private String attribute_values;
 	private String parent_attribute_values;

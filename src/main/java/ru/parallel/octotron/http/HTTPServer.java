@@ -117,8 +117,8 @@ public class HTTPServer
 		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
 			System.err.println("nodelay is not set to true, import will be slow. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");
 
-		requests = new ConcurrentLinkedQueue<ParsedHttpRequest>();
-		blocking_requests = new ConcurrentLinkedQueue<ParsedHttpRequest>();
+		requests = new ConcurrentLinkedQueue<>();
+		blocking_requests = new ConcurrentLinkedQueue<>();
 
 		executor = Executors.newCachedThreadPool();
 
@@ -154,8 +154,8 @@ public class HTTPServer
 	private HTTPServer(int port)
 		throws ExceptionSystemError
 	{
-		requests = new ConcurrentLinkedQueue<ParsedHttpRequest>();
-		blocking_requests = new ConcurrentLinkedQueue<ParsedHttpRequest>();
+		requests = new ConcurrentLinkedQueue<>();
+		blocking_requests = new ConcurrentLinkedQueue<>();
 
 		executor = Executors.newCachedThreadPool();
 

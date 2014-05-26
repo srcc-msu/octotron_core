@@ -19,7 +19,7 @@ public class PersistentMap<T> implements Serializable
 	private static final long serialVersionUID = 3738367887222285089L;
 
 	private PersistentContainer<Long, T> objects
-		= new PersistentContainer<Long, T>();
+		= new PersistentContainer<>();
 
 	private long cur_id = 0;
 

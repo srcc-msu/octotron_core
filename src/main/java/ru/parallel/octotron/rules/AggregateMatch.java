@@ -9,7 +9,6 @@ package ru.parallel.octotron.rules;
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoObjectRule;
-import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.EDependencyType;
 
 public class AggregateMatch extends OctoObjectRule

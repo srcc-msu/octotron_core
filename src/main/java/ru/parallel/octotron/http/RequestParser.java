@@ -53,7 +53,7 @@ private static final Operation[] MODIFY_OPERATIONS =
 private static final Operation[] CONTROL_OPERATIONS =
 	{
 		Operations.quit, Operations.mode
-		, Operations.snapshot
+		, Operations.snapshot, Operations.selftest
 		, Operations.stat, Operations.mod_time
 	};
 

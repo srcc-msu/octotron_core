@@ -110,6 +110,10 @@ public class StartOctotron
 		catch(Exception start_exception)
 		{
 			StartOctotron.ProcessCrash(settings, start_exception, "start");
+
+			if(exec_control != null)
+				exec_control.Finish();
+
 			return;
 		}
 
@@ -163,13 +167,13 @@ public class StartOctotron
 
 		try
 		{
-			PersistenStorage.INSTANCE.Save(path);
-
 			if(exec_control != null)
 				exec_control.Finish();
 
 			if(graph != null)
 				graph.Shutdown();
+
+			PersistenStorage.INSTANCE.Save(path);
 		}
 		catch(Exception e)
 		{

@@ -8,12 +8,13 @@ package ru.parallel.octotron.logic;
 
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.netimport.ISensorData;
 import ru.parallel.octotron.primitive.EEntityType;
+import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.utils.OctoAttributeList;
@@ -41,8 +42,7 @@ public class ImportManager
 	 * calculate computational attributes, that changed from static
 	 * invoke rules, according to all changed attributes
 	 * */
-	public OctoObjectList Process(List<? extends ISensorData> packet)
-		throws ExceptionImportFail
+	public OctoObjectList Process(List<Pair<OctoObject, SimpleAttribute>> packet)
 	{
 		OctoObjectList changed = static_proc.Process(packet);
 
@@ -54,7 +54,8 @@ public class ImportManager
 		return ProcessRules(changed.Uniq());
 	}
 
-	public OctoObjectList ProcessRules(OctoObjectList changed) {
+	public OctoObjectList ProcessRules(OctoObjectList changed)
+	{
 		OctoObjectList rule_changed = ruled_proc.Process(changed).Uniq();
 
 		OctoObjectList changed_last = new OctoObjectList(rule_changed);

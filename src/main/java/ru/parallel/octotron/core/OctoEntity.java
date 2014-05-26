@@ -22,7 +22,6 @@ import java.util.List;
 
 /**
  * some entity, that resides in model<br>
- * implements {@link OctoEntity} interface<br>
  * all operations with it go through the \graph interface, no caching<br>
  * */
 public abstract class OctoEntity

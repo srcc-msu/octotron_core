@@ -86,6 +86,11 @@ public class ReactionInvoker
 		invoker.interrupt();
 	}
 
+	public boolean IsAlive()
+	{
+		return invoker.isAlive();
+	}
+
 	public void Invoke(OctoObjectList all_changed, boolean silent)
 	{
 		OctoObjectList uniq_changed = all_changed.Uniq();

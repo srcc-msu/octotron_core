@@ -66,15 +66,15 @@ public class OctoAttributeTest
 		OctoAttribute attribute_l = object.DeclareAttribute("test1", 1L);
 		OctoAttribute attribute_d = object.DeclareAttribute("test2", 1.0);
 
-		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
-		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.EPSILON);
+		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.EPSILON);
 
 		attribute_l.Update(2L, true);
 		attribute_d.Update(2.0, true);
 
 // speed not available now - requires 2 updates
-		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
-		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.EPSILON);
+		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.EPSILON);
 
 		Thread.sleep(2000); // 2sec
 
@@ -89,8 +89,8 @@ public class OctoAttributeTest
 		attribute_d.Update(4.0, true);
 
 // must be 0
-		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.DELTA);
-		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.DELTA);
+		assertEquals(0.0, attribute_l.GetSpeed(), OctoAttribute.EPSILON);
+		assertEquals(0.0, attribute_d.GetSpeed(), OctoAttribute.EPSILON);
 	}
 
 	@Test
@@ -180,8 +180,8 @@ public class OctoAttributeTest
 		OctoAttribute attribute1 = object.DeclareAttribute("test1", 1.0);
 		OctoAttribute attribute2 = object.DeclareAttribute("test2", 1.0f);
 
-		assertEquals(1.0, attribute1.GetDouble(), OctoAttribute.DELTA);
-		assertEquals(1.0, attribute2.GetDouble(), OctoAttribute.DELTA);
+		assertEquals(1.0, attribute1.GetDouble(), OctoAttribute.EPSILON);
+		assertEquals(1.0, attribute2.GetDouble(), OctoAttribute.EPSILON);
 	}
 
 	@Test
@@ -199,8 +199,8 @@ public class OctoAttributeTest
 		OctoAttribute attribute1 = object.DeclareAttribute("test1", 1);
 		OctoAttribute attribute2 = object.DeclareAttribute("test2", 1L);
 
-		assertEquals(1.0, attribute1.ToDouble(), OctoAttribute.DELTA);
-		assertEquals(1.0, attribute2.ToDouble(), OctoAttribute.DELTA);
+		assertEquals(1.0, attribute1.ToDouble(), OctoAttribute.EPSILON);
+		assertEquals(1.0, attribute2.ToDouble(), OctoAttribute.EPSILON);
 	}
 
 	@Test
@@ -223,8 +223,8 @@ public class OctoAttributeTest
 		OctoAttribute attribute_f = object.DeclareAttribute("test1", 1.0f);
 		OctoAttribute attribute_d = object.DeclareAttribute("test2", 1.0);
 
-		assertEquals(true, attribute_f.aeq(1.0, OctoAttribute.DELTA));
-		assertEquals(true, attribute_d.aeq(1.0, OctoAttribute.DELTA));
+		assertEquals(true, attribute_f.aeq(1.0, OctoAttribute.EPSILON));
+		assertEquals(true, attribute_d.aeq(1.0, OctoAttribute.EPSILON));
 	}
 
 	@Test

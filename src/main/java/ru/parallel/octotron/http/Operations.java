@@ -604,20 +604,39 @@ public abstract class Operations
 //------------CONTROL------------
 //-------------------------------
 
-/**
- * asks the execution control to stop the main process<br>
- * */	public static final Operation quit = new Operation("quit", true, new IExec()
+	/**
+	 * asks the execution control to stop the main process<br>
+	 * */
+	public static final Operation quit = new Operation("quit", true, new IExec()
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
-				throws ExceptionParseError
+			throws ExceptionParseError
 		{
 			Operations.AllParams(params);
 
 			control.SetExit(true);
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, "quiting now");
+		}
+	});
+
+	/**
+	 * asks the execution control to perform a self-test<br>
+	 * */
+	public static final Operation selftest = new Operation("selftest", true, new IExec()
+	{
+		@Override
+		public Object Execute(GraphService graph_service, ExecutionController control
+			, Map<String, String> params, IEntityList<?> objects)
+			throws ExceptionParseError
+		{
+			Operations.AllParams(params);
+
+			String result = control.PerformSelfTest();
+
+			return new RequestResult(E_RESULT_TYPE.TEXT, result);
 		}
 	});
 

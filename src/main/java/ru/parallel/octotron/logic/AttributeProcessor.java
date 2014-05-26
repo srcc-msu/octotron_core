@@ -8,9 +8,10 @@ package ru.parallel.octotron.logic;
 
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.netimport.ISensorData;
+import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
 import ru.parallel.octotron.utils.OctoObjectList;
 
@@ -32,17 +33,16 @@ public class AttributeProcessor
 	 * process each sensor value from the \packet<br>
 	 * return list of values, that changed<br>
 	 * */
-	public OctoObjectList Process(List<? extends ISensorData> packet)
-		throws ExceptionImportFail
+	public OctoObjectList Process(List<Pair<OctoObject, SimpleAttribute>> packet)
 	{
 		OctoObjectList changed = new OctoObjectList();
 
-		for(ISensorData sensor : packet)
+		for(Pair<OctoObject, SimpleAttribute> sensor : packet)
 		{
-			OctoObject obj = sensor.Resolve(graph_service);
+			OctoObject obj = sensor.getLeft();
 
-			if(obj.GetAttribute(sensor.GetData().GetName())
-				.Update(sensor.GetData().GetValue(), true))
+			if(obj.GetAttribute(sensor.getRight().GetName())
+				.Update(sensor.getRight().GetValue(), true))
 					changed.add(obj);
 		}
 

@@ -18,7 +18,7 @@ import ru.parallel.utils.JavaUtils;
  * */
 public class OctoAttribute extends SimpleAttribute
 {
-	public static final double DELTA = 0.001;
+	public static final double EPSILON = 0.00001;
 
 	private final GraphService graph_service;
 	private long ctime = 0;

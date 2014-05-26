@@ -6,28 +6,15 @@
 
 package ru.parallel.octotron.logic;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.IGraph;
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.core.OctoResponse;
+import org.apache.commons.io.FileSystemUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import ru.parallel.octotron.core.*;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.http.HTTPServer;
 import ru.parallel.octotron.http.ParsedHttpRequest;
 import ru.parallel.octotron.http.RequestResult;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.netimport.ISensorData;
 import ru.parallel.octotron.netimport.SimpleImporter;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionImportFail;
@@ -37,20 +24,27 @@ import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.JavaUtils;
 
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+// TODO refactor this class
 public class ExecutionController
 {
-	private boolean exit = false;
-
+	private final GlobalSettings settings;
 	private final IGraph graph;
 	private final GraphService graph_service;
-	private final ImportManager manager;
 
-	private final SimpleImporter http_importer;
+	private ImportManager manager;
+	private SimpleImporter http_importer;
+
 	private HTTPServer http;
 
 	private Thread request_processor;
 
 	private ReactionInvoker rule_invoker;
+
+	private boolean exit = false;
 	private boolean silent = false;
 
 	private final Queue<ParsedHttpRequest> request_queue
@@ -61,12 +55,21 @@ public class ExecutionController
 
 	private Statistics stat;
 
+	private SelfTest tester;
+
 	public ExecutionController(IGraph graph, GraphService graph_service, GlobalSettings settings)
 		throws ExceptionSystemError
 	{
 		this.graph = graph;
 		this.graph_service = graph_service;
+		this.settings = settings;
 
+		Init();
+	}
+
+	public void Init()
+		throws ExceptionSystemError
+	{
 		manager = new ImportManager(graph_service);
 
 		http_importer = new SimpleImporter();
@@ -78,6 +81,8 @@ public class ExecutionController
 		rule_invoker = new ReactionInvoker(settings);
 
 		stat = new Statistics();
+
+		tester = new SelfTest(graph_service, this);
 	}
 
 /**
@@ -145,12 +150,17 @@ public class ExecutionController
 
 	public void Finish()
 	{
+		if(http != null)
+			http.Finish();
+
 		if(request_processor != null)
 			request_processor.interrupt();
 
-		rule_invoker.Finish();
-		http.Finish();
-		manager.Finish();
+		if(rule_invoker != null)
+			rule_invoker.Finish();
+
+		if(manager != null)
+			manager.Finish();
 	}
 
 	private final DynamicSleeper sleeper = new DynamicSleeper();
@@ -172,13 +182,21 @@ public class ExecutionController
 		sleeper.Sleep(processed_requests + processed_blocking_requests + processed_imports == 0);
 	}
 
-/**
- * execute all requests and process data import from all sources,<br>
- * invoke reactions and sleep if needed<br>
- * */
+	OctoObjectList ImmediateImport(OctoObject object, SimpleAttribute attribute)
+	{
+		List<Pair<OctoObject, SimpleAttribute>> packet = new LinkedList<>();
+		packet.add(Pair.of(object, attribute));
+
+		return manager.Process(packet);
+	}
+
+	/**
+	 * execute all requests and process data import from all sources,<br>
+	 * invoke reactions and sleep if needed<br>
+	 * */
 	private int ProcessImport(int max_count)
-		throws ExceptionImportFail {
-		List<? extends ISensorData> http_packet = http_importer.Get(max_count);
+	{
+		List<Pair<OctoObject, SimpleAttribute>> http_packet = http_importer.Get(max_count);
 		int processed_http = http_packet.size();
 
 		OctoObjectList changed = manager.Process(http_packet);
@@ -217,6 +235,44 @@ public class ExecutionController
 		return count;
 	}
 
+	private static final double free_space_kb_thr = 1024*1024; // 1GB in KB
+
+	public String PerformSelfTest()
+	{
+		tester.Init();
+
+		boolean graph_test = tester.Test();
+
+		boolean process_test1 = request_processor.isAlive();
+		boolean process_test2 = rule_invoker.IsAlive();
+
+		long free_space_kb;
+		String free_space_res;
+
+		try
+		{
+			free_space_kb = FileSystemUtils.freeSpaceKb((new File("")).getAbsolutePath());
+		}
+		catch(IOException fail)
+		{
+			free_space_kb = -1;
+		}
+
+		if(free_space_kb > 0)
+			free_space_res = (free_space_kb > free_space_kb_thr) + " ( " + free_space_kb + "KB free )";
+		else
+			free_space_res = Boolean.valueOf(false).toString() + " ( can not get free space )";
+
+		StringBuilder result = new StringBuilder();
+
+		result.append("graph test: ").append(graph_test).append(System.lineSeparator());
+		result.append("request processor: ").append(process_test1).append(System.lineSeparator());
+		result.append("rule invoker: ").append(process_test2).append(System.lineSeparator());
+		result.append("disk space: ").append(free_space_res).append(System.lineSeparator());
+
+		return result.toString();
+	}
+
 /**
  * create snapshot of all reactions with failed conditions<br>
  * and get their description<br>
@@ -232,9 +288,9 @@ public class ExecutionController
 		{
 			for(OctoResponse response : obj.GetFails())
 			{
-				PreparedResponse preppared_response = new PreparedResponse(response, obj, JavaUtils.GetTimestamp());
+				PreparedResponse prepared_response = new PreparedResponse(response, obj, JavaUtils.GetTimestamp());
 
-				String descr = preppared_response.GetFullString();
+				String descr = prepared_response.GetFullString();
 
 				result.append(descr).append(System.lineSeparator());
 			}

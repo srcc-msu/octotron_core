@@ -12,6 +12,9 @@ import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
 import java.io.Serializable;
 
+/**
+ * currently octopy supports only only one constructor for rules
+ * */
 public abstract class OctoRule implements Serializable
 {
 	private static final long serialVersionUID = 6126662649331847764L;

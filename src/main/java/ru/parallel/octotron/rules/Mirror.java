@@ -9,7 +9,6 @@ package ru.parallel.octotron.rules;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoObjectRule;
 import ru.parallel.octotron.primitive.EDependencyType;
-import ru.parallel.octotron.primitive.SimpleAttribute;
 
 public abstract class Mirror extends OctoObjectRule
 {
@@ -18,12 +17,12 @@ public abstract class Mirror extends OctoObjectRule
 	private String mirror_name_match;
 	private Object mirror_value_match;
 
-	protected Mirror(String mirror_attribute, SimpleAttribute mirror_parent)
+	protected Mirror(String mirror_attribute, String mirror_name_match, Object mirror_value_match)
 	{
 		super(mirror_attribute);
 		this.mirror_attribute = mirror_attribute;
-		this.mirror_name_match = mirror_parent.GetName();
-		this.mirror_value_match = mirror_parent.GetValue();
+		this.mirror_name_match = mirror_name_match;
+		this.mirror_value_match = mirror_value_match;
 	}
 
 	@Override

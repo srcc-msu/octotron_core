@@ -77,6 +77,14 @@ public class OctoAttribute extends SimpleAttribute
 		return atime;
 	}
 
+	public Object GetLastValue()
+	{
+		if(!graph_service.TestMeta(parent, name, OctoAttribute.LAST_VAL))
+			return null;
+		else
+			return graph_service.GetMeta(parent, name, OctoAttribute.LAST_VAL);
+	}
+
 	public double GetSpeed()
 	{
 		if(!graph_service.TestMeta(parent, name, OctoAttribute.LAST_VAL))

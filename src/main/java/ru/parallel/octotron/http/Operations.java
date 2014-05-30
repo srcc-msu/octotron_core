@@ -380,15 +380,15 @@ public abstract class Operations
 //------------MODIFY------------
 //------------------------------
 
-/**
- * adds a single import value to import queue<br>
- * */
+	/**
+	 * adds a single import value to import queue<br>
+	 * */
 	public static final Operation import_token = new Operation("import", false, new IExec()
 	{
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
-				throws ExceptionParseError
+			throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name", "value");
 
@@ -405,6 +405,35 @@ public abstract class Operations
 				control.Import((OctoObject) target, new SimpleAttribute(name, value));
 
 			String data = "added to import queue";
+			return new RequestResult(E_RESULT_TYPE.TEXT, data);
+		}
+	});
+
+	/**
+	 * adds a single import value to unchecked import queue<br>
+	 * */
+	public static final Operation unchecked_import_token = new Operation("unchecked_import", false, new IExec()
+	{
+		@Override
+		public Object Execute(GraphService graph_service, ExecutionController control
+			, Map<String, String> params, IEntityList<?> objects)
+			throws ExceptionParseError
+		{
+			Operations.StrictParams(params, "path", "name", "value");
+
+			String name = params.get("name");
+			String value_str = params.get("value");
+
+			Object value = SimpleAttribute.ValueFromStr(value_str);
+
+			OctoEntity target = objects.Only();
+
+			if(target.GetUID().getType() != EEntityType.OBJECT)
+				throw new ExceptionModelFail("can not import value to a link");
+			else
+				control.UncheckedImport((OctoObject) target, new SimpleAttribute(name, value));
+
+			String data = "added to unchcked import queue";
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
 		}
 	});

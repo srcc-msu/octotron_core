@@ -22,6 +22,7 @@ import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.DynamicSleeper;
+import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
 import java.io.*;
@@ -37,6 +38,7 @@ public class ExecutionController
 
 	private ImportManager manager;
 	private SimpleImporter http_importer;
+	private SimpleImporter http_unchecked_importer;
 
 	private HTTPServer http;
 
@@ -70,9 +72,10 @@ public class ExecutionController
 	public void Init()
 		throws ExceptionSystemError
 	{
-		manager = new ImportManager(graph_service);
+		manager = new ImportManager();
 
 		http_importer = new SimpleImporter();
+		http_unchecked_importer = new SimpleImporter();
 
 		http = new HTTPServer(settings);
 
@@ -134,6 +137,11 @@ public class ExecutionController
 		http_importer.Put(object, attribute);
 	}
 
+	public void UncheckedImport(OctoObject object, SimpleAttribute attribute)
+	{
+		http_unchecked_importer.Put(object, attribute);
+	}
+
 	public void SetExit(boolean exit)
 	{
 		this.exit = exit;
@@ -167,13 +175,14 @@ public class ExecutionController
 	private final DynamicSleeper sleeper = new DynamicSleeper();
 
 	public void Process(int max_count)
-		throws IOException, ExceptionImportFail, InterruptedException
+		throws IOException, ExceptionImportFail, InterruptedException, ExceptionSystemError
 	{
 		stat.Process();
 
 		int processed_requests = ProcessRequests(request_queue, max_count);
 		int processed_blocking_requests = ProcessRequests(blocking_request_queue, max_count);
 		int processed_imports = ProcessImport(max_count);
+		processed_imports += ProcessUncheckedImport(max_count);
 
 		stat.Request(processed_requests, request_queue.size());
 		stat.BlockingRequest(processed_blocking_requests, blocking_request_queue.size());
@@ -192,13 +201,53 @@ public class ExecutionController
 	}
 
 	/**
-	 * execute all requests and process data import from all sources,<br>
+	 * process data import from all sources,<br>
 	 * invoke reactions and sleep if needed<br>
+	 * throws if encountered unknown import<br>
 	 * */
 	private int ProcessImport(int max_count)
 	{
-		List<Pair<OctoObject, SimpleAttribute>> http_packet = http_importer.Get(max_count);
+		List<Pair<OctoObject, SimpleAttribute>> http_packet
+			= http_importer.Get(max_count);
 		int processed_http = http_packet.size();
+
+		OctoObjectList changed = manager.Process(http_packet);
+
+		rule_invoker.Invoke(changed, silent);
+
+		return processed_http;
+	}
+
+	/**
+	 * process data import from all sources,<br>
+	 * invoke reactions and sleep if needed<br>
+	 * reports if encountered unknown import<br>
+	 * */
+	private int ProcessUncheckedImport(int max_count)
+		throws ExceptionSystemError
+	{
+		List<Pair<OctoObject, SimpleAttribute>> http_packet
+			= http_unchecked_importer.Get(max_count);
+
+		int processed_http = http_packet.size();
+
+		for(Pair<OctoObject, SimpleAttribute> pair : http_packet)
+		{
+			OctoObject object = pair.getLeft();
+			SimpleAttribute attr = pair.getRight();
+
+			if(!object.TestAttribute(attr.GetName()))
+			{
+				object.DeclareAttribute(attr);
+				String script = settings.GetScriptByKey("on_new_attribute");
+
+				if(script != null)
+				{
+					FileUtils.ExecSilent(script
+						, object.GetAttribute("AID").GetLong().toString(), attr.GetName());
+				}
+			}
+		}
 
 		OctoObjectList changed = manager.Process(http_packet);
 

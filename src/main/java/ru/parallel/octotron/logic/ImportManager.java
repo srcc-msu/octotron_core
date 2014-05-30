@@ -28,7 +28,7 @@ public class ImportManager
 	private final AttributeProcessor static_proc;
 	private final RuleProcessor ruled_proc;
 
-	public ImportManager(GraphService graph_service)
+	public ImportManager()
 	{
 		this.static_proc = new AttributeProcessor();
 		this.ruled_proc = new RuleProcessor();

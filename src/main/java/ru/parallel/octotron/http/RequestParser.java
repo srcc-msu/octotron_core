@@ -40,7 +40,7 @@ private static final Operation[] VIEW_OPERATIONS =
  * */
 private static final Operation[] MODIFY_OPERATIONS =
 	{
-		Operations.import_token
+		Operations.import_token, Operations.unchecked_import_token
 		, Operations.set, Operations.static_op
 		, Operations.set_valid, Operations.set_invalid
 		, Operations.add_m, Operations.del_m

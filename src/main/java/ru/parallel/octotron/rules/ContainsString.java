@@ -11,15 +11,17 @@ import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.EDependencyType;
 
-public class Changed extends OctoRule
+public class ContainsString extends OctoRule
 {
-	private static final long serialVersionUID = -5796823312858284235L;
-	private final String measured_attribute;
+	private static final long serialVersionUID = -665317574895287470L;
+	private final String param;
+	private final String match_str;
 
-	public Changed(String attribute_name, String measured_attribute)
+	public ContainsString(String attribute_name, String param, String match_str)
 	{
 		super(attribute_name);
-		this.measured_attribute = measured_attribute;
+		this.param = param;
+		this.match_str = match_str;
 	}
 
 	@Override
@@ -31,14 +33,12 @@ public class Changed extends OctoRule
 	@Override
 	public Object Compute(OctoEntity entity)
 	{
-		OctoAttribute attr = entity.GetAttribute(measured_attribute);
+		OctoAttribute attr = entity.GetAttribute(param);
 
-		if(!attr.IsValid() || attr.GetCTime() == 0)
+		if(attr.GetCTime() == 0 || !attr.IsValid())
 			return GetDefaultValue();
 
-		Object last_val = attr.GetLastValue();
-
-		return attr.GetValue().equals(last_val);
+		return attr.GetString().contains(match_str);
 	}
 
 	@Override

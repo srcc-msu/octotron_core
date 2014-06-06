@@ -33,7 +33,7 @@ public class AggregateDoubleSum extends OctoObjectRule
 	{
 		double sum = 0.0;
 
-		for(OctoObject obj : object.GetOutNeighbors("type", "contain"))
+		for(OctoObject obj : object.GetOutNeighbors().Uniq())
 			for(OctoAttribute att : obj.GetAttributes())
 				if(att.GetName().contains(detect_str) && att.IsValid() && att.GetCTime() != 0)
 					sum += att.GetDouble();

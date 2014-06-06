@@ -33,7 +33,7 @@ public class AggregateIntSum extends OctoObjectRule
 	{
 		int sum = 0;
 
-		for(OctoObject obj : object.GetOutNeighbors("type", "contain"))
+		for(OctoObject obj : object.GetOutNeighbors().Uniq())
 			for(OctoAttribute att : obj.GetAttributes())
 				if(att.GetName().contains(detect_str) && att.IsValid() && att.GetCTime() != 0)
 					sum += att.GetLong();

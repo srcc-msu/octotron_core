@@ -13,12 +13,12 @@ import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.EDependencyType;
 
-public class CheckBoolRules extends OctoRule
+public class LogicalOr extends OctoRule
 {
 	private static final long serialVersionUID = -5698688420213900355L;
 	private final String[] check_list;
 
-	public CheckBoolRules(String attribute_name, String... check_list)
+	public LogicalOr(String attribute_name, String... check_list)
 	{
 		super(attribute_name);
 		this.check_list = ArrayUtils.clone(check_list);
@@ -33,17 +33,17 @@ public class CheckBoolRules extends OctoRule
 	@Override
 	public Object Compute(OctoEntity entity)
 	{
-		int sum = 0;
+		boolean res = false;
 
 		for(String attr_name : check_list)
 		{
 			OctoAttribute attr = entity.GetAttribute(attr_name);
 
-			if(!attr.GetBoolean() && attr.IsValid() && attr.GetCTime() != 0)
-				sum++;
+			if(attr.IsValid() && attr.GetCTime() != 0)
+				res = res | attr.GetBoolean();
 		}
 
-		return sum;
+		return res;
 	}
 
 	@Override

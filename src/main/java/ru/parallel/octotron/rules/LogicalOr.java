@@ -49,6 +49,6 @@ public class LogicalOr extends OctoRule
 	@Override
 	public Object GetDefaultValue()
 	{
-		return 0;
+		return true;
 	}
 }

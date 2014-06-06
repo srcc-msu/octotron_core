@@ -38,7 +38,7 @@ public class Changed extends OctoRule
 
 		Object last_val = attr.GetLastValue();
 
-		return attr.GetValue().equals(last_val);
+		return !attr.GetValue().equals(last_val);
 	}
 
 	@Override

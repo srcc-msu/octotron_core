@@ -33,7 +33,7 @@ public class LogicalAnd extends OctoRule
 	@Override
 	public Object Compute(OctoEntity entity)
 	{
-		boolean res = false;
+		boolean res = true;
 
 		for(String attr_name : check_list)
 		{
@@ -49,6 +49,6 @@ public class LogicalAnd extends OctoRule
 	@Override
 	public Object GetDefaultValue()
 	{
-		return 0;
+		return true;
 	}
 }

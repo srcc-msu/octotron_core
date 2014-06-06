@@ -204,7 +204,8 @@ public final class Neo4jGraph implements IGraph
 		}
 
 		Map<String, String> config = new HashMap<>();
-		config.put("keep_logical_logs", "false");//MAX_LOG_SIZE + "G size");
+		config.put("use_memory_mapped_buffers", "true");
+		config.put("keep_logical_logs", "=false");//MAX_LOG_SIZE + "G size");
 
 		db_name = name;
 

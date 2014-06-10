@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import ru.parallel.octotron.core.IGraph;
 import ru.parallel.octotron.core.IIndex;
 import ru.parallel.octotron.core.OctoObject;
@@ -205,13 +206,13 @@ public final class Neo4jGraph implements IGraph
 
 		Map<String, String> config = new HashMap<>();
 		config.put("use_memory_mapped_buffers", "true");
-		config.put("keep_logical_logs", "=false");//MAX_LOG_SIZE + "G size");
+		config.put("keep_logical_logs", "false");
 
 		db_name = name;
 
 		graph_db = new GraphDatabaseFactory()
 			.newEmbeddedDatabaseBuilder(db_name)
-			.setConfig(config)
+			.setConfig(GraphDatabaseSettings.keep_logical_logs, "false")
 			.newGraphDatabase();
 
 		if(bootstrap)

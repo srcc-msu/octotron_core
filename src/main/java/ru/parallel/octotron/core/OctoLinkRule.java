@@ -10,9 +10,9 @@ public abstract class OctoLinkRule extends OctoRule
 {
 	private static final long serialVersionUID = -943099846881874234L;
 
-	protected OctoLinkRule(String attribute_name)
+	protected OctoLinkRule(String name)
 	{
-		super(attribute_name);
+		super(name);
 	}
 
 	@Override

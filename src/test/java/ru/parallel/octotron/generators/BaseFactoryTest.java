@@ -83,14 +83,14 @@ public class BaseFactoryTest
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertEquals(3, obj.GetRules().size());
-		assertEquals("test1", obj.GetRules().get(0).GetAttr());
-		assertEquals("test2", obj.GetRules().get(1).GetAttr());
-		assertEquals("test3", obj.GetRules().get(2).GetAttr());
+		assertEquals("test1", obj.GetRules().get(0).GetAttribute());
+		assertEquals("test2", obj.GetRules().get(1).GetAttribute());
+		assertEquals("test3", obj.GetRules().get(2).GetAttribute());
 
 		assertEquals(3, link.GetRules().size());
-		assertEquals("test2", link.GetRules().get(0).GetAttr());
-		assertEquals("test3", link.GetRules().get(1).GetAttr());
-		assertEquals("test1", link.GetRules().get(2).GetAttr());
+		assertEquals("test2", link.GetRules().get(0).GetAttribute());
+		assertEquals("test3", link.GetRules().get(1).GetAttribute());
+		assertEquals("test1", link.GetRules().get(2).GetAttribute());
 	}
 
 	@Test

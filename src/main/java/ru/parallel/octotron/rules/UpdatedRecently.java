@@ -18,9 +18,9 @@ public class UpdatedRecently extends OctoRule
 	private final String measured_attribute;
 	private long threshold = 0l;
 
-	public UpdatedRecently(String attribute_name, String measured_attribute, long threshold)
+	public UpdatedRecently(String name, String measured_attribute, long threshold)
 	{
-		super(attribute_name);
+		super(name) ;
 		this.measured_attribute = measured_attribute;
 		this.threshold = threshold;
 	}

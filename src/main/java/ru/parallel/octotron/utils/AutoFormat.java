@@ -205,7 +205,7 @@ public class AutoFormat
 			for(OctoRule rule : object.GetRules())
 			{
 				String str = " ID: " + rule.GetID() + " attribute: \""
-					+ rule.GetAttr() + "\"" + System.lineSeparator();
+					+ rule.GetAttribute() + "\"" + System.lineSeparator();
 
 				result.append(str);
 			}

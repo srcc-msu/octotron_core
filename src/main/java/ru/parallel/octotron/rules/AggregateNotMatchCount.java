@@ -9,24 +9,29 @@ package ru.parallel.octotron.rules;
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.primitive.EDependencyType;
 
-public class AggregateDoubleSum extends Aggregate
+public class AggregateNotMatchCount extends Aggregate
 {
 	private static final long serialVersionUID = -1961148475047706792L;
+	private final Object value;
 
-	public AggregateDoubleSum(String name, EDependencyType dependency, String... attributes)
+	public AggregateNotMatchCount(String name, Object value, EDependencyType dependency, String... attributes)
 	{
 		super(name, dependency, attributes);
+		this.value = value;
 	}
 
 	@Override
 	protected Object Accumulate(Object res, OctoAttribute attribute)
 	{
-		return (Double)res + attribute.GetDouble();
+		if(attribute.ne(value))
+			return (Long)res + 1;
+		return res;
 	}
 
 	@Override
 	public Object GetDefaultValue()
 	{
-		return 0.0;
+		return 0L;
 	}
 }
+

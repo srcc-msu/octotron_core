@@ -16,12 +16,12 @@ import ru.parallel.octotron.primitive.EDependencyType;
 public class LogicalAnd extends OctoRule
 {
 	private static final long serialVersionUID = -5698688420213900355L;
-	private final String[] check_list;
+	private final String[] attributes;
 
-	public LogicalAnd(String attribute_name, String... check_list)
+	public LogicalAnd(String name, String... attributes)
 	{
-		super(attribute_name);
-		this.check_list = ArrayUtils.clone(check_list);
+		super(name) ;
+		this.attributes = ArrayUtils.clone(attributes);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class LogicalAnd extends OctoRule
 	{
 		boolean res = true;
 
-		for(String attr_name : check_list)
+		for(String attr_name : attributes)
 		{
 			OctoAttribute attr = entity.GetAttribute(attr_name);
 

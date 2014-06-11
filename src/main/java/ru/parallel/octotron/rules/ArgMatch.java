@@ -14,14 +14,14 @@ import ru.parallel.octotron.primitive.EDependencyType;
 public class ArgMatch extends OctoRule
 {
 	private static final long serialVersionUID = -665317574895287470L;
-	private final String param;
-	private final String match_arg;
+	private final String check_attribute;
+	private final String match_attribute;
 
-	public ArgMatch(String attribute_name, String param, String match_arg)
+	public ArgMatch(String name, String check_attribute, String match_attribute)
 	{
-		super(attribute_name);
-		this.param = param;
-		this.match_arg = match_arg;
+		super(name) ;
+		this.check_attribute = check_attribute;
+		this.match_attribute = match_attribute;
 	}
 
 	@Override
@@ -33,12 +33,12 @@ public class ArgMatch extends OctoRule
 	@Override
 	public Object Compute(OctoEntity entity)
 	{
-		OctoAttribute attr = entity.GetAttribute(param);
+		OctoAttribute attr = entity.GetAttribute(check_attribute);
 
 		if(attr.GetCTime() == 0 || !attr.IsValid())
 			return GetDefaultValue();
 
-		return attr.eq(entity.GetAttribute(match_arg).GetValue());
+		return attr.eq(entity.GetAttribute(match_attribute).GetValue());
 	}
 
 	@Override

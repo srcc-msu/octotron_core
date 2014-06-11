@@ -301,7 +301,7 @@ public class OctoEntityTest
 			assertEquals(i + 1, rules.size());
 
 			for(int j = 0; j < i + 1; j++)
-				assertEquals("test" + j, rules.get(j).GetAttr());
+				assertEquals("test" + j, rules.get(j).GetAttribute());
 		}
 	}
 

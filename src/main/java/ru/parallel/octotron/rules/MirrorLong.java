@@ -18,6 +18,6 @@ public class MirrorLong extends Mirror
 	@Override
 	public Object GetDefaultValue()
 	{
-		return 0;
+		return 0L;
 	}
 }

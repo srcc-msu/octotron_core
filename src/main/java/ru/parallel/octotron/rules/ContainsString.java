@@ -14,13 +14,13 @@ import ru.parallel.octotron.primitive.EDependencyType;
 public class ContainsString extends OctoRule
 {
 	private static final long serialVersionUID = -665317574895287470L;
-	private final String param;
+	private final String attribute;
 	private final String match_str;
 
-	public ContainsString(String attribute_name, String param, String match_str)
+	public ContainsString(String name, String attribute, String match_str)
 	{
-		super(attribute_name);
-		this.param = param;
+		super(name) ;
+		this.attribute = attribute;
 		this.match_str = match_str;
 	}
 
@@ -33,7 +33,7 @@ public class ContainsString extends OctoRule
 	@Override
 	public Object Compute(OctoEntity entity)
 	{
-		OctoAttribute attr = entity.GetAttribute(param);
+		OctoAttribute attr = entity.GetAttribute(attribute);
 
 		if(attr.GetCTime() == 0 || !attr.IsValid())
 			return GetDefaultValue();

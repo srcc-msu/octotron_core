@@ -10,9 +10,9 @@ public abstract class OctoObjectRule extends OctoRule
 {
 	private static final long serialVersionUID = -1936097371431183834L;
 
-	protected OctoObjectRule(String attribute_name)
+	protected OctoObjectRule(String name)
 	{
-		super(attribute_name);
+		super(name);
 	}
 
 	@Override

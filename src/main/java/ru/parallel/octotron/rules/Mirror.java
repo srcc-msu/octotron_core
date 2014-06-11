@@ -13,9 +13,9 @@ import ru.parallel.octotron.primitive.EDependencyType;
 public abstract class Mirror extends OctoObjectRule
 {
 	private static final long serialVersionUID = -2328141171759693459L;
-	private String mirror_attribute;
-	private String mirror_name_match;
-	private Object mirror_value_match;
+	private final String mirror_attribute;
+	private final String mirror_name_match;
+	private final Object mirror_value_match;
 
 	protected Mirror(String mirror_attribute, String mirror_name_match, Object mirror_value_match)
 	{

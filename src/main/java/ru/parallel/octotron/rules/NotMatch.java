@@ -17,9 +17,9 @@ public class NotMatch extends OctoRule
 	private final String param;
 	private final Object match_value;
 
-	public NotMatch(String attribute_name, String param, Object match_value)
+	public NotMatch(String name, String param, Object match_value)
 	{
-		super(attribute_name);
+		super(name) ;
 		this.param = param;
 		this.match_value = match_value;
 	}

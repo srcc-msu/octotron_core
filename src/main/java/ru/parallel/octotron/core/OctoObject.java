@@ -119,7 +119,7 @@ public class OctoObject extends OctoEntity
 
 			Object new_val = rule.Compute(this);
 
-			if(GetAttribute(rule.GetAttr()).Update(new_val, false))
+			if(GetAttribute(rule.GetAttribute()).Update(new_val, false))
 				changed++;
 		}
 

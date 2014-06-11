@@ -152,7 +152,7 @@ public abstract class OctoEntity
 	{
 		graph_service.AddToArray(this, OctoEntity.RULE_PREFIX, rule.GetID());
 
-		DeclareAttribute(rule.GetAttr(), rule.GetDefaultValue());
+		DeclareAttribute(rule.GetAttribute(), rule.GetDefaultValue());
 	}
 
 	public void AddRules(List<OctoRule> rules)

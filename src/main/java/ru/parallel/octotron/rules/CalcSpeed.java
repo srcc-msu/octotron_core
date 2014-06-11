@@ -16,9 +16,9 @@ public class CalcSpeed extends OctoRule
 	private static final long serialVersionUID = -5796823312858284235L;
 	private final String measured_attribute;
 
-	public CalcSpeed(String attribute_name, String measured_attribute)
+	public CalcSpeed(String name, String measured_attribute)
 	{
-		super(attribute_name);
+		super(name) ;
 		this.measured_attribute = measured_attribute;
 	}
 

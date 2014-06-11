@@ -18,12 +18,12 @@ import java.io.Serializable;
 public abstract class OctoRule implements Serializable
 {
 	private static final long serialVersionUID = 6126662649331847764L;
-	protected final String attribute_name;
+	protected final String name;
 	private long rule_id;
 
-	protected OctoRule(String attribute_name)
+	protected OctoRule(String name)
 	{
-		this.attribute_name = attribute_name;
+		this.name = name;
 		rule_id = PersistenStorage.INSTANCE.GetRules().Add(this);
 	}
 
@@ -37,9 +37,9 @@ public abstract class OctoRule implements Serializable
 		return rule_id;
 	}
 
-	public final String GetAttr()
+	public final String GetAttribute()
 	{
-		return attribute_name;
+		return name;
 	}
 
 	public abstract Object Compute(OctoEntity entity);

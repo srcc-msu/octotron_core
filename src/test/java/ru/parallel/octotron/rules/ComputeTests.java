@@ -6,12 +6,14 @@ import static org.junit.Assert.*;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.utils.OctoObjectList;
 
 public class ComputeTests
 {
@@ -27,6 +29,10 @@ public class ComputeTests
 		ComputeTests.graph_service = new GraphService(ComputeTests.graph);
 
 		ObjectFactory in = new ObjectFactory(graph_service)
+			.Attributes(new SimpleAttribute("in_d1", 10.0))
+			.Attributes(new SimpleAttribute("in_l1", 20))
+			.Attributes(new SimpleAttribute("in_b1", true))
+			.Attributes(new SimpleAttribute("in_str1", "yes"))
 			.Attributes(new SimpleAttribute("d1", 10.0))
 			.Attributes(new SimpleAttribute("d2", 11.0))
 			.Attributes(new SimpleAttribute("l1", 20))
@@ -37,6 +43,10 @@ public class ComputeTests
 			.Attributes(new SimpleAttribute("str2", "yes"));
 
 		ObjectFactory out = new ObjectFactory(graph_service)
+			.Attributes(new SimpleAttribute("out_d1", 20.0))
+			.Attributes(new SimpleAttribute("out_l1", 10))
+			.Attributes(new SimpleAttribute("out_b1", false))
+			.Attributes(new SimpleAttribute("out_str1", "no"))
 			.Attributes(new SimpleAttribute("d1", 20.0))
 			.Attributes(new SimpleAttribute("d2", 21.0))
 			.Attributes(new SimpleAttribute("l1", 10))
@@ -65,9 +75,15 @@ public class ComputeTests
 		LinkFactory links = new LinkFactory(graph_service)
 			.Attributes(new SimpleAttribute("type", "test"));
 
-		links.EveryToOne(in.Create(3), obj);
+		OctoObjectList ins = in.Create(3);
+		OctoObjectList outs = out.Create(4);
 
-		links.OneToEvery(obj, out.Create(4));
+		Enumerator.Sequence(ins, "in_lid");
+		Enumerator.Sequence(outs, "out_lid");
+
+		links.EveryToOne(ins, obj);
+
+		links.OneToEvery(obj, outs);
 
 // hack to avoid problems with ctime check
 		for(OctoObject obj : graph_service.GetAllObjects())
@@ -162,7 +178,7 @@ public class ComputeTests
 		ArgMatchAprx rule2 = new ArgMatchAprx("test", "d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true, rule2.Compute(obj));
+		assertEquals(true , rule2.Compute(obj));
 	}
 
 	@Test
@@ -172,7 +188,7 @@ public class ComputeTests
 		ArgMatch rule2 = new ArgMatch("test", "str1", "str2");
 
 		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true, rule2.Compute(obj));
+		assertEquals(true , rule2.Compute(obj));
 	}
 
 	@Test
@@ -181,7 +197,7 @@ public class ComputeTests
 		ContainsString rule1 = new ContainsString("test", "str1", "may");
 		ContainsString rule2 = new ContainsString("test", "str2", "bee");
 
-		assertEquals(true, rule1.Compute(obj));
+		assertEquals(true , rule1.Compute(obj));
 		assertEquals(false, rule2.Compute(obj));
 	}
 
@@ -193,7 +209,7 @@ public class ComputeTests
 		LogicalAnd rule3 = new LogicalAnd("test", "bf2");
 		LogicalAnd rule4 = new LogicalAnd("test", "bf1", "bf2");
 
-		assertEquals(true, rule1.Compute(obj));
+		assertEquals(true , rule1.Compute(obj));
 		assertEquals(false, rule2.Compute(obj));
 		assertEquals(false, rule3.Compute(obj));
 		assertEquals(false, rule4.Compute(obj));
@@ -207,9 +223,9 @@ public class ComputeTests
 		LogicalOr rule3 = new LogicalOr("test", "bt1");
 		LogicalOr rule4 = new LogicalOr("test", "bf1", "bf2");
 
-		assertEquals(true, rule1.Compute(obj));
-		assertEquals(true, rule2.Compute(obj));
-		assertEquals(true, rule3.Compute(obj));
+		assertEquals(true , rule1.Compute(obj));
+		assertEquals(true , rule2.Compute(obj));
+		assertEquals(true , rule3.Compute(obj));
 		assertEquals(false, rule4.Compute(obj));
 	}
 
@@ -220,75 +236,181 @@ public class ComputeTests
 		LowerArgThreshold rule2 = new LowerArgThreshold("test", "l2", "l1");
 		LowerArgThreshold rule3 = new LowerArgThreshold("test", "d1", "d2");
 		LowerArgThreshold rule4 = new LowerArgThreshold("test", "d2", "d1");
+
+		assertEquals(false, rule1.Compute(obj));
+		assertEquals(true , rule2.Compute(obj));
+		assertEquals(false, rule3.Compute(obj));
+		assertEquals(true , rule4.Compute(obj));
 	}
 
 	@Test
 	public void TestLowerThreshold()
 	{
+		LowerThreshold rule1 = new LowerThreshold("test", "l1", 10);
+		LowerThreshold rule2 = new LowerThreshold("test", "l2", 0);
+		LowerThreshold rule3 = new LowerThreshold("test", "d1", 10.0);
+		LowerThreshold rule4 = new LowerThreshold("test", "d2", 0.0);
+
+		assertEquals(false, rule1.Compute(obj));
+		assertEquals(true , rule2.Compute(obj));
+		assertEquals(false, rule3.Compute(obj));
+		assertEquals(true , rule4.Compute(obj));
 	}
 
 	@Test
 	public void TestMatchAprx()
 	{
+		MatchAprx rule1 = new MatchAprx("test", "d1", 0.0, 1.0);
+		MatchAprx rule2 = new MatchAprx("test", "d2", 2.5, 2.0);
+
+		MatchAprx rule3 = new MatchAprx("test", "l1", 0L, 1L);
+		MatchAprx rule4 = new MatchAprx("test", "l2", -1L, 5L);
+
+		assertEquals(true, rule1.Compute(obj));
+		assertEquals(true , rule2.Compute(obj));
+		assertEquals(false, rule3.Compute(obj));
+		assertEquals(true , rule4.Compute(obj));
 	}
 
 	@Test
 	public void TestMatch()
 	{
+		Match rule1 = new Match("test", "d1", 0.0);
+		Match rule2 = new Match("test", "d2", 2.5);
+
+		Match rule3 = new Match("test", "l1", 2);
+		Match rule4 = new Match("test", "l2", -1);
+
+		assertEquals(true , rule1.Compute(obj));
+		assertEquals(false, rule2.Compute(obj));
+		assertEquals(true , rule3.Compute(obj));
+		assertEquals(false, rule4.Compute(obj));
 	}
 
 	@Test
 	public void TestMirrorBoolean()
 	{
+		MirrorBoolean rule1 = new MirrorBoolean("in_b1", "in_lid", 0);
+		MirrorBoolean rule2 = new MirrorBoolean("out_b1", "out_lid", 0);
+
+		assertEquals(true, rule1.Compute(obj));
+		assertEquals(false, rule2.Compute(obj));
 	}
 
 	@Test
 	public void TestMirrorDouble()
 	{
-	}
+		MirrorDouble rule1 = new MirrorDouble("in_d1", "in_lid", 1);
+		MirrorDouble rule2 = new MirrorDouble("out_d1", "out_lid", 1);
 
-	@Test
-	public void TestMirror()
-	{
+		assertEquals(10.0, rule1.Compute(obj));
+		assertEquals(20.0, rule2.Compute(obj));
 	}
 
 	@Test
 	public void TestMirrorLong()
 	{
+		MirrorDouble rule1 = new MirrorDouble("in_l1", "in_lid", 2);
+		MirrorDouble rule2 = new MirrorDouble("out_l1", "out_lid", 2);
+
+		assertEquals(20L, rule1.Compute(obj));
+		assertEquals(10L, rule2.Compute(obj));
 	}
 
 	@Test
 	public void TestMirrorString()
 	{
+		MirrorDouble rule1 = new MirrorDouble("in_str1", "in_lid", 2);
+		MirrorDouble rule2 = new MirrorDouble("out_str1", "out_lid", 2);
+
+		assertEquals("yes", rule1.Compute(obj));
+		assertEquals("no", rule2.Compute(obj));
 	}
 
 	@Test
 	public void TestNotMatch()
 	{
+		Match rule1 = new Match("test", "bt1", false);
+		Match rule2 = new Match("test", "bf1", false);
+
+		Match rule3 = new Match("test", "l1", -1);
+		Match rule4 = new Match("test", "l2", 3);
+
+		assertEquals(false, rule1.Compute(obj));
+		assertEquals(true , rule2.Compute(obj));
+		assertEquals(false, rule3.Compute(obj));
+		assertEquals(true , rule4.Compute(obj));
 	}
 
 	@Test
-	public void TestUpdatedRecently()
+	public void TestUpdatedRecently() throws Exception
 	{
+		OctoAttribute attr = obj.DeclareAttribute("test_update", 0);
+
+		UpdatedRecently rule = new UpdatedRecently("test", "test_update", 1);
+
+		assertEquals(false, rule.Compute(obj));
+
+		attr.Update(0, true);
+		assertEquals(true, rule.Compute(obj));
+
+		Thread.sleep(2000);
+		assertEquals(false, rule.Compute(obj));
+		attr.Update(0, true);
+		assertEquals(true, rule.Compute(obj));
+
+		Thread.sleep(3000);
+		assertEquals(false, rule.Compute(obj));
+		attr.Update(0, true);
+		assertEquals(true, rule.Compute(obj));
 	}
 
 	@Test
 	public void TestUpperArgThreshold()
 	{
+		UpperArgThreshold rule1 = new UpperArgThreshold("test", "l1", "l2");
+		UpperArgThreshold rule2 = new UpperArgThreshold("test", "l2", "l1");
+		UpperArgThreshold rule3 = new UpperArgThreshold("test", "d1", "d2");
+		UpperArgThreshold rule4 = new UpperArgThreshold("test", "d2", "d1");
+
+		assertEquals(true, rule1.Compute(obj));
+		assertEquals(false, rule2.Compute(obj));
+		assertEquals(true, rule3.Compute(obj));
+		assertEquals(false, rule4.Compute(obj));
 	}
 
 	@Test
 	public void TestUpperThreshold()
 	{
+		UpperThreshold rule1 = new UpperThreshold("test", "l1", 10);
+		UpperThreshold rule2 = new UpperThreshold("test", "l2", 0);
+		UpperThreshold rule3 = new UpperThreshold("test", "d1", 10.0);
+		UpperThreshold rule4 = new UpperThreshold("test", "d2", 0.0);
+
+		assertEquals(true, rule1.Compute(obj));
+		assertEquals(false, rule2.Compute(obj));
+		assertEquals(true, rule3.Compute(obj));
+		assertEquals(false, rule4.Compute(obj));
 	}
 
 	@Test
 	public void TestVarArgMatchAprx()
 	{
+		VarArgMatchAprx rule1 = new VarArgMatchAprx("test", "d1", "d2", OctoAttribute.EPSILON);
+		VarArgMatchAprx rule2 = new VarArgMatchAprx("test", "d1", "d2", 2.0);
+
+		assertEquals(false, rule1.Compute(obj));
+		assertEquals(true, rule2.Compute(obj));
 	}
 
 	@Test
 	public void TestVarArgMatch()
 	{
+		VarArgMatch rule1 = new VarArgMatch("test", "l1", "l2");
+		VarArgMatch rule2 = new VarArgMatch("test", "str1", "str2");
+
+		assertEquals(false, rule1.Compute(obj));
+		assertEquals(true, rule2.Compute(obj));
 	}
+
 }

@@ -190,8 +190,6 @@ public abstract class OctoEntity
 
 	public void RemoveTimer(String name)
 	{
-		OctoAttribute attr = GetAttribute(name);
-
 		RemoveAttribute(name);
 		TimerProcessor.RemoveTimer(this, name);
 	}

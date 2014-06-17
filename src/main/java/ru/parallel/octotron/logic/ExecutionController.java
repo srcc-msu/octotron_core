@@ -175,7 +175,7 @@ public class ExecutionController
 	private final DynamicSleeper sleeper = new DynamicSleeper();
 
 	public void Process(int max_count)
-		throws IOException, ExceptionImportFail, InterruptedException, ExceptionSystemError
+		throws IOException, InterruptedException, ExceptionSystemError
 	{
 		stat.Process();
 

@@ -15,7 +15,6 @@ public final class CommonReactions
 	private CommonReactions() {}
 
 	public static OctoResponse Critical(String str, String... attributes)
-		throws ExceptionSystemError
 	{
 		return new OctoResponse(EEventStatus.CRITICAL, str)
 			.Print("AID")
@@ -26,7 +25,6 @@ public final class CommonReactions
 	}
 
 	public static OctoResponse Danger(String str, String... attributes)
-		throws ExceptionSystemError
 	{
 		return new OctoResponse(EEventStatus.DANGER, str)
 			.Print("AID")
@@ -37,7 +35,6 @@ public final class CommonReactions
 	}
 
 	public static OctoResponse Warning(String str, String... attributes)
-		throws ExceptionSystemError
 	{
 		return new OctoResponse(EEventStatus.WARNING, str)
 			.Print("AID")
@@ -47,7 +44,6 @@ public final class CommonReactions
 	}
 
 	public static OctoResponse Info(String str, String... attributes)
-		throws ExceptionSystemError
 	{
 		return new OctoResponse(EEventStatus.INFO, str)
 			.Print("AID")
@@ -57,7 +53,6 @@ public final class CommonReactions
 	}
 
 	public static OctoResponse Recover(String str, String... attributes)
-		throws ExceptionSystemError
 	{
 		return new OctoResponse(EEventStatus.RECOVER, str)
 			.Print("AID")

@@ -86,7 +86,7 @@ public class StartOctotron
  * */
 	private static void Run(GlobalSettings settings)
 	{
-		Neo4jGraph graph = null;
+		Neo4jGraph graph;
 		ExecutionController exec_control = null;
 
 		String path = settings.GetDbPath() + settings.GetDbName();

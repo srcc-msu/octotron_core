@@ -18,8 +18,8 @@ public final class TimerProcessor
 {
 	private static final class Entry
 	{
-		public OctoEntity entity;
-		public String name;
+		public final OctoEntity entity;
+		public final String name;
 
 		public Entry(OctoEntity entity, String name)
 		{

@@ -112,7 +112,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * connect Nth object from \from with Nth object from \to<br>
  * create N edges, N == \from.length ==\to.length<br>
  * if \from.length != \to.length - error<br>
- * @throws ExceptionDBError
  * */
 	public OctoLinkList EveryToEvery(OctoObjectList from, OctoObjectList to)
 	{
@@ -147,7 +146,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * connect Nth object from \from with [Kth, Kth+M] objects from \to<br>
  * create L edges, L = \to.length<br>
  * \to.length must be divisible by \from.length<br>
- * @throws ExceptionDBError
  * */
 	public OctoLinkList EveryToChunks(OctoObjectList from, OctoObjectList to)
 	{
@@ -168,7 +166,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * connect Nth object from \from with [Kth, Kth+M] objects from \to<br>
  * create L edges, L = \to.length<br>
  * for last object M can be less than usual
- * @throws ExceptionDBError
  * */
 	public OctoLinkList EveryToChunks_LastLess(OctoObjectList from, OctoObjectList to)
 	{
@@ -192,7 +189,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * connect Nth object from \from with [Kth, Kth+M] objects from \to<br>
 	 * create L edges, L = \to.length<br>
 	 * M comes from \size arrays
-	 * @throws ExceptionDBError
 	 * */
 	public OctoLinkList ChunksToEvery_Guided(OctoObjectList from, OctoObjectList to
 		, int[] sizes)
@@ -230,7 +226,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * connect Nth object from \from with [Kth, Kth+M] objects from \to<br>
  * create L edges, L = \to.length<br>
  * \to.length must be divisible by \from.length<br>
- * @throws ExceptionDBError
  * */
 	public OctoLinkList ChunksToEvery(OctoObjectList from, OctoObjectList to)
 	{
@@ -251,10 +246,8 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * connect Nth object from \from with [Kth, Kth+M] objects from \to<br>
 	 * create L edges, L = \to.length<br>
 	 * \to.length must be divisible by \from.length<br>
-	 * @throws ExceptionDBError
 	 * */
-	public OctoLinkList ChunksToEvery_LastLess(OctoObjectList from, OctoObjectList to
-		, Object... addition)
+	public OctoLinkList ChunksToEvery_LastLess(OctoObjectList from, OctoObjectList to)
 	{
 		int chunk = (from.size() / to.size() + 1);
 		int diff = from.size() - chunk * to.size();
@@ -276,7 +269,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * connect Nth object from \from with [Kth, Kth+M] objects from \to<br>
 	 * create L edges, L = \to.length<br>
 	 * M comes from \size arrays
-	 * @throws ExceptionDBError
 	 * */
 	public OctoLinkList EveryToChunks_Guided(OctoObjectList from, OctoObjectList to
 		, int[] sizes)

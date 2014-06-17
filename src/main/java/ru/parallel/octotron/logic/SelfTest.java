@@ -67,9 +67,6 @@ public class SelfTest
 
 		controller.ImmediateImport(obj1, new SimpleAttribute("test_iteration", test_iteration));
 
-		if (obj2.GetAttribute("test_iteration").ne(test_iteration))
-			return false;
-
-		return true;
+		return obj2.GetAttribute("test_iteration").eq(test_iteration);
 	}
 }

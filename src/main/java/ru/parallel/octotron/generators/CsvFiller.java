@@ -6,16 +6,16 @@
 
 package ru.parallel.octotron.generators;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
-
+import au.com.bytecode.opencsv.CSVReader;
 import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.utils.IEntityList;
-import au.com.bytecode.opencsv.CSVReader;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * read a csv file and and fill a given CEntitList with attributes

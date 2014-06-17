@@ -6,13 +6,12 @@
 
 package ru.parallel.octotron.logic;
 
-import java.util.List;
-
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.utils.OctoObjectList;
+
+import java.util.List;
 
 /**
  * Processes input data<br>

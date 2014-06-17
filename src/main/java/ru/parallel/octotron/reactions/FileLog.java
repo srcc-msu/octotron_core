@@ -6,12 +6,12 @@
 
 package ru.parallel.octotron.reactions;
 
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.utils.JavaUtils;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.utils.JavaUtils;
 
 
 public class FileLog

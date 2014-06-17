@@ -6,7 +6,8 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.*;
+import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.rules.MirrorLong;

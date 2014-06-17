@@ -6,14 +6,14 @@
 
 package ru.parallel.octotron.generators;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.primitive.SimpleAttribute;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Abstract factory for constructing entities with<br>

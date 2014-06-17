@@ -6,21 +6,19 @@
 
 package ru.parallel.octotron.http;
 
+import org.apache.commons.lang3.tuple.Pair;
+import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
+import ru.parallel.octotron.http.PathOperations.PathToken;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.utils.IEntityList;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
-import ru.parallel.octotron.http.PathOperations.PathToken;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.IEntityList;
 
 /**
  * class for parsing http-compatible query<br>

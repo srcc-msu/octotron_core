@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.utils;
 
-import java.util.List;
-
 import ru.parallel.octotron.primitive.SimpleAttribute;
+
+import java.util.List;
 
 public class SimpleAttributeList extends IAttributeList<SimpleAttribute>
 {

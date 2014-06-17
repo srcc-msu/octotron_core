@@ -6,11 +6,7 @@
 
 package ru.parallel.octotron.reactions;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.lang3.ArrayUtils;
-
 import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoResponse;
@@ -21,6 +17,9 @@ import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
+
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class PreparedResponse

@@ -6,13 +6,13 @@
 
 package ru.parallel.octotron.http;
 
-import java.util.Map;
-
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.http.Operations.Operation;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.utils.IEntityList;
+
+import java.util.Map;
 
 /**
  * parsed request with correct tokens list<br>

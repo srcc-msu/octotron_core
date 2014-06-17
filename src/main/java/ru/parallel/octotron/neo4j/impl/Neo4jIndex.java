@@ -6,18 +6,18 @@
 
 package ru.parallel.octotron.neo4j.impl;
 
-import java.util.LinkedList;
-import java.util.List;
-
-
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.*;
-
+import org.neo4j.graphdb.index.AutoIndexer;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.index.ReadableIndex;
 import ru.parallel.octotron.core.IIndex;
 import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * provides access to index for searching elements in the graph

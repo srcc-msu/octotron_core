@@ -6,13 +6,16 @@
 
 package ru.parallel.octotron.core;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.*;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import ru.parallel.octotron.utils.OctoAttributeList;
+import ru.parallel.octotron.utils.OctoLinkList;
+import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.utils.SimpleAttributeList;
 
 import java.util.Arrays;
 import java.util.LinkedList;

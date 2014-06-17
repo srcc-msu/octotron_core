@@ -6,52 +6,75 @@
 
 package ru.parallel.octotron.logic;
 
+import ru.parallel.octotron.core.OctoEntity;
+import ru.parallel.octotron.utils.OctoEntityList;
+import ru.parallel.utils.JavaUtils;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.utils.OctoAttributeList;
-import ru.parallel.utils.JavaUtils;
-
 public final class TimerProcessor
 {
+	private static final class Entry
+	{
+		public OctoEntity entity;
+		public String name;
+
+		public Entry(OctoEntity entity, String name)
+		{
+			this.entity = entity;
+			this.name = name;
+		}
+	}
+
 	public static final TimerProcessor INSTANCE = new TimerProcessor();
 
-	private final List<OctoAttribute> timers;
+	private final List<Entry> timers;
 
 	private TimerProcessor()
 	{
 		timers = new LinkedList<>();
 	}
 
-	public static void AddTimer(OctoAttribute timer)
+	public static void AddTimer(OctoEntity entity, String name)
 	{
-		TimerProcessor.INSTANCE.timers.add(timer);
+		TimerProcessor.INSTANCE.timers.add(new Entry(entity, name));
 	}
 
-	public static OctoAttributeList Process()
+	public static OctoEntityList Process()
 	{
-		OctoAttributeList timers_timed_out = new OctoAttributeList();
+		OctoEntityList to_update = new OctoEntityList();
 
-		long cur_time = JavaUtils.GetTimestamp(); // TODO: move into the cycle?
+		long current_time = JavaUtils.GetTimestamp(); // TODO: move into the cycle?
 
-		Iterator<OctoAttribute> it = TimerProcessor.INSTANCE.timers.iterator();
+		Iterator<Entry> it = TimerProcessor.INSTANCE.timers.iterator();
 
 		while (it.hasNext())
 		{
-			OctoAttribute timer = it.next();
-			long set_time = timer.GetCTime();
+			Entry entry = it.next();
 
-			if(cur_time - set_time > timer.GetLong())
+			if(entry.entity.IsTimerExpired(entry.name, current_time))
 			{
-				timer.Update(0, true);
-				timers_timed_out.add(timer);
+				to_update.add(entry.entity);
 
 				it.remove();
 			}
 		}
 
-		return timers_timed_out;
+		return to_update;
+	}
+
+	public static void RemoveTimer(OctoEntity entity, String name)
+	{
+		Iterator<Entry> it = TimerProcessor.INSTANCE.timers.iterator();
+
+		while (it.hasNext())
+		{
+			Entry entry = it.next();
+
+			if(entry.entity.equals(entity) && entry.name.equals(name))
+				it.remove();
+		}
 	}
 }

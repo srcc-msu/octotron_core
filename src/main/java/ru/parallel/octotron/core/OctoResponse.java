@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.core;
 
-import ru.parallel.octotron.primitive.EEventStatus;
 import org.apache.commons.lang3.ArrayUtils;
+import ru.parallel.octotron.primitive.EEventStatus;
 
 import java.io.Serializable;
 import java.util.LinkedList;

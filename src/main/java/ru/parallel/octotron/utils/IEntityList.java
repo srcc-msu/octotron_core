@@ -6,15 +6,15 @@
 
 package ru.parallel.octotron.utils;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.generators.CsvFiller;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * base class for entity-specific lists<br>

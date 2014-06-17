@@ -6,15 +6,6 @@
 
 package ru.parallel.octotron.http;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
@@ -29,13 +20,16 @@ import ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.IEntityList;
 import ru.parallel.octotron.utils.AutoFormat;
 import ru.parallel.octotron.utils.AutoFormat.E_FORMAT_PARAM;
+import ru.parallel.octotron.utils.IEntityList;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.octotron.utils.SimpleAttributeList;
 import ru.parallel.utils.JavaUtils;
 import ru.parallel.utils.Timer;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * implementation of all available http operations<br>

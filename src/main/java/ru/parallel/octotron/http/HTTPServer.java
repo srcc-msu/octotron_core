@@ -6,25 +6,18 @@
 
 package ru.parallel.octotron.http;
 
+import com.sun.net.httpserver.*;
+import org.apache.commons.lang3.tuple.Pair;
+import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import ru.parallel.octotron.exec.GlobalSettings;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-
-import com.sun.net.httpserver.BasicAuthenticator;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 
 /**
  * HTTP server for requests processing<br>

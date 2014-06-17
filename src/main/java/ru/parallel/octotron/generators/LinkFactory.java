@@ -6,19 +6,15 @@
 
 package ru.parallel.octotron.generators;
 
-import java.util.Arrays;
-import java.util.List;
-
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.OctoLink;
-import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.*;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.utils.OctoLinkList;
 import ru.parallel.octotron.utils.OctoObjectList;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * advanced factory for constructing multiple edges,<br>

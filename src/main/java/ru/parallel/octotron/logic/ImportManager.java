@@ -6,19 +6,17 @@
 
 package ru.parallel.octotron.logic;
 
-import java.util.List;
-
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.OctoAttributeList;
+import ru.parallel.octotron.utils.OctoEntityList;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.JavaUtils;
+
+import java.util.List;
 
 /**
  * main manager class, that does all data processing
@@ -82,19 +80,14 @@ public class ImportManager
 
 		if(cur_time - last_timer_check > ImportManager.TIMER_CHECK_THRESHOLD)
 		{
-			OctoAttributeList timers_timed_out = TimerProcessor.Process();
+			OctoEntityList to_update = TimerProcessor.Process();
 
-			for(OctoAttribute attr : timers_timed_out)
+			for(OctoEntity entity : to_update)
 			{
-				OctoEntity parent = attr.GetParent();
+				if(entity.GetUID().getType() != EEntityType.OBJECT)
+					throw new ExceptionModelFail("timer attribute on link is not supported yet");
 
-				if(parent != null)
-				{
-					if(parent.GetUID().getType() != EEntityType.OBJECT)
-						throw new ExceptionModelFail("timer attribute on link is not upported yet");
-
-					res.add((OctoObject)parent);
-				}
+				res.add((OctoObject)entity);
 			}
 		}
 

@@ -6,18 +6,15 @@
 
 package ru.parallel.octotron.http;
 
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import org.apache.commons.io.IOUtils;
+import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-
-
-import org.apache.commons.io.IOUtils;
-
-import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
-
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
 
 /**
  * stores all request information and<br>

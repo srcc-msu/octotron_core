@@ -6,10 +6,10 @@
 
 package ru.parallel.octotron.utils;
 
-import java.util.List;
-
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.SimpleAttribute;
+
+import java.util.List;
 
 /**
  * implements list container for entities<br>

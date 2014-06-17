@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.utils;
 
-import java.util.*;
-
 import ru.parallel.octotron.primitive.SimpleAttribute;
+
+import java.util.*;
 
 public abstract class IAttributeList<T extends SimpleAttribute> implements Iterable<T>
 {

@@ -6,18 +6,18 @@
 
 package ru.parallel.octotron.neo4j.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.commons.lang3.tuple.Pair;
+import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
+import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.kernel.GraphDatabaseAPI;
+import org.neo4j.server.WrappingNeoServerBootstrapper;
+import org.neo4j.server.configuration.Configurator;
+import org.neo4j.server.configuration.ServerConfigurator;
+import org.neo4j.tooling.GlobalGraphOperations;
+import org.neo4j.visualization.graphviz.GraphvizWriter;
+import org.neo4j.walk.Walker;
 import ru.parallel.octotron.core.IGraph;
 import ru.parallel.octotron.core.IIndex;
 import ru.parallel.octotron.core.OctoObject;
@@ -29,22 +29,11 @@ import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.NotFoundException;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.kernel.GraphDatabaseAPI;
-import org.neo4j.server.WrappingNeoServerBootstrapper;
-import org.neo4j.server.configuration.Configurator;
-import org.neo4j.server.configuration.ServerConfigurator;
-import org.neo4j.tooling.GlobalGraphOperations;
-import org.neo4j.visualization.graphviz.GraphvizWriter;
-import org.neo4j.walk.Walker;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.*;
 
 /**
  * provides access to neo4j BD<br>

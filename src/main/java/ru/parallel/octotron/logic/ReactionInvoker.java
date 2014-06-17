@@ -6,11 +6,6 @@
 
 package ru.parallel.octotron.logic;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.exec.GlobalSettings;
@@ -20,6 +15,11 @@ import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.JavaUtils;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * provides background execution of all needed reactions

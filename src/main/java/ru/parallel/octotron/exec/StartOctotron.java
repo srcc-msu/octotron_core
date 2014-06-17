@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.exec;
 
-import java.io.File;
-
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.impl.PersistenStorage;
 import ru.parallel.octotron.logic.ExecutionController;
@@ -15,6 +13,8 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
+
+import java.io.File;
 
 /**
  * main executable function<br>

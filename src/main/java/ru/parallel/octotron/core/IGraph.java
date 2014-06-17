@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.core;
 
+import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.utils.OctoObjectList;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 

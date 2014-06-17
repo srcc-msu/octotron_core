@@ -6,10 +6,10 @@
 
 package ru.parallel.octotron.utils;
 
+import ru.parallel.octotron.core.OctoAttribute;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import ru.parallel.octotron.core.OctoAttribute;
 
 /**
  * implements list container for attributes<br>

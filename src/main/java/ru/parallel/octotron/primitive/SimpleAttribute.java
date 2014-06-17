@@ -6,14 +6,12 @@
 
 package ru.parallel.octotron.primitive;
 
-import java.io.Serializable;
-import java.text.DecimalFormat;
-
 import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.utils.JavaUtils;
+
+import java.text.DecimalFormat;
 
 /**
  * base class for attributes, contains some common operations<br>

@@ -6,8 +6,7 @@
 
 package ru.parallel.octotron.http;
 
-import java.util.List;
-
+import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.primitive.SimpleAttribute;
@@ -17,7 +16,7 @@ import ru.parallel.octotron.utils.IEntityList;
 import ru.parallel.octotron.utils.OctoLinkList;
 import ru.parallel.octotron.utils.OctoObjectList;
 
-import org.apache.commons.lang3.tuple.Pair;
+import java.util.List;
 
 /**
  * contains all operations, that can be invoked via request<br>

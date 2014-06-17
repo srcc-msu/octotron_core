@@ -6,19 +6,17 @@
 
 package ru.parallel.octotron.exec;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.commons.lang3.tuple.Pair;
+import ru.parallel.utils.JsonUtils;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import ru.parallel.utils.JsonUtils;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 public class GlobalSettings
 {

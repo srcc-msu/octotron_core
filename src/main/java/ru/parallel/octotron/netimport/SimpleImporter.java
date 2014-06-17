@@ -6,12 +6,12 @@
 
 package ru.parallel.octotron.netimport;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.SimpleAttribute;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * threadsafe importer

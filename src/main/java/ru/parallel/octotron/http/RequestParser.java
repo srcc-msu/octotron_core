@@ -6,13 +6,13 @@
 
 package ru.parallel.octotron.http;
 
+import ru.parallel.octotron.http.Operations.Operation;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import ru.parallel.octotron.http.Operations.Operation;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 
 /**
  * class for parsing http-compatible query<br>

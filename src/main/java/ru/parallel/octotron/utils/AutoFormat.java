@@ -6,19 +6,15 @@
 
 package ru.parallel.octotron.utils;
 
+import ru.parallel.octotron.core.*;
+import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.utils.JavaUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.neo4j.impl.Marker;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.utils.JavaUtils;
 
 public class AutoFormat
 {

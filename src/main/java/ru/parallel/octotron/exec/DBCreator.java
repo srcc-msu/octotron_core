@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.exec;
 
-import java.io.FileNotFoundException;
-
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoLink;
 import ru.parallel.octotron.core.OctoObject;
@@ -17,6 +15,8 @@ import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.utils.OctoLinkList;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
+
+import java.io.FileNotFoundException;
 
 /**
  * DSL usage sample and also main class for T60 model creation<br>

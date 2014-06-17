@@ -390,7 +390,7 @@ public class ExecutionController
 	public Map<String, String> GetVersion()
 		throws ExceptionSystemError
 	{
-		InputStream stream = getClass().getResourceAsStream("/main/resources/VERSION");
+		InputStream stream = getClass().getResourceAsStream("/VERSION");
 
 		if(stream == null)
 			throw new ExceptionSystemError("missing VERSION file");

@@ -69,7 +69,7 @@ public class ImportManager
 		return changed.append(rule_changed).Uniq();
 	}
 
-	private final long last_timer_check = 0;
+	private long last_timer_check = 0;
 	private static final long TIMER_CHECK_THRESHOLD = 2;
 
 	public OctoObjectList ProcessTimers()
@@ -78,17 +78,19 @@ public class ImportManager
 
 		OctoObjectList res = new OctoObjectList();
 
-		if(cur_time - last_timer_check > ImportManager.TIMER_CHECK_THRESHOLD)
+		if(cur_time - last_timer_check < ImportManager.TIMER_CHECK_THRESHOLD)
+			return res;
+
+		last_timer_check = cur_time;
+
+		OctoEntityList to_update = TimerProcessor.Process();
+
+		for(OctoEntity entity : to_update)
 		{
-			OctoEntityList to_update = TimerProcessor.Process();
+			if(entity.GetUID().getType() != EEntityType.OBJECT)
+				throw new ExceptionModelFail("timer attribute on link is not supported yet");
 
-			for(OctoEntity entity : to_update)
-			{
-				if(entity.GetUID().getType() != EEntityType.OBJECT)
-					throw new ExceptionModelFail("timer attribute on link is not supported yet");
-
-				res.add((OctoObject)entity);
-			}
+			res.add((OctoObject)entity);
 		}
 
 		return res;

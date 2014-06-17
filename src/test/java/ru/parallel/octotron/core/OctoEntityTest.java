@@ -13,7 +13,6 @@ import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.EEventStatus;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.OctoAttributeList;
 import ru.parallel.octotron.utils.OctoEntityList;
 
 import java.util.LinkedList;

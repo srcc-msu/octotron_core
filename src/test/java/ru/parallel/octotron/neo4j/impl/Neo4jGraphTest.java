@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import ru.parallel.octotron.primitive.Uid;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Neo4jGraphTest
@@ -29,15 +30,18 @@ public class Neo4jGraphTest
 	 * still exists
 	 * */
 	@Test
-	public void Load()
+	public void Load() throws Exception
 	{
 		Uid obj1;
 
 		obj1 = Neo4jGraphTest.graph.AddObject();
+		Neo4jGraphTest.graph.SetObjectAttribute(obj1, "test", 1);
 
 		// in our case Save() consist of shutting down db and then loading it, so no need in Load() call.
 		Neo4jGraphTest.graph.Save();
-		Neo4jGraphTest.graph.GetObjectAttributes(obj1);
+
+		assertEquals("test", Neo4jGraphTest.graph.GetObjectAttributes(obj1).get(0).getLeft());
+		assertEquals(1, Neo4jGraphTest.graph.GetObjectAttributes(obj1).get(0).getRight());
 	}
 
 	/**
@@ -57,13 +61,14 @@ public class Neo4jGraphTest
 
 		try
 		{
+			Neo4jGraphTest.graph.GetTransaction().ForceWrite();
 			Neo4jGraphTest.graph.SetObjectAttribute(obj1, "test_null", null);
 		}
 		catch(Exception e)
 		{
-			// this must fail - is it ok?
 			catched = true;
 		}
+		Neo4jGraphTest.graph.GetTransaction().Fail(); // it will crash otherwise
 
 		assertEquals("succeeded to set a null value", catched, true);
 
@@ -194,13 +199,12 @@ public class Neo4jGraphTest
 
 		assertEquals("number of edges do not match", links.size(), 2);
 
-		//order ??
-		assertEquals("wrong edges"
-			, Neo4jGraphTest.graph.GetLinkAttribute(links.get(0), "test_uniq")
-			, "i am 1");
-		assertEquals("wrong edges"
-			, Neo4jGraphTest.graph.GetLinkAttribute(links.get(1), "test_uniq")
-			, "i am 2");
+		List<String> check = new LinkedList<>();
+		check.add((String)Neo4jGraphTest.graph.GetLinkAttribute(links.get(0), "test_uniq"));
+		check.add((String)Neo4jGraphTest.graph.GetLinkAttribute(links.get(1), "test_uniq"));
+
+		assertTrue("wrong edges", check.contains("i am 1"));
+		assertTrue("wrong edges", check.contains("i am 2"));
 	}
 
 	/**

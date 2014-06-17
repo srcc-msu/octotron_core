@@ -8,7 +8,6 @@ package ru.parallel.octotron.reactions;
 
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.primitive.EEventStatus;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 public final class CommonReactions
 {

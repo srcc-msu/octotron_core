@@ -42,7 +42,7 @@ public class NinjaTransaction
 		if(transaction != null)
 		{
 			transaction.success();
-			transaction.finish();
+			transaction.close();
 		}
 
 		transaction = db.beginTx();
@@ -57,8 +57,10 @@ public class NinjaTransaction
 	{
 		if(transaction != null)
 		{
-			transaction.success();
-			transaction.finish();
+			if(count > 0) // do not commit if nothing was written
+				transaction.success();
+
+			transaction.close();
 		}
 
 		transaction = null;
@@ -130,6 +132,6 @@ public class NinjaTransaction
 
 	public void Delete()
 	{
-		deleted  = true;
+		deleted = true;
 	}
 }

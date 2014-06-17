@@ -30,7 +30,6 @@ import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
@@ -90,18 +89,19 @@ public final class Neo4jGraph implements IGraph
 	public Neo4jGraph(String name, Op op, boolean bootstrap)
 		throws ExceptionSystemError
 	{
+		this.db_name = name;
 		this.bootstrap = bootstrap;
 
 		if(op == Op.LOAD)
-			Load(name);
+			Load();
 		else if(op == Op.CONNECT)
-			Connect(name);
+			Connect();
 		else if(op == Op.CREATE)
-			Create(name);
+			Create();
 		else if(op == Op.RECREATE)
 		{
-			Delete(name);
-			Create(name);
+			Delete();
+			Create();
 		}
 	}
 
@@ -173,35 +173,13 @@ public final class Neo4jGraph implements IGraph
 		return rel_str_mapping.get(link_type);
 	}
 
-	/**
-	 * Create empty graph with \name<br>
-	 * */
-	public void Create(String name)
+	private void DBInit()
 		throws ExceptionDBError
 	{
-		// first check if directory \name is empty
-		File file = new File(name);
-		if (file.exists())
-		{
-			if (file.isDirectory())
-			{
-				if (file.list().length > 0)
-				{
-					throw new ExceptionDBError("Database with name "
-						+ name +" is not empty!");
-				}
-			}
-		}
-
-		Map<String, String> config = new HashMap<>();
-		config.put("use_memory_mapped_buffers", "true");
-		config.put("keep_logical_logs", "false");
-
-		db_name = name;
-
 		graph_db = new GraphDatabaseFactory()
 			.newEmbeddedDatabaseBuilder(db_name)
 			.setConfig(GraphDatabaseSettings.keep_logical_logs, "false")
+			.setConfig(GraphDatabaseSettings.use_memory_mapped_buffers, "true")
 			.newGraphDatabase();
 
 		if(bootstrap)
@@ -210,8 +188,6 @@ public final class Neo4jGraph implements IGraph
 		index = new Neo4jIndex(this);
 
 		transaction = new NinjaTransaction(graph_db, Neo4jGraph.COUNT_THRESHOLD);
-
-		System.out.println("db created: " + db_name);
 	}
 
 	/**
@@ -228,50 +204,35 @@ public final class Neo4jGraph implements IGraph
 		new WrappingNeoServerBootstrapper((GraphDatabaseAPI) graph_db, config)
 			.start();
 
-		System.out.println("neo4j is accessible through web");
+		System.out.println("neo4j is accessible through the web");
 	}
 
-	/**
-	 * load \name database<br>
-	 * */
-	public void Load(String name)
-		throws ExceptionDBError
+	public void Load()
+		throws ExceptionDBError, ExceptionSystemError
 	{
-		String err = "Database " + name + " does not exist!";
+		if(FileUtils.IsDirEmpty(db_name))
+			throw new ExceptionDBError("database does not exist: " + db_name);
 
-		File file = new File(name);
-		if (file.exists())
-		{
-			if (file.isDirectory())
-			{
-				if (file.list().length == 0)
-				{
-					throw new ExceptionDBError(err);
-				}
-			}
-			else throw new ExceptionDBError(err);
-		}
-		else throw new ExceptionDBError(err);
-
-		db_name = name;
-
-		graph_db = new GraphDatabaseFactory()
-			.newEmbeddedDatabase(db_name);
-
-		if(bootstrap)
-			DoBootstrap();
+		DBInit();
 
 		System.out.println("db loaded: " + db_name);
+	}
 
-		index = new Neo4jIndex(this);
+	public void Create()
+		throws ExceptionDBError, ExceptionSystemError
+	{
+		if(!FileUtils.IsDirEmpty(db_name))
+			throw new ExceptionDBError("directory is not empty: " + db_name);
 
-		transaction = new NinjaTransaction(graph_db, Neo4jGraph.COUNT_THRESHOLD);
+		DBInit();
+
+		System.out.println("db created: " + db_name);
 	}
 
 	/**
 	 * connect to running database on \address<br>
 	 * */
-	public void Connect(String address)
+	public void Connect()
 		throws ExceptionDBError
 	{
 		throw new ExceptionDBError("NIY");
@@ -284,10 +245,10 @@ public final class Neo4jGraph implements IGraph
 	 * (proof: http://docs.neo4j.org/chunked/stable/performance-guide.html)<br>
 	 * */
 	public void Save()
-		throws ExceptionDBError
+		throws ExceptionDBError, ExceptionSystemError
 	{
 		Shutdown();
-		Load(db_name);
+		Load();
 	}
 
 	/**
@@ -309,16 +270,7 @@ public final class Neo4jGraph implements IGraph
 	public void Delete()
 		throws ExceptionSystemError
 	{
-		Delete(db_name);
-	}
-
-	public static void Delete(String name)
-		throws ExceptionSystemError
-	{
-		File file = new File(name);
-
-		if(file.exists())
-			FileUtils.WipeDir(file);
+		FileUtils.WipeDir(db_name);
 	}
 
 	/**

@@ -4,7 +4,6 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.IGraph;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
@@ -21,7 +20,7 @@ public class RequestEmulationTest
 {
 	private static final int HTTP_PORT = 4300;
 
-	private static IGraph graph;
+	private static Neo4jGraph graph;
 	private static GraphService graph_service;
 
 	private static LinkFactory links;
@@ -42,6 +41,13 @@ public class RequestEmulationTest
 		RequestEmulationTest.factory = new ObjectFactory(RequestEmulationTest.graph_service);
 		RequestEmulationTest.links = new LinkFactory(RequestEmulationTest.graph_service)
 			.Attributes(new SimpleAttribute("type", "a_link"));
+	}
+
+	@AfterClass
+	public static void Delete() throws Exception
+	{
+		RequestEmulationTest.graph.Shutdown();
+		RequestEmulationTest.graph.Delete();
 	}
 
 	private static final long SLEEP = 100;

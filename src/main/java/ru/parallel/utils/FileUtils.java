@@ -180,12 +180,35 @@ Timer.SPrint(command[0]);
 		}
 	}
 
+	public static boolean IsDirEmpty(String name)
+		throws ExceptionSystemError
+	{
+		File file = new File(name);
+
+		if(!file.exists())
+			return true;
+
+		if(!file.isDirectory())
+			throw new ExceptionSystemError("not a directory: " + name);
+
+		return file.listFiles().length == 0;
+	}
+
+	public static void WipeDir(String name)
+		throws ExceptionSystemError
+	{
+		WipeDir(new File(name));
+	}
+
 	/**
-	 * Service method for deleting all db files<br>
+	 * Service method for deleting a directory<br>
 	 */
 	public static void WipeDir(File file)
 		throws ExceptionSystemError
 	{
+		if(!file.exists())
+			return;
+
 		if(file.isDirectory())
 		{
 			for(File child : file.listFiles())
@@ -193,7 +216,7 @@ Timer.SPrint(command[0]);
 		}
 
 		if(!file.delete())
-			throw new ExceptionSystemError("Can't delete DB!");
+			throw new ExceptionSystemError("can not delete: " + file.getAbsolutePath());
 	}
 
 	public static void SaveToFile(String fname, String string)

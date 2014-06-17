@@ -3,7 +3,6 @@ package ru.parallel.octotron.rules;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import org.junit.internal.runners.statements.Fail;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoAttribute;
 import ru.parallel.octotron.core.OctoObject;

@@ -8,7 +8,6 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.*;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.utils.OctoLinkList;
 import ru.parallel.octotron.utils.OctoObjectList;

@@ -114,7 +114,7 @@ public class OctoObject extends OctoEntity
 		{
 			OctoRule rule = PersistenStorage.INSTANCE.GetRules().Get(key);
 
-			if(rule.GetDeps() != EDependencyType.ALL && rule.GetDeps() != dep)
+			if(rule.GetDependency() != EDependencyType.ALL && rule.GetDependency() != dep)
 				continue;
 
 			Object new_val = rule.Compute(this);

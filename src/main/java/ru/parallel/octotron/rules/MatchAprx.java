@@ -27,7 +27,7 @@ public class MatchAprx extends OctoRule
 	}
 
 	@Override
-	public EDependencyType GetDeps()
+	public EDependencyType GetDependency()
 	{
 		return EDependencyType.SELF;
 	}

@@ -23,7 +23,7 @@ public class Changed extends OctoRule
 	}
 
 	@Override
-	public EDependencyType GetDeps()
+	public EDependencyType GetDependency()
 	{
 		return EDependencyType.SELF;
 	}

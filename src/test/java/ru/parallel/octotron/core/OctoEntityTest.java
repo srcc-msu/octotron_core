@@ -158,7 +158,7 @@ public class OctoEntityTest
 		}
 
 		@Override
-		public EDependencyType GetDeps()
+		public EDependencyType GetDependency()
 		{
 			return dep_type;
 		}

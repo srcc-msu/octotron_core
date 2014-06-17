@@ -44,6 +44,6 @@ public abstract class OctoRule implements Serializable
 
 	public abstract Object Compute(OctoEntity entity);
 	public abstract Object GetDefaultValue();
-	public abstract EDependencyType GetDeps();
+	public abstract EDependencyType GetDependency();
 
 }

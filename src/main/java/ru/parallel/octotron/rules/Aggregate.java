@@ -28,7 +28,7 @@ public abstract class Aggregate extends OctoObjectRule
 	}
 
 	@Override
-	public final EDependencyType GetDeps()
+	public final EDependencyType GetDependency()
 	{
 		return dependency;
 	}

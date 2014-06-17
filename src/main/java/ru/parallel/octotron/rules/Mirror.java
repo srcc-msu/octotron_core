@@ -34,7 +34,7 @@ public abstract class Mirror extends OctoObjectRule
 	}
 
 	@Override
-	public final EDependencyType GetDeps()
+	public final EDependencyType GetDependency()
 	{
 		return EDependencyType.ALL;
 	}

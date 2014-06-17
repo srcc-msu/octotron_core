@@ -173,15 +173,44 @@ public abstract class OctoEntity
 			AddReaction(reaction);
 	}
 
+	/**
+	 * set a new timer, if the time existed before - it will be overwritten</br>
+	 * */
 	public void SetTimer(String name, long expires)
 	{
-		if(TestAttribute(name))
-			graph_service.DeleteAttribute(this, name);
+		if(TestTimer(name))
+			RemoveTimer(name);
 
 		OctoAttribute attr = DeclareAttribute(name, 0);
+
 		attr.Update(expires, true);
 
-		TimerProcessor.AddTimer(attr);
+		TimerProcessor.AddTimer(this, name);
+	}
+
+	public void RemoveTimer(String name)
+	{
+		OctoAttribute attr = GetAttribute(name);
+
+		RemoveAttribute(name);
+		TimerProcessor.RemoveTimer(this, name);
+	}
+
+	public boolean TestTimer(String name)
+	{
+		return TestAttribute(name);
+	}
+
+	public boolean IsTimerExpired(String name)
+	{
+		return IsTimerExpired(name, JavaUtils.GetTimestamp());
+	}
+
+	public boolean IsTimerExpired(String name, long current_time)
+	{
+		OctoAttribute attr = GetAttribute(name);
+
+		return attr.GetCTime() + attr.GetLong() < current_time;
 	}
 
 	// TODO move reactions to meta syntax
@@ -239,14 +268,12 @@ public abstract class OctoEntity
 				}
 				else if(state == OctoReaction.STATE_STARTED)
 				{
-					long delay = reaction.GetDelay();
-					long event_time = this.GetAttribute(OctoReaction.DELAY_PREFIX + reaction.GetCheckName()).GetCTime();
-
-					if(current_time - event_time > delay)
+					if(IsTimerExpired(OctoReaction.DELAY_PREFIX + reaction.GetCheckName(), current_time))
 					{
 						result.add(reaction.GetResponse());
 
 						SetReactionState(reaction.GetID(), OctoReaction.STATE_EXECUTED);
+						RemoveTimer(OctoReaction.DELAY_PREFIX + reaction.GetCheckName());
 					}
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)

@@ -14,6 +14,7 @@ import ru.parallel.octotron.primitive.EEventStatus;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.utils.OctoAttributeList;
+import ru.parallel.octotron.utils.OctoEntityList;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -105,15 +106,15 @@ public class OctoEntityTest
 
 		Thread.sleep(2000); // 2 secs, 1st time must timeout
 
-		OctoAttributeList list1 = TimerProcessor.Process();
+		OctoEntityList list1 = TimerProcessor.Process();
 		assertEquals(1, list1.size());
-		assertEquals(entity, list1.get(0).GetParent());
+		assertEquals(entity, list1.get(0));
 
 		Thread.sleep(2000); // 4 secs, 2nd time must timeout
 
-		OctoAttributeList list2 = TimerProcessor.Process();
+		OctoEntityList list2 = TimerProcessor.Process();
 		assertEquals(1, list2.size());
-		assertEquals(entity, list2.get(0).GetParent());
+		assertEquals(entity, list2.get(0));
 
 		Thread.sleep(1000);
 		assertEquals(0, TimerProcessor.Process().size());
@@ -122,9 +123,9 @@ public class OctoEntityTest
 
 		Thread.sleep(2000); // 2 secs, 1st time must timeout
 
-		OctoAttributeList list3 = TimerProcessor.Process();
+		OctoEntityList list3 = TimerProcessor.Process();
 		assertEquals(1, list3.size());
-		assertEquals(entity, list3.get(0).GetParent());
+		assertEquals(entity, list3.get(0));
 	}
 
 	private class DummyRule extends OctoRule

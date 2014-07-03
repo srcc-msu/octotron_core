@@ -19,6 +19,7 @@ import ru.parallel.octotron.netimport.SimpleImporter;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.reactions.PreparedResponse;
+import ru.parallel.octotron.utils.OctoEntityList;
 import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.FileUtils;
@@ -191,10 +192,10 @@ public class ExecutionController
 		sleeper.Sleep(processed_requests + processed_blocking_requests + processed_imports == 0);
 	}
 
-	OctoObjectList ImmediateImport(OctoObject object, SimpleAttribute attribute)
+	OctoEntityList ImmediateImport(OctoEntity entity, SimpleAttribute attribute)
 	{
-		List<Pair<OctoObject, SimpleAttribute>> packet = new LinkedList<>();
-		packet.add(Pair.of(object, attribute));
+		List<Pair<OctoEntity, SimpleAttribute>> packet = new LinkedList<>();
+		packet.add(Pair.of(entity, attribute));
 
 		return manager.Process(packet);
 	}
@@ -206,11 +207,11 @@ public class ExecutionController
 	 * */
 	private int ProcessImport(int max_count)
 	{
-		List<Pair<OctoObject, SimpleAttribute>> http_packet
+		List<Pair<OctoEntity, SimpleAttribute>> http_packet
 			= http_importer.Get(max_count);
 		int processed_http = http_packet.size();
 
-		OctoObjectList changed = manager.Process(http_packet);
+		OctoEntityList changed = manager.Process(http_packet);
 
 		rule_invoker.Invoke(changed, silent);
 
@@ -225,30 +226,30 @@ public class ExecutionController
 	private int ProcessUncheckedImport(int max_count)
 		throws ExceptionSystemError
 	{
-		List<Pair<OctoObject, SimpleAttribute>> http_packet
+		List<Pair<OctoEntity, SimpleAttribute>> http_packet
 			= http_unchecked_importer.Get(max_count);
 
 		int processed_http = http_packet.size();
 
-		for(Pair<OctoObject, SimpleAttribute> pair : http_packet)
+		for(Pair<OctoEntity, SimpleAttribute> pair : http_packet)
 		{
-			OctoObject object = pair.getLeft();
+			OctoEntity entity = pair.getLeft();
 			SimpleAttribute attr = pair.getRight();
 
-			if(!object.TestAttribute(attr.GetName()))
+			if(!entity.TestAttribute(attr.GetName()))
 			{
-				object.DeclareAttribute(attr);
+				entity.DeclareAttribute(attr);
 				String script = settings.GetScriptByKey("on_new_attribute");
 
 				if(script != null)
 				{
 					FileUtils.ExecSilent(script
-						, object.GetAttribute("AID").GetLong().toString(), attr.GetName());
+						, entity.GetAttribute("AID").GetLong().toString(), attr.GetName());
 				}
 			}
 		}
 
-		OctoObjectList changed = manager.Process(http_packet);
+		OctoEntityList changed = manager.Process(http_packet);
 
 		rule_invoker.Invoke(changed, silent);
 

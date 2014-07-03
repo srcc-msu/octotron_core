@@ -13,7 +13,6 @@ import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.utils.OctoEntityList;
-import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.List;
@@ -39,28 +38,23 @@ public class ImportManager
 	 * calculate computational attributes, that changed from static
 	 * invoke rules, according to all changed attributes
 	 * */
-	public OctoObjectList Process(List<Pair<OctoObject, SimpleAttribute>> packet)
+	public OctoEntityList Process(List<Pair<OctoEntity, SimpleAttribute>> packet)
 	{
-		OctoObjectList changed = static_proc.Process(packet);
+		OctoEntityList changed = static_proc.Process(packet);
 
-		changed = changed.append(ProcessTimers());
-
-		if(changed.size() <= 0)
-			return new OctoObjectList();
-
-		return ProcessRules(changed.Uniq());
+		return ProcessRules(changed.append(ProcessTimers()).Uniq());
 	}
 
-	public OctoObjectList ProcessRules(OctoObjectList changed)
+	public OctoEntityList ProcessRules(OctoEntityList changed)
 	{
-		OctoObjectList rule_changed = ruled_proc.Process(changed).Uniq();
+		OctoEntityList rule_changed = ruled_proc.Process(changed);
 
-		OctoObjectList changed_last = new OctoObjectList(rule_changed);
-		OctoObjectList changed_now;
+		OctoEntityList changed_last = new OctoEntityList(rule_changed);
+		OctoEntityList changed_now;
 
 		while(changed_last.size() > 0)
 		{
-			changed_now = ruled_proc.Process(changed_last).Uniq();
+			changed_now = ruled_proc.Process(changed_last);
 			rule_changed = rule_changed.append(changed_now);
 
 			changed_last = changed_now;
@@ -72,11 +66,11 @@ public class ImportManager
 	private long last_timer_check = 0;
 	private static final long TIMER_CHECK_THRESHOLD = 2;
 
-	public OctoObjectList ProcessTimers()
+	public OctoEntityList ProcessTimers()
 	{
 		long cur_time = JavaUtils.GetTimestamp();
 
-		OctoObjectList res = new OctoObjectList();
+		OctoEntityList res = new OctoEntityList();
 
 		if(cur_time - last_timer_check < ImportManager.TIMER_CHECK_THRESHOLD)
 			return res;
@@ -90,7 +84,7 @@ public class ImportManager
 			if(entity.GetUID().getType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("timer attribute on link is not supported yet");
 
-			res.add((OctoObject)entity);
+			res.add(entity);
 		}
 
 		return res;

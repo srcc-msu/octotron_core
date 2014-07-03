@@ -15,11 +15,15 @@ import java.util.List;
  * implements list container for entities<br>
  * allows to filter entities basing on attributes
  * and obtain list of attributes<br>
- * only filtering for now, to be honest..<br>
  * */
 public class OctoEntityList extends IEntityList<OctoEntity>
 {
 	private OctoEntityList(List<OctoEntity> list)
+	{
+		super(list);
+	}
+
+	public OctoEntityList(OctoEntityList list)
 	{
 		super(list);
 	}
@@ -29,7 +33,7 @@ public class OctoEntityList extends IEntityList<OctoEntity>
 		super();
 	}
 
-	public OctoEntityList append(OctoEntityList list)
+	public OctoEntityList append(IEntityList list)
 	{
 		return new OctoEntityList(InnerAppend(list.list));
 	}
@@ -67,6 +71,19 @@ public class OctoEntityList extends IEntityList<OctoEntity>
 	public OctoEntityList Filter(String name)
 	{
 		return new OctoEntityList(InnerFilter(name));
+	}
+
+	/**
+	 * returns all surrounding links/objects</br>
+	 * */
+	public OctoEntityList GetSurround()
+	{
+		OctoEntityList result = new OctoEntityList();
+
+		for(OctoEntity entity : list)
+			result = result.append(entity.GetSurround());
+
+		return result.Uniq();
 	}
 
 	public OctoEntityList Uniq()

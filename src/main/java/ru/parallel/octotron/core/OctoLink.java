@@ -8,6 +8,7 @@ package ru.parallel.octotron.core;
 
 import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.utils.OctoEntityList;
 
 /**
  * implementation of link, that resides in \graph<br>
@@ -28,6 +29,17 @@ public class OctoLink extends OctoEntity
 	public long Update(EDependencyType dep)
 	{
 		return 0; // TODO
+	}
+
+	@Override
+	public OctoEntityList GetSurround()
+	{
+		OctoEntityList surround = new OctoEntityList();
+
+		surround.add(Target());
+		surround.add(Source());
+
+		return surround;
 	}
 
 	public OctoObject Target()

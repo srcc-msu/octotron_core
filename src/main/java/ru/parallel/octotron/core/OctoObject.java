@@ -9,6 +9,7 @@ package ru.parallel.octotron.core;
 import ru.parallel.octotron.impl.PersistenStorage;
 import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.utils.OctoEntityList;
 import ru.parallel.octotron.utils.OctoLinkList;
 import ru.parallel.octotron.utils.OctoObjectList;
 
@@ -126,4 +127,16 @@ public class OctoObject extends OctoEntity
 		return changed;
 	}
 
+	@Override
+	public OctoEntityList GetSurround()
+	{
+		OctoEntityList surround = new OctoEntityList();
+
+		surround = surround.append(GetInNeighbors());
+		surround = surround.append(GetInLinks());
+		surround = surround.append(GetOutNeighbors());
+		surround = surround.append(GetOutLinks());
+
+		return surround;
+	}
 }

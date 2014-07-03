@@ -7,7 +7,7 @@
 package ru.parallel.octotron.netimport;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 
 import java.util.LinkedList;
@@ -18,26 +18,26 @@ import java.util.List;
  * */
 public class SimpleImporter implements IImporter
 {
-	private List<Pair<OctoObject, SimpleAttribute>> data
+	private List<Pair<OctoEntity, SimpleAttribute>> data
 		= new LinkedList<>();
 	private final Object lock = new Object(); // personal lock for each instance
 
-	public void Put(OctoObject object, SimpleAttribute value)
+	public void Put(OctoEntity entity, SimpleAttribute value)
 	{
 		synchronized(lock)
 		{
-			data.add(Pair.of(object, value));
+			data.add(Pair.of(entity, value));
 		}
 	}
 
 	@Override
-	public List<Pair<OctoObject, SimpleAttribute>> Get(int max_count)
+	public List<Pair<OctoEntity, SimpleAttribute>> Get(int max_count)
 	{
 		synchronized (lock)
 		{
 			if(data.size() > max_count)
 			{
-				List<Pair<OctoObject, SimpleAttribute>> out
+				List<Pair<OctoEntity, SimpleAttribute>> out
 					= data.subList(0, max_count);
 
 				data = new LinkedList<>
@@ -47,7 +47,7 @@ public class SimpleImporter implements IImporter
 			}
 			else
 			{
-				List<Pair<OctoObject, SimpleAttribute>> out = data;
+				List<Pair<OctoEntity, SimpleAttribute>> out = data;
 				data = new LinkedList<>();
 
 				return out;

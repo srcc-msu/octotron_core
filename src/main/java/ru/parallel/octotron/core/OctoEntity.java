@@ -14,6 +14,7 @@ import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.utils.OctoAttributeList;
+import ru.parallel.octotron.utils.OctoEntityList;
 import ru.parallel.octotron.utils.SimpleAttributeList;
 import ru.parallel.utils.JavaUtils;
 
@@ -359,4 +360,6 @@ public abstract class OctoEntity
 
 		PersistenStorage.INSTANCE.GetMarkers().Delete(marker_id);
 	}
+
+	public abstract OctoEntityList GetSurround();
 }

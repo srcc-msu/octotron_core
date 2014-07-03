@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.primitive.EDependencyType;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.utils.OctoEntityList;
 
 /**
  * Processes changed static attributes<br>
@@ -24,34 +24,22 @@ public class RuleProcessor
 	 * return new changed attributes<br>
 	 * probably requires few calculation steps for attribute chains<br>
 	 * */
-	public OctoObjectList Process(OctoObjectList changed)
+	public OctoEntityList Process(OctoEntityList changed)
 	{
-		OctoObjectList in_n = changed.GetInNeighbors().Uniq();
-		OctoObjectList out_n = changed.GetOutNeighbors().Uniq();
+		OctoEntityList comp_changed = new OctoEntityList();
 
-		OctoObjectList comp_changed = new OctoObjectList();
-
-// parents, self depends
-		for(OctoObject obj : changed)
+		for(OctoEntity entity : changed)
 		{
-			if(obj.Update(EDependencyType.SELF) > 0)
-				comp_changed.add(obj);
+			if(entity.Update(EDependencyType.SELF) > 0)
+				comp_changed.add(entity);
 		}
 
-// in_n, for them we are 'out'
-		for(OctoObject obj : in_n)
+		for(OctoEntity entity : changed.GetSurround())
 		{
-			if(obj.Update(EDependencyType.OUT) > 0)
-				comp_changed.add(obj);
+			if(entity.Update(EDependencyType.SELF) > 0)
+				comp_changed.add(entity);
 		}
 
-// out_n, for them we are 'in'
-		for(OctoObject obj : out_n)
-		{
-			if(obj.Update(EDependencyType.IN) > 0)
-				comp_changed.add(obj);
-		}
-
-		return comp_changed;
+		return comp_changed.Uniq();
 	}
 }

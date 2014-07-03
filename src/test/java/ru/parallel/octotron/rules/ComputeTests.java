@@ -54,7 +54,9 @@ public class ComputeTests
 			.Attributes(new SimpleAttribute("b1", false))
 			.Attributes(new SimpleAttribute("b2", false))
 			.Attributes(new SimpleAttribute("str1", "no"))
-			.Attributes(new SimpleAttribute("str2", "no"));
+			.Attributes(new SimpleAttribute("str2", "no"))
+			.Attributes(new SimpleAttribute("mismatch_num", 333))
+			.Attributes(new SimpleAttribute("match_num", 444));
 
 		ObjectFactory self = new ObjectFactory(graph_service)
 			.Attributes(new SimpleAttribute("d1", 0.0))
@@ -68,7 +70,9 @@ public class ComputeTests
 			.Attributes(new SimpleAttribute("bt1", true))
 			.Attributes(new SimpleAttribute("bt2", true))
 			.Attributes(new SimpleAttribute("bf1", false))
-			.Attributes(new SimpleAttribute("bf2", false));
+			.Attributes(new SimpleAttribute("bf2", false))
+			.Attributes(new SimpleAttribute("mismatch_num", 222))
+			.Attributes(new SimpleAttribute("match_num", 444));
 
 		obj = self.Create();
 
@@ -413,4 +417,18 @@ public class ComputeTests
 		assertEquals(true, rule2.Compute(obj));
 	}
 
+	@Test
+	public void TestLinkedVarArgMatch()
+	{
+		LinkedVarArgMatch rule1 = new LinkedVarArgMatch("test", "b1");
+		LinkedVarArgMatch rule2 = new LinkedVarArgMatch("test", "b2");
+		LinkedVarArgMatch rule3 = new LinkedVarArgMatch("test", "match_num");
+		LinkedVarArgMatch rule4 = new LinkedVarArgMatch("test", "mismatch_num");
+
+		assertEquals(false, rule1.Compute(obj.GetOutLinks().get(0)));
+		assertEquals(true , rule2.Compute(obj.GetOutLinks().get(0)));
+
+		assertEquals(true , rule3.Compute(obj.GetOutLinks().get(0)));
+		assertEquals(false, rule4.Compute(obj.GetOutLinks().get(0)));
+	}
 }

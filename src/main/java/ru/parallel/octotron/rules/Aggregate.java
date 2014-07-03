@@ -67,6 +67,9 @@ public abstract class Aggregate extends OctoObjectRule
 		for(OctoObject obj : candidates.Uniq())
 			for(String tmp : attributes)
 			{
+				if(!obj.TestAttribute(tmp))
+					continue;
+
 				OctoAttribute attribute = obj.GetAttribute(tmp);
 				if(attribute.IsValid() && attribute.GetCTime() != 0)
 					res = Accumulate(res, attribute);

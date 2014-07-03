@@ -261,7 +261,7 @@ public abstract class OctoEntity
 						SetReactionState(reaction.GetID(), OctoReaction.STATE_STARTED);
 
 						SetTimer(OctoReaction.DELAY_PREFIX
-							+ reaction.GetCheckName(), delay + 1);
+							+ reaction.GetID(), delay + 1);
 					}
 				}
 				else if(state == OctoReaction.STATE_STARTED)
@@ -271,7 +271,9 @@ public abstract class OctoEntity
 						result.add(reaction.GetResponse());
 
 						SetReactionState(reaction.GetID(), OctoReaction.STATE_EXECUTED);
-						RemoveTimer(OctoReaction.DELAY_PREFIX + reaction.GetCheckName());
+
+						RemoveTimer(OctoReaction.DELAY_PREFIX
+							+ reaction.GetID());
 					}
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)

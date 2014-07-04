@@ -359,6 +359,7 @@ public class ExecutionController
 		return stat.GetStat();
 	}
 
+	// TODO: entities?
 	public String CheckModTime(long interval)
 	{
 		StringBuilder result = new StringBuilder();
@@ -433,7 +434,7 @@ public class ExecutionController
 			}
 			catch (IOException e)
 			{
-				LOGGER.log(Level.SEVERE, "failed to close the version file", e);
+				LOGGER.log(Level.SEVERE, "failed to close the version file");
 			}
 		}
 

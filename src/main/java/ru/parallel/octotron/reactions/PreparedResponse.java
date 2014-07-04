@@ -145,7 +145,7 @@ public class PreparedResponse
 			String actual_name = settings.GetScriptByKey(command[0]);
 
 			if(actual_name == null)
-				throw new ExceptionModelFail("there is no scipt with key: " + command[0]);
+				throw new ExceptionModelFail("there is no script with key: " + command[0]);
 
 			String[] full_command = ArrayUtils.addAll(command
 				, Long.toString(timestamp)

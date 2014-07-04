@@ -38,7 +38,7 @@ public class HTTPServer
  * parse request to tokens and add parsed_request to message queue
  * id the parsed_request is not blocking - close the underlying request
  * */
-	private class StandartHandler implements HttpHandler
+	private class StandardHandler implements HttpHandler
 	{
 		@Override
 		public void handle(HttpExchange http_exchange)
@@ -129,9 +129,9 @@ public class HTTPServer
 
 		server.setExecutor(executor);
 
-		HttpContext request = server.createContext("/view", new StandartHandler());
-		HttpContext modify  = server.createContext("/modify", new StandartHandler());
-		HttpContext control = server.createContext("/control", new StandartHandler());
+		HttpContext request = server.createContext("/view", new StandardHandler());
+		HttpContext modify  = server.createContext("/modify", new StandardHandler());
+		HttpContext control = server.createContext("/control", new StandardHandler());
 
 		server.createContext("/", new DefaultHandler());
 
@@ -166,9 +166,9 @@ public class HTTPServer
 
 		server.setExecutor(executor);
 
-		server.createContext("/view", new StandartHandler());
-		server.createContext("/modify", new StandartHandler());
-		server.createContext("/control", new StandartHandler());
+		server.createContext("/view", new StandardHandler());
+		server.createContext("/modify", new StandardHandler());
+		server.createContext("/control", new StandardHandler());
 
 		server.createContext("/", new DefaultHandler());
 

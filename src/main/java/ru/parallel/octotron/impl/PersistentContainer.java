@@ -28,7 +28,7 @@ public class PersistentContainer<KEY_T, VALUE_T> implements Serializable
 	public KEY_T Add(KEY_T key, VALUE_T object)
 	{
 		if(objects.containsKey(key))
-			throw new ExceptionModelFail("object with such key alreay presents: " + key);
+			throw new ExceptionModelFail("object with such key already presents: " + key);
 
 		objects.put(key, object);
 

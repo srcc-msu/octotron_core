@@ -33,7 +33,7 @@ public class OctoEntityList extends IEntityList<OctoEntity>
 		super();
 	}
 
-	public OctoEntityList append(IEntityList list)
+	public OctoEntityList append(IEntityList<? extends OctoEntity> list)
 	{
 		return new OctoEntityList(InnerAppend(list.list));
 	}

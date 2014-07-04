@@ -192,7 +192,7 @@ Timer.SPrint(command[0]);
 		if(!file.exists())
 			return true;
 
-		if(!file.isDirectory())
+		if(!file.isDirectory() || file.listFiles() == null)
 			throw new ExceptionSystemError("not a directory: " + name);
 
 		return file.listFiles().length == 0;
@@ -213,7 +213,7 @@ Timer.SPrint(command[0]);
 		if(!file.exists())
 			return;
 
-		if(file.isDirectory())
+		if(file.isDirectory() && file.listFiles() != null)
 		{
 			for(File child : file.listFiles())
 				FileUtils.WipeDir(child);

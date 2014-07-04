@@ -16,7 +16,6 @@ import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionDBError;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
@@ -216,7 +215,7 @@ public abstract class Operations
 		{
 			Operations.AllParams(params, "path");
 
-			String data = AutoFormat.PrintEntitiesSpecial((OctoObjectList)objects);
+			String data = AutoFormat.PrintEntitiesSpecial(objects);
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
 		}
 	});
@@ -589,7 +588,7 @@ public abstract class Operations
 
 			StringBuilder res = new StringBuilder();
 
-			for(OctoObject object : (OctoObjectList)objects)
+			for(OctoEntity object : objects)
 				res.append("marker id=")
 					.append(object.AddMarker(reaction_id, description, suppress))
 					.append(System.lineSeparator());
@@ -761,7 +760,6 @@ time = Timer.SEnd();
 			if(!format.equals("dot"))
 				throw new ExceptionParseError("unsupported format: " + format);
 
-
 //if it is a full graph operation and timelimit is not finished - return a cached value
 			if(path == null)
 			{
@@ -776,8 +774,10 @@ time = Timer.SEnd();
 			}
 			else
 			{
-				OctoObjectList target = (OctoObjectList) objects;
-				return new RequestResult(E_RESULT_TYPE.TEXT, graph_service.ExportDot(target));
+				if(!(objects instanceof OctoObjectList))
+					return new RequestResult(E_RESULT_TYPE.ERROR, "export works only with objects");
+
+				return new RequestResult(E_RESULT_TYPE.TEXT, graph_service.ExportDot((OctoObjectList)objects));
 			}
 		}
 	});

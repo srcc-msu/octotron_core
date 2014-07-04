@@ -158,7 +158,7 @@ public final class Neo4jGraph implements IGraph
 	private void RegisterLinkType(String link_type)
 	{
 		if(relations.isEmpty())
-			throw new ExceptionDBError("no more relationships availiable");
+			throw new ExceptionDBError("no more relationships available");
 
 		rel_str_mapping.put(link_type, relations.remove(0));
 	}

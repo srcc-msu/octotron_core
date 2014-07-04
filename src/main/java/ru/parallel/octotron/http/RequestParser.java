@@ -109,7 +109,7 @@ private static final Map<String, Operation[]> REQUEST_TYPES
 /**
  * check that specified request type exists<br>
  * check the operation is allowed here<br>
- * parse params string and return ParsedRequst<br>
+ * parse params string and return ParsedRequest<br>
  * */
 	private static ParsedRequest Parse(String request_type, String operation_name, String query)
 		throws ExceptionParseError

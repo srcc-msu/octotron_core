@@ -13,7 +13,7 @@ import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import java.io.Serializable;
 
 /**
- * currently octopy supports only only one constructor for rules
+ * currently Octopy supports only only one constructor for rules</br>
  * */
 public abstract class OctoRule implements Serializable
 {

@@ -10,7 +10,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.utils.IEntityList;
 import ru.parallel.octotron.utils.OctoLinkList;
@@ -164,7 +163,7 @@ public abstract class PathOperations
 		{
 			if(params.size() != 1)
 				throw new ExceptionParseError
-					("index operation must be quering a single indexed value");
+					("index operation must be querying a single indexed value");
 
 			SimpleAttribute attr = params.get(0).getLeft();
 

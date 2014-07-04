@@ -14,7 +14,7 @@ public class JavaUtils
 {
 	public static long GetTimestamp()
 	{
-		return System.currentTimeMillis() / 1000L; /*miliseconds in second*/
+		return System.currentTimeMillis() / 1000L; /*milliseconds in second*/
 	}
 
 	public static String GetDate()

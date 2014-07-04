@@ -177,19 +177,19 @@ public class AutoFormat
 		}
 	}
 
-	public static String PrintEntitiesSpecial(OctoObjectList list)
+	public static String PrintEntitiesSpecial(IEntityList<?> list)
 	{
 		StringBuilder result = new StringBuilder();
 
-		for(OctoObject object : list)
+		for(OctoEntity entity : list)
 		{
 			result.append(System.lineSeparator()).append("----  attributes   ----")
 				.append(System.lineSeparator()).append(System.lineSeparator());
 
-			for(OctoAttribute attr : object.GetAttributes().AlphabeticSort())
+			for(OctoAttribute attr : entity.GetAttributes().AlphabeticSort())
 			{
 				result.append(attr.GetName()).append('=');
-				Object value = object.GetAttribute(attr.GetName()).GetValue();
+				Object value = entity.GetAttribute(attr.GetName()).GetValue();
 				result.append(SimpleAttribute.ValueToStr(value));
 
 				result.append(System.lineSeparator());
@@ -198,7 +198,7 @@ public class AutoFormat
 			result.append(System.lineSeparator()).append("----  rules  ----")
 				.append(System.lineSeparator()).append(System.lineSeparator());
 
-			for(OctoRule rule : object.GetRules())
+			for(OctoRule rule : entity.GetRules())
 			{
 				String str = " ID: " + rule.GetID() + " attribute: \""
 					+ rule.GetAttribute() + "\"" + System.lineSeparator();
@@ -209,7 +209,7 @@ public class AutoFormat
 			result.append(System.lineSeparator()).append("----  reactions  ----")
 				.append(System.lineSeparator()).append(System.lineSeparator());
 
-			for(OctoReaction reaction : object.GetReactions())
+			for(OctoReaction reaction : entity.GetReactions())
 			{
 				String str = " ID: " + reaction.GetID()
 					+ " descr: \"" + reaction.GetResponse().GetDescription() + "\""
@@ -221,7 +221,7 @@ public class AutoFormat
 			result.append(System.lineSeparator()).append("----  markers  ----")
 					.append(System.lineSeparator()).append(System.lineSeparator());
 
-			for(Marker marker : object.GetMarkers())
+			for(Marker marker : entity.GetMarkers())
 			{
 				String str = " ID: " + marker.GetID()
 					+ " reaction: " + marker.GetTarget()
@@ -234,10 +234,10 @@ public class AutoFormat
 			result.append(System.lineSeparator()).append("----  meta  ----")
 				.append(System.lineSeparator()).append(System.lineSeparator());
 
-			for(SimpleAttribute attr : object.GetMetaAttributes().AlphabeticSort())
+			for(SimpleAttribute attr : entity.GetMetaAttributes().AlphabeticSort())
 			{
 				result.append(attr.GetName()).append('=');
-				Object value = object.GetAttribute(attr.GetName()).GetValue();
+				Object value = entity.GetAttribute(attr.GetName()).GetValue();
 				result.append(SimpleAttribute.ValueToStr(value));
 
 				result.append(System.lineSeparator());

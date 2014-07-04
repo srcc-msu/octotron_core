@@ -13,7 +13,6 @@ import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -132,7 +131,7 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 		}
 	}
 
-	protected List<T> InnerAppend(List<T> list2)
+	protected List<T> InnerAppend(List<? extends T> list2)
 	{
 		List<T> new_list = new LinkedList<>(list);
 

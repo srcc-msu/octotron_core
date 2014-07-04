@@ -39,7 +39,7 @@ public class StartOctotron
 
 		String fname = args[0];
 
-		System.out.println("statring octotron using config file: " + fname);
+		System.out.println("Starting Octotron using config file: " + fname);
 
 		GlobalSettings settings = null;
 
@@ -204,7 +204,7 @@ public class StartOctotron
 
 /**
  * reaction to an exception<br>
- * creates the file with excpetion info<br>
+ * creates the file with exception info<br>
  * */
 	private static void ProcessCrash(GlobalSettings settings, Exception catched_exception, String suffix)
 	{

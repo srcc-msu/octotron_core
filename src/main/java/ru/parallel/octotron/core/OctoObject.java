@@ -105,29 +105,6 @@ public class OctoObject extends OctoEntity
 	}
 
 	@Override
-	public long Update(EDependencyType dep)
-	{
-		long changed = 0;
-
-		List<Long> keys = graph_service.GetArray(this, OctoEntity.RULE_PREFIX);
-
-		for(long key : keys)
-		{
-			OctoRule rule = PersistenStorage.INSTANCE.GetRules().Get(key);
-
-			if(rule.GetDependency() != EDependencyType.ALL && rule.GetDependency() != dep)
-				continue;
-
-			Object new_val = rule.Compute(this);
-
-			if(GetAttribute(rule.GetAttribute()).Update(new_val, false))
-				changed++;
-		}
-
-		return changed;
-	}
-
-	@Override
 	public OctoEntityList GetSurround()
 	{
 		OctoEntityList surround = new OctoEntityList();

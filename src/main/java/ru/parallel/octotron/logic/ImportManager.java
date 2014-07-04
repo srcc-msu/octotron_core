@@ -42,7 +42,10 @@ public class ImportManager
 	{
 		OctoEntityList changed = static_proc.Process(packet);
 
-		return ProcessRules(changed.append(ProcessTimers()).Uniq());
+		if(changed.size() > 0)
+			return ProcessRules(changed.append(ProcessTimers()).Uniq());
+
+		return new OctoEntityList();
 	}
 
 	public OctoEntityList ProcessRules(OctoEntityList changed)

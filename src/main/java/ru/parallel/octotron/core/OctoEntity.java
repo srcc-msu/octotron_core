@@ -117,8 +117,27 @@ public abstract class OctoEntity
 		return graph_service.TestAttribute(this, name);
 	}
 
-	public abstract long Update(EDependencyType dep);
+	public long Update(EDependencyType dep)
+	{
+		long changed = 0;
 
+		List<Long> keys = graph_service.GetArray(this, OctoEntity.RULE_PREFIX);
+
+		for(long key : keys)
+		{
+			OctoRule rule = PersistenStorage.INSTANCE.GetRules().Get(key);
+
+			if(rule.GetDependency() != EDependencyType.ALL && rule.GetDependency() != dep)
+				continue;
+
+			Object new_val = rule.Compute(this);
+
+			if(GetAttribute(rule.GetAttribute()).Update(new_val, false))
+				changed++;
+		}
+
+		return changed;
+	}
 	public List<OctoRule> GetRules()
 	{
 		List<OctoRule> rules = new LinkedList<>();

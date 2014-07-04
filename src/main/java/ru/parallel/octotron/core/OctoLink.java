@@ -26,12 +26,6 @@ public class OctoLink extends OctoEntity
 	}
 
 	@Override
-	public long Update(EDependencyType dep)
-	{
-		return 0; // TODO
-	}
-
-	@Override
 	public OctoEntityList GetSurround()
 	{
 		OctoEntityList surround = new OctoEntityList();

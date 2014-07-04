@@ -16,5 +16,9 @@ public class ExceptionDBError extends RuntimeException
 	{
 		super(err);
 	}
+	public ExceptionDBError(Exception wrap)
+	{
+		super(wrap);
+	}
 }
 

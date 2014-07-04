@@ -11,7 +11,7 @@ import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
-import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.octotron.primitive.EEntityType;
@@ -212,7 +212,7 @@ public abstract class Operations
 		@Override
 		public Object Execute(GraphService graph_service, ExecutionController control
 			, Map<String, String> params, IEntityList<?> objects)
-				throws ExceptionDBError, ExceptionParseError
+				throws ExceptionParseError
 		{
 			Operations.AllParams(params, "path");
 
@@ -233,7 +233,7 @@ public abstract class Operations
 		{
 			Operations.StrictParams(params);
 
-			List<Marker> markers = PersistenStorage.INSTANCE.GetMarkers().GetAll();
+			List<Marker> markers = PersistentStorage.INSTANCE.GetMarkers().GetAll();
 
 			if(markers.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no markers");
@@ -279,7 +279,7 @@ public abstract class Operations
 			if(format == E_FORMAT_PARAM.JSONP && callback == null)
 				throw new ExceptionParseError("specify a callback function");
 
-			List<OctoReaction> reactions = PersistenStorage.INSTANCE.GetReactions().GetAll();
+			List<OctoReaction> reactions = PersistentStorage.INSTANCE.GetReactions().GetAll();
 
 			if(reactions.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no reactions");
@@ -337,7 +337,7 @@ public abstract class Operations
 				throw new ExceptionParseError("specify a callback function");
 
 
-			List<OctoReaction> reactions = PersistenStorage.INSTANCE.GetReactions().GetAll();
+			List<OctoReaction> reactions = PersistentStorage.INSTANCE.GetReactions().GetAll();
 
 			if(reactions.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no reactions");

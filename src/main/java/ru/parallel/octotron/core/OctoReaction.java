@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core;
 
-import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.impl.PersistentStorage;
 
 import java.io.Serializable;
 
@@ -58,7 +58,7 @@ public class OctoReaction implements Serializable
 
 	private void Register()
 	{
-		reaction_id = PersistenStorage.INSTANCE.GetReactions().Add(this);
+		reaction_id = PersistentStorage.INSTANCE.GetReactions().Add(this);
 	}
 
 	public long GetID()

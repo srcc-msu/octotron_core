@@ -14,6 +14,8 @@ import ru.parallel.octotron.utils.OctoObjectList;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * advanced factory for constructing multiple edges,<br>
@@ -21,6 +23,8 @@ import java.util.List;
  * */
 public class LinkFactory extends BaseFactory<LinkFactory>
 {
+	private final static Logger LOGGER = Logger.getLogger(LinkFactory.class.getName());
+
 	public LinkFactory(GraphService graph_service)
 	{
 		super(graph_service);
@@ -215,8 +219,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		}
 
 		if(counter < from.size())
-			System.err.println
-				("warning: ChunksToEvery_Guided connector, not all elements used");
+			LOGGER.log(Level.WARNING,"ChunksToEvery_Guided connector, not all elements used");
 
 		return links;
 	}
@@ -295,8 +298,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		}
 
 		if(counter < to.size())
-			System.err.println
-				("warning: EveryToChunks_Guided connector, not all elements used");
+			LOGGER.log(Level.WARNING, "EveryToChunks_Guided connector, not all elements used");
 
 		return links;
 	}

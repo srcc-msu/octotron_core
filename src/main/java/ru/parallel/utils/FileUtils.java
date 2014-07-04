@@ -13,9 +13,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class FileUtils
 {
+	private final static Logger LOGGER = Logger.getLogger(FileUtils.class.getName());
+
 	public static BufferedReader InitStream(String[] command)
 		throws ExceptionSystemError
 	{
@@ -53,7 +57,7 @@ public abstract class FileUtils
 				}
 
 				if(counter > 0)
-					System.err.println(counter
+					LOGGER.log(Level.WARNING, counter
 						+ " processes did not finish and were killed");
 			}
 		});
@@ -93,7 +97,7 @@ Timer.SStart();
 
 					while ((line = br.readLine()) != null)
 					{
-						System.err.println(line);
+						LOGGER.log(Level.INFO, line);
 					}
 
 					process.waitFor();
@@ -147,7 +151,7 @@ Timer.SPrint(command[0]);
 
 			return text.toString();
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}

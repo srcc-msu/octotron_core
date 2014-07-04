@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.neo4j.impl;
 
-import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.impl.PersistentStorage;
 
 import java.io.Serializable;
 
@@ -34,7 +34,7 @@ public class Marker implements Serializable
 
 	private void Register()
 	{
-		marker_id = PersistenStorage.INSTANCE.GetMarkers().Add(this);
+		marker_id = PersistentStorage.INSTANCE.GetMarkers().Add(this);
 	}
 
 	public long GetAID()

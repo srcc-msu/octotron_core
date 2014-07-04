@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.core;
 
-import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.utils.OctoEntityList;
 

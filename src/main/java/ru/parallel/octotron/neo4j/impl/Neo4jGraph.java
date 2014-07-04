@@ -33,6 +33,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * provides access to neo4j BD<br>
@@ -40,6 +42,8 @@ import java.util.*;
  * */
 public final class Neo4jGraph implements IGraph
 {
+	private final static Logger LOGGER = Logger.getLogger(Neo4jGraph.class.getName());
+
 	private GraphDatabaseService graph_db;
 
 	private Neo4jIndex index;
@@ -152,7 +156,6 @@ public final class Neo4jGraph implements IGraph
 	 * and we will be remember mapping<br>
 	 * */
 	private void RegisterLinkType(String link_type)
-		throws ExceptionDBError
 	{
 		if(relations.isEmpty())
 			throw new ExceptionDBError("no more relationships availiable");
@@ -165,7 +168,6 @@ public final class Neo4jGraph implements IGraph
 	 * if the \\link_type does not exist - creates new relation type<br>
 	 */
 	private RelTypes LinkTypeToRelType(String link_type)
-		throws ExceptionDBError
 	{
 		if(!rel_str_mapping.containsKey(link_type))
 			RegisterLinkType(link_type);
@@ -174,7 +176,6 @@ public final class Neo4jGraph implements IGraph
 	}
 
 	private void DBInit()
-		throws ExceptionDBError
 	{
 		graph_db = new GraphDatabaseFactory()
 			.newEmbeddedDatabaseBuilder(db_name)
@@ -204,36 +205,35 @@ public final class Neo4jGraph implements IGraph
 		new WrappingNeoServerBootstrapper((GraphDatabaseAPI) graph_db, config)
 			.start();
 
-		System.out.println("neo4j is accessible through the web");
+		LOGGER.log(Level.INFO, "neo4j is accessible through the web");
 	}
 
 	public void Load()
-		throws ExceptionDBError, ExceptionSystemError
+		throws ExceptionSystemError
 	{
 		if(FileUtils.IsDirEmpty(db_name))
 			throw new ExceptionDBError("database does not exist: " + db_name);
 
 		DBInit();
 
-		System.out.println("db loaded: " + db_name);
+		LOGGER.log(Level.INFO, "db loaded: " + db_name);
 	}
 
 	public void Create()
-		throws ExceptionDBError, ExceptionSystemError
+		throws ExceptionSystemError
 	{
 		if(!FileUtils.IsDirEmpty(db_name))
 			throw new ExceptionDBError("directory is not empty: " + db_name);
 
 		DBInit();
 
-		System.out.println("db created: " + db_name);
+		LOGGER.log(Level.INFO, "db created: " + db_name);
 	}
 
 	/**
 	 * connect to running database on \address<br>
 	 * */
 	public void Connect()
-		throws ExceptionDBError
 	{
 		throw new ExceptionDBError("NIY");
 	}
@@ -245,7 +245,7 @@ public final class Neo4jGraph implements IGraph
 	 * (proof: http://docs.neo4j.org/chunked/stable/performance-guide.html)<br>
 	 * */
 	public void Save()
-		throws ExceptionDBError, ExceptionSystemError
+		throws ExceptionSystemError
 	{
 		Shutdown();
 		Load();
@@ -260,7 +260,7 @@ public final class Neo4jGraph implements IGraph
 
 		graph_db.shutdown();
 
-		System.out.println("db shutdown: " + db_name);
+		LOGGER.log(Level.INFO, "db shutdown: " + db_name);
 	}
 
 	/**
@@ -359,14 +359,14 @@ public final class Neo4jGraph implements IGraph
 			Node node = graph_db.getNodeById(uid.getUid());
 			node.setProperty(name, value);
 		}
-		catch (NotFoundException ex)
+		catch (NotFoundException e)
 		{
-			throw new ExceptionModelFail("element not found");
+			throw new ExceptionModelFail(e);
 		}
-		catch (IllegalArgumentException ex)
+		catch (IllegalArgumentException e)
 		{
 			// this exception can be thrown by setProperty method if value has incorrect type
-			throw new ExceptionDBError("illegal argument");
+			throw new ExceptionDBError(e);
 		}
 	}
 
@@ -396,9 +396,9 @@ public final class Neo4jGraph implements IGraph
 				throw new ExceptionModelFail("attribute not found: " + name + System.lineSeparator() + rep);
 			}
 		}
-		catch (NotFoundException ex)
+		catch (NotFoundException e)
 		{
-			throw new ExceptionModelFail("element not found");
+			throw new ExceptionModelFail(e);
 		}
 	}
 
@@ -414,9 +414,9 @@ public final class Neo4jGraph implements IGraph
 			Relationship rel = graph_db.getRelationshipById(uid.getUid());
 			rel.setProperty(name, value);
 		}
-		catch (NotFoundException ex)
+		catch (NotFoundException e)
 		{
-			throw new ExceptionModelFail("element not found");
+			throw new ExceptionModelFail(e);
 		}
 	}
 
@@ -447,9 +447,9 @@ public final class Neo4jGraph implements IGraph
 				throw new ExceptionModelFail("attribute not found: " + name + System.lineSeparator() + rep);
 			}
 		}
-		catch (NotFoundException ex)
+		catch (NotFoundException e)
 		{
-			throw new ExceptionModelFail("element not found");
+			throw new ExceptionModelFail(e);
 		}
 	}
 
@@ -495,9 +495,9 @@ public final class Neo4jGraph implements IGraph
 			return FromRelIter
 				(node.getRelationships(Direction.OUTGOING).iterator());
 		}
-		catch (NotFoundException ex)
+		catch (NotFoundException e)
 		{
-			throw new ExceptionModelFail("element not found");
+			throw new ExceptionModelFail(e);
 		}
 	}
 
@@ -515,9 +515,9 @@ public final class Neo4jGraph implements IGraph
 			return FromRelIter
 				(node.getRelationships(Direction.INCOMING).iterator());
 		}
-		catch (NotFoundException ex)
+		catch (NotFoundException e)
 		{
-			throw new ExceptionModelFail("element not found");
+			throw new ExceptionModelFail(e);
 		}
 	}
 
@@ -566,9 +566,9 @@ public final class Neo4jGraph implements IGraph
 		{
 			rel = graph_db.getRelationshipById(uid.getUid());
 		}
-		catch (NotFoundException ex)
+		catch (NotFoundException e)
 		{
-			throw new ExceptionModelFail("element not found");
+			throw new ExceptionModelFail(e);
 		}
 
 		return new Uid(rel.getEndNode().getId(), EEntityType.OBJECT);
@@ -587,9 +587,9 @@ public final class Neo4jGraph implements IGraph
 		{
 			rel = graph_db.getRelationshipById(uid.getUid());
 		}
-		catch (NotFoundException ex)
+		catch (NotFoundException e)
 		{
-			throw new ExceptionModelFail("element not found");
+			throw new ExceptionModelFail(e);
 		}
 
 		return new Uid(rel.getStartNode().getId(), EEntityType.OBJECT);

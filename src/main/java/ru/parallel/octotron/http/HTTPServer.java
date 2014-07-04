@@ -18,12 +18,16 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * HTTP server for requests processing<br>
  * */
 public class HTTPServer
 {
+	private final static Logger LOGGER = Logger.getLogger(HTTPServer.class.getName());
+
 	private final Queue<ParsedHttpRequest> requests;
 	private final Queue<ParsedHttpRequest> blocking_requests;
 
@@ -52,8 +56,7 @@ public class HTTPServer
 			{
 				http_request.FinishError(e.getMessage());
 
-				System.err.println("request failed:" + http_request.GetQuery());
-				System.err.println(e.getMessage());
+				LOGGER.log(Level.WARNING, "request failed:" + http_request.GetQuery(), e.getMessage());
 
 				return;
 			}
@@ -108,7 +111,7 @@ public class HTTPServer
 	{
 		// why is it turned off by default >.<
 		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
-			System.err.println("nodelay is not set to true, import will be slow. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");
+			LOGGER.log(Level.CONFIG, "nodelay is not set to true, import will be slow. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");
 
 		requests = new ConcurrentLinkedQueue<>();
 		blocking_requests = new ConcurrentLinkedQueue<>();
@@ -138,7 +141,7 @@ public class HTTPServer
 
 		server.start();
 
-		System.out.println("request server listetning on port: " + settings.GetPort());
+		LOGGER.log(Level.INFO, "request server listening on port: " + settings.GetPort());
 	}
 
 /**

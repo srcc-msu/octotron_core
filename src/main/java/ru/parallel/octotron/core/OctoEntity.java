@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core;
 
-import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.logic.TimerProcessor;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.octotron.primitive.EDependencyType;
@@ -20,6 +20,8 @@ import ru.parallel.utils.JavaUtils;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * some entity, that resides in model<br>
@@ -27,6 +29,8 @@ import java.util.List;
  * */
 public abstract class OctoEntity
 {
+	private final static Logger LOGGER = Logger.getLogger(OctoEntity.class.getName());
+
 	protected static final String RULE_PREFIX = "_rule";
 	private static final String REACTION_PREFIX = "_reaction";
 	private static final String REACTION_EXECUTED_PREFIX = "_reaction_executed";
@@ -125,7 +129,7 @@ public abstract class OctoEntity
 
 		for(long key : keys)
 		{
-			OctoRule rule = PersistenStorage.INSTANCE.GetRules().Get(key);
+			OctoRule rule = PersistentStorage.INSTANCE.GetRules().Get(key);
 
 			if(rule.GetDependency() != EDependencyType.ALL && rule.GetDependency() != dep)
 				continue;
@@ -143,7 +147,7 @@ public abstract class OctoEntity
 		List<OctoRule> rules = new LinkedList<>();
 
 		for(long id : graph_service.GetArray(this, OctoEntity.RULE_PREFIX))
-			rules.add(PersistenStorage.INSTANCE.GetRules().Get(id));
+			rules.add(PersistentStorage.INSTANCE.GetRules().Get(id));
 
 		return rules;
 	}
@@ -153,7 +157,7 @@ public abstract class OctoEntity
 		List<OctoReaction> reactions = new LinkedList<>();
 
 		for(long id : graph_service.GetArray(this, OctoEntity.REACTION_PREFIX))
-			reactions.add(PersistenStorage.INSTANCE.GetReactions().Get(id));
+			reactions.add(PersistentStorage.INSTANCE.GetReactions().Get(id));
 
 		return reactions;
 	}
@@ -163,7 +167,7 @@ public abstract class OctoEntity
 		List<Marker> markers = new LinkedList<>();
 
 		for(long id : graph_service.GetArray(this, OctoEntity.MARKER_PREFIX))
-			markers.add(PersistenStorage.INSTANCE.GetMarkers().Get(id));
+			markers.add(PersistentStorage.INSTANCE.GetMarkers().Get(id));
 
 		return markers;
 	}
@@ -257,7 +261,7 @@ public abstract class OctoEntity
 
 			if(needed && skip_marker != null)
 			{
-				System.err.println("reaction suppressed: " + skip_marker.GetDescription()
+				LOGGER.log(Level.INFO, "reaction suppressed: " + skip_marker.GetDescription()
 					+ " marker id: " + skip_marker.GetID()
 					+ " target id:" + skip_marker.GetTarget()
 					+ " time: " + current_time);
@@ -377,7 +381,7 @@ public abstract class OctoEntity
 
 		graph_service.SetArray(this, OctoEntity.MARKER_PREFIX, markers_id);
 
-		PersistenStorage.INSTANCE.GetMarkers().Delete(marker_id);
+		PersistentStorage.INSTANCE.GetMarkers().Delete(marker_id);
 	}
 
 	public abstract OctoEntityList GetSurround();

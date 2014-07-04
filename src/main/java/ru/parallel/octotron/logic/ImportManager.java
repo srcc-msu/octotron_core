@@ -8,7 +8,6 @@ package ru.parallel.octotron.logic;
 
 import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.primitive.EEntityType;
 import ru.parallel.octotron.primitive.SimpleAttribute;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;

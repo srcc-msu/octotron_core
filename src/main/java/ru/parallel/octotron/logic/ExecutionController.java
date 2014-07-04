@@ -28,10 +28,14 @@ import ru.parallel.utils.JavaUtils;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 // TODO refactor this class
 public class ExecutionController
 {
+	private final static Logger LOGGER = Logger.getLogger(ExecutionController.class.getName());
+
 	private final GlobalSettings settings;
 	private final IGraph graph;
 	private final GraphService graph_service;
@@ -124,7 +128,7 @@ public class ExecutionController
 				}
 				catch (InterruptedException ignore){}
 
-				System.out.println("request processor thread finished");
+				LOGGER.log(Level.INFO, "request processor thread finished");
 			}
 		};
 
@@ -275,8 +279,8 @@ public class ExecutionController
 
 			if(res.type == E_RESULT_TYPE.ERROR)
 			{
-				System.err.println("request failed " + parsed_request.GetHttpRequest().GetQuery());
-				System.err.println(res.data);
+				LOGGER.log(Level.WARNING, "request failed " + parsed_request.GetHttpRequest().GetQuery());
+				LOGGER.log(Level.WARNING, res.data);
 			}
 
 			count ++;
@@ -305,6 +309,7 @@ public class ExecutionController
 		}
 		catch(IOException fail)
 		{
+			LOGGER.log(Level.WARNING, "could not get free disk space");
 			free_space_kb = -1;
 		}
 
@@ -428,7 +433,7 @@ public class ExecutionController
 			}
 			catch (IOException e)
 			{
-				System.err.println("failed to close the version file");
+				LOGGER.log(Level.SEVERE, "failed to close the version file", e);
 			}
 		}
 

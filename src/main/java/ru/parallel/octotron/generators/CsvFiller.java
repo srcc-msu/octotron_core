@@ -16,14 +16,18 @@ import ru.parallel.octotron.utils.IEntityList;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * read a csv file and and fill a given CEntitList with attributes
+ * read a csv file and and fill a given EntityList with attributes
  * 1st csv string must contain names for attributes
  * rest lines will be taken as values
  * */
 public final class CsvFiller
 {
+	private final static Logger LOGGER = Logger.getLogger(CsvFiller.class.getName());
+
 	private CsvFiller() {}
 
 	public static void Read(String file_name, IEntityList<? extends OctoEntity> list)
@@ -69,7 +73,7 @@ public final class CsvFiller
 			}
 
 			if((next_line = reader.readNext()) != null)
-				System.err.println("some data from csv " + file_name + " were not assigned, read: " + read
+				LOGGER.log(Level.WARNING, "some data from csv " + file_name + " were not assigned, read: " + read
 					+ " expected: " + list.size() + " next line: " + Arrays.toString(next_line));
 		}
 		finally

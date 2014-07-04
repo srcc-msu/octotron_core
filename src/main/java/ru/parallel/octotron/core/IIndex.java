@@ -26,10 +26,8 @@ public interface IIndex
 /**
  * disable indexing for attributes with name \name
  * */
-	void DisableObjectIndex(String name)
-		throws ExceptionDBError;
-	void DisableLinkIndex(String name)
-		throws ExceptionDBError;
+	void DisableObjectIndex(String name);
+	void DisableLinkIndex(String name);
 
 /**
  * get one entity, that has attribute /name = /value

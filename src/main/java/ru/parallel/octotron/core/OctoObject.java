@@ -6,14 +6,10 @@
 
 package ru.parallel.octotron.core;
 
-import ru.parallel.octotron.impl.PersistenStorage;
-import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.Uid;
 import ru.parallel.octotron.utils.OctoEntityList;
 import ru.parallel.octotron.utils.OctoLinkList;
 import ru.parallel.octotron.utils.OctoObjectList;
-
-import java.util.List;
 
 /**
  * implementation of object according to real \graph<br>

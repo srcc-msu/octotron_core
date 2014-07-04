@@ -11,10 +11,13 @@ import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.generators.CsvFiller;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * base class for entity-specific lists<br>
@@ -22,6 +25,8 @@ import java.util.*;
  * */
 public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 {
+	private final static Logger LOGGER = Logger.getLogger(IEntityList.class.getName());
+
 	protected final List<T> list;
 
 	protected IEntityList()
@@ -98,7 +103,8 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 	{
 		if(size() > 1)
 		{
-			System.err.println(AutoFormat.PrintNL(this, new OctoAttributeList()));
+			LOGGER.log(Level.FINE, "Only() failed, attributes:");
+			LOGGER.log(Level.FINE, AutoFormat.PrintNL(this, new OctoAttributeList()));
 
 			throw new ExceptionModelFail("list contains few elements");
 		}
@@ -114,19 +120,15 @@ public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
  * see {@link CsvFiller} for details
  * */
 	public final void SetAttributesFromCsv(String file_name)
-		throws ExceptionParseError
+		throws ExceptionParseError, ExceptionSystemError
 	{
 		try
 		{
 			CsvFiller.Read(file_name, this);
 		}
-		catch(FileNotFoundException ex)
-		{
-			throw new ExceptionModelFail("config file not found " + file_name);
-		}
 		catch (IOException e)
 		{
-			throw new ExceptionModelFail("error reading config file " + file_name);
+			throw new ExceptionSystemError(e);
 		}
 	}
 

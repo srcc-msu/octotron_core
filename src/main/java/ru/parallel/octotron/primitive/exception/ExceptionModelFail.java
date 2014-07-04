@@ -17,4 +17,8 @@ public class ExceptionModelFail extends RuntimeException
 	{
 		super(message);
 	}
+	public ExceptionModelFail(Exception wrap)
+{
+	super(wrap);
+}
 }

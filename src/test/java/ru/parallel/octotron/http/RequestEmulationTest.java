@@ -13,8 +13,8 @@ import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.FileUtils;
 
 /**
- * sometimes tests can fail.. race condition
- * messages are not guaranteed to come in fixed order
+ * sometimes tests can fail if message did not came in time</br>
+ * messages are not guaranteed to come in fixed order</br>
  * */
 public class RequestEmulationTest
 {

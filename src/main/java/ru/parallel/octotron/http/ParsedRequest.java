@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.http.Operations.Operation;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.ExecutionController;
+import ru.parallel.octotron.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.utils.IEntityList;
 
 import java.util.Map;
@@ -41,7 +42,7 @@ public class ParsedRequest
 
 			return (RequestResult) operation.Execute(graph_service, exec_control, params, entity_list);
 		}
-		catch (Exception e)
+		catch(ExceptionParseError e)
 		{
 			String res = "could not execute request: " + e + System.lineSeparator();
 

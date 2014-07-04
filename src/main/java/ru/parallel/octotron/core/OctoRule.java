@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core;
 
-import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.primitive.EDependencyType;
 import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
 
@@ -24,7 +24,7 @@ public abstract class OctoRule implements Serializable
 	protected OctoRule(String name)
 	{
 		this.name = name;
-		rule_id = PersistenStorage.INSTANCE.GetRules().Add(this);
+		rule_id = PersistentStorage.INSTANCE.GetRules().Add(this);
 	}
 
 	protected OctoRule()

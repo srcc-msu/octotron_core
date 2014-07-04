@@ -11,15 +11,15 @@ import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 
-public final class PersistenStorage
+public final class PersistentStorage
 {
-	public static final PersistenStorage INSTANCE = new PersistenStorage();
+	public static final PersistentStorage INSTANCE = new PersistentStorage();
 
 	private final PersistentMap<OctoRule> rules = new PersistentMap<>();
 	private final PersistentMap<OctoReaction> reactions = new PersistentMap<>();
 	private final PersistentMap<Marker> markers = new PersistentMap<>();
 
-	private PersistenStorage() {}
+	private PersistentStorage() {}
 
 	public void Load(String fname)
 		throws ExceptionSystemError
@@ -30,9 +30,9 @@ public final class PersistenStorage
 			reactions.Load(fname + ".react");
 			markers.Load(fname + ".mark");
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
-			throw new ExceptionSystemError("error loading persistant storage: "
+			throw new ExceptionSystemError("error loading persistent storage: "
 				+ e);
 		}
 	}
@@ -48,8 +48,7 @@ public final class PersistenStorage
 		}
 		catch (Exception e)
 		{
-			throw new ExceptionSystemError("error saving persistant storage: "
-				+ e.getMessage());
+			throw new ExceptionSystemError(e);
 		}
 	}
 

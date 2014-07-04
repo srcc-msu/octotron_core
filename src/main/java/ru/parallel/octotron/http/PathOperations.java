@@ -205,7 +205,7 @@ public abstract class PathOperations
 		@Override
 		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
-			throws ExceptionParseError, ExceptionModelFail
+			throws ExceptionParseError
 		{
 			if(params.size() > 1)
 				throw new ExceptionParseError("in_n accepts only one or zero params");
@@ -226,7 +226,7 @@ public abstract class PathOperations
 		@Override
 		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
-			throws ExceptionParseError, ExceptionModelFail
+			throws ExceptionParseError
 		{
 			if(params.size() > 1)
 				throw new ExceptionParseError("out_n accepts only one or zero params");
@@ -247,7 +247,7 @@ public abstract class PathOperations
 		@Override
 		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
-			throws ExceptionParseError, ExceptionModelFail
+			throws ExceptionParseError
 		{
 			if(params.size() > 1)
 				throw new ExceptionParseError("all_n accepts only one or zero params");

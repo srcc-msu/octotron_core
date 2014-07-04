@@ -7,7 +7,7 @@
 package ru.parallel.octotron.exec;
 
 import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
@@ -15,14 +15,33 @@ import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.*;
 
 /**
  * main executable function<br>
  * */
 public class StartOctotron
 {
+	private final static Logger LOGGER = Logger.getLogger(StartOctotron.class.getName());
+
 	private static final int EXIT_ERROR = 1;
 	private static final int PROCESS_CHUNK = 1024; // seems ok
+
+	private static void ConfigLogging()
+	{
+		try
+		{
+			FileHandler file_handler = new FileHandler("octotron_" + JavaUtils.GetTimestamp() + ".log");
+			file_handler.setFormatter(new SimpleFormatter());
+
+			LOGGER.addHandler(file_handler);
+		}
+		catch(IOException e)
+		{
+			LOGGER.log(Level.CONFIG, "could not create log file", e);
+		}
+	}
 
 /**
  * main executable function<br>
@@ -31,15 +50,17 @@ public class StartOctotron
  * */
 	public static void main(String[] args)
 	{
+		ConfigLogging();
+
 		if(args.length != 1)
 		{
-			System.err.println("specify the config file");
+			LOGGER.log(Level.SEVERE, "specify the config file");
 			System.exit(StartOctotron.EXIT_ERROR);
 		}
 
 		String fname = args[0];
 
-		System.out.println("Starting Octotron using config file: " + fname);
+		LOGGER.log(Level.INFO, "starting Octotron using config file: " + fname);
 
 		GlobalSettings settings = null;
 
@@ -51,7 +72,7 @@ public class StartOctotron
 		}
 		catch(ExceptionSystemError e)
 		{
-			System.err.println(e.getMessage());
+			LOGGER.log(Level.SEVERE, "could not load config file", e);
 			System.exit(StartOctotron.EXIT_ERROR);
 		}
 
@@ -62,22 +83,13 @@ public class StartOctotron
  * compare hashes to check if the new config does not match the old one<br>
  * */
 	private static void CheckConfig(GlobalSettings settings)
-		throws NumberFormatException, ExceptionSystemError
+		throws ExceptionSystemError
 	{
 		String path = settings.GetDbPath() + settings.GetDbName();
 		int old_hash = Integer.parseInt(FileUtils.FileToString(path + DBCreator.HASH_FILE));
 
 		if(settings.GetHash() != old_hash)
-		{
-			System.err.println("**********************************************************");
-			System.err.println("*                        WARNING                         *");
-			System.err.println("**********************************************************");
-			System.err.println();
-			System.err.println("config file has been changed since database creation");
-			System.err.println("consistency is not guaranteed");
-			System.err.println();
-			System.err.println("**********************************************************");
-		}
+			LOGGER.log(Level.CONFIG, "config file has been changed since database creation consistency is not guaranteed");
 	}
 
 /**
@@ -98,7 +110,7 @@ public class StartOctotron
 
 			exec_control = new ExecutionController(graph, new GraphService(graph), settings);
 
-			PersistenStorage.INSTANCE.Load(path);
+			PersistentStorage.INSTANCE.Load(path);
 
 			StartOctotron.ProcessStart(settings);
 		}
@@ -135,7 +147,7 @@ public class StartOctotron
  * */
 	private static Exception MainLoop(GlobalSettings settings, ExecutionController exec_control)
 	{
-		System.out.println("main loop started");
+		LOGGER.log(Level.INFO, "main loop started");
 
 		try
 		{
@@ -143,6 +155,7 @@ public class StartOctotron
 			{
 				exec_control.Process(StartOctotron.PROCESS_CHUNK); // it may sleep inside
 			}
+
 			StartOctotron.ProcessFinish(settings);
 		}
 		catch(Exception e)
@@ -168,7 +181,7 @@ public class StartOctotron
 			if(graph != null)
 				graph.Shutdown();
 
-			PersistenStorage.INSTANCE.Save(path);
+			PersistentStorage.INSTANCE.Save(path);
 		}
 		catch(Exception e)
 		{
@@ -208,12 +221,12 @@ public class StartOctotron
  * */
 	private static void ProcessCrash(GlobalSettings settings, Exception catched_exception, String suffix)
 	{
+		LOGGER.log(Level.SEVERE, "Octotron crashed during " + suffix, catched_exception);
+
 		String error = catched_exception.getLocalizedMessage() + System.lineSeparator();
 
 		for(StackTraceElement elem : catched_exception.getStackTrace())
 			error += elem + System.lineSeparator();
-
-		System.err.println(error);
 
 		File error_file = new File("crash_" + JavaUtils.GetDate()
 			+ "_" + JavaUtils.GetTimestamp() + "_" + suffix + ".txt");
@@ -225,7 +238,7 @@ public class StartOctotron
 		}
 		catch (Exception e) // giving up now - exception during exception processing..
 		{
-			System.err.println(e);
+			LOGGER.log(Level.SEVERE, "error during crash notification", e);
 		}
 
 		try
@@ -237,7 +250,7 @@ public class StartOctotron
 		}
 		catch (ExceptionSystemError e) // giving up now - exception during exception processing..
 		{
-			System.err.println(e);
+			LOGGER.log(Level.SEVERE, "error during crash notification", e);
 		}
 	}
 }

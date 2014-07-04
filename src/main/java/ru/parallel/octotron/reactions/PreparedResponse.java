@@ -20,10 +20,14 @@ import ru.parallel.utils.FileUtils;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class PreparedResponse
 {
+	private final static Logger LOGGER = Logger.getLogger(PreparedResponse.class.getName());
+
 	private static final char ARG_CHAR = '$';
 
 	private final OctoResponse response;
@@ -102,10 +106,10 @@ public class PreparedResponse
 		OctoObjectList parents = p_entity.GetInNeighbors("type", "contain");
 
 		if(parents.size() > 1)
-			System.err.println("could not traceback parents - ambiguity");
+			LOGGER.log(Level.WARNING, "could not traceback parents - ambiguity");
 
 		if(parents.size() == 0)
-			System.err.println("could not traceback parents - no parents");
+			LOGGER.log(Level.WARNING, "could not traceback parents - no parents");
 
 		OctoEntity parent = parents.Only();
 
@@ -134,7 +138,7 @@ public class PreparedResponse
  * add attributes to the command and replace the command key by actual file<br>
  * */
 	public void Invoke(GlobalSettings settings)
-		throws ExceptionSystemError, ExceptionModelFail
+		throws ExceptionSystemError
 	{
 		for(String[] command : composed_commands)
 		{

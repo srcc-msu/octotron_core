@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * stores all request information and<br>
@@ -22,6 +24,8 @@ import java.net.HttpURLConnection;
  * */
 public class HTTPRequest
 {
+	private final static Logger LOGGER = Logger.getLogger(HTTPRequest.class.getName());
+
 	private final HttpExchange http_request;
 	private final OutputStream http_request_writer;
 
@@ -102,10 +106,9 @@ public class HTTPRequest
 		{
 			IOUtils.readLines(http_request_reader);
 		}
-		catch (IOException ignore)
+		catch (IOException e)
 		{
-			System.err.println("could not read from a request");
-			System.err.println(ignore);
+			LOGGER.log(Level.WARNING, "could not read from a request", e);
 		}
 		finally
 		{
@@ -113,10 +116,9 @@ public class HTTPRequest
 			{
 				http_request_reader.close();
 			}
-			catch (IOException ignore)
+			catch (IOException e)
 			{
-				System.err.println("could not close a request");
-				System.err.println(ignore);
+				LOGGER.log(Level.WARNING, "could not read close a request", e);
 			}
 		}
 
@@ -130,10 +132,9 @@ public class HTTPRequest
 			http_request.sendResponseHeaders(return_code, raw_data.length);
 			http_request_writer.write(raw_data);
 		}
-		catch (IOException ignore) // most likely a client closed without reading
+		catch (IOException e) // most likely a client closed without reading
 		{
-			System.err.println("could not write all data");
-			System.err.println(ignore);
+			LOGGER.log(Level.WARNING, "could not write all data", e);
 		}
 		finally
 		{
@@ -141,10 +142,9 @@ public class HTTPRequest
 			{
 				http_request_writer.close();
 			}
-			catch(IOException ignore) // may fail to close because did not write enough bytes
+			catch(IOException e) // may fail to close because did not write enough bytes
 			{
-				System.err.println("could not close a writer");
-				System.err.println(ignore);
+				LOGGER.log(Level.WARNING, "could not close a writer", e);
 			}
 		}
 

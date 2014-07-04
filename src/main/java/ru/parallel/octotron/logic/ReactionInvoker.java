@@ -20,12 +20,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * provides background execution of all needed reactions
  * */
 public class ReactionInvoker
 {
+	private final static Logger LOGGER = Logger.getLogger(ReactionInvoker.class.getName());
+
 	private final Queue<PreparedResponse> pending_response
 		= new ConcurrentLinkedQueue<>();
 
@@ -68,13 +72,13 @@ public class ReactionInvoker
 						}
 						catch(ExceptionSystemError | ExceptionModelFail e)
 						{
-							System.err.println(e);
+							LOGGER.log(Level.WARNING, "reaction invocation failed", e);
 						}
 					}
 				}
 				catch (InterruptedException ignore){}
 
-				System.out.println("reaction invoker thread finished");
+				LOGGER.log(Level.INFO, "reaction invoker thread finished");
 			}
 		};
 
@@ -107,6 +111,6 @@ public class ReactionInvoker
 		if(!silent)
 			pending_response.addAll(new_responses);
 		else if(!new_responses.isEmpty())
-			System.err.println("silent mode, reactions ignored: " + new_responses.size());
+			LOGGER.log(Level.INFO, "silent mode, reactions ignored: " + new_responses.size());
 	}
 }

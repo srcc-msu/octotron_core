@@ -9,7 +9,7 @@ package ru.parallel.octotron.exec;
 import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoLink;
 import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.impl.PersistenStorage;
+import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.utils.OctoLinkList;
@@ -70,7 +70,7 @@ public class DBCreator
 	public void End()
 		throws ExceptionSystemError, FileNotFoundException
 	{
-		PersistenStorage.INSTANCE.Save(settings.GetDbPath() + settings.GetDbName());
+		PersistentStorage.INSTANCE.Save(settings.GetDbPath() + settings.GetDbName());
 
 		FileUtils.SaveToFile(settings.GetDbPath() + settings.GetDbName() + DBCreator.HASH_FILE
 			, Integer.toString(settings.GetHash()));

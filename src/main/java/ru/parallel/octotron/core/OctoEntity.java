@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  * */
 public abstract class OctoEntity
 {
-	private final static Logger LOGGER = Logger.getLogger(OctoEntity.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	protected static final String RULE_PREFIX = "_rule";
 	private static final String REACTION_PREFIX = "_reaction";
@@ -261,7 +261,7 @@ public abstract class OctoEntity
 
 			if(needed && skip_marker != null)
 			{
-				LOGGER.log(Level.INFO, "reaction suppressed: " + skip_marker.GetDescription()
+				LOGGER.log(Level.FINE, "reaction suppressed: " + skip_marker.GetDescription()
 					+ " marker id: " + skip_marker.GetID()
 					+ " target id:" + skip_marker.GetTarget()
 					+ " time: " + current_time);

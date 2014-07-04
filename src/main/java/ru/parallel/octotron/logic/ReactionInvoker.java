@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * */
 public class ReactionInvoker
 {
-	private final static Logger LOGGER = Logger.getLogger(ReactionInvoker.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private final Queue<PreparedResponse> pending_response
 		= new ConcurrentLinkedQueue<>();

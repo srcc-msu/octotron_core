@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 // TODO refactor this class
 public class ExecutionController
 {
-	private final static Logger LOGGER = Logger.getLogger(ExecutionController.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private final GlobalSettings settings;
 	private final IGraph graph;
@@ -279,7 +279,10 @@ public class ExecutionController
 
 			if(res.type == E_RESULT_TYPE.ERROR)
 			{
-				LOGGER.log(Level.WARNING, "request failed " + parsed_request.GetHttpRequest().GetQuery());
+				LOGGER.log(Level.WARNING, "request failed "
+					+ parsed_request.GetHttpRequest().GetPath()
+					+ parsed_request.GetHttpRequest().GetQuery());
+
 				LOGGER.log(Level.WARNING, res.data);
 			}
 

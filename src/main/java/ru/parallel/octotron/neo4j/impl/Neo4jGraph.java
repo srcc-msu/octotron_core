@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  * */
 public final class Neo4jGraph implements IGraph
 {
-	private final static Logger LOGGER = Logger.getLogger(Neo4jGraph.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private GraphDatabaseService graph_db;
 

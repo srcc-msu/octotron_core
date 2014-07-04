@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * */
 public class HTTPServer
 {
-	private final static Logger LOGGER = Logger.getLogger(HTTPServer.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private final Queue<ParsedHttpRequest> requests;
 	private final Queue<ParsedHttpRequest> blocking_requests;
@@ -56,7 +56,8 @@ public class HTTPServer
 			{
 				http_request.FinishError(e.getMessage());
 
-				LOGGER.log(Level.WARNING, "request failed:" + http_request.GetQuery(), e.getMessage());
+				LOGGER.log(Level.WARNING, "request failed: "
+					+ http_request.GetPath() + http_request.GetQuery(), e);
 
 				return;
 			}

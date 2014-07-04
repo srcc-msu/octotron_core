@@ -23,16 +23,19 @@ import java.util.logging.*;
  * */
 public class StartOctotron
 {
-	private final static Logger LOGGER = Logger.getLogger(StartOctotron.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private static final int EXIT_ERROR = 1;
 	private static final int PROCESS_CHUNK = 1024; // seems ok
+	private static final int SYS_LOG_SIZE = 10*1024*1024; // 10 MB
 
 	private static void ConfigLogging()
 	{
 		try
 		{
-			FileHandler file_handler = new FileHandler("octotron_" + JavaUtils.GetTimestamp() + ".log");
+			FileHandler file_handler
+				= new FileHandler("log/octotron_%g.log"
+					, SYS_LOG_SIZE, 1, true); // rotate to 1 file, allow append
 			file_handler.setFormatter(new SimpleFormatter());
 
 			LOGGER.addHandler(file_handler);
@@ -228,7 +231,7 @@ public class StartOctotron
 		for(StackTraceElement elem : catched_exception.getStackTrace())
 			error += elem + System.lineSeparator();
 
-		File error_file = new File("crash_" + JavaUtils.GetDate()
+		File error_file = new File("log/crash_" + JavaUtils.GetDate()
 			+ "_" + JavaUtils.GetTimestamp() + "_" + suffix + ".txt");
 		String error_fname = error_file.getAbsolutePath();
 

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * */
 public class HTTPRequest
 {
-	private final static Logger LOGGER = Logger.getLogger(HTTPRequest.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private final HttpExchange http_request;
 	private final OutputStream http_request_writer;
@@ -153,11 +153,15 @@ public class HTTPRequest
 
 	public String GetQuery()
 	{
+		if(query == null)
+			return "";
 		return query;
 	}
 
 	public String GetPath()
 	{
+		if(path == null)
+			return "";
 		return path;
 	}
 }

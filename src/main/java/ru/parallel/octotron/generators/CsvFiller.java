@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * */
 public final class CsvFiller
 {
-	private final static Logger LOGGER = Logger.getLogger(CsvFiller.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private CsvFiller() {}
 

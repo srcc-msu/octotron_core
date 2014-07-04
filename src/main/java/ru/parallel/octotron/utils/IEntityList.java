@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * */
 public abstract class IEntityList<T extends OctoEntity> implements Iterable<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(IEntityList.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	protected final List<T> list;
 

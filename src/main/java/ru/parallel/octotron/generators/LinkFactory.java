@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * */
 public class LinkFactory extends BaseFactory<LinkFactory>
 {
-	private final static Logger LOGGER = Logger.getLogger(LinkFactory.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	public LinkFactory(GraphService graph_service)
 	{

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 public class PreparedResponse
 {
-	private final static Logger LOGGER = Logger.getLogger(PreparedResponse.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private static final char ARG_CHAR = '$';
 

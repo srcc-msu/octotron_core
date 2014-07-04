@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 public abstract class FileUtils
 {
-	private final static Logger LOGGER = Logger.getLogger(FileUtils.class.getName());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	public static BufferedReader InitStream(String[] command)
 		throws ExceptionSystemError
@@ -94,14 +94,17 @@ Timer.SStart();
 					BufferedReader br = new BufferedReader(isr);
 
 					String line;
+					String output = "";
 
 					while ((line = br.readLine()) != null)
 					{
-						LOGGER.log(Level.INFO, line);
+						output += line + System.lineSeparator();
 					}
 
+					LOGGER.log(Level.INFO, output);
+
 					process.waitFor();
-Timer.SPrint(command[0]);
+LOGGER.log(Level.INFO, command[0] + " finished, took: " + Timer.SGet());
 
 					process.destroy();
 					br.close();

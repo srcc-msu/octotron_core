@@ -431,4 +431,14 @@ public class ComputeTests
 		assertEquals(true , rule3.Compute(obj.GetOutLinks().get(0)));
 		assertEquals(false, rule4.Compute(obj.GetOutLinks().get(0)));
 	}
+
+	@Test
+	public void TestToPct()
+	{
+		ToArgPct rule1 = new ToArgPct("test", "l1", "l2");
+		ToPct rule2 = new ToPct("test", "l2", 6);
+
+		assertEquals(66, rule1.Compute(obj));
+		assertEquals(50, rule2.Compute(obj));
+	}
 }

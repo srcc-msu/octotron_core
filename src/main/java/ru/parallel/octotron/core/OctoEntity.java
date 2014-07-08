@@ -290,7 +290,8 @@ public abstract class OctoEntity
 				}
 				else if(state == OctoReaction.STATE_STARTED)
 				{
-					if(IsTimerExpired(OctoReaction.DELAY_PREFIX + reaction.GetCheckName(), current_time))
+					if(IsTimerExpired(OctoReaction.DELAY_PREFIX
+						+ reaction.GetID(), current_time))
 					{
 						result.add(reaction.GetResponse());
 

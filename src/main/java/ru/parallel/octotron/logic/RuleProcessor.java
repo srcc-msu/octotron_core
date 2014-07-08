@@ -36,7 +36,9 @@ public class RuleProcessor
 
 		for(OctoEntity entity : changed.GetSurround())
 		{
-			if(entity.Update(EDependencyType.SELF) > 0)
+			if(entity.Update(EDependencyType.OUT) > 0)
+				comp_changed.add(entity);
+			if(entity.Update(EDependencyType.IN) > 0)
 				comp_changed.add(entity);
 		}
 

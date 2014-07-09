@@ -284,6 +284,11 @@ public abstract class OctoEntity
 					{
 						SetReactionState(reaction.GetID(), OctoReaction.STATE_STARTED);
 
+						if(TestTimer(OctoReaction.DELAY_PREFIX
+							+ reaction.GetID()))
+							RemoveTimer(OctoReaction.DELAY_PREFIX
+								+ reaction.GetID());
+
 						SetTimer(OctoReaction.DELAY_PREFIX
 							+ reaction.GetID(), delay + 1);
 					}
@@ -297,8 +302,10 @@ public abstract class OctoEntity
 
 						SetReactionState(reaction.GetID(), OctoReaction.STATE_EXECUTED);
 
-						RemoveTimer(OctoReaction.DELAY_PREFIX
-							+ reaction.GetID());
+						if(TestTimer(OctoReaction.DELAY_PREFIX
+							+ reaction.GetID()))
+							RemoveTimer(OctoReaction.DELAY_PREFIX
+								+ reaction.GetID());
 					}
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)
@@ -316,6 +323,11 @@ public abstract class OctoEntity
 				else if(state == OctoReaction.STATE_STARTED)
 				{
 					SetReactionState(reaction.GetID(), OctoReaction.STATE_NONE);
+
+					if(TestTimer(OctoReaction.DELAY_PREFIX
+						+ reaction.GetID()))
+						RemoveTimer(OctoReaction.DELAY_PREFIX
+							+ reaction.GetID());
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)
 				{
@@ -323,6 +335,11 @@ public abstract class OctoEntity
 						result.add(reaction.GetRecoverResponse());
 
 					SetReactionState(reaction.GetID(), OctoReaction.STATE_NONE);
+
+					if(TestTimer(OctoReaction.DELAY_PREFIX
+						+ reaction.GetID()))
+						RemoveTimer(OctoReaction.DELAY_PREFIX
+							+ reaction.GetID());
 				}
 			}
 		}

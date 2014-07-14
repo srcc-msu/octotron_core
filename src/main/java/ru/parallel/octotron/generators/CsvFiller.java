@@ -1,17 +1,17 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.generators;
 
 import au.com.bytecode.opencsv.CSVReader;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.IEntityList;
+import ru.parallel.octotron.core.graph.IEntity;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public final class CsvFiller
 
 	private CsvFiller() {}
 
-	public static void Read(String file_name, IEntityList<? extends OctoEntity> list)
+	public static void Read(String file_name, IEntityList<? extends IEntity> list)
 		throws ExceptionParseError, IOException
 	{
 		CSVReader reader = new CSVReader(new FileReader(file_name));
@@ -48,7 +48,7 @@ public final class CsvFiller
 
 			int read = 0;
 
-			for(OctoEntity entity : list)
+			for(IEntity entity : list)
 			{
 				next_line = reader.readNext();
 

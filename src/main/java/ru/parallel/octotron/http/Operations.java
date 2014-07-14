@@ -1,29 +1,28 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.graph.collections.AutoFormat;
+import ru.parallel.octotron.core.graph.collections.AutoFormat.E_FORMAT_PARAM;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.neo4j.impl.Marker;
-import ru.parallel.octotron.primitive.EEntityType;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.AutoFormat;
-import ru.parallel.octotron.utils.AutoFormat.E_FORMAT_PARAM;
-import ru.parallel.octotron.utils.IEntityList;
-import ru.parallel.octotron.utils.OctoObjectList;
-import ru.parallel.octotron.utils.SimpleAttributeList;
 import ru.parallel.utils.JavaUtils;
 import ru.parallel.utils.Timer;
 
@@ -58,18 +57,18 @@ public abstract class Operations
 			return is_blocking;
 		}
 
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
-			return exec.Execute(graph_service, control, params, objects);
+			return exec.Execute(model_service, control, params, objects);
 		}
 	}
 
 	private interface IExec
 	{
-		Object Execute(GraphService graph_service, ExecutionController control
-				, Map<String, String> params, IEntityList<?> objects)
+		Object Execute(ModelService model_service, ExecutionController control
+				, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError;
 	}
 
@@ -131,8 +130,8 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path");
@@ -150,8 +149,8 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
@@ -169,7 +168,7 @@ public abstract class Operations
 // check if attributes are specified
 
 			String attributes_str = params.get("attributes");
-			SimpleAttributeList attributes = new SimpleAttributeList();
+			List<SimpleAttribute> attributes = new LinkedList<>();
 
 			if(attributes_str != null)
 				for(String name : attributes_str.split(","))
@@ -209,8 +208,8 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params, "path");
@@ -226,13 +225,13 @@ public abstract class Operations
 	public static final Operation show_m = new Operation("show_m", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params);
 
-			List<Marker> markers = PersistentStorage.INSTANCE.GetMarkers().GetAll();
+/*			List<Marker> markers = PersistentStorage.INSTANCE.GetMarkers().GetAll();
 
 			if(markers.isEmpty())
 				return new RequestResult(E_RESULT_TYPE.TEXT, "no markers");
@@ -247,7 +246,8 @@ public abstract class Operations
 			}
 
 			String data = res.toString();
-			return new RequestResult(E_RESULT_TYPE.TEXT, data);
+			return new RequestResult(E_RESULT_TYPE.TEXT, data);*/
+			return null;
 		}
 	});
 
@@ -257,8 +257,8 @@ public abstract class Operations
 	public static final Operation show_r = new Operation("show_r", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params);
@@ -314,8 +314,8 @@ public abstract class Operations
 	public static final Operation version = new Operation("version", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params);
@@ -379,8 +379,8 @@ public abstract class Operations
 	public static final Operation import_token = new Operation("import", false, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 			throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name", "value");
@@ -390,12 +390,12 @@ public abstract class Operations
 
 			Object value = SimpleAttribute.ValueFromStr(value_str);
 
-			OctoEntity target = objects.Only();
+			ModelEntity target = objects.Only();
 
 			if(target.GetUID().getType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("can not import value to a link");
 			else
-				control.Import((OctoObject) target, new SimpleAttribute(name, value));
+				control.Import(target, new SimpleAttribute(name, value));
 
 			String data = "added to import queue";
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -408,8 +408,8 @@ public abstract class Operations
 	public static final Operation unchecked_import_token = new Operation("unchecked_import", false, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 			throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name", "value");
@@ -419,12 +419,12 @@ public abstract class Operations
 
 			Object value = SimpleAttribute.ValueFromStr(value_str);
 
-			OctoEntity target = objects.Only();
+			ModelEntity target = objects.Only();
 
 			if(target.GetUID().getType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("can not import value to a link");
 			else
-				control.UncheckedImport((OctoObject) target, new SimpleAttribute(name, value));
+				control.UncheckedImport(target, new SimpleAttribute(name, value));
 
 			String data = "added to unchcked import queue";
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -438,8 +438,8 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name", "value");
@@ -448,7 +448,7 @@ public abstract class Operations
 			String value_str = params.get("value");
 			Object value = SimpleAttribute.ValueFromStr(value_str);
 
-			for(OctoEntity entity : objects)
+			for(ModelEntity entity : objects)
 			{
 				entity.DeclareAttribute(new SimpleAttribute(name, value));
 			}
@@ -472,11 +472,11 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
-			Operations.AllParams(params, "name", "value");
+		/*	Operations.AllParams(params, "name", "value");
 			Operations.RequiredParams(params, "name");
 
 			String name = params.get("name");
@@ -496,7 +496,8 @@ public abstract class Operations
 					+ SimpleAttribute.ValueToStr(graph_service.GetStatic().GetAttribute(name).GetValue()));
 			}
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, "static attribute set");
+			return new RequestResult(E_RESULT_TYPE.TEXT, "static attribute set");*/
+			return null;
 		}
 	});
 
@@ -507,15 +508,15 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name");
 
 			String name = params.get("name");
 
-			for(OctoEntity entity : objects)
+			for(ModelEntity entity : objects)
 				entity.GetAttribute(name).SetValid();
 
 			int count = objects.size();
@@ -537,15 +538,15 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name");
 
 			String name = params.get("name");
 
-			for(OctoEntity entity : objects)
+			for(ModelEntity entity : objects)
 				entity.GetAttribute(name).SetInvalid();
 
 			int count = objects.size();
@@ -567,8 +568,8 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path", "reaction_id", "description");
@@ -588,7 +589,7 @@ public abstract class Operations
 
 			StringBuilder res = new StringBuilder();
 
-			for(OctoEntity object : objects)
+			for(ModelEntity object : objects)
 				res.append("marker id=")
 					.append(object.AddMarker(reaction_id, description, suppress))
 					.append(System.lineSeparator());
@@ -604,8 +605,8 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "id");
@@ -613,7 +614,7 @@ public abstract class Operations
 
 			long id = (long)SimpleAttribute.ValueFromStr(id_str);
 
-			OctoObject entity = (OctoObject)objects.Only();
+			ModelEntity entity = objects.Only();
 
 			entity.DeleteMarker(id);
 
@@ -632,8 +633,8 @@ public abstract class Operations
 	public static final Operation quit = new Operation("quit", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 			throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -650,8 +651,8 @@ public abstract class Operations
 	public static final Operation selftest = new Operation("selftest", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 			throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -670,8 +671,8 @@ public abstract class Operations
 	public static final Operation mode = new Operation("mode", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "silent");
@@ -697,8 +698,8 @@ public abstract class Operations
 	public static final Operation snapshot = new Operation("snapshot", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -722,8 +723,8 @@ time = Timer.SEnd();
 	public static final Operation stat = new Operation("stat", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -747,8 +748,8 @@ time = Timer.SEnd();
 		private String cached_result = null;
 
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "format");
@@ -766,7 +767,7 @@ time = Timer.SEnd();
 				long cur_time = JavaUtils.GetTimestamp();
 				if(cur_time - last_export > EXPORT_THRESHOLD || cached_result == null)
 				{
-					cached_result = graph_service.ExportDot();
+					cached_result = model_service.ExportDot();
 					last_export = cur_time;
 				}
 
@@ -774,10 +775,10 @@ time = Timer.SEnd();
 			}
 			else
 			{
-				if(!(objects instanceof OctoObjectList))
+				if(!(objects instanceof ObjectList))
 					return new RequestResult(E_RESULT_TYPE.ERROR, "export works only with objects");
 
-				return new RequestResult(E_RESULT_TYPE.TEXT, graph_service.ExportDot((OctoObjectList)objects));
+				return new RequestResult(E_RESULT_TYPE.TEXT, model_service.ExportDot((ObjectList)objects));
 			}
 		}
 	});
@@ -789,8 +790,8 @@ time = Timer.SEnd();
 	public static final Operation mod_time = new Operation("mod_time", true, new IExec()
 	{
 		@Override
-		public Object Execute(GraphService graph_service, ExecutionController control
-			, Map<String, String> params, IEntityList<?> objects)
+		public Object Execute(ModelService model_service, ExecutionController control
+			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "interval");

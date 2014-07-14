@@ -1,21 +1,25 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.reactions;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.core.graph.IEntity;
+import ru.parallel.octotron.core.graph.impl.GraphEntity;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.exec.GlobalSettings;
-import ru.parallel.octotron.primitive.EEntityType;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.utils.FileUtils;
 
 import java.util.LinkedList;
@@ -39,7 +43,7 @@ public class PreparedResponse
 
 	private final long timestamp;
 
-	public PreparedResponse(OctoResponse response, OctoEntity entity, long timestamp)
+	public PreparedResponse(OctoResponse response, ModelEntity entity, long timestamp)
 	{
 		this.response = response;
 		this.timestamp = timestamp;
@@ -49,7 +53,7 @@ public class PreparedResponse
 		СomposeCommands(entity);
 	}
 
-	private String GetAttrStr(String[] attributes, OctoEntity entity)
+	private static String GetAttrStr(String[] attributes, IEntity entity)
 	{
 		StringBuilder str = new StringBuilder();
 
@@ -75,7 +79,7 @@ public class PreparedResponse
 		return str.toString();
 	}
 
-	private void СomposeAttributes(OctoEntity entity)
+	private void СomposeAttributes(ModelEntity entity)
 	{
 		String[] print_attributes = response.GetPrintAttributes();
 
@@ -88,7 +92,7 @@ public class PreparedResponse
 		attribute_values = GetAttrStr(print_attributes, entity);
 	}
 
-	private void СomposeParentAttributes(OctoEntity entity)
+	private void СomposeParentAttributes(ModelEntity entity)
 	{
 		String[] print_attributes = response.GetParentPrintAttributes();
 
@@ -101,9 +105,9 @@ public class PreparedResponse
 		if(entity.GetUID().getType() != EEntityType.OBJECT)
 			throw new ExceptionModelFail("only objects have a parent");
 
-		OctoObject p_entity = (OctoObject)entity;
+		ModelObject p_entity = (ModelObject)entity;
 
-		OctoObjectList parents = p_entity.GetInNeighbors("type", "contain");
+		ObjectList<ModelObject, ModelLink> parents = p_entity.GetInLinks().Filter("type", "contain").Source();
 
 		if(parents.size() > 1)
 			LOGGER.log(Level.WARNING, "could not traceback parents - ambiguity");
@@ -111,12 +115,12 @@ public class PreparedResponse
 		if(parents.size() == 0)
 			LOGGER.log(Level.WARNING, "could not traceback parents - no parents");
 
-		OctoEntity parent = parents.Only();
+		ModelObject parent = parents.Only();
 
 		parent_attribute_values = GetAttrStr(print_attributes, parent);
 	}
 
-	private void СomposeCommands(OctoEntity entity)
+	private void СomposeCommands(ModelEntity entity)
 	{
 		for(String[] command : response.GetCommands())
 		{

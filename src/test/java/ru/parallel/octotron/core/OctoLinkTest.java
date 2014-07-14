@@ -1,10 +1,13 @@
 package ru.parallel.octotron.core;
 
 import org.junit.*;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import static org.junit.Assert.*;
 
@@ -46,11 +49,11 @@ public class OctoLinkTest
 	@Test
 	public void TestSource()
 	{
-		OctoObject object1 = obj_factory.Create();
-		OctoObject object2 = obj_factory.Create();
+		ModelObject object1 = obj_factory.Create();
+		ModelObject object2 = obj_factory.Create();
 
-		OctoLink link1 = link_factory.OneToOne(object1, object2);
-		OctoLink link2 = link_factory.OneToOne(object2, object1);
+		ModelLink link1 = link_factory.OneToOne(object1, object2);
+		ModelLink link2 = link_factory.OneToOne(object2, object1);
 
 		assertEquals(object1, link1.Source());
 		assertEquals(object2, link2.Source());
@@ -59,11 +62,11 @@ public class OctoLinkTest
 	@Test
 	public void TestTarget()
 	{
-		OctoObject object1 = obj_factory.Create();
-		OctoObject object2 = obj_factory.Create();
+		ModelObject object1 = obj_factory.Create();
+		ModelObject object2 = obj_factory.Create();
 
-		OctoLink link1 = link_factory.OneToOne(object1, object2);
-		OctoLink link2 = link_factory.OneToOne(object2, object1);
+		ModelLink link1 = link_factory.OneToOne(object1, object2);
+		ModelLink link2 = link_factory.OneToOne(object2, object1);
 
 		assertEquals(object2, link1.Target());
 		assertEquals(object1, link2.Target());

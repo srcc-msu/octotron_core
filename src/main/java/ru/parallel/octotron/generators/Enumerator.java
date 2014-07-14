@@ -1,23 +1,23 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.utils.IEntityList;
+import ru.parallel.octotron.core.graph.impl.GraphEntity;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
 
 public final class Enumerator
 {
 	private Enumerator(){}
 
-	public static void Sequence(IEntityList<? extends OctoEntity> list, String att, int div)
+	public static void Sequence(IEntityList<? extends GraphEntity> list, String att, int div)
 	{
 		int i = 0;
 
-		for(OctoEntity ent : list)
+		for(GraphEntity ent : list)
 		{
 			ent.DeclareAttribute(att, i);
 
@@ -27,7 +27,7 @@ public final class Enumerator
 		}
 	}
 
-	public static void Sequence(IEntityList<? extends OctoEntity> list, String att)
+	public static void Sequence(IEntityList<? extends GraphEntity> list, String att)
 	{
 		Enumerator.Sequence(list, att, 0);
 	}

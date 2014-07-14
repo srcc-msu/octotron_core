@@ -1,15 +1,15 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.GraphService;
 import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.Arrays;
 import java.util.LinkedList;

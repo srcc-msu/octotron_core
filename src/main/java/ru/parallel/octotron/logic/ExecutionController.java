@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
@@ -8,7 +8,16 @@ package ru.parallel.octotron.logic;
 
 import org.apache.commons.io.FileSystemUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.*;
+import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.core.graph.IGraph;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.*;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.http.HTTPServer;
 import ru.parallel.octotron.http.ParsedHttpRequest;
@@ -16,11 +25,7 @@ import ru.parallel.octotron.http.RequestResult;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.netimport.SimpleImporter;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.reactions.PreparedResponse;
-import ru.parallel.octotron.utils.OctoEntityList;
-import ru.parallel.octotron.utils.OctoObjectList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
@@ -39,6 +44,7 @@ public class ExecutionController
 	private final GlobalSettings settings;
 	private final IGraph graph;
 	private final GraphService graph_service;
+	private final ModelService model_service = null;
 
 	private ImportManager manager;
 	private SimpleImporter http_importer;
@@ -136,12 +142,12 @@ public class ExecutionController
 		request_processor.start();
 	}
 
-	public void Import(OctoObject object, SimpleAttribute attribute)
+	public void Import(ModelEntity object, SimpleAttribute attribute)
 	{
 		http_importer.Put(object, attribute);
 	}
 
-	public void UncheckedImport(OctoObject object, SimpleAttribute attribute)
+	public void UncheckedImport(ModelEntity object, SimpleAttribute attribute)
 	{
 		http_unchecked_importer.Put(object, attribute);
 	}
@@ -196,9 +202,9 @@ public class ExecutionController
 		sleeper.Sleep(processed_requests + processed_blocking_requests + processed_imports == 0);
 	}
 
-	OctoEntityList ImmediateImport(OctoEntity entity, SimpleAttribute attribute)
+	AttributeList<ModelAttribute> ImmediateImport(ModelEntity entity, SimpleAttribute attribute)
 	{
-		List<Pair<OctoEntity, SimpleAttribute>> packet = new LinkedList<>();
+		List<Pair<ModelEntity, SimpleAttribute>> packet = new LinkedList<>();
 		packet.add(Pair.of(entity, attribute));
 
 		return manager.Process(packet);
@@ -211,11 +217,11 @@ public class ExecutionController
 	 * */
 	private int ProcessImport(int max_count)
 	{
-		List<Pair<OctoEntity, SimpleAttribute>> http_packet
+		List<Pair<ModelEntity, SimpleAttribute>> http_packet
 			= http_importer.Get(max_count);
 		int processed_http = http_packet.size();
 
-		OctoEntityList changed = manager.Process(http_packet);
+		AttributeList<ModelAttribute> changed = manager.Process(http_packet);
 
 		rule_invoker.Invoke(changed, silent);
 
@@ -230,14 +236,14 @@ public class ExecutionController
 	private int ProcessUncheckedImport(int max_count)
 		throws ExceptionSystemError
 	{
-		List<Pair<OctoEntity, SimpleAttribute>> http_packet
+		List<Pair<ModelEntity, SimpleAttribute>> http_packet
 			= http_unchecked_importer.Get(max_count);
 
 		int processed_http = http_packet.size();
 
-		for(Pair<OctoEntity, SimpleAttribute> pair : http_packet)
+		for(Pair<ModelEntity, SimpleAttribute> pair : http_packet)
 		{
-			OctoEntity entity = pair.getLeft();
+			ModelEntity entity = pair.getLeft();
 			SimpleAttribute attr = pair.getRight();
 
 			if(!entity.TestAttribute(attr.GetName()))
@@ -253,7 +259,7 @@ public class ExecutionController
 			}
 		}
 
-		OctoEntityList changed = manager.Process(http_packet);
+		AttributeList<ModelAttribute> changed = manager.Process(http_packet);
 
 		rule_invoker.Invoke(changed, silent);
 
@@ -272,7 +278,7 @@ public class ExecutionController
 
 		while((parsed_request = queue.poll()) != null && count < max_count)
 		{
-			RequestResult res = parsed_request.GetParsedRequest().Execute(graph_service, this);
+			RequestResult res = parsed_request.GetParsedRequest().Execute(model_service, this);
 
 			if(parsed_request.GetParsedRequest().IsBlocking())
 				parsed_request.GetHttpRequest().Finish(res);
@@ -338,11 +344,11 @@ public class ExecutionController
 	public String MakeSnapshot() {
 		StringBuilder result = new StringBuilder();
 
-		OctoObjectList list = graph_service.GetAllObjects();
+		ObjectList<ModelObject, ModelLink> list = model_service.GetAllObjects();
 
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
 
-		for(OctoObject obj : list)
+		for(ModelObject obj : list)
 		{
 			for(OctoResponse response : obj.GetFails())
 			{
@@ -367,15 +373,15 @@ public class ExecutionController
 	{
 		StringBuilder result = new StringBuilder();
 
-		OctoObjectList list = graph_service.GetAllObjects();
+		ObjectList<ModelObject, ModelLink> list = model_service.GetAllObjects();
 
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
 
 		long cur_time = JavaUtils.GetTimestamp();
 
-		for(OctoObject obj : list)
+		for(ModelObject obj : list)
 		{
-			for(OctoAttribute attr : obj.GetAttributes())
+			for(ModelAttribute attr : obj.GetAttributes())
 			{
 				long diff = cur_time - attr.GetATime();
 

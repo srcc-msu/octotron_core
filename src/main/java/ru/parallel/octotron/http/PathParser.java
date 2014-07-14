@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
@@ -9,9 +9,9 @@ package ru.parallel.octotron.http;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
 import ru.parallel.octotron.http.PathOperations.PathToken;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.IEntityList;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
 
 import java.util.HashMap;
 import java.util.LinkedList;

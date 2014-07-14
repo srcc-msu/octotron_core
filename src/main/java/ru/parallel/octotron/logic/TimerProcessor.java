@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.utils.OctoEntityList;
+import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Iterator;
@@ -18,10 +18,10 @@ public final class TimerProcessor
 {
 	private static final class Entry
 	{
-		public final OctoEntity entity;
+		public final ModelEntity entity;
 		public final String name;
 
-		public Entry(OctoEntity entity, String name)
+		public Entry(ModelEntity entity, String name)
 		{
 			this.entity = entity;
 			this.name = name;
@@ -37,14 +37,14 @@ public final class TimerProcessor
 		timers = new LinkedList<>();
 	}
 
-	public static void AddTimer(OctoEntity entity, String name)
+	public static void AddTimer(ModelEntity entity, String name)
 	{
 		TimerProcessor.INSTANCE.timers.add(new Entry(entity, name));
 	}
 
-	public static OctoEntityList Process()
+	public static EntityList<ModelEntity> Process()
 	{
-		OctoEntityList to_update = new OctoEntityList();
+		EntityList<ModelEntity> to_update = new EntityList<>();
 
 		long current_time = JavaUtils.GetTimestamp(); // TODO: move into the cycle?
 
@@ -54,18 +54,18 @@ public final class TimerProcessor
 		{
 			Entry entry = it.next();
 
-			if(entry.entity.IsTimerExpired(entry.name, current_time))
+/*			if(entry.entity.IsTimerExpired(entry.name, current_time))
 			{
 				to_update.add(entry.entity);
 
 				it.remove();
-			}
+			}*/
 		}
 
 		return to_update;
 	}
 
-	public static void RemoveTimer(OctoEntity entity, String name)
+	public static void RemoveTimer(ModelEntity entity, String name)
 	{
 		Iterator<Entry> it = TimerProcessor.INSTANCE.timers.iterator();
 

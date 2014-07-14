@@ -6,22 +6,27 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.rules.MirrorLong;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 
 public class SelfTest
 {
 	private GraphService graph_service;
+	private ModelService model_service;
+
 	private ExecutionController controller;
 
 	private long test_iteration;
 
-	OctoObject obj1;
-	OctoObject obj2;
+	ModelObject obj1;
+	ModelObject obj2;
 
 	public SelfTest(GraphService graph_service, ExecutionController controller)
 	{
@@ -33,21 +38,21 @@ public class SelfTest
 
 	public void Init()
 	{
-		OctoObjectList list = graph_service.GetObjects("type", "_selftest");
+		ObjectList<ModelObject, ModelLink> list = model_service.GetObjects("type", "_selftest");
 
 		if(list.size() == 0)
 		{
-			obj1 = graph_service.AddObject();
+			obj1 = model_service.AddObject();
 			obj1.DeclareAttribute("type", "_selftest");
 			obj1.DeclareAttribute("lid", 0);
 			obj1.DeclareAttribute("test_iteration", 0);
 
-			obj2 = graph_service.AddObject();
+			obj2 = model_service.AddObject();
 			obj2.DeclareAttribute("type", "_selftest");
 			obj2.DeclareAttribute("lid", 1);
 			obj2.AddRule(new MirrorLong("test_iteration", "lid", 0));
 
-			graph_service.AddLink(obj1, obj2, "test");
+			model_service.AddLink(obj1, obj2, "test");
 		}
 		else if(list.size() == 2)
 		{

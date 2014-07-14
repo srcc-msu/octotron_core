@@ -3,10 +3,12 @@ package ru.parallel.octotron.core;
 import org.junit.*;
 import static org.junit.Assert.*;
 
+import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class OctoObjectTest
 {
@@ -52,7 +54,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		OctoObject node = OctoObjectTest.obj_factory.Create();
+		GraphObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
@@ -77,7 +79,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		OctoObject node = OctoObjectTest.obj_factory.Create();
+		GraphObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
@@ -102,7 +104,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		OctoObject node = OctoObjectTest.obj_factory.Create();
+		GraphObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
@@ -127,7 +129,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		OctoObject node = OctoObjectTest.obj_factory.Create();
+		GraphObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
@@ -157,7 +159,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		OctoObject node = OctoObjectTest.obj_factory.Create();
+		GraphObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
@@ -187,7 +189,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		OctoObject node = OctoObjectTest.obj_factory.Create();
+		GraphObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 

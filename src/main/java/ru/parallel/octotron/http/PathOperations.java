@@ -1,19 +1,24 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.http;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.logic.ExecutionController;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.IEntityList;
-import ru.parallel.octotron.utils.OctoLinkList;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
+import ru.parallel.octotron.core.graph.collections.LinkList;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 
 import java.util.List;
 
@@ -29,7 +34,7 @@ public abstract class PathOperations
 
 	private interface ITransform
 	{
-		IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		IEntityList Transform(ModelService model_service, ExecutionController exec_control
 				, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError;
 	}
@@ -63,11 +68,11 @@ public abstract class PathOperations
 			return out;
 		}
 
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj)
 				throws ExceptionParseError
 		{
-			return transform.Transform(graph_service, exec_control, obj, params);
+			return transform.Transform(model_service, exec_control, obj, params);
 		}
 
 		private PathToken(String name, CHAIN_TYPE in, CHAIN_TYPE out
@@ -101,21 +106,21 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1) // TODO
 				throw new ExceptionParseError("query accepts only one filter");
 
-			if(obj instanceof OctoObjectList)
+			if(obj instanceof ObjectList)
 			{
-				OctoObjectList list = (OctoObjectList) obj;
+				ObjectList list = (ObjectList) obj;
 				return list.Filter(params.get(0).getLeft(), params.get(0).getRight());
 			}
-			else if(obj instanceof OctoLinkList)
+			else if(obj instanceof LinkList)
 			{
-				OctoLinkList list = (OctoLinkList) obj;
+				LinkList list = (LinkList) obj;
 				return list.Filter(params.get(0).getLeft(), params.get(0).getRight());
 			}
 
@@ -132,20 +137,20 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1)
 				throw new ExceptionParseError
-					("index operation must be quering a single indexed value");
+					("index operation must be querying a single indexed value");
 
 			SimpleAttribute attr = params.get(0).getLeft();
 
 			if(attr.GetValue() != null)
-				return graph_service.GetObjects(attr);
+				return model_service.GetObjects(attr);
 			else
-				return graph_service.GetObjects(attr.GetName());
+				return model_service.GetObjects(attr.GetName());
 		}
 	});
 
@@ -157,7 +162,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
@@ -168,9 +173,9 @@ public abstract class PathOperations
 			SimpleAttribute attr = params.get(0).getLeft();
 
 			if(attr.GetValue() != null)
-				return graph_service.GetLinks(attr);
+				return model_service.GetLinks(attr);
 			else
-				return graph_service.GetLinks(attr.GetName());
+				return model_service.GetLinks(attr.GetName());
 		}
 	});
 
@@ -181,14 +186,14 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
-			if(obj instanceof OctoObjectList)
-				return ((OctoObjectList) obj).Uniq();
-			else if(obj instanceof OctoLinkList)
-				return ((OctoLinkList) obj).Uniq();
+			if(obj instanceof ObjectList)
+				return ((ObjectList) obj).Uniq();
+			else if(obj instanceof LinkList)
+				return ((LinkList) obj).Uniq();
 
 			throw new ExceptionParseError(
 				"internal error: operation uniq is not applicable to " + obj);
@@ -202,7 +207,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
@@ -210,9 +215,9 @@ public abstract class PathOperations
 				throw new ExceptionParseError("in_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ((OctoObjectList)obj).GetInNeighbors(params.get(0).getLeft());
+				return ((ObjectList)obj).GetInNeighbors(params.get(0).getLeft());
 
-			return ((OctoObjectList)obj).GetInNeighbors();
+			return ((ObjectList)obj).GetInNeighbors();
 		}
 	});
 
@@ -223,7 +228,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
@@ -231,9 +236,9 @@ public abstract class PathOperations
 				throw new ExceptionParseError("out_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ((OctoObjectList)obj).GetOutNeighbors(params.get(0).getLeft());
+				return ((ObjectList)obj).GetOutNeighbors(params.get(0).getLeft());
 
-			return ((OctoObjectList)obj).GetOutNeighbors();
+			return ((ObjectList)obj).GetOutNeighbors();
 		}
 	});
 
@@ -244,7 +249,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
@@ -252,11 +257,11 @@ public abstract class PathOperations
 				throw new ExceptionParseError("all_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ((OctoObjectList)obj).GetOutNeighbors(params.get(0).getLeft())
-					.append(((OctoObjectList)obj).GetOutNeighbors(params.get(0).getLeft()));
+				return ((ObjectList)obj).GetOutNeighbors(params.get(0).getLeft())
+					.append(((ObjectList)obj).GetOutNeighbors(params.get(0).getLeft()));
 
-			return ((OctoObjectList)obj).GetOutNeighbors()
-				.append(((OctoObjectList)obj).GetOutNeighbors());
+			return ((ObjectList)obj).GetOutNeighbors()
+				.append(((ObjectList)obj).GetOutNeighbors());
 		}
 	});
 
@@ -267,10 +272,10 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
-			return ((OctoObjectList)obj).GetInLinks();
+			return ((ObjectList)obj).GetInLinks();
 		}
 	});
 
@@ -281,10 +286,10 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
-			return ((OctoObjectList)obj).GetOutLinks();
+			return ((ObjectList)obj).GetOutLinks();
 		}
 	});
 
@@ -295,9 +300,9 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
-			return ((OctoObjectList)obj).GetInLinks().append(((OctoObjectList)obj).GetOutLinks());
+			return ((ObjectList)obj).GetInLinks().append(((ObjectList)obj).GetOutLinks());
 		}
 	});
 
@@ -308,10 +313,10 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
-			return ((OctoLinkList)obj).Source();
+			return ((LinkList)obj).Source();
 		}
 	});
 
@@ -322,10 +327,10 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public IEntityList<?> Transform(GraphService graph_service, ExecutionController exec_control
+		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
-			return ((OctoLinkList)obj).Target();
+			return ((LinkList)obj).Target();
 		}
 	});
 }

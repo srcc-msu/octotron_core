@@ -1,11 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.core;
 
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.impl.PersistentStorage;
 
 import java.io.Serializable;
@@ -100,11 +102,11 @@ public class OctoReaction implements Serializable
 /**
  * reaction is needed if the \check_name attribute is false
  * */
-	public boolean ReactionNeeded(OctoEntity entity)
+	public boolean ReactionNeeded(ModelEntity entity)
 	{
-		OctoAttribute attr = entity.GetAttribute(check_name);
+		ModelAttribute attr = entity.GetAttribute(check_name);
 
-		if(attr.GetCTime() <= 0 || !attr.IsValid())
+		if(!attr.IsValid()) // TODO
 			return false;
 
 		return attr.eq(check_value);

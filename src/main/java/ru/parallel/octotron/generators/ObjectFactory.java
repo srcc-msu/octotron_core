@@ -1,17 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.OctoObject;
 import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +46,9 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	/**
 	 * create single vertices
 	 * */
-	public OctoObject Create()
+	public ModelObject Create()
 	{
-		OctoObject object = graph_service.AddObject();
+		ModelObject object = new ModelObject(graph_service.AddObject());
 
 		object.DeclareAttributes(attributes);
 		object.AddRules(rules);
@@ -59,9 +60,9 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	/**
 	 * create \count vertices with additional attributes
 	 * */
-	public OctoObjectList Create(int count)
+	public ObjectList<ModelObject, ModelLink> Create(int count)
 	{
-		OctoObjectList objects = new OctoObjectList();
+		ObjectList<ModelObject, ModelLink> objects = new ObjectList();
 
 		for(int i = 0; i < count; i++)
 			objects.add(this.Create());

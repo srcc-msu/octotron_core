@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AggregateDoubleSum extends Aggregate
 {
@@ -19,7 +19,7 @@ public class AggregateDoubleSum extends Aggregate
 	}
 
 	@Override
-	protected Object Accumulate(Object res, OctoAttribute attribute)
+	protected Object Accumulate(Object res, ModelAttribute attribute)
 	{
 		return (Double)res + attribute.GetDouble();
 	}

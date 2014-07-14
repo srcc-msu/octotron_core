@@ -6,8 +6,9 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.core.graph.IAttribute;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AggregateLongSum extends Aggregate
 {
@@ -19,7 +20,7 @@ public class AggregateLongSum extends Aggregate
 	}
 
 	@Override
-	protected Object Accumulate(Object res, OctoAttribute attribute)
+	protected Object Accumulate(Object res, ModelAttribute attribute)
 	{
 		return (Long)res + attribute.GetLong();
 	}

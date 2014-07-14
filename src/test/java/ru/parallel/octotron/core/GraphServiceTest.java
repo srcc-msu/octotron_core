@@ -3,9 +3,12 @@ package ru.parallel.octotron.core;
 import org.junit.*;
 import static org.junit.Assert.*;
 
+import ru.parallel.octotron.core.graph.impl.GraphLink;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,19 +39,12 @@ public class GraphServiceTest
 	}
 
 	@Test
-	public void TestIsStaticName() throws Exception
-	{
-		assertFalse(GraphService.IsStaticName("test"));
-		assertTrue(GraphService.IsStaticName("_static_test"));
-	}
-
-	@Test
 	public void TestSetAttribute() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		assertFalse(graph_service.TestAttribute(object1, "exist"));
 		assertFalse(graph_service.TestAttribute(object2, "exist"));
@@ -88,8 +84,8 @@ public class GraphServiceTest
 	@Test
 	public void TestGetAttribute() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		graph_service.SetAttribute(object1, "test_long", 1L);
 		graph_service.SetAttribute(object1, "test_str", "a");
@@ -106,7 +102,7 @@ public class GraphServiceTest
 
 		assertEquals(true, graph_service.GetAttribute(object1, "test_bool").GetBoolean());
 
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		graph_service.SetAttribute(link, "test_long", 1L);
 		graph_service.SetAttribute(link, "test_str", "a");
@@ -127,8 +123,8 @@ public class GraphServiceTest
 	@Test
 	public void TestTestAttribute() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		graph_service.SetAttribute(object1, "object", "");
 
@@ -136,7 +132,7 @@ public class GraphServiceTest
 		assertFalse(graph_service.TestAttribute(object1, "link"));
 		assertTrue(graph_service.TestAttribute(object1, "object"));
 
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 		graph_service.SetAttribute(link, "link", "");
 
 		assertFalse(graph_service.TestAttribute(link, "not_exist"));
@@ -147,10 +143,10 @@ public class GraphServiceTest
 	@Test
 	public void TestDeleteAttribute() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		graph_service.SetAttribute(object1, "object", "");
 		graph_service.SetAttribute(link, "link", "");
@@ -184,9 +180,9 @@ public class GraphServiceTest
 	@Test
 	public void TestGetStatic() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		graph_service.SetAttribute(object1, "_static_object", "");
 		graph_service.SetAttribute(link, "_static_link", "");
@@ -204,7 +200,7 @@ public class GraphServiceTest
 	@Test
 	public void TestAddSelfLink() throws Exception
 	{
-		OctoObject object = graph_service.AddObject();
+		GraphObject object = graph_service.AddObject();
 
 		assertEquals(0, object.GetOutLinks().size());
 		assertEquals(0, object.GetInLinks().size());
@@ -218,8 +214,8 @@ public class GraphServiceTest
 	@Test
 	public void TestAddLink() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		assertEquals(0, graph_service.GetAllLinks().size());
 
@@ -257,13 +253,13 @@ public class GraphServiceTest
 	@Test
 	public void TestDelete() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		assertEquals(0, graph_service.GetAllLinks().size());
-		OctoLink link1 = graph_service.AddLink(object1, object2, "test");
+		GraphLink link1 = graph_service.AddLink(object1, object2, "test");
 		assertEquals(1, graph_service.GetAllLinks().size());
-		OctoLink link2 = graph_service.AddLink(object1, object2, "test");
+		GraphLink link2 = graph_service.AddLink(object1, object2, "test");
 		assertEquals(2, graph_service.GetAllLinks().size());
 		graph_service.Delete(link1);
 		assertEquals(1, graph_service.GetAllLinks().size());
@@ -280,18 +276,18 @@ public class GraphServiceTest
 	@Test
 	public void TestGetInLinks() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		assertEquals(0, graph_service.GetInLinks(object1).size());
 		assertEquals(0, graph_service.GetInLinks(object2).size());
 
-		OctoLink link1 = graph_service.AddLink(object1, object2, "test");
+		GraphLink link1 = graph_service.AddLink(object1, object2, "test");
 
 		assertEquals(link1.GetUID().getUid()
 			, graph_service.GetInLinks(object2).Only().GetUID().getUid());
 
-		OctoLink link2 = graph_service.AddLink(object2, object1, "test");
+		GraphLink link2 = graph_service.AddLink(object2, object1, "test");
 
 		assertEquals(link2.GetUID().getUid()
 			, graph_service.GetInLinks(object1).Only().GetUID().getUid());
@@ -300,18 +296,18 @@ public class GraphServiceTest
 	@Test
 	public void TestGetOutLink() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		assertEquals(0, graph_service.GetInLinks(object1).size());
 		assertEquals(0, graph_service.GetInLinks(object2).size());
 
-		OctoLink link1 = graph_service.AddLink(object1, object2, "test");
+		GraphLink link1 = graph_service.AddLink(object1, object2, "test");
 
 		assertEquals(link1.GetUID().getUid()
 			, graph_service.GetOutLinks(object1).Only().GetUID().getUid());
 
-		OctoLink link2 = graph_service.AddLink(object2, object1, "test");
+		GraphLink link2 = graph_service.AddLink(object2, object1, "test");
 
 		assertEquals(link2.GetUID().getUid()
 			, graph_service.GetOutLinks(object2).Only().GetUID().getUid());
@@ -320,9 +316,9 @@ public class GraphServiceTest
 	@Test
 	public void TestGetAttributes() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 // everyone has AID
 		assertEquals(1, object1.GetAttributes().size());
@@ -353,9 +349,9 @@ public class GraphServiceTest
 	@Test
 	public void TestSetMeta() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 // everyone has AID
 		assertEquals(1, object1.GetAttributes().size());
@@ -390,9 +386,9 @@ public class GraphServiceTest
 	@Test
 	public void TestGetMeta() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		graph_service.SetAttribute(object1, "object", "");
 
@@ -414,9 +410,9 @@ public class GraphServiceTest
 	@Test
 	public void TestTestMeta() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		graph_service.SetAttribute(object1, "object", "");
 		graph_service.SetAttribute(object1, "object2", "");
@@ -437,9 +433,9 @@ public class GraphServiceTest
 	@Test
 	public void TestDeleteMeta() throws Exception
 	{
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
-		OctoLink link = graph_service.AddLink(object1, object2, "test");
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		graph_service.SetAttribute(object1, "object", "");
 
@@ -458,7 +454,7 @@ public class GraphServiceTest
 	@Test
 	public void TestGetAllLinks() throws Exception
 	{
-		OctoObjectList objects = new OctoObjectList();
+		ObjectList objects = new ObjectList();
 
 		final int N = 10;
 		for(int i = 0; i < N; i++)
@@ -498,7 +494,7 @@ public class GraphServiceTest
 
 		List<Long> data = new LinkedList<>();
 
-		OctoObject object = graph_service.AddObject();
+		GraphObject object = graph_service.AddObject();
 
 		for(long i = 0; i < N; i++)
 			data.add(i);
@@ -519,8 +515,8 @@ public class GraphServiceTest
 		List<Long> data1 = new LinkedList<>();
 		List<Long> data2 = new LinkedList<>();
 
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		for(long i = 0; i < N; i++)
 		{
@@ -549,7 +545,7 @@ public class GraphServiceTest
 		List<Long> data = new LinkedList<>();
 		data.add(0L);
 
-		OctoObject object = graph_service.AddObject();
+		GraphObject object = graph_service.AddObject();
 
 		graph_service.SetArray(object, "test", data);
 
@@ -571,8 +567,8 @@ public class GraphServiceTest
 		List<Long> data1 = new LinkedList<>();
 		List<Long> data2 = new LinkedList<>();
 
-		OctoObject object1 = graph_service.AddObject();
-		OctoObject object2 = graph_service.AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		for(long i = 0; i < N; i++)
 		{
@@ -600,8 +596,8 @@ public class GraphServiceTest
 	@Test
 	public void TestClean() throws Exception
 	{
-		OctoObject obj1 = graph_service.AddObject();
-		OctoObject obj2 = graph_service.AddObject();
+		GraphObject obj1 = graph_service.AddObject();
+		GraphObject obj2 = graph_service.AddObject();
 		graph_service.AddObject();
 		graph_service.AddLink(obj1, obj2, "test");
 

@@ -1,15 +1,16 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class VarArgMatchAprx extends OctoRule
 {
@@ -33,15 +34,15 @@ public class VarArgMatchAprx extends OctoRule
 	}
 
 	@Override
-	public Object Compute(OctoEntity entity)
+	public Object Compute(ModelEntity entity)
 	{
-		OctoAttribute attr = entity.GetAttribute(check_attribute);
-		OctoAttribute match_attr = entity.GetAttribute(match_attribute);
+		ModelAttribute attr = entity.GetAttribute(check_attribute);
+		ModelAttribute match_attr = entity.GetAttribute(match_attribute);
 
-		if(attr.GetCTime() == 0 || !attr.IsValid())
+		if(!attr.IsValid())
 			return GetDefaultValue();
 
-		if(match_attr.GetCTime() == 0 || !match_attr.IsValid())
+		if(!match_attr.IsValid())
 			return GetDefaultValue();
 
 		return attr.aeq(match_attr.GetValue(), aprx);

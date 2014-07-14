@@ -3,7 +3,7 @@ package ru.parallel.octotron.neo4j.impl;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import ru.parallel.octotron.primitive.Uid;
+import ru.parallel.octotron.core.primitive.Uid;
 
 import java.util.LinkedList;
 import java.util.List;

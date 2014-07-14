@@ -1,12 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.neo4j.impl;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
@@ -18,15 +17,13 @@ import org.neo4j.server.configuration.ServerConfigurator;
 import org.neo4j.tooling.GlobalGraphOperations;
 import org.neo4j.visualization.graphviz.GraphvizWriter;
 import org.neo4j.walk.Walker;
-import ru.parallel.octotron.core.IGraph;
-import ru.parallel.octotron.core.IIndex;
-import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.primitive.EEntityType;
-import ru.parallel.octotron.primitive.Uid;
-import ru.parallel.octotron.primitive.exception.ExceptionDBError;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.graph.IGraph;
+import ru.parallel.octotron.core.graph.IIndex;
+import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.Uid;
+import ru.parallel.octotron.core.primitive.exception.ExceptionDBError;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -387,10 +384,10 @@ public final class Neo4jGraph implements IGraph
 			{
 				StringBuilder rep = new StringBuilder();
 
-				for(Pair<String, Object> att : GetObjectAttributes(uid))
-					rep.append(att.getKey())
+				for(String n : GetObjectAttributes(uid))
+					rep.append(n)
 						.append(" : ")
-						.append(att.getValue())
+						.append(GetObjectAttribute(uid, n))
 						.append(System.lineSeparator());
 
 				throw new ExceptionModelFail("attribute not found: " + name + System.lineSeparator() + rep);
@@ -438,10 +435,10 @@ public final class Neo4jGraph implements IGraph
 			{
 				StringBuilder rep = new StringBuilder();
 
-				for(Pair<String, Object> att : GetLinkAttributes(uid))
-					rep.append(att.getKey())
+				for(String n : GetLinkAttributes(uid))
+					rep.append(n)
 						.append(" : ")
-						.append(att.getValue())
+						.append(GetLinkAttribute(uid, n))
 						.append(System.lineSeparator());
 
 				throw new ExceptionModelFail("attribute not found: " + name + System.lineSeparator() + rep);
@@ -596,33 +593,33 @@ public final class Neo4jGraph implements IGraph
 	}
 
 	@Override
-	public List<Pair<String, Object>> GetObjectAttributes(Uid uid)
+	public List<String> GetObjectAttributes(Uid uid)
 	{
 		transaction.Read();
 		MatchType(uid, EEntityType.OBJECT);
 
-		List<Pair<String, Object>> attrs = new LinkedList<>();
+		List<String> attrs = new LinkedList<>();
 
 		Node node = graph_db.getNodeById(uid.getUid());
 
 		for (String name : node.getPropertyKeys())
-			attrs.add(Pair.of(name, node.getProperty(name)));
+			attrs.add(name);
 
 		return attrs;
 	}
 
 	@Override
-	public List<Pair<String, Object>> GetLinkAttributes(Uid uid)
+	public List<String> GetLinkAttributes(Uid uid)
 	{
 		transaction.Read();
 		MatchType(uid, EEntityType.LINK);
 
-		List<Pair<String, Object>> attrs = new LinkedList<>();
+		List<String> attrs = new LinkedList<>();
 
 		Relationship rel = graph_db.getRelationshipById(uid.getUid());
 
 		for (String name : rel.getPropertyKeys())
-			attrs.add(Pair.of(name, rel.getProperty(name)));
+			attrs.add(name);
 
 		return attrs;
 	}
@@ -708,12 +705,12 @@ public final class Neo4jGraph implements IGraph
 	}
 
 	@Override
-	public String ExportDot(OctoObjectList objects)
+	public String ExportDot(List<Uid> uids)
 	{
 		List<Node> nodes = new LinkedList<>();
 
-		for(OctoObject obj : objects)
-			nodes.add(graph_db.getNodeById(obj.GetUID().getUid()));
+		for(Uid uid  : uids)
+			nodes.add(graph_db.getNodeById(uid.getUid()));
 
 		return ExportDot(nodes);
 	}

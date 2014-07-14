@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
@@ -11,10 +11,10 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.AutoIndexer;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.ReadableIndex;
-import ru.parallel.octotron.core.IIndex;
-import ru.parallel.octotron.primitive.EEntityType;
-import ru.parallel.octotron.primitive.Uid;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.graph.IIndex;
+import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.Uid;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.LinkedList;
 import java.util.List;

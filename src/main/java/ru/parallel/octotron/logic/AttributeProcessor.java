@@ -1,15 +1,19 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.logic;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.utils.OctoEntityList;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.attribute.AttributeObject;
+import ru.parallel.octotron.core.model.attribute.Sensor;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.List;
 
@@ -22,19 +26,20 @@ public class AttributeProcessor
 {
 	/**
 	 * process each sensor value from the \packet<br>
-	 * return list of values, that changed<br>
+	 * return list of sensors, that changed<br>
 	 * */
-	public OctoEntityList Process(List<Pair<OctoEntity, SimpleAttribute>> packet)
+	public AttributeList<Sensor> Process(List<Pair<ModelEntity, SimpleAttribute>> packets)
 	{
-		OctoEntityList changed = new OctoEntityList();
+		AttributeList<Sensor> changed = new AttributeList<>();
 
-		for(Pair<OctoEntity, SimpleAttribute> sensor : packet)
+		for(Pair<ModelEntity, SimpleAttribute> packet : packets)
 		{
-			OctoEntity entity = sensor.getLeft();
+			ModelEntity entity = packet.getLeft();
 
-			if(entity.GetAttribute(sensor.getRight().GetName())
-				.Update(sensor.getRight().GetValue(), true))
-					changed.add(entity);
+			Sensor sensor = entity.GetSensor(packet.getRight().GetName());
+
+			if(sensor.Update(packet.getRight().GetValue()))
+				changed.add(sensor);
 		}
 
 		return changed;

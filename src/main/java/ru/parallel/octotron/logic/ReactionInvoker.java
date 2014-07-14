@@ -1,18 +1,20 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.OctoEntity;
 import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.GlobalSettings;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.reactions.PreparedResponse;
-import ru.parallel.octotron.utils.OctoEntityList;
+import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.JavaUtils;
 
@@ -96,21 +98,19 @@ public class ReactionInvoker
 		return invoker.isAlive();
 	}
 
-	public void Invoke(OctoEntityList all_changed, boolean silent)
+	public void Invoke(AttributeList<ModelAttribute> changed, boolean silent)
 	{
-		OctoEntityList uniq_changed = all_changed.Uniq();
+		List<PreparedResponse> responses = new LinkedList<>();
 
-		List<PreparedResponse> new_responses = new LinkedList<>();
-
-		for(OctoEntity entity : uniq_changed)
-			for(OctoResponse response : entity.PreparePendingReactions())
+		for(ModelAttribute attribute : changed)
+			for(OctoResponse response : attribute.PreparePendingReactions())
 			{
-				new_responses.add(new PreparedResponse(response, entity, JavaUtils.GetTimestamp()));
+				responses.add(new PreparedResponse(response, attribute.GetParent(), JavaUtils.GetTimestamp()));
 			}
 
 		if(!silent)
-			pending_response.addAll(new_responses);
-		else if(!new_responses.isEmpty())
-			LOGGER.log(Level.INFO, "silent mode, reactions ignored: " + new_responses.size());
+			pending_response.addAll(responses);
+		else if(!responses.isEmpty())
+			LOGGER.log(Level.INFO, "silent mode, reactions ignored: " + responses.size());
 	}
 }

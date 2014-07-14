@@ -1,16 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.http.PathOperations.PathToken;
 import ru.parallel.octotron.logic.ExecutionController;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.IEntityList;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
 
 import java.util.List;
 
@@ -26,14 +28,14 @@ public class ParsedPath
 		this.tokens = tokens;
 	}
 
-	public IEntityList<?> Execute(GraphService graph_service, ExecutionController exec_control)
+	public IEntityList<ModelEntity> Execute(ModelService model_service, ExecutionController exec_control)
 		throws ExceptionParseError
 	{
-		IEntityList<?> entity_list = null;
+		IEntityList<ModelEntity> entity_list = null;
 
 		for(PathToken token : tokens)
 		{
-			entity_list = token.Transform(graph_service, exec_control, entity_list);
+			entity_list = token.Transform(model_service, exec_control, entity_list);
 		}
 
 		return entity_list;

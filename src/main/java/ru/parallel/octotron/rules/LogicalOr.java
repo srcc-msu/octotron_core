@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
@@ -8,10 +8,10 @@ package ru.parallel.octotron.rules;
 
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class LogicalOr extends OctoRule
 {
@@ -31,13 +31,13 @@ public class LogicalOr extends OctoRule
 	}
 
 	@Override
-	public Object Compute(OctoEntity entity)
+	public Object Compute(ModelEntity entity)
 	{
 		boolean res = false;
 
 		for(String attr_name : attributes)
 		{
-			OctoAttribute attr = entity.GetAttribute(attr_name);
+			ModelAttribute attr = entity.GetAttribute(attr_name);
 
 			if(attr.IsValid() && attr.GetCTime() != 0)
 				res = res | attr.GetBoolean();

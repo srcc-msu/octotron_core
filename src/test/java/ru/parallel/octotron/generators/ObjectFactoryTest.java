@@ -3,13 +3,10 @@ package ru.parallel.octotron.generators;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.OctoLink;
-import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 
 /**
  * test some common cases -attributes, factories
@@ -48,7 +45,7 @@ public class ObjectFactoryTest
 	{
 		final int N = 10; // some testing param
 
-		OctoObjectList obj = ObjectFactoryTest.obj_factory.Create(N);
+		ObjectList obj = ObjectFactoryTest.obj_factory.Create(N);
 		assertEquals("created more objects", obj.size(), N);
 
 		for(int i = 0; i < N; i++)
@@ -64,7 +61,7 @@ public class ObjectFactoryTest
 		final int N = 100;
 		final int K = 23;
 
-		OctoObjectList objects = ObjectFactoryTest.obj_factory.Create(N);
+		ObjectList objects = ObjectFactoryTest.obj_factory.Create(N);
 
 		Enumerator.Sequence(objects, "test1");
 

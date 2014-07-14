@@ -4,9 +4,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.*;
+import ru.parallel.octotron.core.graph.impl.GraphLink;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.primitive.EEventStatus;
-import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.EEventStatus;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.rules.Match;
 
 import static org.junit.Assert.assertEquals;
@@ -53,8 +57,8 @@ public class BaseFactoryTest
 		LinkFactory f2 = new LinkFactory(BaseFactoryTest.graph_service)
 			.Attributes(attr2, attr3).Attributes(attributes);
 
-		OctoObject obj = f1.Create();
-		OctoLink link = f2.Attributes(new SimpleAttribute("type", "1"))
+		GraphObject obj = f1.Create();
+		GraphLink link = f2.Attributes(new SimpleAttribute("type", "1"))
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertTrue(obj.TestAttribute("test1"));
@@ -78,8 +82,8 @@ public class BaseFactoryTest
 		LinkFactory f2 = new LinkFactory(BaseFactoryTest.graph_service)
 			.Rules(rule2, rule3).Rules(rules);
 
-		OctoObject obj = f1.Create();
-		OctoLink link = f2.Attributes(new SimpleAttribute("type", "1"))
+		GraphObject obj = f1.Create();
+		GraphLink link = f2.Attributes(new SimpleAttribute("type", "1"))
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertEquals(3, obj.GetRules().size());
@@ -105,8 +109,8 @@ public class BaseFactoryTest
 		LinkFactory f2 = new LinkFactory(BaseFactoryTest.graph_service)
 			.Reactions(reaction2, reaction3).Reactions(reactions);
 
-		OctoObject obj = f1.Create();
-		OctoLink link = f2.Attributes(new SimpleAttribute("type", "1"))
+		GraphObject obj = f1.Create();
+		GraphLink link = f2.Attributes(new SimpleAttribute("type", "1"))
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertEquals(3, obj.GetReactions().size());

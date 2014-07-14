@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.reactions;
 
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.utils.JavaUtils;
 
 import java.io.BufferedWriter;

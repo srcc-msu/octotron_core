@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.impl;
 
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.io.Serializable;
 import java.util.HashMap;

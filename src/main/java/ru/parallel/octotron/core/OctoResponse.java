@@ -1,13 +1,13 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.core;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.primitive.EEventStatus;
+import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import java.io.Serializable;
 import java.util.LinkedList;

@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.core.OctoObjectRule;
-import ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.rule.OctoObjectRule;
+import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public abstract class Mirror extends OctoObjectRule
 {
@@ -26,7 +26,7 @@ public abstract class Mirror extends OctoObjectRule
 	}
 
 	@Override
-	public final Object Compute(OctoObject object)
+	public final Object Compute(ModelObject object)
 	{
 		return object.GetInNeighbors().append(object.GetOutNeighbors())
 			.Filter(mirror_name_match, mirror_value_match)

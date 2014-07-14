@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
@@ -9,8 +9,8 @@ package ru.parallel.octotron.http;
 import com.sun.net.httpserver.*;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.exec.GlobalSettings;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

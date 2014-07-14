@@ -1,14 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.netimport;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,11 +18,11 @@ import java.util.List;
  * */
 public class SimpleImporter implements IImporter
 {
-	private List<Pair<OctoEntity, SimpleAttribute>> data
+	private List<Pair<ModelEntity, SimpleAttribute>> data
 		= new LinkedList<>();
 	private final Object lock = new Object(); // personal lock for each instance
 
-	public void Put(OctoEntity entity, SimpleAttribute value)
+	public void Put(ModelEntity entity, SimpleAttribute value)
 	{
 		synchronized(lock)
 		{
@@ -31,13 +31,13 @@ public class SimpleImporter implements IImporter
 	}
 
 	@Override
-	public List<Pair<OctoEntity, SimpleAttribute>> Get(int max_count)
+	public List<Pair<ModelEntity, SimpleAttribute>> Get(int max_count)
 	{
 		synchronized (lock)
 		{
 			if(data.size() > max_count)
 			{
-				List<Pair<OctoEntity, SimpleAttribute>> out
+				List<Pair<ModelEntity, SimpleAttribute>> out
 					= data.subList(0, max_count);
 
 				data = new LinkedList<>
@@ -47,7 +47,7 @@ public class SimpleImporter implements IImporter
 			}
 			else
 			{
-				List<Pair<OctoEntity, SimpleAttribute>> out = data;
+				List<Pair<ModelEntity, SimpleAttribute>> out = data;
 				data = new LinkedList<>();
 
 				return out;

@@ -1,17 +1,19 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.http.Operations.Operation;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.ExecutionController;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.IEntityList;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
 
 import java.util.Map;
 
@@ -29,18 +31,18 @@ public class ParsedRequest
 		this.params = params;
 	}
 
-	public RequestResult Execute(GraphService graph_service, ExecutionController exec_control)
+	public RequestResult Execute(ModelService model_service, ExecutionController exec_control)
 	{
 		try
 		{
-			IEntityList<?> entity_list = null;
+			IEntityList<ModelEntity> entity_list = null;
 
 			String path = params.get("path");
 
 			if(path != null)
-				entity_list = PathParser.Parse(path).Execute(graph_service, exec_control);
+				entity_list = PathParser.Parse(path).Execute(model_service, exec_control);
 
-			return (RequestResult) operation.Execute(graph_service, exec_control, params, entity_list);
+			return (RequestResult) operation.Execute(model_service, exec_control, params, entity_list);
 		}
 		catch(ExceptionParseError e)
 		{

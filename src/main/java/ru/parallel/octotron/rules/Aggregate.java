@@ -1,18 +1,20 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.rules;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.core.OctoObject;
-import ru.parallel.octotron.core.OctoObjectRule;
-import ru.parallel.octotron.primitive.EDependencyType;
-import ru.parallel.octotron.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.graph.IAttribute;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.rule.OctoObjectRule;
+import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 
 public abstract class Aggregate extends OctoObjectRule
 {
@@ -34,11 +36,11 @@ public abstract class Aggregate extends OctoObjectRule
 	}
 
 	@Override
-	public final Object Compute(OctoObject object)
+	public final Object Compute(ModelObject object)
 	{
 		Object res = GetDefaultValue();
 
-		OctoObjectList candidates = new OctoObjectList();
+		ObjectList<ModelObject, ModelLink> candidates = new ObjectList();
 
 		switch(dependency)
 		{
@@ -64,13 +66,13 @@ public abstract class Aggregate extends OctoObjectRule
 				throw new ExceptionModelFail("unknown dependency: " + dependency);
 		}
 
-		for(OctoObject obj : candidates.Uniq())
+		for(ModelObject obj : candidates.Uniq())
 			for(String tmp : attributes)
 			{
-				if(!obj.TestAttribute(tmp))
+				if(!obj.GetBaseObject().TestAttribute(tmp))
 					continue;
 
-				OctoAttribute attribute = obj.GetAttribute(tmp);
+				ModelAttribute attribute = obj.GetAttribute(tmp);
 				if(attribute.IsValid() && attribute.GetCTime() != 0)
 					res = Accumulate(res, attribute);
 			}
@@ -78,5 +80,5 @@ public abstract class Aggregate extends OctoObjectRule
 		return res;
 	}
 
-	protected abstract Object Accumulate(Object res, OctoAttribute attribute);
+	protected abstract Object Accumulate(Object res, ModelAttribute attribute);
 }

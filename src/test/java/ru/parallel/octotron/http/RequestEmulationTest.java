@@ -3,13 +3,13 @@ package ru.parallel.octotron.http;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import ru.parallel.octotron.core.GraphService;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.utils.FileUtils;
 
 /**
@@ -157,7 +157,7 @@ public class RequestEmulationTest
 	@Test
 	public void HttpQueryRequest() throws Exception
 	{
-		OctoObjectList l = RequestEmulationTest.factory.Create(10);
+		ObjectList l = RequestEmulationTest.factory.Create(10);
 		long AID = l.get(0).GetAttribute("AID").GetLong();
 
 		String test = GetRequestResult("/view/p?path=obj(AID).q(AID=="+AID+")");
@@ -179,7 +179,7 @@ public class RequestEmulationTest
 	@Test
 	public void HttpNeighbourRequest() throws Exception
 	{
-		OctoObjectList objs = RequestEmulationTest.factory.Create(10);
+		ObjectList objs = RequestEmulationTest.factory.Create(10);
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
 		String test = GetRequestResult("/view/p?path=obj(AID).in_n()");
@@ -198,7 +198,7 @@ public class RequestEmulationTest
 	@Test
 	public void HttpObjLinkRequest() throws Exception
 	{
-		OctoObjectList objs = RequestEmulationTest.factory.Create(10);
+		ObjectList objs = RequestEmulationTest.factory.Create(10);
 
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
@@ -218,7 +218,7 @@ public class RequestEmulationTest
 	@Test
 	public void HttpLinkRequest() throws Exception
 	{
-		OctoObjectList objs = RequestEmulationTest.factory.Create(10);
+		ObjectList objs = RequestEmulationTest.factory.Create(10);
 
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 
@@ -230,7 +230,7 @@ public class RequestEmulationTest
 	@Test
 	public void HttpLinkPropRequest() throws Exception
 	{
-		OctoObjectList objs = RequestEmulationTest.factory.Create(10);
+		ObjectList objs = RequestEmulationTest.factory.Create(10);
 
 		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
 

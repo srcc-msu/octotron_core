@@ -1,15 +1,15 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.impl;
 
 import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Marker;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 
 public final class PersistentStorage
 {
@@ -17,7 +17,6 @@ public final class PersistentStorage
 
 	private final PersistentMap<OctoRule> rules = new PersistentMap<>();
 	private final PersistentMap<OctoReaction> reactions = new PersistentMap<>();
-	private final PersistentMap<Marker> markers = new PersistentMap<>();
 
 	private PersistentStorage() {}
 
@@ -28,7 +27,6 @@ public final class PersistentStorage
 		{
 			rules.Load(fname + ".rule");
 			reactions.Load(fname + ".react");
-			markers.Load(fname + ".mark");
 		}
 		catch(Exception e)
 		{
@@ -44,7 +42,6 @@ public final class PersistentStorage
 		{
 			rules.Save(fname + ".rule");
 			reactions.Save(fname + ".react");
-			markers.Save(fname + ".mark");
 		}
 		catch (Exception e)
 		{
@@ -57,10 +54,6 @@ public final class PersistentStorage
 		return rules;
 	}
 
-	public PersistentMap<Marker> GetMarkers()
-	{
-		return markers;
-	}
 
 	public PersistentMap<OctoReaction> GetReactions()
 	{

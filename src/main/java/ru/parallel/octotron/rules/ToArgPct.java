@@ -1,15 +1,15 @@
 /*******************************************************************************
  * Copyright (c) 2014 SRCC MSU
- * 
+ *
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.core.OctoEntity;
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.primitive.EDependencyType;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class ToArgPct extends OctoRule
 {
@@ -31,10 +31,10 @@ public class ToArgPct extends OctoRule
 	}
 
 	@Override
-	public Object Compute(OctoEntity entity)
+	public Object Compute(ModelEntity entity)
 	{
-		OctoAttribute attr = entity.GetAttribute(measured_attribute);
-		OctoAttribute max_value = entity.GetAttribute(max_value_arg);
+		ModelAttribute attr = entity.GetAttribute(measured_attribute);
+		ModelAttribute max_value = entity.GetAttribute(max_value_arg);
 
 		if(!attr.IsValid() || attr.GetCTime() == 0)
 			return GetDefaultValue();

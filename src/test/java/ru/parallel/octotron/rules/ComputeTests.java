@@ -3,23 +3,23 @@ package ru.parallel.octotron.rules;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import ru.parallel.octotron.core.GraphService;
-import ru.parallel.octotron.core.OctoAttribute;
-import ru.parallel.octotron.core.OctoObject;
+import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.primitive.EDependencyType;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.utils.OctoObjectList;
+import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 
 public class ComputeTests
 {
 	private static GraphService graph_service;
 	private static Neo4jGraph graph;
-	private static OctoObject obj;
+	private static GraphObject obj;
 
 	@BeforeClass
 	public static void Init()
@@ -79,8 +79,8 @@ public class ComputeTests
 		LinkFactory links = new LinkFactory(graph_service)
 			.Attributes(new SimpleAttribute("type", "test"));
 
-		OctoObjectList ins = in.Create(3);
-		OctoObjectList outs = out.Create(4);
+		ObjectList ins = in.Create(3);
+		ObjectList outs = out.Create(4);
 
 		Enumerator.Sequence(ins, "in_lid");
 		Enumerator.Sequence(outs, "out_lid");
@@ -90,8 +90,8 @@ public class ComputeTests
 		links.OneToEvery(obj, outs);
 
 // hack to avoid problems with ctime check
-		for(OctoObject obj : graph_service.GetAllObjects())
-			for(OctoAttribute attribute : obj.GetAttributes())
+		for(GraphObject obj : graph_service.GetAllObjects())
+			for(GraphAttribute attribute : obj.GetAttributes())
 				graph_service.SetMeta(obj, attribute.GetName(), "ctime", 1L);
 	}
 
@@ -115,10 +115,10 @@ public class ComputeTests
 		AggregateDoubleSum all_rule
 			= new AggregateDoubleSum("res", EDependencyType.ALL, "d1", "d2");
 
-		assertEquals(  1.0, (Double)self_rule.Compute(obj), OctoAttribute.EPSILON);
-		assertEquals( 63.0, (Double)  in_rule.Compute(obj), OctoAttribute.EPSILON);
-		assertEquals(164.0, (Double) out_rule.Compute(obj), OctoAttribute.EPSILON);
-		assertEquals(228.0, (Double) all_rule.Compute(obj), OctoAttribute.EPSILON);
+		assertEquals(  1.0, (Double)self_rule.Compute(obj), GraphAttribute.EPSILON);
+		assertEquals( 63.0, (Double)  in_rule.Compute(obj), GraphAttribute.EPSILON);
+		assertEquals(164.0, (Double) out_rule.Compute(obj), GraphAttribute.EPSILON);
+		assertEquals(228.0, (Double) all_rule.Compute(obj), GraphAttribute.EPSILON);
 	}
 
 	@Test
@@ -178,7 +178,7 @@ public class ComputeTests
 	@Test
 	public void TestArgMatchAprx()
 	{
-		ArgMatchAprx rule1 = new ArgMatchAprx("test", "d1", "d2", OctoAttribute.EPSILON);
+		ArgMatchAprx rule1 = new ArgMatchAprx("test", "d1", "d2", GraphAttribute.EPSILON);
 		ArgMatchAprx rule2 = new ArgMatchAprx("test", "d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(obj));
@@ -349,7 +349,7 @@ public class ComputeTests
 	@Test
 	public void TestUpdatedRecently() throws Exception
 	{
-		OctoAttribute attr = obj.DeclareAttribute("test_update", 0);
+		IAttribute attr = obj.DeclareAttribute("test_update", 0);
 
 		UpdatedRecently rule = new UpdatedRecently("test", "test_update", 1);
 
@@ -400,7 +400,7 @@ public class ComputeTests
 	@Test
 	public void TestVarArgMatchAprx()
 	{
-		VarArgMatchAprx rule1 = new VarArgMatchAprx("test", "d1", "d2", OctoAttribute.EPSILON);
+		VarArgMatchAprx rule1 = new VarArgMatchAprx("test", "d1", "d2", GraphAttribute.EPSILON);
 		VarArgMatchAprx rule2 = new VarArgMatchAprx("test", "d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(obj));

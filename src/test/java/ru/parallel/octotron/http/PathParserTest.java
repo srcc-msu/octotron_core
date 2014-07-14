@@ -4,8 +4,8 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.primitive.SimpleAttribute;
-import ru.parallel.octotron.utils.IEntityList;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
 
 public class PathParserTest
 {

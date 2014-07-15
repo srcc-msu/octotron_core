@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.core.rule;
 
-import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 

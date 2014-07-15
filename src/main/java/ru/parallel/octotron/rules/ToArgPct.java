@@ -8,8 +8,8 @@ package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.rule.OctoRule;
 
 public class ToArgPct extends OctoRule
 {

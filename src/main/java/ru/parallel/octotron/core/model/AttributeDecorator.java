@@ -1,7 +1,6 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.graph.IAttribute;
-import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 
 public class AttributeDecorator implements IAttribute
@@ -21,98 +20,92 @@ public class AttributeDecorator implements IAttribute
 // decorated staff
 
 	@Override
-	public IEntity GetParent()
-	{
-		return null;
-	}
-
-	@Override
 	public String GetName()
 	{
-		return null;
+		return base.GetName();
 	}
 
 	@Override
 	public Object GetValue()
 	{
-		return null;
+		return base.GetValue();
 	}
 
 	@Override
 	public void SetValue(Object value)
 	{
-
+		base.SetValue(value);
 	}
 
 	@Override
 	public String GetString()
 	{
-		return null;
+		return base.GetString();
 	}
 
 	@Override
 	public Long GetLong()
 	{
-		return null;
+		return base.GetLong();
 	}
 
 	@Override
 	public Double GetDouble()
 	{
-		return null;
+		return base.GetDouble();
 	}
 
 	@Override
 	public Boolean GetBoolean()
 	{
-		return null;
+		return base.GetBoolean();
 	}
 
 	@Override
 	public Double ToDouble()
 	{
-		return null;
+		return base.ToDouble();
 	}
 
 	@Override
 	public boolean eq(Object new_value)
 	{
-		return false;
+		return base.eq(new_value);
 	}
 
 	@Override
 	public boolean aeq(Object new_value, Object aprx)
 	{
-		return false;
+		return base.aeq(new_value, aprx);
 	}
 
 	@Override
 	public boolean ne(Object new_value)
 	{
-		return false;
+		return base.ne(new_value);
 	}
 
 	@Override
 	public boolean gt(Object new_value)
 	{
-		return false;
+		return base.gt(new_value);
 	}
 
 	@Override
 	public boolean lt(Object new_value)
 	{
-		return false;
+		return base.lt(new_value);
 	}
 
 	@Override
-	public boolean ge(Object val)
+	public boolean ge(Object new_value)
 	{
-		return false;
+		return base.ge(new_value);
 	}
 
 	@Override
-	public boolean le(Object val)
+	public boolean le(Object new_value)
 	{
-		return false;
+		return base.le(new_value);
 	}
 }

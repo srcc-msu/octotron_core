@@ -38,7 +38,7 @@ public abstract class OctoRule implements Serializable
 		return rule_id;
 	}
 
-	public final String GetAttribute()
+	public final String GetName()
 	{
 		return name;
 	}

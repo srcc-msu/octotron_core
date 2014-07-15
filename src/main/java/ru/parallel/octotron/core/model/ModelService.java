@@ -2,7 +2,10 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.graph.collections.LinkList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.graph.impl.GraphLink;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class ModelService
@@ -66,14 +69,16 @@ public class ModelService
 
 	public ModelObject AddObject()
 	{
-		return null;
+		GraphObject object = graph_service.AddObject();
+		object.AddLabel(EObjectLabels.MODEL.toString());
+		return new ModelObject(graph_service, object);
 	}
 
-	public void AddLink(ModelObject obj1, ModelObject obj2, String test)
+	public ModelLink AddLink(ModelObject obj1, ModelObject obj2, String type)
 	{
-
+		GraphLink link = graph_service.AddLink(obj1.GetBaseObject(), obj2.GetBaseObject(), type);
+		return new ModelLink(graph_service, link);
 	}
-
 
 /*	public String ExportDot()
 	{

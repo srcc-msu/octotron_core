@@ -46,10 +46,10 @@ public final class GraphService
 	private long NextAID()
 	{
 		if(!static_obj.TestAttribute(GraphService.NEXT_AID))
-			static_obj.SetAttribute(GraphService.NEXT_AID, 0L);
+			static_obj.DeclareAttribute(GraphService.NEXT_AID, 0L);
 
 		long next_AID = static_obj.GetAttribute(GraphService.NEXT_AID).GetLong();
-		static_obj.SetAttribute(GraphService.NEXT_AID, next_AID + 1);
+		static_obj.UpdateAttribute(GraphService.NEXT_AID, next_AID + 1);
 
 		return next_AID;
 	}
@@ -76,8 +76,8 @@ public final class GraphService
 // have to do it manually - no AID yet
 				static_obj = new GraphObject(graph, graph.AddObject());
 
-				static_obj.SetAttribute("type", GraphService.STATIC_PREFIX);
-				static_obj.SetAttribute("AID", NextAID());
+				static_obj.DeclareAttribute("type", GraphService.STATIC_PREFIX);
+				static_obj.DeclareAttribute("AID", NextAID());
 			}
 			else if(objects.size() > 1)
 				throw new ExceptionDBError("found multiple static objects");
@@ -86,7 +86,7 @@ public final class GraphService
 		}
 	}
 
-	private boolean IsStaticObject(IEntity entity)
+	private boolean IsStaticObject(GraphEntity entity)
 	{
 		return entity.equals(static_obj);
 	}
@@ -103,7 +103,7 @@ public final class GraphService
 	public GraphLink AddLink(GraphObject source, GraphObject target, String link_type)
 	{
 		GraphLink link = new GraphLink(graph, graph.AddLink(source.GetUID(), target.GetUID(), link_type));
-		link.SetAttribute("AID", NextAID());
+		link.DeclareAttribute("AID", NextAID());
 
 		return link;
 	}
@@ -111,7 +111,7 @@ public final class GraphService
 	public void AddLink(GraphObject source, GraphObject target, SimpleAttribute link_type)
 	{
 		if(!link_type.GetName().equals("type"))
-			throw new ExceptionModelFail("the only acceptable arttribute for a new links is 'type'");
+			throw new ExceptionModelFail("the only acceptable attribute for a new links is 'type'");
 
 		AddLink(source, target, (String)link_type.GetValue());
 	}
@@ -119,9 +119,18 @@ public final class GraphService
 	public GraphObject AddObject()
 	{
 		GraphObject object = new GraphObject(graph, graph.AddObject());
-		object.SetAttribute("AID", NextAID());
+		object.DeclareAttribute("AID", NextAID());
 
 		return object;
+	}
+
+// --------------------------------
+//			LABEL
+//---------------------------------
+
+	public ObjectList<GraphObject, GraphLink> GetAllLabeledNodes(String label)
+	{
+		return ObjectsFromUid(graph, graph.GetAllLabeledNodes(label));
 	}
 
 // --------------------------------

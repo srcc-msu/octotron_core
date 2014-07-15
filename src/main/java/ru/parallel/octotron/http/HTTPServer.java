@@ -8,9 +8,9 @@ package ru.parallel.octotron.http;
 
 import com.sun.net.httpserver.*;
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.GlobalSettings;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

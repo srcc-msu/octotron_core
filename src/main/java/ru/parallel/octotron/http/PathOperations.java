@@ -7,18 +7,13 @@
 package ru.parallel.octotron.http;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelLink;
-import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.logic.ExecutionController;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.graph.collections.IEntityList;
 import ru.parallel.octotron.core.graph.collections.LinkList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.logic.ExecutionController;
 
 import java.util.List;
 

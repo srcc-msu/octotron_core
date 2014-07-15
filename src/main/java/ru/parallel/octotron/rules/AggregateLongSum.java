@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 

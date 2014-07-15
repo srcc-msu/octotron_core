@@ -7,11 +7,11 @@
 package ru.parallel.octotron.generators;
 
 import au.com.bytecode.opencsv.CSVReader;
-import ru.parallel.octotron.core.graph.IEntity;
+import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.core.graph.collections.IEntityList;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public final class CsvFiller
 
 	private CsvFiller() {}
 
-	public static void Read(String file_name, IEntityList<? extends IEntity> list)
+	public static void Read(String file_name, EntityList<? extends ModelEntity> list)
 		throws ExceptionParseError, IOException
 	{
 		CSVReader reader = new CSVReader(new FileReader(file_name));
@@ -48,7 +48,7 @@ public final class CsvFiller
 
 			int read = 0;
 
-			for(IEntity entity : list)
+			for(ModelEntity entity : list)
 			{
 				next_line = reader.readNext();
 
@@ -66,7 +66,7 @@ public final class CsvFiller
 
 					Object val = SimpleAttribute.ValueFromStr(str_val);
 
-					entity.DeclareAttribute(fields[i], val);
+					entity.DeclareConstant(fields[i], val);
 				}
 
 				read++;

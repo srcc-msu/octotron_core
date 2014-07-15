@@ -1,11 +1,11 @@
 package ru.parallel.octotron.http;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import org.junit.Test;
 import ru.parallel.octotron.core.graph.collections.IEntityList;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
+import static org.junit.Assert.assertEquals;
 
 public class PathParserTest
 {

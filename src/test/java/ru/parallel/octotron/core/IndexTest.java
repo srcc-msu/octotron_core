@@ -1,16 +1,22 @@
 package ru.parallel.octotron.core;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import ru.parallel.octotron.core.graph.collections.LinkList;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.graph.collections.LinkList;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+
+import static org.junit.Assert.assertEquals;
 
 public class IndexTest
 {
@@ -19,12 +25,15 @@ public class IndexTest
 
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
+	private static ModelService model_service;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
 		IndexTest.graph = new Neo4jGraph( "dbs/" + IndexTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		graph_service = new GraphService(IndexTest.graph);
+		graph_service = new GraphService(graph);
+		model_service = new ModelService(graph_service);
+
 
 		IndexTest.graph_service.EnableObjectIndex("att_obj");
 		IndexTest.graph_service.EnableLinkIndex("att_link");
@@ -34,14 +43,14 @@ public class IndexTest
 			new SimpleAttribute("att_obj", "value12345")
 		};
 
-		IndexTest.obj_factory = new ObjectFactory(graph_service).Attributes(obj_att);
+		IndexTest.obj_factory = new ObjectFactory(model_service).Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("type", "contain"),
 			new SimpleAttribute("att_link", "value23456")
 		};
 
-		IndexTest.link_factory = new LinkFactory(graph_service).Attributes(link_att);
+		IndexTest.link_factory = new LinkFactory(model_service).Constants(link_att);
 	}
 
 	@AfterClass
@@ -148,7 +157,7 @@ public class IndexTest
 	@Test
 	public void TestSingleLink() throws Exception
 	{
-		ObjectList objs = IndexTest.obj_factory.Create(2);
+		ObjectList<ModelObject, ModelLink> objs = IndexTest.obj_factory.Create(2);
 		IndexTest.link_factory.OneToOne(objs.get(0), objs.get(1));
 
 		IndexTest.graph_service.GetLink("att_link", "value23456");

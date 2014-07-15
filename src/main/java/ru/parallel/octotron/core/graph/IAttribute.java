@@ -2,8 +2,6 @@ package ru.parallel.octotron.core.graph;
 
 public interface IAttribute
 {
-	IEntity GetParent();
-
 	String GetName();
 	Object GetValue();
 	void SetValue(Object value);

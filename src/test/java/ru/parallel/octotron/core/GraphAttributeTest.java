@@ -1,13 +1,15 @@
 package ru.parallel.octotron.core;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+
+import static org.junit.Assert.assertEquals;
 
 public class GraphAttributeTest
 {
@@ -202,7 +204,7 @@ public class GraphAttributeTest
 
 		try
 		{
-			attribute.SetValue(true);
+			attribute.SetValue(object2);
 		}
 		catch(ExceptionModelFail ignore)
 		{

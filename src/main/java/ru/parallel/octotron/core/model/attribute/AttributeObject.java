@@ -2,12 +2,15 @@ package ru.parallel.octotron.core.model.attribute;
 
 import com.sun.istack.internal.Nullable;
 import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.graph.IObject;
-import ru.parallel.octotron.core.graph.collections.LinkList;
+import ru.parallel.octotron.core.graph.collections.ListConverter;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.neo4j.impl.Marker;
@@ -15,17 +18,109 @@ import ru.parallel.octotron.neo4j.impl.Marker;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AttributeObject extends GraphBased implements IObject
+public abstract class AttributeObject extends GraphBased
 {
-	GraphService graph_service;
-
-	private static final String REACTION_PREFIX = "_reaction";
-	private static final String REACTION_EXECUTED_PREFIX = "_reaction_executed";
-	private static final String MARKER_PREFIX = "_marker";
-
-	protected AttributeObject(GraphObject base)
+	protected AttributeObject(GraphService graph_service, GraphObject base)
 	{
-		super(base);
+		super(graph_service, base);
+	}
+
+	static final String name_const = "_name";
+	static final String value_const = "_value";
+	static final String atime_const = "_atime";
+	static final String ctime_const = "_ctime";
+	static final String valid_const = "_valid";
+
+	public ModelObject GetAttributeObject()
+	{
+		GraphObject parent = GetBaseObject().GetInNeighbors("_attribute", GetName()).Only();
+		return new ModelObject(GetGraphService(), parent);
+	}
+
+	public static void Init(GraphObject object, String name, Object value)
+	{
+		object.DeclareAttribute(name_const, name);
+		object.DeclareAttribute(value_const, value);
+		object.DeclareAttribute(atime_const, 0L);
+		object.DeclareAttribute(ctime_const, 0L);
+		object.DeclareAttribute(valid_const, true);
+	}
+
+	public String GetName()
+	{
+		return GetAttribute(name_const).GetString();
+	}
+
+	public ModelAttribute GetAttribute()
+	{
+		return GetAttributeObject().GetAttribute(GetName());
+	}
+
+	public boolean GetValid()
+	{
+		return GetAttribute(valid_const).GetBoolean();
+	}
+
+	public void SetValid(boolean value)
+	{
+		GetBaseObject().UpdateAttribute(valid_const, value);
+	}
+
+	public long GetATime()
+	{
+		return GetAttribute(atime_const).GetLong();
+	}
+
+	public long GetCTime()
+	{
+		return GetAttribute(ctime_const).GetLong();
+	}
+
+	public void SetCurrent(Object new_value, long cur_time)
+	{
+		GetBaseObject().UpdateAttribute(value_const, new_value);
+		GetBaseObject().UpdateAttribute(ctime_const, cur_time);
+	}
+
+	public void Touch(long cur_time)
+	{
+		GetBaseObject().UpdateAttribute(atime_const, cur_time);
+	}
+
+// LAST
+	private static final SimpleAttribute last_type
+		= new SimpleAttribute("type", "_last");
+
+	public ObjectList<GraphObject, GraphLink> GetLastObject()
+	{
+		return ListConverter.FilterLabel(GetBaseObject().GetOutNeighbors(), EObjectLabels.LAST.toString());
+	}
+
+	public void SetLast(Object value, long ctime)
+	{
+		ObjectList<GraphObject, GraphLink> list = GetLastObject();
+
+		if(list.size() == 0)
+		{
+			GraphObject last = GetGraphService().AddObject();
+			GetGraphService().AddLink(GetBaseObject(), last, last_type);
+		}
+
+		GraphObject object = list.Only();
+
+		object.UpdateAttribute(value_const, value);
+		object.UpdateAttribute(ctime_const, ctime);
+	}
+
+	@Nullable
+	public GraphObject GetLast()
+	{
+		ObjectList<GraphObject, GraphLink> list = GetLastObject();
+
+		if(list.size() == 0)
+			return null;
+
+		return list.Only();
 	}
 
 // REACTIONS
@@ -51,21 +146,19 @@ public class AttributeObject extends GraphBased implements IObject
 
 	public ObjectList<GraphObject, GraphLink> GetReactionsObjects()
 	{
-		return GetOutNeighbors().Filter(reaction_type);
+		return ListConverter.FilterLabel(
+			GetBaseObject().GetOutNeighbors()
+			, EObjectLabels.REACTION.toString());
 	}
 
 	public void AddReaction(OctoReaction reaction)
 	{
-		GraphObject object = graph_service.AddObject();
+		GraphObject object = GetGraphService().AddObject();
+		GetGraphService().AddLink(GetBaseObject(), object, reaction_type);
+		object.AddLabel(EObjectLabels.REACTION.toString());
 
 		object.DeclareAttribute(reaction_id_const, reaction.GetID());
 		object.DeclareAttribute(reaction_status_const, 0L);
-	}
-
-	public void AddReactions(List<OctoReaction> reactions)
-	{
-		for(OctoReaction reaction : reactions)
-			AddReaction(reaction);
 	}
 
 	public long GetReactionState(long key)
@@ -78,9 +171,8 @@ public class AttributeObject extends GraphBased implements IObject
 	public void SetReactionState(long key, long res)
 	{
 		GraphObject object = GetReactionsObjects().Filter(reaction_id_const, key).Only();
-		graph_service.AddLink(GetBaseObject(), object, reaction_type);
 
-		object.SetAttribute(reaction_status_const, res);
+		object.UpdateAttribute(reaction_status_const, res);
 	}
 
 // MARKERS
@@ -109,15 +201,18 @@ public class AttributeObject extends GraphBased implements IObject
 		return markers;
 	}
 
-	public ObjectList GetMarkersObjects()
+	public ObjectList<GraphObject, GraphLink> GetMarkersObjects()
 	{
-		return GetOutNeighbors().Filter(mark_type);
+		return ListConverter.FilterLabel(
+			GetBaseObject().GetOutNeighbors()
+			, EObjectLabels.MARK.toString());
 	}
 
 	public void AddMarker(long reaction_id, String description, boolean suppress)
 	{
-		GraphObject object = graph_service.AddObject();
-		graph_service.AddLink(GetBaseObject(), object, mark_type);
+		GraphObject object = GetGraphService().AddObject();
+		GetGraphService().AddLink(GetBaseObject(), object, mark_type);
+		object.AddLabel(EObjectLabels.MARK.toString());
 
 		object.DeclareAttribute(mark_id_const, 0); // TODO
 		object.DeclareAttribute(mark_r_id_const, reaction_id);
@@ -127,104 +222,9 @@ public class AttributeObject extends GraphBased implements IObject
 
 	public void DeleteMarker(long marker_id)
 	{
-		ObjectList objects = GetMarkersObjects();
+		ObjectList<GraphObject, GraphLink> objects = GetMarkersObjects();
 		objects.Filter(mark_id_const, marker_id).Only().Delete();
 	}
 
-// LAST
-
-	private static final SimpleAttribute last_type
-		= new SimpleAttribute("type", "_last");
-
-	public ObjectList<GraphObject, GraphLink> GetLastObject()
-	{
-		return GetOutNeighbors().Filter(last_type);
-	}
-
-	public void SetLast(Object value, long ctime)
-	{
-		ObjectList<GraphObject, GraphLink> list = GetLastObject();
-
-		if(list.size() == 0)
-		{
-			GraphObject last = graph_service.AddObject();
-			graph_service.AddLink(GetBaseObject(), last, last_type);
-		}
-
-		GraphObject object = list.Only();
-
-		object.SetAttribute(AbstractVaryingAttribute.value_const, value);
-		object.SetAttribute(AbstractVaryingAttribute.ctime_const, ctime);
-	}
-
-	@Nullable
-	public GraphObject GetLast()
-	{
-		ObjectList<GraphObject, GraphLink> list = GetLastObject();
-
-		if(list.size() == 0)
-			return null;
-
-		return list.Only();
-	}
-
-	@Override
-	public LinkList GetInLinks()
-	{
-		return null;
-	}
-
-	@Override
-	public LinkList GetOutLinks()
-	{
-		return null;
-	}
-
-	@Override
-	public ObjectList GetInNeighbors()
-	{
-		return null;
-	}
-
-	@Override
-	public ObjectList GetOutNeighbors()
-	{
-		return null;
-	}
-
-	@Override
-	public ObjectList GetInNeighbors(String link_name, Object link_value)
-	{
-		return null;
-	}
-
-	@Override
-	public ObjectList GetOutNeighbors(String link_name, Object link_value)
-	{
-		return null;
-	}
-
-	@Override
-	public ObjectList GetInNeighbors(String link_name)
-	{
-		return null;
-	}
-
-	@Override
-	public ObjectList GetOutNeighbors(String link_name)
-	{
-		return null;
-	}
-
-	@Override
-	public ObjectList GetInNeighbors(SimpleAttribute link_attribute)
-	{
-		return null;
-	}
-
-	@Override
-	public ObjectList GetOutNeighbors(SimpleAttribute link_attribute)
-	{
-		return null;
-	}
+//	public abstract EAttributeType GetType();
 }

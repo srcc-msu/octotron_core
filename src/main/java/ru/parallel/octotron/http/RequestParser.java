@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.http.Operations.Operation;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.http.Operations.Operation;
 
 import java.util.HashMap;
 import java.util.Map;

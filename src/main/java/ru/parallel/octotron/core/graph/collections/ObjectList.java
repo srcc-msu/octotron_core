@@ -19,7 +19,7 @@ import java.util.List;
  * and obtain list of attributes<br>
  * only filtering for now, to be honest..<br>
  * */
-public class ObjectList<OT extends IObject, LT extends ILink> extends IEntityList<OT>
+public class ObjectList<OT extends IObject & IEntity, LT extends ILink & IEntity> extends IEntityList<OT>
 {
 	public ObjectList()
 	{
@@ -38,52 +38,52 @@ public class ObjectList<OT extends IObject, LT extends ILink> extends IEntityLis
 
 	public ObjectList<OT, LT> append(ObjectList<OT, LT> list)
 	{
-		return new ObjectList<OT, LT>(InnerAppend(list.list));
+		return new ObjectList<>(InnerAppend(list.list));
 	}
 
 	public ObjectList<OT, LT> range(int from, int to)
 	{
-		return new ObjectList<OT, LT>(InnerRange(from, to));
+		return new ObjectList<>(InnerRange(from, to));
 	}
 
 	public ObjectList<OT, LT> ranges(int... ranges)
 	{
-		return new ObjectList<OT, LT>(InnerRanges(ranges));
+		return new ObjectList<>(InnerRanges(ranges));
 	}
 
 	public ObjectList<OT, LT> elems(int... elems)
 	{
-		return new ObjectList<OT, LT>(InnerElems(elems));
+		return new ObjectList<>(InnerElems(elems));
 	}
 
 	public ObjectList<OT, LT> Filter(SimpleAttribute att, EQueryType type)
 	{
-		return new ObjectList<OT, LT>(InnerFilter(att.GetName(), att.GetValue(), type));
+		return new ObjectList<>(InnerFilter(att.GetName(), att.GetValue(), type));
 	}
 
 	public ObjectList<OT, LT> Filter(String name, Object value, EQueryType type)
 	{
-		return new ObjectList<OT, LT>(InnerFilter(name, value, type));
+		return new ObjectList<>(InnerFilter(name, value, type));
 	}
 
 	public ObjectList<OT, LT> Filter(SimpleAttribute att)
 	{
-		return new ObjectList<OT, LT>(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
+		return new ObjectList<>(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
 	}
 
 	public ObjectList<OT, LT> Filter(String name, Object value)
 	{
-		return new ObjectList<OT, LT>(InnerFilter(name, value, EQueryType.EQ));
+		return new ObjectList<>(InnerFilter(name, value, EQueryType.EQ));
 	}
 
 	public ObjectList<OT, LT> Filter(String name)
 	{
-		return new ObjectList<OT, LT>(InnerFilter(name));
+		return new ObjectList<>(InnerFilter(name));
 	}
 
 	public ObjectList<OT, LT> GetInNeighbors(String link_name, Object link_value)
 	{
-		ObjectList<OT, LT> new_list = new ObjectList<OT, LT>();
+		ObjectList<OT, LT> new_list = new ObjectList<>();
 
 		for(OT obj : list)
 			new_list = new_list.append(obj.GetInNeighbors(link_name, link_value));
@@ -93,7 +93,7 @@ public class ObjectList<OT extends IObject, LT extends ILink> extends IEntityLis
 
 	public ObjectList<OT, LT> GetOutNeighbors(String link_name, Object link_value)
 	{
-		ObjectList<OT, LT> new_list = new ObjectList<OT, LT>();
+		ObjectList<OT, LT> new_list = new ObjectList<>();
 
 		for(OT obj : list)
 			new_list = new_list.append(obj.GetOutNeighbors(link_name, link_value));
@@ -113,7 +113,7 @@ public class ObjectList<OT extends IObject, LT extends ILink> extends IEntityLis
 
 	public ObjectList<OT, LT> GetInNeighbors(String link_name)
 	{
-		ObjectList<OT, LT> new_list = new ObjectList<OT, LT>();
+		ObjectList<OT, LT> new_list = new ObjectList<>();
 
 		for(OT obj : list)
 			new_list = new_list.append(obj.GetInNeighbors(link_name));
@@ -123,7 +123,7 @@ public class ObjectList<OT extends IObject, LT extends ILink> extends IEntityLis
 
 	public ObjectList<OT, LT> GetOutNeighbors(String link_name)
 	{
-		ObjectList<OT, LT> new_list = new ObjectList<OT, LT>();
+		ObjectList<OT, LT> new_list = new ObjectList<>();
 
 		for(OT obj : list)
 			new_list = new_list.append(obj.GetOutNeighbors(link_name));
@@ -133,7 +133,7 @@ public class ObjectList<OT extends IObject, LT extends ILink> extends IEntityLis
 
 	public ObjectList<OT, LT> GetInNeighbors()
 	{
-		ObjectList<OT, LT> new_list = new ObjectList<OT, LT>();
+		ObjectList<OT, LT> new_list = new ObjectList<>();
 
 		for(OT obj : list)
 			new_list = new_list.append(obj.GetInNeighbors());
@@ -143,7 +143,7 @@ public class ObjectList<OT extends IObject, LT extends ILink> extends IEntityLis
 
 	public ObjectList<OT, LT> GetOutNeighbors()
 	{
-		ObjectList<OT, LT> new_list = new ObjectList<OT, LT>();
+		ObjectList<OT, LT> new_list = new ObjectList<>();
 
 		for(OT obj : list)
 			new_list = new_list.append(obj.GetOutNeighbors());
@@ -153,7 +153,7 @@ public class ObjectList<OT extends IObject, LT extends ILink> extends IEntityLis
 
 	public ObjectList<OT, LT> Uniq()
 	{
-		return new ObjectList<OT, LT>(InnerUniq());
+		return new ObjectList<>(InnerUniq());
 	}
 
 	public LinkList<OT, LT> GetInLinks()

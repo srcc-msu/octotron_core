@@ -1,57 +1,86 @@
 package ru.parallel.octotron.core.model;
 
+import com.sun.istack.internal.Nullable;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.IEntity;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.model.attribute.*;
-import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Marker;
-import ru.parallel.octotron.rules.MirrorLong;
+import sun.management.Sensor;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class ModelEntity extends GraphBased
+public abstract class ModelEntity extends GraphBased implements IEntity
 {
-	public ModelEntity(GraphEntity base)
+	public ModelEntity(GraphService graph_service, GraphEntity base)
 	{
-		super(base);
+		super(graph_service, base);
 	}
 
-	public abstract void DeclareAttributes(List<SimpleAttribute> attributes);
 	public abstract void AddRules(List<OctoRule> rules);
-	public abstract void AddReactions(List<OctoReaction> reactions);
 
-	private static final String extended_attr = "_extended_attr";
+	public void AddReactions(List<OctoReaction> reactions)
+	{
+		for(OctoReaction reaction : reactions)
+		{
+			if(!TestAttribute(reaction.GetCheckName()))
+				throw new ExceptionModelFail("could not assign a reaction, attribute is missing: " + reaction.GetCheckName());
+
+			ModelAttribute attribute = GetAttribute(reaction.GetCheckName());
+
+			if(attribute.GetType() == EAttributeType.CONSTANT)
+				throw new ExceptionModelFail("could not assign a reaction to constant attribute: " + reaction.GetCheckName());
+
+			AttributeObject object
+				= this.GetAttributeObject(reaction.GetCheckName());
+
+			object.AddReaction(reaction);
+		}
+	}
+
+	@Nullable
+	public abstract AttributeObject GetAttributeObject(String name);
 
 	public ModelAttribute GetAttribute(String name)
 	{
-		Sensor sensor = Sensor.TryConstruct(this, name);
-		if(sensor != null)
-			return sensor;
+		AttributeObject object = GetAttributeObject(name);
 
-		Derived derived = Derived.TryConstruct(this, name);
-		if(derived != null)
-			return derived;
+		if(object == null)
+			return new ConstantAttribute(this, name);
 
-		Constant constant = Constant.TryConstruct(this, name);
-		if(constant != null)
-			return constant;
+		else if(object.GetBaseObject().TestLabel(EObjectLabels.SENSOR.toString()))
+			return new SensorAttribute(this, name);
+
+		else if(object.GetBaseObject().TestLabel(EObjectLabels.DERIVED.toString()))
+			return new DerivedAttribute(this, name);
 
 		throw new ExceptionModelFail("attribute not found: " + name);
+	}
+
+	public AttributeList<ModelAttribute> GetAttributes()
+	{
+		AttributeList<ModelAttribute> attributes = new AttributeList<>();
+
+		for(GraphAttribute attribute : GetBaseEntity().GetAttributes())
+		{
+			attributes.add(GetAttribute(attribute.GetName()));
+		}
+
+		return attributes;
 	}
 
 	public List<OctoResponse> GetFails()
 	{
 		List<OctoResponse> responses = new LinkedList<>();
 
-		for(AbstractVaryingAttribute attribute : GetAttributes())
+		for(ModelAttribute attribute : GetAttributes())
 		{
 			responses.addAll(attribute.GetFails());
 		}
@@ -73,7 +102,7 @@ public abstract class ModelEntity extends GraphBased
 	{
 		List<OctoResponse> responses = new LinkedList<>();
 
-		for(AbstractVaryingAttribute attribute : GetAttributes())
+		for(ModelAttribute attribute : GetAttributes())
 		{
 			responses.addAll(attribute.PreparePendingReactions());
 		}
@@ -96,47 +125,47 @@ public abstract class ModelEntity extends GraphBased
 		return null;
 	}
 
-	public void AddRule(MirrorLong mirrorLong)
+	public void AddRule(OctoRule rule)
 	{
 	}
 
-	public Sensor GetSensor(String name)
+	public SensorAttribute GetSensor(String name)
 	{
-		Sensor sensor = Sensor.TryConstruct(this, name);
-
-		if(sensor == null)
-			throw new ExceptionModelFail("sensor not found: " + name);
-
-		return sensor;
+		return new SensorAttribute(this, name);
 	}
 
-	public Derived GetDerived(String name)
+	public DerivedAttribute GetDerived(String name)
 	{
-		Derived derived = Derived.TryConstruct(this, name);
-
-		if(derived == null)
-			throw new ExceptionModelFail("derived not found: " + name);
-
-		return derived;
+		return new DerivedAttribute(this, name);
 	}
 
-	public Constant GetConstant(String name)
+	public ConstantAttribute GetConstant(String name)
 	{
-		Constant constant = Constant.TryConstruct(this, name);
-
-		if(constant == null)
-			throw new ExceptionModelFail("constant not found: " + name);
-
-		return constant;
+		return new ConstantAttribute(this, name);
 	}
 
-	public static ModelEntity Obtain(GraphEntity entity)
+	public ModelAttribute DeclareConstant(SimpleAttribute attribute)
 	{
-		if(entity.GetUID().getType() == EEntityType.OBJECT)
-			return new ModelObject((GraphObject)entity);
-		else if(entity.GetUID().getType() == EEntityType.LINK)
-			return new ModelLink((GraphLink)entity);
-		else
-			throw new ExceptionModelFail("unknown entity type");
+		return DeclareConstant(attribute.GetName(), attribute.GetValue());
 	}
+
+	public ModelAttribute DeclareConstant(String name, Object value)
+	{
+		GetBaseEntity().DeclareAttribute(name, value);
+		return GetAttribute(name);
+	}
+
+	public void DeclareConstants(List<SimpleAttribute> attributes)
+	{
+		for(SimpleAttribute attribute : attributes)
+			DeclareConstant(attribute);
+	}
+
+	public void AddSensors(List<SimpleAttribute> attributes)
+	{
+		for(SimpleAttribute attribute : attributes)
+			AddSensor(attribute);
+	}
+
+	public abstract void AddSensor(SimpleAttribute attribute);
 }

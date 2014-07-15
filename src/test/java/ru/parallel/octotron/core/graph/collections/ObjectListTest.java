@@ -1,12 +1,15 @@
 package ru.parallel.octotron.core.graph.collections;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ObjectListTest
 {
@@ -30,7 +33,7 @@ public class ObjectListTest
 	@Test
 	public void TestAdd()
 	{
-		ObjectList list = new ObjectList();
+		ObjectList<GraphObject, GraphLink> list = new ObjectList<>();
 
 		assertEquals("list is not empty", list.size(), 0);
 
@@ -46,7 +49,7 @@ public class ObjectListTest
 	@Test
 	public void TestGet()
 	{
-		ObjectList list = new ObjectList();
+		ObjectList<GraphObject, GraphLink> list = new ObjectList<>();
 
 		list.add(ObjectListTest.graph_service.AddObject());
 		list.add(ObjectListTest.graph_service.AddObject());
@@ -60,7 +63,7 @@ public class ObjectListTest
 	@Test
 	public void TestIterate()
 	{
-		ObjectList<GraphObject, GraphLink> list = new ObjectList();
+		ObjectList<GraphObject, GraphLink> list = new ObjectList<>();
 
 		int N = 10;
 
@@ -79,7 +82,7 @@ public class ObjectListTest
 	@Test
 	public void TestSize()
 	{
-		ObjectList list = new ObjectList();
+		ObjectList<GraphObject, GraphLink> list = new ObjectList<>();
 
 		int N = 10;
 
@@ -93,7 +96,7 @@ public class ObjectListTest
 	@Test
 	public void TestRange()
 	{
-		ObjectList list = new ObjectList();
+		ObjectList<GraphObject, GraphLink> list = new ObjectList<>();
 
 		int N = 10;
 
@@ -113,9 +116,9 @@ public class ObjectListTest
 	@Test
 	public void Append()
 	{
-		ObjectList list1 = new ObjectList();
-		ObjectList list2 = new ObjectList();
-		ObjectList list3;
+		ObjectList<GraphObject, GraphLink> list1 = new ObjectList<>();
+		ObjectList<GraphObject, GraphLink> list2 = new ObjectList<>();
+		ObjectList<GraphObject, GraphLink> list3;
 
 		int N = 10;
 

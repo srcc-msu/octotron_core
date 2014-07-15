@@ -6,20 +6,21 @@ import ru.parallel.octotron.core.primitive.Uid;
 
 public interface IEntity
 {
-	IAttribute GetAttribute(String name);
-	AttributeList GetAttributes();
+/*	IAttribute DeclareAttribute(String name, Object value);
+	IAttribute DeclareAttribute(SimpleAttribute attribute);
 
-	IAttribute SetAttribute(String name, Object value);
-	IAttribute SetAttribute(SimpleAttribute att);
+	IAttribute UpdateAttribute(String name, Object value);
+	IAttribute UpdateAttribute(SimpleAttribute att);
 
-	void RemoveAttribute(String name);
+	void DeleteAttribute(String name);
+	void Delete();
+*/
 	boolean TestAttribute(String name);
 	boolean TestAttribute(String name, Object value);
 	boolean TestAttribute(SimpleAttribute test);
 
-	IAttribute DeclareAttribute(String name, Object value);
-	IAttribute DeclareAttribute(SimpleAttribute att);
+	IAttribute GetAttribute(String name);
+	AttributeList GetAttributes();
 
 	Uid GetUID();
-	void Delete();
 }

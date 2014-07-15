@@ -1,20 +1,24 @@
 package ru.parallel.octotron.core;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class OctoLinkTest
 {
 	private static Neo4jGraph graph;
 	private static GraphService graph_service;
+	private static ModelService model_service;
 
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
@@ -24,19 +28,20 @@ public class OctoLinkTest
 	{
 		OctoLinkTest.graph = new Neo4jGraph( "dbs/" + OctoLinkTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		OctoLinkTest.graph_service = new GraphService(OctoLinkTest.graph);
+		OctoLinkTest.model_service = new ModelService(OctoLinkTest.graph_service);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
 		};
 
-		OctoLinkTest.obj_factory = new ObjectFactory(OctoLinkTest.graph_service).Attributes(obj_att);
+		OctoLinkTest.obj_factory = new ObjectFactory(OctoLinkTest.model_service).Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("link", "ok"),
 			new SimpleAttribute("type", "contain"),
 		};
 
-		OctoLinkTest.link_factory = new LinkFactory(OctoLinkTest.graph_service).Attributes(link_att);
+		OctoLinkTest.link_factory = new LinkFactory(OctoLinkTest.model_service).Constants(link_att);
 	}
 
 	@AfterClass

@@ -8,7 +8,7 @@ package ru.parallel.octotron.neo4j.impl;
 
 public class Marker
 {
-	private long id;
+	private final long id;
 	private final long reaction_id;
 	private final String description;
 	private final boolean suppress;

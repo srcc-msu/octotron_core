@@ -47,6 +47,15 @@ public interface IGraph
 // **********************************************************
 // ----------------------------------------------------------
 
+	void AddNodeLabel(Uid uid, String label);
+	boolean TestNodeLabel(Uid uid, String label);
+
+	List<Uid> GetAllLabeledNodes(String label);
+
+// ----------------------------------------------------------
+// **********************************************************
+// ----------------------------------------------------------
+
 	IIndex GetIndex();
 
 	List<Uid> GetAllObjects();

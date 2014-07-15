@@ -3,9 +3,10 @@ package ru.parallel.octotron.core;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
@@ -15,12 +16,14 @@ public class ModelAttributeTest
 {
 	private static GraphService graph_service;
 	private static Neo4jGraph graph;
+	private static ModelService model_service;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
 		ModelAttributeTest.graph = new Neo4jGraph( "dbs/" + ModelAttributeTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		ModelAttributeTest.graph_service = new GraphService(ModelAttributeTest.graph);
+		ModelAttributeTest.model_service = new ModelService(graph_service);
 	}
 
 	@AfterClass
@@ -33,9 +36,9 @@ public class ModelAttributeTest
 	@Test
 	public void TestGetCTime() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute1 = object.DeclareAttribute("test1", "");
-		GraphAttribute attribute2 = object.DeclareAttribute("test2", "");
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute1 = object.DeclareAttribute("test1", "");
+		ModelAttribute attribute2 = object.DeclareAttribute("test2", "");
 
 		assertEquals(0, attribute1.GetCTime());
 		assertEquals(0, attribute2.GetCTime());
@@ -50,9 +53,9 @@ public class ModelAttributeTest
 	@Test
 	public void TestGetATime() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute1 = object.DeclareAttribute("test1", "");
-		GraphAttribute attribute2 = object.DeclareAttribute("test2", "");
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute1 = object.DeclareAttribute("test1", "");
+		ModelAttribute attribute2 = object.DeclareAttribute("test2", "");
 
 		assertEquals(0, attribute1.GetATime());
 		assertEquals(0, attribute2.GetATime());
@@ -67,19 +70,19 @@ public class ModelAttributeTest
 	@Test
 	public void TestGetSpeed() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute_l = object.DeclareAttribute("test1", 1L);
-		GraphAttribute attribute_d = object.DeclareAttribute("test2", 1.0);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute_l = object.DeclareAttribute("test1", 1L);
+		ModelAttribute attribute_d = object.DeclareAttribute("test2", 1.0);
 
-		assertEquals(0.0, attribute_l.GetSpeed(), GraphAttribute.EPSILON);
-		assertEquals(0.0, attribute_d.GetSpeed(), GraphAttribute.EPSILON);
+		assertEquals(0.0, attribute_l.GetSpeed(), ModelAttribute.EPSILON);
+		assertEquals(0.0, attribute_d.GetSpeed(), ModelAttribute.EPSILON);
 
 		attribute_l.Update(2L, true);
 		attribute_d.Update(2.0, true);
 
 // speed not available now - requires 2 updates
-		assertEquals(0.0, attribute_l.GetSpeed(), GraphAttribute.EPSILON);
-		assertEquals(0.0, attribute_d.GetSpeed(), GraphAttribute.EPSILON);
+		assertEquals(0.0, attribute_l.GetSpeed(), ModelAttribute.EPSILON);
+		assertEquals(0.0, attribute_d.GetSpeed(), ModelAttribute.EPSILON);
 
 		Thread.sleep(2000); // 2sec
 
@@ -94,18 +97,18 @@ public class ModelAttributeTest
 		attribute_d.Update(4.0, true);
 
 // must be 0
-		assertEquals(0.0, attribute_l.GetSpeed(), GraphAttribute.EPSILON);
-		assertEquals(0.0, attribute_d.GetSpeed(), GraphAttribute.EPSILON);
+		assertEquals(0.0, attribute_l.GetSpeed(), ModelAttribute.EPSILON);
+		assertEquals(0.0, attribute_d.GetSpeed(), ModelAttribute.EPSILON);
 	}
 
 	@Test
 	public void TestUpdate() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute1 = object.DeclareAttribute("test1", "");
-		GraphAttribute attribute2 = object.DeclareAttribute("test2", "");
-		GraphAttribute attribute3 = object.DeclareAttribute("test3", "");
-		GraphAttribute attribute4 = object.DeclareAttribute("test4", "");
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute1 = object.DeclareAttribute("test1", "");
+		ModelAttribute attribute2 = object.DeclareAttribute("test2", "");
+		ModelAttribute attribute3 = object.DeclareAttribute("test3", "");
+		ModelAttribute attribute4 = object.DeclareAttribute("test4", "");
 
 		assertEquals(0, attribute1.GetCTime());
 		assertEquals(0, attribute2.GetCTime());
@@ -163,17 +166,17 @@ public class ModelAttributeTest
 	@Test
 	public void TestGetString() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute = object.DeclareAttribute("test", "test");
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute = object.DeclareAttribute("test", "test");
 		assertEquals("test", attribute.GetString());
 	}
 
 	@Test
 	public void TestGetLong() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute1 = object.DeclareAttribute("test1", 1L);
-		GraphAttribute attribute2 = object.DeclareAttribute("test2", 1);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute1 = object.DeclareAttribute("test1", 1L);
+		ModelAttribute attribute2 = object.DeclareAttribute("test2", 1);
 		assertEquals(Long.valueOf(1L), attribute1.GetLong());
 		assertEquals(Long.valueOf(1L), attribute2.GetLong());
 	}
@@ -181,40 +184,40 @@ public class ModelAttributeTest
 	@Test
 	public void TestGetDouble() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute1 = object.DeclareAttribute("test1", 1.0);
-		GraphAttribute attribute2 = object.DeclareAttribute("test2", 1.0f);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute1 = object.DeclareAttribute("test1", 1.0);
+		ModelAttribute attribute2 = object.DeclareAttribute("test2", 1.0f);
 
-		assertEquals(1.0, attribute1.GetDouble(), GraphAttribute.EPSILON);
-		assertEquals(1.0, attribute2.GetDouble(), GraphAttribute.EPSILON);
+		assertEquals(1.0, attribute1.GetDouble(), ModelAttribute.EPSILON);
+		assertEquals(1.0, attribute2.GetDouble(), ModelAttribute.EPSILON);
 	}
 
 	@Test
 	public void TestGetBoolean() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute = object.DeclareAttribute("test", false);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute = object.DeclareAttribute("test", false);
 		assertEquals(false, attribute.GetBoolean());
 	}
 
 	@Test
 	public void TestToDouble() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute1 = object.DeclareAttribute("test1", 1);
-		GraphAttribute attribute2 = object.DeclareAttribute("test2", 1L);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute1 = object.DeclareAttribute("test1", 1);
+		ModelAttribute attribute2 = object.DeclareAttribute("test2", 1L);
 
-		assertEquals(1.0, attribute1.ToDouble(), GraphAttribute.EPSILON);
-		assertEquals(1.0, attribute2.ToDouble(), GraphAttribute.EPSILON);
+		assertEquals(1.0, attribute1.ToDouble(), ModelAttribute.EPSILON);
+		assertEquals(1.0, attribute2.ToDouble(), ModelAttribute.EPSILON);
 	}
 
 	@Test
 	public void TestEq() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute_i = object.DeclareAttribute("test1", 1);
-		GraphAttribute attribute_l = object.DeclareAttribute("test2", 1L);
-		GraphAttribute attribute_s = object.DeclareAttribute("test3", "1");
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute_i = object.DeclareAttribute("test1", 1);
+		ModelAttribute attribute_l = object.DeclareAttribute("test2", 1L);
+		ModelAttribute attribute_s = object.DeclareAttribute("test3", "1");
 
 		assertEquals(true, attribute_i.eq(1L));
 		assertEquals(true, attribute_l.eq(1L));
@@ -224,21 +227,21 @@ public class ModelAttributeTest
 	@Test
 	public void TestAeq() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute_f = object.DeclareAttribute("test1", 1.0f);
-		GraphAttribute attribute_d = object.DeclareAttribute("test2", 1.0);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute_f = object.DeclareAttribute("test1", 1.0f);
+		ModelAttribute attribute_d = object.DeclareAttribute("test2", 1.0);
 
-		assertEquals(true, attribute_f.aeq(1.0, GraphAttribute.EPSILON));
-		assertEquals(true, attribute_d.aeq(1.0, GraphAttribute.EPSILON));
+		assertEquals(true, attribute_f.aeq(1.0, ModelAttribute.EPSILON));
+		assertEquals(true, attribute_d.aeq(1.0, ModelAttribute.EPSILON));
 	}
 
 	@Test
 	public void TestNe() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute_i = object.DeclareAttribute("test1", 1);
-		GraphAttribute attribute_l = object.DeclareAttribute("test2", 1L);
-		GraphAttribute attribute_s = object.DeclareAttribute("test3", "1");
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute_i = object.DeclareAttribute("test1", 1);
+		ModelAttribute attribute_l = object.DeclareAttribute("test2", 1L);
+		ModelAttribute attribute_s = object.DeclareAttribute("test3", "1");
 
 		assertEquals(true, attribute_i.ne(0L));
 		assertEquals(true, attribute_l.ne(0L));
@@ -248,11 +251,11 @@ public class ModelAttributeTest
 	@Test
 	public void TestGt() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute_i = object.DeclareAttribute("test1", 1);
-		GraphAttribute attribute_l = object.DeclareAttribute("test2", 1L);
-		GraphAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
-		GraphAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute_i = object.DeclareAttribute("test1", 1);
+		ModelAttribute attribute_l = object.DeclareAttribute("test2", 1L);
+		ModelAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
+		ModelAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
 
 		assertEquals(true, attribute_i.gt(0L));
 		assertEquals(true, attribute_l.gt(0L));
@@ -268,11 +271,11 @@ public class ModelAttributeTest
 	@Test
 	public void TestLt() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute_i = object.DeclareAttribute("test1", 1);
-		GraphAttribute attribute_l = object.DeclareAttribute("test2", 1L);
-		GraphAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
-		GraphAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute_i = object.DeclareAttribute("test1", 1);
+		ModelAttribute attribute_l = object.DeclareAttribute("test2", 1L);
+		ModelAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
+		ModelAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
 
 		assertEquals(true, attribute_i.lt(2L));
 		assertEquals(true, attribute_l.lt(2L));
@@ -288,11 +291,11 @@ public class ModelAttributeTest
 	@Test
 	public void TestGe() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute_i = object.DeclareAttribute("test1", 1);
-		GraphAttribute attribute_l = object.DeclareAttribute("test2", 1L);
-		GraphAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
-		GraphAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute_i = object.DeclareAttribute("test1", 1);
+		ModelAttribute attribute_l = object.DeclareAttribute("test2", 1L);
+		ModelAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
+		ModelAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
 
 		assertEquals(true, attribute_i.ge(0L));
 		assertEquals(true, attribute_l.ge(0L));
@@ -308,11 +311,11 @@ public class ModelAttributeTest
 	@Test
 	public void TestLe() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute_i = object.DeclareAttribute("test1", 1);
-		GraphAttribute attribute_l = object.DeclareAttribute("test2", 1L);
-		GraphAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
-		GraphAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute_i = object.DeclareAttribute("test1", 1);
+		ModelAttribute attribute_l = object.DeclareAttribute("test2", 1L);
+		ModelAttribute attribute_f = object.DeclareAttribute("test3", 1.0f);
+		ModelAttribute attribute_d = object.DeclareAttribute("test4", 1.0);
 
 		assertEquals(true, attribute_i.le(2L));
 		assertEquals(true, attribute_l.le(2L));
@@ -328,8 +331,8 @@ public class ModelAttributeTest
 	@Test
 	public void TestValid() throws Exception
 	{
-		GraphObject object = graph_service.AddObject();
-		GraphAttribute attribute = object.DeclareAttribute("test", 0);
+		ModelObject object = model_service.AddObject();
+		ModelAttribute attribute = object.DeclareAttribute("test", 0);
 
 		assertTrue(attribute.IsValid());
 
@@ -348,7 +351,7 @@ public class ModelAttributeTest
 
 	private void SingleTypeCheck(Object object1, Object object2, boolean must_throw)
 	{
-		GraphAttribute attribute = graph_service.AddObject()
+		ModelAttribute attribute = model_service.AddObject()
 			.DeclareAttribute("test", object1);
 
 		boolean catched = false;

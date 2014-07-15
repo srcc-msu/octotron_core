@@ -7,14 +7,13 @@
 package ru.parallel.octotron.rules;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.graph.IAttribute;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.rule.OctoObjectRule;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.rule.OctoObjectRule;
 
 public abstract class Aggregate extends OctoObjectRule
 {
@@ -40,7 +39,7 @@ public abstract class Aggregate extends OctoObjectRule
 	{
 		Object res = GetDefaultValue();
 
-		ObjectList<ModelObject, ModelLink> candidates = new ObjectList();
+		ObjectList<ModelObject, ModelLink> candidates = new ObjectList<>();
 
 		switch(dependency)
 		{

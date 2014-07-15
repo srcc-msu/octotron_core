@@ -14,6 +14,7 @@ import ru.parallel.octotron.core.graph.collections.LinkList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 /**
  * implementation of object according to real \graph<br>
@@ -32,7 +33,7 @@ public final class GraphObject extends GraphEntity implements IObject, IEntity
 	}
 
 	@Override
-	public AttributeList GetAttributes()
+	public AttributeList<GraphAttribute> GetAttributes()
 	{
 		return GraphService.AttributesFromPair(this, graph.GetObjectAttributes(uid));
 	}
@@ -44,16 +45,40 @@ public final class GraphObject extends GraphEntity implements IObject, IEntity
 	}
 
 	@Override
-	public GraphAttribute SetAttribute(String name, Object value)
+	public GraphAttribute UpdateAttribute(String name, Object value)
 	{
+		value = SimpleAttribute.ConformType(value);
+
+		if(!TestAttribute(name))
+			throw new ExceptionModelFail("attribute not found: " + name);
+
+		GetAttribute(name).CheckType(value);
 		graph.SetObjectAttribute(uid, name, value);
 		return new GraphAttribute(this, name);
 	}
 
 	@Override
-	public void RemoveAttribute(String name)
+	public GraphAttribute DeclareAttribute(String name, Object value)
 	{
-		graph.DeleteObjectAttribute(uid, name);
+		value = SimpleAttribute.ConformType(value);
+
+		if(TestAttribute(name))
+			throw new ExceptionModelFail("attribute already declared: " + name);
+
+		graph.SetObjectAttribute(uid, name, value);
+		return new GraphAttribute(this, name);
+	}
+
+	@Override
+	public void AddLabel(String label)
+	{
+		graph.AddNodeLabel(uid, label);
+	}
+
+	@Override
+	public boolean TestLabel(String label)
+	{
+		return graph.TestNodeLabel(uid, label);
 	}
 
 	@Override
@@ -149,14 +174,19 @@ public final class GraphObject extends GraphEntity implements IObject, IEntity
 	}
 
 	@Override
-	public ObjectList GetInNeighbors(SimpleAttribute link_attribute)
+	public ObjectList<GraphObject, GraphLink> GetInNeighbors(SimpleAttribute link_attribute)
 	{
 		return GetInNeighbors(link_attribute.GetName(), link_attribute.GetValue());
 	}
 
 	@Override
-	public ObjectList GetOutNeighbors(SimpleAttribute link_attribute)
+	public ObjectList<GraphObject, GraphLink> GetOutNeighbors(SimpleAttribute link_attribute)
 	{
 		return GetOutNeighbors(link_attribute.GetName(), link_attribute.GetValue());
+	}
+
+	public void DeleteAttribute(String name)
+	{
+		graph.DeleteObjectAttribute(uid, name);
 	}
 }

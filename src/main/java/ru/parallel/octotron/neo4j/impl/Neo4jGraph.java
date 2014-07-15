@@ -326,6 +326,37 @@ public final class Neo4jGraph implements IGraph
 	}
 
 	@Override
+	public void AddNodeLabel(Uid uid, String label)
+	{
+		MatchType(uid, EEntityType.OBJECT);
+
+		graph_db.getNodeById(uid.getUid()).addLabel(DynamicLabel.label(label));
+	}
+
+	@Override
+	public boolean TestNodeLabel(Uid uid, String label)
+	{
+		MatchType(uid, EEntityType.OBJECT);
+
+		return graph_db.getNodeById(uid.getUid()).hasLabel(DynamicLabel.label(label));
+	}
+
+	@Override
+	public List<Uid> GetAllLabeledNodes(String label)
+	{
+		List<Uid> list = new LinkedList<>();
+
+		for(Node node : GlobalGraphOperations.at(graph_db)
+			.getAllNodesWithLabel(DynamicLabel.label(label)))
+		{
+			if(node.getId() != 0)
+				list.add(new Uid(node.getId(), EEntityType.OBJECT));
+		}
+
+		return list;
+	}
+
+	@Override
 	public Uid AddLink(Uid source, Uid target, String link_type)
 	{
 		transaction.Write();
@@ -346,7 +377,7 @@ public final class Neo4jGraph implements IGraph
 
 	@Override
 	public void SetObjectAttribute(Uid uid, String name, Object value)
-		{
+	{
 		transaction.Write();
 
 		MatchType(uid, EEntityType.OBJECT);

@@ -10,8 +10,8 @@ package ru.parallel.octotron.rules;
 import org.apache.commons.lang3.ArrayUtils;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.rule.OctoRule;
 
 public class LogicalAnd extends OctoRule
 {

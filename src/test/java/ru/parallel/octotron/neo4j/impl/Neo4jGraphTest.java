@@ -1,12 +1,15 @@
 package ru.parallel.octotron.neo4j.impl;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.parallel.octotron.core.primitive.Uid;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Neo4jGraphTest
 {
@@ -40,8 +43,9 @@ public class Neo4jGraphTest
 		// in our case Save() consist of shutting down db and then loading it, so no need in Load() call.
 		Neo4jGraphTest.graph.Save();
 
-		assertEquals("test", Neo4jGraphTest.graph.GetObjectAttributes(obj1).get(0).getLeft());
-		assertEquals(1, Neo4jGraphTest.graph.GetObjectAttributes(obj1).get(0).getRight());
+		String name = Neo4jGraphTest.graph.GetObjectAttributes(obj1).get(0);
+		assertEquals("test", name);
+		assertEquals(1, Neo4jGraphTest.graph.GetObjectAttribute(obj1, name));
 	}
 
 	/**

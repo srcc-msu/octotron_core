@@ -9,8 +9,6 @@ package ru.parallel.octotron.core.graph.collections;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
-import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.rule.OctoRule;
@@ -209,7 +207,7 @@ public class AutoFormat
 			for(OctoRule rule : entity.GetRules())
 			{
 				String str = " ID: " + rule.GetID() + " attribute: \""
-					+ rule.GetAttribute() + "\"" + System.lineSeparator();
+					+ rule.GetName() + "\"" + System.lineSeparator();
 
 				result.append(str);
 			}

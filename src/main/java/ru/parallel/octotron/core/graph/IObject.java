@@ -4,20 +4,20 @@ import ru.parallel.octotron.core.graph.collections.LinkList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
-public interface IObject extends IEntity
+public interface IObject
 {
-	public LinkList GetInLinks();
-	public LinkList GetOutLinks();
+	LinkList GetInLinks();
+	LinkList GetOutLinks();
 
-	public ObjectList GetInNeighbors();
-	public ObjectList GetOutNeighbors();
+	ObjectList GetInNeighbors();
+	ObjectList GetOutNeighbors();
 
-	public ObjectList GetInNeighbors(String link_name, Object link_value);
-	public ObjectList GetOutNeighbors(String link_name, Object link_value);
+	ObjectList GetInNeighbors(String link_name, Object link_value);
+	ObjectList GetOutNeighbors(String link_name, Object link_value);
 
-	public ObjectList GetInNeighbors(String link_name);
-	public ObjectList GetOutNeighbors(String link_name);
+	ObjectList GetInNeighbors(String link_name);
+	ObjectList GetOutNeighbors(String link_name);
 
-	public ObjectList GetInNeighbors(SimpleAttribute link_attribute);
-	public ObjectList GetOutNeighbors(SimpleAttribute link_attribute);
+	ObjectList GetInNeighbors(SimpleAttribute link_attribute);
+	ObjectList GetOutNeighbors(SimpleAttribute link_attribute);
 }

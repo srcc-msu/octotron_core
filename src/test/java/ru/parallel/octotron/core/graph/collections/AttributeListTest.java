@@ -1,47 +1,47 @@
 package ru.parallel.octotron.core.graph.collections;
 
 import org.junit.*;
-import static org.junit.Assert.*;
-
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
-public class GraphAttributeListTest
+import static org.junit.Assert.assertEquals;
+
+public class AttributeListTest
 {
 	private static GraphService graph_service;
 	private static Neo4jGraph graph;
-	private static GraphObject static_obj;
+	private static GraphObject object;
 
 	@BeforeClass
 	public static void Init()
 		throws ExceptionSystemError
 	{
-		GraphAttributeListTest.graph = new Neo4jGraph( "dbs/" + GraphAttributeListTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphAttributeListTest.graph_service = new GraphService(GraphAttributeListTest.graph);
+		AttributeListTest.graph = new Neo4jGraph( "dbs/" + AttributeListTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
+		AttributeListTest.graph_service = new GraphService(AttributeListTest.graph);
 	}
 
 	@AfterClass
 	public static void Delete()
 		throws ExceptionSystemError
 	{
-		GraphAttributeListTest.graph.Shutdown();
-		GraphAttributeListTest.graph.Delete();
+		AttributeListTest.graph.Shutdown();
+		AttributeListTest.graph.Delete();
 	}
 
 	@Before
 	public void Create()
 	{
-		GraphAttributeListTest.static_obj = GraphAttributeListTest.graph_service.AddObject();
+		AttributeListTest.object = AttributeListTest.graph_service.AddObject();
 	}
 
 	@After
 	public void Clean()
 	{
-		GraphAttributeListTest.graph_service.Clean();
-		GraphAttributeListTest.static_obj = null;
+		AttributeListTest.graph_service.Clean();
+		AttributeListTest.object = null;
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class GraphAttributeListTest
 		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
 
 		assertEquals("list is no empty", list.size(), 0);
-		list.add(GraphAttributeListTest.static_obj.DeclareAttribute("test", 0));
+		list.add(AttributeListTest.object.DeclareAttribute("test", 0));
 		assertEquals("list has no elements", list.size(), 1);
 
 		GraphAttribute elem = list.get(0);
@@ -62,9 +62,9 @@ public class GraphAttributeListTest
 	{
 		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
 
-		list.add(GraphAttributeListTest.static_obj.DeclareAttribute("test1", 0));
-		list.add(GraphAttributeListTest.static_obj.DeclareAttribute("test2", 1.0));
-		list.add(GraphAttributeListTest.static_obj.DeclareAttribute("test3", "test"));
+		list.add(AttributeListTest.object.DeclareAttribute("test1", 0));
+		list.add(AttributeListTest.object.DeclareAttribute("test2", 1.0));
+		list.add(AttributeListTest.object.DeclareAttribute("test3", "test"));
 
 		assertEquals("got something wrong", list.get(0).eq(0), true);
 		assertEquals("got something wrong", list.get(1).eq(1.0), true);
@@ -79,7 +79,7 @@ public class GraphAttributeListTest
 		int N = 10;
 
 		for(int i = 0; i < N; i++)
-			list.add(GraphAttributeListTest.static_obj.DeclareAttribute("test" + i, i));
+			list.add(AttributeListTest.object.DeclareAttribute("test" + i, i));
 
 		int i = 0;
 		for(GraphAttribute att : list)
@@ -98,7 +98,7 @@ public class GraphAttributeListTest
 
 		for(int i = 0; i < N; i++)
 		{
-			list.add(GraphAttributeListTest.static_obj.DeclareAttribute("test" + i, i));
+			list.add(AttributeListTest.object.DeclareAttribute("test" + i, i));
 			assertEquals("got something wrong", list.size(), i + 1);
 		}
 	}
@@ -111,7 +111,7 @@ public class GraphAttributeListTest
 		int N = 10;
 
 		for(int i = 0; i < N; i++)
-			list.add(GraphAttributeListTest.static_obj.DeclareAttribute("test" + i, i));
+			list.add(AttributeListTest.object.DeclareAttribute("test" + i, i));
 
 		AttributeList<GraphAttribute> le = list.le(5);
 		AttributeList<GraphAttribute> lt = list.lt(5);
@@ -151,9 +151,9 @@ public class GraphAttributeListTest
 	{
 		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
 
-		list.add(GraphAttributeListTest.static_obj.DeclareAttribute("b", ""));
-		list.add(GraphAttributeListTest.static_obj.DeclareAttribute("c", ""));
-		list.add(GraphAttributeListTest.static_obj.DeclareAttribute("a", ""));
+		list.add(AttributeListTest.object.DeclareAttribute("b", ""));
+		list.add(AttributeListTest.object.DeclareAttribute("c", ""));
+		list.add(AttributeListTest.object.DeclareAttribute("a", ""));
 
 		list = list.AlphabeticSort();
 

@@ -198,7 +198,12 @@ LOGGER.log(Level.INFO, command[0] + " finished, took: " + Timer.SGet());
 		if(!file.isDirectory() || file.listFiles() == null)
 			throw new ExceptionSystemError("not a directory: " + name);
 
-		return file.listFiles().length == 0;
+		File[] files = file.listFiles();
+
+		if(files == null)
+			throw new ExceptionSystemError("unknown error, could not list files in directory: " + name);
+
+		return files.length == 0;
 	}
 
 	public static void WipeDir(String name)
@@ -218,7 +223,12 @@ LOGGER.log(Level.INFO, command[0] + " finished, took: " + Timer.SGet());
 
 		if(file.isDirectory() && file.listFiles() != null)
 		{
-			for(File child : file.listFiles())
+			File[] files = file.listFiles();
+
+			if(files == null)
+				throw new ExceptionSystemError("unknown error, could not list files in directory: " + file.getAbsolutePath());
+
+			for(File child : files)
 				FileUtils.WipeDir(child);
 		}
 

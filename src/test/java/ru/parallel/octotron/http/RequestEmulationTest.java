@@ -1,16 +1,21 @@
 package ru.parallel.octotron.http;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.utils.FileUtils;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * sometimes tests can fail if message did not came in time</br>
@@ -22,6 +27,7 @@ public class RequestEmulationTest
 
 	private static Neo4jGraph graph;
 	private static GraphService graph_service;
+	private static ModelService model_service;
 
 	private static LinkFactory links;
 	private static ObjectFactory factory;
@@ -37,10 +43,11 @@ public class RequestEmulationTest
 		RequestEmulationTest.graph_service = new GraphService(RequestEmulationTest.graph);
 		RequestEmulationTest.graph_service.EnableObjectIndex("AID");
 		RequestEmulationTest.graph_service.EnableLinkIndex("AID");
+		model_service = new ModelService(graph_service);
 
-		RequestEmulationTest.factory = new ObjectFactory(RequestEmulationTest.graph_service);
-		RequestEmulationTest.links = new LinkFactory(RequestEmulationTest.graph_service)
-			.Attributes(new SimpleAttribute("type", "a_link"));
+		RequestEmulationTest.factory = new ObjectFactory(RequestEmulationTest.model_service);
+		RequestEmulationTest.links = new LinkFactory(RequestEmulationTest.model_service)
+			.Constants(new SimpleAttribute("type", "a_link"));
 	}
 
 	@AfterClass
@@ -50,7 +57,7 @@ public class RequestEmulationTest
 		RequestEmulationTest.graph.Delete();
 	}
 
-	private static final long SLEEP = 100;
+	private static final long SLEEP = 0;//100;
 
 	@Before
 	public void Clean() throws Exception
@@ -125,7 +132,7 @@ public class RequestEmulationTest
 
 		RequestResult result = RequestParser.ParseFromHttp(request)
 			.GetParsedRequest()
-			.Execute(RequestEmulationTest.graph_service, null);
+			.Execute(RequestEmulationTest.model_service, null);
 
 		if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
 			throw new ExceptionParseError(result.data);

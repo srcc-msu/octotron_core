@@ -7,12 +7,12 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.rule.OctoRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,25 +22,18 @@ import java.util.List;
  * */
 public class ObjectFactory extends BaseFactory<ObjectFactory>
 {
-	private ObjectFactory(GraphService graph_service
-		, List<SimpleAttribute> attributes
+	private ObjectFactory(ModelService model_service
+		, List<SimpleAttribute> constants
+		, List<SimpleAttribute> sensors
 		, List<OctoRule> rules
 		, List<OctoReaction> reactions)
 	{
-		super(graph_service, attributes, rules, reactions);
+		super(model_service, constants, sensors, rules, reactions);
 	}
 
-	private ObjectFactory(GraphService graph_service
-		, ArrayList<SimpleAttribute> attributes
-		, ArrayList<OctoRule> rules
-		, ArrayList<OctoReaction> reactions)
+	public ObjectFactory(ModelService model_service)
 	{
-		super(graph_service, attributes, rules, reactions);
-	}
-
-	public ObjectFactory(GraphService graph_service)
-	{
-		super(graph_service);
+		super(model_service);
 	}
 
 	/**
@@ -48,9 +41,10 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * */
 	public ModelObject Create()
 	{
-		ModelObject object = new ModelObject(graph_service.AddObject());
+		ModelObject object = model_service.AddObject();
 
-		object.DeclareAttributes(attributes);
+		object.DeclareConstants(constants);
+		object.AddSensors(sensors);
 		object.AddRules(rules);
 		object.AddReactions(reactions);
 
@@ -62,7 +56,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * */
 	public ObjectList<ModelObject, ModelLink> Create(int count)
 	{
-		ObjectList<ModelObject, ModelLink> objects = new ObjectList();
+		ObjectList<ModelObject, ModelLink> objects = new ObjectList<>();
 
 		for(int i = 0; i < count; i++)
 			objects.add(this.Create());
@@ -71,10 +65,12 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	}
 
 	@Override
-	protected ObjectFactory Clone(List<SimpleAttribute> new_attributes
+	protected ObjectFactory Clone(
+		List<SimpleAttribute> new_constants
+		, List<SimpleAttribute> new_sensors
 		, List<OctoRule> new_rules
 		, List<OctoReaction> new_reactions)
 	{
-		return new ObjectFactory(graph_service, new_attributes, new_rules, new_reactions);
+		return new ObjectFactory(model_service, new_constants, new_sensors, new_rules, new_reactions);
 	}
 }

@@ -1,25 +1,27 @@
 package ru.parallel.octotron.rules;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.core.primitive.EDependencyType;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+
+import static org.junit.Assert.assertEquals;
 
 public class ComputeTests
 {
 	private static GraphService graph_service;
 	private static Neo4jGraph graph;
-	private static GraphObject obj;
+	private static ModelObject obj;
 
 	@BeforeClass
 	public static void Init()
@@ -90,7 +92,7 @@ public class ComputeTests
 		links.OneToEvery(obj, outs);
 
 // hack to avoid problems with ctime check
-		for(GraphObject obj : graph_service.GetAllObjects())
+		for(ModelObject obj : graph_service.GetAllObjects())
 			for(GraphAttribute attribute : obj.GetAttributes())
 				graph_service.SetMeta(obj, attribute.GetName(), "ctime", 1L);
 	}

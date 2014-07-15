@@ -29,7 +29,6 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 		this.parent = parent;
 	}
 
-	@Override
 	public GraphEntity GetParent()
 	{
 		return parent;
@@ -44,10 +43,10 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 	@Override
 	public void SetValue(Object value)
 	{
-		parent.SetAttribute(name, value);
+		parent.UpdateAttribute(name, value);
 	}
 
-	protected final void CheckTypes(Object a_value)
+	final void CheckType(Object a_value)
 	{
 		if(!GetValue().getClass().equals(a_value.getClass()))
 		{
@@ -58,7 +57,7 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 		}
 	}
 
-	protected final void CheckType(Class<?> check_class)
+	final void CheckType(Class<?> check_class)
 	{
 		if(!GetValue().getClass().equals(check_class))
 		{
@@ -118,7 +117,7 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 	public final boolean eq(Object new_value)
 	{
 		new_value = SimpleAttribute.ConformType(new_value);
-		CheckTypes(new_value);
+		CheckType(new_value);
 
 		return GetValue().equals(new_value);
 	}
@@ -127,7 +126,7 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 	public final boolean aeq(Object new_value, Object aprx)
 	{
 		new_value = SimpleAttribute.ConformType(new_value);
-		CheckTypes(new_value);
+		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();
 
@@ -151,7 +150,7 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 	public final boolean gt(Object new_value)
 	{
 		new_value = SimpleAttribute.ConformType(new_value);
-		CheckTypes(new_value);
+		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();
 
@@ -167,7 +166,7 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 	public final boolean lt(Object new_value)
 	{
 		new_value = SimpleAttribute.ConformType(new_value);
-		CheckTypes(new_value);
+		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();
 

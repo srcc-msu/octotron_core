@@ -41,7 +41,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		List<T> new_list = new LinkedList<>(list);
 
 		new_list.addAll(list2.list);
-		return new AttributeList<T>(new_list);
+		return new AttributeList<>(new_list);
 	}
 
 	public final T get(int n)
@@ -92,7 +92,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 			if(att.ge(val))
 				new_list.add(att);
 
-		return new AttributeList<T>(new_list);
+		return new AttributeList<>(new_list);
 	}
 
 	public AttributeList<T> le(Object val)
@@ -103,7 +103,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 			if(att.le(val))
 				new_list.add(att);
 
-		return new AttributeList<T>(new_list);
+		return new AttributeList<>(new_list);
 	}
 
 	public AttributeList<T> gt(Object val)
@@ -114,7 +114,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 			if(att.gt(val))
 				new_list.add(att);
 
-		return new AttributeList<T>(new_list);
+		return new AttributeList<>(new_list);
 	}
 
 	public AttributeList<T> lt(Object val)
@@ -125,7 +125,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 			if(att.lt(val))
 				new_list.add(att);
 
-		return new AttributeList<T>(new_list);
+		return new AttributeList<>(new_list);
 	}
 
 	public AttributeList<T> eq(Object val)
@@ -136,7 +136,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 			if(att.eq(val))
 				new_list.add(att);
 
-		return new AttributeList<T>(new_list);
+		return new AttributeList<>(new_list);
 	}
 
 	public AttributeList<T> ne(Object val)
@@ -147,12 +147,12 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 			if(att.ne(val))
 				new_list.add(att);
 
-		return new AttributeList<T>(new_list);
+		return new AttributeList<>(new_list);
 	}
 
 	public AttributeList<T> AlphabeticSort()
 	{
-		return new AttributeList<T>(InnerAlphabeticSort());
+		return new AttributeList<>(InnerAlphabeticSort());
 	}
 
 	public List<SimpleAttribute> ToSimple()

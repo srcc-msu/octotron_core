@@ -11,7 +11,6 @@ import ru.parallel.octotron.core.graph.collections.AutoFormat;
 import ru.parallel.octotron.core.graph.collections.AutoFormat.E_FORMAT_PARAM;
 import ru.parallel.octotron.core.graph.collections.IEntityList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEntityType;
@@ -22,7 +21,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.logic.ExecutionController;
-import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.utils.JavaUtils;
 import ru.parallel.utils.Timer;
 
@@ -450,7 +448,7 @@ public abstract class Operations
 
 			for(ModelEntity entity : objects)
 			{
-				entity.DeclareAttribute(new SimpleAttribute(name, value));
+				entity.DeclareConstant(new SimpleAttribute(name, value));
 			}
 
 			int count = objects.size();

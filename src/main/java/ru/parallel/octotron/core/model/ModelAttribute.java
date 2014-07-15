@@ -1,10 +1,9 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
-import ru.parallel.octotron.core.model.attribute.Derived;
+import ru.parallel.octotron.core.model.attribute.DerivedAttribute;
+import ru.parallel.octotron.core.model.attribute.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.LinkedList;
@@ -14,7 +13,7 @@ public abstract class ModelAttribute extends AttributeDecorator
 {
 	public static final String extended_attribute = "_extended_attribute";
 
-	protected ModelEntity parent;
+	protected final ModelEntity parent;
 
 	public ModelAttribute(ModelEntity parent, String name)
 	{
@@ -22,10 +21,9 @@ public abstract class ModelAttribute extends AttributeDecorator
 		this.parent = parent;
 	}
 
-	@Override
 	public ModelEntity GetParent()
 	{
-		return ModelEntity.Obtain(GetBase().GetParent());
+		return parent;
 	}
 
 	public Object GetLastValue()
@@ -61,12 +59,12 @@ public abstract class ModelAttribute extends AttributeDecorator
 
 	public List<OctoResponse> PreparePendingReactions()
 	{
-		return new LinkedList<OctoResponse>();
+		return new LinkedList<>();
 	}
 
 	public List<OctoResponse> GetFails()
 	{
-		return new LinkedList<OctoResponse>();
+		return new LinkedList<>();
 	}
 
 	public boolean IsValid()
@@ -84,5 +82,7 @@ public abstract class ModelAttribute extends AttributeDecorator
 		throw new ExceptionModelFail("updating raw attribute");
 	}
 
-	public abstract AttributeList<Derived> GetDependant();
+	public abstract AttributeList<DerivedAttribute> GetDependant();
+
+	public abstract EAttributeType GetType();
 }

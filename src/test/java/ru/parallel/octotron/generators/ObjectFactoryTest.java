@@ -1,12 +1,15 @@
 package ru.parallel.octotron.generators;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
-import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * test some common cases -attributes, factories
@@ -14,7 +17,7 @@ import ru.parallel.octotron.core.graph.collections.ObjectList;
 public class ObjectFactoryTest
 {
 	private static Neo4jGraph graph;
-	private static GraphService graph_service;
+	private static ModelService model_service;
 
 	private static ObjectFactory obj_factory;
 
@@ -23,10 +26,10 @@ public class ObjectFactoryTest
 	{
 		ObjectFactoryTest.graph = new Neo4jGraph( "dbs/"
 			+ ObjectFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		ObjectFactoryTest.graph_service = new GraphService(ObjectFactoryTest.graph);
+		model_service = new ModelService(new GraphService(ObjectFactoryTest.graph));
 
-		ObjectFactoryTest.obj_factory = new ObjectFactory(ObjectFactoryTest.graph_service)
-			.Attributes(new SimpleAttribute("object", "ok"));
+		ObjectFactoryTest.obj_factory = new ObjectFactory(ObjectFactoryTest.model_service)
+			.Constants(new SimpleAttribute("object", "ok"));
 	}
 
 	@AfterClass

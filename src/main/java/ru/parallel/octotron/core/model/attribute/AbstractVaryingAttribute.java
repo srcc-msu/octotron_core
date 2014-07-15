@@ -8,8 +8,7 @@ package ru.parallel.octotron.core.model.attribute;
 
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
-import ru.parallel.octotron.core.graph.impl.GraphEntity;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -28,19 +27,11 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 
 	protected final AttributeObject meta;
 
-	static final String name_const = "_name";
-	static final String value_const = "_value";
-	static final String atime_const = "_atime";
-	static final String ctime_const = "_ctime";
-	static final String valid_const = "_valid";
-
 	public AbstractVaryingAttribute(ModelEntity parent, String name)
 	{
 		super(parent, name);
-		this.meta = GetMeta();
+		this.meta = parent.GetAttributeObject(name);
 	}
-
-	protected abstract AttributeObject GetMeta();
 
 	@Override
 	public ModelEntity GetParent()
@@ -57,13 +48,13 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 	@Override
 	public long GetCTime()
 	{
-		return meta.GetAttribute(ctime_const).GetLong();
+		return meta.GetCTime();
 	}
 
 	@Override
 	public long GetATime()
 	{
-		return meta.GetAttribute(atime_const).GetLong();
+		return meta.GetATime();
 	}
 
 	@Override
@@ -76,7 +67,7 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 
 // check time
 		long cur_ctime = GetCTime();
-		long last_ctime = last.GetAttribute(ctime_const).GetLong();
+		long last_ctime = last.GetAttribute(AttributeObject.ctime_const).GetLong(); // TODO
 
 		if(cur_ctime - last_ctime == 0) // speed is zero
 			return 0.0;
@@ -84,25 +75,22 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 		if(last_ctime == 0) // last value was default
 			return 0.0;
 
-		double diff = ToDouble() - last.GetAttribute(value_const).ToDouble();
+		double diff = ToDouble() - last.GetAttribute(AttributeObject.value_const).ToDouble();
 
 		return diff / (cur_ctime - last_ctime);
 	}
-
-	private static final SimpleAttribute history_link
-		= new SimpleAttribute("type", "_history");
 
 	protected void RotateValue(Object new_value, long cur_time)
 	{
 		meta.SetLast(GetValue(), GetCTime());
 
 		SetValue(new_value);
-		meta.SetAttribute(ctime_const, cur_time);
+		meta.SetCurrent(new_value, cur_time);
 	}
 
 	protected void Touch(long cur_time)
 	{
-		meta.SetAttribute(atime_const, cur_time);
+		meta.Touch(cur_time);
 	}
 
 	@Override
@@ -256,18 +244,36 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 	@Override
 	public boolean IsValid()
 	{
-		return meta.GetAttribute(valid_const).GetBoolean();
+		return meta.GetValid() && GetCTime() != 0;
 	}
 
 	@Override
 	public void SetValid()
 	{
-		meta.SetAttribute(valid_const, true);
+		meta.SetValid(true);
 	}
 
 	@Override
 	public void SetInvalid()
 	{
-		meta.SetAttribute(valid_const, false);
+		meta.SetValid(false);
+	}
+
+	private static final SimpleAttribute dependence_link
+		= new SimpleAttribute("type", "_depends");
+
+	@Override
+	public AttributeList<DerivedAttribute> GetDependant()
+	{
+		AttributeList<DerivedAttribute> result = new AttributeList<>();
+
+		for(GraphObject object : meta.GetBaseObject().GetInNeighbors(dependence_link))
+		{
+			AttributeObject attribute_object = new DerivedObject(meta.GetGraphService(), object);
+
+			result.add((DerivedAttribute)attribute_object.GetAttribute());
+		}
+
+		return result;
 	}
 }

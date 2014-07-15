@@ -19,7 +19,7 @@ import java.util.List;
  * and obtain list of attributes<br>
  * only filtering for now, to be honest..<br>
  * */
-public class LinkList<OT extends IObject, LT extends ILink> extends IEntityList<LT>
+public class LinkList<OT extends IObject & IEntity, LT extends ILink & IEntity> extends IEntityList<LT>
 {
 	private LinkList(List<LT> list)
 	{
@@ -33,55 +33,55 @@ public class LinkList<OT extends IObject, LT extends ILink> extends IEntityList<
 
 	public LinkList<OT, LT> append(LinkList<OT, LT> list)
 	{
-		return new LinkList<OT, LT>(InnerAppend(list.list));
+		return new LinkList<>(InnerAppend(list.list));
 	}
 
 	@Override
 	public LinkList<OT, LT> range(int from, int to)
 	{
-		return new LinkList<OT, LT>(InnerRange(from, to));
+		return new LinkList<>(InnerRange(from, to));
 	}
 
 	@Override
 	public LinkList<OT, LT> ranges(int... ranges)
 	{
-		return new LinkList<OT, LT>(InnerRanges(ranges));
+		return new LinkList<>(InnerRanges(ranges));
 	}
 
 	@Override
 	public LinkList<OT, LT> Filter(SimpleAttribute att, EQueryType type)
 	{
-		return new LinkList<OT, LT>(InnerFilter(att.GetName(), att.GetValue(), type));
+		return new LinkList<>(InnerFilter(att.GetName(), att.GetValue(), type));
 	}
 
 	@Override
 	public LinkList<OT, LT> Filter(String name, Object value, EQueryType type)
 	{
-		return new LinkList<OT, LT>(InnerFilter(name, value, type));
+		return new LinkList<>(InnerFilter(name, value, type));
 	}
 
 	@Override
 	public LinkList<OT, LT> Filter(SimpleAttribute att)
 	{
-		return new LinkList<OT, LT>(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
+		return new LinkList<>(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
 	}
 
 	@Override
 	public LinkList<OT, LT> Filter(String name, Object value)
 	{
-		return new LinkList<OT, LT>(InnerFilter(name, value, EQueryType.EQ));
+		return new LinkList<>(InnerFilter(name, value, EQueryType.EQ));
 	}
 
 	@Override
 	public LinkList<OT, LT> Filter(String name)
 	{
-		return new LinkList<OT, LT>(InnerFilter(name));
+		return new LinkList<>(InnerFilter(name));
 	}
 
 	@Override
 	public LinkList<OT, LT> Uniq()
 	{
-		return new LinkList<OT, LT>(InnerUniq());
+		return new LinkList<>(InnerUniq());
 	}
 
 	public ObjectList<OT, LT> Target()

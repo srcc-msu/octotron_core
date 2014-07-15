@@ -9,12 +9,10 @@ package ru.parallel.octotron.logic;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.reactions.PreparedResponse;
-import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.JavaUtils;
 

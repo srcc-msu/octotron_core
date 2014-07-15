@@ -12,6 +12,7 @@ import ru.parallel.octotron.core.graph.ILink;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 /**
  * implementation of link, that resides in \graph<br>
@@ -36,22 +37,46 @@ public final class GraphLink extends GraphEntity implements ILink, IEntity
 	}
 
 	@Override
-	public AttributeList GetAttributes()
+	public AttributeList<GraphAttribute> GetAttributes()
 	{
 		return GraphService.AttributesFromPair(this, graph.GetLinkAttributes(uid));
 	}
 
 	@Override
-	public GraphAttribute SetAttribute(String name, Object value)
+	public GraphAttribute UpdateAttribute(String name, Object value)
 	{
+		value = SimpleAttribute.ConformType(value);
+
+		if(!TestAttribute(name))
+			throw new ExceptionModelFail("attribute not found: " + name);
+
+		GetAttribute(name).CheckType(value);
 		graph.SetLinkAttribute(uid, name, value);
 		return new GraphAttribute(this, name);
 	}
 
 	@Override
-	public void RemoveAttribute(String name)
+	public GraphAttribute DeclareAttribute(String name, Object value)
 	{
-		graph.DeleteLinkAttribute(uid, name);
+		value = SimpleAttribute.ConformType(value);
+
+		if(TestAttribute(name))
+			throw new ExceptionModelFail("attribute already declared: " + name);
+
+		graph.SetLinkAttribute(uid, name, value);
+		return new GraphAttribute(this, name);
+	}
+
+	@Override
+	public void AddLabel(String label)
+	{
+		throw new ExceptionModelFail("labels on links are not supported yet");
+	}
+
+	@Override
+	public boolean TestLabel(String label)
+	{
+		throw new ExceptionModelFail("labels on links are not supported yet");
 	}
 
 	@Override
@@ -76,5 +101,10 @@ public final class GraphLink extends GraphEntity implements ILink, IEntity
 	public GraphObject Source()
 	{
 		return new GraphObject(graph, graph.GetLinkSource(uid));
+	}
+
+	public void DeleteAttribute(String name)
+	{
+		graph.DeleteLinkAttribute(uid, name);
 	}
 }

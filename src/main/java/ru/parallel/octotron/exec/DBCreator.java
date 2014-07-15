@@ -6,19 +6,17 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.core.graph.ILink;
-import ru.parallel.octotron.core.graph.IObject;
+import ru.parallel.octotron.core.graph.collections.LinkList;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.core.graph.collections.LinkList;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.utils.FileUtils;
 
 import java.io.FileNotFoundException;

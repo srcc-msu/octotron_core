@@ -8,9 +8,9 @@ package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.IGraph;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 /**
  * some entity, that resides in model<br>
@@ -47,42 +47,42 @@ public abstract class GraphEntity implements IEntity
 //			ATTRIBUTES
 //---------------------------------
 
+	@Override
 	public abstract GraphAttribute GetAttribute(String name);
-	public abstract GraphAttribute SetAttribute(String name, Object value);
-
-	abstract Object GetRawAttribute(String name);
-
-
 	@Override
-	public GraphAttribute DeclareAttribute(String name, Object value)
-	{
-		if (TestAttribute(name))
-			throw new ExceptionModelFail("attribute " + name + " already declared");
-
-		return SetAttribute(name, value);
-	}
-
-	@Override
-	public GraphAttribute DeclareAttribute(SimpleAttribute att)
-	{
-		return DeclareAttribute(att.GetName(), att.GetValue());
-	}
-
-	@Override
-	public GraphAttribute SetAttribute(SimpleAttribute att)
-	{
-		return SetAttribute(att.GetName(), att.GetValue());
-	}
+	public abstract AttributeList<GraphAttribute> GetAttributes();
 
 	@Override
 	public boolean TestAttribute(String name, Object value)
 	{
 		return TestAttribute(name) && GetAttribute(name).eq(value);
 	}
-
 	@Override
 	public boolean TestAttribute(SimpleAttribute test)
 	{
 		return TestAttribute(test.GetName(), test.GetValue());
 	}
+
+// ---
+
+	abstract Object GetRawAttribute(String name);
+
+	public abstract GraphAttribute UpdateAttribute(String name, Object value);
+	public GraphAttribute UpdateAttribute(SimpleAttribute att)
+	{
+		return UpdateAttribute(att.GetName(), att.GetValue());
+	}
+
+	public abstract GraphAttribute DeclareAttribute(String name, Object value);
+	public GraphAttribute DeclareAttribute(SimpleAttribute att)
+	{
+		return DeclareAttribute(att.GetName(), att.GetValue());
+	}
+
+// --------------------------------
+//			ATTRIBUTES
+//---------------------------------
+
+	public abstract void AddLabel(String label);
+	public abstract boolean TestLabel(String label);
 }

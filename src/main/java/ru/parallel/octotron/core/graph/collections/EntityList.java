@@ -35,54 +35,54 @@ public class EntityList<T extends IEntity> extends IEntityList<T>
 
 	public EntityList<T> append(EntityList<T> list)
 	{
-		return new EntityList<T>(InnerAppend(list.list));
+		return new EntityList<>(InnerAppend(list.list));
 	}
 
 	@Override
-	public EntityList range(int from, int to)
+	public EntityList<T> range(int from, int to)
 	{
-		return new EntityList(InnerRange(from, to));
+		return new EntityList<>(InnerRange(from, to));
 	}
 
 	@Override
-	public EntityList ranges(int... ranges)
+	public EntityList<T> ranges(int... ranges)
 	{
-		return new EntityList(InnerRanges(ranges));
+		return new EntityList<>(InnerRanges(ranges));
 	}
 
 	@Override
-	public EntityList Filter(SimpleAttribute att, EQueryType type)
+	public EntityList<T> Filter(SimpleAttribute att, EQueryType type)
 	{
-		return new EntityList(InnerFilter(att.GetName(), att.GetValue(), type));
+		return new EntityList<>(InnerFilter(att.GetName(), att.GetValue(), type));
 	}
 
 	@Override
-	public EntityList Filter(String name, Object value, EQueryType type)
+	public EntityList<T> Filter(String name, Object value, EQueryType type)
 	{
-		return new EntityList(InnerFilter(name, value, type));
+		return new EntityList<>(InnerFilter(name, value, type));
 	}
 
 	@Override
-	public EntityList Filter(SimpleAttribute att)
+	public EntityList<T> Filter(SimpleAttribute att)
 	{
-		return new EntityList(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
+		return new EntityList<>(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
 	}
 
 	@Override
-	public EntityList Filter(String name, Object value)
+	public EntityList<T> Filter(String name, Object value)
 	{
-		return new EntityList(InnerFilter(name, value, EQueryType.EQ));
+		return new EntityList<>(InnerFilter(name, value, EQueryType.EQ));
 	}
 
 	@Override
-	public EntityList Filter(String name)
+	public EntityList<T> Filter(String name)
 	{
-		return new EntityList(InnerFilter(name));
+		return new EntityList<>(InnerFilter(name));
 	}
 
 	@Override
-	public EntityList Uniq()
+	public EntityList<T> Uniq()
 	{
-		return new EntityList(InnerUniq());
+		return new EntityList<>(InnerUniq());
 	}
 }

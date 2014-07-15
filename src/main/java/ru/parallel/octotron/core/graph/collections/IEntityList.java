@@ -10,14 +10,8 @@ import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.generators.CsvFiller;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * base class for entity-specific lists<br>
@@ -92,15 +86,6 @@ public abstract class IEntityList<T extends IEntity> implements Iterable<T>
 	}
 
 /**
- * set the same attribute \name = \value to all list elements<br>
- * */
-	public final void SetAttributes(String name, Object value)
-	{
-		for(T obj : list)
-			obj.DeclareAttribute(name, value);
-	}
-
-/**
  * checks that list contains only one element and returns it<br>
  * if it is not true - throws the exception<br>
  * the function is for use in places where there MUST be only one element,<br>
@@ -115,23 +100,6 @@ public abstract class IEntityList<T extends IEntity> implements Iterable<T>
 			throw new ExceptionModelFail("list does not contains elements");
 
 		return get(0);
-	}
-
-	/**
- * allows to set different attributes to all list elements from csv file<br>
- * see {@link CsvFiller} for details
- * */
-	public final void SetAttributesFromCsv(String file_name)
-		throws ExceptionParseError, ExceptionSystemError
-	{
-		try
-		{
-			CsvFiller.Read(file_name, this);
-		}
-		catch (IOException e)
-		{
-			throw new ExceptionSystemError(e);
-		}
 	}
 
 	protected List<T> InnerAppend(List<T> list2)

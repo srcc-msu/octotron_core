@@ -8,8 +8,8 @@ package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
-import ru.parallel.octotron.core.rule.OctoLinkRule;
 import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.rule.OctoLinkRule;
 
 public class LinkedVarArgMatch extends OctoLinkRule
 {

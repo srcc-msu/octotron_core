@@ -3,13 +3,13 @@ package ru.parallel.octotron.generators;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,7 +55,7 @@ public class LinkFactoryTest
 	{
 		ObjectList obj = LinkFactoryTest.obj_factory.Create(2);
 
-		GraphLink link = LinkFactoryTest.link_factory.OneToOne(obj.get(0), obj.get(1));
+		ModelLink link = LinkFactoryTest.link_factory.OneToOne(obj.get(0), obj.get(1));
 
 		assertEquals("created something wrong"
 			, link.GetAttribute("type").GetString(), "contain");
@@ -83,7 +83,7 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorOneToAll()
 	{
-		GraphObject obj = LinkFactoryTest.obj_factory.Create();
+		ModelObject obj = LinkFactoryTest.obj_factory.Create();
 		ObjectList objs = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.OneToEvery(obj, objs);
@@ -102,7 +102,7 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorAllToOne()
 	{
-		GraphObject obj = LinkFactoryTest.obj_factory.Create();
+		ModelObject obj = LinkFactoryTest.obj_factory.Create();
 		ObjectList objs = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.EveryToOne(objs, obj);

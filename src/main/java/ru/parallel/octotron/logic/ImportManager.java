@@ -10,13 +10,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.attribute.Derived;
-import ru.parallel.octotron.core.model.attribute.Sensor;
-import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.model.attribute.DerivedAttribute;
+import ru.parallel.octotron.core.model.attribute.SensorAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.List;
@@ -35,7 +31,7 @@ public class ImportManager
 
 	public AttributeList<ModelAttribute> Process(List<Pair<ModelEntity, SimpleAttribute>> packet)
 	{
-		AttributeList<Sensor> changed = static_proc.Process(packet);
+		AttributeList<SensorAttribute> changed = static_proc.Process(packet);
 
 		if(changed.size() > 0)
 			return ProcessRules(changed.append(ProcessTimers()));
@@ -43,11 +39,11 @@ public class ImportManager
 		return new AttributeList<>();
 	}
 
-	public AttributeList<Derived> ProcessRuleWave(AttributeList<Derived> changed)
+	public AttributeList<DerivedAttribute> ProcessRuleWave(AttributeList<DerivedAttribute> changed)
 	{
-		AttributeList<Derived> result = new AttributeList<>();
+		AttributeList<DerivedAttribute> result = new AttributeList<>();
 
-		for(Derived derived : changed)
+		for(DerivedAttribute derived : changed)
 		{
 			if(derived.Update())
 				result.append(derived.GetDependant());
@@ -56,21 +52,21 @@ public class ImportManager
 		return result;
 	}
 
-	public AttributeList<ModelAttribute> ProcessRules(AttributeList<Sensor> changed)
+	public AttributeList<ModelAttribute> ProcessRules(AttributeList<SensorAttribute> changed)
 	{
-		AttributeList<Derived> rule_changed = new AttributeList<>();
+		AttributeList<DerivedAttribute> rule_changed = new AttributeList<>();
 
-		for(Sensor sensor : changed)
+		for(SensorAttribute sensor : changed)
 			rule_changed.append(sensor.GetDependant());
 
-		AttributeList<Derived> changed_last = new AttributeList<>(rule_changed);
-		AttributeList<Derived> changed_now;
+		AttributeList<DerivedAttribute> changed_last = new AttributeList<>(rule_changed);
+		AttributeList<DerivedAttribute> changed_now;
 
 		while(changed_last.size() > 0)
 		{
 			changed_now = new AttributeList<>();
 
-			for(Derived derived : changed_now)
+			for(DerivedAttribute derived : changed_now)
 				changed_now.append(derived.GetDependant());
 
 			rule_changed = rule_changed.append(changed_now);
@@ -85,11 +81,11 @@ public class ImportManager
 	private long last_timer_check = 0;
 	private static final long TIMER_CHECK_THRESHOLD = 2;
 
-	public AttributeList<Sensor> ProcessTimers()
+	public AttributeList<SensorAttribute> ProcessTimers()
 	{
 		long cur_time = JavaUtils.GetTimestamp();
 
-		AttributeList<Sensor> res = new AttributeList<>();
+		AttributeList<SensorAttribute> res = new AttributeList<>();
 
 		/*if(cur_time - last_timer_check < ImportManager.TIMER_CHECK_THRESHOLD)
 			return res;

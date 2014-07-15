@@ -11,9 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.*;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -248,7 +246,7 @@ public class ExecutionController
 
 			if(!entity.TestAttribute(attr.GetName()))
 			{
-				entity.DeclareAttribute(attr);
+				entity.DeclareConstant(attr);
 				String script = settings.GetScriptByKey("on_new_attribute");
 
 				if(script != null)

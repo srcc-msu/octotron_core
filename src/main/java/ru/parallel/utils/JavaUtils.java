@@ -12,7 +12,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class JavaUtils
+public abstract class JavaUtils
 {
 	public static long GetTimestamp()
 	{

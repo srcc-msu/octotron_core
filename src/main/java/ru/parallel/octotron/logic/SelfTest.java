@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -14,14 +14,13 @@ import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.rules.MirrorLong;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
 
 public class SelfTest
 {
-	private GraphService graph_service;
+	private final GraphService graph_service;
 	private ModelService model_service;
 
-	private ExecutionController controller;
+	private final ExecutionController controller;
 
 	private long test_iteration;
 
@@ -43,13 +42,13 @@ public class SelfTest
 		if(list.size() == 0)
 		{
 			obj1 = model_service.AddObject();
-			obj1.DeclareAttribute("type", "_selftest");
-			obj1.DeclareAttribute("lid", 0);
-			obj1.DeclareAttribute("test_iteration", 0);
+			obj1.DeclareConstant("type", "_selftest");
+			obj1.DeclareConstant("lid", 0);
+			obj1.DeclareConstant("test_iteration", 0);
 
 			obj2 = model_service.AddObject();
-			obj2.DeclareAttribute("type", "_selftest");
-			obj2.DeclareAttribute("lid", 1);
+			obj2.DeclareConstant("type", "_selftest");
+			obj2.DeclareConstant("lid", 1);
 			obj2.AddRule(new MirrorLong("test_iteration", "lid", 0));
 
 			model_service.AddLink(obj1, obj2, "test");

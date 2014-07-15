@@ -106,7 +106,7 @@ public class OctoReaction implements Serializable
 	{
 		ModelAttribute attr = entity.GetAttribute(check_name);
 
-		if(!attr.IsValid()) // TODO
+		if(!attr.IsValid())
 			return false;
 
 		return attr.eq(check_value);

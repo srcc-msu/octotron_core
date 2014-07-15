@@ -1,19 +1,22 @@
 package ru.parallel.octotron.core;
 
-import org.junit.*;
-import static org.junit.Assert.*;
-
-import ru.parallel.octotron.core.graph.impl.GraphObject;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
+import static org.junit.Assert.assertEquals;
 
 public class OctoObjectTest
 {
 	private static Neo4jGraph graph;
-	private static GraphService graph_service;
+	private static ModelService model_service;
 
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
@@ -21,21 +24,21 @@ public class OctoObjectTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		OctoObjectTest.graph = new Neo4jGraph( "dbs/" + OctoObjectTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		OctoObjectTest.graph_service = new GraphService(OctoObjectTest.graph);
+		graph = new Neo4jGraph( "dbs/" + OctoObjectTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
+		model_service = new ModelService(new GraphService(OctoObjectTest.graph));
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
 		};
 
-		OctoObjectTest.obj_factory = new ObjectFactory(OctoObjectTest.graph_service).Attributes(obj_att);
+		OctoObjectTest.obj_factory = new ObjectFactory(model_service).Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("link", "ok"),
 			new SimpleAttribute("type", "contain"),
 		};
 
-		OctoObjectTest.link_factory = new LinkFactory(OctoObjectTest.graph_service).Attributes(link_att);
+		OctoObjectTest.link_factory = new LinkFactory(model_service).Constants(link_att);
 	}
 
 	@AfterClass
@@ -54,7 +57,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		GraphObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
@@ -79,7 +82,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		GraphObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
@@ -104,7 +107,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		GraphObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
@@ -129,7 +132,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		GraphObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 
@@ -159,7 +162,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		GraphObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
 
@@ -189,7 +192,7 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		GraphObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = OctoObjectTest.obj_factory.Create();
 
 		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
 

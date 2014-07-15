@@ -3,14 +3,16 @@ package ru.parallel.octotron.generators;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.*;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.rule.OctoRule;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.rules.Match;
 
 import static org.junit.Assert.assertEquals;
@@ -22,16 +24,21 @@ import static org.junit.Assert.assertTrue;
 public class BaseFactoryTest
 {
 	private static Neo4jGraph graph;
-	private static GraphService graph_service;
+	private static ModelService model_service;
 
 	private static final int N = 10; // some testing param
+	private static ObjectFactory object_factory;
+	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
 		BaseFactoryTest.graph = new Neo4jGraph( "dbs/"
-			+ BaseFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		BaseFactoryTest.graph_service = new GraphService(BaseFactoryTest.graph);
+			+ BaseFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE, true);
+		model_service = new ModelService(new GraphService(graph));
+
+		object_factory = new ObjectFactory(BaseFactoryTest.model_service);
+		link_factory = new LinkFactory(BaseFactoryTest.model_service);
 	}
 
 	@AfterClass
@@ -52,13 +59,13 @@ public class BaseFactoryTest
 		SimpleAttribute attr2 = new SimpleAttribute("test2", 1);
 		SimpleAttribute attr3 = new SimpleAttribute("test3", 2);
 
-		ObjectFactory f1 = new ObjectFactory(BaseFactoryTest.graph_service)
-			.Attributes(attributes).Attributes(attr2, attr3);
-		LinkFactory f2 = new LinkFactory(BaseFactoryTest.graph_service)
-			.Attributes(attr2, attr3).Attributes(attributes);
+		ObjectFactory f1 = object_factory
+			.Constants(attributes).Constants(attr2, attr3);
+		LinkFactory f2 = link_factory
+			.Constants(attr2, attr3).Constants(attributes);
 
-		GraphObject obj = f1.Create();
-		GraphLink link = f2.Attributes(new SimpleAttribute("type", "1"))
+		ModelObject obj = f1.Create();
+		ModelLink link = f2.Constants(new SimpleAttribute("type", "1"))
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertTrue(obj.TestAttribute("test1"));
@@ -77,24 +84,24 @@ public class BaseFactoryTest
 		OctoRule rule2 = new Match("test2", "", "");
 		OctoRule rule3 = new Match("test3", "", "");
 
-		ObjectFactory f1 = new ObjectFactory(BaseFactoryTest.graph_service)
+		ObjectFactory f1 = object_factory
 			.Rules(rules).Rules(rule2, rule3);
-		LinkFactory f2 = new LinkFactory(BaseFactoryTest.graph_service)
+		LinkFactory f2 = link_factory
 			.Rules(rule2, rule3).Rules(rules);
 
-		GraphObject obj = f1.Create();
-		GraphLink link = f2.Attributes(new SimpleAttribute("type", "1"))
+		ModelObject obj = f1.Create();
+		ModelLink link = f2.Constants(new SimpleAttribute("type", "1"))
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertEquals(3, obj.GetRules().size());
-		assertEquals("test1", obj.GetRules().get(0).GetAttribute());
-		assertEquals("test2", obj.GetRules().get(1).GetAttribute());
-		assertEquals("test3", obj.GetRules().get(2).GetAttribute());
+		assertEquals("test1", obj.GetRules().get(0).GetName());
+		assertEquals("test2", obj.GetRules().get(1).GetName());
+		assertEquals("test3", obj.GetRules().get(2).GetName());
 
 		assertEquals(3, link.GetRules().size());
-		assertEquals("test2", link.GetRules().get(0).GetAttribute());
-		assertEquals("test3", link.GetRules().get(1).GetAttribute());
-		assertEquals("test1", link.GetRules().get(2).GetAttribute());
+		assertEquals("test2", link.GetRules().get(0).GetName());
+		assertEquals("test3", link.GetRules().get(1).GetName());
+		assertEquals("test1", link.GetRules().get(2).GetName());
 	}
 
 	@Test
@@ -104,13 +111,21 @@ public class BaseFactoryTest
 		OctoReaction reaction2 = new OctoReaction("test2", 0, new OctoResponse(EEventStatus.INFO, ""));
 		OctoReaction reaction3 = new OctoReaction("test3", 0, new OctoResponse(EEventStatus.INFO, ""));
 
-		ObjectFactory f1 = new ObjectFactory(BaseFactoryTest.graph_service)
+		ObjectFactory f1 = object_factory
+			.Sensors(new SimpleAttribute("test1", 0))
+			.Sensors(new SimpleAttribute("test2", 0))
+			.Sensors(new SimpleAttribute("test3", 0))
 			.Reactions(reactions).Reactions(reaction2, reaction3);
-		LinkFactory f2 = new LinkFactory(BaseFactoryTest.graph_service)
+
+		LinkFactory f2 = link_factory
+			.Sensors(new SimpleAttribute("test1", 0))
+			.Sensors(new SimpleAttribute("test2", 0))
+			.Sensors(new SimpleAttribute("test3", 0))
 			.Reactions(reaction2, reaction3).Reactions(reactions);
 
-		GraphObject obj = f1.Create();
-		GraphLink link = f2.Attributes(new SimpleAttribute("type", "1"))
+		ModelObject obj = f1.Create();
+
+		ModelLink link = f2.Constants(new SimpleAttribute("type", "test"))
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertEquals(3, obj.GetReactions().size());

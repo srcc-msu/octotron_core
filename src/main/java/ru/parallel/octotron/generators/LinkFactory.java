@@ -7,14 +7,14 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.model.ModelLink;
-import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.rule.OctoRule;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.graph.collections.LinkList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.rule.OctoRule;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,17 +29,18 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	public LinkFactory(GraphService graph_service)
+	public LinkFactory(ModelService model_service)
 	{
-		super(graph_service);
+		super(model_service);
 	}
 
-	private LinkFactory(GraphService graph_service
-		, List<SimpleAttribute> attributes
+	private LinkFactory(ModelService model_service
+		, List<SimpleAttribute> constants
+		, List<SimpleAttribute> sensors
 		, List<OctoRule> rules
 		, List<OctoReaction> reactions)
 	{
-		super(graph_service, attributes, rules, reactions);
+		super(model_service, constants, sensors, rules, reactions);
 	}
 /*
 @Override
@@ -63,7 +64,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 // find type attribute
 		SimpleAttribute type = null;
 
-		for(SimpleAttribute att : attributes)
+		for(SimpleAttribute att : constants)
 		{
 			if(att.GetName().equals("type"))
 				type = att;
@@ -73,16 +74,16 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 			throw new ExceptionModelFail("link type not set");
 
 // create edge
-		ModelLink link = new ModelLink(graph_service.AddLink(
-				from.GetBaseObject(), to.GetBaseObject(), (String)type.GetValue()));
+		ModelLink link = model_service.AddLink(from, to, (String)type.GetValue());
 
 // set all attributes
-		link.DeclareAttributes(attributes);
+		link.DeclareConstants(constants);
+		link.AddSensors(sensors);
 		link.AddRules(rules);
 		link.AddReactions(reactions);
 
-		link.DeclareAttribute("source", from.GetAttribute("AID").GetLong());
-		link.DeclareAttribute("target", to.GetAttribute("AID").GetLong());
+		link.DeclareConstant("source", from.GetAttribute("AID").GetLong());
+		link.DeclareConstant("target", to.GetAttribute("AID").GetLong());
 
 		return link;
 	}
@@ -94,7 +95,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * */
 	public LinkList<ModelObject, ModelLink> EveryToOne(ObjectList<ModelObject, ModelLink> from, ModelObject to)
 	{
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		for(int i = 0; i < from.size(); i++)
 			links.add(OneToOne(from.get(i), to));
@@ -108,7 +109,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * */
 	public LinkList<ModelObject, ModelLink> OneToEvery(ModelObject from, ObjectList<ModelObject, ModelLink> to)
 	{
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		for(int i = 0; i < to.size(); i++)
 			links.add(OneToOne(from, to.get(i)));
@@ -128,7 +129,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("all-to-all connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		for(int i = 0; i < from.size(); i++)
 			links.add(OneToOne(from.get(i), to.get(i)));
@@ -142,7 +143,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * */
 	public LinkList<ModelObject, ModelLink> AllToAll(ObjectList<ModelObject, ModelLink> from, ObjectList<ModelObject, ModelLink> to)
 	{
-		LinkList<ModelObject, ModelLink> res_links = new LinkList();
+		LinkList<ModelObject, ModelLink> res_links = new LinkList<>();
 
 		for(int i = 0; i < from.size(); i++)
 			res_links.append(OneToEvery(from.get(i), to));
@@ -162,7 +163,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("every-to-chunks connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		for(int i = 0; i < to.size(); i++)
 			links.add(OneToOne(from.get(i / (to.size() / from.size())), to.get(i)));
@@ -185,7 +186,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("every-to-chunks-less connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		for(int i = 0; i < to.size(); i++)
 			links.add(OneToOne(from.get(i / chunk), to.get(i)));
@@ -206,7 +207,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("ChunksToEvery_Guided connector, not enough elements in guiding array: from="
 					+ from.size() + " sizes.length=" + sizes.length);
 
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		int counter = 0;
 
@@ -241,7 +242,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("chunks-to-all connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		for(int i = 0; i < from.size(); i++)
 			links.add(OneToOne(from.get(i), to.get(i / (from.size() / to.size()))));
@@ -264,7 +265,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("chunks-to-all connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size() + " diff=" + diff + " chunk=" + chunk);
 
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		for(int i = 0; i < from.size(); i++)
 			links.add(OneToOne(from.get(i), to.get(i / chunk)));
@@ -285,7 +286,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 				("EveryToChunks_Guided connector, not enough elements in guiding array: from="
 					+ from.size() + " sizes.length=" + sizes.length);
 
-		LinkList<ModelObject, ModelLink> links = new LinkList();
+		LinkList<ModelObject, ModelLink> links = new LinkList<>();
 
 		int counter = 0;
 
@@ -309,10 +310,12 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	}
 
 	@Override
-	protected LinkFactory Clone(List<SimpleAttribute> new_attributes
+	protected LinkFactory Clone(
+		List<SimpleAttribute> new_constants
+		, List<SimpleAttribute> new_sensors
 		, List<OctoRule> new_rules
 		, List<OctoReaction> new_reactions)
 	{
-		return new LinkFactory(graph_service, new_attributes, new_rules, new_reactions);
+		return new LinkFactory(model_service, new_constants, new_sensors, new_rules, new_reactions);
 	}
 }

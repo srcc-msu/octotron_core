@@ -6,7 +6,7 @@
 
 package ru.parallel.utils;
 
-public class DynamicSleeper
+public final class DynamicSleeper
 {
 	private static final long MIN_SLEEP_TIME = 1;
 	private static final long MAX_SLEEP_TIME = 128;

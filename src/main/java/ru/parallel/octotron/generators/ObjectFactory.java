@@ -14,7 +14,6 @@ import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.rule.OctoRule;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -6,7 +6,9 @@
 
 package ru.parallel.octotron.neo4j.impl;
 
-public class Marker
+import ru.parallel.octotron.core.primitive.UniqueName;
+
+public class Marker implements UniqueName
 {
 	private final long id;
 	private final long reaction_id;
@@ -39,5 +41,11 @@ public class Marker
 	public long GetID()
 	{
 		return id;
+	}
+
+	@Override
+	public String GetUniqName()
+	{
+		return Long.toString(reaction_id);
 	}
 }

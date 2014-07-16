@@ -5,14 +5,20 @@ import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.impl.*;
-import ru.parallel.octotron.core.model.attribute.*;
+import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.graph.impl.GraphBased;
+import ru.parallel.octotron.core.graph.impl.GraphEntity;
+import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.attribute.ConstantAttribute;
+import ru.parallel.octotron.core.model.attribute.DerivedAttribute;
+import ru.parallel.octotron.core.model.attribute.EAttributeType;
+import ru.parallel.octotron.core.model.attribute.SensorAttribute;
+import ru.parallel.octotron.core.model.meta.*;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Marker;
-import sun.management.Sensor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,42 +30,74 @@ public abstract class ModelEntity extends GraphBased implements IEntity
 		super(graph_service, base);
 	}
 
-	public abstract void AddRules(List<OctoRule> rules);
-
-	public void AddReactions(List<OctoReaction> reactions)
+	public ModelAttribute AddSensor(String name, Object value)
 	{
-		for(OctoReaction reaction : reactions)
-		{
-			if(!TestAttribute(reaction.GetCheckName()))
-				throw new ExceptionModelFail("could not assign a reaction, attribute is missing: " + reaction.GetCheckName());
+		return AddSensor(new SimpleAttribute(name, value));
+	}
 
-			ModelAttribute attribute = GetAttribute(reaction.GetCheckName());
+	public ModelAttribute AddSensor(SimpleAttribute attribute)
+	{
+		GetBaseEntity().DeclareAttribute(attribute.GetName(), attribute.GetValue());
+		SensorObject meta = new SensorObjectFactory().Create(GetGraphService(), GetBaseEntity(), attribute);
+		return new SensorAttribute(this, meta, attribute.GetName());
+	}
 
-			if(attribute.GetType() == EAttributeType.CONSTANT)
-				throw new ExceptionModelFail("could not assign a reaction to constant attribute: " + reaction.GetCheckName());
+	public void AddRule(OctoRule rule)
+	{
+		GetBaseEntity().DeclareAttribute(rule.GetName(), rule.GetDefaultValue());
+		new DerivedObjectFactory().Create(GetGraphService(), GetBaseEntity(), rule);
+	}
 
-			AttributeObject object
-				= this.GetAttributeObject(reaction.GetCheckName());
+	public void AddReaction(OctoReaction reaction)
+	{
+		if(!TestAttribute(reaction.GetCheckName()))
+			throw new ExceptionModelFail("could not assign a reaction, attribute is missing: " + reaction.GetCheckName());
 
-			object.AddReaction(reaction);
-		}
+		ModelAttribute attribute = GetAttribute(reaction.GetCheckName());
+
+		if(attribute.GetType() == EAttributeType.CONSTANT)
+			throw new ExceptionModelFail("could not assign a reaction to constant attribute: " + reaction.GetCheckName());
+
+		AttributeObject object
+			= this.TryGetAttributeObject(reaction.GetCheckName());
+
+		object.AddReaction(reaction);
 	}
 
 	@Nullable
-	public abstract AttributeObject GetAttributeObject(String name);
+	public AttributeObject TryGetAttributeObject(String name)
+	{
+		DerivedObject derived_object
+			= new DerivedObjectFactory().TryObtain(GetGraphService(), GetBaseEntity(), name);
+
+		if(derived_object != null)
+			return derived_object;
+
+		SensorObject sensor_object
+			= new SensorObjectFactory().TryObtain(GetGraphService(), GetBaseEntity(), name);
+
+		if(sensor_object != null)
+			return sensor_object;
+
+		return null;
+	}
 
 	public ModelAttribute GetAttribute(String name)
 	{
-		AttributeObject object = GetAttributeObject(name);
+		DerivedObject derived_object
+			= new DerivedObjectFactory().TryObtain(GetGraphService(), GetBaseEntity(), name);
 
-		if(object == null)
+		if(derived_object != null)
+			return new DerivedAttribute(this, derived_object, name);
+
+		SensorObject sensor_object
+			= new SensorObjectFactory().TryObtain(GetGraphService(), GetBaseEntity(), name);
+
+		if(sensor_object != null)
+			return new SensorAttribute(this, sensor_object, name);
+
+		if(GetBaseEntity().TestAttribute(name))
 			return new ConstantAttribute(this, name);
-
-		else if(object.GetBaseObject().TestLabel(EObjectLabels.SENSOR.toString()))
-			return new SensorAttribute(this, name);
-
-		else if(object.GetBaseObject().TestLabel(EObjectLabels.DERIVED.toString()))
-			return new DerivedAttribute(this, name);
 
 		throw new ExceptionModelFail("attribute not found: " + name);
 	}
@@ -125,18 +163,16 @@ public abstract class ModelEntity extends GraphBased implements IEntity
 		return null;
 	}
 
-	public void AddRule(OctoRule rule)
-	{
-	}
-
 	public SensorAttribute GetSensor(String name)
 	{
-		return new SensorAttribute(this, name);
+		return new SensorAttribute(this
+			, new SensorObjectFactory().Obtain(GetGraphService(), GetBaseEntity(), name), name);
 	}
 
 	public DerivedAttribute GetDerived(String name)
 	{
-		return new DerivedAttribute(this, name);
+		return new DerivedAttribute(this
+			, new DerivedObjectFactory().Obtain(GetGraphService(), GetBaseEntity(), name), name);
 	}
 
 	public ConstantAttribute GetConstant(String name)
@@ -167,5 +203,19 @@ public abstract class ModelEntity extends GraphBased implements IEntity
 			AddSensor(attribute);
 	}
 
-	public abstract void AddSensor(SimpleAttribute attribute);
+	public void AddRules(List<OctoRule> rules)
+	{
+		for(OctoRule rule : rules)
+		{
+			AddRule(rule);
+		}
+	}
+
+	public void AddReactions(List<OctoReaction> reactions)
+	{
+		for(OctoReaction reaction : reactions)
+		{
+			AddReaction(reaction);
+		}
+	}
 }

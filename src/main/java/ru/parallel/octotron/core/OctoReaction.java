@@ -8,11 +8,12 @@ package ru.parallel.octotron.core;
 
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.UniqueName;
 import ru.parallel.octotron.impl.PersistentStorage;
 
 import java.io.Serializable;
 
-public class OctoReaction implements Serializable
+public class OctoReaction implements Serializable, UniqueName
 {
 	private static final long serialVersionUID = 8900268116120488911L;
 
@@ -110,5 +111,11 @@ public class OctoReaction implements Serializable
 			return false;
 
 		return attr.eq(check_value);
+	}
+
+	@Override
+	public String GetUniqName()
+	{
+		return GetCheckName();
 	}
 }

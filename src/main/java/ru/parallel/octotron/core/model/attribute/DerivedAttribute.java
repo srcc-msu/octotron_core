@@ -7,14 +7,15 @@
 package ru.parallel.octotron.core.model.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.meta.DerivedObject;
+import ru.parallel.octotron.core.model.meta.DerivedObjectFactory;
 import ru.parallel.octotron.core.rule.OctoRule;
-import ru.parallel.octotron.impl.PersistentStorage;
 
-public class DerivedAttribute extends AbstractVaryingAttribute
+public class DerivedAttribute extends AbstractVaryingAttribute<DerivedObject>
 {
-	public DerivedAttribute(ModelEntity parent, String name)
+	public DerivedAttribute(ModelEntity parent, DerivedObject meta, String name)
 	{
-		super(parent, name);
+		super(parent, meta, name);
 	}
 
 	@Override
@@ -23,13 +24,9 @@ public class DerivedAttribute extends AbstractVaryingAttribute
 		return EAttributeType.DERIVED;
 	}
 
-	private static final String rule_key_const = "_rule";
-
 	public boolean Update()
 	{
-		long rule_id = meta.GetAttribute(rule_key_const).GetLong();
-
-		OctoRule rule = PersistentStorage.INSTANCE.GetRules().Get(rule_id);
+		OctoRule rule = ((DerivedObject)meta).GetRule();
 		Object new_val = rule.Compute(parent);
 
 		return Update(new_val, false);

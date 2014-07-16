@@ -11,8 +11,6 @@ import java.util.List;
 
 public abstract class ModelAttribute extends AttributeDecorator
 {
-	public static final String extended_attribute = "_extended_attribute";
-
 	protected final ModelEntity parent;
 
 	public ModelAttribute(ModelEntity parent, String name)

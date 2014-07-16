@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 /**
  * base class for attributes, contains some common operations<br>
  * */
-public class SimpleAttribute
+public class SimpleAttribute implements UniqueName
 {
 	protected final String name;
 	protected final Object value;
@@ -103,5 +103,11 @@ public class SimpleAttribute
 			return JavaUtils.Quotify((String)value);
 		else
 			throw new ExceptionModelFail("unsupported type: " + value.getClass());
+	}
+
+	@Override
+	public String GetUniqName()
+	{
+		return GetName();
 	}
 }

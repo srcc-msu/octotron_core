@@ -7,13 +7,14 @@
 package ru.parallel.octotron.core.model.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.model.meta.AttributeObject;
+import ru.parallel.octotron.core.model.meta.SensorObject;
 
-public class SensorAttribute extends AbstractVaryingAttribute
+public class SensorAttribute extends AbstractVaryingAttribute<SensorObject>
 {
-	public SensorAttribute(ModelEntity parent, String name)
+	public SensorAttribute(ModelEntity parent, SensorObject meta, String name)
 	{
-		super(parent, name);
+		super(parent, meta, name);
 	}
 
 	@Override
@@ -26,7 +27,4 @@ public class SensorAttribute extends AbstractVaryingAttribute
 	{
 		return Update(new_value, true);
 	}
-
-	private static final SimpleAttribute attribute_type
-		= new SimpleAttribute("type", "_derived");
 }

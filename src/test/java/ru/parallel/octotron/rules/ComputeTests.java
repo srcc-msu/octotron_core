@@ -6,7 +6,9 @@ import org.junit.Test;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -22,6 +24,7 @@ public class ComputeTests
 	private static GraphService graph_service;
 	private static Neo4jGraph graph;
 	private static ModelObject obj;
+	private static ModelService model_service;
 
 	@BeforeClass
 	public static void Init()
@@ -29,57 +32,58 @@ public class ComputeTests
 	{
 		ComputeTests.graph = new Neo4jGraph( "dbs/" + ComputeTests.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		ComputeTests.graph_service = new GraphService(ComputeTests.graph);
+		ComputeTests.model_service = new ModelService(graph_service);
 
-		ObjectFactory in = new ObjectFactory(graph_service)
-			.Attributes(new SimpleAttribute("in_d1", 10.0))
-			.Attributes(new SimpleAttribute("in_l1", 20))
-			.Attributes(new SimpleAttribute("in_b1", true))
-			.Attributes(new SimpleAttribute("in_str1", "yes"))
-			.Attributes(new SimpleAttribute("d1", 10.0))
-			.Attributes(new SimpleAttribute("d2", 11.0))
-			.Attributes(new SimpleAttribute("l1", 20))
-			.Attributes(new SimpleAttribute("l2", 21))
-			.Attributes(new SimpleAttribute("b1", true))
-			.Attributes(new SimpleAttribute("b2", true))
-			.Attributes(new SimpleAttribute("str1", "yes"))
-			.Attributes(new SimpleAttribute("str2", "yes"));
+		ObjectFactory in = new ObjectFactory(model_service)
+			.Sensors(new SimpleAttribute("in_d1", 10.0))
+			.Sensors(new SimpleAttribute("in_l1", 20))
+			.Sensors(new SimpleAttribute("in_b1", true))
+			.Sensors(new SimpleAttribute("in_str1", "yes"))
+			.Sensors(new SimpleAttribute("d1", 10.0))
+			.Sensors(new SimpleAttribute("d2", 11.0))
+			.Sensors(new SimpleAttribute("l1", 20))
+			.Sensors(new SimpleAttribute("l2", 21))
+			.Sensors(new SimpleAttribute("b1", true))
+			.Sensors(new SimpleAttribute("b2", true))
+			.Sensors(new SimpleAttribute("str1", "yes"))
+			.Sensors(new SimpleAttribute("str2", "yes"));
 
-		ObjectFactory out = new ObjectFactory(graph_service)
-			.Attributes(new SimpleAttribute("out_d1", 20.0))
-			.Attributes(new SimpleAttribute("out_l1", 10))
-			.Attributes(new SimpleAttribute("out_b1", false))
-			.Attributes(new SimpleAttribute("out_str1", "no"))
-			.Attributes(new SimpleAttribute("d1", 20.0))
-			.Attributes(new SimpleAttribute("d2", 21.0))
-			.Attributes(new SimpleAttribute("l1", 10))
-			.Attributes(new SimpleAttribute("l2", 11))
-			.Attributes(new SimpleAttribute("b1", false))
-			.Attributes(new SimpleAttribute("b2", false))
-			.Attributes(new SimpleAttribute("str1", "no"))
-			.Attributes(new SimpleAttribute("str2", "no"))
-			.Attributes(new SimpleAttribute("mismatch_num", 333))
-			.Attributes(new SimpleAttribute("match_num", 444));
+		ObjectFactory out = new ObjectFactory(model_service)
+			.Sensors(new SimpleAttribute("out_d1", 20.0))
+			.Sensors(new SimpleAttribute("out_l1", 10))
+			.Sensors(new SimpleAttribute("out_b1", false))
+			.Sensors(new SimpleAttribute("out_str1", "no"))
+			.Sensors(new SimpleAttribute("d1", 20.0))
+			.Sensors(new SimpleAttribute("d2", 21.0))
+			.Sensors(new SimpleAttribute("l1", 10))
+			.Sensors(new SimpleAttribute("l2", 11))
+			.Sensors(new SimpleAttribute("b1", false))
+			.Sensors(new SimpleAttribute("b2", false))
+			.Sensors(new SimpleAttribute("str1", "no"))
+			.Sensors(new SimpleAttribute("str2", "no"))
+			.Sensors(new SimpleAttribute("mismatch_num", 333))
+			.Sensors(new SimpleAttribute("match_num", 444));
 
-		ObjectFactory self = new ObjectFactory(graph_service)
-			.Attributes(new SimpleAttribute("d1", 0.0))
-			.Attributes(new SimpleAttribute("d2", 1.0))
-			.Attributes(new SimpleAttribute("l1", 2))
-			.Attributes(new SimpleAttribute("l2", 3))
-			.Attributes(new SimpleAttribute("b1", true))
-			.Attributes(new SimpleAttribute("b2", false))
-			.Attributes(new SimpleAttribute("str1", "maybe"))
-			.Attributes(new SimpleAttribute("str2", "maybe"))
-			.Attributes(new SimpleAttribute("bt1", true))
-			.Attributes(new SimpleAttribute("bt2", true))
-			.Attributes(new SimpleAttribute("bf1", false))
-			.Attributes(new SimpleAttribute("bf2", false))
-			.Attributes(new SimpleAttribute("mismatch_num", 222))
-			.Attributes(new SimpleAttribute("match_num", 444));
+		ObjectFactory self = new ObjectFactory(model_service)
+			.Sensors(new SimpleAttribute("d1", 0.0))
+			.Sensors(new SimpleAttribute("d2", 1.0))
+			.Sensors(new SimpleAttribute("l1", 2))
+			.Sensors(new SimpleAttribute("l2", 3))
+			.Sensors(new SimpleAttribute("b1", true))
+			.Sensors(new SimpleAttribute("b2", false))
+			.Sensors(new SimpleAttribute("str1", "maybe"))
+			.Sensors(new SimpleAttribute("str2", "maybe"))
+			.Sensors(new SimpleAttribute("bt1", true))
+			.Sensors(new SimpleAttribute("bt2", true))
+			.Sensors(new SimpleAttribute("bf1", false))
+			.Sensors(new SimpleAttribute("bf2", false))
+			.Sensors(new SimpleAttribute("mismatch_num", 222))
+			.Sensors(new SimpleAttribute("match_num", 444));
 
 		obj = self.Create();
 
-		LinkFactory links = new LinkFactory(graph_service)
-			.Attributes(new SimpleAttribute("type", "test"));
+		LinkFactory links = new LinkFactory(model_service)
+			.Constants(new SimpleAttribute("type", "test"));
 
 		ObjectList ins = in.Create(3);
 		ObjectList outs = out.Create(4);
@@ -90,11 +94,6 @@ public class ComputeTests
 		links.EveryToOne(ins, obj);
 
 		links.OneToEvery(obj, outs);
-
-// hack to avoid problems with ctime check
-		for(ModelObject obj : graph_service.GetAllObjects())
-			for(GraphAttribute attribute : obj.GetAttributes())
-				graph_service.SetMeta(obj, attribute.GetName(), "ctime", 1L);
 	}
 
 	@AfterClass
@@ -351,7 +350,7 @@ public class ComputeTests
 	@Test
 	public void TestUpdatedRecently() throws Exception
 	{
-		IAttribute attr = obj.DeclareAttribute("test_update", 0);
+/*		ModelAttribute attr = obj.AddSensor("test_update", 0);
 
 		UpdatedRecently rule = new UpdatedRecently("test", "test_update", 1);
 
@@ -368,7 +367,7 @@ public class ComputeTests
 		Thread.sleep(3000);
 		assertEquals(false, rule.Compute(obj));
 		attr.Update(0, true);
-		assertEquals(true, rule.Compute(obj));
+		assertEquals(true, rule.Compute(obj));*/
 	}
 
 	@Test

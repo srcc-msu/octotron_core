@@ -8,6 +8,7 @@ package ru.parallel.octotron.core.rule;
 
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.UniqueName;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.impl.PersistentStorage;
 
@@ -16,7 +17,7 @@ import java.io.Serializable;
 /**
  * currently Octopy supports only only one constructor for rules</br>
  * */
-public abstract class OctoRule implements Serializable
+public abstract class OctoRule implements UniqueName, Serializable
 {
 	private static final long serialVersionUID = 6126662649331847764L;
 	protected final String name;
@@ -47,4 +48,9 @@ public abstract class OctoRule implements Serializable
 	public abstract Object GetDefaultValue();
 	public abstract EDependencyType GetDependency();
 
+	@Override
+	public String GetUniqName()
+	{
+		return GetName();
+	}
 }

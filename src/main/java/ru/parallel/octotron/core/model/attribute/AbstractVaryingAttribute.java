@@ -12,6 +12,8 @@ import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.meta.AttributeObject;
+import ru.parallel.octotron.core.model.meta.DerivedObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.utils.JavaUtils;
@@ -21,16 +23,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class AbstractVaryingAttribute extends ModelAttribute
+public abstract class AbstractVaryingAttribute<T extends AttributeObject> extends ModelAttribute
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	protected final AttributeObject meta;
+	protected T meta;
 
-	public AbstractVaryingAttribute(ModelEntity parent, String name)
+	public AbstractVaryingAttribute(ModelEntity parent, T meta, String name)
 	{
 		super(parent, name);
-		this.meta = parent.GetAttributeObject(name);
+		this.meta = meta;
 	}
 
 	@Override
@@ -60,14 +62,9 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 	@Override
 	public double GetSpeed()
 	{
-		GraphObject last = meta.GetLast();
-
-		if(last == null)
-			return 0.0;
-
 // check time
 		long cur_ctime = GetCTime();
-		long last_ctime = last.GetAttribute(AttributeObject.ctime_const).GetLong(); // TODO
+		long last_ctime = meta.GetLast().GetCTime();
 
 		if(cur_ctime - last_ctime == 0) // speed is zero
 			return 0.0;
@@ -75,7 +72,7 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 		if(last_ctime == 0) // last value was default
 			return 0.0;
 
-		double diff = ToDouble() - last.GetAttribute(AttributeObject.value_const).ToDouble();
+		double diff = ToDouble() - meta.GetLast().GetValue().ToDouble();
 
 		return diff / (cur_ctime - last_ctime);
 	}
@@ -147,7 +144,7 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 			}
 
 			boolean needed = reaction.ReactionNeeded(parent);
-			long state = meta.GetReactionState(reaction.GetID());
+			long state = meta.GetReactionState(reaction);
 
 			if(needed && skip_marker != null)
 			{
@@ -167,11 +164,11 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 					{
 						result.add(reaction.GetResponse());
 
-						meta.SetReactionState(reaction.GetID(), OctoReaction.STATE_EXECUTED);
+						meta.SetReactionState(reaction, OctoReaction.STATE_EXECUTED);
 					}
 					else
 					{
-						meta.SetReactionState(reaction.GetID(), OctoReaction.STATE_STARTED);
+						meta.SetReactionState(reaction, OctoReaction.STATE_STARTED);
 
 						Notify(OctoReaction.DELAY_PREFIX
 							+ reaction.GetID(), delay + 1);
@@ -184,7 +181,7 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 					{
 						result.add(reaction.GetResponse());
 
-						meta.SetReactionState(reaction.GetID(), OctoReaction.STATE_EXECUTED);
+						meta.SetReactionState(reaction, OctoReaction.STATE_EXECUTED);
 
 						StopNotify(OctoReaction.DELAY_PREFIX
 							+ reaction.GetID());
@@ -203,7 +200,7 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 				}
 				else if(state == OctoReaction.STATE_STARTED)
 				{
-					meta.SetReactionState(reaction.GetID(), OctoReaction.STATE_NONE);
+					meta.SetReactionState(reaction, OctoReaction.STATE_NONE);
 
 					StopNotify(OctoReaction.DELAY_PREFIX
 						+ reaction.GetID());
@@ -213,7 +210,7 @@ public abstract class AbstractVaryingAttribute extends ModelAttribute
 					if(reaction.GetRecoverResponse() != null)
 						result.add(reaction.GetRecoverResponse());
 
-					meta.SetReactionState(reaction.GetID(), OctoReaction.STATE_NONE);
+					meta.SetReactionState(reaction, OctoReaction.STATE_NONE);
 				}
 			}
 		}

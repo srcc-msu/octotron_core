@@ -40,10 +40,9 @@ public class RequestEmulationTest
 		RequestEmulationTest.http = HTTPServer.GetDummyServer(RequestEmulationTest.HTTP_PORT);
 
 		RequestEmulationTest.graph = new Neo4jGraph( "dbs/" + RequestEmulationTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		RequestEmulationTest.graph_service = new GraphService(RequestEmulationTest.graph);
-		RequestEmulationTest.graph_service.EnableObjectIndex("AID");
-		RequestEmulationTest.graph_service.EnableLinkIndex("AID");
-		model_service = new ModelService(graph_service);
+GraphService.Init(graph);
+		GraphService.Get().EnableObjectIndex("AID");
+		GraphService.Get().EnableLinkIndex("AID");
 
 		RequestEmulationTest.factory = new ObjectFactory(RequestEmulationTest.model_service);
 		RequestEmulationTest.links = new LinkFactory(RequestEmulationTest.model_service)
@@ -62,7 +61,7 @@ public class RequestEmulationTest
 	@Before
 	public void Clean() throws Exception
 	{
-		RequestEmulationTest.graph_service.Clean();
+		GraphService.Get().Clean();
 		RequestEmulationTest.http.Clear();
 	}
 
@@ -89,7 +88,7 @@ public class RequestEmulationTest
 	/**
 	 * testing curl manually, will use it in later tests via the function
 	 * */
-	@Test
+/*	@Test
 	public void HttpMessage() throws Exception
 	{
 		int COUNT = 3;
@@ -138,8 +137,8 @@ public class RequestEmulationTest
 			throw new ExceptionParseError(result.data);
 
 		return result.data;
-	}
-
+	}*/
+/*
 	@Test
 	public void HttpRequest() throws Exception
 	{
@@ -248,5 +247,5 @@ public class RequestEmulationTest
 		test = GetRequestResult("/view/p?path=link(AID).target()");
 		if(test == null || !test.contains("AID"))
 			fail("bad response target: " + test);
-	}
+	}*/
 }

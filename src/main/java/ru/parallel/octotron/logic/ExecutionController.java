@@ -41,7 +41,6 @@ public class ExecutionController
 
 	private final GlobalSettings settings;
 	private final IGraph graph;
-	private final GraphService graph_service;
 	private final ModelService model_service = null;
 
 	private ImportManager manager;
@@ -67,11 +66,10 @@ public class ExecutionController
 
 	private SelfTest tester;
 
-	public ExecutionController(IGraph graph, GraphService graph_service, GlobalSettings settings)
+	public ExecutionController(IGraph graph, GlobalSettings settings)
 		throws ExceptionSystemError
 	{
 		this.graph = graph;
-		this.graph_service = graph_service;
 		this.settings = settings;
 
 		Init();
@@ -93,7 +91,7 @@ public class ExecutionController
 
 		stat = new Statistics();
 
-		tester = new SelfTest(graph_service, this);
+		tester = new SelfTest(this);
 	}
 
 /**
@@ -342,7 +340,7 @@ public class ExecutionController
 	public String MakeSnapshot() {
 		StringBuilder result = new StringBuilder();
 
-		ObjectList<ModelObject, ModelLink> list = model_service.GetAllObjects();
+		ObjectList<ModelObject, ModelLink> list = ModelService.GetAllObjects();
 
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
 
@@ -371,7 +369,7 @@ public class ExecutionController
 	{
 		StringBuilder result = new StringBuilder();
 
-		ObjectList<ModelObject, ModelLink> list = model_service.GetAllObjects();
+		ObjectList<ModelObject, ModelLink> list = ModelService.GetAllObjects();
 
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
 

@@ -13,14 +13,13 @@ import static org.junit.Assert.assertNotNull;
 
 public class ObjectListTest
 {
-	private static GraphService graph_service;
 	private static Neo4jGraph graph;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
 		ObjectListTest.graph = new Neo4jGraph( "dbs/" + ObjectListTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		ObjectListTest.graph_service = new GraphService(ObjectListTest.graph);
+		GraphService.Init(ObjectListTest.graph);
 	}
 
 	@AfterClass
@@ -37,10 +36,10 @@ public class ObjectListTest
 
 		assertEquals("list is not empty", list.size(), 0);
 
-		list.add(ObjectListTest.graph_service.AddObject());
+		list.add(GraphService.Get().AddObject());
 		assertEquals("list has no elements", list.size(), 1);
 
-		list.add(ObjectListTest.graph_service.AddObject());
+		list.add(GraphService.Get().AddObject());
 		assertEquals("list has not get 2nd element", list.size(), 2);
 
 		assertNotNull("add not worked correctly", list.get(0));
@@ -51,9 +50,9 @@ public class ObjectListTest
 	{
 		ObjectList<GraphObject, GraphLink> list = new ObjectList<>();
 
-		list.add(ObjectListTest.graph_service.AddObject());
-		list.add(ObjectListTest.graph_service.AddObject());
-		list.add(ObjectListTest.graph_service.AddObject());
+		list.add(GraphService.Get().AddObject());
+		list.add(GraphService.Get().AddObject());
+		list.add(GraphService.Get().AddObject());
 
 		assertNotNull("got something wrong", list.get(0));
 		assertNotNull("got something wrong", list.get(1));
@@ -68,7 +67,7 @@ public class ObjectListTest
 		int N = 10;
 
 		for(int i = 0; i < N; i++)
-			list.add(ObjectListTest.graph_service.AddObject());
+			list.add(GraphService.Get().AddObject());
 
 
 		int i = 0;
@@ -88,7 +87,7 @@ public class ObjectListTest
 
 		for(int i = 0; i < N; i++)
 		{
-			list.add(ObjectListTest.graph_service.AddObject());
+			list.add(GraphService.Get().AddObject());
 			assertEquals("got something wrong", list.size(), i + 1);
 		}
 	}
@@ -102,7 +101,7 @@ public class ObjectListTest
 
 		for(int i = 0; i < N; i++)
 		{
-			list.add(ObjectListTest.graph_service.AddObject());
+			list.add(GraphService.Get().AddObject());
 		}
 
 		assertEquals(N, list.range(0, N).size());
@@ -124,8 +123,8 @@ public class ObjectListTest
 
 		for(int i = 0; i < N; i++)
 		{
-			list1.add(ObjectListTest.graph_service.AddObject());
-			list2.add(ObjectListTest.graph_service.AddObject());
+			list1.add(GraphService.Get().AddObject());
+			list2.add(GraphService.Get().AddObject());
 		}
 
 		list3 = list1.append(list2);

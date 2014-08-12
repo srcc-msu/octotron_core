@@ -6,20 +6,20 @@ import ru.parallel.octotron.core.graph.impl.GraphService;
 
 public class ModelLink extends ModelEntity implements ILink
 {
-	public ModelLink(GraphService graph_service, GraphLink link)
+	public ModelLink(GraphLink link)
 	{
-		super(graph_service, link);
+		super(link);
 	}
 
 	@Override
 	public ModelObject Target()
 	{
-		return new ModelObject(GetGraphService(), GetBaseLink().Target());
+		return new ModelObject(GetBaseLink().Target());
 	}
 
 	@Override
 	public ModelObject Source()
 	{
-		return new ModelObject(GetGraphService(), GetBaseLink().Source());
+		return new ModelObject(GetBaseLink().Source());
 	}
 }

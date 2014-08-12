@@ -10,14 +10,12 @@ import ru.parallel.octotron.core.primitive.UniqueName;
 
 public class Marker implements UniqueName
 {
-	private final long id;
 	private final long reaction_id;
 	private final String description;
 	private final boolean suppress;
 
-	public Marker(long id, long reaction_id, String description, boolean suppress)
+	public Marker(long reaction_id, String description, boolean suppress)
 	{
-		this.id = id;
 		this.reaction_id = reaction_id;
 		this.suppress = suppress;
 		this.description = description;
@@ -36,11 +34,6 @@ public class Marker implements UniqueName
 	public boolean IsSuppress()
 	{
 		return suppress;
-	}
-
-	public long GetID()
-	{
-		return id;
 	}
 
 	@Override

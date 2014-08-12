@@ -8,9 +8,9 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 public class SensorObjectFactory extends MetaObjectFactory<SensorObject, SimpleAttribute>
 {
 	@Override
-	protected SensorObject CreateInstance(GraphService graph_service, GraphObject meta_object)
+	protected SensorObject CreateInstance(GraphObject meta_object)
 	{
-		return new SensorObject(graph_service, meta_object);
+		return new SensorObject(meta_object);
 	}
 
 	@Override

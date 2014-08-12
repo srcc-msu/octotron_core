@@ -114,7 +114,7 @@ public class StartOctotron
 		{
 			graph = new Neo4jGraph(path + "_neo4j", Neo4jGraph.Op.LOAD);
 
-			exec_control = new ExecutionController(graph, new GraphService(graph), settings);
+			exec_control = new ExecutionController(graph, settings);
 
 			PersistentStorage.INSTANCE.Load(path);
 

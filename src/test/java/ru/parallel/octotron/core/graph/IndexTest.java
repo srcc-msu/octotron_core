@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core;
+package ru.parallel.octotron.core.graph;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,12 +31,10 @@ public class IndexTest
 	public static void Init() throws Exception
 	{
 		IndexTest.graph = new Neo4jGraph( "dbs/" + IndexTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		graph_service = new GraphService(graph);
-		model_service = new ModelService(graph_service);
+		GraphService.Init(graph);
 
-
-		IndexTest.graph_service.EnableObjectIndex("att_obj");
-		IndexTest.graph_service.EnableLinkIndex("att_link");
+		GraphService.Get().EnableObjectIndex("att_obj");
+		GraphService.Get().EnableLinkIndex("att_link");
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok"),
@@ -63,7 +61,7 @@ public class IndexTest
 	@After
 	public void Clean() throws Exception
 	{
-		IndexTest.graph_service.Clean();
+		GraphService.Get().Clean();
 	}
 
 	@Test
@@ -74,8 +72,8 @@ public class IndexTest
 		ObjectList objs = IndexTest.obj_factory.Create(N);
 		IndexTest.link_factory.EveryToEvery(objs, objs);
 
-		LinkList found = IndexTest.graph_service.GetLinks("att_link", "value23456");
-		LinkList not_found = IndexTest.graph_service.GetLinks("att_link", "aa");
+		LinkList found = GraphService.Get().GetLinks("att_link", "value23456");
+		LinkList not_found = GraphService.Get().GetLinks("att_link", "aa");
 
 		assertEquals(N, found.size());
 		assertEquals(0, not_found.size());
@@ -88,8 +86,8 @@ public class IndexTest
 
 		IndexTest.obj_factory.Create(N);
 
-		ObjectList found = IndexTest.graph_service.GetObjects("att_obj", "value12345");
-		ObjectList not_found = IndexTest.graph_service.GetObjects("att_obj", "aa");
+		ObjectList found = GraphService.Get().GetObjects("att_obj", "value12345");
+		ObjectList not_found = GraphService.Get().GetObjects("att_obj", "aa");
 
 		assertEquals(N, found.size());
 		assertEquals(0, not_found.size());
@@ -103,8 +101,8 @@ public class IndexTest
 		ObjectList objs = IndexTest.obj_factory.Create(N);
 		IndexTest.link_factory.EveryToEvery(objs, objs);
 
-		LinkList found = IndexTest.graph_service.GetLinks("att_link");
-		LinkList not_found = IndexTest.graph_service.GetLinks("wrong");
+		LinkList found = GraphService.Get().GetLinks("att_link");
+		LinkList not_found = GraphService.Get().GetLinks("wrong");
 
 		assertEquals(N, found.size());
 		assertEquals(0, not_found.size());
@@ -117,8 +115,8 @@ public class IndexTest
 
 		IndexTest.obj_factory.Create(N);
 
-		ObjectList found = IndexTest.graph_service.GetObjects("att_obj");
-		ObjectList not_found = IndexTest.graph_service.GetObjects("wrong");
+		ObjectList found = GraphService.Get().GetObjects("att_obj");
+		ObjectList not_found = GraphService.Get().GetObjects("wrong");
 
 		assertEquals(N, found.size());
 		assertEquals(0, not_found.size());
@@ -132,9 +130,9 @@ public class IndexTest
 		ObjectList objs = IndexTest.obj_factory.Create(N);
 		IndexTest.link_factory.EveryToEvery(objs, objs);
 
-		LinkList found = IndexTest.graph_service.QueryLinks("att_link", "*lue234*");
+		LinkList found = GraphService.Get().QueryLinks("att_link", "*lue234*");
 
-		LinkList not_found = IndexTest.graph_service.QueryLinks("att_link", "f*lue234*");
+		LinkList not_found = GraphService.Get().QueryLinks("att_link", "f*lue234*");
 
 		assertEquals(N, found.size());
 		assertEquals(0, not_found.size());
@@ -147,8 +145,8 @@ public class IndexTest
 
 		IndexTest.obj_factory.Create(N);
 
-		ObjectList found = IndexTest.graph_service.QueryObjects("att_obj", "*lue123*");
-		ObjectList not_found = IndexTest.graph_service.QueryObjects("att_obj", "f*lue123*");
+		ObjectList found = GraphService.Get().QueryObjects("att_obj", "*lue123*");
+		ObjectList not_found = GraphService.Get().QueryObjects("att_obj", "f*lue123*");
 
 		assertEquals(N, found.size());
 		assertEquals(0, not_found.size());
@@ -160,13 +158,13 @@ public class IndexTest
 		ObjectList<ModelObject, ModelLink> objs = IndexTest.obj_factory.Create(2);
 		IndexTest.link_factory.OneToOne(objs.get(0), objs.get(1));
 
-		IndexTest.graph_service.GetLink("att_link", "value23456");
+		GraphService.Get().GetLink("att_link", "value23456");
 
 		boolean catched = false;
 // this must throw
 		try
 		{
-			IndexTest.graph_service.GetLink("att_link", "gfgf");
+			GraphService.Get().GetLink("att_link", "gfgf");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -180,7 +178,7 @@ public class IndexTest
 // this must throw - two possible links
 		try
 		{
-			IndexTest.graph_service.GetLink("att_link", "value23456");
+			GraphService.Get().GetLink("att_link", "value23456");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -194,14 +192,14 @@ public class IndexTest
 	{
 		IndexTest.obj_factory.Create(1);
 
-		IndexTest.graph_service.GetObject("att_obj", "value12345");
+		GraphService.Get().GetObject("att_obj", "value12345");
 
 		boolean catched = false;
 
 // this must throw
 		try
 		{
-			IndexTest.graph_service.GetObject("att_obj", "gfgf");
+			GraphService.Get().GetObject("att_obj", "gfgf");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -215,7 +213,7 @@ public class IndexTest
 // this must throw - two possible objects
 		try
 		{
-			IndexTest.graph_service.GetObject("att_obj", "value12345");
+			GraphService.Get().GetObject("att_obj", "value12345");
 		}
 		catch(ExceptionModelFail ignore)
 		{

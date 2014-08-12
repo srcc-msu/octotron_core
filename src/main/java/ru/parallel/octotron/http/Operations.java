@@ -483,15 +483,15 @@ public abstract class Operations
 			if(value_str != null)
 			{
 				Object value = SimpleAttribute.ValueFromStr(value_str);
-				graph_service.GetStatic().DeclareAttribute(name, value);
+				GraphService.Get().GetStatic().DeclareAttribute(name, value);
 			}
 			else
 			{
-				if(!graph_service.GetStatic().TestAttribute(name))
+				if(!GraphService.Get().GetStatic().TestAttribute(name))
 					return new RequestResult(E_RESULT_TYPE.TEXT, "attribute not found");
 
 				return new RequestResult(E_RESULT_TYPE.TEXT, name + "="
-					+ SimpleAttribute.ValueToStr(graph_service.GetStatic().GetAttribute(name).GetValue()));
+					+ SimpleAttribute.ValueToStr(GraphService.Get().GetStatic().GetAttribute(name).GetValue()));
 			}
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, "static attribute set");*/
@@ -587,10 +587,11 @@ public abstract class Operations
 
 			StringBuilder res = new StringBuilder();
 
-			for(ModelEntity object : objects)
+			//TODO
+/*			for(ModelEntity object : objects)
 				res.append("marker id=")
 					.append(object.AddMarker(reaction_id, description, suppress))
-					.append(System.lineSeparator());
+					.append(System.lineSeparator());*/
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, res.toString());
 		}
@@ -607,14 +608,15 @@ public abstract class Operations
 			, Map<String, String> params, IEntityList<ModelEntity>objects)
 				throws ExceptionParseError
 		{
-			Operations.StrictParams(params, "path", "id");
+			Operations.StrictParams(params, "path", "name", "id");
 			String id_str = params.get("id");
+			String name = params.get("name");
 
 			long id = (long)SimpleAttribute.ValueFromStr(id_str);
 
 			ModelEntity entity = objects.Only();
 
-			entity.DeleteMarker(id);
+			entity.DeleteMarker(name, id);
 
 			String data = "deleted marker with id: " + id;
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -765,7 +767,7 @@ time = Timer.SEnd();
 				long cur_time = JavaUtils.GetTimestamp();
 				if(cur_time - last_export > EXPORT_THRESHOLD || cached_result == null)
 				{
-					cached_result = model_service.ExportDot();
+					cached_result = ModelService.ExportDot();
 					last_export = cur_time;
 				}
 
@@ -776,7 +778,7 @@ time = Timer.SEnd();
 				if(!(objects instanceof ObjectList))
 					return new RequestResult(E_RESULT_TYPE.ERROR, "export works only with objects");
 
-				return new RequestResult(E_RESULT_TYPE.TEXT, model_service.ExportDot((ObjectList)objects));
+				return new RequestResult(E_RESULT_TYPE.TEXT, ModelService.ExportDot((ObjectList)objects));
 			}
 		}
 	});

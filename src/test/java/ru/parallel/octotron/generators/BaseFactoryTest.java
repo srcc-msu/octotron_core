@@ -35,7 +35,6 @@ public class BaseFactoryTest
 	{
 		BaseFactoryTest.graph = new Neo4jGraph( "dbs/"
 			+ BaseFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE, true);
-		model_service = new ModelService(new GraphService(graph));
 
 		object_factory = new ObjectFactory(BaseFactoryTest.model_service);
 		link_factory = new LinkFactory(BaseFactoryTest.model_service);
@@ -72,43 +71,41 @@ public class BaseFactoryTest
 		assertTrue(obj.TestAttribute("test2"));
 		assertTrue(obj.TestAttribute("test3"));
 
-		assertTrue("missing link attribute", link.TestAttribute("test1"));
-		assertTrue("missing link attribute", link.TestAttribute("test2"));
-		assertTrue("missing link attribute", link.TestAttribute("test3"));
+		assertTrue(link.TestAttribute("test1"));
+		assertTrue(link.TestAttribute("test2"));
+		assertTrue(link.TestAttribute("test3"));
 	}
 
 	@Test
-	public void TestRules()
+	public void TestVariables()
 	{
 		OctoRule[] rules = { new Match("test1", "", "") };
 		OctoRule rule2 = new Match("test2", "", "");
 		OctoRule rule3 = new Match("test3", "", "");
 
 		ObjectFactory f1 = object_factory
-			.Rules(rules).Rules(rule2, rule3);
+			.Variables(rules).Variables(rule2, rule3);
 		LinkFactory f2 = link_factory
-			.Rules(rule2, rule3).Rules(rules);
+			.Variables(rule2, rule3).Variables(rules);
 
 		ModelObject obj = f1.Create();
 		ModelLink link = f2.Constants(new SimpleAttribute("type", "1"))
 			.OneToOne(f1.Create(), f1.Create());
 
-		assertEquals(3, obj.GetRules().size());
-		assertEquals("test1", obj.GetRules().get(0).GetName());
-		assertEquals("test2", obj.GetRules().get(1).GetName());
-		assertEquals("test3", obj.GetRules().get(2).GetName());
+		assertTrue(obj.TestAttribute("test1"));
+		assertTrue(obj.TestAttribute("test2"));
+		assertTrue(obj.TestAttribute("test3"));
 
-		assertEquals(3, link.GetRules().size());
-		assertEquals("test2", link.GetRules().get(0).GetName());
-		assertEquals("test3", link.GetRules().get(1).GetName());
-		assertEquals("test1", link.GetRules().get(2).GetName());
+		assertTrue(link.TestAttribute("test1"));
+		assertTrue(link.TestAttribute("test2"));
+		assertTrue(link.TestAttribute("test3"));
 	}
 
 	@Test
 	public void TestReactions()
 	{
-		OctoReaction[] reactions = { new OctoReaction("test1", 0, new OctoResponse(EEventStatus.INFO, "")) };
-		OctoReaction reaction2 = new OctoReaction("test2", 0, new OctoResponse(EEventStatus.INFO, ""));
+		OctoReaction[] reactions = { new OctoReaction("test2", 0, new OctoResponse(EEventStatus.INFO, "")) };
+		OctoReaction reaction2 = new OctoReaction("test3", 0, new OctoResponse(EEventStatus.INFO, ""));
 		OctoReaction reaction3 = new OctoReaction("test3", 0, new OctoResponse(EEventStatus.INFO, ""));
 
 		ObjectFactory f1 = object_factory
@@ -128,15 +125,12 @@ public class BaseFactoryTest
 		ModelLink link = f2.Constants(new SimpleAttribute("type", "test"))
 			.OneToOne(f1.Create(), f1.Create());
 
-		assertEquals(3, obj.GetReactions().size());
-		assertEquals("test1", obj.GetReactions().get(0).GetCheckName());
-		assertEquals("test2", obj.GetReactions().get(1).GetCheckName());
-		assertEquals("test3", obj.GetReactions().get(2).GetCheckName());
+		assertEquals(0, obj.GetAttribute("test1").GetReactions().size());
+		assertEquals(1, obj.GetAttribute("test2").GetReactions().size());
+		assertEquals(2, obj.GetAttribute("test3").GetReactions().size());
 
-		assertEquals(3, link.GetReactions().size());
-		assertEquals("test2", link.GetReactions().get(0).GetCheckName());
-		assertEquals("test3", link.GetReactions().get(1).GetCheckName());
-		assertEquals("test1", link.GetReactions().get(2).GetCheckName());
+		assertEquals(0, link.GetAttribute("test1").GetReactions().size());
+		assertEquals(1, link.GetAttribute("test2").GetReactions().size());
+		assertEquals(2, link.GetAttribute("test3").GetReactions().size());
 	}
-
 }

@@ -8,17 +8,10 @@ import ru.parallel.octotron.core.primitive.Uid;
 
 public abstract class GraphBased implements IEntity
 {
-	private final GraphService graph_service;
 	private final GraphEntity base;
 
-	public GraphService GetGraphService()
+	public GraphBased(GraphEntity base)
 	{
-		return graph_service;
-	}
-
-	public GraphBased(GraphService graph_service, GraphEntity base)
-	{
-		this.graph_service = graph_service;
 		this.base = base;
 	}
 

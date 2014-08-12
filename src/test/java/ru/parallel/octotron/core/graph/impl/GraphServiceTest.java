@@ -1,13 +1,10 @@
-package ru.parallel.octotron.core;
+package ru.parallel.octotron.core.graph.impl;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +18,7 @@ public class GraphServiceTest
 	public static void Init() throws Exception
 	{
 		GraphServiceTest.graph = new Neo4jGraph( "dbs/" + GraphServiceTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphServiceTest.graph_service = new GraphService(GraphServiceTest.graph);
+GraphService.Init(graph);
 	}
 
 	@AfterClass
@@ -34,7 +31,7 @@ public class GraphServiceTest
 	@After
 	public void Clean()
 	{
-		graph_service.Clean();
+		GraphService.Get().Clean();
 	}
 
 
@@ -46,15 +43,15 @@ public class GraphServiceTest
 		final int N = 10;
 		for(int i = 0; i < N; i++)
 		{
-			objects.add(graph_service.AddObject());
+			objects.add(GraphService.Get().AddObject());
 		}
 
-		assertEquals(0, graph_service.GetAllLinks().size());
+		assertEquals(0, GraphService.Get().GetAllLinks().size());
 
 		for(int i = 0; i < N; i++)
 		{
-			graph_service.AddLink(objects.get(i), objects.get((i * 2) % N), "test");
-			assertEquals(i + 1, graph_service.GetAllLinks().size());
+			GraphService.Get().AddLink(objects.get(i), objects.get((i * 2) % N), "test");
+			assertEquals(i + 1, GraphService.Get().GetAllLinks().size());
 		}
 	}
 
@@ -64,32 +61,32 @@ public class GraphServiceTest
 		final int N = 10;
 
 		// static must not be visible
-		assertEquals(0, graph_service.GetAllObjects().size());
+		assertEquals(0, GraphService.Get().GetAllObjects().size());
 
 		for(int i = 0; i < N; i++)
 		{
-			graph_service.AddObject();
+			GraphService.Get().AddObject();
 
-			assertEquals(i + 1, graph_service.GetAllObjects().size());
+			assertEquals(i + 1, GraphService.Get().GetAllObjects().size());
 		}
 	}
 
 	@Test
 	public void TestClean() throws Exception
 	{
-		GraphObject obj1 = graph_service.AddObject();
-		GraphObject obj2 = graph_service.AddObject();
-		graph_service.AddObject();
-		graph_service.AddLink(obj1, obj2, "test");
+		GraphObject obj1 = GraphService.Get().AddObject();
+		GraphObject obj2 = GraphService.Get().AddObject();
+		GraphService.Get().AddObject();
+		GraphService.Get().AddLink(obj1, obj2, "test");
 
-		graph_service.Clean();
+		GraphService.Get().Clean();
 
 		assertEquals("unexpected objects found"
 			, 0
-			, graph_service.GetAllObjects().size());
+			, GraphService.Get().GetAllObjects().size());
 
 		assertEquals("some links found"
 			, 0
-			, graph_service.GetAllLinks().size());
+			, GraphService.Get().GetAllLinks().size());
 	}
 }

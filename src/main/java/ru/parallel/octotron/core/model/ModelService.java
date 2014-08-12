@@ -8,76 +8,69 @@ import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
-public class ModelService
+public abstract class ModelService
 {
-	private final GraphService graph_service;
-
-	public ModelService(GraphService graph_service)
-	{
-		this.graph_service = graph_service;
-	}
-
-	public ObjectList<ModelObject, ModelLink> GetObjects(SimpleAttribute attr)
+	public static ObjectList<ModelObject, ModelLink> GetObjects(SimpleAttribute attr)
 	{
 		return null;
 	}
 
-	public ObjectList<ModelObject, ModelLink> GetObjects(String name, Object value)
+	public static ObjectList<ModelObject, ModelLink> GetObjects(String name, Object value)
 	{
 		return null;
 	}
 
-	public ObjectList<ModelObject, ModelLink> GetObjects(String name)
+	public static ObjectList<ModelObject, ModelLink> GetObjects(String name)
 	{
 		return null;
 	}
 
-	public LinkList<ModelObject, ModelLink> GetLinks(SimpleAttribute attr)
+	public static LinkList<ModelObject, ModelLink> GetLinks(SimpleAttribute attr)
 	{
 		return null;
 	}
 
-	public LinkList<ModelObject, ModelLink> GetLinks(String name, Object value)
+	public static LinkList<ModelObject, ModelLink> GetLinks(String name, Object value)
 	{
 		return null;
 	}
 
-	public LinkList<ModelObject, ModelLink> GetLinks(String name)
+	public static LinkList<ModelObject, ModelLink> GetLinks(String name)
 	{
 		return null;
 	}
 
-	public ObjectList<ModelObject, ModelLink> GetAllObjects()
+	public static ObjectList<ModelObject, ModelLink> GetAllObjects()
 	{
 		return null;
 	}
 
-	public LinkList<ModelObject, ModelLink> GetAllLinks()
+	public static LinkList<ModelObject, ModelLink> GetAllLinks()
 	{
 		return null;
 	}
 
-	public String ExportDot(ObjectList<ModelObject, ModelLink> objects)
+	public static String ExportDot(ObjectList<ModelObject, ModelLink> objects)
 	{
 		return null;
 	}
 
-	public String ExportDot()
+	public static String ExportDot()
 	{
 		return null;
 	}
 
-	public ModelObject AddObject()
+	public static ModelObject AddObject()
 	{
-		GraphObject object = graph_service.AddObject();
+		GraphObject object = GraphService.Get().AddObject();
 		object.AddLabel(EObjectLabels.MODEL.toString());
-		return new ModelObject(graph_service, object);
+		return new ModelObject(object);
 	}
 
-	public ModelLink AddLink(ModelObject obj1, ModelObject obj2, String type)
+	public static ModelLink AddLink(ModelObject obj1, ModelObject obj2, String type)
 	{
-		GraphLink link = graph_service.AddLink(obj1.GetBaseObject(), obj2.GetBaseObject(), type);
-		return new ModelLink(graph_service, link);
+		GraphLink link = GraphService.Get().AddLink(obj1.GetBaseObject(), obj2.GetBaseObject(), type);
+		return new ModelLink(link);
 	}
 
 /*	public String ExportDot()

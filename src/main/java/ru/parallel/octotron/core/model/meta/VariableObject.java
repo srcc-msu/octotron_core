@@ -5,11 +5,11 @@ import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.impl.PersistentStorage;
 
-public class DerivedObject extends AttributeObject
+public class VariableObject extends AttributeObject
 {
-	public DerivedObject(GraphService graph_service, GraphObject object)
+	public VariableObject(GraphObject object)
 	{
-		super(graph_service, object);
+		super(object);
 	}
 
 	private static final String rid_const = "_rid";
@@ -24,7 +24,7 @@ public class DerivedObject extends AttributeObject
 	public void Init(Object object)
 	{
 		OctoRule rule = (OctoRule) object;
-		super.Init(GetBaseObject(), rule.GetName(), rule.GetDefaultValue());
+		Init(GetBaseObject(), rule.GetName(), rule.GetDefaultValue());
 		GetBaseObject().DeclareAttribute(rid_const, rule.GetID());
 	}
 }

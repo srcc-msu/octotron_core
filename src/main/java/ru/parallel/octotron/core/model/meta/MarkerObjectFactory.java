@@ -8,9 +8,9 @@ import ru.parallel.octotron.neo4j.impl.Marker;
 public class MarkerObjectFactory extends MetaObjectFactory<MarkerObject, Marker>
 {
 	@Override
-	protected MarkerObject CreateInstance(GraphService graph_service, GraphObject meta_object)
+	protected MarkerObject CreateInstance(GraphObject meta_object)
 	{
-		return new MarkerObject(graph_service, meta_object);
+		return new MarkerObject(meta_object);
 	}
 
 	@Override

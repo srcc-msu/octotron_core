@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.model.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.meta.AttributeObject;
 import ru.parallel.octotron.core.model.meta.SensorObject;
 
 public class SensorAttribute extends AbstractVaryingAttribute<SensorObject>

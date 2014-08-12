@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.attribute.DerivedAttribute;
+import ru.parallel.octotron.core.model.attribute.VariableAttribute;
 import ru.parallel.octotron.core.model.attribute.SensorAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.utils.JavaUtils;
@@ -39,11 +39,11 @@ public class ImportManager
 		return new AttributeList<>();
 	}
 
-	public AttributeList<DerivedAttribute> ProcessRuleWave(AttributeList<DerivedAttribute> changed)
+	public AttributeList<VariableAttribute> ProcessRuleWave(AttributeList<VariableAttribute> changed)
 	{
-		AttributeList<DerivedAttribute> result = new AttributeList<>();
+		AttributeList<VariableAttribute> result = new AttributeList<>();
 
-		for(DerivedAttribute derived : changed)
+		for(VariableAttribute derived : changed)
 		{
 			if(derived.Update())
 				result.append(derived.GetDependant());
@@ -54,19 +54,19 @@ public class ImportManager
 
 	public AttributeList<ModelAttribute> ProcessRules(AttributeList<SensorAttribute> changed)
 	{
-		AttributeList<DerivedAttribute> rule_changed = new AttributeList<>();
+		AttributeList<VariableAttribute> rule_changed = new AttributeList<>();
 
 		for(SensorAttribute sensor : changed)
 			rule_changed.append(sensor.GetDependant());
 
-		AttributeList<DerivedAttribute> changed_last = new AttributeList<>(rule_changed);
-		AttributeList<DerivedAttribute> changed_now;
+		AttributeList<VariableAttribute> changed_last = new AttributeList<>(rule_changed);
+		AttributeList<VariableAttribute> changed_now;
 
 		while(changed_last.size() > 0)
 		{
 			changed_now = new AttributeList<>();
 
-			for(DerivedAttribute derived : changed_now)
+			for(VariableAttribute derived : changed_now)
 				changed_now.append(derived.GetDependant());
 
 			rule_changed = rule_changed.append(changed_now);

@@ -1,12 +1,12 @@
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.model.attribute.DerivedAttribute;
+import ru.parallel.octotron.core.model.attribute.VariableAttribute;
 import ru.parallel.octotron.core.model.attribute.EAttributeType;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.neo4j.impl.Marker;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class ModelAttribute extends AttributeDecorator
@@ -44,25 +44,13 @@ public abstract class ModelAttribute extends AttributeDecorator
 	{
 		return 0L;
 	}
-
 	public long GetATime()
 	{
 		return 0L;
 	}
-
 	public double GetSpeed()
 	{
 		return 0.0;
-	}
-
-	public List<OctoResponse> PreparePendingReactions()
-	{
-		return new LinkedList<>();
-	}
-
-	public List<OctoResponse> GetFails()
-	{
-		return new LinkedList<>();
 	}
 
 	public boolean IsValid()
@@ -70,17 +58,26 @@ public abstract class ModelAttribute extends AttributeDecorator
 		return true;
 	}
 
-	public void SetValid()
-	{
-		throw new ExceptionModelFail("updating raw attribute");
-	}
-
-	public void SetInvalid()
-	{
-		throw new ExceptionModelFail("updating raw attribute");
-	}
-
-	public abstract AttributeList<DerivedAttribute> GetDependant();
+	public abstract void SetValid();
+	public abstract void SetInvalid();
 
 	public abstract EAttributeType GetType();
+
+	public abstract AttributeList<VariableAttribute> GetDependant();
+
+//--------
+
+	public abstract void AddReaction(OctoReaction reaction);
+
+	public abstract List<OctoReaction> GetReactions();
+
+	public abstract List<OctoResponse> PreparePendingReactions();
+
+	public abstract List<OctoResponse> GetFails();
+
+	public abstract List<Marker> GetMarkers();
+
+	public abstract long AddMarker(OctoReaction reaction, String description, boolean suppress);
+
+	public abstract void DeleteMarker(long id);
 }

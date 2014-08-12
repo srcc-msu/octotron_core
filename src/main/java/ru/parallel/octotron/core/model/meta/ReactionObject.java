@@ -10,9 +10,9 @@ public class ReactionObject extends MetaObject
 	private static final String reaction_id_const = "_id";
 	private static final String reaction_state_const = "_status";
 
-	public ReactionObject(GraphService graph_service, GraphEntity base)
+	public ReactionObject(GraphEntity base)
 	{
-		super(graph_service, base);
+		super(base);
 	}
 
 	@Override

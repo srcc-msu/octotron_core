@@ -17,7 +17,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 /**
  * implementation of link, that resides in \graph<br>
  * */
-public final class GraphLink extends GraphEntity implements ILink, IEntity
+public final class GraphLink extends GraphEntity implements ILink
 {
 	public GraphLink(IGraph graph, Uid uid)
 	{

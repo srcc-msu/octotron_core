@@ -11,7 +11,6 @@ import static org.junit.Assert.assertEquals;
 
 public class AttributeListTest
 {
-	private static GraphService graph_service;
 	private static Neo4jGraph graph;
 	private static GraphObject object;
 
@@ -20,7 +19,7 @@ public class AttributeListTest
 		throws ExceptionSystemError
 	{
 		AttributeListTest.graph = new Neo4jGraph( "dbs/" + AttributeListTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		AttributeListTest.graph_service = new GraphService(AttributeListTest.graph);
+		GraphService.Init(AttributeListTest.graph);
 	}
 
 	@AfterClass
@@ -34,13 +33,13 @@ public class AttributeListTest
 	@Before
 	public void Create()
 	{
-		AttributeListTest.object = AttributeListTest.graph_service.AddObject();
+		AttributeListTest.object = GraphService.Get().AddObject();
 	}
 
 	@After
 	public void Clean()
 	{
-		AttributeListTest.graph_service.Clean();
+		GraphService.Get().Clean();
 		AttributeListTest.object = null;
 	}
 

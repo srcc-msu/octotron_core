@@ -7,9 +7,9 @@ import ru.parallel.octotron.core.primitive.EObjectLabels;
 public class HistoryObjectFactory extends MetaObjectFactory<HistoryObject, HistoryObject.OldPair>
 {
 	@Override
-	protected HistoryObject CreateInstance(GraphService graph_service, GraphObject meta_object)
+	protected HistoryObject CreateInstance(GraphObject meta_object)
 	{
-		return new HistoryObject(graph_service, meta_object);
+		return new HistoryObject(meta_object);
 	}
 
 	@Override

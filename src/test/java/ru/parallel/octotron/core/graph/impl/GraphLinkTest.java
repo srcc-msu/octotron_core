@@ -1,9 +1,8 @@
-package ru.parallel.octotron.core;
+package ru.parallel.octotron.core.graph.impl;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 public class GraphLinkTest
@@ -15,7 +14,7 @@ public class GraphLinkTest
 	public static void Init() throws Exception
 	{
 		GraphLinkTest.graph = new Neo4jGraph( "dbs/" + GraphLinkTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphLinkTest.graph_service = new GraphService(GraphLinkTest.graph);
+GraphService.Init(graph);
 	}
 
 	@AfterClass
@@ -28,7 +27,7 @@ public class GraphLinkTest
 	@After
 	public void Clean()
 	{
-		graph_service.Clean();
+		GraphService.Get().Clean();
 	}
 
 

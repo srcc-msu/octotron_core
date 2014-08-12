@@ -26,7 +26,6 @@ public class ObjectFactoryTest
 	{
 		ObjectFactoryTest.graph = new Neo4jGraph( "dbs/"
 			+ ObjectFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		model_service = new ModelService(new GraphService(ObjectFactoryTest.graph));
 
 		ObjectFactoryTest.obj_factory = new ObjectFactory(ObjectFactoryTest.model_service)
 			.Constants(new SimpleAttribute("object", "ok"));

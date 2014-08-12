@@ -8,22 +8,22 @@ import ru.parallel.octotron.core.model.ModelObject;
 
 public class ListConverter
 {
-	public static LinkList<ModelObject, ModelLink> GraphToModel(GraphService graph_service, LinkList<GraphObject, GraphLink> list)
+	public static LinkList<ModelObject, ModelLink> GraphToModel(LinkList<GraphObject, GraphLink> list)
 	{
 		LinkList<ModelObject, ModelLink> result = new LinkList<>();
 
 		for(GraphLink link : list)
-			result.add(new ModelLink(graph_service, link));
+			result.add(new ModelLink(link));
 
 		return result;
 	}
 
-	public static ObjectList<ModelObject, ModelLink> GraphToModel(GraphService graph_service, ObjectList<GraphObject, GraphLink> list)
+	public static ObjectList<ModelObject, ModelLink> GraphToModel(ObjectList<GraphObject, GraphLink> list)
 	{
 		ObjectList<ModelObject, ModelLink> result = new ObjectList<>();
 
 		for(GraphObject object : list)
-			result.add(new ModelObject(graph_service, object));
+			result.add(new ModelObject(object));
 
 		return result;
 	}

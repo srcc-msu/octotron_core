@@ -40,11 +40,11 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * */
 	public ModelObject Create()
 	{
-		ModelObject object = model_service.AddObject();
+		ModelObject object = ModelService.AddObject();
 
 		object.DeclareConstants(constants);
-		object.AddSensors(sensors);
-		object.AddRules(rules);
+		object.DeclareSensors(sensors);
+		object.DeclareVariables(rules);
 		object.AddReactions(reactions);
 
 		return object;

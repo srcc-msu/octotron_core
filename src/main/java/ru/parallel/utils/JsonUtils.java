@@ -9,7 +9,7 @@ package ru.parallel.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class JsonUtils
+public abstract class JsonUtils
 {
 	public static JsonElement MustPresent(JsonObject base, String name)
 	{

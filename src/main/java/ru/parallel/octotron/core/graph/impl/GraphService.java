@@ -16,6 +16,7 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 import ru.parallel.octotron.core.primitive.exception.ExceptionDBError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,17 +28,32 @@ import java.util.List;
  * */
 public final class GraphService
 {
-	private static final String NEXT_AID = "_static_next_AID";
+	private static GraphService INSTANCE = null;
+	public static void Init(IGraph graph)
+		throws ExceptionSystemError
+	{
+		if(GraphService.INSTANCE != null)
+			throw new ExceptionSystemError("graph service already initialize");
+		else GraphService.INSTANCE = new GraphService(graph);
+	}
+
+	public static GraphService Get()
+	{
+		return INSTANCE;
+	}
+
+// ------------------
 
 	private final IGraph graph;
-
 	private GraphObject static_obj = null;
 
-	public GraphService(IGraph graph)
+	private GraphService(IGraph graph)
 	{
 		this.graph = graph;
 		InitStatic();
 	}
+
+	private static final String NEXT_AID = "_static_next_AID";
 
 /**
  * return next value for AID counter from static object<br>

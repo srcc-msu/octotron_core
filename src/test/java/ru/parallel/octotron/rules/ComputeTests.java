@@ -3,12 +3,14 @@ package ru.parallel.octotron.rules;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.model.*;
+import ru.parallel.octotron.core.model.attribute.EAttributeType;
+import ru.parallel.octotron.core.model.attribute.SensorAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -19,6 +21,7 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.assertEquals;
 
+//they do not work because invalid or wrong ctime, need to fix somehow
 public class ComputeTests
 {
 	private static GraphService graph_service;
@@ -31,8 +34,7 @@ public class ComputeTests
 		throws ExceptionSystemError
 	{
 		ComputeTests.graph = new Neo4jGraph( "dbs/" + ComputeTests.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		ComputeTests.graph_service = new GraphService(ComputeTests.graph);
-		ComputeTests.model_service = new ModelService(graph_service);
+GraphService.Init(graph);
 
 		ObjectFactory in = new ObjectFactory(model_service)
 			.Sensors(new SimpleAttribute("in_d1", 10.0))
@@ -94,6 +96,17 @@ public class ComputeTests
 		links.EveryToOne(ins, obj);
 
 		links.OneToEvery(obj, outs);
+
+		EntityList<ModelEntity> entities = new EntityList<>();
+
+		entities.add(obj);
+		entities = entities.append(ins);
+		entities = entities.append(outs);
+
+		for(ModelEntity entity : entities)
+			for(ModelAttribute attr : entity.GetAttributes())
+				if(attr.GetType() == EAttributeType.SENSOR)
+					((SensorAttribute)attr).Update(attr.GetValue());
 	}
 
 	@AfterClass
@@ -350,7 +363,7 @@ public class ComputeTests
 	@Test
 	public void TestUpdatedRecently() throws Exception
 	{
-/*		ModelAttribute attr = obj.AddSensor("test_update", 0);
+/*		ModelAttribute attr = obj.DeclareSensor("test_update", 0);
 
 		UpdatedRecently rule = new UpdatedRecently("test", "test_update", 1);
 

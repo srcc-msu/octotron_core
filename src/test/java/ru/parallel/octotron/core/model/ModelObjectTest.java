@@ -1,11 +1,9 @@
-package ru.parallel.octotron.core;
+package ru.parallel.octotron.core.model;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
@@ -13,7 +11,7 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.assertEquals;
 
-public class OctoObjectTest
+public class ModelObjectTest
 {
 	private static Neo4jGraph graph;
 	private static ModelService model_service;
@@ -24,28 +22,27 @@ public class OctoObjectTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		graph = new Neo4jGraph( "dbs/" + OctoObjectTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		model_service = new ModelService(new GraphService(OctoObjectTest.graph));
+		graph = new Neo4jGraph( "dbs/" + ModelObjectTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
 		};
 
-		OctoObjectTest.obj_factory = new ObjectFactory(model_service).Constants(obj_att);
+		ModelObjectTest.obj_factory = new ObjectFactory(model_service).Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("link", "ok"),
 			new SimpleAttribute("type", "contain"),
 		};
 
-		OctoObjectTest.link_factory = new LinkFactory(model_service).Constants(link_att);
+		ModelObjectTest.link_factory = new LinkFactory(model_service).Constants(link_att);
 	}
 
 	@AfterClass
 	public static void Delete() throws Exception
 	{
-		OctoObjectTest.graph.Shutdown();
-		OctoObjectTest.graph.Delete();
+		ModelObjectTest.graph.Shutdown();
+		ModelObjectTest.graph.Delete();
 	}
 
 	/**
@@ -57,9 +54,9 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		ModelObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
+		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node);
 
 		assertEquals("in links not match, any type"
 			, node.GetInLinks().size(), N);
@@ -82,9 +79,9 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		ModelObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
+		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node);
 
 		assertEquals("in links not match, any type"
 			, node.GetInNeighbors().size(), N);
@@ -107,9 +104,9 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		ModelObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
+		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N));
 
 		assertEquals("in links not match, any type"
 			, node.GetOutNeighbors().size(), N);
@@ -132,9 +129,9 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		ModelObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
+		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N));
 
 		assertEquals("out links not match, any type"
 			, node.GetOutLinks().size(), N);
@@ -162,9 +159,9 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		ModelObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		OctoObjectTest.link_factory.EveryToOne(OctoObjectTest.obj_factory.Create(N), node);
+		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node);
 
 		assertEquals("in neighbors not match, any type"
 			, node.GetInNeighbors()
@@ -192,9 +189,9 @@ public class OctoObjectTest
 	{
 		int N = 10;
 
-		ModelObject node = OctoObjectTest.obj_factory.Create();
+		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		OctoObjectTest.link_factory.OneToEvery(node, OctoObjectTest.obj_factory.Create(N));
+		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N));
 
 		assertEquals("in neighbors not match, any type"
 			, node.GetOutNeighbors()

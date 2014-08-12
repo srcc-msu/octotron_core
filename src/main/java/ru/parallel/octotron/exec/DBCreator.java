@@ -29,10 +29,8 @@ public class DBCreator
 	public static final String HASH_FILE = ".hash";
 
 	private Neo4jGraph graph;
-	private GraphService graph_service;
 
 	private GlobalSettings settings;
-	private ModelService model_service;
 
 	public DBCreator(String fname)
 		throws ExceptionSystemError
@@ -41,17 +39,12 @@ public class DBCreator
 		settings = new GlobalSettings(json_config);
 	}
 
-	public GraphService GetGraphService()
-	{
-		return graph_service;
-	}
-
 	public void Begin()
 		throws ExceptionSystemError
 	{
 		graph = new Neo4jGraph(settings.GetDbPath() + settings.GetDbName() + "_neo4j", Neo4jGraph.Op.RECREATE);
-		graph_service = new GraphService(graph);
-		model_service = new ModelService(graph_service);
+
+		GraphService.Init(graph);
 
 		graph.GetIndex().EnableObjectIndex("AID");
 		graph.GetIndex().EnableLinkIndex("AID");
@@ -76,8 +69,8 @@ public class DBCreator
 	{
 		int graph_attributes_count = 0;
 
-		ObjectList<GraphObject, GraphLink> graph_objects = graph_service.GetAllObjects();
-		LinkList<GraphObject, GraphLink> graph_links = graph_service.GetAllLinks();
+		ObjectList<GraphObject, GraphLink> graph_objects = GraphService.Get().GetAllObjects();
+		LinkList<GraphObject, GraphLink> graph_links = GraphService.Get().GetAllLinks();
 
 		for(GraphObject obj : graph_objects)
 		{
@@ -97,8 +90,8 @@ public class DBCreator
 
 		int model_attributes_count = 0;
 
-		ObjectList<ModelObject, ModelLink> model_objects = model_service.GetAllObjects();
-		LinkList<ModelObject, ModelLink> model_links = model_service.GetAllLinks();
+		ObjectList<ModelObject, ModelLink> model_objects = ModelService.GetAllObjects();
+		LinkList<ModelObject, ModelLink> model_links = ModelService.GetAllLinks();
 
 		for(ModelObject obj : model_objects)
 		{

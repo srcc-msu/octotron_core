@@ -17,7 +17,6 @@ import ru.parallel.octotron.rules.MirrorLong;
 
 public class SelfTest
 {
-	private final GraphService graph_service;
 	private ModelService model_service;
 
 	private final ExecutionController controller;
@@ -27,9 +26,8 @@ public class SelfTest
 	ModelObject obj1;
 	ModelObject obj2;
 
-	public SelfTest(GraphService graph_service, ExecutionController controller)
+	public SelfTest(ExecutionController controller)
 	{
-		this.graph_service = graph_service;
 		this.controller = controller;
 
 		test_iteration = 0;
@@ -37,21 +35,21 @@ public class SelfTest
 
 	public void Init()
 	{
-		ObjectList<ModelObject, ModelLink> list = model_service.GetObjects("type", "_selftest");
+		ObjectList<ModelObject, ModelLink> list = ModelService.GetObjects("type", "_selftest");
 
 		if(list.size() == 0)
 		{
-			obj1 = model_service.AddObject();
+			obj1 = ModelService.AddObject();
 			obj1.DeclareConstant("type", "_selftest");
 			obj1.DeclareConstant("lid", 0);
 			obj1.DeclareConstant("test_iteration", 0);
 
-			obj2 = model_service.AddObject();
+			obj2 = ModelService.AddObject();
 			obj2.DeclareConstant("type", "_selftest");
 			obj2.DeclareConstant("lid", 1);
-			obj2.AddRule(new MirrorLong("test_iteration", "lid", 0));
+			obj2.DeclareVariable(new MirrorLong("test_iteration", "lid", 0));
 
-			model_service.AddLink(obj1, obj2, "test");
+			ModelService.AddLink(obj1, obj2, "test");
 		}
 		else if(list.size() == 2)
 		{

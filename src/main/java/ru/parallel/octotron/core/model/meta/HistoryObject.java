@@ -9,8 +9,8 @@ public class HistoryObject extends MetaObject
 {
 	public static class OldPair implements UniqueName
 	{
-		public Object value;
-		public long ctime;
+		public final Object value;
+		public final long ctime;
 
 		public OldPair(Object value, long ctime)
 		{
@@ -25,9 +25,9 @@ public class HistoryObject extends MetaObject
 		}
 	}
 
-	public HistoryObject(GraphService graph_service, GraphEntity base)
+	public HistoryObject(GraphEntity base)
 	{
-		super(graph_service, base);
+		super(base);
 	}
 
 	@Override

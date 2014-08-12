@@ -204,13 +204,13 @@ public class AutoFormat
 			result.append(System.lineSeparator()).append("----  rules  ----")
 				.append(System.lineSeparator()).append(System.lineSeparator());
 
-			for(OctoRule rule : entity.GetRules())
+/*			for(OctoRule rule : entity.GetRules())
 			{
 				String str = " ID: " + rule.GetID() + " attribute: \""
 					+ rule.GetName() + "\"" + System.lineSeparator();
 
 				result.append(str);
-			}
+			}*/
 
 			result.append(System.lineSeparator()).append("----  reactions  ----")
 				.append(System.lineSeparator()).append(System.lineSeparator());
@@ -229,8 +229,7 @@ public class AutoFormat
 
 			for(Marker marker : entity.GetMarkers())
 			{
-				String str = " ID: " + marker.GetID()
-					+ " reaction: " + marker.GetTarget()
+				String str = " reaction: " + marker.GetTarget()
 					+ " descr: \"" + marker.GetDescription() + "\""
 					+ " suppressed = " + marker. IsSuppress()
 					+ System.lineSeparator();

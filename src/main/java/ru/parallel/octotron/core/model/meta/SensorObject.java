@@ -6,15 +6,15 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class SensorObject extends AttributeObject
 {
-	public SensorObject(GraphService graph_service, GraphObject object)
+	public SensorObject(GraphObject object)
 	{
-		super(graph_service, object);
+		super(object);
 	}
 
 	@Override
 	public void Init(Object object)
 	{
 		SimpleAttribute attribute = (SimpleAttribute)object;
-		super.Init(GetBaseObject(), attribute.GetName(), attribute.GetValue());
+		Init(GetBaseObject(), attribute.GetName(), attribute.GetValue());
 	}
 }

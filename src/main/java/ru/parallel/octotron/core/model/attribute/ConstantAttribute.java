@@ -6,9 +6,16 @@
 
 package ru.parallel.octotron.core.model.attribute;
 
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.neo4j.impl.Marker;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ConstantAttribute extends ModelAttribute
 {
@@ -18,7 +25,7 @@ public class ConstantAttribute extends ModelAttribute
 	}
 
 	@Override
-	public AttributeList<DerivedAttribute> GetDependant()
+	public AttributeList<VariableAttribute> GetDependant()
 	{
 		return new AttributeList<>();
 	}
@@ -27,5 +34,51 @@ public class ConstantAttribute extends ModelAttribute
 	public EAttributeType GetType()
 	{
 		return EAttributeType.CONSTANT;
+	}
+
+	public void SetValid()
+	{
+		throw new ExceptionModelFail("constant object");
+	}
+	public void SetInvalid()
+	{
+		throw new ExceptionModelFail("constant object");
+	}
+
+	public void AddReaction(OctoReaction reaction)
+	{
+		throw new ExceptionModelFail("can not add reaction to constant attribute");
+	}
+
+	public List<OctoReaction> GetReactions()
+	{
+		return new LinkedList<>();
+	}
+
+	public List<OctoResponse> PreparePendingReactions()
+	{
+		return new LinkedList<>();
+	}
+
+	public List<OctoResponse> GetFails()
+	{
+		return new LinkedList<>();
+	}
+
+	public List<Marker> GetMarkers()
+	{
+		return new LinkedList<>();
+	}
+
+	@Override
+	public long AddMarker(OctoReaction reaction, String description, boolean suppress)
+	{
+		throw new ExceptionModelFail("constant object");
+	}
+
+	@Override
+	public void DeleteMarker(long id)
+	{
+		throw new ExceptionModelFail("constant object");
 	}
 }

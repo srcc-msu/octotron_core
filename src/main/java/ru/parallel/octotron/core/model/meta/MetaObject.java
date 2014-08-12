@@ -6,9 +6,9 @@ import ru.parallel.octotron.core.graph.impl.GraphService;
 
 public abstract class MetaObject extends GraphBased
 {
-	public MetaObject(GraphService graph_service, GraphEntity base)
+	public MetaObject(GraphEntity base)
 	{
-		super(graph_service, base);
+		super(base);
 	}
 
 	public abstract void Init(Object object);

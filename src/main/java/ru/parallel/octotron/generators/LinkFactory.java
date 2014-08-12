@@ -44,7 +44,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	}
 /*
 @Override
-	public LinkFactory Rules(OctoRule... params)
+	public LinkFactory Variables(OctoRule... params)
 	{
 		throw new ExceptionModelFail("links do not have rules");
 	}
@@ -74,12 +74,12 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 			throw new ExceptionModelFail("link type not set");
 
 // create edge
-		ModelLink link = model_service.AddLink(from, to, (String)type.GetValue());
+		ModelLink link = ModelService.AddLink(from, to, (String)type.GetValue());
 
 // set all attributes
 		link.DeclareConstants(constants);
-		link.AddSensors(sensors);
-		link.AddRules(rules);
+		link.DeclareSensors(sensors);
+		link.DeclareVariables(rules);
 		link.AddReactions(reactions);
 
 		link.DeclareConstant("source", from.GetAttribute("AID").GetLong());

@@ -12,8 +12,7 @@ import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.meta.AttributeObject;
-import ru.parallel.octotron.core.model.meta.DerivedObject;
+import ru.parallel.octotron.core.model.meta.*;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.utils.JavaUtils;
@@ -27,18 +26,12 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	protected T meta;
+	protected final T meta;
 
 	public AbstractVaryingAttribute(ModelEntity parent, T meta, String name)
 	{
 		super(parent, name);
 		this.meta = meta;
-	}
-
-	@Override
-	public ModelEntity GetParent()
-	{
-		return parent;
 	}
 
 	@Override
@@ -125,7 +118,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	@Override
 	public List<OctoResponse> PreparePendingReactions()
 	{
-		List<Marker> markers = meta.GetMarkers();
+		List<Marker> markers = GetMarkers();
 
 		List<OctoResponse> result = new LinkedList<>();
 
@@ -260,17 +253,77 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		= new SimpleAttribute("type", "_depends");
 
 	@Override
-	public AttributeList<DerivedAttribute> GetDependant()
+	public AttributeList<VariableAttribute> GetDependant()
 	{
-		AttributeList<DerivedAttribute> result = new AttributeList<>();
+		AttributeList<VariableAttribute> result = new AttributeList<>();
 
 		for(GraphObject object : meta.GetBaseObject().GetInNeighbors(dependence_link))
 		{
-			AttributeObject attribute_object = new DerivedObject(meta.GetGraphService(), object);
+			AttributeObject attribute_object = new VariableObject(object);
 
-			result.add((DerivedAttribute)attribute_object.GetAttribute());
+			result.add((VariableAttribute)attribute_object.GetAttribute());
 		}
 
 		return result;
+	}
+
+	@Override
+	public void AddReaction(OctoReaction reaction)
+	{
+		new ReactionObjectFactory().Create(meta.GetBaseEntity(), reaction);
+	}
+
+	@Override
+	public List<OctoReaction> GetReactions()
+	{
+		List<ReactionObject> candidates = new ReactionObjectFactory()
+			.ObtainAll(meta.GetBaseEntity());
+
+		List<OctoReaction> result = new LinkedList<>();
+
+		for(ReactionObject candidate : candidates)
+			result.add(candidate.GetReaction());
+
+		return result;
+	}
+
+	@Override
+	public long AddMarker(OctoReaction reaction, String description, boolean suppress)
+	{
+		ReactionObject reaction_object = new ReactionObjectFactory()
+			.Obtain(meta.GetBaseEntity(), reaction.GetCheckName());
+
+		MarkerObject marker_object = new MarkerObjectFactory()
+			.Create(reaction_object.GetBaseEntity(), new Marker(reaction.GetID(), description, suppress));
+		return marker_object.GetAttribute("AID").GetLong();
+	}
+
+	@Override
+	public List<Marker> GetMarkers()
+	{
+		List<ReactionObject> candidates = new ReactionObjectFactory()
+			.ObtainAll(meta.GetBaseEntity());
+
+		List<Marker> result = new LinkedList<>();
+
+		for(ReactionObject candidate : candidates)
+			for(MarkerObject marker_object : new MarkerObjectFactory()
+				.ObtainAll(candidate.GetBaseEntity()))
+				result.add(marker_object.GetMarker());
+
+		return result;
+	}
+
+	@Override
+	public void DeleteMarker(long id)
+	{
+		List<ReactionObject> candidates = new ReactionObjectFactory()
+			.ObtainAll(meta.GetBaseEntity());
+
+		for(ReactionObject candidate : candidates)
+			for(MarkerObject marker_object : new MarkerObjectFactory()
+				.ObtainAll(candidate.GetBaseEntity()))
+				if(marker_object.GetAttribute("AID").eq(id))
+					marker_object.GetBaseEntity().Delete();
 	}
 }

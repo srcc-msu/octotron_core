@@ -19,7 +19,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 /**
  * implementation of object according to real \graph<br>
  * */
-public final class GraphObject extends GraphEntity implements IObject, IEntity
+public final class GraphObject extends GraphEntity implements IObject
 {
 	public GraphObject(IGraph graph, Uid uid)
 	{

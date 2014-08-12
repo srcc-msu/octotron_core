@@ -8,9 +8,9 @@ import ru.parallel.octotron.core.primitive.EObjectLabels;
 public class ReactionObjectFactory extends MetaObjectFactory<ReactionObject, OctoReaction>
 {
 	@Override
-	protected ReactionObject CreateInstance(GraphService graph_service, GraphObject meta_object)
+	protected ReactionObject CreateInstance(GraphObject meta_object)
 	{
-		return new ReactionObject(graph_service, meta_object);
+		return new ReactionObject(meta_object);
 	}
 
 	@Override

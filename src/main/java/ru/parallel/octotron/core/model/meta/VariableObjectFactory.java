@@ -5,17 +5,17 @@ import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.rule.OctoRule;
 
-public class DerivedObjectFactory extends MetaObjectFactory<DerivedObject, OctoRule>
+public class VariableObjectFactory extends MetaObjectFactory<VariableObject, OctoRule>
 {
 	@Override
-	protected DerivedObject CreateInstance(GraphService graph_service, GraphObject meta_object)
+	protected VariableObject CreateInstance(GraphObject meta_object)
 	{
-		return new DerivedObject(graph_service, meta_object);
+		return new VariableObject(meta_object);
 	}
 
 	@Override
 	protected String GetLabel()
 	{
-		return EObjectLabels.DERIVED.toString();
+		return EObjectLabels.VARIABLE.toString();
 	}
 }

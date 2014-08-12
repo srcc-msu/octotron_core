@@ -12,9 +12,9 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class ModelObject extends ModelEntity implements IObject
 {
-	public ModelObject(GraphService graph_service, GraphObject object)
+	public ModelObject(GraphObject object)
 	{
-		super(graph_service, object);
+		super(object);
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class ModelObject extends ModelEntity implements IObject
 		LinkList<GraphObject, GraphLink> filtered
 			= ListConverter.FilterLabel(links, EObjectLabels.MODEL.toString());
 
-		return ListConverter.GraphToModel(GetGraphService(), filtered);
+		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class ModelObject extends ModelEntity implements IObject
 		LinkList<GraphObject, GraphLink> filtered
 			= ListConverter.FilterLabel(links, EObjectLabels.MODEL.toString());
 
-		return ListConverter.GraphToModel(GetGraphService(), filtered);
+		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ModelObject extends ModelEntity implements IObject
 		ObjectList<GraphObject, GraphLink> filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
-		return ListConverter.GraphToModel(GetGraphService(), filtered);
+		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ModelObject extends ModelEntity implements IObject
 		ObjectList<GraphObject, GraphLink> filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
-		return ListConverter.GraphToModel(GetGraphService(), filtered);
+		return ListConverter.GraphToModel(filtered);
 	}
 	@Override
 	public ObjectList<ModelObject, ModelLink> GetInNeighbors(String link_name, Object link_value)
@@ -73,7 +73,7 @@ public class ModelObject extends ModelEntity implements IObject
 		ObjectList<GraphObject, GraphLink> filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
-		return ListConverter.GraphToModel(GetGraphService(), filtered);
+		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class ModelObject extends ModelEntity implements IObject
 		ObjectList<GraphObject, GraphLink> filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
-		return ListConverter.GraphToModel(GetGraphService(), filtered);
+		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class ModelObject extends ModelEntity implements IObject
 		ObjectList<GraphObject, GraphLink> filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
-		return ListConverter.GraphToModel(GetGraphService(), filtered);
+		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class ModelObject extends ModelEntity implements IObject
 		ObjectList<GraphObject, GraphLink> filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
-		return ListConverter.GraphToModel(GetGraphService(), filtered);
+		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override

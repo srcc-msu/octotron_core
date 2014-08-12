@@ -7,13 +7,12 @@
 package ru.parallel.octotron.core.model.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.meta.DerivedObject;
-import ru.parallel.octotron.core.model.meta.DerivedObjectFactory;
+import ru.parallel.octotron.core.model.meta.VariableObject;
 import ru.parallel.octotron.core.rule.OctoRule;
 
-public class DerivedAttribute extends AbstractVaryingAttribute<DerivedObject>
+public class VariableAttribute extends AbstractVaryingAttribute<VariableObject>
 {
-	public DerivedAttribute(ModelEntity parent, DerivedObject meta, String name)
+	public VariableAttribute(ModelEntity parent, VariableObject meta, String name)
 	{
 		super(parent, meta, name);
 	}
@@ -26,7 +25,7 @@ public class DerivedAttribute extends AbstractVaryingAttribute<DerivedObject>
 
 	public boolean Update()
 	{
-		OctoRule rule = ((DerivedObject)meta).GetRule();
+		OctoRule rule = meta.GetRule();
 		Object new_val = rule.Compute(parent);
 
 		return Update(new_val, false);

@@ -7,16 +7,15 @@ import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.neo4j.impl.Marker;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AttributeObject extends MetaObject
 {
-	protected AttributeObject(GraphService graph_service, GraphObject base)
+	protected AttributeObject(GraphObject base)
 	{
-		super(graph_service, base);
+		super(base);
 	}
 
 	static final String name_const = "_name";
@@ -28,7 +27,7 @@ public abstract class AttributeObject extends MetaObject
 	public ModelObject GetAttributeObject()
 	{
 		GraphObject parent = GetBaseObject().GetInNeighbors("_attribute", GetName()).Only();
-		return new ModelObject(GetGraphService(), parent);
+		return new ModelObject(parent);
 	}
 
 	public static void Init(GraphObject object, String name, Object value)
@@ -85,7 +84,7 @@ public abstract class AttributeObject extends MetaObject
 	public List<OctoReaction> GetReactions()
 	{
 		List<ReactionObject> objects
-			= new ReactionObjectFactory().ObtainAll(GetGraphService(), GetBaseObject());
+			= new ReactionObjectFactory().ObtainAll(GetBaseObject());
 
 		List<OctoReaction> reactions = new LinkedList<>();
 
@@ -95,15 +94,10 @@ public abstract class AttributeObject extends MetaObject
 		return reactions;
 	}
 
-	public void AddReaction(OctoReaction reaction)
-	{
-		new ReactionObjectFactory().Create(GetGraphService(), GetBaseObject(), reaction);
-	}
-
 	public long GetReactionState(OctoReaction reaction)
 	{
 		List<ReactionObject> reactions
-			= new ReactionObjectFactory().ObtainAll(GetGraphService(), GetBaseObject(), reaction.GetCheckName());
+			= new ReactionObjectFactory().ObtainAll(GetBaseObject(), reaction.GetCheckName());
 
 		for(ReactionObject r : reactions)
 		{
@@ -116,7 +110,7 @@ public abstract class AttributeObject extends MetaObject
 	public void SetReactionState(OctoReaction reaction, long res)
 	{
 		List<ReactionObject> reactions
-			= new ReactionObjectFactory().ObtainAll(GetGraphService(), GetBaseObject(), reaction.GetCheckName());
+			= new ReactionObjectFactory().ObtainAll(GetBaseObject(), reaction.GetCheckName());
 
 		for(ReactionObject r : reactions)
 		{
@@ -129,35 +123,10 @@ public abstract class AttributeObject extends MetaObject
 		throw new ExceptionModelFail("reaction not found");
 	}
 
-// MARKERS
-
-	public List<Marker> GetMarkers()
-	{
-		List<MarkerObject> objects
-			= new MarkerObjectFactory().ObtainAll(GetGraphService(), GetBaseObject());
-
-		List<Marker> markers = new LinkedList<>();
-
-		for(MarkerObject object : objects)
-			markers.add(object.GetMarker());
-
-		return markers;
-	}
-
-	public void AddMarker(Marker marker)
-	{
-		new MarkerObjectFactory().Create(GetGraphService(), GetBaseObject(), marker);
-	}
-
-	public void DeleteMarker(long marker_id)
-	{
-		throw new ExceptionModelFail("NIY");
-	}
-
 	@Nullable
 	public HistoryObject GetLast()
 	{
-		List<HistoryObject> objects = new HistoryObjectFactory().ObtainAll(GetGraphService(), GetBaseObject());
+		List<HistoryObject> objects = new HistoryObjectFactory().ObtainAll(GetBaseObject());
 
 		if(objects.size() == 0)
 			return null;
@@ -169,12 +138,13 @@ public abstract class AttributeObject extends MetaObject
 
 	public void SetLast(Object value, long ctime)
 	{
-		List<HistoryObject> objects = new HistoryObjectFactory().ObtainAll(GetGraphService(), GetBaseObject());
+		List<HistoryObject> objects = new HistoryObjectFactory().ObtainAll(GetBaseObject());
 
 		if(objects.size() == 0)
-			new HistoryObjectFactory().Create(GetGraphService(), GetBaseObject(), new HistoryObject.OldPair(value, ctime));
+			new HistoryObjectFactory().Create(GetBaseObject(), new HistoryObject.OldPair(value, ctime));
 		else if(objects.size() == 1)
 			objects.get(0).Set(value, ctime);
-
+		else
+			throw new ExceptionModelFail("NIY");
 	}
 }

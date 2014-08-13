@@ -102,7 +102,7 @@ public abstract class IEntityList<T extends IEntity> implements Iterable<T>
 		return get(0);
 	}
 
-	protected List<T> InnerAppend(List<T> list2)
+	protected List<T> InnerAppend(List<? extends T> list2)
 	{
 		List<T> new_list = new LinkedList<>(list);
 

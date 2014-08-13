@@ -33,7 +33,7 @@ public class EntityList<T extends IEntity> extends IEntityList<T>
 		super();
 	}
 
-	public EntityList<T> append(IEntityList<T> list)
+	public EntityList<T> append(IEntityList<? extends T> list)
 	{
 		return new EntityList<>(InnerAppend(list.list));
 	}

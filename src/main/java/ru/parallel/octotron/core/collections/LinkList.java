@@ -84,6 +84,7 @@ public class LinkList<OT extends IObject<OT, LT>, LT extends ILink<OT, LT>> exte
 		return new LinkList<>(InnerUniq());
 	}
 
+@SuppressWarnings("unchecked") // it will always match
 	public ObjectList<OT, LT> Target()
 	{
 		ObjectList<OT, LT> new_list = new ObjectList<>();
@@ -94,6 +95,7 @@ public class LinkList<OT extends IObject<OT, LT>, LT extends ILink<OT, LT>> exte
 		return new_list;
 	}
 
+@SuppressWarnings("unchecked") // it will always match
 	public ObjectList<OT, LT> Source()
 	{
 		ObjectList<OT, LT> new_list = new ObjectList<>();

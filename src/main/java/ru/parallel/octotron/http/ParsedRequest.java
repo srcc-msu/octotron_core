@@ -34,7 +34,7 @@ public class ParsedRequest
 	{
 		try
 		{
-			IEntityList<ModelEntity> entity_list = null;
+			IEntityList<? extends ModelEntity> entity_list = null;
 
 			String path = params.get("path");
 

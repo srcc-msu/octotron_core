@@ -38,7 +38,7 @@ public class GraphServiceTest
 	@Test
 	public void TestGetAllLinks() throws Exception
 	{
-		ObjectList<GraphObject, GraphLink> objects = new ObjectList();
+		ObjectList<GraphObject, GraphLink> objects = new ObjectList<>();
 
 		final int N = 10;
 		for(int i = 0; i < N; i++)

@@ -9,6 +9,7 @@ import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.attribute.SensorAttribute;
@@ -87,8 +88,8 @@ public class ComputeTests
 		LinkFactory links = new LinkFactory()
 			.Constants(new SimpleAttribute("type", "test"));
 
-		ObjectList ins = in.Create(3);
-		ObjectList outs = out.Create(4);
+		ObjectList<ModelObject, ModelLink> ins = in.Create(3);
+		ObjectList<ModelObject, ModelLink> outs = out.Create(4);
 
 		Enumerator.Sequence(ins, "in_lid");
 		Enumerator.Sequence(outs, "out_lid");

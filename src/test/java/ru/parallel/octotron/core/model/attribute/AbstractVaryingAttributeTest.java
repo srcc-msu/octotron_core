@@ -53,7 +53,7 @@ public class AbstractVaryingAttributeTest
 	@Test
 	public void testGetLastValue() throws Exception
 	{
-		AbstractVaryingAttribute attribute = object.DeclareSensor("test", 0);
+		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
 		assertNull(attribute.GetLastValue());
 
@@ -75,7 +75,7 @@ public class AbstractVaryingAttributeTest
 	@Test
 	public void testGetCTime() throws Exception
 	{
-		AbstractVaryingAttribute attribute = object.DeclareSensor("test", 0);
+		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
 		assertEquals(0, attribute.GetCTime());
 
@@ -98,7 +98,7 @@ public class AbstractVaryingAttributeTest
 	@Test
 	public void testGetATime() throws Exception
 	{
-		AbstractVaryingAttribute attribute = object.DeclareSensor("test", 0);
+		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
 		assertEquals(0, attribute.GetATime());
 
@@ -121,7 +121,7 @@ public class AbstractVaryingAttributeTest
 	@Test
 	public void testGetSpeed() throws Exception
 	{
-		AbstractVaryingAttribute attribute = object.DeclareSensor("test", 0.0);
+		SensorAttribute attribute = object.DeclareSensor("test", 0.0);
 
 		assertEquals(0.0, attribute.GetSpeed(), GraphAttribute.EPSILON);
 
@@ -144,7 +144,7 @@ public class AbstractVaryingAttributeTest
 	@Test
 	public void testUpdate() throws Exception
 	{
-		AbstractVaryingAttribute attribute = object.DeclareSensor("test", 0);
+		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
 		assertEquals(0L, attribute.GetValue());
 
@@ -164,7 +164,7 @@ public class AbstractVaryingAttributeTest
 	@Test
 	public void testValid() throws Exception
 	{
-		AbstractVaryingAttribute attribute = object.DeclareSensor("test", 0);
+		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
 		attribute.Update(1, true);
 
@@ -186,7 +186,7 @@ public class AbstractVaryingAttributeTest
 	@Test
 	public void testReactions() throws Exception
 	{
-		AbstractVaryingAttribute attribute = object.DeclareSensor("test", 0);
+		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
 		assertEquals(0, attribute.GetReactions().size());
 
@@ -200,7 +200,7 @@ public class AbstractVaryingAttributeTest
 	@Test
 	public void testMarkers() throws Exception
 	{
-		AbstractVaryingAttribute attribute = object.DeclareSensor("test", 0);
+		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
 		assertEquals(0, attribute.GetMarkers().size());
 

@@ -188,17 +188,17 @@ public final class GraphService
 		return new GraphLink(graph, uid);
 	}
 
-	public LinkList GetLinks(SimpleAttribute att)
+	public LinkList<GraphObject, GraphLink> GetLinks(SimpleAttribute att)
 	{
 		return GetLinks(att.GetName(), att.GetValue());
 	}
 
-	public LinkList GetLinks(String name)
+	public LinkList<GraphObject, GraphLink> GetLinks(String name)
 	{
 		return LinksFromUid(graph, graph.GetIndex().GetLinks(name));
 	}
 
-	public LinkList GetLinks(String name, Object value)
+	public LinkList<GraphObject, GraphLink> GetLinks(String name, Object value)
 	{
 		return LinksFromUid(graph, graph.GetIndex().GetLinks(name, value));
 	}

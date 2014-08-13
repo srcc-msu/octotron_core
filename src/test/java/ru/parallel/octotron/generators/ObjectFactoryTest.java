@@ -5,6 +5,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
@@ -43,7 +45,7 @@ public class ObjectFactoryTest
 	{
 		final int N = 10; // some testing param
 
-		ObjectList obj = ObjectFactoryTest.obj_factory.Create(N);
+		ObjectList<ModelObject, ModelLink> obj = ObjectFactoryTest.obj_factory.Create(N);
 		assertEquals("created more objects", obj.size(), N);
 
 		for(int i = 0; i < N; i++)
@@ -59,7 +61,7 @@ public class ObjectFactoryTest
 		final int N = 100;
 		final int K = 23;
 
-		ObjectList objects = ObjectFactoryTest.obj_factory.Create(N);
+		ObjectList<ModelObject, ModelLink> objects = ObjectFactoryTest.obj_factory.Create(N);
 
 		Enumerator.Sequence(objects, "test1");
 

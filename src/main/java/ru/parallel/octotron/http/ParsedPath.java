@@ -27,14 +27,14 @@ public class ParsedPath
 		this.tokens = tokens;
 	}
 
-	public IEntityList<? extends ModelEntity> Execute(ModelService model_service, ExecutionController exec_control)
+	public IEntityList<? extends ModelEntity> Execute(ExecutionController exec_control)
 		throws ExceptionParseError
 	{
 		IEntityList<? extends ModelEntity> entity_list = null;
 
 		for(PathToken token : tokens)
 		{
-			entity_list = token.Transform(model_service, exec_control, entity_list);
+			entity_list = token.Transform(exec_control, entity_list);
 		}
 
 		return entity_list;

@@ -30,7 +30,7 @@ public class ParsedRequest
 		this.params = params;
 	}
 
-	public RequestResult Execute(ModelService model_service, ExecutionController exec_control)
+	public RequestResult Execute(ExecutionController exec_control)
 	{
 		try
 		{
@@ -39,9 +39,9 @@ public class ParsedRequest
 			String path = params.get("path");
 
 			if(path != null)
-				entity_list = PathParser.Parse(path).Execute(model_service, exec_control);
+				entity_list = PathParser.Parse(path).Execute(exec_control);
 
-			return (RequestResult) operation.Execute(model_service, exec_control, params, entity_list);
+			return (RequestResult) operation.Execute(exec_control, params, entity_list);
 		}
 		catch(ExceptionParseError e)
 		{

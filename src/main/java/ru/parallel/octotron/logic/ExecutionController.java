@@ -40,7 +40,6 @@ public class ExecutionController
 
 	private final GlobalSettings settings;
 	private final IGraph graph;
-	private final ModelService model_service = null;
 
 	private ImportManager manager;
 	private SimpleImporter http_importer;
@@ -273,7 +272,7 @@ public class ExecutionController
 
 		while((parsed_request = queue.poll()) != null && count < max_count)
 		{
-			RequestResult res = parsed_request.GetParsedRequest().Execute(model_service, this);
+			RequestResult res = parsed_request.GetParsedRequest().Execute(this);
 
 			if(parsed_request.GetParsedRequest().IsBlocking())
 				parsed_request.GetHttpRequest().Finish(res);

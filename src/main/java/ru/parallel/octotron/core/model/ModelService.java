@@ -1,6 +1,7 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.collections.LinkList;
+import ru.parallel.octotron.core.collections.ListConverter;
 import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
@@ -12,42 +13,50 @@ public abstract class ModelService
 {
 	public static ObjectList<ModelObject, ModelLink> GetObjects(SimpleAttribute attr)
 	{
-		return null;
+		ObjectList<GraphObject, GraphLink> result = GraphService.Get().GetObjects(attr);
+		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
 	}
 
 	public static ObjectList<ModelObject, ModelLink> GetObjects(String name, Object value)
 	{
-		return null;
+		ObjectList<GraphObject, GraphLink> result = GraphService.Get().GetObjects(name, value);
+		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
 	}
 
 	public static ObjectList<ModelObject, ModelLink> GetObjects(String name)
 	{
-		return null;
+		ObjectList<GraphObject, GraphLink> result = GraphService.Get().GetObjects(name);
+		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
 	}
 
 	public static LinkList<ModelObject, ModelLink> GetLinks(SimpleAttribute attr)
 	{
-		return null;
+		LinkList<GraphObject, GraphLink> result = GraphService.Get().GetLinks(attr);
+		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
 	}
 
 	public static LinkList<ModelObject, ModelLink> GetLinks(String name, Object value)
 	{
-		return null;
+		LinkList<GraphObject, GraphLink> result = GraphService.Get().GetLinks(name, value);
+		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
 	}
 
 	public static LinkList<ModelObject, ModelLink> GetLinks(String name)
 	{
-		return null;
+		LinkList<GraphObject, GraphLink> result = GraphService.Get().GetLinks(name);
+		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
 	}
 
 	public static ObjectList<ModelObject, ModelLink> GetAllObjects()
 	{
-		return null;
+		ObjectList<GraphObject, GraphLink> result = GraphService.Get().GetAllObjects();
+		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
 	}
 
 	public static LinkList<ModelObject, ModelLink> GetAllLinks()
 	{
-		return null;
+		LinkList<GraphObject, GraphLink> result = GraphService.Get().GetAllLinks();
+		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
 	}
 
 	public static String ExportDot(ObjectList<ModelObject, ModelLink> objects)
@@ -72,15 +81,4 @@ public abstract class ModelService
 		GraphLink link = GraphService.Get().AddLink(obj1.GetBaseObject(), obj2.GetBaseObject(), type);
 		return new ModelLink(link);
 	}
-
-/*	public String ExportDot()
-	{
-		return graph.ExportDot(UidsFromList(GetAllObjects()));
-	}
-
-	public String ExportDot(ObjectList<GraphObject, GraphLink> list)
-	{
-		return graph.ExportDot(UidsFromList(list));
-	}*/
-
 }

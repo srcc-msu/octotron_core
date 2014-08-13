@@ -33,7 +33,7 @@ public abstract class PathOperations
 
 	private interface ITransform
 	{
-		IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 				, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError;
 	}
@@ -67,11 +67,11 @@ public abstract class PathOperations
 			return out;
 		}
 
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj)
 				throws ExceptionParseError
 		{
-			return transform.Transform(model_service, exec_control, obj, params);
+			return transform.Transform(exec_control, obj, params);
 		}
 
 		private PathToken(String name, CHAIN_TYPE in, CHAIN_TYPE out
@@ -123,7 +123,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
@@ -154,7 +154,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
@@ -179,7 +179,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError
 		{
@@ -203,7 +203,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
@@ -224,7 +224,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
@@ -245,7 +245,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
@@ -266,7 +266,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
@@ -289,7 +289,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ToObjList(obj).GetInLinks();
@@ -303,7 +303,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ToObjList(obj).GetOutLinks();
@@ -317,7 +317,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ToObjList(obj).GetInLinks().append(ToObjList(obj).GetOutLinks());
 		}
@@ -330,7 +330,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ToLinkList(obj).Source();
@@ -344,7 +344,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public IEntityList<? extends ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<? extends ModelEntity> Transform(ExecutionController exec_control
 			, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 		{
 			return ToLinkList(obj).Target();

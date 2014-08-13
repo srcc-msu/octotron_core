@@ -16,8 +16,6 @@ import ru.parallel.octotron.rules.MirrorLong;
 
 public class SelfTest
 {
-	private ModelService model_service;
-
 	private final ExecutionController controller;
 
 	private long test_iteration;

@@ -57,17 +57,17 @@ public abstract class Operations
 			return is_blocking;
 		}
 
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
-			return exec.Execute(model_service, control, params, objects);
+			return exec.Execute(control, params, objects);
 		}
 	}
 
 	private interface IExec
 	{
-		Object Execute(ModelService model_service, ExecutionController control
+		Object Execute(ExecutionController control
 				, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError;
 	}
@@ -130,7 +130,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -149,7 +149,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -208,7 +208,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -225,7 +225,7 @@ public abstract class Operations
 	public static final Operation show_m = new Operation("show_m", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -257,7 +257,7 @@ public abstract class Operations
 	public static final Operation show_r = new Operation("show_r", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -314,7 +314,7 @@ public abstract class Operations
 	public static final Operation version = new Operation("version", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -379,7 +379,7 @@ public abstract class Operations
 	public static final Operation import_token = new Operation("import", false, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 			throws ExceptionParseError
 		{
@@ -408,7 +408,7 @@ public abstract class Operations
 	public static final Operation unchecked_import_token = new Operation("unchecked_import", false, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 			throws ExceptionParseError
 		{
@@ -438,7 +438,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -472,7 +472,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -508,7 +508,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -538,7 +538,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -568,7 +568,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -606,7 +606,7 @@ public abstract class Operations
 		, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -635,7 +635,7 @@ public abstract class Operations
 	public static final Operation quit = new Operation("quit", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 			throws ExceptionParseError
 		{
@@ -653,7 +653,7 @@ public abstract class Operations
 	public static final Operation selftest = new Operation("selftest", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 			throws ExceptionParseError
 		{
@@ -673,7 +673,7 @@ public abstract class Operations
 	public static final Operation mode = new Operation("mode", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -700,7 +700,7 @@ public abstract class Operations
 	public static final Operation snapshot = new Operation("snapshot", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -725,7 +725,7 @@ time = Timer.SEnd();
 	public static final Operation stat = new Operation("stat", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -750,7 +750,7 @@ time = Timer.SEnd();
 		private String cached_result = null;
 
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{
@@ -792,7 +792,7 @@ time = Timer.SEnd();
 	public static final Operation mod_time = new Operation("mod_time", true, new IExec()
 	{
 		@Override
-		public Object Execute(ModelService model_service, ExecutionController control
+		public Object Execute(ExecutionController control
 			, Map<String, String> params, IEntityList<? extends ModelEntity> objects)
 				throws ExceptionParseError
 		{

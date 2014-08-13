@@ -164,9 +164,4 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 
 		return result;
 	}
-
-	public AttributeList<T> Uniq()
-	{
-		return null;
-	}
 }

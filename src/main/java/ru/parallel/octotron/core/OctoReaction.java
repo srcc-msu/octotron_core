@@ -91,6 +91,11 @@ public class OctoReaction implements Serializable, UniqueName
 		return delay;
 	}
 
+	public long GetRepeat()
+	{
+		return repeat;
+	}
+
 	public String GetCheckName()
 	{
 		return check_name;

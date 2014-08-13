@@ -94,7 +94,7 @@ public abstract class PathOperations
 	}
 
 	@SuppressWarnings("unchecked")
-	private static final ObjectList<ModelObject, ModelLink> ToObjList(Object obj)
+	private static ObjectList<ModelObject, ModelLink> ToObjList(Object obj)
 	{
 		if(obj instanceof ObjectList)
 			return (ObjectList<ModelObject, ModelLink>)obj;
@@ -103,7 +103,7 @@ public abstract class PathOperations
 	}
 
 	@SuppressWarnings("unchecked")
-	private static final LinkList<ModelObject, ModelLink> ToLinkList(Object obj)
+	private static LinkList<ModelObject, ModelLink> ToLinkList(Object obj)
 	{
 		if(obj instanceof LinkList)
 			return (LinkList<ModelObject, ModelLink>)obj;

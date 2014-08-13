@@ -164,7 +164,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 			if(needed)
 			{
 				long delay = reaction.GetDelay();
-				long repeat = reaction.GetDelay();
+				long repeat = reaction.GetRepeat();
 
 				boolean ready = (reaction_object.GetDelay() > delay)
 					&& (reaction_object.GetRepeat() > repeat);

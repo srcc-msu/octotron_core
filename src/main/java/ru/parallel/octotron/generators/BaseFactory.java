@@ -7,7 +7,6 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.rule.OctoRule;
 

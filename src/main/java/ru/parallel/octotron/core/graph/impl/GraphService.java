@@ -30,7 +30,6 @@ public final class GraphService
 {
 	private static GraphService INSTANCE = null;
 	public static void Init(IGraph graph)
-		throws ExceptionSystemError
 	{
 		GraphService.INSTANCE = new GraphService(graph);
 	}

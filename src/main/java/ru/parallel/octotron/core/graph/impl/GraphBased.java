@@ -1,9 +1,5 @@
 package ru.parallel.octotron.core.graph.impl;
 
-import ru.parallel.octotron.core.graph.IAttribute;
-import ru.parallel.octotron.core.graph.IEntity;
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 
 public abstract class GraphBased //implements IEntity

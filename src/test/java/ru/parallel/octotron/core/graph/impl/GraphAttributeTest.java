@@ -17,7 +17,7 @@ public class GraphAttributeTest
 	public static void Init() throws Exception
 	{
 		GraphAttributeTest.graph = new Neo4jGraph( "dbs/" + GraphAttributeTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-GraphService.Init(graph);
+		GraphService.Init (graph);
 	}
 
 	@AfterClass

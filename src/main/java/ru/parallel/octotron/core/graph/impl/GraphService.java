@@ -32,9 +32,7 @@ public final class GraphService
 	public static void Init(IGraph graph)
 		throws ExceptionSystemError
 	{
-		if(GraphService.INSTANCE != null)
-			throw new ExceptionSystemError("graph service already initialize");
-		else GraphService.INSTANCE = new GraphService(graph);
+		GraphService.INSTANCE = new GraphService(graph);
 	}
 
 	public static GraphService Get()

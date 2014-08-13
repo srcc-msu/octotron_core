@@ -19,7 +19,6 @@ import ru.parallel.utils.JavaUtils;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class AbstractVaryingAttribute<T extends AttributeObject> extends ModelAttribute
@@ -35,7 +34,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	}
 
 	@Override
-	public Object GetLastValue()
+	public HistoryObject GetLastValue()
 	{
 		return meta.GetLast();
 	}
@@ -56,8 +55,12 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	public double GetSpeed()
 	{
 // check time
+		HistoryObject last = meta.GetLast();
+		if(last == null)
+			return 0.0;
+
 		long cur_ctime = GetCTime();
-		long last_ctime = meta.GetLast().GetCTime();
+		long last_ctime = last.GetCTime();
 
 		if(cur_ctime - last_ctime == 0) // speed is zero
 			return 0.0;
@@ -99,85 +102,100 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		return false;
 	}
 
-
-	public void Notify(String id, long seconds)
+	private List<ReactionObject> FilterSuppressed(List<ReactionObject> reaction_objects)
 	{
+		List<ReactionObject> result = new LinkedList<>();
 
-	}
-
-	public void StopNotify(String id)
-	{
-
-	}
-
-	public boolean ShouldNotify(String id, long current_time)
-	{
-		return false;
-	}
-
-	@Override
-	public List<OctoResponse> PreparePendingReactions()
-	{
-		List<Marker> markers = GetMarkers();
-
-		List<OctoResponse> result = new LinkedList<>();
-
-		long current_time = JavaUtils.GetTimestamp();
-
-		for(OctoReaction reaction : meta.GetReactions())
+		for(ReactionObject reaction_object : reaction_objects)
 		{
-			Marker skip_marker = null;
-			for(Marker marker : markers)
+			boolean suppress = false;
+			for(Marker marker : reaction_object.GetMarkers())
 			{
-				if(marker.GetTarget() == reaction.GetID() && marker.IsSuppress())
+				if(marker.IsSuppress())
 				{
-					skip_marker = marker;
+					suppress = true;
 					break;
 				}
 			}
 
-			boolean needed = reaction.ReactionNeeded(parent);
-			long state = meta.GetReactionState(reaction);
+			if(!suppress)
+				result.add(reaction_object);
+		}
 
-			if(needed && skip_marker != null)
-			{
-				LOGGER.log(Level.FINE, "reaction suppressed: " + skip_marker.GetDescription()
-					+ " reaction id:" + skip_marker.GetTarget()
-					+ " time: " + current_time);
-				continue;
-			}
+		return result;
+	}
+
+
+	@Override
+	public List<OctoResponse> GetExecutedReactions()
+	{
+		List<OctoResponse> result = new LinkedList<>();
+
+		List<ReactionObject> reaction_objects = new ReactionObjectFactory()
+			.ObtainAll(meta.GetBaseEntity());
+
+		reaction_objects = FilterSuppressed(reaction_objects);
+
+		for(ReactionObject reaction_object : reaction_objects)
+		{
+			if(reaction_object.GetState() == OctoReaction.STATE_EXECUTED)
+				result.add(reaction_object.GetReaction().GetResponse());
+		}
+
+		return result;
+	}
+
+	public List<OctoResponse> GetReadyReactions()
+	{
+		List<OctoResponse> result = new LinkedList<>();
+
+		List<ReactionObject> reaction_objects = new ReactionObjectFactory()
+			.ObtainAll(meta.GetBaseEntity());
+
+		reaction_objects = FilterSuppressed(reaction_objects);
+
+		for(ReactionObject reaction_object : reaction_objects)
+		{
+			OctoReaction reaction = reaction_object.GetReaction();
+
+			boolean needed = reaction.ReactionNeeded(parent);
+			long state = reaction_object.GetState();
 
 			if(needed)
 			{
+				long delay = reaction.GetDelay();
+				long repeat = reaction.GetDelay();
+
+				boolean ready = (reaction_object.GetDelay() > delay)
+					&& (reaction_object.GetRepeat() > repeat);
+
 				if(state == OctoReaction.STATE_NONE)
 				{
-					long delay = reaction.GetDelay();
-
-					if(delay == 0)
+					if(ready)
 					{
 						result.add(reaction.GetResponse());
 
-						meta.SetReactionState(reaction, OctoReaction.STATE_EXECUTED);
+						reaction_object.SetState(OctoReaction.STATE_EXECUTED);
 					}
 					else
 					{
-						meta.SetReactionState(reaction, OctoReaction.STATE_STARTED);
+						reaction_object.SetState(OctoReaction.STATE_STARTED);
 
-						Notify(OctoReaction.DELAY_PREFIX
-							+ reaction.GetID(), delay + 1);
+						reaction_object.StartDelay();
+						reaction_object.StartRepeat();
 					}
 				}
 				else if(state == OctoReaction.STATE_STARTED)
 				{
-					if(ShouldNotify(OctoReaction.DELAY_PREFIX
-						+ reaction.GetID(), current_time))
+					if(ready)
 					{
 						result.add(reaction.GetResponse());
 
-						meta.SetReactionState(reaction, OctoReaction.STATE_EXECUTED);
-
-						StopNotify(OctoReaction.DELAY_PREFIX
-							+ reaction.GetID());
+						reaction_object.SetState(OctoReaction.STATE_EXECUTED);
+					}
+					else
+					{
+						reaction_object.Repeat();
 					}
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)
@@ -193,38 +211,19 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 				}
 				else if(state == OctoReaction.STATE_STARTED)
 				{
-					meta.SetReactionState(reaction, OctoReaction.STATE_NONE);
-
-					StopNotify(OctoReaction.DELAY_PREFIX
-						+ reaction.GetID());
+					reaction_object.SetState(OctoReaction.STATE_NONE);
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)
 				{
 					if(reaction.GetRecoverResponse() != null)
 						result.add(reaction.GetRecoverResponse());
 
-					meta.SetReactionState(reaction, OctoReaction.STATE_NONE);
+					reaction_object.SetState(OctoReaction.STATE_NONE);
 				}
 			}
 		}
 
 		return result;
-	}
-
-	@Override
-	public List<OctoResponse> GetFails()
-	{
-		List<OctoResponse> fails = new LinkedList<>();
-
-		for(OctoReaction reaction : meta.GetReactions())
-		{
-			boolean needed = reaction.ReactionNeeded(parent);
-
-			if(needed)
-				fails.add(reaction.GetResponse());
-		}
-
-		return fails;
 	}
 
 //-------------------
@@ -276,13 +275,13 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	@Override
 	public List<OctoReaction> GetReactions()
 	{
-		List<ReactionObject> candidates = new ReactionObjectFactory()
+		List<ReactionObject> reaction_objects = new ReactionObjectFactory()
 			.ObtainAll(meta.GetBaseEntity());
 
 		List<OctoReaction> result = new LinkedList<>();
 
-		for(ReactionObject candidate : candidates)
-			result.add(candidate.GetReaction());
+		for(ReactionObject reaction_object : reaction_objects)
+			result.add(reaction_object.GetReaction());
 
 		return result;
 	}
@@ -291,25 +290,21 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	public long AddMarker(OctoReaction reaction, String description, boolean suppress)
 	{
 		ReactionObject reaction_object = new ReactionObjectFactory()
-			.Obtain(meta.GetBaseEntity(), reaction.GetCheckName());
+			.Create(meta.GetBaseEntity(), reaction);
 
-		MarkerObject marker_object = new MarkerObjectFactory()
-			.Create(reaction_object.GetBaseEntity(), new Marker(reaction.GetID(), description, suppress));
-		return marker_object.GetAttribute("AID").GetLong();
+		return reaction_object.AddMarker(description, suppress);
 	}
 
 	@Override
 	public List<Marker> GetMarkers()
 	{
-		List<ReactionObject> candidates = new ReactionObjectFactory()
+		List<ReactionObject> reaction_objects = new ReactionObjectFactory()
 			.ObtainAll(meta.GetBaseEntity());
 
 		List<Marker> result = new LinkedList<>();
 
-		for(ReactionObject candidate : candidates)
-			for(MarkerObject marker_object : new MarkerObjectFactory()
-				.ObtainAll(candidate.GetBaseEntity()))
-				result.add(marker_object.GetMarker());
+		for(ReactionObject reaction_object : reaction_objects)
+			result.addAll(reaction_object.GetMarkers());
 
 		return result;
 	}
@@ -317,13 +312,10 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	@Override
 	public void DeleteMarker(long id)
 	{
-		List<ReactionObject> candidates = new ReactionObjectFactory()
+		List<ReactionObject> reaction_objects = new ReactionObjectFactory()
 			.ObtainAll(meta.GetBaseEntity());
 
-		for(ReactionObject candidate : candidates)
-			for(MarkerObject marker_object : new MarkerObjectFactory()
-				.ObtainAll(candidate.GetBaseEntity()))
-				if(marker_object.GetAttribute("AID").eq(id))
-					marker_object.GetBaseEntity().Delete();
+		for(ReactionObject reaction_object : reaction_objects)
+			reaction_object.TryDeleteMarker(id);
 	}
 }

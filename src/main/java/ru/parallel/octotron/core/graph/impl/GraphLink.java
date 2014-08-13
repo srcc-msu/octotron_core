@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.core.graph.impl;
 
-import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.graph.ILink;
 import ru.parallel.octotron.core.graph.collections.AttributeList;

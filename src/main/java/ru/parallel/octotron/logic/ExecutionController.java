@@ -12,7 +12,6 @@ import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.*;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;

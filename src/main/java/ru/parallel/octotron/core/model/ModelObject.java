@@ -6,7 +6,6 @@ import ru.parallel.octotron.core.graph.collections.ListConverter;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 

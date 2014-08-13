@@ -3,18 +3,14 @@ package ru.parallel.octotron.http;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.FileUtils;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -40,7 +36,7 @@ public class RequestEmulationTest
 		RequestEmulationTest.http = HTTPServer.GetDummyServer(RequestEmulationTest.HTTP_PORT);
 
 		RequestEmulationTest.graph = new Neo4jGraph( "dbs/" + RequestEmulationTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-GraphService.Init(graph);
+		GraphService.Init (graph);
 		GraphService.Get().EnableObjectIndex("AID");
 		GraphService.Get().EnableLinkIndex("AID");
 

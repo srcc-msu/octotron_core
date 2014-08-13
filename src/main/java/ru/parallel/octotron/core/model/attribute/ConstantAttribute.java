@@ -55,12 +55,12 @@ public class ConstantAttribute extends ModelAttribute
 		return new LinkedList<>();
 	}
 
-	public List<OctoResponse> PreparePendingReactions()
+	public List<OctoResponse> GetReadyReactions()
 	{
 		return new LinkedList<>();
 	}
 
-	public List<OctoResponse> GetFails()
+	public List<OctoResponse> GetExecutedReactions()
 	{
 		return new LinkedList<>();
 	}

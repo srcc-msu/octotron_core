@@ -2,7 +2,6 @@ package ru.parallel.octotron.core.model.meta;
 
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.primitive.UniqueName;
 
 public class HistoryObject extends MetaObject

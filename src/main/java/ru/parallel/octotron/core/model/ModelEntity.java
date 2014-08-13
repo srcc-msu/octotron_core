@@ -7,11 +7,13 @@ import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.attribute.ConstantAttribute;
-import ru.parallel.octotron.core.model.attribute.VariableAttribute;
 import ru.parallel.octotron.core.model.attribute.SensorAttribute;
-import ru.parallel.octotron.core.model.meta.*;
+import ru.parallel.octotron.core.model.attribute.VariableAttribute;
+import ru.parallel.octotron.core.model.meta.SensorObject;
+import ru.parallel.octotron.core.model.meta.SensorObjectFactory;
+import ru.parallel.octotron.core.model.meta.VariableObject;
+import ru.parallel.octotron.core.model.meta.VariableObjectFactory;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.rule.OctoRule;
@@ -204,7 +206,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity
 
 		for(ModelAttribute attribute : GetAttributes())
 		{
-			responses.addAll(attribute.GetFails());
+			responses.addAll(attribute.GetExecutedReactions());
 		}
 
 		return responses;
@@ -216,7 +218,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity
 
 		for(ModelAttribute attribute : GetAttributes())
 		{
-			responses.addAll(attribute.PreparePendingReactions());
+			responses.addAll(attribute.GetReadyReactions());
 		}
 
 		return responses;

@@ -22,7 +22,8 @@ public class ModelObjectTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		graph = new Neo4jGraph( "dbs/" + ModelObjectTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
+		ModelObjectTest.graph = new Neo4jGraph( "dbs/" + ModelObjectTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
+		GraphService.Init(ModelObjectTest.graph);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
@@ -212,7 +213,5 @@ public class ModelObjectTest
 		assertEquals("in neighbors not match, wrong type, wrong value"
 			, node.GetOutNeighbors()
 				.Filter("fail", "fail").size(), 0);
-
 	}
-
 }

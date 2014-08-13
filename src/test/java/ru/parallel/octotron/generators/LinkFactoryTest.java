@@ -14,9 +14,6 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * test some common cases -attributes, factories
- * */
 public class LinkFactoryTest
 {
 	private static Neo4jGraph graph;
@@ -33,7 +30,7 @@ public class LinkFactoryTest
 	{
 		LinkFactoryTest.graph = new Neo4jGraph( "dbs/"
 			+ LinkFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-GraphService.Init(graph);
+		GraphService.Init (graph);
 
 		LinkFactoryTest.obj_factory = new ObjectFactory(LinkFactoryTest.model_service)
 			.Constants(new SimpleAttribute("object", "ok"));

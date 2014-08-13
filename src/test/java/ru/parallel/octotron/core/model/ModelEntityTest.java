@@ -33,7 +33,7 @@ public class ModelEntityTest
 	public static void Init() throws Exception
 	{
 		ModelEntityTest.graph = new Neo4jGraph( "dbs/" + ModelEntityTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-GraphService.Init(graph);
+		GraphService.Init (graph);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")

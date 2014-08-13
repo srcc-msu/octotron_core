@@ -101,7 +101,7 @@ public class ReactionInvoker
 		List<PreparedResponse> responses = new LinkedList<>();
 
 		for(ModelAttribute attribute : changed)
-			for(OctoResponse response : attribute.PreparePendingReactions())
+			for(OctoResponse response : attribute.GetReadyReactions())
 			{
 				responses.add(new PreparedResponse(response, attribute.GetParent(), JavaUtils.GetTimestamp()));
 			}

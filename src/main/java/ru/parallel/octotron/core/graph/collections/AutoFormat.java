@@ -11,7 +11,6 @@ import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.utils.JavaUtils;
 

@@ -3,7 +3,6 @@ package ru.parallel.octotron.core.model.meta;
 import com.sun.istack.internal.Nullable;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -92,35 +91,6 @@ public abstract class AttributeObject extends MetaObject
 			reactions.add(object.GetReaction());
 
 		return reactions;
-	}
-
-	public long GetReactionState(OctoReaction reaction)
-	{
-		List<ReactionObject> reactions
-			= new ReactionObjectFactory().ObtainAll(GetBaseObject(), reaction.GetCheckName());
-
-		for(ReactionObject r : reactions)
-		{
-			if(r.GetID() == reaction.GetID())
-				return r.GetState();
-		}
-		throw new ExceptionModelFail("reaction not found");
-	}
-
-	public void SetReactionState(OctoReaction reaction, long res)
-	{
-		List<ReactionObject> reactions
-			= new ReactionObjectFactory().ObtainAll(GetBaseObject(), reaction.GetCheckName());
-
-		for(ReactionObject r : reactions)
-		{
-			if(r.GetID() == reaction.GetID())
-			{
-				r.SetState(res);
-				return;
-			}
-		}
-		throw new ExceptionModelFail("reaction not found");
 	}
 
 	@Nullable

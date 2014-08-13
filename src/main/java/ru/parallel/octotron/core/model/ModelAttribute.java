@@ -3,8 +3,8 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.model.attribute.VariableAttribute;
 import ru.parallel.octotron.core.model.attribute.EAttributeType;
+import ru.parallel.octotron.core.model.attribute.VariableAttribute;
 import ru.parallel.octotron.neo4j.impl.Marker;
 
 import java.util.List;
@@ -71,9 +71,9 @@ public abstract class ModelAttribute extends AttributeDecorator
 
 	public abstract List<OctoReaction> GetReactions();
 
-	public abstract List<OctoResponse> PreparePendingReactions();
+	public abstract List<OctoResponse> GetReadyReactions();
 
-	public abstract List<OctoResponse> GetFails();
+	public abstract List<OctoResponse> GetExecutedReactions();
 
 	public abstract List<Marker> GetMarkers();
 

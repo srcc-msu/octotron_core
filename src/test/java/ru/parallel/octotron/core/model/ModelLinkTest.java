@@ -24,7 +24,7 @@ public class ModelLinkTest
 	public static void Init() throws Exception
 	{
 		ModelLinkTest.graph = new Neo4jGraph( "dbs/" + ModelLinkTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-GraphService.Init(graph);
+		GraphService.Init (graph);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")

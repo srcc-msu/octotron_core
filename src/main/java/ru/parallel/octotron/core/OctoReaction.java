@@ -26,14 +26,16 @@ public class OctoReaction implements Serializable, UniqueName
 	private final OctoResponse recover_response;
 
 	private final long delay;
+	private final long repeat;
 
 	public OctoReaction(String check_name, Object check_value
-		, OctoResponse response, long delay, OctoResponse recover_response)
+		, OctoResponse response, long delay, long repeat, OctoResponse recover_response)
 	{
 		this.check_name = check_name;
 		this.check_value = check_value;
 
 		this.delay = delay;
+		this.repeat = repeat;
 
 		this.response = response;
 		this.recover_response = recover_response;
@@ -44,19 +46,19 @@ public class OctoReaction implements Serializable, UniqueName
 	public OctoReaction(String check_name, Object check_value
 		, OctoResponse response, OctoResponse recover_response)
 	{
-		this(check_name, check_value, response, 0, recover_response);
+		this(check_name, check_value, response, 0, 0, recover_response);
 	}
 
 	public OctoReaction(String check_name, Object check_value
-		, OctoResponse response, long delay)
+		, OctoResponse response, long delay, long repeat)
 	{
-		this(check_name, check_value, response, delay, null);
+		this(check_name, check_value, response, delay, repeat, null);
 	}
 
 	public OctoReaction(String check_name, Object check_value
 		, OctoResponse response)
 	{
-		this(check_name, check_value, response, 0, null);
+		this(check_name, check_value, response, 0, 0, null);
 	}
 
 	private void Register()

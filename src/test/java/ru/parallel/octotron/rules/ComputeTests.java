@@ -4,11 +4,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.collections.EntityList;
-import ru.parallel.octotron.core.graph.collections.IEntityList;
 import ru.parallel.octotron.core.graph.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.model.*;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.attribute.SensorAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
@@ -34,7 +36,7 @@ public class ComputeTests
 		throws ExceptionSystemError
 	{
 		ComputeTests.graph = new Neo4jGraph( "dbs/" + ComputeTests.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-GraphService.Init(graph);
+		GraphService.Init (graph);
 
 		ObjectFactory in = new ObjectFactory(model_service)
 			.Sensors(new SimpleAttribute("in_d1", 10.0))

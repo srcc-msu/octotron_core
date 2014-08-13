@@ -2,7 +2,6 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.graph.ILink;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 
 public class ModelLink extends ModelEntity implements ILink
 {

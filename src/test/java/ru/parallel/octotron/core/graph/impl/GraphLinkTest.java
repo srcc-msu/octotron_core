@@ -14,7 +14,7 @@ public class GraphLinkTest
 	public static void Init() throws Exception
 	{
 		GraphLinkTest.graph = new Neo4jGraph( "dbs/" + GraphLinkTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-GraphService.Init(graph);
+		GraphService.Init(graph);
 	}
 
 	@AfterClass

@@ -2,7 +2,6 @@ package ru.parallel.octotron.core.graph.collections;
 
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 

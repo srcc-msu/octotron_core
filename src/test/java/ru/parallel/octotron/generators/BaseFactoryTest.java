@@ -18,9 +18,6 @@ import ru.parallel.octotron.rules.Match;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * test some common cases - attributes, factories
- * */
 public class BaseFactoryTest
 {
 	private static Neo4jGraph graph;
@@ -35,6 +32,7 @@ public class BaseFactoryTest
 	{
 		BaseFactoryTest.graph = new Neo4jGraph( "dbs/"
 			+ BaseFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE, true);
+		GraphService.Init(BaseFactoryTest.graph);
 
 		object_factory = new ObjectFactory(BaseFactoryTest.model_service);
 		link_factory = new LinkFactory(BaseFactoryTest.model_service);

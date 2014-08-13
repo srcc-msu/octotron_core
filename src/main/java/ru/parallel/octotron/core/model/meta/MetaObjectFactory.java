@@ -1,7 +1,7 @@
 package ru.parallel.octotron.core.model.meta;
 
-import ru.parallel.octotron.core.graph.collections.ListConverter;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.collections.ListConverter;
+import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;

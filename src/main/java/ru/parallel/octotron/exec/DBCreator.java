@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.core.graph.collections.LinkList;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.collections.LinkList;
+import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;

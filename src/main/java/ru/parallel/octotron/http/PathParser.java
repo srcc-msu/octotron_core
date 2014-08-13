@@ -7,7 +7,7 @@
 package ru.parallel.octotron.http;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.graph.collections.IEntityList;
+import ru.parallel.octotron.core.collections.IEntityList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;

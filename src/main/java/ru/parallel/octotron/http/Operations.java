@@ -7,11 +7,13 @@
 package ru.parallel.octotron.http;
 
 import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.graph.collections.AutoFormat;
-import ru.parallel.octotron.core.graph.collections.AutoFormat.E_FORMAT_PARAM;
-import ru.parallel.octotron.core.graph.collections.IEntityList;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.collections.AutoFormat;
+import ru.parallel.octotron.core.collections.AutoFormat.E_FORMAT_PARAM;
+import ru.parallel.octotron.core.collections.IEntityList;
+import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;

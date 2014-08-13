@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.graph.collections;
+package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;

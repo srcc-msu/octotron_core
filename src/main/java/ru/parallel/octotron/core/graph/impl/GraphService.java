@@ -8,10 +8,10 @@ package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.collections.IEntityList;
-import ru.parallel.octotron.core.graph.collections.LinkList;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.collections.IEntityList;
+import ru.parallel.octotron.core.collections.LinkList;
+import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 import ru.parallel.octotron.core.primitive.exception.ExceptionDBError;

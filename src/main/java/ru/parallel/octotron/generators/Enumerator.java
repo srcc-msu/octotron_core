@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.graph.collections.IEntityList;
+import ru.parallel.octotron.core.collections.IEntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 public final class Enumerator

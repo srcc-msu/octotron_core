@@ -8,9 +8,9 @@ package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.graph.IObject;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.collections.LinkList;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.collections.LinkList;
+import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -18,7 +18,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 /**
  * implementation of object according to real \graph<br>
  * */
-public final class GraphObject extends GraphEntity implements IObject
+public final class GraphObject extends GraphEntity implements IObject<GraphObject, GraphLink>
 {
 	public GraphObject(IGraph graph, Uid uid)
 	{

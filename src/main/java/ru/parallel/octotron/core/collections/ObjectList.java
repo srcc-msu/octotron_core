@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.graph.collections;
+package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.ILink;
@@ -19,7 +19,7 @@ import java.util.List;
  * and obtain list of attributes<br>
  * only filtering for now, to be honest..<br>
  * */
-public class ObjectList<OT extends IObject & IEntity, LT extends ILink & IEntity> extends IEntityList<OT>
+public class ObjectList<OT extends IObject<OT, LT>, LT extends ILink<OT, LT>> extends IEntityList<OT>
 {
 	public ObjectList()
 	{

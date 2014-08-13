@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.graph.collections;
+package ru.parallel.octotron.core.collections;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

@@ -7,7 +7,7 @@
 package ru.parallel.octotron.logic;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.attribute.SensorAttribute;

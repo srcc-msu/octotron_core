@@ -3,7 +3,7 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.IEntity;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
@@ -105,6 +105,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity
 
 // -----------------------------
 
+	@Override
 	public ModelAttribute GetAttribute(String name)
 	{
 		VariableObject derived_object
@@ -125,6 +126,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity
 		throw new ExceptionModelFail("attribute not found: " + name);
 	}
 
+	@Override
 	public AttributeList<ModelAttribute> GetAttributes()
 	{
 		AttributeList<ModelAttribute> attributes = new AttributeList<>();
@@ -135,6 +137,26 @@ public abstract class ModelEntity extends GraphBased implements IEntity
 		}
 
 		return attributes;
+	}
+
+	@Override
+	public boolean TestAttribute(String name)
+	{
+		return GetBaseEntity().TestAttribute(name);
+	}
+
+
+	@Override
+	public boolean TestAttribute(String name, Object value)
+	{
+		return GetBaseEntity().TestAttribute(name, value);
+	}
+
+
+	@Override
+	public boolean TestAttribute(SimpleAttribute attribute)
+	{
+		return GetBaseEntity().TestAttribute(attribute);
 	}
 
 // -----------

@@ -2,7 +2,7 @@ package ru.parallel.octotron.http;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
-import ru.parallel.octotron.core.graph.collections.IEntityList;
+import ru.parallel.octotron.core.collections.IEntityList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import static org.junit.Assert.assertEquals;

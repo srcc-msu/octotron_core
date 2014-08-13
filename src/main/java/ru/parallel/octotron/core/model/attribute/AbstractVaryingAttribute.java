@@ -8,7 +8,7 @@ package ru.parallel.octotron.core.model.attribute;
 
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -258,9 +258,9 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 
 		for(GraphObject object : meta.GetBaseObject().GetInNeighbors(dependence_link))
 		{
-			AttributeObject attribute_object = new VariableObject(object);
+			VariableObject attribute_object = new VariableObject(object); // only rules will be here
 
-			result.add((VariableAttribute)attribute_object.GetAttribute());
+			result.add((VariableAttribute)attribute_object.GetParentAttribute());
 		}
 
 		return result;

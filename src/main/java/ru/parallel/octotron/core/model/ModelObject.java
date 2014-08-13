@@ -1,15 +1,15 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.graph.IObject;
-import ru.parallel.octotron.core.graph.collections.LinkList;
-import ru.parallel.octotron.core.graph.collections.ListConverter;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.collections.LinkList;
+import ru.parallel.octotron.core.collections.ListConverter;
+import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
-public class ModelObject extends ModelEntity implements IObject
+public class ModelObject extends ModelEntity implements IObject<ModelObject, ModelLink>
 {
 	public ModelObject(GraphObject object)
 	{

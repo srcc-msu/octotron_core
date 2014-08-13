@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.graph.collections;
+package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
@@ -72,7 +72,7 @@ public abstract class IEntityList<T extends IEntity> implements Iterable<T>
  * in any list object<br>
  * order of attributes is the same as order of objects<br>
  * */
-	public final AttributeList GetAttributes(String name)
+	public final AttributeList<IAttribute> GetAttributes(String name)
 	{
 		AttributeList<IAttribute> attributes = new AttributeList<>();
 

@@ -2,11 +2,11 @@ package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 
-public abstract class GraphBased implements IEntity
+public abstract class GraphBased //implements IEntity
 {
 	private final GraphEntity base;
 
@@ -15,7 +15,7 @@ public abstract class GraphBased implements IEntity
 		this.base = base;
 	}
 
-	@Override
+//	@Override
 	public final boolean equals(Object object)
 	{
 		if (!(object instanceof GraphBased))
@@ -39,7 +39,7 @@ public abstract class GraphBased implements IEntity
 		return (GraphObject)base;
 	}
 
-	@Override
+	/*@Override
 	public boolean TestAttribute(String name)
 	{
 		return base.TestAttribute(name);
@@ -64,12 +64,12 @@ public abstract class GraphBased implements IEntity
 	}
 
 	@Override
-	public AttributeList GetAttributes()
+	public AttributeList<GraphAttribute> GetAttributes()
 	{
 		return base.GetAttributes();
 	}
-
-	@Override
+*/
+//	@Override
 	public Uid GetUID()
 	{
 		return base.GetUID();

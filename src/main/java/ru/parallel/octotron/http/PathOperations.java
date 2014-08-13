@@ -7,9 +7,10 @@
 package ru.parallel.octotron.http;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.graph.collections.IEntityList;
-import ru.parallel.octotron.core.graph.collections.LinkList;
-import ru.parallel.octotron.core.graph.collections.ObjectList;
+import ru.parallel.octotron.core.collections.IEntityList;
+import ru.parallel.octotron.core.collections.LinkList;
+import ru.parallel.octotron.core.collections.ObjectList;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -29,7 +30,7 @@ public abstract class PathOperations
 
 	private interface ITransform
 	{
-		IEntityList Transform(ModelService model_service, ExecutionController exec_control
+		IEntityList<ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
 				, Object obj, List<Pair<SimpleAttribute, IEntityList.EQueryType>> params)
 				throws ExceptionParseError;
 	}
@@ -63,7 +64,7 @@ public abstract class PathOperations
 			return out;
 		}
 
-		public IEntityList Transform(ModelService model_service, ExecutionController exec_control
+		public IEntityList<ModelEntity> Transform(ModelService model_service, ExecutionController exec_control
 			, Object obj)
 				throws ExceptionParseError
 		{

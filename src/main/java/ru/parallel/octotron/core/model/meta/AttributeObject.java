@@ -43,7 +43,7 @@ public abstract class AttributeObject extends MetaObject
 		return GetAttribute(name_const).GetString();
 	}
 
-	public ModelAttribute GetAttribute()
+	public ModelAttribute GetParentAttribute()
 	{
 		return GetAttributeObject().GetAttribute(GetName());
 	}

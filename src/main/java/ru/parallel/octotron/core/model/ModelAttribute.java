@@ -2,7 +2,7 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.attribute.VariableAttribute;
 import ru.parallel.octotron.neo4j.impl.Marker;

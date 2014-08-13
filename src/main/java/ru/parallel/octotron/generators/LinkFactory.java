@@ -29,18 +29,17 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	public LinkFactory(ModelService model_service)
+	public LinkFactory()
 	{
-		super(model_service);
+		super();
 	}
 
-	private LinkFactory(ModelService model_service
-		, List<SimpleAttribute> constants
+	private LinkFactory(List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
 		, List<OctoRule> rules
 		, List<OctoReaction> reactions)
 	{
-		super(model_service, constants, sensors, rules, reactions);
+		super(constants, sensors, rules, reactions);
 	}
 /*
 @Override
@@ -316,6 +315,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		, List<OctoRule> new_rules
 		, List<OctoReaction> new_reactions)
 	{
-		return new LinkFactory(model_service, new_constants, new_sensors, new_rules, new_reactions);
+		return new LinkFactory(new_constants, new_sensors, new_rules, new_reactions);
 	}
 }

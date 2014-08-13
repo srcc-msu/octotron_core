@@ -23,7 +23,6 @@ public class RequestEmulationTest
 
 	private static Neo4jGraph graph;
 	private static GraphService graph_service;
-	private static ModelService model_service;
 
 	private static LinkFactory links;
 	private static ObjectFactory factory;
@@ -40,8 +39,8 @@ public class RequestEmulationTest
 		GraphService.Get().EnableObjectIndex("AID");
 		GraphService.Get().EnableLinkIndex("AID");
 
-		RequestEmulationTest.factory = new ObjectFactory(RequestEmulationTest.model_service);
-		RequestEmulationTest.links = new LinkFactory(RequestEmulationTest.model_service)
+		RequestEmulationTest.factory = new ObjectFactory();
+		RequestEmulationTest.links = new LinkFactory()
 			.Constants(new SimpleAttribute("type", "a_link"));
 	}
 

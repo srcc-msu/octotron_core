@@ -1,12 +1,12 @@
 package ru.parallel.octotron.core.model.meta;
 
-import com.sun.istack.internal.Nullable;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 

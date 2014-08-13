@@ -22,8 +22,6 @@ import java.util.List;
  * */
 public abstract class BaseFactory<T>
 {
-	protected final ModelService model_service;
-
 /**
  * attribute template that will be used for all created entities<br>
  * must be cloned<br>
@@ -33,24 +31,20 @@ public abstract class BaseFactory<T>
 	protected final List<OctoRule> rules;
 	protected final List<OctoReaction> reactions;
 
-	protected BaseFactory(ModelService model_service
-		, List<SimpleAttribute> constants
+	protected BaseFactory(List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
 		, List<OctoRule> rules
 		, List<OctoReaction> reactions)
 	{
-		this.model_service = model_service;
-
 		this.constants = constants;
 		this.sensors = sensors;
 		this.rules = rules;
 		this.reactions = reactions;
 	}
 
-	protected BaseFactory(ModelService model_service)
+	protected BaseFactory()
 	{
-		this(model_service
-			, new LinkedList<SimpleAttribute>()
+		this(new LinkedList<SimpleAttribute>()
 			, new LinkedList<SimpleAttribute>()
 			, new LinkedList<OctoRule>()
 			, new LinkedList<OctoReaction>());

@@ -21,7 +21,6 @@ import static org.junit.Assert.assertTrue;
 public class BaseFactoryTest
 {
 	private static Neo4jGraph graph;
-	private static ModelService model_service;
 
 	private static final int N = 10; // some testing param
 	private static ObjectFactory object_factory;
@@ -34,8 +33,8 @@ public class BaseFactoryTest
 			+ BaseFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE, true);
 		GraphService.Init(BaseFactoryTest.graph);
 
-		object_factory = new ObjectFactory(BaseFactoryTest.model_service);
-		link_factory = new LinkFactory(BaseFactoryTest.model_service);
+		object_factory = new ObjectFactory();
+		link_factory = new LinkFactory();
 	}
 
 	@AfterClass

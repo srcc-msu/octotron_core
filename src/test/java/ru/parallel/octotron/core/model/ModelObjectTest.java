@@ -14,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 public class ModelObjectTest
 {
 	private static Neo4jGraph graph;
-	private static ModelService model_service;
 
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
@@ -29,14 +28,14 @@ public class ModelObjectTest
 			new SimpleAttribute("object", "ok")
 		};
 
-		ModelObjectTest.obj_factory = new ObjectFactory(model_service).Constants(obj_att);
+		ModelObjectTest.obj_factory = new ObjectFactory().Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("link", "ok"),
 			new SimpleAttribute("type", "contain"),
 		};
 
-		ModelObjectTest.link_factory = new LinkFactory(model_service).Constants(link_att);
+		ModelObjectTest.link_factory = new LinkFactory().Constants(link_att);
 	}
 
 	@AfterClass

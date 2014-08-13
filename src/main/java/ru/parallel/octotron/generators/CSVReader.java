@@ -6,8 +6,7 @@
 
 package ru.parallel.octotron.generators;
 
-import au.com.bytecode.opencsv.CSVReader;
-import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.graph.collections.IEntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -20,20 +19,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * read a csv file and and fill a given EntityList with attributes
+ * read a csv file and and fill a given IEntityList with attributes
  * 1st csv string must contain names for attributes
  * rest lines will be taken as values
  * */
-public final class CsvFiller
+public final class CSVReader
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	private CsvFiller() {}
+	private CSVReader() {}
 
-	public static void Read(String file_name, EntityList<? extends ModelEntity> list)
+	public static void Declare(IEntityList<? extends ModelEntity> list, String file_name)
 		throws ExceptionParseError, IOException
 	{
-		CSVReader reader = new CSVReader(new FileReader(file_name));
+		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name));
 
 		try
 		{

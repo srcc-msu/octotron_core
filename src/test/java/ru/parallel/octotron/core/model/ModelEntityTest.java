@@ -24,7 +24,6 @@ public class ModelEntityTest
 {
 	private static Neo4jGraph graph;
 	private static GraphService graph_service;
-	private static ModelService model_service;
 
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
@@ -39,14 +38,14 @@ public class ModelEntityTest
 			new SimpleAttribute("object", "ok")
 		};
 
-		ModelEntityTest.obj_factory = new ObjectFactory(ModelEntityTest.model_service).Constants(obj_att);
+		ModelEntityTest.obj_factory = new ObjectFactory().Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("link", "ok"),
 			new SimpleAttribute("type", "contain"),
 		};
 
-		ModelEntityTest.link_factory = new LinkFactory(ModelEntityTest.model_service).Constants(link_att);
+		ModelEntityTest.link_factory = new LinkFactory().Constants(link_att);
 	}
 
 	@AfterClass

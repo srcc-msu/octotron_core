@@ -29,7 +29,6 @@ public class ComputeTests
 	private static GraphService graph_service;
 	private static Neo4jGraph graph;
 	private static ModelObject obj;
-	private static ModelService model_service;
 
 	@BeforeClass
 	public static void Init()
@@ -38,7 +37,7 @@ public class ComputeTests
 		ComputeTests.graph = new Neo4jGraph( "dbs/" + ComputeTests.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		GraphService.Init (graph);
 
-		ObjectFactory in = new ObjectFactory(model_service)
+		ObjectFactory in = new ObjectFactory()
 			.Sensors(new SimpleAttribute("in_d1", 10.0))
 			.Sensors(new SimpleAttribute("in_l1", 20))
 			.Sensors(new SimpleAttribute("in_b1", true))
@@ -52,7 +51,7 @@ public class ComputeTests
 			.Sensors(new SimpleAttribute("str1", "yes"))
 			.Sensors(new SimpleAttribute("str2", "yes"));
 
-		ObjectFactory out = new ObjectFactory(model_service)
+		ObjectFactory out = new ObjectFactory()
 			.Sensors(new SimpleAttribute("out_d1", 20.0))
 			.Sensors(new SimpleAttribute("out_l1", 10))
 			.Sensors(new SimpleAttribute("out_b1", false))
@@ -68,7 +67,7 @@ public class ComputeTests
 			.Sensors(new SimpleAttribute("mismatch_num", 333))
 			.Sensors(new SimpleAttribute("match_num", 444));
 
-		ObjectFactory self = new ObjectFactory(model_service)
+		ObjectFactory self = new ObjectFactory()
 			.Sensors(new SimpleAttribute("d1", 0.0))
 			.Sensors(new SimpleAttribute("d2", 1.0))
 			.Sensors(new SimpleAttribute("l1", 2))
@@ -86,7 +85,7 @@ public class ComputeTests
 
 		obj = self.Create();
 
-		LinkFactory links = new LinkFactory(model_service)
+		LinkFactory links = new LinkFactory()
 			.Constants(new SimpleAttribute("type", "test"));
 
 		ObjectList ins = in.Create(3);

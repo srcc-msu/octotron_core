@@ -21,18 +21,17 @@ import java.util.List;
  * */
 public class ObjectFactory extends BaseFactory<ObjectFactory>
 {
-	private ObjectFactory(ModelService model_service
-		, List<SimpleAttribute> constants
+	public ObjectFactory()
+	{
+		super();
+	}
+
+	private ObjectFactory(List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
 		, List<OctoRule> rules
 		, List<OctoReaction> reactions)
 	{
-		super(model_service, constants, sensors, rules, reactions);
-	}
-
-	public ObjectFactory(ModelService model_service)
-	{
-		super(model_service);
+		super(constants, sensors, rules, reactions);
 	}
 
 	/**
@@ -70,6 +69,6 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 		, List<OctoRule> new_rules
 		, List<OctoReaction> new_reactions)
 	{
-		return new ObjectFactory(model_service, new_constants, new_sensors, new_rules, new_reactions);
+		return new ObjectFactory(new_constants, new_sensors, new_rules, new_reactions);
 	}
 }

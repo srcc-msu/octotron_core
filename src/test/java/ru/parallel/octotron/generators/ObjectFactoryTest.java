@@ -14,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 public class ObjectFactoryTest
 {
 	private static Neo4jGraph graph;
-	private static ModelService model_service;
 
 	private static ObjectFactory obj_factory;
 
@@ -25,7 +24,7 @@ public class ObjectFactoryTest
 			+ ObjectFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
 		GraphService.Init(ObjectFactoryTest.graph);
 
-		ObjectFactoryTest.obj_factory = new ObjectFactory(ObjectFactoryTest.model_service)
+		ObjectFactoryTest.obj_factory = new ObjectFactory()
 			.Constants(new SimpleAttribute("object", "ok"));
 	}
 

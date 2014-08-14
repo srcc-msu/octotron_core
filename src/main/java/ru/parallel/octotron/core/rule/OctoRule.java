@@ -6,6 +6,8 @@
 
 package ru.parallel.octotron.core.rule;
 
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.UniqueName;
@@ -46,7 +48,8 @@ public abstract class OctoRule implements UniqueName, Serializable
 
 	public abstract Object Compute(ModelEntity entity);
 	public abstract Object GetDefaultValue();
-	public abstract EDependencyType GetDependency();
+
+	public abstract AttributeList<ModelAttribute> GetDependency(ModelEntity entity);
 
 	@Override
 	public String GetUniqName()

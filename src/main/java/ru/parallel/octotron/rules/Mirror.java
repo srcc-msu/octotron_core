@@ -6,8 +6,9 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.rule.OctoObjectRule;
 
 public abstract class Mirror extends OctoObjectRule
@@ -34,8 +35,13 @@ public abstract class Mirror extends OctoObjectRule
 	}
 
 	@Override
-	public final EDependencyType GetDependency()
+	public AttributeList<ModelAttribute> GetDependency(ModelObject object)
 	{
-		return EDependencyType.ALL;
-	}
-}
+		AttributeList<ModelAttribute> result = new AttributeList<>();
+
+		result.add(object.GetInNeighbors().append(object.GetOutNeighbors())
+			.Filter(mirror_name_match, mirror_value_match)
+			.Only().GetAttribute(mirror_attribute));
+
+		return result;
+	}}

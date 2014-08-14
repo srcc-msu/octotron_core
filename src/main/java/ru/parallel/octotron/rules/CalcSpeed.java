@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.rule.OctoRule;
 
 public class CalcSpeed extends OctoRule
@@ -23,9 +23,13 @@ public class CalcSpeed extends OctoRule
 	}
 
 	@Override
-	public EDependencyType GetDependency()
+	public AttributeList<ModelAttribute> GetDependency(ModelEntity entity)
 	{
-		return EDependencyType.SELF;
+		AttributeList<ModelAttribute> result = new AttributeList<>();
+
+		result.add(entity.GetAttribute(measured_attribute));
+
+		return result;
 	}
 
 	@Override

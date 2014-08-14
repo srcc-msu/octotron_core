@@ -2,6 +2,7 @@ package ru.parallel.octotron.core.model;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
@@ -147,9 +148,9 @@ public class ModelEntityTest
 		}
 
 		@Override
-		public EDependencyType GetDependency()
+		public AttributeList<ModelAttribute> GetDependency(ModelEntity entity)
 		{
-			return dep_type;
+			return new AttributeList<>();
 		}
 	}
 

@@ -7,6 +7,7 @@
 package ru.parallel.octotron.rules;
 
 import org.apache.commons.lang3.ArrayUtils;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
@@ -27,10 +28,54 @@ public abstract class Aggregate extends OctoObjectRule
 		this.attributes = ArrayUtils.clone(attributes);
 	}
 
-	@Override
-	public final EDependencyType GetDependency()
+	protected ModelObjectList GetCandidates(ModelObject object)
 	{
-		return dependency;
+		ModelObjectList candidates = new ModelObjectList();
+
+		switch(dependency)
+		{
+			case SELF:
+				candidates.add(object);
+				break;
+
+			case OUT:
+				candidates = object.GetOutNeighbors();
+				break;
+
+			case IN:
+				candidates = object.GetInNeighbors();
+				break;
+
+			case ALL:
+				candidates.add(object);
+				candidates = candidates.append(object.GetInNeighbors());
+				candidates = candidates.append(object.GetOutNeighbors());
+				break;
+
+			default:
+				throw new ExceptionModelFail("unknown dependency: " + dependency);
+		}
+
+		return candidates;
+	}
+
+	@Override
+	public final AttributeList<ModelAttribute> GetDependency(ModelObject object)
+	{
+		AttributeList<ModelAttribute> result = new AttributeList<>();
+
+		ModelObjectList candidates = GetCandidates(object);
+
+		for(ModelObject obj : candidates.Uniq())
+			for(String tmp : attributes)
+			{
+				if(!obj.TestAttribute(tmp))
+					continue;
+
+				result.add(obj.GetAttribute(tmp));
+			}
+
+		return result;
 	}
 
 	@Override
@@ -38,36 +83,12 @@ public abstract class Aggregate extends OctoObjectRule
 	{
 		Object res = GetDefaultValue();
 
-		ModelObjectList candidates = new ModelObjectList();
-
-		switch(dependency)
-		{
-			case SELF:
-				candidates.add(object);
-			break;
-
-			case OUT:
-				candidates = object.GetOutNeighbors();
-			break;
-
-			case IN:
-				candidates = object.GetInNeighbors();
-			break;
-
-			case ALL:
-				candidates.add(object);
-				candidates = candidates.append(object.GetInNeighbors());
-				candidates = candidates.append(object.GetOutNeighbors());
-			break;
-
-			default:
-				throw new ExceptionModelFail("unknown dependency: " + dependency);
-		}
+		ModelObjectList candidates = GetCandidates(object);
 
 		for(ModelObject obj : candidates.Uniq())
 			for(String tmp : attributes)
 			{
-				if(!obj.GetBaseObject().TestAttribute(tmp))
+				if(!obj.TestAttribute(tmp))
 					continue;
 
 				ModelAttribute attribute = obj.GetAttribute(tmp);

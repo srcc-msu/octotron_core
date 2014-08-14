@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
-import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.rule.OctoLinkRule;
 
 public class LinkedVarArgMatch extends OctoLinkRule
@@ -23,9 +23,14 @@ public class LinkedVarArgMatch extends OctoLinkRule
 	}
 
 	@Override
-	public EDependencyType GetDependency()
+	public AttributeList<ModelAttribute> GetDependency(ModelLink link)
 	{
-		return EDependencyType.SELF;
+		AttributeList<ModelAttribute> result = new AttributeList<>();
+
+		result.add(link.Target().GetAttribute(check_attribute));
+		result.add(link.Source().GetAttribute(check_attribute));
+
+		return result;
 	}
 
 	@Override

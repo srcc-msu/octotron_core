@@ -1,5 +1,12 @@
 package ru.parallel.octotron.http;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -12,6 +19,9 @@ import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.FileUtils;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import static org.junit.Assert.*;
 
@@ -53,7 +63,7 @@ public class RequestEmulationTest
 		RequestEmulationTest.graph.Delete();
 	}
 
-	private static final long SLEEP = 0;//100;
+	private static final long SLEEP = 100;
 
 	@Before
 	public void Clean() throws Exception
@@ -67,59 +77,32 @@ public class RequestEmulationTest
  * */
 	private HTTPRequest GetHttpRequest(String str) throws Exception
 	{
-		ParsedHttpRequest request;
-
 		RequestEmulationTest.http.Clear();
 
-		FileUtils.ExecSilent("curl", "-u:", "-sS", "127.0.0.1:" + RequestEmulationTest.HTTP_PORT + str);
-		Thread.sleep(RequestEmulationTest.SLEEP);
+		HttpClient client = new DefaultHttpClient();
+		HttpGet request = new HttpGet("http://127.0.0.1:" + RequestEmulationTest.HTTP_PORT + str);
 
-		if((request = RequestEmulationTest.http.GetBlockingRequest()) != null)
-			request.GetHttpRequest().FinishString("");
-		else
+		HttpParams params = client.getParams();
+		HttpConnectionParams.setConnectionTimeout(params, (int)RequestEmulationTest.SLEEP);
+		HttpConnectionParams.setSoTimeout(params, (int)RequestEmulationTest.SLEEP);
+
+		try
+		{
+			client.execute(request);
+		}
+		catch (Exception ignore)
+		{}
+
+		client.getConnectionManager().shutdown();
+
+		ParsedHttpRequest parsed_request = RequestEmulationTest.http.GetBlockingRequest();
+
+		if(parsed_request == null)
 			fail("did not get the message");
 
-		return request.GetHttpRequest();
-	}
+		parsed_request.GetHttpRequest().FinishString("");
 
-	/**
-	 * testing curl manually, will use it in later tests via the function
-	 * */
-	@Test
-	public void HttpMessage() throws Exception
-	{
-		int COUNT = 3;
-
-		RequestEmulationTest.http.Clear();
-
-		String target = "/view/p";
-
-		for(int i = 0; i < COUNT; i++)
-		{
-			String params = "path=obj(AID==" + i + ")";
-
-			FileUtils.ExecSilent("curl", "-u:", "-sS", "127.0.0.1:" + RequestEmulationTest.HTTP_PORT + target + "?" + params  + i);
-			Thread.sleep(RequestEmulationTest.SLEEP);
-		}
-
-		ParsedHttpRequest request;
-
-		for(int i = 0; i < COUNT; i++)
-		{
-			if((request = RequestEmulationTest.http.GetBlockingRequest()) != null)
-			{
-				String params = "path=obj(AID==" + i + ")";
-
-				assertEquals("got wrong target", request.GetHttpRequest().GetPath(), target);
-				assertEquals("got wrong params", request.GetHttpRequest().GetQuery(), params + i);
-				request.GetHttpRequest().FinishString("");
-			}
-			else
-				fail("did not get the message");
-		}
-
-		if(RequestEmulationTest.http.GetRequest() != null)
-			fail("unexpected message");
+		return parsed_request.GetHttpRequest();
 	}
 
 	private String GetRequestResult(String str_request) throws Exception
@@ -127,8 +110,7 @@ public class RequestEmulationTest
 		HTTPRequest request = GetHttpRequest(str_request);
 
 		RequestResult result = RequestParser.ParseFromHttp(request)
-			.GetParsedRequest()
-			.Execute(null);
+			.GetParsedRequest().Execute(null);
 
 		if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
 			throw new ExceptionParseError(result.data);

@@ -8,9 +8,8 @@ package ru.parallel.octotron.http;
 
 import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.collections.EntityList;
-import ru.parallel.octotron.core.graph.impl.GraphLinkList;
-import ru.parallel.octotron.core.graph.impl.GraphObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.impl.ModelLinkList;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
@@ -130,12 +129,12 @@ public abstract class PathOperations
 			if(params.size() != 1) // TODO
 				throw new ExceptionParseError("query accepts only one filter");
 
-			if(obj instanceof GraphObjectList)
+			if(obj instanceof ModelObjectList)
 			{
 				ModelObjectList list = ToObjList(obj);
 				return list.Filter(params.get(0).getLeft(), params.get(0).getRight());
 			}
-			else if(obj instanceof GraphLinkList)
+			else if(obj instanceof ModelLinkList)
 			{
 				ModelLinkList list = ToLinkList(obj);
 				return list.Filter(params.get(0).getLeft(), params.get(0).getRight());
@@ -207,9 +206,9 @@ public abstract class PathOperations
 			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
 			throws ExceptionParseError
 		{
-			if(obj instanceof GraphObjectList)
+			if(obj instanceof ModelObjectList)
 				return ToObjList(obj).Uniq();
-			else if(obj instanceof GraphLinkList)
+			else if(obj instanceof ModelLinkList)
 				return ToLinkList(obj).Uniq();
 
 			throw new ExceptionParseError(

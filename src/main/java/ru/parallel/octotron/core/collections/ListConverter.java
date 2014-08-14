@@ -1,15 +1,19 @@
 package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.graph.impl.GraphLink;
+import ru.parallel.octotron.core.graph.impl.GraphLinkList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.impl.ModelLinkList;
+import ru.parallel.octotron.core.model.impl.ModelObjectList;
 
 public class ListConverter
 {
-	public static LinkList<ModelObject, ModelLink> GraphToModel(LinkList<GraphObject, GraphLink> list)
+	public static ModelLinkList GraphToModel(GraphLinkList list)
 	{
-		LinkList<ModelObject, ModelLink> result = new LinkList<>();
+		ModelLinkList result = new ModelLinkList();
 
 		for(GraphLink link : list)
 			result.add(new ModelLink(link));
@@ -17,9 +21,9 @@ public class ListConverter
 		return result;
 	}
 
-	public static ObjectList<ModelObject, ModelLink> GraphToModel(ObjectList<GraphObject, GraphLink> list)
+	public static ModelObjectList GraphToModel(GraphObjectList list)
 	{
-		ObjectList<ModelObject, ModelLink> result = new ObjectList<>();
+		ModelObjectList result = new ModelObjectList();
 
 		for(GraphObject object : list)
 			result.add(new ModelObject(object));
@@ -27,9 +31,9 @@ public class ListConverter
 		return result;
 	}
 
-	public static ObjectList<GraphObject, GraphLink> FilterLabel(ObjectList<GraphObject, GraphLink> list, String label)
+	public static GraphObjectList FilterLabel(GraphObjectList list, String label)
 	{
-		ObjectList<GraphObject, GraphLink> new_list = new ObjectList<>();
+		GraphObjectList new_list = new GraphObjectList();
 
 		for(GraphObject obj : list)
 		{
@@ -40,9 +44,9 @@ public class ListConverter
 		return new_list;
 	}
 
-	public static LinkList<GraphObject, GraphLink> FilterLabel(LinkList<GraphObject, GraphLink> list, String label)
+	public static GraphLinkList FilterLabel(GraphLinkList list, String label)
 	{
-		LinkList<GraphObject, GraphLink> new_list = new LinkList<>();
+		GraphLinkList new_list = new GraphLinkList();
 
 		for(GraphLink link : list)
 		{

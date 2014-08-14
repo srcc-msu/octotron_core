@@ -4,15 +4,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.EntityList;
-import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.attribute.EAttributeType;
-import ru.parallel.octotron.core.model.attribute.SensorAttribute;
+import ru.parallel.octotron.core.model.impl.ModelList;
+import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
+import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -88,8 +88,8 @@ public class ComputeTests
 		LinkFactory links = new LinkFactory()
 			.Constants(new SimpleAttribute("type", "test"));
 
-		ObjectList<ModelObject, ModelLink> ins = in.Create(3);
-		ObjectList<ModelObject, ModelLink> outs = out.Create(4);
+		ModelObjectList ins = in.Create(3);
+		ModelObjectList outs = out.Create(4);
 
 		Enumerator.Sequence(ins, "in_lid");
 		Enumerator.Sequence(outs, "out_lid");
@@ -98,7 +98,7 @@ public class ComputeTests
 
 		links.OneToEvery(obj, outs);
 
-		EntityList<ModelEntity> entities = new EntityList<>();
+		ModelList entities = new ModelList();
 
 		entities.add(obj);
 		entities = entities.append(ins);

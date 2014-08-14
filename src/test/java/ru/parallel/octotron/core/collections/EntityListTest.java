@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.collections;
+/*package ru.parallel.octotron.core.collections;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -48,4 +48,4 @@ public class EntityListTest
 		assertEquals("got something wrong", list2.size(), N);
 		assertEquals("got something wrong", list3.size(), N * 2);
 	}
-}
+}*/

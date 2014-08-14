@@ -4,10 +4,10 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.model.attribute;
+package ru.parallel.octotron.core.model.impl.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.meta.SensorObject;
+import ru.parallel.octotron.core.model.impl.meta.SensorObject;
 
 public class SensorAttribute extends AbstractVaryingAttribute<SensorObject>
 {

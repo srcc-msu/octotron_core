@@ -163,25 +163,20 @@ public class ModelObjectTest
 
 		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node);
 
-		assertEquals("in neighbors not match, any type"
-			, node.GetInNeighbors()
-				.size(), N);
+		assertEquals(N
+			, node.GetInNeighbors().size(), N);
 
-		assertEquals("in neighbors not match, exact type"
-			, node.GetInNeighbors()
-				.Filter("object").size(), N);
+		assertEquals(N
+			, node.GetInNeighbors().Filter("object").size(), N);
 
-		assertEquals("in neighbors not match, exact type and value"
-			, node.GetInNeighbors()
-				.Filter("object", "ok").size(), N);
+		assertEquals(N
+			, node.GetInNeighbors().Filter("object", "ok").size());
 
-		assertEquals("in neighbors not match, exact type, wrong value"
-			, node.GetInNeighbors()
-				.Filter("object", "fail").size(), 0);
+		assertEquals(0
+			, node.GetInNeighbors().Filter("object", "fail").size());
 
-		assertEquals("in neighbors not match, wrong type, wrong value"
-			, node.GetInNeighbors()
-				.Filter("fail", "fail").size(), 0);
+		assertEquals(0
+			, node.GetInNeighbors().Filter("fail", "fail").size());
 	}
 
 	@Test

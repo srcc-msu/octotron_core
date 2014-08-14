@@ -4,10 +4,10 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.model.attribute;
+package ru.parallel.octotron.core.model.impl.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.meta.VariableObject;
+import ru.parallel.octotron.core.model.impl.meta.VariableObject;
 import ru.parallel.octotron.core.rule.OctoRule;
 
 public class VariableAttribute extends AbstractVaryingAttribute<VariableObject>

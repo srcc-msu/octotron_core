@@ -6,11 +6,9 @@
 
 package ru.parallel.octotron.core.graph.impl;
 
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.graph.IObject;
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.collections.LinkList;
-import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -18,7 +16,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 /**
  * implementation of object according to real \graph<br>
  * */
-public final class GraphObject extends GraphEntity implements IObject<GraphObject, GraphLink>
+public final class GraphObject extends GraphEntity implements IObject<GraphAttribute>
 {
 	public GraphObject(IGraph graph, Uid uid)
 	{
@@ -41,6 +39,11 @@ public final class GraphObject extends GraphEntity implements IObject<GraphObjec
 	Object GetRawAttribute(String name)
 	{
 		return graph.GetObjectAttribute(uid, name);
+	}
+
+	public void DeleteAttribute(String name)
+	{
+		graph.DeleteObjectAttribute(uid, name);
 	}
 
 	@Override
@@ -92,22 +95,26 @@ public final class GraphObject extends GraphEntity implements IObject<GraphObjec
 		graph.DeleteObject(uid);
 	}
 
+// ----
+//
+// ----
+
 	@Override
-	public LinkList<GraphObject, GraphLink> GetInLinks()
+	public GraphLinkList GetInLinks()
 	{
 		return GraphService.LinksFromUid(graph, graph.GetInLinks(uid));
 	}
 
 	@Override
-	public LinkList<GraphObject, GraphLink> GetOutLinks()
+	public GraphLinkList GetOutLinks()
 	{
 		return GraphService.LinksFromUid(graph, graph.GetOutLinks(uid));
 	}
 
 	@Override
-	public ObjectList<GraphObject, GraphLink> GetInNeighbors()
+	public GraphObjectList GetInNeighbors()
 	{
-		ObjectList<GraphObject, GraphLink> objects = new ObjectList<>();
+		GraphObjectList objects = new GraphObjectList();
 
 		for(GraphLink link : GetInLinks())
 			objects.add(link.Source());
@@ -116,9 +123,9 @@ public final class GraphObject extends GraphEntity implements IObject<GraphObjec
 	}
 
 	@Override
-	public ObjectList<GraphObject, GraphLink> GetOutNeighbors()
+	public GraphObjectList GetOutNeighbors()
 	{
-		ObjectList<GraphObject, GraphLink> objects = new ObjectList<>();
+		GraphObjectList objects = new GraphObjectList();
 
 		for(GraphLink link : GetOutLinks())
 			objects.add(link.Target());
@@ -127,10 +134,10 @@ public final class GraphObject extends GraphEntity implements IObject<GraphObjec
 	}
 
 	@Override
-	public ObjectList<GraphObject, GraphLink> GetInNeighbors(String link_name
+	public GraphObjectList GetInNeighbors(String link_name
 		, Object link_value)
 	{
-		ObjectList<GraphObject, GraphLink> objects = new ObjectList<>();
+		GraphObjectList objects = new GraphObjectList();
 
 		for(GraphLink link : GetInLinks().Filter(link_name, link_value))
 			objects.add(link.Source());
@@ -139,10 +146,10 @@ public final class GraphObject extends GraphEntity implements IObject<GraphObjec
 	}
 
 	@Override
-	public ObjectList<GraphObject, GraphLink> GetOutNeighbors(String link_name
+	public GraphObjectList GetOutNeighbors(String link_name
 		, Object link_value)
 	{
-		ObjectList<GraphObject, GraphLink> objects = new ObjectList<>();
+		GraphObjectList objects = new GraphObjectList();
 
 		for(GraphLink link : GetOutLinks().Filter(link_name, link_value))
 			objects.add(link.Target());
@@ -151,9 +158,9 @@ public final class GraphObject extends GraphEntity implements IObject<GraphObjec
 	}
 
 	@Override
-	public ObjectList<GraphObject, GraphLink> GetInNeighbors(String link_name)
+	public GraphObjectList GetInNeighbors(String link_name)
 	{
-		ObjectList<GraphObject, GraphLink> objects = new ObjectList<>();
+		GraphObjectList objects = new GraphObjectList();
 
 		for(GraphLink link : GetInLinks().Filter(link_name))
 			objects.add(link.Source());
@@ -162,9 +169,9 @@ public final class GraphObject extends GraphEntity implements IObject<GraphObjec
 	}
 
 	@Override
-	public ObjectList<GraphObject, GraphLink> GetOutNeighbors(String link_name)
+	public GraphObjectList GetOutNeighbors(String link_name)
 	{
-		ObjectList<GraphObject, GraphLink> objects = new ObjectList<>();
+		GraphObjectList objects = new GraphObjectList();
 
 		for(GraphLink link : GetOutLinks().Filter(link_name))
 			objects.add(link.Target());
@@ -173,19 +180,14 @@ public final class GraphObject extends GraphEntity implements IObject<GraphObjec
 	}
 
 	@Override
-	public ObjectList<GraphObject, GraphLink> GetInNeighbors(SimpleAttribute link_attribute)
+	public GraphObjectList GetInNeighbors(SimpleAttribute link_attribute)
 	{
 		return GetInNeighbors(link_attribute.GetName(), link_attribute.GetValue());
 	}
 
 	@Override
-	public ObjectList<GraphObject, GraphLink> GetOutNeighbors(SimpleAttribute link_attribute)
+	public GraphObjectList GetOutNeighbors(SimpleAttribute link_attribute)
 	{
 		return GetOutNeighbors(link_attribute.GetName(), link_attribute.GetValue());
-	}
-
-	public void DeleteAttribute(String name)
-	{
-		graph.DeleteObjectAttribute(uid, name);
 	}
 }

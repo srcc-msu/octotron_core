@@ -1,28 +1,28 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.model.attribute.ConstantAttribute;
-import ru.parallel.octotron.core.model.attribute.SensorAttribute;
-import ru.parallel.octotron.core.model.attribute.VariableAttribute;
-import ru.parallel.octotron.core.model.meta.SensorObject;
-import ru.parallel.octotron.core.model.meta.SensorObjectFactory;
-import ru.parallel.octotron.core.model.meta.VariableObject;
-import ru.parallel.octotron.core.model.meta.VariableObjectFactory;
+import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
+import ru.parallel.octotron.core.model.impl.meta.SensorObject;
+import ru.parallel.octotron.core.model.impl.meta.SensorObjectFactory;
+import ru.parallel.octotron.core.model.impl.meta.VariableObject;
+import ru.parallel.octotron.core.model.impl.meta.VariableObjectFactory;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.rule.OctoReaction;
+import ru.parallel.octotron.core.rule.OctoResponse;
 import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Marker;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class ModelEntity extends GraphBased implements IEntity
+public abstract class ModelEntity extends GraphBased implements IEntity<ModelAttribute>
 {
 	public ModelEntity(GraphEntity base)
 	{

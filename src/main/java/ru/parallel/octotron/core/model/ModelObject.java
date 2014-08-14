@@ -1,15 +1,16 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.graph.IObject;
-import ru.parallel.octotron.core.collections.LinkList;
 import ru.parallel.octotron.core.collections.ListConverter;
-import ru.parallel.octotron.core.collections.ObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
+import ru.parallel.octotron.core.graph.IObject;
+import ru.parallel.octotron.core.graph.impl.GraphLinkList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphObjectList;
+import ru.parallel.octotron.core.model.impl.ModelLinkList;
+import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
-public class ModelObject extends ModelEntity implements IObject<ModelObject, ModelLink>
+public class ModelObject extends ModelEntity implements IObject<ModelAttribute>
 {
 	public ModelObject(GraphObject object)
 	{
@@ -17,108 +18,108 @@ public class ModelObject extends ModelEntity implements IObject<ModelObject, Mod
 	}
 
 	@Override
-	public LinkList<ModelObject, ModelLink> GetInLinks()
+	public ModelLinkList GetInLinks()
 	{
-		LinkList<GraphObject, GraphLink> links
+		GraphLinkList links
 			= GetBaseObject().GetInLinks();
 
-		LinkList<GraphObject, GraphLink> filtered
+		GraphLinkList filtered
 			= ListConverter.FilterLabel(links, EObjectLabels.MODEL.toString());
 
 		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
-	public LinkList<ModelObject, ModelLink> GetOutLinks()
+	public ModelLinkList GetOutLinks()
 	{
-		LinkList<GraphObject, GraphLink> links
+		GraphLinkList links
 			= GetBaseObject().GetOutLinks();
 
-		LinkList<GraphObject, GraphLink> filtered
+		GraphLinkList filtered
 			= ListConverter.FilterLabel(links, EObjectLabels.MODEL.toString());
 
 		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
-	public ObjectList<ModelObject, ModelLink> GetInNeighbors()
+	public ModelObjectList GetInNeighbors()
 	{
-		ObjectList<GraphObject, GraphLink> Objects
+		GraphObjectList Objects
 			= GetBaseObject().GetInNeighbors();
 
-		ObjectList<GraphObject, GraphLink> filtered
+		GraphObjectList filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
 		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
-	public ObjectList<ModelObject, ModelLink> GetOutNeighbors()
+	public ModelObjectList GetOutNeighbors()
 	{
-		ObjectList<GraphObject, GraphLink> Objects
+		GraphObjectList Objects
 			= GetBaseObject().GetOutNeighbors();
 
-		ObjectList<GraphObject, GraphLink> filtered
+		GraphObjectList filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
 		return ListConverter.GraphToModel(filtered);
 	}
 	@Override
-	public ObjectList<ModelObject, ModelLink> GetInNeighbors(String link_name, Object link_value)
+	public ModelObjectList GetInNeighbors(String link_name, Object link_value)
 	{
-		ObjectList<GraphObject, GraphLink> Objects
+		GraphObjectList Objects
 			= GetBaseObject().GetInNeighbors(link_name, link_value);
 
-		ObjectList<GraphObject, GraphLink> filtered
+		GraphObjectList filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
 		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
-	public ObjectList<ModelObject, ModelLink> GetOutNeighbors(String link_name, Object link_value)
+	public ModelObjectList GetOutNeighbors(String link_name, Object link_value)
 	{
-		ObjectList<GraphObject, GraphLink> Objects
+		GraphObjectList Objects
 			= GetBaseObject().GetOutNeighbors(link_name, link_value);
 
-		ObjectList<GraphObject, GraphLink> filtered
+		GraphObjectList filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
 		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
-	public ObjectList<ModelObject, ModelLink> GetInNeighbors(String link_name)
+	public ModelObjectList GetInNeighbors(String link_name)
 	{
-		ObjectList<GraphObject, GraphLink> Objects
+		GraphObjectList Objects
 			= GetBaseObject().GetInNeighbors(link_name);
 
-		ObjectList<GraphObject, GraphLink> filtered
+		GraphObjectList filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
 		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
-	public ObjectList<ModelObject, ModelLink> GetOutNeighbors(String link_name)
+	public ModelObjectList GetOutNeighbors(String link_name)
 	{
-		ObjectList<GraphObject, GraphLink> Objects
+		GraphObjectList Objects
 			= GetBaseObject().GetOutNeighbors(link_name);
 
-		ObjectList<GraphObject, GraphLink> filtered
+		GraphObjectList filtered
 			= ListConverter.FilterLabel(Objects, EObjectLabels.MODEL.toString());
 
 		return ListConverter.GraphToModel(filtered);
 	}
 
 	@Override
-	public ObjectList<ModelObject, ModelLink> GetInNeighbors(SimpleAttribute link_attribute)
+	public ModelObjectList GetInNeighbors(SimpleAttribute link_attribute)
 	{
 		return GetInNeighbors(link_attribute.GetName(), link_attribute.GetValue());
 	}
 
 	@Override
-	public ObjectList<ModelObject, ModelLink> GetOutNeighbors(SimpleAttribute link_attribute)
+	public ModelObjectList GetOutNeighbors(SimpleAttribute link_attribute)
 	{
 		return GetOutNeighbors(link_attribute.GetName(), link_attribute.GetValue());
 	}

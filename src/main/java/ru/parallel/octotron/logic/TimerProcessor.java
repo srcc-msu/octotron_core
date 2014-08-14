@@ -6,9 +6,7 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.utils.JavaUtils;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -42,28 +40,7 @@ public final class TimerProcessor
 		TimerProcessor.INSTANCE.timers.add(new Entry(entity, name));
 	}
 
-	public static EntityList<ModelEntity> Process()
-	{
-		EntityList<ModelEntity> to_update = new EntityList<>();
 
-		long current_time = JavaUtils.GetTimestamp(); // TODO: move into the cycle?
-
-		Iterator<Entry> it = TimerProcessor.INSTANCE.timers.iterator();
-
-		while (it.hasNext())
-		{
-			Entry entry = it.next();
-
-/*			if(entry.entity.IsTimerExpired(entry.name, current_time))
-			{
-				to_update.add(entry.entity);
-
-				it.remove();
-			}*/
-		}
-
-		return to_update;
-	}
 
 	public static void RemoveTimer(ModelEntity entity, String name)
 	{

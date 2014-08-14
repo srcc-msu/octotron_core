@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.assertEquals;
@@ -38,7 +37,7 @@ public class GraphServiceTest
 	@Test
 	public void TestGetAllLinks() throws Exception
 	{
-		ObjectList<GraphObject, GraphLink> objects = new ObjectList<>();
+		GraphObjectList objects = new GraphObjectList();
 
 		final int N = 10;
 		for(int i = 0; i < N; i++)

@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.collections.IEntityList;
+import ru.parallel.octotron.core.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -29,7 +29,7 @@ public final class CSVReader
 
 	private CSVReader() {}
 
-	public static void Declare(IEntityList<? extends ModelEntity> list, String file_name)
+	public static void Declare(EntityList<? extends ModelEntity, ?> list, String file_name)
 		throws ExceptionParseError, IOException
 	{
 		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name));

@@ -1,7 +1,7 @@
 package ru.parallel.octotron.core.graph;
 
-public interface ILink<OT extends IObject<OT, LT>, LT extends ILink<OT, LT>> extends IEntity
+public interface ILink<T extends IAttribute> extends IEntity<T>
 {
-	IObject<OT, LT> Target();
-	IObject<OT, LT> Source();
+	IObject<T> Target();
+	IObject<T> Source();
 }

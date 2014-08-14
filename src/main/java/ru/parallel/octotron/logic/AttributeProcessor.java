@@ -9,7 +9,7 @@ package ru.parallel.octotron.logic;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.attribute.SensorAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.List;

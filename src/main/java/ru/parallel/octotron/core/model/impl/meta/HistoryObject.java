@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.model.meta;
+package ru.parallel.octotron.core.model.impl.meta;
 
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;

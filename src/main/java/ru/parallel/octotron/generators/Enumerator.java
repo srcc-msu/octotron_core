@@ -6,20 +6,20 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.collections.IEntityList;
+import ru.parallel.octotron.core.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 public final class Enumerator
 {
 	private Enumerator(){}
 
-	public static void Sequence(IEntityList<? extends ModelEntity> list, String att, int div)
+	public static void Sequence(EntityList<? extends ModelEntity, ?> list, String att, int div)
 	{
 		int i = 0;
 
-		for(ModelEntity ent : list)
+		for(ModelEntity entity : list)
 		{
-			ent.DeclareConstant(att, i);
+			entity.DeclareConstant(att, i);
 
 			i++;
 			if(div != 0)
@@ -27,7 +27,7 @@ public final class Enumerator
 		}
 	}
 
-	public static void Sequence(IEntityList<? extends ModelEntity> list, String att)
+	public static void Sequence(EntityList<? extends ModelEntity, ?> list, String att)
 	{
 		Enumerator.Sequence(list, att, 0);
 	}

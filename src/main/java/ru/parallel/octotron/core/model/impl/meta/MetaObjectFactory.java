@@ -1,11 +1,7 @@
-package ru.parallel.octotron.core.model.meta;
+package ru.parallel.octotron.core.model.impl.meta;
 
 import ru.parallel.octotron.core.collections.ListConverter;
-import ru.parallel.octotron.core.collections.ObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.UniqueName;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -34,7 +30,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 
 	public List<T> ObtainAll(GraphEntity parent)
 	{
-		ObjectList<GraphObject, GraphLink> candidates
+		GraphObjectList candidates
 			= Candidates(parent, GetLabel());
 
 		List<T> result = new LinkedList<>();
@@ -49,7 +45,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 
 	public List<T> ObtainAll(GraphEntity parent, String name)
 	{
-		ObjectList<GraphObject, GraphLink> candidates
+		GraphObjectList candidates
 			= Candidates(parent, name, GetLabel());
 
 		List<T> result = new LinkedList<>();
@@ -89,7 +85,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 			throw new ExceptionModelFail("wtf"); // TODO
 	}
 
-	private static ObjectList<GraphObject, GraphLink> Candidates(GraphEntity parent, String label)
+	private static GraphObjectList Candidates(GraphEntity parent, String label)
 	{
 		if(parent.GetUID().getType() == EEntityType.OBJECT)
 			return GetObjectMetas((GraphObject) parent, label);
@@ -99,7 +95,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 			throw new ExceptionModelFail("wtf"); // TODO
 	}
 
-	private static ObjectList<GraphObject, GraphLink> Candidates(GraphEntity parent, String name, String label)
+	private static GraphObjectList Candidates(GraphEntity parent, String name, String label)
 	{
 		if(parent.GetUID().getType() == EEntityType.OBJECT)
 			return GetObjectMetas((GraphObject) parent, name, label);
@@ -122,12 +118,12 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 		return object;
 	}
 
-	private static ObjectList<GraphObject, GraphLink> GetObjectMetas(GraphObject parent, String name, String label)
+	private static GraphObjectList GetObjectMetas(GraphObject parent, String name, String label)
 	{
 		return ListConverter.FilterLabel(parent.GetOutNeighbors(meta_const, name), label);
 	}
 
-	private static ObjectList<GraphObject, GraphLink> GetObjectMetas(GraphObject parent, String label)
+	private static GraphObjectList GetObjectMetas(GraphObject parent, String label)
 	{
 		return ListConverter.FilterLabel(parent.GetOutNeighbors(), label);
 	}
@@ -146,7 +142,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 		return object;
 	}
 
-	private static ObjectList<GraphObject, GraphLink> GetLinkMetas(GraphLink parent, String name, String label)
+	private static GraphObjectList GetLinkMetas(GraphLink parent, String name, String label)
 	{
 		long AID = parent.GetAttribute("AID").GetLong();
 
@@ -154,7 +150,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 			.Filter(owner_const, AID).Filter(name_const, name);
 	}
 
-	private static ObjectList<GraphObject, GraphLink> GetLinkMetas(GraphLink parent, String label)
+	private static GraphObjectList GetLinkMetas(GraphLink parent, String label)
 	{
 		long AID = parent.GetAttribute("AID").GetLong();
 

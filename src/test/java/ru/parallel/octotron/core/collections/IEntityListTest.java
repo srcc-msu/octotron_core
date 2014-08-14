@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.collections;
+/*package ru.parallel.octotron.core.collections;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -220,4 +220,4 @@ public class IEntityListTest
 
 		assertEquals("got something wrong", N * 2, i);
 	}
-}
+}*/

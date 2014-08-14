@@ -7,16 +7,15 @@
 package ru.parallel.octotron.reactions;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.IEntity;
-import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.core.rule.OctoResponse;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.utils.FileUtils;
 
@@ -51,7 +50,7 @@ public class PreparedResponse
 		СomposeCommands(entity);
 	}
 
-	private static String GetAttrStr(String[] attributes, IEntity entity)
+	private static String GetAttrStr(String[] attributes, ModelEntity entity)
 	{
 		StringBuilder str = new StringBuilder();
 
@@ -105,7 +104,7 @@ public class PreparedResponse
 
 		ModelObject p_entity = (ModelObject)entity;
 
-		ObjectList<ModelObject, ModelLink> parents = p_entity.GetInLinks().Filter("type", "contain").Source();
+		ModelObjectList parents = p_entity.GetInLinks().Filter("type", "contain").Source();
 
 		if(parents.size() > 1)
 			LOGGER.log(Level.WARNING, "could not traceback parents - ambiguity");

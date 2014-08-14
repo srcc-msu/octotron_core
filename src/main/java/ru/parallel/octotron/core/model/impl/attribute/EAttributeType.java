@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.model.attribute;
+package ru.parallel.octotron.core.model.impl.attribute;
 
 public enum EAttributeType
 {

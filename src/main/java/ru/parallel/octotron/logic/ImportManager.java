@@ -10,8 +10,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.attribute.SensorAttribute;
-import ru.parallel.octotron.core.model.attribute.VariableAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.utils.JavaUtils;
 

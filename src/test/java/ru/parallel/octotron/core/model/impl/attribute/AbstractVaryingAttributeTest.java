@@ -1,13 +1,12 @@
-package ru.parallel.octotron.core.model.attribute;
+package ru.parallel.octotron.core.model.impl.attribute;
 
 import org.junit.*;
-import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.rule.OctoReaction;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.JavaUtils;
 
@@ -130,11 +129,11 @@ public class AbstractVaryingAttributeTest
 
 		Thread.sleep(SLEEP);
 		attribute.Update(10.0, true);
-		assertEquals(10.0 / (SLEEP / 1000), attribute.GetSpeed(), GraphAttribute.EPSILON);
+		assertEquals(10.0 / (SLEEP / 1000), attribute.GetSpeed(), 1.0);
 
 		Thread.sleep(SLEEP);
 		attribute.Update(10.0, false);
-		assertEquals(10.0 / (SLEEP / 1000), attribute.GetSpeed(), GraphAttribute.EPSILON);
+		assertEquals(10.0 / (SLEEP / 1000), attribute.GetSpeed(), 1.0);
 
 		Thread.sleep(SLEEP);
 		attribute.Update(10.0, true);

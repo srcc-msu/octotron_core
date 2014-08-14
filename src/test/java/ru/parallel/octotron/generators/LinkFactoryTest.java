@@ -3,10 +3,10 @@ package ru.parallel.octotron.generators;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.collections.ObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
@@ -50,7 +50,7 @@ public class LinkFactoryTest
 	@Test
 	public void TestLinkCreate()
 	{
-		ObjectList<ModelObject, ModelLink>  obj = LinkFactoryTest.obj_factory.Create(2);
+		ModelObjectList obj = LinkFactoryTest.obj_factory.Create(2);
 
 		ModelLink link = LinkFactoryTest.link_factory.OneToOne(obj.get(0), obj.get(1));
 
@@ -64,7 +64,7 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorOneToOne()
 	{
-		ObjectList<ModelObject, ModelLink>  obj = LinkFactoryTest.obj_factory.Create(2);
+		ModelObjectList obj = LinkFactoryTest.obj_factory.Create(2);
 
 		LinkFactoryTest.link_factory.OneToOne(obj.get(0), obj.get(1));
 
@@ -81,7 +81,7 @@ public class LinkFactoryTest
 	public void TestConnectorOneToAll()
 	{
 		ModelObject obj = LinkFactoryTest.obj_factory.Create();
-		ObjectList<ModelObject, ModelLink>  objs = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.OneToEvery(obj, objs);
 
@@ -100,7 +100,7 @@ public class LinkFactoryTest
 	public void TestConnectorAllToOne()
 	{
 		ModelObject obj = LinkFactoryTest.obj_factory.Create();
-		ObjectList<ModelObject, ModelLink>  objs = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.EveryToOne(objs, obj);
 
@@ -118,8 +118,8 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorEveryToEvery()
 	{
-		ObjectList<ModelObject, ModelLink>  objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
-		ObjectList<ModelObject, ModelLink>  objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.EveryToEvery(objs1, objs2);
 
@@ -139,8 +139,8 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorAllToAll()
 	{
-		ObjectList<ModelObject, ModelLink>  objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
-		ObjectList<ModelObject, ModelLink>  objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.AllToAll(objs1, objs2);
 
@@ -160,8 +160,8 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorAllToChunks()
 	{
-		ObjectList<ModelObject, ModelLink>  objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
-		ObjectList<ModelObject, ModelLink>  objs2 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N);
+		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.EveryToChunks(objs1, objs2);
 
@@ -184,8 +184,8 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorChunksToEvery()
 	{
-		ObjectList<ModelObject, ModelLink>  objs1 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N);
-		ObjectList<ModelObject, ModelLink>  objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N);
+		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.ChunksToEvery(objs1, objs2);
 
@@ -206,8 +206,8 @@ public class LinkFactoryTest
 	{
 		int K = 6;
 
-		ObjectList<ModelObject, ModelLink>  objs1 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N - K);
-		ObjectList<ModelObject, ModelLink>  objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N - K);
+		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
 		LinkFactoryTest.link_factory.ChunksToEvery_LastLess(objs1, objs2);
 
@@ -230,8 +230,8 @@ public class LinkFactoryTest
 	{
 		int K = 6;
 
-		ObjectList<ModelObject, ModelLink>  objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
-		ObjectList<ModelObject, ModelLink>  objs2 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N - K);
+		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N - K);
 
 		LinkFactoryTest.link_factory.EveryToChunks_LastLess(objs1, objs2);
 
@@ -261,13 +261,13 @@ public class LinkFactoryTest
 		for(int i : arr)
 			sum += i;
 
-		ObjectList<ModelObject, ModelLink>  objs_from1 = LinkFactoryTest.obj_factory.Create(len);
-		ObjectList<ModelObject, ModelLink>  objs_from2 = LinkFactoryTest.obj_factory.Create(len);
-		ObjectList<ModelObject, ModelLink>  objs_from3 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objs_from1 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objs_from2 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objs_from3 = LinkFactoryTest.obj_factory.Create(len);
 
-		ObjectList<ModelObject, ModelLink>  objs_to1 = LinkFactoryTest.obj_factory.Create(sum);
-		ObjectList<ModelObject, ModelLink>  objs_to2 = LinkFactoryTest.obj_factory.Create(sum + 1);
-		ObjectList<ModelObject, ModelLink>  objs_to3 = LinkFactoryTest.obj_factory.Create(sum - 1);
+		ModelObjectList objs_to1 = LinkFactoryTest.obj_factory.Create(sum);
+		ModelObjectList objs_to2 = LinkFactoryTest.obj_factory.Create(sum + 1);
+		ModelObjectList objs_to3 = LinkFactoryTest.obj_factory.Create(sum - 1);
 
 		LinkFactoryTest.link_factory.EveryToChunks_Guided(objs_from1, objs_to1, arr);
 		LinkFactoryTest.link_factory.EveryToChunks_Guided(objs_from2, objs_to2, arr);
@@ -301,13 +301,13 @@ public class LinkFactoryTest
 		for(int i : arr)
 			sum += i;
 
-		ObjectList<ModelObject, ModelLink>  objs_from1 = LinkFactoryTest.obj_factory.Create(sum);
-		ObjectList<ModelObject, ModelLink>  objs_from2 = LinkFactoryTest.obj_factory.Create(sum + 1);
-		ObjectList<ModelObject, ModelLink>  objs_from3 = LinkFactoryTest.obj_factory.Create(sum - 1);
+		ModelObjectList objs_from1 = LinkFactoryTest.obj_factory.Create(sum);
+		ModelObjectList objs_from2 = LinkFactoryTest.obj_factory.Create(sum + 1);
+		ModelObjectList objs_from3 = LinkFactoryTest.obj_factory.Create(sum - 1);
 
-		ObjectList<ModelObject, ModelLink>  objs_to1 = LinkFactoryTest.obj_factory.Create(len);
-		ObjectList<ModelObject, ModelLink>  objs_to2 = LinkFactoryTest.obj_factory.Create(len);
-		ObjectList<ModelObject, ModelLink>  objs_to3 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objs_to1 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objs_to2 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objs_to3 = LinkFactoryTest.obj_factory.Create(len);
 
 		LinkFactoryTest.link_factory.ChunksToEvery_Guided(objs_from1, objs_to1, arr);
 		LinkFactoryTest.link_factory.ChunksToEvery_Guided(objs_from2, objs_to2, arr);

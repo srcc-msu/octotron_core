@@ -7,7 +7,7 @@
 package ru.parallel.octotron.http;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.collections.IEntityList;
+import ru.parallel.octotron.core.collections.EntityList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
@@ -41,17 +41,17 @@ public final class PathParser
 		, PathOperations.source, PathOperations.target
 	};
 
-	private static final Map<String, IEntityList.EQueryType> DELIMS
+	private static final Map<String, EntityList.EQueryType> DELIMS
 		= new HashMap<>();
 
 	static
 	{
-		PathParser.DELIMS.put("==", IEntityList.EQueryType.EQ);
-		PathParser.DELIMS.put("!=", IEntityList.EQueryType.NE);
-		PathParser.DELIMS.put("<=", IEntityList.EQueryType.LE);
-		PathParser.DELIMS.put(">=", IEntityList.EQueryType.GE);
-		PathParser.DELIMS.put("<", IEntityList.EQueryType.LT);
-		PathParser.DELIMS.put(">", IEntityList.EQueryType.GT);
+		PathParser.DELIMS.put("==", EntityList.EQueryType.EQ);
+		PathParser.DELIMS.put("!=", EntityList.EQueryType.NE);
+		PathParser.DELIMS.put("<=", EntityList.EQueryType.LE);
+		PathParser.DELIMS.put(">=", EntityList.EQueryType.GE);
+		PathParser.DELIMS.put("<", EntityList.EQueryType.LT);
+		PathParser.DELIMS.put(">", EntityList.EQueryType.GT);
 	}
 
 
@@ -62,7 +62,7 @@ public final class PathParser
 /**
  * parse SimpleAttribute from string "<name><op><value>"<br>
  * */
-	public static Pair<SimpleAttribute, IEntityList.EQueryType> AttrFromString(String str)
+	public static Pair<SimpleAttribute, EntityList.EQueryType> AttrFromString(String str)
 		throws ExceptionParseError
 	{
 		if(str.length() == 0)
@@ -76,7 +76,7 @@ public final class PathParser
 			String op = matcher.group(2);
 			Object value = SimpleAttribute.ValueFromStr(matcher.group(3));
 
-			IEntityList.EQueryType type = DELIMS.get(op);
+			EntityList.EQueryType type = DELIMS.get(op);
 
 			if(type == null)
 				throw new ExceptionParseError("unsupported operation: " + op);
@@ -87,7 +87,7 @@ public final class PathParser
 		matcher = op_pattern_word.matcher(str);
 
 		if(matcher.find())
-			return Pair.of(new SimpleAttribute(str, null), IEntityList.EQueryType.NONE);
+			return Pair.of(new SimpleAttribute(str, null), EntityList.EQueryType.NONE);
 
 		throw new ExceptionParseError("can not parse: " + str);
 	}
@@ -97,10 +97,10 @@ public final class PathParser
  * name=val,name2,name3=val<br>
  * may be empty<br>
  * */
-	private static List<Pair<SimpleAttribute, IEntityList.EQueryType>> StrToAttrList(String str)
+	private static List<Pair<SimpleAttribute, EntityList.EQueryType>> StrToAttrList(String str)
 		throws ExceptionParseError
 	{
-		List<Pair<SimpleAttribute, IEntityList.EQueryType>> result
+		List<Pair<SimpleAttribute, EntityList.EQueryType>> result
 			= new LinkedList<>();
 
 		if(str == null || str.isEmpty())

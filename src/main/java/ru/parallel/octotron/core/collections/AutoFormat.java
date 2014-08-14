@@ -6,11 +6,11 @@
 
 package ru.parallel.octotron.core.collections;
 
-import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.rule.OctoReaction;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.utils.JavaUtils;
 
@@ -29,12 +29,12 @@ public class AutoFormat
 	 * print \\list objects with custom separators
 	 * if \\attributes list is empty - print all attributes
 	 * */
-	public static String PrintSeparated(IEntityList<?> list, List<SimpleAttribute> attributes
+	public static String PrintSeparated(EntityList<?, ?> list, List<SimpleAttribute> attributes
 		, String attr_sep, String line_sep, boolean show_name, boolean separate_objects)
 	{
 		StringBuilder result = new StringBuilder();
 
-		for(IEntity entity : list)
+		for(IEntity<?> entity : list)
 		{
 			List<SimpleAttribute> target;
 
@@ -79,7 +79,7 @@ public class AutoFormat
 	 * example: [{"attr_1"=0, "attr2"="test"},{"attr_name"=1.0}]
 	 * if \\attributes list is empty - print all attributes
 	 * */
-	public static String PrintJson(IEntityList<?> list, List<SimpleAttribute> attributes)
+	public static String PrintJson(EntityList<?, ?> list, List<SimpleAttribute> attributes)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -87,7 +87,7 @@ public class AutoFormat
 
 		result.append('[');
 
-		for(IEntity entity : list)
+		for(IEntity<?> entity : list)
 		{
 			result.append(ent_prefix);
 			result.append('{');
@@ -125,7 +125,7 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintJsonP(IEntityList<?> list, List<SimpleAttribute> attributes, String callback)
+	public static String PrintJsonP(EntityList<?, ?> list, List<SimpleAttribute> attributes, String callback)
 	{
 		String result = callback + "({" + System.lineSeparator();
 		result += "\"modified\" : " + JavaUtils.GetTimestamp() + "," + System.lineSeparator();
@@ -135,7 +135,7 @@ public class AutoFormat
 		return result;
 	}
 
-	public static String PrintCSV(IEntityList<?> list, List<SimpleAttribute> attributes)
+	public static String PrintCSV(EntityList<?, ?> list, List<SimpleAttribute> attributes)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -148,17 +148,17 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintNL(IEntityList<?> list, List<SimpleAttribute> attributes)
+	public static String PrintNL(EntityList<?, ?> list, List<SimpleAttribute> attributes)
 	{
 		return PrintSeparated(list, attributes, System.lineSeparator(), System.lineSeparator(), true, true);
 	}
 
-	public static String PrintComma(IEntityList<?> list, List<SimpleAttribute> attributes)
+	public static String PrintComma(EntityList<?, ?> list, List<SimpleAttribute> attributes)
 	{
 		return PrintSeparated(list, attributes, ",", ",", true, false);
 	}
 
-	public static String PrintEntities(IEntityList<?> list, List<SimpleAttribute> attributes, E_FORMAT_PARAM format, String callback)
+	public static String PrintEntities(EntityList<?, ?> list, List<SimpleAttribute> attributes, E_FORMAT_PARAM format, String callback)
 	{
 		switch (format)
 		{
@@ -182,7 +182,7 @@ public class AutoFormat
 		}
 	}
 
-	public static String PrintEntitiesSpecial(IEntityList<? extends ModelEntity> list)
+	public static String PrintEntitiesSpecial(EntityList<? extends ModelEntity, ?> list)
 	{
 		StringBuilder result = new StringBuilder();
 

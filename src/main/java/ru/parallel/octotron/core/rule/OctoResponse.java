@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core;
+package ru.parallel.octotron.core.rule;
 
 import org.apache.commons.lang3.ArrayUtils;
 import ru.parallel.octotron.core.primitive.EEventStatus;

@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.collections.IEntityList;
+import ru.parallel.octotron.core.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.PathOperations.PathToken;
@@ -26,10 +26,10 @@ public class ParsedPath
 		this.tokens = tokens;
 	}
 
-	public IEntityList<? extends ModelEntity> Execute(ExecutionController exec_control)
+	public EntityList<? extends ModelEntity, ?> Execute(ExecutionController exec_control)
 		throws ExceptionParseError
 	{
-		IEntityList<? extends ModelEntity> entity_list = null;
+		EntityList<? extends ModelEntity, ?> entity_list = null;
 
 		for(PathToken token : tokens)
 		{

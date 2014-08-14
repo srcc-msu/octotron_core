@@ -1,10 +1,10 @@
-package ru.parallel.octotron.core.model.meta;
+package ru.parallel.octotron.core.model.impl.meta;
 
-import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.rule.OctoReaction;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;

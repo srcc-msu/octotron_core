@@ -6,12 +6,11 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.collections.ObjectList;
-import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.rule.OctoReaction;
 import ru.parallel.octotron.core.rule.OctoRule;
 
 import java.util.List;
@@ -52,9 +51,9 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	/**
 	 * create \count vertices with additional attributes
 	 * */
-	public ObjectList<ModelObject, ModelLink> Create(int count)
+	public ModelObjectList Create(int count)
 	{
-		ObjectList<ModelObject, ModelLink> objects = new ObjectList<>();
+		ModelObjectList objects = new ModelObjectList();
 
 		for(int i = 0; i < count; i++)
 			objects.add(this.Create());

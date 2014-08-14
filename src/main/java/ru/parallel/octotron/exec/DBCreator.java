@@ -6,14 +6,12 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.core.collections.LinkList;
-import ru.parallel.octotron.core.collections.ObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.model.impl.ModelLinkList;
+import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
@@ -69,8 +67,8 @@ public class DBCreator
 	{
 		int graph_attributes_count = 0;
 
-		ObjectList<GraphObject, GraphLink> graph_objects = GraphService.Get().GetAllObjects();
-		LinkList<GraphObject, GraphLink> graph_links = GraphService.Get().GetAllLinks();
+		GraphObjectList graph_objects = GraphService.Get().GetAllObjects();
+		GraphLinkList graph_links = GraphService.Get().GetAllLinks();
 
 		for(GraphObject obj : graph_objects)
 		{
@@ -90,8 +88,8 @@ public class DBCreator
 
 		int model_attributes_count = 0;
 
-		ObjectList<ModelObject, ModelLink> model_objects = ModelService.GetAllObjects();
-		LinkList<ModelObject, ModelLink> model_links = ModelService.GetAllLinks();
+		ModelObjectList model_objects = ModelService.GetAllObjects();
+		ModelLinkList model_links = ModelService.GetAllLinks();
 
 		for(ModelObject obj : model_objects)
 		{

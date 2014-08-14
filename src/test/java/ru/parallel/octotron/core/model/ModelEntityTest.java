@@ -2,13 +2,13 @@ package ru.parallel.octotron.core.model;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.rule.OctoReaction;
+import ru.parallel.octotron.core.rule.OctoResponse;
 import ru.parallel.octotron.core.rule.OctoRule;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;

@@ -1,10 +1,11 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.attribute.EAttributeType;
-import ru.parallel.octotron.core.model.attribute.VariableAttribute;
+import ru.parallel.octotron.core.model.impl.AttributeDecorator;
+import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
+import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
+import ru.parallel.octotron.core.rule.OctoReaction;
+import ru.parallel.octotron.core.rule.OctoResponse;
 import ru.parallel.octotron.neo4j.impl.Marker;
 
 import java.util.List;

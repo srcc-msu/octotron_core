@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.core.graph.impl;
 
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 
@@ -16,7 +16,7 @@ import ru.parallel.octotron.core.primitive.Uid;
  * some entity, that resides in model<br>
  * all operations with it go through the \graph interface, no caching<br>
  * */
-public abstract class GraphEntity implements IEntity
+public abstract class GraphEntity implements IEntity<GraphAttribute>
 {
 	protected final IGraph graph;
 	protected final Uid uid;

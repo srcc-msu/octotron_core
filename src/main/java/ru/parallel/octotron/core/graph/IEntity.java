@@ -4,7 +4,7 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 
-public interface IEntity
+public interface IEntity<T extends IAttribute>
 {
 /*	IAttribute DeclareAttribute(String name, Object value);
 	IAttribute DeclareAttribute(SimpleAttribute attribute);
@@ -19,8 +19,8 @@ public interface IEntity
 	boolean TestAttribute(String name, Object value);
 	boolean TestAttribute(SimpleAttribute test);
 
-	IAttribute GetAttribute(String name);
-	AttributeList<? extends IAttribute> GetAttributes();
+	T GetAttribute(String name);
+	AttributeList<T> GetAttributes();
 
 	Uid GetUID();
 }

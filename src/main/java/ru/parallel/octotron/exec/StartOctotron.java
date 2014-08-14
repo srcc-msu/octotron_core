@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.exec;
 
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.logic.ExecutionController;
@@ -112,6 +113,7 @@ public class StartOctotron
 		try
 		{
 			graph = new Neo4jGraph(path + "_neo4j", Neo4jGraph.Op.LOAD);
+			GraphService.Init(graph);
 
 			exec_control = new ExecutionController(graph, settings);
 

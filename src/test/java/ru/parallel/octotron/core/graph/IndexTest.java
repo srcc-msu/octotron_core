@@ -64,8 +64,8 @@ public class IndexTest
 	{
 		int N = 10;
 
-		ModelObjectList objs = IndexTest.obj_factory.Create(N);
-		IndexTest.link_factory.EveryToEvery(objs, objs);
+		ModelObjectList objects = IndexTest.obj_factory.Create(N);
+		IndexTest.link_factory.EveryToEvery(objects, objects);
 
 		GraphLinkList found = GraphService.Get().GetLinks("att_link", "value23456");
 		GraphLinkList not_found = GraphService.Get().GetLinks("att_link", "aa");
@@ -93,8 +93,8 @@ public class IndexTest
 	{
 		int N = 12;
 
-		ModelObjectList objs = IndexTest.obj_factory.Create(N);
-		IndexTest.link_factory.EveryToEvery(objs, objs);
+		ModelObjectList objects = IndexTest.obj_factory.Create(N);
+		IndexTest.link_factory.EveryToEvery(objects, objects);
 
 		GraphLinkList found = GraphService.Get().GetLinks("att_link");
 		GraphLinkList not_found = GraphService.Get().GetLinks("wrong");
@@ -122,8 +122,8 @@ public class IndexTest
 	{
 		int N = 14;
 
-		ModelObjectList objs = IndexTest.obj_factory.Create(N);
-		IndexTest.link_factory.EveryToEvery(objs, objs);
+		ModelObjectList objects = IndexTest.obj_factory.Create(N);
+		IndexTest.link_factory.EveryToEvery(objects, objects);
 
 		GraphLinkList found = GraphService.Get().QueryLinks("att_link", "*lue234*");
 
@@ -150,8 +150,8 @@ public class IndexTest
 	@Test
 	public void TestSingleLink() throws Exception
 	{
-		ModelObjectList objs = IndexTest.obj_factory.Create(2);
-		IndexTest.link_factory.OneToOne(objs.get(0), objs.get(1));
+		ModelObjectList objects = IndexTest.obj_factory.Create(2);
+		IndexTest.link_factory.OneToOne(objects.get(0), objects.get(1));
 
 		GraphService.Get().GetLink("att_link", "value23456");
 
@@ -167,7 +167,7 @@ public class IndexTest
 		}
 		assertEquals(true, catched);
 
-		IndexTest.link_factory.OneToOne(objs.get(1), objs.get(0));
+		IndexTest.link_factory.OneToOne(objects.get(1), objects.get(0));
 		catched = false;
 
 // this must throw - two possible links
@@ -194,7 +194,7 @@ public class IndexTest
 // this must throw
 		try
 		{
-			GraphService.Get().GetObject("att_obj", "gfgf");
+			GraphService.Get().GetObject("att_obj", "test");
 		}
 		catch(ExceptionModelFail ignore)
 		{

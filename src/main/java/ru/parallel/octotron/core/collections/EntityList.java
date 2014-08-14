@@ -14,7 +14,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import java.util.*;
 
 /**
- * abstarct list container for entities<br>
+ * base list container for entities<br>
  * allows to filter entities basing on attributes
  * and obtain list of attributes<br>
  * */

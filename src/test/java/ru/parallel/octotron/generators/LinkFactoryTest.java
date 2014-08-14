@@ -81,16 +81,16 @@ public class LinkFactoryTest
 	public void TestConnectorOneToAll()
 	{
 		ModelObject obj = LinkFactoryTest.obj_factory.Create();
-		ModelObjectList objs = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
-		LinkFactoryTest.link_factory.OneToEvery(obj, objs);
+		LinkFactoryTest.link_factory.OneToEvery(obj, objects);
 
 		assertEquals("link does not exist"
 			, obj.GetOutLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 			assertEquals("link does not exist"
-				, objs.get(i).GetInLinks().Filter("type", "contain").size(), 1);
+				, objects.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 	}
 
 	/**
@@ -100,16 +100,16 @@ public class LinkFactoryTest
 	public void TestConnectorAllToOne()
 	{
 		ModelObject obj = LinkFactoryTest.obj_factory.Create();
-		ModelObjectList objs = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
-		LinkFactoryTest.link_factory.EveryToOne(objs, obj);
+		LinkFactoryTest.link_factory.EveryToOne(objects, obj);
 
 		assertEquals("link does not exist"
 			, obj.GetInLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 			assertEquals("link does not exist"
-				, objs.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
+				, objects.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 	}
 
 	/**
@@ -118,18 +118,18 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorEveryToEvery()
 	{
-		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
-		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
-		LinkFactoryTest.link_factory.EveryToEvery(objs1, objs2);
+		LinkFactoryTest.link_factory.EveryToEvery(objects1, objects2);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 		{
 			assertEquals("link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 
 			assertEquals("link does not exist"
-				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 		}
 	}
 
@@ -139,18 +139,18 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorAllToAll()
 	{
-		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
-		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
-		LinkFactoryTest.link_factory.AllToAll(objs1, objs2);
+		LinkFactoryTest.link_factory.AllToAll(objects1, objects2);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 		{
 			assertEquals("link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
 
 			assertEquals("link does not exist"
-				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
 		}
 	}
 
@@ -160,21 +160,21 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorAllToChunks()
 	{
-		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
-		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N);
+		ModelObjectList objects1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects2 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N);
 
-		LinkFactoryTest.link_factory.EveryToChunks(objs1, objs2);
+		LinkFactoryTest.link_factory.EveryToChunks(objects1, objects2);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 		{
 			assertEquals("link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
 		}
 
 		for(int i = 0; i < 2* LinkFactoryTest.N * LinkFactoryTest.N; i++)
 		{
 			assertEquals("link does not exist"
-				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 		}
 	}
 
@@ -184,18 +184,18 @@ public class LinkFactoryTest
 	@Test
 	public void TestConnectorChunksToEvery()
 	{
-		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N);
-		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects1 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N);
+		ModelObjectList objects2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
-		LinkFactoryTest.link_factory.ChunksToEvery(objs1, objs2);
+		LinkFactoryTest.link_factory.ChunksToEvery(objects1, objects2);
 
 		for(int i = 0; i < 2* LinkFactoryTest.N * LinkFactoryTest.N; i++)
 			assertEquals("out link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 			assertEquals("in link does not exist"
-				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
 	}
 
 	/**
@@ -206,21 +206,21 @@ public class LinkFactoryTest
 	{
 		int K = 6;
 
-		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N - K);
-		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects1 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N - K);
+		ModelObjectList objects2 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
 
-		LinkFactoryTest.link_factory.ChunksToEvery_LastLess(objs1, objs2);
+		LinkFactoryTest.link_factory.ChunksToEvery_LastLess(objects1, objects2);
 
 		for(int i = 0; i < 2* LinkFactoryTest.N * LinkFactoryTest.N -K; i++)
 			assertEquals("out link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 
 		for(int i = 0; i < LinkFactoryTest.N -1; i++)
 			assertEquals("in link does not exist"
-				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
 
 		assertEquals("in link does not exist"
-			, objs2.get(LinkFactoryTest.N - 1).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N - K);
+			, objects2.get(LinkFactoryTest.N - 1).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N - K);
 	}
 	/**
 	 * check that {@link ru.parallel.octotron.generators.LinkFactory#EveryToChunks_LastLess} creates correct link
@@ -230,21 +230,21 @@ public class LinkFactoryTest
 	{
 		int K = 6;
 
-		ModelObjectList objs1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
-		ModelObjectList objs2 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N - K);
+		ModelObjectList objects1 = LinkFactoryTest.obj_factory.Create(LinkFactoryTest.N);
+		ModelObjectList objects2 = LinkFactoryTest.obj_factory.Create(2 * LinkFactoryTest.N * LinkFactoryTest.N - K);
 
-		LinkFactoryTest.link_factory.EveryToChunks_LastLess(objs1, objs2);
+		LinkFactoryTest.link_factory.EveryToChunks_LastLess(objects1, objects2);
 
 		for(int i = 0; i < LinkFactoryTest.N -1; i++)
 			assertEquals("link does not exist"
-				, objs1.get(i).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
 
 		assertEquals("link does not exist"
-			, objs1.get(LinkFactoryTest.N - 1).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N - K);
+			, objects1.get(LinkFactoryTest.N - 1).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N - K);
 
 		for(int i = 0; i < 2* LinkFactoryTest.N * LinkFactoryTest.N - K; i++)
 			assertEquals("link does not exist"
-				, objs2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 	}
 
 	/**
@@ -261,22 +261,22 @@ public class LinkFactoryTest
 		for(int i : arr)
 			sum += i;
 
-		ModelObjectList objs_from1 = LinkFactoryTest.obj_factory.Create(len);
-		ModelObjectList objs_from2 = LinkFactoryTest.obj_factory.Create(len);
-		ModelObjectList objs_from3 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objects_from1 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objects_from2 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objects_from3 = LinkFactoryTest.obj_factory.Create(len);
 
-		ModelObjectList objs_to1 = LinkFactoryTest.obj_factory.Create(sum);
-		ModelObjectList objs_to2 = LinkFactoryTest.obj_factory.Create(sum + 1);
-		ModelObjectList objs_to3 = LinkFactoryTest.obj_factory.Create(sum - 1);
+		ModelObjectList objects_to1 = LinkFactoryTest.obj_factory.Create(sum);
+		ModelObjectList objects_to2 = LinkFactoryTest.obj_factory.Create(sum + 1);
+		ModelObjectList objects_to3 = LinkFactoryTest.obj_factory.Create(sum - 1);
 
-		LinkFactoryTest.link_factory.EveryToChunks_Guided(objs_from1, objs_to1, arr);
-		LinkFactoryTest.link_factory.EveryToChunks_Guided(objs_from2, objs_to2, arr);
+		LinkFactoryTest.link_factory.EveryToChunks_Guided(objects_from1, objects_to1, arr);
+		LinkFactoryTest.link_factory.EveryToChunks_Guided(objects_from2, objects_to2, arr);
 		System.err.println("^^ above warning is ok ^^");
 
 		boolean detected = false;
 		try
 		{
-			LinkFactoryTest.link_factory.EveryToChunks_Guided(objs_from3, objs_to3, arr);
+			LinkFactoryTest.link_factory.EveryToChunks_Guided(objects_from3, objects_to3, arr);
 		}
 		catch(ExceptionModelFail e) { detected = true; }
 
@@ -284,7 +284,7 @@ public class LinkFactoryTest
 
 		for(int i = 0; i < len; i++)
 			assertEquals("out link does not exist"
-				, objs_from1.get(i).GetOutLinks().Filter("type", "contain").size(), arr[i]);
+				, objects_from1.get(i).GetOutLinks().Filter("type", "contain").size(), arr[i]);
 	}
 
 	/**
@@ -301,23 +301,23 @@ public class LinkFactoryTest
 		for(int i : arr)
 			sum += i;
 
-		ModelObjectList objs_from1 = LinkFactoryTest.obj_factory.Create(sum);
-		ModelObjectList objs_from2 = LinkFactoryTest.obj_factory.Create(sum + 1);
-		ModelObjectList objs_from3 = LinkFactoryTest.obj_factory.Create(sum - 1);
+		ModelObjectList objects_from1 = LinkFactoryTest.obj_factory.Create(sum);
+		ModelObjectList objects_from2 = LinkFactoryTest.obj_factory.Create(sum + 1);
+		ModelObjectList objects_from3 = LinkFactoryTest.obj_factory.Create(sum - 1);
 
-		ModelObjectList objs_to1 = LinkFactoryTest.obj_factory.Create(len);
-		ModelObjectList objs_to2 = LinkFactoryTest.obj_factory.Create(len);
-		ModelObjectList objs_to3 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objects_to1 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objects_to2 = LinkFactoryTest.obj_factory.Create(len);
+		ModelObjectList objects_to3 = LinkFactoryTest.obj_factory.Create(len);
 
-		LinkFactoryTest.link_factory.ChunksToEvery_Guided(objs_from1, objs_to1, arr);
-		LinkFactoryTest.link_factory.ChunksToEvery_Guided(objs_from2, objs_to2, arr);
+		LinkFactoryTest.link_factory.ChunksToEvery_Guided(objects_from1, objects_to1, arr);
+		LinkFactoryTest.link_factory.ChunksToEvery_Guided(objects_from2, objects_to2, arr);
 
 		System.err.println("^^ above warning is ok ^^");
 
 		boolean detected = false;
 		try
 		{
-			LinkFactoryTest.link_factory.ChunksToEvery_Guided(objs_from3, objs_to3, arr);
+			LinkFactoryTest.link_factory.ChunksToEvery_Guided(objects_from3, objects_to3, arr);
 		}
 		catch(ExceptionModelFail e) { detected = true; }
 
@@ -325,6 +325,6 @@ public class LinkFactoryTest
 
 		for(int i = 0; i < len; i++)
 			assertEquals("out link does not exist"
-				, objs_to1.get(i).GetInLinks().Filter("type", "contain").size(), arr[i]);
+				, objects_to1.get(i).GetInLinks().Filter("type", "contain").size(), arr[i]);
 	}
 }

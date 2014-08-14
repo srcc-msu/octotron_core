@@ -29,7 +29,7 @@ public class Neo4jGraphTest
 	}
 
 	/**
-	 * add some element to the graph, save/load it and check that the elelement
+	 * add some element to the graph, save/load it and check that the element
 	 * still exists
 	 * */
 	@Test

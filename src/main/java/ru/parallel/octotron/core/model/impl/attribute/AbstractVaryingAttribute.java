@@ -8,6 +8,7 @@ package ru.parallel.octotron.core.model.impl.attribute;
 
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.meta.*;
@@ -28,6 +29,11 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	{
 		super(parent, name);
 		this.meta = meta;
+	}
+
+	public T GetMeta()
+	{
+		return meta;
 	}
 
 	@Override
@@ -256,11 +262,19 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		= new SimpleAttribute("type", "_depends");
 
 	@Override
+	public void AddDependant(VariableAttribute attribute)
+	{
+		GraphService.Get().AddLink(meta.GetBaseObject()
+			, attribute.GetMeta().GetBaseObject()
+			, dependence_link);
+	}
+
+	@Override
 	public AttributeList<VariableAttribute> GetDependant()
 	{
 		AttributeList<VariableAttribute> result = new AttributeList<>();
 
-		for(GraphObject object : meta.GetBaseObject().GetInNeighbors(dependence_link))
+		for(GraphObject object : meta.GetBaseObject().GetInNeighbors(dependence_link).Uniq())
 		{
 			VariableObject attribute_object = new VariableObject(object); // only rules will be here
 

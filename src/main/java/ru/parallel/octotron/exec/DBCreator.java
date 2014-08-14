@@ -111,6 +111,7 @@ public class DBCreator
 	public void End()
 		throws ExceptionSystemError, FileNotFoundException
 	{
+		ModelService.MakeRuleDependencies();
 		PersistentStorage.INSTANCE.Save(settings.GetDbPath() + settings.GetDbName());
 
 		FileUtils.SaveToFile(settings.GetDbPath() + settings.GetDbName() + DBCreator.HASH_FILE

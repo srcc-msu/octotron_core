@@ -4,11 +4,26 @@ import ru.parallel.octotron.core.collections.ListConverter;
 import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.model.impl.ModelLinkList;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public abstract class ModelService
 {
+	public static void MakeRuleDependencies()
+	{
+		for(ModelObject object : GetAllObjects())
+		{
+			for(VariableAttribute attribute : object.GetVariables())
+			{
+				for(ModelAttribute dep : attribute.GetRule().GetDependency(object))
+				{
+					dep.AddDependant(attribute);
+				}
+			}
+		}
+	}
+
 	public static ModelObjectList GetObjects(SimpleAttribute attr)
 	{
 		GraphObjectList result = GraphService.Get().GetObjects(attr);

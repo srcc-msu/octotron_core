@@ -25,6 +25,9 @@ public class ConstantAttribute extends ModelAttribute
 	}
 
 	@Override
+	public void AddDependant(VariableAttribute attribute) {}
+
+	@Override
 	public AttributeList<VariableAttribute> GetDependant()
 	{
 		return new AttributeList<>();

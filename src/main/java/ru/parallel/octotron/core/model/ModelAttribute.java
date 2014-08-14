@@ -64,6 +64,7 @@ public abstract class ModelAttribute extends AttributeDecorator
 
 	public abstract EAttributeType GetType();
 
+	public abstract void AddDependant(VariableAttribute attribute);
 	public abstract AttributeList<VariableAttribute> GetDependant();
 
 //--------

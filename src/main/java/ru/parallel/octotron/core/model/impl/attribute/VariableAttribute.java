@@ -20,7 +20,12 @@ public class VariableAttribute extends AbstractVaryingAttribute<VariableObject>
 	@Override
 	public EAttributeType GetType()
 	{
-		return EAttributeType.DERIVED;
+		return EAttributeType.VARIABLE;
+	}
+
+	public OctoRule GetRule()
+	{
+		return meta.GetRule();
 	}
 
 	public boolean Update()

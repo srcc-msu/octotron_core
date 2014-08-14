@@ -1,11 +1,13 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
 import ru.parallel.octotron.core.model.impl.meta.SensorObject;
@@ -137,6 +139,42 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		}
 
 		return attributes;
+	}
+
+	public AttributeList<ConstantAttribute> GetConstants()
+	{
+		AttributeList<ModelAttribute> attributes = GetAttributes();
+		AttributeList<ConstantAttribute> filtered = new AttributeList<>();
+
+		for(ModelAttribute attribute : attributes)
+			if(attribute.GetType() == EAttributeType.CONSTANT)
+				filtered.add((ConstantAttribute)attribute);
+
+		return filtered;
+	}
+
+	public AttributeList<SensorAttribute> GetSensors()
+	{
+		AttributeList<ModelAttribute> attributes = GetAttributes();
+		AttributeList<SensorAttribute> filtered = new AttributeList<>();
+
+		for(ModelAttribute attribute : attributes)
+			if(attribute.GetType() == EAttributeType.SENSOR)
+				filtered.add((SensorAttribute)attribute);
+
+		return filtered;
+	}
+
+	public AttributeList<VariableAttribute> GetVariables()
+	{
+		AttributeList<ModelAttribute> attributes = GetAttributes();
+		AttributeList<VariableAttribute> filtered = new AttributeList<>();
+
+		for(ModelAttribute attribute : attributes)
+			if(attribute.GetType() == EAttributeType.VARIABLE)
+				filtered.add((VariableAttribute)attribute);
+
+		return filtered;
 	}
 
 	@Override

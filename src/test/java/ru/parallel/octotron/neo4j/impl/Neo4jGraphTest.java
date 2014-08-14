@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class Neo4jGraphTest
@@ -243,5 +244,29 @@ public class Neo4jGraphTest
 
 		assertEquals("link changed after addition"
 			, Neo4jGraphTest.graph.GetLinkAttribute(link, "test"), "ok");
+	}
+
+	@Test
+	public void TestLabel()
+	{
+		Uid obj1, obj2, link;
+
+		obj1 = Neo4jGraphTest.graph.AddObject();
+		obj2 = Neo4jGraphTest.graph.AddObject();
+
+		graph.AddNodeLabel(obj1, "L1");
+		graph.AddNodeLabel(obj2, "L2");
+
+		assertTrue(graph.TestNodeLabel(obj1, "L1"));
+		assertFalse(graph.TestNodeLabel(obj1, "L2"));
+
+		assertFalse(graph.TestNodeLabel(obj2, "L1"));
+		assertTrue(graph.TestNodeLabel(obj2, "L2"));
+
+		assertEquals(1, graph.GetAllLabeledNodes("L1").size());
+		assertEquals(obj1, graph.GetAllLabeledNodes("L1").get(0));
+
+		assertEquals(1, graph.GetAllLabeledNodes("L2").size());
+		assertEquals(obj2, graph.GetAllLabeledNodes("L2").get(0));
 	}
 }

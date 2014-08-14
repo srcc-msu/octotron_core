@@ -1,7 +1,7 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.rule.OctoReaction;
+import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.utils.JavaUtils;

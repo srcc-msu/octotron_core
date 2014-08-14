@@ -2,7 +2,7 @@ package ru.parallel.octotron.core.model.impl.meta;
 
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
-import ru.parallel.octotron.core.rule.OctoReaction;
+import ru.parallel.octotron.core.OctoReaction;
 
 public class ReactionObjectFactory extends MetaObjectFactory<ReactionObject, OctoReaction>
 {

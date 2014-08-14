@@ -7,7 +7,7 @@
 package ru.parallel.octotron.reactions;
 
 import ru.parallel.octotron.core.primitive.EEventStatus;
-import ru.parallel.octotron.core.rule.OctoResponse;
+import ru.parallel.octotron.core.OctoResponse;
 
 public final class CommonReactions
 {

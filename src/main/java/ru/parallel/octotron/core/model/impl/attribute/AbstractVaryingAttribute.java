@@ -7,14 +7,15 @@
 package ru.parallel.octotron.core.model.impl.attribute;
 
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.meta.*;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.rule.OctoReaction;
-import ru.parallel.octotron.core.rule.OctoResponse;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.utils.JavaUtils;
 
@@ -264,9 +265,12 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	@Override
 	public void AddDependant(VariableAttribute attribute)
 	{
-		GraphService.Get().AddLink(meta.GetBaseObject()
+		GraphLink link = GraphService.Get().AddLink(meta.GetBaseObject()
 			, attribute.GetMeta().GetBaseObject()
 			, dependence_link);
+
+		link.DeclareAttribute(dependence_link);
+
 	}
 
 	@Override
@@ -274,7 +278,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	{
 		AttributeList<VariableAttribute> result = new AttributeList<>();
 
-		for(GraphObject object : meta.GetBaseObject().GetInNeighbors(dependence_link).Uniq())
+		for(GraphObject object : meta.GetBaseObject().GetOutNeighbors(dependence_link).Uniq())
 		{
 			VariableObject attribute_object = new VariableObject(object); // only rules will be here
 

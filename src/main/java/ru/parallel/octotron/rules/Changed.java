@@ -9,7 +9,7 @@ package ru.parallel.octotron.rules;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.OctoRule;
 
 public class Changed extends OctoRule
 {

@@ -13,8 +13,8 @@ import ru.parallel.octotron.core.model.impl.ModelLinkList;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.rule.OctoReaction;
-import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoRule;
 
 import java.util.Arrays;
 import java.util.List;

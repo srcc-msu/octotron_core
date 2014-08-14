@@ -1,7 +1,6 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
@@ -16,9 +15,9 @@ import ru.parallel.octotron.core.model.impl.meta.VariableObject;
 import ru.parallel.octotron.core.model.impl.meta.VariableObjectFactory;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.rule.OctoReaction;
-import ru.parallel.octotron.core.rule.OctoResponse;
-import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Marker;
 
 import java.util.LinkedList;

@@ -1,7 +1,7 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
 import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.impl.PersistentStorage;
 
 public class VariableObject extends AttributeObject

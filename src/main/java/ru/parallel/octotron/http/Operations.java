@@ -17,7 +17,7 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.core.rule.OctoReaction;
+import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.logic.ExecutionController;

@@ -9,7 +9,7 @@ package ru.parallel.octotron.rules;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.rule.OctoObjectRule;
+import ru.parallel.octotron.core.OctoObjectRule;
 
 public abstract class Mirror extends OctoObjectRule
 {

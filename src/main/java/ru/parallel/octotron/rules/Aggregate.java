@@ -13,7 +13,7 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.rule.OctoObjectRule;
+import ru.parallel.octotron.core.OctoObjectRule;
 
 public abstract class Aggregate extends OctoObjectRule
 {

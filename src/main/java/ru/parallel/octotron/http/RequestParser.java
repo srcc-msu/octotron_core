@@ -148,13 +148,14 @@ private static final Map<String, Operation[]> REQUEST_TYPES
 		}
 	}
 
+	private static Pattern pattern = Pattern.compile("^/([a-zA-Z_]+)/([a-zA-Z_]+)$");
+
 /**
  * parse http request into a ParsedHttp object, filling all required information<br>
  * */
 	public static ParsedHttpRequest ParseFromHttp(HTTPRequest http_request)
 		throws ExceptionParseError
 	{
-		Pattern pattern = Pattern.compile("^/([a-zA-Z_]+)/([a-zA-Z_]+)$");
 		Matcher matcher = pattern.matcher(http_request.GetPath());
 
 		if(matcher.find())

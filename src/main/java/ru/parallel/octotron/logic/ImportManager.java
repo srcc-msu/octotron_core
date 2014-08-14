@@ -56,7 +56,7 @@ public class ImportManager
 		AttributeList<VariableAttribute> rule_changed = new AttributeList<>();
 
 		for(SensorAttribute sensor : changed)
-			rule_changed.append(sensor.GetDependant());
+			rule_changed = rule_changed.append(sensor.GetDependant());
 
 		AttributeList<VariableAttribute> changed_last = new AttributeList<>(rule_changed);
 		AttributeList<VariableAttribute> changed_now;
@@ -66,7 +66,7 @@ public class ImportManager
 			changed_now = new AttributeList<>();
 
 			for(VariableAttribute derived : changed_now)
-				changed_now.append(derived.GetDependant());
+				changed_now = changed_now.append(derived.GetDependant());
 
 			rule_changed = rule_changed.append(changed_now);
 

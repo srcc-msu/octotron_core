@@ -10,8 +10,8 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.rule.OctoReaction;
-import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoRule;
 
 import java.util.List;
 

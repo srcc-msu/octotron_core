@@ -118,12 +118,12 @@ public final class GraphService
 		return link;
 	}
 
-	public void AddLink(GraphObject source, GraphObject target, SimpleAttribute link_type)
+	public GraphLink AddLink(GraphObject source, GraphObject target, SimpleAttribute link_type)
 	{
 		if(!link_type.GetName().equals("type"))
 			throw new ExceptionModelFail("the only acceptable attribute for a new links is 'type'");
 
-		AddLink(source, target, (String)link_type.GetValue());
+		return AddLink(source, target, (String)link_type.GetValue());
 	}
 
 	public GraphObject AddObject()

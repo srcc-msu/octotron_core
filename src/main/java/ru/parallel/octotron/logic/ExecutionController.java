@@ -17,7 +17,7 @@ import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.core.rule.OctoResponse;
+import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.http.HTTPServer;
 import ru.parallel.octotron.http.ParsedHttpRequest;

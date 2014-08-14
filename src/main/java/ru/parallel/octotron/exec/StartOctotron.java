@@ -49,6 +49,11 @@ public class StartOctotron
 		}
 	}
 
+
+// for debugging
+	private static boolean sample_mode = true;
+	private static boolean bootstrap = false;
+
 /**
  * main executable function<br>
  * uses one input parameter from args - path to the configuration file<br>
@@ -58,21 +63,28 @@ public class StartOctotron
 	{
 		ConfigLogging();
 
-		if(args.length != 1)
+		String config_fname;
+
+		if(!sample_mode)
 		{
-			LOGGER.log(Level.SEVERE, "specify the config file");
-			System.exit(StartOctotron.EXIT_ERROR);
+			if (args.length != 1)
+			{
+				LOGGER.log(Level.SEVERE, "specify the config file");
+				System.exit(StartOctotron.EXIT_ERROR);
+			}
+
+			config_fname = args[0];
 		}
+		else
+			config_fname = "sample_src/config.json";
 
-		String fname = args[0];
-
-		LOGGER.log(Level.INFO, "starting Octotron using config file: " + fname);
+		LOGGER.log(Level.INFO, "starting Octotron using config file: " + config_fname);
 
 		GlobalSettings settings = null;
 
 		try
 		{
-			String json_config = FileUtils.FileToString(fname);
+			String json_config = FileUtils.FileToString(config_fname);
 			settings = new GlobalSettings(json_config);
 			StartOctotron.CheckConfig(settings);
 		}
@@ -112,7 +124,7 @@ public class StartOctotron
 // --- create
 		try
 		{
-			graph = new Neo4jGraph(path + "_neo4j", Neo4jGraph.Op.LOAD);
+			graph = new Neo4jGraph(path + "_neo4j", Neo4jGraph.Op.LOAD, bootstrap);
 			GraphService.Init(graph);
 
 			exec_control = new ExecutionController(graph, settings);

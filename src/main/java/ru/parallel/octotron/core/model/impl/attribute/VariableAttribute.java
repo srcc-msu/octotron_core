@@ -8,7 +8,7 @@ package ru.parallel.octotron.core.model.impl.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.meta.VariableObject;
-import ru.parallel.octotron.core.rule.OctoRule;
+import ru.parallel.octotron.core.OctoRule;
 
 public class VariableAttribute extends AbstractVaryingAttribute<VariableObject>
 {

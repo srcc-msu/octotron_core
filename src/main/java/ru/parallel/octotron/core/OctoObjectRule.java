@@ -4,18 +4,18 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.rule;
+package ru.parallel.octotron.core;
 
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 
-public abstract class OctoLinkRule extends OctoRule
+public abstract class OctoObjectRule extends OctoRule
 {
-	private static final long serialVersionUID = -943099846881874234L;
+	private static final long serialVersionUID = -1936097371431183834L;
 
-	protected OctoLinkRule(String name)
+	protected OctoObjectRule(String name)
 	{
 		super(name);
 	}
@@ -23,17 +23,16 @@ public abstract class OctoLinkRule extends OctoRule
 	@Override
 	public final Object Compute(ModelEntity entity)
 	{
-		return Compute((ModelLink) entity);
+		return Compute((ModelObject) entity);
 	}
 
-	public abstract Object Compute(ModelLink object);
+	public abstract Object Compute(ModelObject object);
 
 	@Override
 	public final AttributeList<ModelAttribute> GetDependency(ModelEntity entity)
 	{
-		return GetDependency((ModelLink) entity);
+		return GetDependency((ModelObject) entity);
 	}
 
-	public abstract AttributeList<ModelAttribute> GetDependency(ModelLink object);
-
+	public abstract AttributeList<ModelAttribute> GetDependency(ModelObject object);
 }

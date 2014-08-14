@@ -350,8 +350,7 @@ public final class Neo4jGraph implements IGraph
 		for(Node node : GlobalGraphOperations.at(graph_db)
 			.getAllNodesWithLabel(DynamicLabel.label(label)))
 		{
-			if(node.getId() != 0)
-				list.add(new Uid(node.getId(), EEntityType.OBJECT));
+			list.add(new Uid(node.getId(), EEntityType.OBJECT));
 		}
 
 		return list;
@@ -559,8 +558,7 @@ public final class Neo4jGraph implements IGraph
 
 		for(Node node : GlobalGraphOperations.at(graph_db).getAllNodes())
 		{
-			if(node.getId() != 0)
-				list.add(new Uid(node.getId(), EEntityType.OBJECT));
+			list.add(new Uid(node.getId(), EEntityType.OBJECT));
 		}
 
 		return list;

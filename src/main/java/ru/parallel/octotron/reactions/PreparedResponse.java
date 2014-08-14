@@ -14,7 +14,7 @@ import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.core.rule.OctoResponse;
+import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.utils.FileUtils;
 

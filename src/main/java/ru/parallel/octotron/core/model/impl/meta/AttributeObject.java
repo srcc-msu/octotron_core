@@ -4,7 +4,7 @@ import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.rule.OctoReaction;
+import ru.parallel.octotron.core.OctoReaction;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -25,7 +25,7 @@ public abstract class AttributeObject extends MetaObject
 
 	public ModelObject GetAttributeObject()
 	{
-		GraphObject parent = GetBaseObject().GetInNeighbors("_attribute", GetName()).Only();
+		GraphObject parent = GetBaseObject().GetInNeighbors("_meta", GetName()).Only();
 		return new ModelObject(parent);
 	}
 

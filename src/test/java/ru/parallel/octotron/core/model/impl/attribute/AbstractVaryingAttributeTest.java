@@ -263,9 +263,8 @@ public class AbstractVaryingAttributeTest
 		assertEquals(0, attribute.GetReadyReactions().size());
 		attribute.Update(5);
 		assertEquals(0, attribute.GetReadyReactions().size());
-		attribute.Update(5);
-		assertEquals(0, attribute.GetReadyReactions().size());
 		Thread.sleep(2000);
+		attribute.Update(5);
 		assertEquals(1, attribute.GetReadyReactions().size());
 		assertEquals(0, attribute.GetReadyReactions().size());
 	}

@@ -7,7 +7,11 @@
 package ru.parallel.octotron.core.model.impl.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
+import ru.parallel.octotron.core.model.impl.meta.ReactionObjectFactory;
 import ru.parallel.octotron.core.model.impl.meta.SensorObject;
+
+import java.util.List;
 
 public class SensorAttribute extends AbstractVaryingAttribute<SensorObject>
 {
@@ -24,6 +28,12 @@ public class SensorAttribute extends AbstractVaryingAttribute<SensorObject>
 
 	public boolean Update(Object new_value)
 	{
+		List<ReactionObject> reaction_objects = new ReactionObjectFactory()
+			.ObtainAll(meta.GetBaseEntity());
+
+		for(ReactionObject reaction_object : reaction_objects)
+			reaction_object.Repeat(new_value);
+
 		return Update(new_value, true);
 	}
 }

@@ -28,6 +28,8 @@ public class ReactionObject extends MetaObject
 
 		GetBaseObject().DeclareAttribute(reaction_id_const, reaction.GetID());
 		GetBaseObject().DeclareAttribute(reaction_state_const, OctoReaction.STATE_NONE);
+		GetBaseEntity().DeclareAttribute(reaction_start_time_const, 0);
+		GetBaseEntity().DeclareAttribute(reaction_repeat_const, 0);
 	}
 
 	public long GetID()
@@ -54,7 +56,7 @@ public class ReactionObject extends MetaObject
 	public long AddMarker(String description, boolean suppress)
 	{
 		MarkerObject marker_object = new MarkerObjectFactory()
-		.Create(GetBaseEntity(), new Marker(GetReaction().GetID(), description, suppress));
+			.Create(GetBaseEntity(), new Marker(GetReaction().GetID(), description, suppress));
 
 		return marker_object.GetAttribute("AID").GetLong();
 	}
@@ -85,12 +87,27 @@ public class ReactionObject extends MetaObject
 
 	public long GetDelay()
 	{
-		return JavaUtils.GetTimestamp() - GetAttribute(reaction_start_time_const).GetLong();
+		long value = GetAttribute(reaction_start_time_const).GetLong();
+
+		if(value == 0) // timer not started
+			return 0;
+
+		return JavaUtils.GetTimestamp() - value;
 	}
 
-	public void StartRepeat()
+	public void DropDelay()
 	{
 		GetBaseEntity().UpdateAttribute(reaction_start_time_const, 0);
+	}
+
+// -------------
+
+	public void Repeat(Object new_value)
+	{
+		if(new_value == GetReaction().GetCheckValue())
+			GetBaseEntity().UpdateAttribute(reaction_repeat_const, GetRepeat() + 1);
+		else
+			DropRepeat();
 	}
 
 	public long GetRepeat()
@@ -98,9 +115,9 @@ public class ReactionObject extends MetaObject
 		return GetAttribute(reaction_repeat_const).GetLong();
 	}
 
-	public void Repeat()
+	public void DropRepeat()
 	{
-		GetBaseEntity().UpdateAttribute(reaction_start_time_const, GetRepeat() + 1);
+		GetBaseEntity().UpdateAttribute(reaction_repeat_const, 0);
 	}
 
 }

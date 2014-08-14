@@ -1,42 +1,60 @@
-/*package ru.parallel.octotron.core.collections;
+package ru.parallel.octotron.core.graph.impl;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.collections.EntityList;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
-public class IEntityListTest
+public class GraphListTest
 {
 	private static Neo4jGraph graph;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		IEntityListTest.graph = new Neo4jGraph( "dbs/" + IEntityListTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init(IEntityListTest.graph);
+		GraphListTest.graph = new Neo4jGraph( "dbs/" + GraphListTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
+		GraphService.Init(GraphListTest.graph);
 	}
 
 	@AfterClass
 	public static void Delete() throws Exception
 	{
-		IEntityListTest.graph.Shutdown();
-		IEntityListTest.graph.Delete();
+		GraphListTest.graph.Shutdown();
+		GraphListTest.graph.Delete();
 	}
 
 	@Test
-	public void testRange() throws Exception
+	public void TestAppend() throws Exception
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list1 = new GraphList() ;
+		GraphList list2 = new GraphList() ;
+		GraphList list3;
+
+		int N = 10;
+
+		for(int i = 0; i < N; i++)
+		{
+			list1.add(GraphService.Get().AddObject());
+			list2.add(GraphService.Get().AddObject());
+		}
+
+		list3 = list1.append(list2);
+
+		assertEquals("got something wrong", list1.size(), N);
+		assertEquals("got something wrong", list2.size(), N);
+		assertEquals("got something wrong", list3.size(), N * 2);
+	}
+
+	@Test
+	public void TestRange() throws Exception
+	{
+		GraphList list = new GraphList() ;
 
 		int N = 10;
 
@@ -55,9 +73,9 @@ public class IEntityListTest
 	}
 
 	@Test
-	public void testRanges() throws Exception
+	public void TestRanges() throws Exception
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list = new GraphList() ;
 
 		int N = 12;
 
@@ -73,9 +91,9 @@ public class IEntityListTest
 	}
 
 	@Test
-	public void testFilter() throws Exception
+	public void TestFilter() throws Exception
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list = new GraphList() ;
 
 		int N = 10;
 
@@ -100,19 +118,19 @@ public class IEntityListTest
 		assertEquals(3, list.Filter("entity", 1).size());
 		assertEquals(1, list.Filter("entity", 7).size());
 
-		assertEquals(4, list.Filter("entity", 5, IEntityList.EQueryType.GT).size());
-		assertEquals(12, list.Filter("entity", 4, IEntityList.EQueryType.LT).size());
+		assertEquals(4, list.Filter("entity", 5, EntityList.EQueryType.GT).size());
+		assertEquals(12, list.Filter("entity", 4, EntityList.EQueryType.LT).size());
 
-		assertEquals(3, list.Filter("entity", 3, IEntityList.EQueryType.EQ).size());
+		assertEquals(3, list.Filter("entity", 3, EntityList.EQueryType.EQ).size());
 
-		assertEquals(17, list.Filter("entity", 3, IEntityList.EQueryType.NE).size());
-		assertEquals(19, list.Filter("entity", 7, IEntityList.EQueryType.NE).size());
+		assertEquals(17, list.Filter("entity", 3, EntityList.EQueryType.NE).size());
+		assertEquals(19, list.Filter("entity", 7, EntityList.EQueryType.NE).size());
 	}
 
 	@Test
-	public void testUniq() throws Exception
+	public void TestUniq() throws Exception
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list = new GraphList() ;
 
 		int N = 10;
 
@@ -133,9 +151,9 @@ public class IEntityListTest
 	}
 
 	@Test
-	public void testAdd() throws Exception
+	public void TestAdd() throws Exception
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list = new GraphList() ;
 
 		assertEquals("list is not empty", list.size(), 0);
 
@@ -149,9 +167,9 @@ public class IEntityListTest
 	}
 
 	@Test
-	public void testGet() throws Exception
+	public void TestGet() throws Exception
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list = new GraphList() ;
 
 		list.add(GraphService.Get().AddObject());
 		list.add(GraphService.Get().AddLink(GraphService.Get().AddObject(), GraphService.Get().AddObject(), "test"));
@@ -163,9 +181,9 @@ public class IEntityListTest
 	}
 
 	@Test
-	public void testSize() throws Exception
+	public void TestSize() throws Exception
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list = new GraphList() ;
 
 		int N = 10;
 
@@ -182,14 +200,14 @@ public class IEntityListTest
 	public ExpectedException exception = ExpectedException.none();
 
 	@Test
-	public void testOnly() throws Exception
+	public void TestOnly() throws Exception
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list = new GraphList() ;
 
 		list.add(GraphService.Get().AddObject());
 		assertNotNull(list.Only());
 
-		list = new EntityList<>();
+		list = new GraphList();
 
 		exception.expect(ExceptionModelFail.class);
 		list.Only();
@@ -203,7 +221,7 @@ public class IEntityListTest
 	@Test
 	public void TestIterate()
 	{
-		IEntityList<GraphEntity> list = new EntityList<>() ;
+		GraphList list = new GraphList() ;
 
 		int N = 10;
 
@@ -220,4 +238,4 @@ public class IEntityListTest
 
 		assertEquals("got something wrong", N * 2, i);
 	}
-}*/
+}

@@ -50,7 +50,7 @@ public class AbstractVaryingAttributeTest
 	}
 
 	@Test
-	public void testGetLastValue() throws Exception
+	public void TestGetLastValue() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
@@ -72,7 +72,7 @@ public class AbstractVaryingAttributeTest
 	 * uses assert for floats for delta param
 	 */
 	@Test
-	public void testGetCTime() throws Exception
+	public void TestGetCTime() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
@@ -95,7 +95,7 @@ public class AbstractVaryingAttributeTest
 	}
 
 	@Test
-	public void testGetATime() throws Exception
+	public void TestGetATime() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
@@ -118,7 +118,7 @@ public class AbstractVaryingAttributeTest
 	}
 
 	@Test
-	public void testGetSpeed() throws Exception
+	public void TestGetSpeed() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0.0);
 
@@ -141,7 +141,7 @@ public class AbstractVaryingAttributeTest
 	}
 
 	@Test
-	public void testUpdate() throws Exception
+	public void TestUpdate() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
@@ -161,7 +161,7 @@ public class AbstractVaryingAttributeTest
 	}
 
 	@Test
-	public void testValid() throws Exception
+	public void TestValid() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
@@ -183,7 +183,7 @@ public class AbstractVaryingAttributeTest
 	}
 
 	@Test
-	public void testReactions() throws Exception
+	public void TestReactions() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
@@ -197,7 +197,7 @@ public class AbstractVaryingAttributeTest
 	}
 
 	@Test
-	public void testMarkers() throws Exception
+	public void TestMarkers() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
@@ -214,5 +214,59 @@ public class AbstractVaryingAttributeTest
 
 		attribute.DeleteMarker(id2);
 		assertEquals(0, attribute.GetMarkers().size());
+	}
+
+	@Test
+	public void TestGetReadyReactions() throws Exception
+	{
+		SensorAttribute attribute = object.DeclareSensor("test", 0);
+
+		OctoReaction r1 = new OctoReaction("test", 1, null);
+		OctoReaction r2 = new OctoReaction("test", 2, null);
+
+		OctoReaction r3 = new OctoReaction("test", 3, null, 2, 0);
+		OctoReaction r4 = new OctoReaction("test", 4, null, 0, 3);
+
+		OctoReaction r5 = new OctoReaction("test", 5, null, 2, 4);
+
+		attribute.AddReaction(r1);
+		attribute.AddReaction(r2);
+		attribute.AddReaction(r3);
+		attribute.AddReaction(r4);
+		attribute.AddReaction(r5);
+
+		assertEquals(0, attribute.GetReadyReactions().size());
+
+		attribute.Update(1);
+		assertEquals(1, attribute.GetReadyReactions().size());
+
+		attribute.Update(2);
+		assertEquals(1, attribute.GetReadyReactions().size());
+
+		attribute.Update(3);
+		assertEquals(0, attribute.GetReadyReactions().size());
+		Thread.sleep(3000);
+		assertEquals(1, attribute.GetReadyReactions().size());
+
+		attribute.Update(4);
+		assertEquals(0, attribute.GetReadyReactions().size());
+		attribute.Update(4);
+		assertEquals(0, attribute.GetReadyReactions().size());
+		attribute.Update(4);
+		assertEquals(1, attribute.GetReadyReactions().size());
+
+
+		attribute.Update(5);
+		assertEquals(0, attribute.GetReadyReactions().size());
+		Thread.sleep(1000);
+		attribute.Update(5);
+		assertEquals(0, attribute.GetReadyReactions().size());
+		attribute.Update(5);
+		assertEquals(0, attribute.GetReadyReactions().size());
+		attribute.Update(5);
+		assertEquals(0, attribute.GetReadyReactions().size());
+		Thread.sleep(2000);
+		assertEquals(1, attribute.GetReadyReactions().size());
+		assertEquals(0, attribute.GetReadyReactions().size());
 	}
 }

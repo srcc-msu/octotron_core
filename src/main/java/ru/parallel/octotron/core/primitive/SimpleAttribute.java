@@ -96,7 +96,7 @@ public class SimpleAttribute implements UniqueName
 			return value.toString();
 		else if(value instanceof Double)
 		{
-			DecimalFormat df = new DecimalFormat("#.##"); // TODO: is it ok?
+			DecimalFormat df = new DecimalFormat("0.00"); // TODO: is it ok?
 			return df.format(value);
 		}
 		else if(value instanceof String)

@@ -166,8 +166,11 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 				long delay = reaction.GetDelay();
 				long repeat = reaction.GetRepeat();
 
-				boolean ready = (reaction_object.GetDelay() > delay)
-					&& (reaction_object.GetRepeat() > repeat);
+				long current_delay = reaction_object.GetDelay();
+				long current_repeat = reaction_object.GetRepeat();
+
+				boolean ready = (current_delay >= delay)
+					&& (current_repeat >= repeat);
 
 				if(state == OctoReaction.STATE_NONE)
 				{
@@ -182,7 +185,6 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 						reaction_object.SetState(OctoReaction.STATE_STARTED);
 
 						reaction_object.StartDelay();
-						reaction_object.StartRepeat();
 					}
 				}
 				else if(state == OctoReaction.STATE_STARTED)
@@ -195,7 +197,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 					}
 					else
 					{
-						reaction_object.Repeat();
+						// nothing to see here
 					}
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)
@@ -212,6 +214,8 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 				else if(state == OctoReaction.STATE_STARTED)
 				{
 					reaction_object.SetState(OctoReaction.STATE_NONE);
+					reaction_object.DropDelay();
+					reaction_object.DropRepeat();
 				}
 				else if(state == OctoReaction.STATE_EXECUTED)
 				{
@@ -219,6 +223,8 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 						result.add(reaction.GetRecoverResponse());
 
 					reaction_object.SetState(OctoReaction.STATE_NONE);
+					reaction_object.DropDelay();
+					reaction_object.DropRepeat();
 				}
 			}
 		}

@@ -3,14 +3,17 @@ package ru.parallel.octotron.http;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.FileUtils;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * sometimes tests can fail if message did not came in time</br>
@@ -82,7 +85,7 @@ public class RequestEmulationTest
 	/**
 	 * testing curl manually, will use it in later tests via the function
 	 * */
-/*	@Test
+	@Test
 	public void HttpMessage() throws Exception
 	{
 		int COUNT = 3;
@@ -125,14 +128,14 @@ public class RequestEmulationTest
 
 		RequestResult result = RequestParser.ParseFromHttp(request)
 			.GetParsedRequest()
-			.Execute(RequestEmulationTest.model_service, null);
+			.Execute(null);
 
 		if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
 			throw new ExceptionParseError(result.data);
 
 		return result.data;
-	}*/
-/*
+	}
+
 	@Test
 	public void HttpRequest() throws Exception
 	{
@@ -157,7 +160,7 @@ public class RequestEmulationTest
 	@Test
 	public void HttpQueryRequest() throws Exception
 	{
-		ObjectList l = RequestEmulationTest.factory.Create(10);
+		ModelObjectList l = RequestEmulationTest.factory.Create(10);
 		long AID = l.get(0).GetAttribute("AID").GetLong();
 
 		String test = GetRequestResult("/view/p?path=obj(AID).q(AID=="+AID+")");
@@ -179,8 +182,8 @@ public class RequestEmulationTest
 	@Test
 	public void HttpNeighbourRequest() throws Exception
 	{
-		ObjectList objs = RequestEmulationTest.factory.Create(10);
-		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+		ModelObjectList objects = RequestEmulationTest.factory.Create(10);
+		RequestEmulationTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
 
 		String test = GetRequestResult("/view/p?path=obj(AID).in_n()");
 		if(test == null || !test.contains("AID"))
@@ -198,9 +201,9 @@ public class RequestEmulationTest
 	@Test
 	public void HttpObjLinkRequest() throws Exception
 	{
-		ObjectList objs = RequestEmulationTest.factory.Create(10);
+		ModelObjectList objects = RequestEmulationTest.factory.Create(10);
 
-		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+		RequestEmulationTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
 
 		String test = GetRequestResult("/view/p?path=obj(AID).in_l()");
 		if(test == null || !test.contains("AID"))
@@ -218,9 +221,9 @@ public class RequestEmulationTest
 	@Test
 	public void HttpLinkRequest() throws Exception
 	{
-		ObjectList objs = RequestEmulationTest.factory.Create(10);
+		ModelObjectList objects = RequestEmulationTest.factory.Create(10);
 
-		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+		RequestEmulationTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
 
 		String test = GetRequestResult("/view/p?path=link(AID)");
 		if(test == null || !test.contains("AID"))
@@ -230,9 +233,9 @@ public class RequestEmulationTest
 	@Test
 	public void HttpLinkPropRequest() throws Exception
 	{
-		ObjectList objs = RequestEmulationTest.factory.Create(10);
+		ModelObjectList objects = RequestEmulationTest.factory.Create(10);
 
-		RequestEmulationTest.links.AllToAll(objs.range(0, 5), objs.range(0, 10));
+		RequestEmulationTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
 
 		String test = GetRequestResult("/view/p?path=link(AID).source()");
 		if(test == null || !test.contains("AID"))
@@ -241,5 +244,5 @@ public class RequestEmulationTest
 		test = GetRequestResult("/view/p?path=link(AID).target()");
 		if(test == null || !test.contains("AID"))
 			fail("bad response target: " + test);
-	}*/
+	}
 }

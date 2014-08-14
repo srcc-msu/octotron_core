@@ -27,11 +27,19 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 		list = new LinkedList<>();
 	}
 
+
+/**
+ * list reuse
+ * */
 	protected EntityList(List<T> list)
 	{
 		this.list = list;
 	}
 
+
+/**
+ * list copy
+ * */
 	protected EntityList(R list)
 	{
 		this.list = new LinkedList<>();
@@ -230,6 +238,11 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 	public final R ranges(int... ranges)
 	{
 		return Instance(InnerRanges(ranges));
+	}
+
+	public final R elems(int... position)
+	{
+		return Instance(InnerElems(position));
 	}
 
 	public final R Filter(SimpleAttribute att, EQueryType type)

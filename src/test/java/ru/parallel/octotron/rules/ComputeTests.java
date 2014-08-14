@@ -3,7 +3,6 @@ package ru.parallel.octotron.rules;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.collections.EntityList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelAttribute;
@@ -26,7 +25,6 @@ import static org.junit.Assert.assertEquals;
 //they do not work because invalid or wrong ctime, need to fix somehow
 public class ComputeTests
 {
-	private static GraphService graph_service;
 	private static Neo4jGraph graph;
 	private static ModelObject obj;
 
@@ -35,7 +33,7 @@ public class ComputeTests
 		throws ExceptionSystemError
 	{
 		ComputeTests.graph = new Neo4jGraph( "dbs/" + ComputeTests.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init (graph);
+		GraphService.Init(graph);
 
 		ObjectFactory in = new ObjectFactory()
 			.Sensors(new SimpleAttribute("in_d1", 10.0))
@@ -364,24 +362,24 @@ public class ComputeTests
 	@Test
 	public void TestUpdatedRecently() throws Exception
 	{
-/*		ModelAttribute attr = obj.DeclareSensor("test_update", 0);
+		SensorAttribute attr = obj.DeclareSensor("test_update", 0);
 
 		UpdatedRecently rule = new UpdatedRecently("test", "test_update", 1);
 
 		assertEquals(false, rule.Compute(obj));
 
-		attr.Update(0, true);
+		attr.Update(0);
 		assertEquals(true, rule.Compute(obj));
 
 		Thread.sleep(2000);
 		assertEquals(false, rule.Compute(obj));
-		attr.Update(0, true);
+		attr.Update(0);
 		assertEquals(true, rule.Compute(obj));
 
 		Thread.sleep(3000);
 		assertEquals(false, rule.Compute(obj));
-		attr.Update(0, true);
-		assertEquals(true, rule.Compute(obj));*/
+		attr.Update(0);
+		assertEquals(true, rule.Compute(obj));
 	}
 
 	@Test

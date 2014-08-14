@@ -20,7 +20,23 @@ import java.util.List;
  * */
 public class ModelObjectList extends EntityList<ModelObject, ModelObjectList>
 {
-	private ModelObjectList(List<ModelObject> list)
+	public ModelObjectList()
+	{
+		super();
+	}
+
+/**
+ * list copy
+ * */
+	public ModelObjectList(ModelObjectList list)
+	{
+		super(list);
+	}
+
+/**
+ * list reuse
+ * */
+	protected ModelObjectList(List<ModelObject> list)
 	{
 		super(list);
 	}
@@ -29,11 +45,6 @@ public class ModelObjectList extends EntityList<ModelObject, ModelObjectList>
 	protected ModelObjectList Instance(List<ModelObject> new_list)
 	{
 		return new ModelObjectList(new_list);
-	}
-
-	public ModelObjectList()
-	{
-		super();
 	}
 
 	public ModelObjectList GetInNeighbors(String link_name, Object link_value)

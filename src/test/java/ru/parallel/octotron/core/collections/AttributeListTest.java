@@ -46,7 +46,7 @@ public class AttributeListTest
 	@Test
 	public void TestAdd()
 	{
-		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
+		AttributeList<GraphAttribute> list = new AttributeList<>();
 
 		assertEquals("list is no empty", list.size(), 0);
 		list.add(AttributeListTest.object.DeclareAttribute("test", 0));
@@ -59,7 +59,7 @@ public class AttributeListTest
 	@Test
 	public void TestGet()
 	{
-		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
+		AttributeList<GraphAttribute> list = new AttributeList<>();
 
 		list.add(AttributeListTest.object.DeclareAttribute("test1", 0));
 		list.add(AttributeListTest.object.DeclareAttribute("test2", 1.0));
@@ -73,7 +73,7 @@ public class AttributeListTest
 	@Test
 	public void TestIterate()
 	{
-		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
+		AttributeList<GraphAttribute> list = new AttributeList<>();
 
 		int N = 10;
 
@@ -91,7 +91,7 @@ public class AttributeListTest
 	@Test
 	public void TestSize()
 	{
-		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
+		AttributeList<GraphAttribute> list = new AttributeList<>();
 
 		int N = 10;
 
@@ -105,7 +105,7 @@ public class AttributeListTest
 	@Test
 	public void TestOps()
 	{
-		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
+		AttributeList<GraphAttribute> list = new AttributeList<>();
 
 		int N = 10;
 
@@ -148,7 +148,7 @@ public class AttributeListTest
 	@Test
 	public void TestSort()
 	{
-		AttributeList<GraphAttribute> list = new AttributeList<GraphAttribute>();
+		AttributeList<GraphAttribute> list = new AttributeList<>();
 
 		list.add(AttributeListTest.object.DeclareAttribute("b", ""));
 		list.add(AttributeListTest.object.DeclareAttribute("c", ""));

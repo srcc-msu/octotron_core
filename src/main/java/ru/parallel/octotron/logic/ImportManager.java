@@ -13,7 +13,6 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.utils.JavaUtils;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class ImportManager
 		AttributeList<SensorAttribute> changed = static_proc.Process(packet);
 
 		if(changed.size() > 0)
-			return ProcessRules(changed.append(ProcessTimers()));
+			return ProcessRules(changed/*.append(ProcessTimers())*/); // TODO: timers?
 
 		return new AttributeList<>();
 	}
@@ -78,7 +77,7 @@ public class ImportManager
 		return result.append(changed).append(rule_changed);
 	}
 
-	private long last_timer_check = 0;
+	/*private long last_timer_check = 0;
 	private static final long TIMER_CHECK_THRESHOLD = 2;
 
 	public AttributeList<SensorAttribute> ProcessTimers()
@@ -87,7 +86,7 @@ public class ImportManager
 
 		AttributeList<SensorAttribute> res = new AttributeList<>();
 
-		/*if(cur_time - last_timer_check < ImportManager.TIMER_CHECK_THRESHOLD)
+		if(cur_time - last_timer_check < ImportManager.TIMER_CHECK_THRESHOLD)
 			return res;
 
 		last_timer_check = cur_time;
@@ -100,10 +99,10 @@ public class ImportManager
 				throw new ExceptionModelFail("timer attribute on link is not supported yet");
 
 			res.add(entity);
-		}*/
+		}
 
 		return res;
-	}
+	}*/
 
 	public void Finish() {}
 }

@@ -7,7 +7,6 @@
 package ru.parallel.octotron.reactions;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;

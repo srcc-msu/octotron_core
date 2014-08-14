@@ -33,18 +33,8 @@ public class Uid
 		return uid;
 	}
 
-	public void setUid(long uid)
-	{
-		this.uid = uid;
-	}
-
 	public EEntityType getType()
 	{
 		return type;
-	}
-
-	public void setType(EEntityType type)
-	{
-		this.type = type;
 	}
 }

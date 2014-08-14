@@ -19,12 +19,9 @@ import ru.parallel.utils.JavaUtils;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public abstract class AbstractVaryingAttribute<T extends AttributeObject> extends ModelAttribute
 {
-	private final static Logger LOGGER = Logger.getLogger("octotron");
-
 	protected final T meta;
 
 	public AbstractVaryingAttribute(ModelEntity parent, T meta, String name)
@@ -56,6 +53,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	{
 // check time
 		HistoryObject last = meta.GetLast();
+
 		if(last == null)
 			return 0.0;
 
@@ -68,7 +66,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		if(last_ctime == 0) // last value was default
 			return 0.0;
 
-		double diff = ToDouble() - meta.GetLast().GetValue().ToDouble();
+		double diff = ToDouble() - last.GetValue().ToDouble();
 
 		return diff / (cur_ctime - last_ctime);
 	}

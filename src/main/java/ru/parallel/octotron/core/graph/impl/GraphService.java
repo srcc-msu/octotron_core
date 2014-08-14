@@ -265,7 +265,7 @@ public final class GraphService
 //			converters
 //---------------------------------
 
-	protected static List<Uid> UidsFromList(EntityList<GraphEntity, ?> entities)
+	protected static List<Uid> UidsFromList(EntityList<? extends GraphEntity, ?> entities)
 	{
 		List<Uid> uids = new LinkedList<>();
 
@@ -312,5 +312,15 @@ public final class GraphService
 		}
 
 		return objects;
+	}
+
+	public String ExportDot()
+	{
+		return graph.ExportDot(UidsFromList(GetAllObjects()));
+	}
+
+	public String ExportDot(GraphObjectList list)
+	{
+		return graph.ExportDot(UidsFromList(list));
 	}
 }

@@ -59,12 +59,12 @@ public abstract class ModelService
 
 	public static String ExportDot(ModelObjectList objects)
 	{
-		return null;
+		return GraphService.Get().ExportDot(ListConverter.ModelToGraph(objects));
 	}
 
 	public static String ExportDot()
 	{
-		return null;
+		return GraphService.Get().ExportDot();
 	}
 
 	public static ModelObject AddObject()

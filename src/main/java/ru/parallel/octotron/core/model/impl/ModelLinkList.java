@@ -24,6 +24,18 @@ public class ModelLinkList extends EntityList<ModelLink, ModelLinkList>
 		super();
 	}
 
+/**
+ * list copy
+ * */
+	public ModelLinkList(ModelLinkList list)
+	{
+		super(list);
+	}
+
+
+/**
+ * list reuse
+ * */
 	public ModelLinkList(List<ModelLink> graph_links)
 	{
 		super(graph_links);

@@ -191,6 +191,7 @@ public final class Neo4jGraph implements IGraph
 	/**
 	 * private function for bootstrap configuration<br>
 	 * */
+	@SuppressWarnings("deprecation")
 	private void DoBootstrap()
 	{
 		ServerConfigurator config

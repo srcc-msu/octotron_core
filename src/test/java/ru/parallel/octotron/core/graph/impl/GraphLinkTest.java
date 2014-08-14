@@ -7,7 +7,6 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 public class GraphLinkTest
 {
-	private static GraphService graph_service;
 	private static Neo4jGraph graph;
 
 	@BeforeClass

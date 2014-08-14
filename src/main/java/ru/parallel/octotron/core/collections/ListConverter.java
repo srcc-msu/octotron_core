@@ -56,4 +56,28 @@ public class ListConverter
 
 		return new_list;
 	}
+
+	public static GraphObjectList ModelToGraph(ModelObjectList objects)
+	{
+		GraphObjectList new_list = new GraphObjectList();
+
+		for(ModelObject object : objects)
+		{
+			new_list.add(object.GetBaseObject());
+		}
+
+		return new_list;
+	}
+
+	public static GraphLinkList ModelToGraph(ModelLinkList links)
+	{
+		GraphLinkList new_list = new GraphLinkList();
+
+		for(ModelLink link : links)
+		{
+			new_list.add(link.GetBaseLink());
+		}
+
+		return new_list;
+	}
 }

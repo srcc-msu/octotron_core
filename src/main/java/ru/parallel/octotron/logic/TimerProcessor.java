@@ -40,8 +40,6 @@ public final class TimerProcessor
 		TimerProcessor.INSTANCE.timers.add(new Entry(entity, name));
 	}
 
-
-
 	public static void RemoveTimer(ModelEntity entity, String name)
 	{
 		Iterator<Entry> it = TimerProcessor.INSTANCE.timers.iterator();

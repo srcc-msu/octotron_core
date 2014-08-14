@@ -1,9 +1,7 @@
 package ru.parallel.octotron.http;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -18,10 +16,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.utils.FileUtils;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 import static org.junit.Assert.*;
 
@@ -34,7 +28,6 @@ public class RequestEmulationTest
 	private static final int HTTP_PORT = 4300;
 
 	private static Neo4jGraph graph;
-	private static GraphService graph_service;
 
 	private static LinkFactory links;
 	private static ObjectFactory factory;

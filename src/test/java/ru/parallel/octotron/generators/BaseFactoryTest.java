@@ -21,7 +21,6 @@ public class BaseFactoryTest
 {
 	private static Neo4jGraph graph;
 
-	private static final int N = 10; // some testing param
 	private static ObjectFactory object_factory;
 	private static LinkFactory link_factory;
 

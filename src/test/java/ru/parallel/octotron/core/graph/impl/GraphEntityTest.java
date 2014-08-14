@@ -10,7 +10,6 @@ import static org.junit.Assert.*;
 
 public class GraphEntityTest
 {
-	private static GraphService graph_service;
 	private static Neo4jGraph graph;
 
 	@BeforeClass

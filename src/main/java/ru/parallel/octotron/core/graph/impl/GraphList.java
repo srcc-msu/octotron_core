@@ -7,9 +7,6 @@
 package ru.parallel.octotron.core.graph.impl;
 
  import ru.parallel.octotron.core.collections.EntityList;
-import ru.parallel.octotron.core.model.ModelEntity;
- import ru.parallel.octotron.core.model.impl.ModelLinkList;
- import ru.parallel.octotron.core.model.impl.ModelObjectList;
 
  import java.util.List;
 

@@ -14,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 public class ModelLinkTest
 {
 	private static Neo4jGraph graph;
-	private static GraphService graph_service;
 
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;

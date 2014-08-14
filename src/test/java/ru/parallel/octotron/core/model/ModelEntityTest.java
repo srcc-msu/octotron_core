@@ -23,7 +23,6 @@ import static org.junit.Assert.*;
 public class ModelEntityTest
 {
 	private static Neo4jGraph graph;
-	private static GraphService graph_service;
 
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
@@ -121,7 +120,7 @@ public class ModelEntityTest
 	private class DummyRule extends OctoRule
 	{
 		private static final long serialVersionUID = -6085542113382606406L;
-		private EDependencyType dep_type;
+		private final EDependencyType dep_type;
 		private long n = 0L;
 
 		DummyRule(String name, EDependencyType dep_type)

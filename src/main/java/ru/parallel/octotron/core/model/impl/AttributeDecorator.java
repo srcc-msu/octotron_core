@@ -12,11 +12,6 @@ public class AttributeDecorator implements IAttribute
 		this.base = base;
 	}
 
-	protected GraphAttribute GetBase()
-	{
-		return base;
-	}
-
 // decorated staff
 
 	@Override

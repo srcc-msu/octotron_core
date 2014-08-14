@@ -105,8 +105,6 @@ public class OctoReaction implements Serializable, UniqueName
 	public static final long STATE_STARTED = 1;
 	public static final long STATE_EXECUTED = 2;
 
-	public static final String DELAY_PREFIX = "_DELAY_";
-
 /**
  * reaction is needed if the \check_name attribute is false
  * */

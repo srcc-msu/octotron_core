@@ -51,7 +51,7 @@ public class StartOctotron
 
 
 // for debugging
-	private static boolean sample_mode = true;
+	private static boolean sample_mode = false;
 	private static boolean bootstrap = false;
 
 /**

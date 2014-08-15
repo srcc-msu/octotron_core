@@ -60,14 +60,6 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return list.iterator();
 	}
 
-	protected final List<T> InnerAppend(List<T> list2)
-	{
-		List<T> new_list = new LinkedList<>(list);
-
-		new_list.addAll(list2);
-		return new_list;
-	}
-
 	protected final List<T> InnerAlphabeticSort()
 	{
 		List<T> new_list = new LinkedList<>(list);

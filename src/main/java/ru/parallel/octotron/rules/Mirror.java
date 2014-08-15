@@ -39,7 +39,8 @@ public abstract class Mirror extends OctoObjectRule
 	{
 		AttributeList<ModelAttribute> result = new AttributeList<>();
 
-		result.add(object.GetInNeighbors().append(object.GetOutNeighbors())
+		result.add(
+			object.GetInNeighbors().append(object.GetOutNeighbors())
 			.Filter(mirror_name_match, mirror_value_match)
 			.Only().GetAttribute(mirror_attribute));
 

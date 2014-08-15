@@ -4,12 +4,15 @@ import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphLinkList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphObjectList;
+import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.ModelLinkList;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
 
-public class ListConverter
+public abstract class ListConverter
 {
 	public static ModelLinkList GraphToModel(GraphLinkList list)
 	{
@@ -79,5 +82,15 @@ public class ListConverter
 		}
 
 		return new_list;
+	}
+
+	public static <T extends ModelAttribute> AttributeList<VariableAttribute> GetDependant(AttributeList<T> attributes)
+	{
+		AttributeList<VariableAttribute> result = new AttributeList<>();
+
+		for(T attribute : attributes)
+			result = result.append(attribute.GetDependant());
+
+		return result;
 	}
 }

@@ -145,7 +145,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		ModelLinkList res_links = new ModelLinkList();
 
 		for(int i = 0; i < from.size(); i++)
-			res_links.append(OneToEvery(from.get(i), to));
+			res_links = res_links.append(OneToEvery(from.get(i), to));
 
 		return res_links;
 	}
@@ -217,7 +217,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 					("ChunksToEvery_Guided connector, too many elements specified: "
 						+ "to: " + to.size() + " from: " + from.size() + " sizes: " + Arrays.toString(sizes));
 
-			links.append(EveryToOne(
+			links = links.append(EveryToOne(
 				from.range(counter, counter + sizes[i]), to.get(i)));
 
 			counter += sizes[i];
@@ -296,7 +296,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 					"EveryToChunks_Guided connector, too many elements specified: "
 						+ "to: " + to.size() + " from: " + from.size() + " sizes: " + Arrays.toString(sizes));
 
-			links.append(OneToEvery(
+			links = links.append(OneToEvery(
 				from.get(i), to.range(counter, counter + sizes[i])));
 
 			counter += sizes[i];

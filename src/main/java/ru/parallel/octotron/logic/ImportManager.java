@@ -8,6 +8,7 @@ package ru.parallel.octotron.logic;
 
 import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.collections.ListConverter;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
@@ -30,51 +31,48 @@ public class ImportManager
 
 	public AttributeList<ModelAttribute> Process(List<Pair<ModelEntity, SimpleAttribute>> packet)
 	{
+		AttributeList<ModelAttribute> result = new AttributeList<>();
+
 		AttributeList<SensorAttribute> changed = static_proc.Process(packet);
 
 		if(changed.size() > 0)
-			return ProcessRules(changed/*.append(ProcessTimers())*/); // TODO: timers?
-
-		return new AttributeList<>();
-	}
-
-	public AttributeList<VariableAttribute> ProcessRuleWave(AttributeList<VariableAttribute> changed)
-	{
-		AttributeList<VariableAttribute> result = new AttributeList<>();
-
-		for(VariableAttribute derived : changed)
 		{
-			if(derived.Update())
-				result.append(derived.GetDependant());
+			AttributeList<VariableAttribute> changed_variables = ProcessVariables(changed/*.append(ProcessTimers())*/); // TODO: timers?
+			result = result.append(changed);
+			result = result.append(changed_variables);
 		}
 
 		return result;
 	}
 
-	public AttributeList<ModelAttribute> ProcessRules(AttributeList<SensorAttribute> changed)
+	public AttributeList<VariableAttribute> CheckChanged(AttributeList<VariableAttribute> changed)
 	{
-		AttributeList<VariableAttribute> rule_changed = new AttributeList<>();
+		AttributeList<VariableAttribute> result = new AttributeList<>();
 
-		for(SensorAttribute sensor : changed)
-			rule_changed = rule_changed.append(sensor.GetDependant());
-
-		AttributeList<VariableAttribute> changed_last = new AttributeList<>(rule_changed);
-		AttributeList<VariableAttribute> changed_now;
-
-		while(changed_last.size() > 0)
+		for(VariableAttribute variable : changed)
 		{
-			changed_now = new AttributeList<>();
-
-			for(VariableAttribute derived : changed_now)
-				changed_now = changed_now.append(derived.GetDependant());
-
-			rule_changed = rule_changed.append(changed_now);
-
-			changed_last = changed_now;
+			if(variable.Update())
+				result.add(variable);
 		}
 
-		AttributeList<ModelAttribute> result = new AttributeList<>();
-		return result.append(changed).append(rule_changed);
+		return result;
+	}
+
+	public AttributeList<VariableAttribute> ProcessVariables(AttributeList<SensorAttribute> changed)
+	{
+		AttributeList<VariableAttribute> result = new AttributeList();
+
+		AttributeList<VariableAttribute> dependant_variables = ListConverter.GetDependant(changed);
+
+		do
+		{
+			dependant_variables = CheckChanged(dependant_variables);
+			result = result.append(dependant_variables);
+			dependant_variables = ListConverter.GetDependant(dependant_variables);
+		}
+		while(dependant_variables.size() != 0);
+
+		return result;
 	}
 
 	/*private long last_timer_check = 0;

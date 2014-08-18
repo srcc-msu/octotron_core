@@ -263,7 +263,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		= new SimpleAttribute("type", "_depends");
 
 	@Override
-	public void AddDependant(VariableAttribute attribute)
+	public void AddDependant(VaryingAttribute attribute)
 	{
 		GraphLink link = GraphService.Get().AddLink(meta.GetBaseObject()
 			, attribute.GetMeta().GetBaseObject()
@@ -274,15 +274,15 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	}
 
 	@Override
-	public AttributeList<VariableAttribute> GetDependant()
+	public AttributeList<VaryingAttribute> GetDependant()
 	{
-		AttributeList<VariableAttribute> result = new AttributeList<>();
+		AttributeList<VaryingAttribute> result = new AttributeList<>();
 
 		for(GraphObject object : meta.GetBaseObject().GetOutNeighbors(dependence_link).Uniq())
 		{
-			VariableObject attribute_object = new VariableObject(object); // only rules will be here
+			VaryingObject attribute_object = new VaryingObject(object); // only rules will be here
 
-			result.add((VariableAttribute)attribute_object.GetParentAttribute());
+			result.add((VaryingAttribute)attribute_object.GetParentAttribute());
 		}
 
 		return result;

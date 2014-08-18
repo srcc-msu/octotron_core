@@ -65,7 +65,7 @@ public abstract class BaseFactory<T>
 		return Clone(constants, new_sensors, rules, reactions);
 	}
 
-	public T Variables(OctoRule... addition)
+	public T Varyings(OctoRule... addition)
 	{
 		List<OctoRule> new_rules = new LinkedList<>(rules);
 		new_rules.addAll(Arrays.asList(addition));

@@ -3,7 +3,7 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.impl.AttributeDecorator;
 import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
-import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.neo4j.impl.Marker;
@@ -64,8 +64,8 @@ public abstract class ModelAttribute extends AttributeDecorator
 
 	public abstract EAttributeType GetType();
 
-	public abstract void AddDependant(VariableAttribute attribute);
-	public abstract AttributeList<VariableAttribute> GetDependant();
+	public abstract void AddDependant(VaryingAttribute attribute);
+	public abstract AttributeList<VaryingAttribute> GetDependant();
 
 //--------
 

@@ -8,11 +8,11 @@ import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
-import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.model.impl.meta.SensorObject;
 import ru.parallel.octotron.core.model.impl.meta.SensorObjectFactory;
-import ru.parallel.octotron.core.model.impl.meta.VariableObject;
-import ru.parallel.octotron.core.model.impl.meta.VariableObjectFactory;
+import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
+import ru.parallel.octotron.core.model.impl.meta.VaryingObjectFactory;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.OctoReaction;
@@ -82,26 +82,26 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // ---------------
 
-	public VariableAttribute DeclareVariable(OctoRule rule)
+	public VaryingAttribute DeclareVarying(OctoRule rule)
 	{
 		GetBaseEntity().DeclareAttribute(rule.GetName(), rule.GetDefaultValue());
-		VariableObject meta = new VariableObjectFactory().Create(GetBaseEntity(), rule);
+		VaryingObject meta = new VaryingObjectFactory().Create(GetBaseEntity(), rule);
 
-		return new VariableAttribute(this, meta, rule.GetName());
+		return new VaryingAttribute(this, meta, rule.GetName());
 	}
 
-	public void DeclareVariables(List<OctoRule> rules)
+	public void DeclareVaryings(List<OctoRule> rules)
 	{
 		for(OctoRule rule : rules)
 		{
-			DeclareVariable(rule);
+			DeclareVarying(rule);
 		}
 	}
 
-	public VariableAttribute GetVariable(String name)
+	public VaryingAttribute GetVarying(String name)
 	{
-		return new VariableAttribute(this
-			, new VariableObjectFactory().Obtain(GetBaseEntity(), name), name);
+		return new VaryingAttribute(this
+			, new VaryingObjectFactory().Obtain(GetBaseEntity(), name), name);
 	}
 
 // -----------------------------
@@ -109,11 +109,11 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 	@Override
 	public ModelAttribute GetAttribute(String name)
 	{
-		VariableObject derived_object
-			= new VariableObjectFactory().TryObtain(GetBaseEntity(), name);
+		VaryingObject derived_object
+			= new VaryingObjectFactory().TryObtain(GetBaseEntity(), name);
 
 		if(derived_object != null)
-			return new VariableAttribute(this, derived_object, name);
+			return new VaryingAttribute(this, derived_object, name);
 
 		SensorObject sensor_object
 			= new SensorObjectFactory().TryObtain(GetBaseEntity(), name);
@@ -164,14 +164,14 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		return filtered;
 	}
 
-	public AttributeList<VariableAttribute> GetVariables()
+	public AttributeList<VaryingAttribute> GetVaryings()
 	{
 		AttributeList<ModelAttribute> attributes = GetAttributes();
-		AttributeList<VariableAttribute> filtered = new AttributeList<>();
+		AttributeList<VaryingAttribute> filtered = new AttributeList<>();
 
 		for(ModelAttribute attribute : attributes)
-			if(attribute.GetType() == EAttributeType.VARIABLE)
-				filtered.add((VariableAttribute)attribute);
+			if(attribute.GetType() == EAttributeType.VARYING)
+				filtered.add((VaryingAttribute)attribute);
 
 		return filtered;
 	}

@@ -91,7 +91,7 @@ public class DBCreator
 		ModelObjectList model_objects = ModelService.GetAllObjects();
 		ModelLinkList model_links = ModelService.GetAllLinks();
 
-		for(ModelObject obj : model_objects)
+/*		for(ModelObject obj : model_objects)
 		{
 			model_attributes_count += obj.GetAttributes().size();
 		}
@@ -99,7 +99,7 @@ public class DBCreator
 		for(ModelLink link : model_links)
 		{
 			model_attributes_count += link.GetAttributes().size();
-		}
+		}*/
 
 		System.out.println("Created model objects: " + model_objects.size());
 		System.out.println("Created model links: " + model_links.size());
@@ -111,7 +111,9 @@ public class DBCreator
 	public void End()
 		throws ExceptionSystemError, FileNotFoundException
 	{
+		System.out.println("Building rule dependencies");
 		ModelService.MakeRuleDependencies();
+
 		PersistentStorage.INSTANCE.Save(settings.GetDbPath() + settings.GetDbName());
 
 		FileUtils.SaveToFile(settings.GetDbPath() + settings.GetDbName() + DBCreator.HASH_FILE

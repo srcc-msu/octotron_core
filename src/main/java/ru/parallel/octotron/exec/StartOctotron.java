@@ -51,7 +51,7 @@ public class StartOctotron
 
 
 // for debugging
-	private static boolean sample_mode = false;
+	private static String debug_config = null;
 	private static boolean bootstrap = false;
 
 /**
@@ -65,7 +65,7 @@ public class StartOctotron
 
 		String config_fname;
 
-		if(!sample_mode)
+		if(debug_config == null)
 		{
 			if (args.length != 1)
 			{
@@ -76,7 +76,7 @@ public class StartOctotron
 			config_fname = args[0];
 		}
 		else
-			config_fname = "sample_src/config.json";
+			config_fname = debug_config;
 
 		LOGGER.log(Level.INFO, "starting Octotron using config file: " + config_fname);
 

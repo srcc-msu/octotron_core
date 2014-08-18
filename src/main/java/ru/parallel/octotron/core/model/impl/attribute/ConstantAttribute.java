@@ -25,10 +25,10 @@ public class ConstantAttribute extends ModelAttribute
 	}
 
 	@Override
-	public void AddDependant(VariableAttribute attribute) {}
+	public void AddDependant(VaryingAttribute attribute) {}
 
 	@Override
-	public AttributeList<VariableAttribute> GetDependant()
+	public AttributeList<VaryingAttribute> GetDependant()
 	{
 		return new AttributeList<>();
 	}

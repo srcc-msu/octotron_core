@@ -72,16 +72,16 @@ public class BaseFactoryTest
 	}
 
 	@Test
-	public void TestVariables()
+	public void TestVaryings()
 	{
 		OctoRule[] rules = { new Match("test1", "", "") };
 		OctoRule rule2 = new Match("test2", "", "");
 		OctoRule rule3 = new Match("test3", "", "");
 
 		ObjectFactory f1 = object_factory
-			.Variables(rules).Variables(rule2, rule3);
+			.Varyings(rules).Varyings(rule2, rule3);
 		LinkFactory f2 = link_factory
-			.Variables(rule2, rule3).Variables(rules);
+			.Varyings(rule2, rule3).Varyings(rules);
 
 		ModelObject obj = f1.Create();
 		ModelLink link = f2.Constants(new SimpleAttribute("type", "1"))

@@ -168,10 +168,10 @@ public class ModelEntityTest
 		DummyRule rule3 = new DummyRule("test3", EDependencyType.IN);
 		DummyRule rule4 = new DummyRule("test4", EDependencyType.OUT);
 
-		entity.DeclareVariable(rule1);
-		entity.DeclareVariable(rule2);
-		entity.DeclareVariable(rule3);
-		entity.DeclareVariable(rule4);
+		entity.DeclareVarying(rule1);
+		entity.DeclareVarying(rule2);
+		entity.DeclareVarying(rule3);
+		entity.DeclareVarying(rule4);
 
 		assertEquals(2, entity.Update(EDependencyType.SELF));
 		assertEquals(2, entity.Update(EDependencyType.IN));
@@ -217,7 +217,7 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.DeclareVariable(new DummyRule("test1", EDependencyType.ALL));
+		entity.DeclareVarying(new DummyRule("test1", EDependencyType.ALL));
 	}
 
 	@Test
@@ -232,7 +232,7 @@ public class ModelEntityTest
 		rules.add(new DummyRule("test1", EDependencyType.ALL));
 		rules.add(new DummyRule("test2", EDependencyType.ALL));
 
-		entity.DeclareVariables(rules);
+		entity.DeclareVaryings(rules);
 	}
 
 	@Test

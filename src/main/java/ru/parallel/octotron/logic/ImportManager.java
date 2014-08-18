@@ -12,7 +12,7 @@ import ru.parallel.octotron.core.collections.ListConverter;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
-import ru.parallel.octotron.core.model.impl.attribute.VariableAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.List;
@@ -37,40 +37,40 @@ public class ImportManager
 
 		if(changed.size() > 0)
 		{
-			AttributeList<VariableAttribute> changed_variables = ProcessVariables(changed/*.append(ProcessTimers())*/); // TODO: timers?
+			AttributeList<VaryingAttribute> changed_varyings = ProcessVaryings(changed/*.append(ProcessTimers())*/); // TODO: timers?
 			result = result.append(changed);
-			result = result.append(changed_variables);
+			result = result.append(changed_varyings);
 		}
 
 		return result;
 	}
 
-	public AttributeList<VariableAttribute> CheckChanged(AttributeList<VariableAttribute> changed)
+	public AttributeList<VaryingAttribute> CheckChanged(AttributeList<VaryingAttribute> changed)
 	{
-		AttributeList<VariableAttribute> result = new AttributeList<>();
+		AttributeList<VaryingAttribute> result = new AttributeList<>();
 
-		for(VariableAttribute variable : changed)
+		for(VaryingAttribute varying : changed)
 		{
-			if(variable.Update())
-				result.add(variable);
+			if(varying.Update())
+				result.add(varying);
 		}
 
 		return result;
 	}
 
-	public AttributeList<VariableAttribute> ProcessVariables(AttributeList<SensorAttribute> changed)
+	public AttributeList<VaryingAttribute> ProcessVaryings(AttributeList<SensorAttribute> changed)
 	{
-		AttributeList<VariableAttribute> result = new AttributeList();
+		AttributeList<VaryingAttribute> result = new AttributeList<>();
 
-		AttributeList<VariableAttribute> dependant_variables = ListConverter.GetDependant(changed);
+		AttributeList<VaryingAttribute> dependant_varyings = ListConverter.GetDependant(changed);
 
 		do
 		{
-			dependant_variables = CheckChanged(dependant_variables);
-			result = result.append(dependant_variables);
-			dependant_variables = ListConverter.GetDependant(dependant_variables);
+			dependant_varyings = CheckChanged(dependant_varyings);
+			result = result.append(dependant_varyings);
+			dependant_varyings = ListConverter.GetDependant(dependant_varyings);
 		}
-		while(dependant_variables.size() != 0);
+		while(dependant_varyings.size() != 0);
 
 		return result;
 	}

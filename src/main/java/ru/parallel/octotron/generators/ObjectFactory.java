@@ -42,7 +42,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 
 		object.DeclareConstants(constants);
 		object.DeclareSensors(sensors);
-		object.DeclareVariables(rules);
+		object.DeclareVaryings(rules);
 		object.AddReactions(reactions);
 
 		return object;

@@ -4,9 +4,9 @@ import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.impl.PersistentStorage;
 
-public class VariableObject extends AttributeObject
+public class VaryingObject extends AttributeObject
 {
-	public VariableObject(GraphObject object)
+	public VaryingObject(GraphObject object)
 	{
 		super(object);
 	}

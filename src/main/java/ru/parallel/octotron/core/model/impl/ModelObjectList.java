@@ -136,4 +136,15 @@ public class ModelObjectList extends EntityList<ModelObject, ModelObjectList>
 
 		return new_list;
 	}
+
+	public void DeclareConstants(SimpleAttribute attribute)
+	{
+		DeclareConstants(attribute.GetName(), attribute.GetValue());
+	}
+
+	public void DeclareConstants(String name, Object value)
+	{
+		for(ModelObject obj : list)
+			obj.DeclareConstant(name, value);
+	}
 }

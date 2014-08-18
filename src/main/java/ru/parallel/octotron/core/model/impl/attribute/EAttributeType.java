@@ -2,5 +2,5 @@ package ru.parallel.octotron.core.model.impl.attribute;
 
 public enum EAttributeType
 {
-	CONSTANT, SENSOR, VARIABLE
+	CONSTANT, SENSOR, VARYING
 }

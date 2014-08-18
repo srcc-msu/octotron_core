@@ -7,12 +7,12 @@
 package ru.parallel.octotron.core.model.impl.attribute;
 
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.impl.meta.VariableObject;
+import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
 import ru.parallel.octotron.core.OctoRule;
 
-public class VariableAttribute extends AbstractVaryingAttribute<VariableObject>
+public class VaryingAttribute extends AbstractVaryingAttribute<VaryingObject>
 {
-	public VariableAttribute(ModelEntity parent, VariableObject meta, String name)
+	public VaryingAttribute(ModelEntity parent, VaryingObject meta, String name)
 	{
 		super(parent, meta, name);
 	}
@@ -20,7 +20,7 @@ public class VariableAttribute extends AbstractVaryingAttribute<VariableObject>
 	@Override
 	public EAttributeType GetType()
 	{
-		return EAttributeType.VARIABLE;
+		return EAttributeType.VARYING;
 	}
 
 	public OctoRule GetRule()

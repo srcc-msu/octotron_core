@@ -43,7 +43,7 @@ public class SelfTest
 			obj2 = ModelService.AddObject();
 			obj2.DeclareConstant("type", "_selftest");
 			obj2.DeclareConstant("lid", 1);
-			obj2.DeclareVariable(new MirrorLong("test_iteration", "lid", 0));
+			obj2.DeclareVarying(new MirrorLong("test_iteration", "lid", 0));
 
 			ModelService.AddLink(obj1, obj2, "test");
 		}

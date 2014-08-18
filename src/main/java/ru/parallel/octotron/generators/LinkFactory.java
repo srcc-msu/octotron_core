@@ -43,7 +43,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	}
 /*
 @Override
-	public LinkFactory Variables(OctoRule... params)
+	public LinkFactory Varyings(OctoRule... params)
 	{
 		throw new ExceptionModelFail("links do not have rules");
 	}
@@ -78,7 +78,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 // set all attributes
 		link.DeclareConstants(constants);
 		link.DeclareSensors(sensors);
-		link.DeclareVariables(rules);
+		link.DeclareVaryings(rules);
 		link.AddReactions(reactions);
 
 		link.DeclareConstant("source", from.GetAttribute("AID").GetLong());

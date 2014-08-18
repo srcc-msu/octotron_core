@@ -2,5 +2,5 @@ package ru.parallel.octotron.core.primitive;
 
 public enum EObjectLabels
 {
-	MODEL, VARIABLE, SENSOR, MARK, REACTION, HISTORY
+	MODEL, VARYING, SENSOR, MARK, REACTION, HISTORY
 }

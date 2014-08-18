@@ -98,7 +98,14 @@ public class HTTPServer
 			@Override
 			public boolean checkCredentials(String user, String password)
 			{
-				return user.equals(user_ref) && password.equals(password_ref);
+				boolean result = user.equals(user_ref) && password.equals(password_ref);
+
+				if(result)
+					LOGGER.log(Level.FINE, "[SUCCESS] authentication attempt, username: " + user + ", password: " + password);
+				else
+					LOGGER.log(Level.WARNING, "[FAIL] authentication attempt, username: " + user + ", password: " + password);
+
+				return result;
 			}
 		};
 	}

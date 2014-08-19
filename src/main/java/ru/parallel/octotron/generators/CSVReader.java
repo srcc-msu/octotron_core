@@ -8,6 +8,7 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.impl.ModelList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -80,4 +81,13 @@ public final class CSVReader
 			reader.close();
 		}
 	}
+
+	public static <T extends ModelEntity> void Declare(T object, String file_name)
+		throws ExceptionParseError, IOException
+	{
+		ModelList list = new ModelList();
+		list.add(object);
+		Declare(list, file_name);
+	}
+
 }

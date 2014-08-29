@@ -155,7 +155,7 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 		Class<?> my_class = GetValue().getClass();
 
 		if(my_class.equals(Double.class))
-			return GetDouble() > (Double)new_value;
+			return GetDouble() > (Double)new_value + EPSILON;
 		else if(my_class.equals(Long.class))
 			return GetLong() > (Long)new_value;
 		else
@@ -171,7 +171,7 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 		Class<?> my_class = GetValue().getClass();
 
 		if(my_class.equals(Double.class))
-			return GetDouble() < (Double)new_value;
+			return GetDouble() < (Double)new_value - EPSILON;
 		else if(my_class.equals(Long.class))
 			return GetLong() < (Long)new_value;
 		else

@@ -454,4 +454,25 @@ public class ComputeTests
 		assertEquals(66, rule1.Compute(obj));
 		assertEquals(50, rule2.Compute(obj));
 	}
+
+	@Test
+	public void TestInterval()
+	{
+		// d1 = 0.0
+		// l1 = 2
+
+		assertEquals(0, new Interval("test", "d1", 0.5, 2.0).Compute(obj));
+		assertEquals(1, new Interval("test", "d1", -1.5).Compute(obj));
+		assertEquals(1, new Interval("test", "d1", -0.5, 2.0).Compute(obj));
+		assertEquals(1, new Interval("test", "d1", 0.0, 2.0).Compute(obj));
+		assertEquals(2, new Interval("test", "d1", -0.5, 0.0, 2.0).Compute(obj));
+		assertEquals(2, new Interval("test", "d1", -1.5, -0.5, 2.0).Compute(obj));
+
+		assertEquals(0, new Interval("test", "l1", 4).Compute(obj));
+		assertEquals(0, new Interval("test", "l1", 4, 5).Compute(obj));
+		assertEquals(1, new Interval("test", "l1", 2).Compute(obj));
+		assertEquals(1, new Interval("test", "l1", 2, 4).Compute(obj));
+		assertEquals(2, new Interval("test", "l1", 1, 2, 4).Compute(obj));
+		assertEquals(2, new Interval("test", "l1", 1, 2).Compute(obj));
+	}
 }

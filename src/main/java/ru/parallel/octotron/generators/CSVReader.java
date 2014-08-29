@@ -89,5 +89,4 @@ public final class CSVReader
 		list.add(object);
 		Declare(list, file_name);
 	}
-
 }

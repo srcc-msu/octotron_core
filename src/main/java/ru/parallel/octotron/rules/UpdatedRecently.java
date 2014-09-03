@@ -43,7 +43,10 @@ public class UpdatedRecently extends OctoRule
 		if(!attr.IsValid() || attr.GetCTime() == 0)
 			return GetDefaultValue();
 
-		return JavaUtils.GetTimestamp() - attr.GetATime() < threshold;
+		long update_time = attr.GetATime();
+		long cur_time = JavaUtils.GetTimestamp();
+
+		return cur_time - update_time < threshold;
 	}
 
 	@Override

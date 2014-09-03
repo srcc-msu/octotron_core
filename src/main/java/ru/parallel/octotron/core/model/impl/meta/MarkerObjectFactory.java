@@ -6,6 +6,10 @@ import ru.parallel.octotron.neo4j.impl.Marker;
 
 public class MarkerObjectFactory extends MetaObjectFactory<MarkerObject, Marker>
 {
+	private MarkerObjectFactory() { super(); }
+
+	public static final MarkerObjectFactory INSTANCE = new MarkerObjectFactory();
+
 	@Override
 	protected MarkerObject CreateInstance(GraphObject meta_object)
 	{

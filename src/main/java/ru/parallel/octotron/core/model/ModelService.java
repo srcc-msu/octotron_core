@@ -16,7 +16,7 @@ public abstract class ModelService
 		{
 			for(VaryingAttribute attribute : object.GetVaryings())
 			{
-				for(ModelAttribute dep : attribute.GetRule().GetDependency(object))
+				for(IMetaAttribute dep : attribute.GetRule().GetDependency(object))
 				{
 					dep.AddDependant(attribute);
 				}

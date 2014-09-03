@@ -6,22 +6,24 @@
 
 package ru.parallel.octotron.core.model.impl.attribute;
 
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.neo4j.impl.Marker;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class ConstantAttribute extends ModelAttribute
+public class ConstantAttribute extends ModelAttribute implements IMetaAttribute
 {
-	public ConstantAttribute(ModelEntity parent, String name)
+	public ConstantAttribute(ModelEntity parent, GraphAttribute attribute)
 	{
-		super(parent, name);
+		super(parent, attribute);
 	}
 
 	@Override
@@ -37,6 +39,36 @@ public class ConstantAttribute extends ModelAttribute
 	public EAttributeType GetType()
 	{
 		return EAttributeType.CONSTANT;
+	}
+
+	@Override
+	public Object GetLastValue()
+	{
+		return GetValue();
+	}
+
+	@Override
+	public long GetCTime()
+	{
+		return 0;
+	}
+
+	@Override
+	public long GetATime()
+	{
+		return 0;
+	}
+
+	@Override
+	public double GetSpeed()
+	{
+		return 0.0;
+	}
+
+	@Override
+	public boolean IsValid()
+	{
+		return true;
 	}
 
 	public void SetValid()

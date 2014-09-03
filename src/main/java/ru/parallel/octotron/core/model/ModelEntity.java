@@ -1,12 +1,14 @@
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
-import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.model.impl.meta.SensorObject;
@@ -15,9 +17,6 @@ import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObjectFactory;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Marker;
 
 import java.util.LinkedList;
@@ -39,15 +38,14 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 	public SensorAttribute DeclareSensor(SimpleAttribute attribute)
 	{
-		GetBaseEntity().DeclareAttribute(attribute.GetName(), attribute.GetValue());
-		SensorObject meta = new SensorObjectFactory().Create(GetBaseEntity(), attribute);
-		return new SensorAttribute(this, meta, attribute.GetName());
+		GraphAttribute graph_attribute = GetBaseEntity().DeclareAttribute(attribute.GetName(), attribute.GetValue());
+		SensorObject meta = SensorObjectFactory.INSTANCE.Create(GetBaseEntity(), attribute);
+		return new SensorAttribute(this, graph_attribute, meta);
 	}
 
 	public SensorAttribute GetSensor(String name)
 	{
-		return new SensorAttribute(this
-			, new SensorObjectFactory().Obtain(GetBaseEntity(), name), name);
+		return GetAttribute(name).ToSensor();
 	}
 
 	public void DeclareSensors(List<SimpleAttribute> attributes)
@@ -65,13 +63,13 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 	public ConstantAttribute DeclareConstant(String name, Object value)
 	{
-		GetBaseEntity().DeclareAttribute(name, value);
-		return new ConstantAttribute(this, name);
+		GraphAttribute graph_attribute = GetBaseEntity().DeclareAttribute(name, value);
+		return new ConstantAttribute(this, graph_attribute);
 	}
 
 	public ConstantAttribute GetConstant(String name)
 	{
-		return new ConstantAttribute(this, name);
+		return GetAttribute(name).ToConstant();
 	}
 
 	public void DeclareConstants(List<SimpleAttribute> attributes)
@@ -84,10 +82,10 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 	public VaryingAttribute DeclareVarying(OctoRule rule)
 	{
-		GetBaseEntity().DeclareAttribute(rule.GetName(), rule.GetDefaultValue());
-		VaryingObject meta = new VaryingObjectFactory().Create(GetBaseEntity(), rule);
+		GraphAttribute graph_attribute = GetBaseEntity().DeclareAttribute(rule.GetName(), rule.GetDefaultValue());
+		VaryingObject meta = VaryingObjectFactory.INSTANCE.Create(GetBaseEntity(), rule);
 
-		return new VaryingAttribute(this, meta, rule.GetName());
+		return new VaryingAttribute(this, graph_attribute, meta);
 	}
 
 	public void DeclareVaryings(List<OctoRule> rules)
@@ -100,31 +98,14 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 	public VaryingAttribute GetVarying(String name)
 	{
-		return new VaryingAttribute(this
-			, new VaryingObjectFactory().Obtain(GetBaseEntity(), name), name);
+		return GetAttribute(name).ToVarying();
 	}
 
 // -----------------------------
 
-	@Override
 	public ModelAttribute GetAttribute(String name)
 	{
-		VaryingObject derived_object
-			= new VaryingObjectFactory().TryObtain(GetBaseEntity(), name);
-
-		if(derived_object != null)
-			return new VaryingAttribute(this, derived_object, name);
-
-		SensorObject sensor_object
-			= new SensorObjectFactory().TryObtain(GetBaseEntity(), name);
-
-		if(sensor_object != null)
-			return new SensorAttribute(this, sensor_object, name);
-
-		if(GetBaseEntity().TestAttribute(name))
-			return new ConstantAttribute(this, name);
-
-		throw new ExceptionModelFail("attribute not found: " + name);
+		return new ModelAttribute(this, GetBaseEntity().GetAttribute(name));
 	}
 
 	@Override
@@ -134,7 +115,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 		for(GraphAttribute attribute : GetBaseEntity().GetAttributes())
 		{
-			attributes.add(GetAttribute(attribute.GetName()));
+			attributes.add(new ModelAttribute(this, attribute));
 		}
 
 		return attributes;
@@ -142,39 +123,38 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 	public AttributeList<ConstantAttribute> GetConstants()
 	{
-		AttributeList<ModelAttribute> attributes = GetAttributes();
-		AttributeList<ConstantAttribute> filtered = new AttributeList<>();
-
-		for(ModelAttribute attribute : attributes)
-			if(attribute.GetType() == EAttributeType.CONSTANT)
-				filtered.add((ConstantAttribute)attribute);
-
-		return filtered;
+		AttributeList<ConstantAttribute> attributes = new AttributeList<>();
+		throw new ExceptionModelFail("NIY");
 	}
 
 	public AttributeList<SensorAttribute> GetSensors()
 	{
-		AttributeList<ModelAttribute> attributes = GetAttributes();
-		AttributeList<SensorAttribute> filtered = new AttributeList<>();
-
-		for(ModelAttribute attribute : attributes)
-			if(attribute.GetType() == EAttributeType.SENSOR)
-				filtered.add((SensorAttribute)attribute);
-
-		return filtered;
+		AttributeList<SensorAttribute> attributes = new AttributeList<>();
+		throw new ExceptionModelFail("NIY");
 	}
 
 	public AttributeList<VaryingAttribute> GetVaryings()
 	{
-		AttributeList<ModelAttribute> attributes = GetAttributes();
-		AttributeList<VaryingAttribute> filtered = new AttributeList<>();
-
-		for(ModelAttribute attribute : attributes)
-			if(attribute.GetType() == EAttributeType.VARYING)
-				filtered.add((VaryingAttribute)attribute);
-
-		return filtered;
+		AttributeList<VaryingAttribute> attributes = new AttributeList<>();
+		throw new ExceptionModelFail("NIY");
 	}
+
+	public IMetaAttribute GetMetaAttribute(String name)
+	{
+		return GetAttribute(name).ToMeta();
+	}
+
+	public AttributeList<IMetaAttribute> GetMetaAttributes()
+	{
+		AttributeList<IMetaAttribute> result = new AttributeList<>();
+
+		for(ModelAttribute attribute : GetAttributes())
+			result.add(attribute.ToMeta());
+
+		return result;
+	}
+
+// -----------------------------
 
 	@Override
 	public boolean TestAttribute(String name)
@@ -200,13 +180,13 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 	public long AddMarker(OctoReaction reaction, String description, boolean suppress)
 	{
-		return GetAttribute(reaction.GetCheckName())
+		return GetAttribute(reaction.GetCheckName()).ToMeta()
 			.AddMarker(reaction, description, suppress);
 	}
 
 	public void DeleteMarker(String name, long id)
 	{
-		GetAttribute(name).DeleteMarker(id);
+		GetAttribute(name).ToMeta().DeleteMarker(id);
 	}
 
 	public List<Marker> GetMarkers()
@@ -214,7 +194,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		List<Marker> result = new LinkedList<>();
 
 		for(ModelAttribute attribute : GetAttributes())
-			result.addAll(attribute.GetMarkers());
+			result.addAll(attribute.ToMeta().GetMarkers());
 
 		return result;
 	}
@@ -226,7 +206,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		if(!TestAttribute(reaction.GetCheckName()))
 			throw new ExceptionModelFail("could not assign a reaction, attribute is missing: " + reaction.GetCheckName());
 
-		GetAttribute(reaction.GetCheckName())
+		GetAttribute(reaction.GetCheckName()).ToMeta()
 			.AddReaction(reaction);
 	}
 
@@ -235,7 +215,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		List<OctoReaction> result = new LinkedList<>();
 
 		for(ModelAttribute attribute : GetAttributes())
-			result.addAll(attribute.GetReactions());
+			result.addAll(attribute.ToMeta().GetReactions());
 
 		return result;
 	}
@@ -244,7 +224,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 	{
 		List<OctoReaction> result = new LinkedList<>();
 
-		result.addAll(GetAttribute(name).GetReactions());
+		result.addAll(GetAttribute(name).ToMeta().GetReactions());
 
 		return result;
 	}
@@ -265,7 +245,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 		for(ModelAttribute attribute : GetAttributes())
 		{
-			responses.addAll(attribute.GetExecutedReactions());
+			responses.addAll(attribute.ToMeta().GetExecutedReactions());
 		}
 
 		return responses;
@@ -277,7 +257,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 		for(ModelAttribute attribute : GetAttributes())
 		{
-			responses.addAll(attribute.GetReadyReactions());
+			responses.addAll(attribute.ToMeta().GetReadyReactions());
 		}
 
 		return responses;

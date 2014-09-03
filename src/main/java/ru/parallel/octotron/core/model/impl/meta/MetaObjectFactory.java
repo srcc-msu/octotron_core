@@ -14,6 +14,8 @@ import java.util.List;
 // TODO make cache
 public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueName>
 {
+	protected MetaObjectFactory() {}
+
 	protected abstract T CreateInstance(GraphObject meta_object);
 	protected abstract String GetLabel();
 

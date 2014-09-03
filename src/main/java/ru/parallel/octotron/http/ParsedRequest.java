@@ -42,7 +42,7 @@ public class ParsedRequest
 
 			return (RequestResult) operation.Execute(exec_control, params, entity_list);
 		}
-		catch(ExceptionParseError e)
+		catch(Exception e)
 		{
 			String res = "could not execute request: " + e + System.lineSeparator();
 

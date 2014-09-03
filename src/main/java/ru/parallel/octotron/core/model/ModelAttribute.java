@@ -1,22 +1,22 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.model.impl.AttributeDecorator;
-import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
+import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
+import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.core.model.impl.meta.SensorObject;
+import ru.parallel.octotron.core.model.impl.meta.SensorObjectFactory;
+import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
+import ru.parallel.octotron.core.model.impl.meta.VaryingObjectFactory;
 
-import java.util.List;
-
-public abstract class ModelAttribute extends AttributeDecorator
+public class ModelAttribute extends AttributeDecorator
 {
 	protected final ModelEntity parent;
 
-	public ModelAttribute(ModelEntity parent, String name)
+	public ModelAttribute(ModelEntity parent, GraphAttribute attribute)
 	{
-		super(parent.GetBaseEntity().GetAttribute(name));
+		super(attribute);
 		this.parent = parent;
 	}
 
@@ -25,61 +25,35 @@ public abstract class ModelAttribute extends AttributeDecorator
 		return parent;
 	}
 
-	public Object GetLastValue()
+	public ConstantAttribute ToConstant()
 	{
-		return GetValue();
+		return new ConstantAttribute(GetParent(), GetBaseAttribute());
 	}
 
-	protected boolean Update(Object new_value, boolean allow_overwrite)
+	public SensorAttribute ToSensor()
 	{
-		if(ne(new_value) || GetCTime() == 0 || allow_overwrite)
-		{
-			SetValue(new_value);
-			return true;
-		}
-
-		return false;
+		return new SensorAttribute(GetParent(), GetBaseAttribute()
+			, SensorObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
 	}
 
-	public long GetCTime()
+	public VaryingAttribute ToVarying()
 	{
-		return 0L;
-	}
-	public long GetATime()
-	{
-		return 0L;
-	}
-	public double GetSpeed()
-	{
-		return 0.0;
+		return new VaryingAttribute(GetParent(), GetBaseAttribute()
+			, VaryingObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
 	}
 
-	public boolean IsValid()
+	public IMetaAttribute ToMeta()
 	{
-		return true;
+		SensorObject sensor_meta = SensorObjectFactory.INSTANCE.TryObtain(GetParent().GetBaseEntity(), GetName());
+
+		if(sensor_meta != null)
+			return new SensorAttribute(GetParent(), GetBaseAttribute(), sensor_meta);
+
+		VaryingObject varying_meta = VaryingObjectFactory.INSTANCE.TryObtain(GetParent().GetBaseEntity(), GetName());
+
+		if(varying_meta != null)
+			return new VaryingAttribute(GetParent(), GetBaseAttribute(), varying_meta);
+
+		return ToConstant();
 	}
-
-	public abstract void SetValid();
-	public abstract void SetInvalid();
-
-	public abstract EAttributeType GetType();
-
-	public abstract void AddDependant(VaryingAttribute attribute);
-	public abstract AttributeList<VaryingAttribute> GetDependant();
-
-//--------
-
-	public abstract void AddReaction(OctoReaction reaction);
-
-	public abstract List<OctoReaction> GetReactions();
-
-	public abstract List<OctoResponse> GetReadyReactions();
-
-	public abstract List<OctoResponse> GetExecutedReactions();
-
-	public abstract List<Marker> GetMarkers();
-
-	public abstract long AddMarker(OctoReaction reaction, String description, boolean suppress);
-
-	public abstract void DeleteMarker(long id);
 }

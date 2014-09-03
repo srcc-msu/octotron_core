@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AggregateNotMatchCount extends Aggregate
@@ -21,7 +21,7 @@ public class AggregateNotMatchCount extends Aggregate
 	}
 
 	@Override
-	protected Object Accumulate(Object res, ModelAttribute attribute)
+	protected Object Accumulate(Object res, IMetaAttribute attribute)
 	{
 		if(attribute.ne(value))
 			return (Long)res + 1;

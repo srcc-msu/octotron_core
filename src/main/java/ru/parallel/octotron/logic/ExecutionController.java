@@ -8,16 +8,13 @@ package ru.parallel.octotron.logic;
 
 import org.apache.commons.io.FileSystemUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.model.*;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.http.HTTPServer;
 import ru.parallel.octotron.http.ParsedHttpRequest;
@@ -378,7 +375,7 @@ public class ExecutionController
 
 		for(ModelObject obj : list)
 		{
-			for(ModelAttribute attr : obj.GetAttributes())
+			for(IMetaAttribute attr : obj.GetMetaAttributes())
 			{
 				long diff = cur_time - attr.GetATime();
 

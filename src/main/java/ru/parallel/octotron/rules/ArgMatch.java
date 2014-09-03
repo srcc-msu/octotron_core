@@ -6,10 +6,10 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 
 public class ArgMatch extends OctoRule
 {
@@ -25,12 +25,12 @@ public class ArgMatch extends OctoRule
 	}
 
 	@Override
-	public AttributeList<ModelAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<ModelAttribute> result = new AttributeList<>();
+		AttributeList<IMetaAttribute> result = new AttributeList<>();
 
-		result.add(entity.GetAttribute(check_attribute));
-		result.add(entity.GetAttribute(match_attribute));
+		result.add(entity.GetMetaAttribute(check_attribute));
+		result.add(entity.GetMetaAttribute(match_attribute));
 
 		return result;
 	}
@@ -38,7 +38,7 @@ public class ArgMatch extends OctoRule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		ModelAttribute attr = entity.GetAttribute(check_attribute);
+		IMetaAttribute attr = entity.GetMetaAttribute(check_attribute);
 
 		if(!attr.IsValid())
 			return GetDefaultValue();

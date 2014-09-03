@@ -8,10 +8,10 @@ package ru.parallel.octotron.rules;
 
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 
 public class LogicalAnd extends OctoRule
 {
@@ -25,12 +25,12 @@ public class LogicalAnd extends OctoRule
 	}
 
 	@Override
-	public AttributeList<ModelAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<ModelAttribute> result = new AttributeList<>();
+		AttributeList<IMetaAttribute> result = new AttributeList<>();
 
 		for(String attr_name : attributes)
-			result.add(entity.GetAttribute(attr_name));
+			result.add(entity.GetMetaAttribute(attr_name));
 
 		return result;
 	}
@@ -42,7 +42,7 @@ public class LogicalAnd extends OctoRule
 
 		for(String attr_name : attributes)
 		{
-			ModelAttribute attr = entity.GetAttribute(attr_name);
+			IMetaAttribute attr = entity.GetMetaAttribute(attr_name);
 
 			if(attr.IsValid() && attr.GetCTime() != 0)
 				res = res & attr.GetBoolean();

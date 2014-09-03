@@ -6,10 +6,11 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.OctoRule;
 
 public class ToArgPct extends OctoRule
 {
@@ -25,12 +26,12 @@ public class ToArgPct extends OctoRule
 	}
 
 	@Override
-	public AttributeList<ModelAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<ModelAttribute> result = new AttributeList<>();
+		AttributeList<IMetaAttribute> result = new AttributeList<>();
 
-		result.add(entity.GetAttribute(measured_attribute));
-		result.add(entity.GetAttribute(max_value_arg));
+		result.add(entity.GetMetaAttribute(measured_attribute));
+		result.add(entity.GetMetaAttribute(max_value_arg));
 
 		return result;
 	}
@@ -38,7 +39,7 @@ public class ToArgPct extends OctoRule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		ModelAttribute attr = entity.GetAttribute(measured_attribute);
+		IMetaAttribute attr = entity.GetMetaAttribute(measured_attribute);
 		ModelAttribute max_value = entity.GetAttribute(max_value_arg);
 
 		if(!attr.IsValid() || attr.GetCTime() == 0)

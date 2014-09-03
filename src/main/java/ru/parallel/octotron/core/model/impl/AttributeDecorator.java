@@ -3,13 +3,18 @@ package ru.parallel.octotron.core.model.impl;
 import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 
-public class AttributeDecorator implements IAttribute
+public abstract class AttributeDecorator implements IAttribute
 {
 	private final GraphAttribute base;
 
 	public AttributeDecorator(GraphAttribute base)
 	{
 		this.base = base;
+	}
+
+	protected GraphAttribute GetBaseAttribute()
+	{
+		return base;
 	}
 
 // decorated staff

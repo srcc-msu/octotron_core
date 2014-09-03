@@ -7,13 +7,13 @@
 package ru.parallel.octotron.rules;
 
 import org.apache.commons.lang3.ArrayUtils;
+import ru.parallel.octotron.core.OctoObjectRule;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.OctoObjectRule;
 
 public abstract class Aggregate extends OctoObjectRule
 {
@@ -60,9 +60,9 @@ public abstract class Aggregate extends OctoObjectRule
 	}
 
 	@Override
-	public final AttributeList<ModelAttribute> GetDependency(ModelObject object)
+	public final AttributeList<IMetaAttribute> GetDependency(ModelObject object)
 	{
-		AttributeList<ModelAttribute> result = new AttributeList<>();
+		AttributeList<IMetaAttribute> result = new AttributeList<>();
 
 		ModelObjectList candidates = GetCandidates(object);
 
@@ -72,7 +72,7 @@ public abstract class Aggregate extends OctoObjectRule
 				if(!obj.TestAttribute(tmp))
 					continue;
 
-				result.add(obj.GetAttribute(tmp));
+				result.add(obj.GetMetaAttribute(tmp));
 			}
 
 		return result;
@@ -91,7 +91,7 @@ public abstract class Aggregate extends OctoObjectRule
 				if(!obj.TestAttribute(tmp))
 					continue;
 
-				ModelAttribute attribute = obj.GetAttribute(tmp);
+				IMetaAttribute attribute = obj.GetMetaAttribute(tmp);
 				if(attribute.IsValid() && attribute.GetCTime() != 0)
 					res = Accumulate(res, attribute);
 			}
@@ -99,5 +99,5 @@ public abstract class Aggregate extends OctoObjectRule
 		return res;
 	}
 
-	protected abstract Object Accumulate(Object res, ModelAttribute attribute);
+	protected abstract Object Accumulate(Object res, IMetaAttribute attribute);
 }

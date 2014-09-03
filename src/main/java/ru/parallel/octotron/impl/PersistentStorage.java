@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.impl;
 
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 
 public final class PersistentStorage
 {

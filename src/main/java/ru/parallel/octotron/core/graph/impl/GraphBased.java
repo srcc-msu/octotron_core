@@ -11,7 +11,6 @@ public abstract class GraphBased //implements IEntity
 		this.base = base;
 	}
 
-//	@Override
 	public final boolean equals(Object object)
 	{
 		if (!(object instanceof GraphBased))
@@ -35,37 +34,6 @@ public abstract class GraphBased //implements IEntity
 		return (GraphObject)base;
 	}
 
-	/*@Override
-	public boolean TestAttribute(String name)
-	{
-		return base.TestAttribute(name);
-	}
-
-	@Override
-	public boolean TestAttribute(String name, Object value)
-	{
-		return base.TestAttribute(name, value);
-	}
-
-	@Override
-	public boolean TestAttribute(SimpleAttribute attribute)
-	{
-		return base.TestAttribute(attribute);
-	}
-
-	@Override
-	public IAttribute GetAttribute(String name)
-	{
-		return base.GetAttribute(name);
-	}
-
-	@Override
-	public AttributeList<GraphAttribute> GetAttributes()
-	{
-		return base.GetAttributes();
-	}
-*/
-//	@Override
 	public Uid GetUID()
 	{
 		return base.GetUID();

@@ -4,7 +4,7 @@ import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphLinkList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphObjectList;
-import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.ModelLinkList;
@@ -83,7 +83,7 @@ public abstract class ListConverter
 		return new_list;
 	}
 
-	public static <T extends ModelAttribute> AttributeList<VaryingAttribute> GetDependant(AttributeList<T> attributes)
+	public static <T extends IMetaAttribute> AttributeList<VaryingAttribute> GetDependant(AttributeList<T> attributes)
 	{
 		AttributeList<VaryingAttribute> result = new AttributeList<>();
 

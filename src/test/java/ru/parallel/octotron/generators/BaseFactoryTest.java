@@ -120,12 +120,12 @@ public class BaseFactoryTest
 		ModelLink link = f2.Constants(new SimpleAttribute("type", "test"))
 			.OneToOne(f1.Create(), f1.Create());
 
-		assertEquals(0, obj.GetAttribute("test1").GetReactions().size());
-		assertEquals(1, obj.GetAttribute("test2").GetReactions().size());
-		assertEquals(2, obj.GetAttribute("test3").GetReactions().size());
+		assertEquals(0, obj.GetMetaAttribute("test1").GetReactions().size());
+		assertEquals(1, obj.GetMetaAttribute("test2").GetReactions().size());
+		assertEquals(2, obj.GetMetaAttribute("test3").GetReactions().size());
 
-		assertEquals(0, link.GetAttribute("test1").GetReactions().size());
-		assertEquals(1, link.GetAttribute("test2").GetReactions().size());
-		assertEquals(2, link.GetAttribute("test3").GetReactions().size());
+		assertEquals(0, link.GetMetaAttribute("test1").GetReactions().size());
+		assertEquals(1, link.GetMetaAttribute("test2").GetReactions().size());
+		assertEquals(2, link.GetMetaAttribute("test3").GetReactions().size());
 	}
 }

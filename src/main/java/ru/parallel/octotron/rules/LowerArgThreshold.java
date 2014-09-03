@@ -6,10 +6,10 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 
 public class LowerArgThreshold extends OctoRule
 {
@@ -25,12 +25,12 @@ public class LowerArgThreshold extends OctoRule
 	}
 
 	@Override
-	public AttributeList<ModelAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<ModelAttribute> result = new AttributeList<>();
+		AttributeList<IMetaAttribute> result = new AttributeList<>();
 
-		result.add(entity.GetAttribute(param));
-		result.add(entity.GetAttribute(arg_threshold));
+		result.add(entity.GetMetaAttribute(param));
+		result.add(entity.GetMetaAttribute(arg_threshold));
 
 		return result;
 	}
@@ -38,7 +38,7 @@ public class LowerArgThreshold extends OctoRule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		ModelAttribute attr = entity.GetAttribute(param);
+		IMetaAttribute attr = entity.GetMetaAttribute(param);
 
 		if(!attr.IsValid())
 			return GetDefaultValue();

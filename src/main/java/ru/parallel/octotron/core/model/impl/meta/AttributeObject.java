@@ -1,10 +1,11 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
+import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.OctoReaction;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -43,9 +44,9 @@ public abstract class AttributeObject extends MetaObject
 		return GetAttribute(name_const).GetString();
 	}
 
-	public ModelAttribute GetParentAttribute()
+	public IMetaAttribute GetParentAttribute()
 	{
-		return GetAttributeObject().GetAttribute(GetName());
+		return GetAttributeObject().GetMetaAttribute(GetName());
 	}
 
 	public boolean GetValid()
@@ -83,7 +84,7 @@ public abstract class AttributeObject extends MetaObject
 	public List<OctoReaction> GetReactions()
 	{
 		List<ReactionObject> objects
-			= new ReactionObjectFactory().ObtainAll(GetBaseObject());
+			= ReactionObjectFactory.INSTANCE.ObtainAll(GetBaseObject());
 
 		List<OctoReaction> reactions = new LinkedList<>();
 
@@ -96,7 +97,7 @@ public abstract class AttributeObject extends MetaObject
 	@Nullable
 	public HistoryObject GetLast()
 	{
-		List<HistoryObject> objects = new HistoryObjectFactory().ObtainAll(GetBaseObject());
+		List<HistoryObject> objects = HistoryObjectFactory.INSTANCE.ObtainAll(GetBaseObject());
 
 		if(objects.size() == 0)
 			return null;
@@ -108,10 +109,10 @@ public abstract class AttributeObject extends MetaObject
 
 	public void SetLast(Object value, long ctime)
 	{
-		List<HistoryObject> objects = new HistoryObjectFactory().ObtainAll(GetBaseObject());
+		List<HistoryObject> objects = HistoryObjectFactory.INSTANCE.ObtainAll(GetBaseObject());
 
 		if(objects.size() == 0)
-			new HistoryObjectFactory().Create(GetBaseObject(), new HistoryObject.OldPair(value, ctime));
+			HistoryObjectFactory.INSTANCE.Create(GetBaseObject(), new HistoryObject.OldPair(value, ctime));
 		else if(objects.size() == 1)
 			objects.get(0).Set(value, ctime);
 		else

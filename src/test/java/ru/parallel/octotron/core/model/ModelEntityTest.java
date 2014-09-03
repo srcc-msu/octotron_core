@@ -148,7 +148,7 @@ public class ModelEntityTest
 		}
 
 		@Override
-		public AttributeList<ModelAttribute> GetDependency(ModelEntity entity)
+		public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
 		{
 			return new AttributeList<>();
 		}

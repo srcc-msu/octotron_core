@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -103,7 +104,7 @@ public class ComputeTests
 		entities = entities.append(outs);
 
 		for(ModelEntity entity : entities)
-			for(ModelAttribute attr : entity.GetAttributes())
+			for(IMetaAttribute attr : entity.GetMetaAttributes())
 				if(attr.GetType() == EAttributeType.SENSOR)
 					((SensorAttribute)attr).Update(attr.GetValue());
 	}

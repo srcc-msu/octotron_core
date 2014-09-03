@@ -6,15 +6,16 @@
 
 package ru.parallel.octotron.core.model.impl.attribute;
 
+import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
-import ru.parallel.octotron.core.OctoRule;
 
 public class VaryingAttribute extends AbstractVaryingAttribute<VaryingObject>
 {
-	public VaryingAttribute(ModelEntity parent, VaryingObject meta, String name)
+	public VaryingAttribute(ModelEntity parent, GraphAttribute attribute, VaryingObject meta)
 	{
-		super(parent, meta, name);
+		super(parent, attribute, meta);
 	}
 
 	@Override

@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core;
 
-import ru.parallel.octotron.core.model.ModelAttribute;
+import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.UniqueName;
 import ru.parallel.octotron.impl.PersistentStorage;
@@ -110,7 +110,7 @@ public class OctoReaction implements Serializable, UniqueName
  * */
 	public boolean ReactionNeeded(ModelEntity entity)
 	{
-		ModelAttribute attr = entity.GetAttribute(check_name);
+		IMetaAttribute attr = entity.GetMetaAttribute(check_name);
 
 		if(!attr.IsValid())
 			return false;

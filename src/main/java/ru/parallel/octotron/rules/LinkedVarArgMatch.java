@@ -6,10 +6,10 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.OctoLinkRule;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.ModelLink;
 
 public class LinkedVarArgMatch extends OctoLinkRule
 {
@@ -23,12 +23,12 @@ public class LinkedVarArgMatch extends OctoLinkRule
 	}
 
 	@Override
-	public AttributeList<ModelAttribute> GetDependency(ModelLink link)
+	public AttributeList<IMetaAttribute> GetDependency(ModelLink link)
 	{
-		AttributeList<ModelAttribute> result = new AttributeList<>();
+		AttributeList<IMetaAttribute> result = new AttributeList<>();
 
-		result.add(link.Target().GetAttribute(check_attribute));
-		result.add(link.Source().GetAttribute(check_attribute));
+		result.add(link.Target().GetMetaAttribute(check_attribute));
+		result.add(link.Source().GetMetaAttribute(check_attribute));
 
 		return result;
 	}
@@ -36,8 +36,8 @@ public class LinkedVarArgMatch extends OctoLinkRule
 	@Override
 	public Object Compute(ModelLink link)
 	{
-		ModelAttribute target_attr = link.Target().GetAttribute(check_attribute);
-		ModelAttribute source_attr = link.Source().GetAttribute(check_attribute);
+		IMetaAttribute target_attr = link.Target().GetMetaAttribute(check_attribute);
+		IMetaAttribute source_attr = link.Source().GetMetaAttribute(check_attribute);
 
 		if(!target_attr.IsValid())
 			return GetDefaultValue();

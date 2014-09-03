@@ -5,6 +5,10 @@ import ru.parallel.octotron.core.primitive.EObjectLabels;
 
 public class HistoryObjectFactory extends MetaObjectFactory<HistoryObject, HistoryObject.OldPair>
 {
+	private HistoryObjectFactory() { super(); }
+
+	public static final HistoryObjectFactory INSTANCE = new HistoryObjectFactory();
+
 	@Override
 	protected HistoryObject CreateInstance(GraphObject meta_object)
 	{

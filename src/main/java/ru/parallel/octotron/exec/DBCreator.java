@@ -7,8 +7,6 @@
 package ru.parallel.octotron.exec;
 
 import ru.parallel.octotron.core.graph.impl.*;
-import ru.parallel.octotron.core.model.ModelLink;
-import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.impl.ModelLinkList;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;

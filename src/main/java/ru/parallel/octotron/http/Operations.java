@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.http;
 
+import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.collections.AutoFormat;
 import ru.parallel.octotron.core.collections.AutoFormat.E_FORMAT_PARAM;
 import ru.parallel.octotron.core.collections.EntityList;
@@ -17,7 +18,6 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.impl.PersistentStorage;
 import ru.parallel.octotron.logic.ExecutionController;
@@ -515,7 +515,7 @@ public abstract class Operations
 			String name = params.get("name");
 
 			for(ModelEntity entity : objects)
-				entity.GetAttribute(name).SetValid();
+				entity.GetMetaAttribute(name).SetValid();
 
 			int count = objects.size();
 			String data = "";
@@ -545,7 +545,7 @@ public abstract class Operations
 			String name = params.get("name");
 
 			for(ModelEntity entity : objects)
-				entity.GetAttribute(name).SetInvalid();
+				entity.GetMetaAttribute(name).SetInvalid();
 
 			int count = objects.size();
 			String data = "";

@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.Arrays;
 import java.util.LinkedList;

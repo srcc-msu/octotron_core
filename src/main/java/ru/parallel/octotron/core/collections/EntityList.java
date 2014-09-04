@@ -164,6 +164,10 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 		}
 	}
 
+	/**
+	 * the for loop is inlined here for speed, profiling shows that
+	 * CheckOp would be more convenient here, but there is no way to do it pretty and fast
+	 * */
 	protected List<T> InnerFilter(String name, Object value, EQueryType type)
 	{
 		if(name == null)
@@ -174,13 +178,85 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 
 		List<T> new_list = new LinkedList<>();
 
-		for(T obj : list)
+		switch(type)
+		{
+			case EQ:
+			{
+				for (T obj : list)
+				{
+					if (!obj.TestAttribute(name))
+						continue;
+					if (obj.GetAttribute(name).eq(value))
+						new_list.add(obj);
+				}
+				return new_list;
+			}
+			case NE:
+			{
+				for (T obj : list)
+				{
+					if (!obj.TestAttribute(name))
+						continue;
+					if (obj.GetAttribute(name).ne(value))
+						new_list.add(obj);
+				}
+				return new_list;
+			}
+			case GE:
+			{
+				for (T obj : list)
+				{
+					if (!obj.TestAttribute(name))
+						continue;
+					if (obj.GetAttribute(name).ge(value))
+						new_list.add(obj);
+				}
+				return new_list;
+			}
+			case GT:
+			{
+				for (T obj : list)
+				{
+					if (!obj.TestAttribute(name))
+						continue;
+					if (obj.GetAttribute(name).gt(value))
+						new_list.add(obj);
+				}
+				return new_list;
+			}
+			case LE:
+			{
+				for (T obj : list)
+				{
+					if (!obj.TestAttribute(name))
+						continue;
+					if (obj.GetAttribute(name).le(value))
+						new_list.add(obj);
+				}
+				return new_list;
+			}
+			case LT:
+			{
+				for (T obj : list)
+				{
+					if (!obj.TestAttribute(name))
+						continue;
+					if (obj.GetAttribute(name).lt(value))
+						new_list.add(obj);
+				}
+				return new_list;
+			}
+			case NONE:
+			default:
+				throw new ExceptionModelFail("unsupported operation for list filter: " + type);
+		}
+/*		for(T obj : list)
 		{
 			if(CheckOp(obj, name, value, type))
 				new_list.add(obj);
 		}
 
-		return new_list;
+		return new_list;*/
 	}
 
 	protected List<T> InnerFilter(String name)

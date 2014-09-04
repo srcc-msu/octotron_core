@@ -361,29 +361,6 @@ public class ComputeTests
 	}
 
 	@Test
-	public void TestUpdatedRecently() throws Exception
-	{
-		SensorAttribute attr = obj.DeclareSensor("test_update", 0);
-
-		UpdatedRecently rule = new UpdatedRecently("test", "test_update", 1);
-
-		assertEquals(false, rule.Compute(obj));
-
-		attr.Update(0);
-		assertEquals(true, rule.Compute(obj));
-
-		Thread.sleep(2000);
-		assertEquals(false, rule.Compute(obj));
-		attr.Update(0);
-		assertEquals(true, rule.Compute(obj));
-
-		Thread.sleep(3000);
-		assertEquals(false, rule.Compute(obj));
-		attr.Update(0);
-		assertEquals(true, rule.Compute(obj));
-	}
-
-	@Test
 	public void TestUpperArgThreshold()
 	{
 		UpperArgThreshold rule1 = new UpperArgThreshold("test", "l1", "l2");

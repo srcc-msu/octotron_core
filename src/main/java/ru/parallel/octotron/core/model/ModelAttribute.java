@@ -44,15 +44,13 @@ public class ModelAttribute extends AttributeDecorator
 
 	public IMetaAttribute ToMeta()
 	{
-		SensorObject sensor_meta = SensorObjectFactory.INSTANCE.TryObtain(GetParent().GetBaseEntity(), GetName());
+		if(SensorObjectFactory.INSTANCE.Test(GetParent().GetBaseEntity(), GetName()))
+			return new SensorAttribute(GetParent(), GetBaseAttribute()
+				, SensorObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
 
-		if(sensor_meta != null)
-			return new SensorAttribute(GetParent(), GetBaseAttribute(), sensor_meta);
-
-		VaryingObject varying_meta = VaryingObjectFactory.INSTANCE.TryObtain(GetParent().GetBaseEntity(), GetName());
-
-		if(varying_meta != null)
-			return new VaryingAttribute(GetParent(), GetBaseAttribute(), varying_meta);
+		if(VaryingObjectFactory.INSTANCE.Test(GetParent().GetBaseEntity(), GetName()))
+			return new VaryingAttribute(GetParent(), GetBaseAttribute()
+				, VaryingObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
 
 		return ToConstant();
 	}

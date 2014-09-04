@@ -1,17 +1,14 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
-import ru.parallel.octotron.core.collections.ListConverter;
 import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.UniqueName;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
-
-// TODO make cache
 public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueName>
 {
 	protected MetaObjectFactory() {}
@@ -19,62 +16,18 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 	protected abstract T CreateInstance(GraphObject meta_object);
 	protected abstract String GetLabel();
 
-	public T Create(GraphEntity parent, V object)
+// ----------------
+// create
+// ----------------
+
+	public final T Create(GraphEntity parent, V object)
 	{
-		GraphObject meta_object
-			= Create(parent, object.GetUniqName(), GetLabel());
+		GraphObject meta_object = Create(parent, object.GetUniqName(), GetLabel());
 
 		T derived_object = CreateInstance(meta_object);
 
 		derived_object.Init(object);
 		return derived_object;
-	}
-
-	public List<T> ObtainAll(GraphEntity parent)
-	{
-		GraphObjectList candidates
-			= Candidates(parent, GetLabel());
-
-		List<T> result = new LinkedList<>();
-
-		for(GraphObject object : candidates)
-		{
-			result.add(CreateInstance(object));
-		}
-
-		return result;
-	}
-
-	public List<T> ObtainAll(GraphEntity parent, String name)
-	{
-		GraphObjectList candidates
-			= Candidates(parent, name, GetLabel());
-
-		List<T> result = new LinkedList<>();
-
-		for(GraphObject object : candidates)
-		{
-			result.add(CreateInstance(object));
-		}
-
-		return result;
-	}
-
-	public T Obtain(GraphEntity parent, String name)
-	{
-		return CreateInstance(Candidates(parent, name, GetLabel()).Only());
-	}
-
-	@Nullable
-	public T TryObtain(GraphEntity parent, String name)
-	{
-		List<T> meta_objects
-			= ObtainAll(parent, name);
-
-		if(meta_objects.size() == 1)
-			return meta_objects.get(0);
-
-		return null;
 	}
 
 	private static GraphObject Create(GraphEntity parent, String name, String label)
@@ -87,76 +40,176 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 			throw new ExceptionModelFail("wtf"); // TODO
 	}
 
-	private static GraphObjectList Candidates(GraphEntity parent, String label)
-	{
-		if(parent.GetUID().getType() == EEntityType.OBJECT)
-			return GetObjectMetas((GraphObject) parent, label);
-		else if(parent.GetUID().getType() == EEntityType.LINK)
-			return GetLinkMetas((GraphLink) parent, label);
-		else
-			throw new ExceptionModelFail("wtf"); // TODO
-	}
+	private static final SimpleAttribute meta_const = new SimpleAttribute("type", "_meta");
+	private static final String owner_const = "_owner_AID";
+	private static final String name_const = "_owner_name";
 
-	private static GraphObjectList Candidates(GraphEntity parent, String name, String label)
-	{
-		if(parent.GetUID().getType() == EEntityType.OBJECT)
-			return GetObjectMetas((GraphObject) parent, name, label);
-		else if(parent.GetUID().getType() == EEntityType.LINK)
-			return GetLinkMetas((GraphLink) parent, name, label);
-		else
-			throw new ExceptionModelFail("wtf"); // TODO
-	}
-
-	private static final String meta_const = "_meta";
+	private static final SimpleAttribute object_type_const = new SimpleAttribute("owner_type", "object");
+	private static final SimpleAttribute link_type_const = new SimpleAttribute("owner_type", "link");
 
 	private static GraphObject CreateObjectMeta(GraphObject parent, String name, String label)
 	{
 		GraphObject object = GraphService.Get().AddObject();
 		object.AddLabel(label);
+		object.DeclareAttribute(object_type_const);
+		object.DeclareAttribute(owner_const, parent.GetAttribute("AID").GetLong());
+		object.DeclareAttribute(name_const, name);
 
-		GraphLink link = GraphService.Get().AddLink(parent, object, label);
-		link.DeclareAttribute(meta_const, name);
+		GraphLink link = GraphService.Get().AddLink(parent, object, meta_const);
+		link.DeclareAttribute(meta_const);
+		link.DeclareAttribute(label, name);
 
 		return object;
 	}
-
-	private static GraphObjectList GetObjectMetas(GraphObject parent, String name, String label)
-	{
-		return ListConverter.FilterLabel(parent.GetOutNeighbors(meta_const, name), label);
-	}
-
-	private static GraphObjectList GetObjectMetas(GraphObject parent, String label)
-	{
-		return ListConverter.FilterLabel(parent.GetOutNeighbors(), label);
-	}
-
-	private static final String owner_const = "_owner_AID";
-	private static final String name_const = "_owner_name";
 
 	private static GraphObject CreateLinkMeta(GraphLink parent, String name, String label)
 	{
 		GraphObject object = GraphService.Get().AddObject();
 		object.AddLabel(label);
-
+		object.DeclareAttribute(link_type_const);
 		object.DeclareAttribute(owner_const, parent.GetAttribute("AID").GetLong());
 		object.DeclareAttribute(name_const, name);
 
 		return object;
 	}
 
-	private static GraphObjectList GetLinkMetas(GraphLink parent, String name, String label)
+// ----------------
+// test
+// ----------------
+
+	public final boolean Test(GraphEntity parent, String name)
+	{
+		if(parent.GetUID().getType() == EEntityType.OBJECT)
+			return Test((GraphObject) parent, name, GetLabel());
+		else if(parent.GetUID().getType() == EEntityType.LINK)
+			return Test((GraphLink) parent, name, GetLabel());
+		else
+			throw new ExceptionModelFail("wtf"); // TODO
+	}
+
+	private static boolean Test(GraphObject parent, String name, String label)
+	{
+		GraphLinkList links = parent.GetOutLinks().Filter(label, name);
+
+		if(links.size() > 1)
+			throw new ExceptionModelFail("ambiguous meta objects for attribute: " + name);
+		else if(links.size() == 1)
+			return true;
+
+		return false;
+	}
+
+	private static boolean Test(GraphLink parent, String name, String label)
+	{
+		long AID = parent.GetAttribute("AID").GetLong();
+
+		GraphObjectList objects = GraphService.Get().GetAllLabeledNodes(label)
+			.Filter(owner_const, AID).Filter(name_const, name);
+
+		if(objects.size() > 1)
+			throw new ExceptionModelFail("ambiguous meta objects for attribute: " + name);
+		else if(objects.size() == 1)
+			return true;
+
+		return false;
+	}
+
+// ----------------
+// obtain
+// ----------------
+
+	public final T Obtain(GraphEntity parent, String name)
+	{
+		return CreateInstance(Obtain(parent, name, GetLabel()));
+	}
+
+	private static GraphObject Obtain(GraphEntity parent, String name, String label)
+	{
+		if(parent.GetUID().getType() == EEntityType.OBJECT)
+			return Obtain((GraphObject) parent, name, label);
+		else if(parent.GetUID().getType() == EEntityType.LINK)
+			return Obtain((GraphLink) parent, name, label);
+		else
+			throw new ExceptionModelFail("wtf"); // TODO
+	}
+
+
+	private static GraphObject Obtain(GraphObject parent, String name, String label)
+	{
+		return parent.GetOutLinks().Filter(label, name).Only().Target();
+	}
+
+	private static GraphObject Obtain(GraphLink parent, String name, String label)
 	{
 		long AID = parent.GetAttribute("AID").GetLong();
 
 		return GraphService.Get().GetAllLabeledNodes(label)
-			.Filter(owner_const, AID).Filter(name_const, name);
+			.Filter(owner_const, AID).Filter(name_const, name).Only();
 	}
 
-	private static GraphObjectList GetLinkMetas(GraphLink parent, String label)
+// ----------------
+// obtain all
+// ----------------
+
+	public final List<T> ObtainAll(GraphEntity parent)
+	{
+		List<T> result = new LinkedList<>();
+
+		for(GraphObject object : ObtainAll(parent, GetLabel()))
+			result.add(CreateInstance(object));
+
+		return result;
+	}
+
+	private static GraphObjectList ObtainAll(GraphEntity parent, String label)
+	{
+		if(parent.GetUID().getType() == EEntityType.OBJECT)
+			return ObtainAll((GraphObject) parent, label);
+		else if(parent.GetUID().getType() == EEntityType.LINK)
+			return ObtainAll((GraphLink) parent, label);
+		else
+			throw new ExceptionModelFail("wtf"); // TODO
+	}
+
+
+	private static GraphObjectList ObtainAll(GraphObject parent, String label)
+	{
+		return parent.GetOutLinks().Filter(label).Target();
+	}
+
+	private static GraphObjectList ObtainAll(GraphLink parent, String label)
 	{
 		long AID = parent.GetAttribute("AID").GetLong();
 
 		return GraphService.Get().GetAllLabeledNodes(label)
 			.Filter(owner_const, AID);
+	}
+
+// ----------------
+// get parent
+// ----------------
+
+	public static GraphEntity GetParent(GraphObject meta)
+	{
+		if(meta.TestAttribute(object_type_const))
+		{
+			return meta.GetInNeighbors(meta_const).Only();
+		}
+		else if(meta.TestAttribute(link_type_const))
+		{
+			return GraphService.Get().GetLink("AID", meta.GetAttribute(owner_const).GetLong());
+		}
+		else
+			throw new ExceptionModelFail("WTF");
+	}
+
+	public static String GetName(GraphObject meta)
+	{
+		return meta.GetAttribute(name_const).GetString();
+	}
+
+	public static GraphAttribute GetParentAttribute(GraphObject meta)
+	{
+		return GetParent(meta).GetAttribute(GetName(meta));
 	}
 }

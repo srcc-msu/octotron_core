@@ -9,14 +9,13 @@ package ru.parallel.octotron.core.model.impl.attribute;
 import ru.parallel.octotron.core.OctoReaction;
 import ru.parallel.octotron.core.OctoResponse;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.meta.*;
+import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.neo4j.impl.Marker;
 import ru.parallel.utils.JavaUtils;
@@ -260,7 +259,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		meta.SetValid(false);
 	}
 
-	private static final SimpleAttribute dependence_link
+	private static final SimpleAttribute dependency_link
 		= new SimpleAttribute("type", "_depends");
 
 	@Override
@@ -268,10 +267,9 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	{
 		GraphLink link = GraphService.Get().AddLink(meta.GetBaseObject()
 			, attribute.GetMeta().GetBaseObject()
-			, dependence_link);
+			, dependency_link);
 
-		link.DeclareAttribute(dependence_link);
-
+		link.DeclareAttribute(dependency_link);
 	}
 
 	@Override
@@ -279,11 +277,17 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	{
 		AttributeList<VaryingAttribute> result = new AttributeList<>();
 
-		for(GraphObject object : meta.GetBaseObject().GetOutNeighbors(dependence_link).Uniq())
+		for(GraphObject object : meta.GetBaseObject().GetOutNeighbors(dependency_link).Uniq())
 		{
 			VaryingObject attribute_object = new VaryingObject(object); // only rules will be here
 
-			result.add((VaryingAttribute)attribute_object.GetParentAttribute());
+			GraphEntity parent = MetaObjectFactory.GetParent(object);
+			GraphAttribute parent_attribute = MetaObjectFactory.GetParentAttribute(object);
+
+			result.add(new VaryingAttribute(
+				ModelEntity.FromGraph(parent)
+				, parent_attribute
+				, attribute_object));
 		}
 
 		return result;

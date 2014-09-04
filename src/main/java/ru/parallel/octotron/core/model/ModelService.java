@@ -4,6 +4,7 @@ import ru.parallel.octotron.core.collections.ListConverter;
 import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.model.impl.ModelLinkList;
 import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -18,7 +19,8 @@ public abstract class ModelService
 			{
 				for(IMetaAttribute dep : attribute.GetRule().GetDependency(object))
 				{
-					dep.AddDependant(attribute);
+					if(dep.GetType() != EAttributeType.CONSTANT)
+						dep.AddDependant(attribute);
 				}
 			}
 		}

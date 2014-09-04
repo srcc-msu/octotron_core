@@ -8,6 +8,7 @@ import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
@@ -15,6 +16,7 @@ import ru.parallel.octotron.core.model.impl.meta.SensorObject;
 import ru.parallel.octotron.core.model.impl.meta.SensorObjectFactory;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObjectFactory;
+import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.neo4j.impl.Marker;
@@ -27,6 +29,16 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 	public ModelEntity(GraphEntity base)
 	{
 		super(base);
+	}
+
+	public static ModelEntity FromGraph(GraphEntity entity)
+	{
+		if(entity.GetUID().getType() == EEntityType.OBJECT)
+			return new ModelObject((GraphObject)entity);
+		else if(entity.GetUID().getType() == EEntityType.OBJECT)
+			return new ModelObject((GraphObject)entity);
+		else
+			throw new ExceptionModelFail("WTF");
 	}
 
 // ---------------
@@ -124,19 +136,39 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 	public AttributeList<ConstantAttribute> GetConstants()
 	{
 		AttributeList<ConstantAttribute> attributes = new AttributeList<>();
-		throw new ExceptionModelFail("NIY");
+
+		for(ModelAttribute attribute : GetAttributes())
+		{
+			boolean t1 = SensorObjectFactory.INSTANCE.Test(GetBaseEntity(), attribute.GetName());
+			boolean t2 = VaryingObjectFactory.INSTANCE.Test(GetBaseEntity(), attribute.GetName());
+
+			if(t1 || t2)
+				continue;
+
+			attributes.add(attribute.ToConstant());
+		}
+
+		return attributes;
 	}
 
 	public AttributeList<SensorAttribute> GetSensors()
 	{
 		AttributeList<SensorAttribute> attributes = new AttributeList<>();
-		throw new ExceptionModelFail("NIY");
+
+		for(SensorObject object : SensorObjectFactory.INSTANCE.ObtainAll(GetBaseEntity()))
+			attributes.add(new SensorAttribute(this, GetBaseEntity().GetAttribute(object.GetName()), object));
+
+		return attributes;
 	}
 
 	public AttributeList<VaryingAttribute> GetVaryings()
 	{
 		AttributeList<VaryingAttribute> attributes = new AttributeList<>();
-		throw new ExceptionModelFail("NIY");
+
+		for(VaryingObject object : VaryingObjectFactory.INSTANCE.ObtainAll(GetBaseEntity()))
+			attributes.add(new VaryingAttribute(this, GetBaseEntity().GetAttribute(object.GetName()), object));
+
+		return attributes;
 	}
 
 	public IMetaAttribute GetMetaAttribute(String name)

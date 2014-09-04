@@ -18,21 +18,13 @@ public abstract class AttributeObject extends MetaObject
 		super(base);
 	}
 
-	static final String name_const = "_name";
 	static final String value_const = "_value";
 	static final String atime_const = "_atime";
 	static final String ctime_const = "_ctime";
 	static final String valid_const = "_valid";
 
-	public ModelObject GetAttributeObject()
-	{
-		GraphObject parent = GetBaseObject().GetInNeighbors("_meta", GetName()).Only();
-		return new ModelObject(parent);
-	}
-
 	public static void Init(GraphObject object, String name, Object value)
 	{
-		object.DeclareAttribute(name_const, name);
 		object.DeclareAttribute(value_const, value);
 		object.DeclareAttribute(atime_const, 0L);
 		object.DeclareAttribute(ctime_const, 0L);
@@ -41,12 +33,7 @@ public abstract class AttributeObject extends MetaObject
 
 	public String GetName()
 	{
-		return GetAttribute(name_const).GetString();
-	}
-
-	public IMetaAttribute GetParentAttribute()
-	{
-		return GetAttributeObject().GetMetaAttribute(GetName());
+		return MetaObjectFactory.GetName(GetBaseObject());
 	}
 
 	public boolean GetValid()

@@ -280,9 +280,8 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		for(GraphObject object : meta.GetBaseObject().GetOutNeighbors(dependency_link).Uniq())
 		{
 			VaryingObject attribute_object = new VaryingObject(object); // only rules will be here
-
-			GraphEntity parent = MetaObjectFactory.GetParent(object);
-			GraphAttribute parent_attribute = MetaObjectFactory.GetParentAttribute(object);
+			GraphEntity parent = attribute_object.GetParent();
+			GraphAttribute parent_attribute = parent.GetAttribute(attribute_object.GetName());
 
 			result.add(new VaryingAttribute(
 				ModelEntity.FromGraph(parent)

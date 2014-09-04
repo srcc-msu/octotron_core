@@ -40,9 +40,9 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 			throw new ExceptionModelFail("wtf"); // TODO
 	}
 
-	private static final SimpleAttribute meta_const = new SimpleAttribute("type", "_meta");
-	private static final String owner_const = "_owner_AID";
-	private static final String name_const = "_owner_name";
+	private static final SimpleAttribute meta_type_const = new SimpleAttribute("type", "_meta");
+	private static final String owner_aid_const = "_owner_AID";
+	private static final String owner_name_const = "_owner_name";
 
 	private static final SimpleAttribute object_type_const = new SimpleAttribute("owner_type", "object");
 	private static final SimpleAttribute link_type_const = new SimpleAttribute("owner_type", "link");
@@ -52,11 +52,11 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 		GraphObject object = GraphService.Get().AddObject();
 		object.AddLabel(label);
 		object.DeclareAttribute(object_type_const);
-		object.DeclareAttribute(owner_const, parent.GetAttribute("AID").GetLong());
-		object.DeclareAttribute(name_const, name);
+		object.DeclareAttribute(owner_aid_const, parent.GetAttribute("AID").GetLong());
+		object.DeclareAttribute(owner_name_const, name);
 
-		GraphLink link = GraphService.Get().AddLink(parent, object, meta_const);
-		link.DeclareAttribute(meta_const);
+		GraphLink link = GraphService.Get().AddLink(parent, object, meta_type_const);
+		link.DeclareAttribute(meta_type_const);
 		link.DeclareAttribute(label, name);
 
 		return object;
@@ -67,8 +67,8 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 		GraphObject object = GraphService.Get().AddObject();
 		object.AddLabel(label);
 		object.DeclareAttribute(link_type_const);
-		object.DeclareAttribute(owner_const, parent.GetAttribute("AID").GetLong());
-		object.DeclareAttribute(name_const, name);
+		object.DeclareAttribute(owner_aid_const, parent.GetAttribute("AID").GetLong());
+		object.DeclareAttribute(owner_name_const, name);
 
 		return object;
 	}
@@ -104,7 +104,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 		long AID = parent.GetAttribute("AID").GetLong();
 
 		GraphObjectList objects = GraphService.Get().GetAllLabeledNodes(label)
-			.Filter(owner_const, AID).Filter(name_const, name);
+			.Filter(owner_aid_const, AID).Filter(owner_name_const, name);
 
 		if(objects.size() > 1)
 			throw new ExceptionModelFail("ambiguous meta objects for attribute: " + name);
@@ -144,7 +144,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 		long AID = parent.GetAttribute("AID").GetLong();
 
 		return GraphService.Get().GetAllLabeledNodes(label)
-			.Filter(owner_const, AID).Filter(name_const, name).Only();
+			.Filter(owner_aid_const, AID).Filter(owner_name_const, name).Only();
 	}
 
 // ----------------
@@ -182,7 +182,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 		long AID = parent.GetAttribute("AID").GetLong();
 
 		return GraphService.Get().GetAllLabeledNodes(label)
-			.Filter(owner_const, AID);
+			.Filter(owner_aid_const, AID);
 	}
 
 // ----------------
@@ -193,11 +193,11 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 	{
 		if(meta.TestAttribute(object_type_const))
 		{
-			return meta.GetInNeighbors(meta_const).Only();
+			return meta.GetInNeighbors(meta_type_const).Only();
 		}
 		else if(meta.TestAttribute(link_type_const))
 		{
-			return GraphService.Get().GetLink("AID", meta.GetAttribute(owner_const).GetLong());
+			return GraphService.Get().GetLink("AID", meta.GetAttribute(owner_aid_const).GetLong());
 		}
 		else
 			throw new ExceptionModelFail("WTF");
@@ -205,11 +205,6 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 
 	public static String GetName(GraphObject meta)
 	{
-		return meta.GetAttribute(name_const).GetString();
-	}
-
-	public static GraphAttribute GetParentAttribute(GraphObject meta)
-	{
-		return GetParent(meta).GetAttribute(GetName(meta));
+		return meta.GetAttribute(owner_name_const).GetString();
 	}
 }

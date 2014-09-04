@@ -1,6 +1,7 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
 import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
@@ -29,6 +30,11 @@ public abstract class AttributeObject extends MetaObject
 		object.DeclareAttribute(atime_const, 0L);
 		object.DeclareAttribute(ctime_const, 0L);
 		object.DeclareAttribute(valid_const, true);
+	}
+
+	public GraphEntity GetParent()
+	{
+		return MetaObjectFactory.GetParent(GetBaseObject());
 	}
 
 	public String GetName()

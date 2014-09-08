@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.model.impl.attribute;
 
-import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
@@ -24,14 +24,14 @@ public class VaryingAttribute extends AbstractVaryingAttribute<VaryingObject>
 		return EAttributeType.VARYING;
 	}
 
-	public OctoRule GetRule()
+	public Rule GetRule()
 	{
 		return meta.GetRule();
 	}
 
 	public boolean Update()
 	{
-		OctoRule rule = meta.GetRule();
+		Rule rule = meta.GetRule();
 		Object new_val = rule.Compute(parent);
 
 		return Update(new_val, false);

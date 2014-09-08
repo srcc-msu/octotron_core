@@ -6,16 +6,16 @@
 
 package ru.parallel.octotron.reactions;
 
-import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 
 public final class CommonReactions
 {
 	private CommonReactions() {}
 
-	public static OctoResponse Critical(String str, String... attributes)
+	public static Response Critical(String str, String... attributes)
 	{
-		return new OctoResponse(EEventStatus.CRITICAL, str)
+		return new Response(EEventStatus.CRITICAL, str)
 			.Print("AID")
 			.Print(attributes)
 			.Log("errors")
@@ -23,9 +23,9 @@ public final class CommonReactions
 			.Exec("on_critical");
 	}
 
-	public static OctoResponse Danger(String str, String... attributes)
+	public static Response Danger(String str, String... attributes)
 	{
-		return new OctoResponse(EEventStatus.DANGER, str)
+		return new Response(EEventStatus.DANGER, str)
 			.Print("AID")
 			.Print(attributes)
 			.Log("errors")
@@ -33,27 +33,27 @@ public final class CommonReactions
 			.Exec("on_danger");
 	}
 
-	public static OctoResponse Warning(String str, String... attributes)
+	public static Response Warning(String str, String... attributes)
 	{
-		return new OctoResponse(EEventStatus.WARNING, str)
+		return new Response(EEventStatus.WARNING, str)
 			.Print("AID")
 			.Print(attributes)
 			.Log("all")
 			.Exec("on_warning");
 	}
 
-	public static OctoResponse Info(String str, String... attributes)
+	public static Response Info(String str, String... attributes)
 	{
-		return new OctoResponse(EEventStatus.INFO, str)
+		return new Response(EEventStatus.INFO, str)
 			.Print("AID")
 			.Print(attributes)
 			.Log("all")
 			.Exec("on_info");
 	}
 
-	public static OctoResponse Recover(String str, String... attributes)
+	public static Response Recover(String str, String... attributes)
 	{
-		return new OctoResponse(EEventStatus.RECOVER, str)
+		return new Response(EEventStatus.RECOVER, str)
 			.Print("AID")
 			.Print(attributes)
 			.Log("all")

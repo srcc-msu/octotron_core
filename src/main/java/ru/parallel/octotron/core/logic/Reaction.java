@@ -4,16 +4,16 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core;
+package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.UniqueName;
-import ru.parallel.octotron.impl.PersistentStorage;
+import ru.parallel.octotron.storage.PersistentStorage;
 
 import java.io.Serializable;
 
-public class OctoReaction implements Serializable, UniqueName
+public class Reaction implements Serializable, UniqueName
 {
 	private static final long serialVersionUID = 8900268116120488911L;
 
@@ -22,14 +22,14 @@ public class OctoReaction implements Serializable, UniqueName
 	private final String check_name;
 	private final Object check_value;
 
-	private final OctoResponse response;
-	private final OctoResponse recover_response;
+	private final Response response;
+	private final Response recover_response;
 
 	private final long delay;
 	private final long repeat;
 
-	public OctoReaction(String check_name, Object check_value
-		, OctoResponse response, long delay, long repeat, OctoResponse recover_response)
+	public Reaction(String check_name, Object check_value
+		, Response response, long delay, long repeat, Response recover_response)
 	{
 		this.check_name = check_name;
 		this.check_value = check_value;
@@ -43,20 +43,20 @@ public class OctoReaction implements Serializable, UniqueName
 		Register();
 	}
 
-	public OctoReaction(String check_name, Object check_value
-		, OctoResponse response, OctoResponse recover_response)
+	public Reaction(String check_name, Object check_value
+		, Response response, Response recover_response)
 	{
 		this(check_name, check_value, response, 0, 0, recover_response);
 	}
 
-	public OctoReaction(String check_name, Object check_value
-		, OctoResponse response, long delay, long repeat)
+	public Reaction(String check_name, Object check_value
+		, Response response, long delay, long repeat)
 	{
 		this(check_name, check_value, response, delay, repeat, null);
 	}
 
-	public OctoReaction(String check_name, Object check_value
-		, OctoResponse response)
+	public Reaction(String check_name, Object check_value
+		, Response response)
 	{
 		this(check_name, check_value, response, 0, 0, null);
 	}
@@ -76,12 +76,12 @@ public class OctoReaction implements Serializable, UniqueName
 		return check_value;
 	}
 
-	public OctoResponse GetResponse()
+	public Response GetResponse()
 	{
 		return response;
 	}
 
-	public OctoResponse GetRecoverResponse()
+	public Response GetRecoverResponse()
 	{
 		return recover_response;
 	}

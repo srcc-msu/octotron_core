@@ -1,9 +1,9 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.logic.Rule;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
@@ -19,7 +19,7 @@ import ru.parallel.octotron.core.model.impl.meta.VaryingObjectFactory;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.core.logic.Marker;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -92,7 +92,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // ---------------
 
-	public VaryingAttribute DeclareVarying(OctoRule rule)
+	public VaryingAttribute DeclareVarying(Rule rule)
 	{
 		GraphAttribute graph_attribute = GetBaseEntity().DeclareAttribute(rule.GetName(), rule.GetDefaultValue());
 		VaryingObject meta = VaryingObjectFactory.INSTANCE.Create(GetBaseEntity(), rule);
@@ -100,9 +100,9 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		return new VaryingAttribute(this, graph_attribute, meta);
 	}
 
-	public void DeclareVaryings(List<OctoRule> rules)
+	public void DeclareVaryings(List<Rule> rules)
 	{
-		for(OctoRule rule : rules)
+		for(Rule rule : rules)
 		{
 			DeclareVarying(rule);
 		}
@@ -210,7 +210,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // -----------
 
-	public long AddMarker(OctoReaction reaction, String description, boolean suppress)
+	public long AddMarker(Reaction reaction, String description, boolean suppress)
 	{
 		return GetAttribute(reaction.GetCheckName()).ToMeta()
 			.AddMarker(reaction, description, suppress);
@@ -233,7 +233,7 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // -----------
 
-	public void AddReaction(OctoReaction reaction)
+	public void AddReaction(Reaction reaction)
 	{
 		if(!TestAttribute(reaction.GetCheckName()))
 			throw new ExceptionModelFail("could not assign a reaction, attribute is missing: " + reaction.GetCheckName());
@@ -242,9 +242,9 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 			.AddReaction(reaction);
 	}
 
-	public List<OctoReaction> GetReactions()
+	public List<Reaction> GetReactions()
 	{
-		List<OctoReaction> result = new LinkedList<>();
+		List<Reaction> result = new LinkedList<>();
 
 		for(ModelAttribute attribute : GetAttributes())
 			result.addAll(attribute.ToMeta().GetReactions());
@@ -252,18 +252,18 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		return result;
 	}
 
-	public List<OctoReaction> GetReactions(String name)
+	public List<Reaction> GetReactions(String name)
 	{
-		List<OctoReaction> result = new LinkedList<>();
+		List<Reaction> result = new LinkedList<>();
 
 		result.addAll(GetAttribute(name).ToMeta().GetReactions());
 
 		return result;
 	}
 
-	public void AddReactions(List<OctoReaction> reactions)
+	public void AddReactions(List<Reaction> reactions)
 	{
-		for(OctoReaction reaction : reactions)
+		for(Reaction reaction : reactions)
 		{
 			AddReaction(reaction);
 		}
@@ -271,9 +271,9 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // --------------
 
-	public List<OctoResponse> GetFails()
+	public List<Response> GetFails()
 	{
-		List<OctoResponse> responses = new LinkedList<>();
+		List<Response> responses = new LinkedList<>();
 
 		for(ModelAttribute attribute : GetAttributes())
 		{
@@ -283,9 +283,9 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		return responses;
 	}
 
-	public List<OctoResponse> PreparePendingReactions()
+	public List<Response> PreparePendingReactions()
 	{
-		List<OctoResponse> responses = new LinkedList<>();
+		List<Response> responses = new LinkedList<>();
 
 		for(ModelAttribute attribute : GetAttributes())
 		{

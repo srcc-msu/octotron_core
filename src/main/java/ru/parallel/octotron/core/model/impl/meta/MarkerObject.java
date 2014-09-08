@@ -1,7 +1,7 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.core.logic.Marker;
 
 public class MarkerObject extends MetaObject
 {

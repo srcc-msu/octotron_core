@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -101,7 +101,7 @@ public class ReactionInvoker
 		List<PreparedResponse> responses = new LinkedList<>();
 
 		for(ModelAttribute attribute : changed)
-			for(OctoResponse response : attribute.ToMeta().GetReadyReactions())
+			for(Response response : attribute.ToMeta().GetReadyReactions())
 			{
 				responses.add(new PreparedResponse(response, attribute.GetParent(), JavaUtils.GetTimestamp()));
 			}

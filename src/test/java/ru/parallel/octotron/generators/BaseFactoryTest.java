@@ -4,13 +4,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.OctoRule;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.rules.Match;
 
@@ -74,9 +74,9 @@ public class BaseFactoryTest
 	@Test
 	public void TestVaryings()
 	{
-		OctoRule[] rules = { new Match("test1", "", "") };
-		OctoRule rule2 = new Match("test2", "", "");
-		OctoRule rule3 = new Match("test3", "", "");
+		Rule[] rules = { new Match("test1", "", "") };
+		Rule rule2 = new Match("test2", "", "");
+		Rule rule3 = new Match("test3", "", "");
 
 		ObjectFactory f1 = object_factory
 			.Varyings(rules).Varyings(rule2, rule3);
@@ -99,9 +99,9 @@ public class BaseFactoryTest
 	@Test
 	public void TestReactions()
 	{
-		OctoReaction[] reactions = { new OctoReaction("test2", 0, new OctoResponse(EEventStatus.INFO, "")) };
-		OctoReaction reaction2 = new OctoReaction("test3", 0, new OctoResponse(EEventStatus.INFO, ""));
-		OctoReaction reaction3 = new OctoReaction("test3", 0, new OctoResponse(EEventStatus.INFO, ""));
+		Reaction[] reactions = { new Reaction("test2", 0, new Response(EEventStatus.INFO, "")) };
+		Reaction reaction2 = new Reaction("test3", 0, new Response(EEventStatus.INFO, ""));
+		Reaction reaction3 = new Reaction("test3", 0, new Response(EEventStatus.INFO, ""));
 
 		ObjectFactory f1 = object_factory
 			.Sensors(new SimpleAttribute("test1", 0))

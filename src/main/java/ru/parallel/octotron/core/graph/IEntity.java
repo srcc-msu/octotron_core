@@ -1,6 +1,6 @@
 package ru.parallel.octotron.core.graph;
 
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
 

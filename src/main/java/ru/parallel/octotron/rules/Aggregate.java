@@ -7,15 +7,15 @@
 package ru.parallel.octotron.rules;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.OctoObjectRule;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.impl.ObjectRule;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
-public abstract class Aggregate extends OctoObjectRule
+public abstract class Aggregate extends ObjectRule
 {
 	private static final long serialVersionUID = -1961148475047706792L;
 	private final String[] attributes;

@@ -4,9 +4,9 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.model.impl;
+package ru.parallel.octotron.core.model.collections;
 
-import ru.parallel.octotron.core.collections.EntityList;
+import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelLink;
 
 import java.util.List;

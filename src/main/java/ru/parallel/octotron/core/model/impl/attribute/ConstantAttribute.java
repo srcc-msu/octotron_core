@@ -6,15 +6,15 @@
 
 package ru.parallel.octotron.core.model.impl.attribute;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.core.logic.Marker;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -80,22 +80,22 @@ public class ConstantAttribute extends ModelAttribute implements IMetaAttribute
 		throw new ExceptionModelFail("constant object");
 	}
 
-	public void AddReaction(OctoReaction reaction)
+	public void AddReaction(Reaction reaction)
 	{
 		throw new ExceptionModelFail("can not add reaction to constant attribute");
 	}
 
-	public List<OctoReaction> GetReactions()
+	public List<Reaction> GetReactions()
 	{
 		return new LinkedList<>();
 	}
 
-	public List<OctoResponse> GetReadyReactions()
+	public List<Response> GetReadyReactions()
 	{
 		return new LinkedList<>();
 	}
 
-	public List<OctoResponse> GetExecutedReactions()
+	public List<Response> GetExecutedReactions()
 	{
 		return new LinkedList<>();
 	}
@@ -106,7 +106,7 @@ public class ConstantAttribute extends ModelAttribute implements IMetaAttribute
 	}
 
 	@Override
-	public long AddMarker(OctoReaction reaction, String description, boolean suppress)
+	public long AddMarker(Reaction reaction, String description, boolean suppress)
 	{
 		throw new ExceptionModelFail("constant object");
 	}

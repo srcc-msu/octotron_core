@@ -4,33 +4,33 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core;
+package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.UniqueName;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.impl.PersistentStorage;
+import ru.parallel.octotron.storage.PersistentStorage;
 
 import java.io.Serializable;
 
 /**
  * currently Octopy supports only only one constructor for rules</br>
  * */
-public abstract class OctoRule implements UniqueName, Serializable
+public abstract class Rule implements UniqueName, Serializable
 {
 	private static final long serialVersionUID = 6126662649331847764L;
 	protected final String name;
 	private long rule_id;
 
-	protected OctoRule(String name)
+	protected Rule(String name)
 	{
 		this.name = name;
 		rule_id = PersistentStorage.INSTANCE.GetRules().Add(this);
 	}
 
-	protected OctoRule()
+	protected Rule()
 	{
 		throw new ExceptionModelFail("super(attribute_name) must be called in the constructor");
 	}

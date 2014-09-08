@@ -5,7 +5,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.*;
-import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.LinkFactory;

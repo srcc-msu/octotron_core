@@ -7,10 +7,10 @@
 package ru.parallel.octotron.reactions;
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.OctoResponse;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -30,7 +30,7 @@ public class PreparedResponse
 
 	private static final char ARG_CHAR = '$';
 
-	private final OctoResponse response;
+	private final Response response;
 
 	private final List<String[]> composed_commands = new LinkedList<>();
 
@@ -39,7 +39,7 @@ public class PreparedResponse
 
 	private final long timestamp;
 
-	public PreparedResponse(OctoResponse response, ModelEntity entity, long timestamp)
+	public PreparedResponse(Response response, ModelEntity entity, long timestamp)
 	{
 		this.response = response;
 		this.timestamp = timestamp;

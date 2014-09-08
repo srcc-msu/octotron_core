@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.collections.EntityList;
+import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.impl.ModelList;
+import ru.parallel.octotron.core.model.collections.ModelList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;

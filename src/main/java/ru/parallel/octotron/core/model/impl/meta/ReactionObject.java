@@ -1,9 +1,9 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
-import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.impl.PersistentStorage;
-import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.storage.PersistentStorage;
+import ru.parallel.octotron.core.logic.Marker;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.LinkedList;
@@ -24,10 +24,10 @@ public class ReactionObject extends MetaObject
 	@Override
 	public void Init(Object object)
 	{
-		OctoReaction reaction = (OctoReaction) object;
+		Reaction reaction = (Reaction) object;
 
 		GetBaseObject().DeclareAttribute(reaction_id_const, reaction.GetID());
-		GetBaseObject().DeclareAttribute(reaction_state_const, OctoReaction.STATE_NONE);
+		GetBaseObject().DeclareAttribute(reaction_state_const, Reaction.STATE_NONE);
 		GetBaseEntity().DeclareAttribute(reaction_start_time_const, 0);
 		GetBaseEntity().DeclareAttribute(reaction_repeat_const, 0);
 	}
@@ -42,7 +42,7 @@ public class ReactionObject extends MetaObject
 		return GetAttribute(reaction_state_const).GetLong();
 	}
 
-	public OctoReaction GetReaction()
+	public Reaction GetReaction()
 	{
 		return PersistentStorage.INSTANCE.GetReactions()
 			.Get(GetAttribute(reaction_id_const).GetLong());

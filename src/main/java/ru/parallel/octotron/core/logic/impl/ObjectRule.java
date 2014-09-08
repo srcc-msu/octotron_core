@@ -4,18 +4,19 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core;
+package ru.parallel.octotron.core.logic.impl;
 
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 
-public abstract class OctoObjectRule extends OctoRule
+public abstract class ObjectRule extends Rule
 {
 	private static final long serialVersionUID = -1936097371431183834L;
 
-	protected OctoObjectRule(String name)
+	protected ObjectRule(String name)
 	{
 		super(name);
 	}

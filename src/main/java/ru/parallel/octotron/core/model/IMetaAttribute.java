@@ -1,12 +1,12 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
-import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.core.logic.Marker;
 
 import java.util.List;
 
@@ -30,13 +30,13 @@ public interface IMetaAttribute extends IAttribute
 
 	AttributeList<VaryingAttribute> GetDependant();
 
-	void AddReaction(OctoReaction reaction);
-	List<OctoReaction> GetReactions();
+	void AddReaction(Reaction reaction);
+	List<Reaction> GetReactions();
 
-	List<OctoResponse> GetReadyReactions();
-	List<OctoResponse> GetExecutedReactions();
+	List<Response> GetReadyReactions();
+	List<Response> GetExecutedReactions();
 
 	List<Marker> GetMarkers();
-	long AddMarker(OctoReaction reaction, String description, boolean suppress);
+	long AddMarker(Reaction reaction, String description, boolean suppress);
 	void DeleteMarker(long id);
 }

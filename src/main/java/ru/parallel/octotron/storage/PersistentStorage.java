@@ -4,18 +4,18 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.impl;
+package ru.parallel.octotron.storage;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 
 public final class PersistentStorage
 {
 	public static final PersistentStorage INSTANCE = new PersistentStorage();
 
-	private final PersistentMap<OctoRule> rules = new PersistentMap<>();
-	private final PersistentMap<OctoReaction> reactions = new PersistentMap<>();
+	private final PersistentMap<Rule> rules = new PersistentMap<>();
+	private final PersistentMap<Reaction> reactions = new PersistentMap<>();
 
 	private PersistentStorage() {}
 
@@ -48,13 +48,13 @@ public final class PersistentStorage
 		}
 	}
 
-	public PersistentMap<OctoRule> GetRules()
+	public PersistentMap<Rule> GetRules()
 	{
 		return rules;
 	}
 
 
-	public PersistentMap<OctoReaction> GetReactions()
+	public PersistentMap<Reaction> GetReactions()
 	{
 		return reactions;
 	}

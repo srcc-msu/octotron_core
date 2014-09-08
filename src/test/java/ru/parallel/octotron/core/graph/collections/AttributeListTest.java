@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.collections;
+package ru.parallel.octotron.core.graph.collections;
 
 import org.junit.*;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;

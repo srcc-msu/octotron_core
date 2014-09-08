@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.graph.impl;
 
- import ru.parallel.octotron.core.collections.EntityList;
+ import ru.parallel.octotron.core.graph.collections.EntityList;
 
  import java.util.List;
 

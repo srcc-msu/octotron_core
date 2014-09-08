@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.impl;
+package ru.parallel.octotron.storage;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 

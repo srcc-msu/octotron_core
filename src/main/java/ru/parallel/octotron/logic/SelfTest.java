@@ -8,9 +8,10 @@ package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.rules.MirrorLong;
 
 public class SelfTest

@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.collections;
+package ru.parallel.octotron.core.graph.collections;
 
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphLinkList;
@@ -7,8 +7,8 @@ import ru.parallel.octotron.core.graph.impl.GraphObjectList;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.impl.ModelLinkList;
-import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.collections.ModelLinkList;
+import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 
 public abstract class ListConverter

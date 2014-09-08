@@ -6,12 +6,12 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Rule;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class VarArgMatch extends OctoRule
+public class VarArgMatch extends Rule
 {
 	private static final long serialVersionUID = -665317574895287470L;
 	private final String check_attribute;

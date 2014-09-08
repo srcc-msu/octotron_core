@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.collections;
+package ru.parallel.octotron.core.graph.collections;
 
 import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;

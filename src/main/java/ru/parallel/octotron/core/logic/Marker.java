@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.neo4j.impl;
+package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.primitive.UniqueName;
 

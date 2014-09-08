@@ -6,12 +6,12 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Rule;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class CalcSpeed extends OctoRule
+public class CalcSpeed extends Rule
 {
 	private static final long serialVersionUID = -5796823312858284235L;
 	private final String measured_attribute;

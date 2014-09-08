@@ -6,18 +6,16 @@
 
 package ru.parallel.octotron.core.model.impl.attribute;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoResponse;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.meta.*;
-import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.core.logic.Marker;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.LinkedList;
@@ -132,9 +130,9 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 
 
 	@Override
-	public List<OctoResponse> GetExecutedReactions()
+	public List<Response> GetExecutedReactions()
 	{
-		List<OctoResponse> result = new LinkedList<>();
+		List<Response> result = new LinkedList<>();
 
 		List<ReactionObject> reaction_objects = ReactionObjectFactory
 			.INSTANCE.ObtainAll(meta.GetBaseEntity());
@@ -143,16 +141,16 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 
 		for(ReactionObject reaction_object : reaction_objects)
 		{
-			if(reaction_object.GetState() == OctoReaction.STATE_EXECUTED)
+			if(reaction_object.GetState() == Reaction.STATE_EXECUTED)
 				result.add(reaction_object.GetReaction().GetResponse());
 		}
 
 		return result;
 	}
 
-	public List<OctoResponse> GetReadyReactions()
+	public List<Response> GetReadyReactions()
 	{
-		List<OctoResponse> result = new LinkedList<>();
+		List<Response> result = new LinkedList<>();
 
 		List<ReactionObject> reaction_objects = ReactionObjectFactory
 			.INSTANCE.ObtainAll(meta.GetBaseEntity());
@@ -161,7 +159,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 
 		for(ReactionObject reaction_object : reaction_objects)
 		{
-			OctoReaction reaction = reaction_object.GetReaction();
+			Reaction reaction = reaction_object.GetReaction();
 
 			boolean needed = reaction.ReactionNeeded(parent);
 			long state = reaction_object.GetState();
@@ -177,57 +175,57 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 				boolean ready = (current_delay >= delay)
 					&& (current_repeat >= repeat);
 
-				if(state == OctoReaction.STATE_NONE)
+				if(state == Reaction.STATE_NONE)
 				{
 					if(ready)
 					{
 						result.add(reaction.GetResponse());
 
-						reaction_object.SetState(OctoReaction.STATE_EXECUTED);
+						reaction_object.SetState(Reaction.STATE_EXECUTED);
 					}
 					else
 					{
-						reaction_object.SetState(OctoReaction.STATE_STARTED);
+						reaction_object.SetState(Reaction.STATE_STARTED);
 
 						reaction_object.StartDelay();
 					}
 				}
-				else if(state == OctoReaction.STATE_STARTED)
+				else if(state == Reaction.STATE_STARTED)
 				{
 					if(ready)
 					{
 						result.add(reaction.GetResponse());
 
-						reaction_object.SetState(OctoReaction.STATE_EXECUTED);
+						reaction_object.SetState(Reaction.STATE_EXECUTED);
 					}
 					else
 					{
 						// nothing to see here
 					}
 				}
-				else if(state == OctoReaction.STATE_EXECUTED)
+				else if(state == Reaction.STATE_EXECUTED)
 				{
 					// nothing to see here
 				}
 			}
 			else
 			{
-				if(state == OctoReaction.STATE_NONE)
+				if(state == Reaction.STATE_NONE)
 				{
 					// nothing to see here
 				}
-				else if(state == OctoReaction.STATE_STARTED)
+				else if(state == Reaction.STATE_STARTED)
 				{
-					reaction_object.SetState(OctoReaction.STATE_NONE);
+					reaction_object.SetState(Reaction.STATE_NONE);
 					reaction_object.DropDelay();
 					reaction_object.DropRepeat();
 				}
-				else if(state == OctoReaction.STATE_EXECUTED)
+				else if(state == Reaction.STATE_EXECUTED)
 				{
 					if(reaction.GetRecoverResponse() != null)
 						result.add(reaction.GetRecoverResponse());
 
-					reaction_object.SetState(OctoReaction.STATE_NONE);
+					reaction_object.SetState(Reaction.STATE_NONE);
 					reaction_object.DropDelay();
 					reaction_object.DropRepeat();
 				}
@@ -293,18 +291,18 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	}
 
 	@Override
-	public void AddReaction(OctoReaction reaction)
+	public void AddReaction(Reaction reaction)
 	{
 		ReactionObjectFactory.INSTANCE.Create(meta.GetBaseEntity(), reaction);
 	}
 
 	@Override
-	public List<OctoReaction> GetReactions()
+	public List<Reaction> GetReactions()
 	{
 		List<ReactionObject> reaction_objects = ReactionObjectFactory
 			.INSTANCE.ObtainAll(meta.GetBaseEntity());
 
-		List<OctoReaction> result = new LinkedList<>();
+		List<Reaction> result = new LinkedList<>();
 
 		for(ReactionObject reaction_object : reaction_objects)
 			result.add(reaction_object.GetReaction());
@@ -313,7 +311,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	}
 
 	@Override
-	public long AddMarker(OctoReaction reaction, String description, boolean suppress)
+	public long AddMarker(Reaction reaction, String description, boolean suppress)
 	{
 		ReactionObject reaction_object = ReactionObjectFactory
 			.INSTANCE.Create(meta.GetBaseEntity(), reaction);

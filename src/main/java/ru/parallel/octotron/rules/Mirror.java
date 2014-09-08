@@ -6,12 +6,12 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoObjectRule;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.impl.ObjectRule;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 
-public abstract class Mirror extends OctoObjectRule
+public abstract class Mirror extends ObjectRule
 {
 	private static final long serialVersionUID = -2328141171759693459L;
 	private final String mirror_attribute;

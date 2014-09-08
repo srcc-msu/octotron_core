@@ -1,12 +1,12 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.collections.ListConverter;
+import ru.parallel.octotron.core.graph.collections.ListConverter;
 import ru.parallel.octotron.core.graph.IObject;
 import ru.parallel.octotron.core.graph.impl.GraphLinkList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphObjectList;
-import ru.parallel.octotron.core.model.impl.ModelLinkList;
-import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.collections.ModelLinkList;
+import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 

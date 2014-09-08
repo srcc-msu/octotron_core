@@ -1,11 +1,8 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
-import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.model.IMetaAttribute;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import javax.annotation.Nullable;
@@ -74,12 +71,12 @@ public abstract class AttributeObject extends MetaObject
 	}
 
 // REACTIONS
-	public List<OctoReaction> GetReactions()
+	public List<Reaction> GetReactions()
 	{
 		List<ReactionObject> objects
 			= ReactionObjectFactory.INSTANCE.ObtainAll(GetBaseObject());
 
-		List<OctoReaction> reactions = new LinkedList<>();
+		List<Reaction> reactions = new LinkedList<>();
 
 		for(ReactionObject object : objects)
 			reactions.add(object.GetReaction());

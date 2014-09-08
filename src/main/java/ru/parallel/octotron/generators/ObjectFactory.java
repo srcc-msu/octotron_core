@@ -6,11 +6,11 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.List;
@@ -27,8 +27,8 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 
 	private ObjectFactory(List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
-		, List<OctoRule> rules
-		, List<OctoReaction> reactions)
+		, List<Rule> rules
+		, List<Reaction> reactions)
 	{
 		super(constants, sensors, rules, reactions);
 	}
@@ -65,8 +65,8 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	protected ObjectFactory Clone(
 		List<SimpleAttribute> new_constants
 		, List<SimpleAttribute> new_sensors
-		, List<OctoRule> new_rules
-		, List<OctoReaction> new_reactions)
+		, List<Rule> new_rules
+		, List<Reaction> new_reactions)
 	{
 		return new ObjectFactory(new_constants, new_sensors, new_rules, new_reactions);
 	}

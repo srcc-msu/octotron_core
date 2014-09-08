@@ -1,8 +1,8 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
-import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.impl.PersistentStorage;
+import ru.parallel.octotron.storage.PersistentStorage;
 
 public class VaryingObject extends AttributeObject
 {
@@ -13,7 +13,7 @@ public class VaryingObject extends AttributeObject
 
 	private static final String rid_const = "_rid";
 
-	public OctoRule GetRule()
+	public Rule GetRule()
 	{
 		return PersistentStorage.INSTANCE.GetRules().Get(GetAttribute(rid_const).GetLong());
 	}
@@ -21,7 +21,7 @@ public class VaryingObject extends AttributeObject
 	@Override
 	public void Init(Object object)
 	{
-		OctoRule rule = (OctoRule) object;
+		Rule rule = (Rule) object;
 		Init(GetBaseObject(), rule.GetName(), rule.GetDefaultValue());
 		GetBaseObject().DeclareAttribute(rid_const, rule.GetID());
 	}

@@ -1,6 +1,6 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;

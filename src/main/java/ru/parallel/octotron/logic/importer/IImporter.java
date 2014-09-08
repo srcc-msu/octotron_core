@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.netimport;
+package ru.parallel.octotron.logic.importer;
 
 import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.model.ModelEntity;

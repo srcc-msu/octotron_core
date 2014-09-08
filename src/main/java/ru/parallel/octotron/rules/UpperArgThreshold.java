@@ -6,12 +6,12 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.OctoRule;
-import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Rule;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class UpperArgThreshold extends OctoRule
+public class UpperArgThreshold extends Rule
 {
 	private static final long serialVersionUID = 2191189080156471873L;
 	private final String param;

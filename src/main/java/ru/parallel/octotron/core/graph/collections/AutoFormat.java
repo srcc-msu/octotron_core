@@ -4,14 +4,14 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.collections;
+package ru.parallel.octotron.core.graph.collections;
 
-import ru.parallel.octotron.core.OctoReaction;
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.graph.IAttribute;
 import ru.parallel.octotron.core.graph.IEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.neo4j.impl.Marker;
+import ru.parallel.octotron.core.logic.Marker;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.ArrayList;
@@ -214,7 +214,7 @@ public class AutoFormat
 			result.append(System.lineSeparator()).append("----  reactions  ----")
 				.append(System.lineSeparator()).append(System.lineSeparator());
 
-			for(OctoReaction reaction : entity.GetReactions())
+			for(Reaction reaction : entity.GetReactions())
 			{
 				String str = " ID: " + reaction.GetID()
 					+ " descr: \"" + reaction.GetResponse().GetDescription() + "\""

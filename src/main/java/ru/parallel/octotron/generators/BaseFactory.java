@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.OctoReaction;
-import ru.parallel.octotron.core.OctoRule;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.Arrays;
@@ -27,13 +27,13 @@ public abstract class BaseFactory<T>
  * */
 	protected final List<SimpleAttribute> constants;
 	protected final List<SimpleAttribute> sensors;
-	protected final List<OctoRule> rules;
-	protected final List<OctoReaction> reactions;
+	protected final List<Rule> rules;
+	protected final List<Reaction> reactions;
 
 	protected BaseFactory(List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
-		, List<OctoRule> rules
-		, List<OctoReaction> reactions)
+		, List<Rule> rules
+		, List<Reaction> reactions)
 	{
 		this.constants = constants;
 		this.sensors = sensors;
@@ -45,8 +45,8 @@ public abstract class BaseFactory<T>
 	{
 		this(new LinkedList<SimpleAttribute>()
 			, new LinkedList<SimpleAttribute>()
-			, new LinkedList<OctoRule>()
-			, new LinkedList<OctoReaction>());
+			, new LinkedList<Rule>()
+			, new LinkedList<Reaction>());
 	}
 
 	public T Constants(SimpleAttribute... addition)
@@ -65,17 +65,17 @@ public abstract class BaseFactory<T>
 		return Clone(constants, new_sensors, rules, reactions);
 	}
 
-	public T Varyings(OctoRule... addition)
+	public T Varyings(Rule... addition)
 	{
-		List<OctoRule> new_rules = new LinkedList<>(rules);
+		List<Rule> new_rules = new LinkedList<>(rules);
 		new_rules.addAll(Arrays.asList(addition));
 
 		return Clone(constants, sensors, new_rules, reactions);
 	}
 
-	public T Reactions(OctoReaction... addition)
+	public T Reactions(Reaction... addition)
 	{
-		List<OctoReaction> new_reactions = new LinkedList<>(reactions);
+		List<Reaction> new_reactions = new LinkedList<>(reactions);
 		new_reactions.addAll(Arrays.asList(addition));
 
 		return Clone(constants, sensors, rules, new_reactions);
@@ -84,6 +84,6 @@ public abstract class BaseFactory<T>
 	protected abstract T Clone(
 		List<SimpleAttribute> new_constants
 		, List<SimpleAttribute> new_sensors
-		, List<OctoRule> new_rules
-		, List<OctoReaction> new_reactions);
+		, List<Rule> new_rules
+		, List<Reaction> new_reactions);
 }

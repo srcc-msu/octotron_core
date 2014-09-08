@@ -7,11 +7,11 @@
 package ru.parallel.octotron.http;
 
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.collections.EntityList;
+import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.model.impl.ModelLinkList;
-import ru.parallel.octotron.core.model.impl.ModelObjectList;
+import ru.parallel.octotron.core.model.collections.ModelLinkList;
+import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;

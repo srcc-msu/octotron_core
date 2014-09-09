@@ -5,6 +5,7 @@ import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.logic.*;
+import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -186,8 +187,8 @@ public class ModelEntityTest
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
 		entity.DeclareSensor("test", 0);
-		Reaction reaction = new Reaction("test", 1
-			, new Response(EEventStatus.INFO, "test"));
+		Reaction reaction = new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"));
 
 		entity.AddReaction(reaction);
 	}
@@ -201,10 +202,10 @@ public class ModelEntityTest
 
 		List<Reaction> reactions = new LinkedList<>();
 
-		reactions.add(new Reaction("test", 1
-			, new Response(EEventStatus.INFO, "test")));
-		reactions.add(new Reaction("test", 2
-			, new Response(EEventStatus.INFO, "test")));
+		reactions.add(new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test")));
+		reactions.add(new Equals("test", 2)
+			.Response(new Response(EEventStatus.INFO, "test")));
 
 		entity.AddReactions(reactions);
 	}
@@ -238,8 +239,8 @@ public class ModelEntityTest
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
 		entity.DeclareSensor("test", 0);
-		Reaction reaction = new Reaction("test", 1
-			, new Response(EEventStatus.INFO, "test"));
+		Reaction reaction = new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"));
 
 		entity.AddReaction(reaction);
 
@@ -253,8 +254,8 @@ public class ModelEntityTest
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
 		entity.DeclareSensor("test", 0);
-		Reaction reaction = new Reaction("test", 1
-			, new Response(EEventStatus.INFO, "test"));
+		Reaction reaction = new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"));
 
 		entity.AddReaction(reaction);
 
@@ -284,8 +285,8 @@ public class ModelEntityTest
 
 		for(int i = 0; i < N; i++)
 		{
-			Reaction reaction = new Reaction("test" + i, 1
-				, new Response(EEventStatus.INFO, "test"));
+			Reaction reaction = new Equals("test" + i, 1)
+				.Response(new Response(EEventStatus.INFO, "test"));
 
 			entity.AddReaction(reaction);
 
@@ -302,8 +303,8 @@ public class ModelEntityTest
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
 		entity.DeclareSensor("test", 0);
-		Reaction reaction = new Reaction("test", 1
-			, new Response(EEventStatus.INFO, "test"));
+		Reaction reaction = new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"));
 
 		entity.AddReaction(reaction);
 

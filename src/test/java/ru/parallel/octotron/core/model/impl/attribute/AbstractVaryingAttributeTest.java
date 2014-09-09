@@ -4,6 +4,7 @@ import org.junit.*;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
@@ -189,10 +190,10 @@ public class AbstractVaryingAttributeTest
 
 		assertEquals(0, attribute.GetReactions().size());
 
-		attribute.AddReaction(new Reaction("test1", 0, null));
+		attribute.AddReaction(new Equals("test1", 0));
 		assertEquals(1, attribute.GetReactions().size());
 
-		attribute.AddReaction(new Reaction("test2", 0, null));
+		attribute.AddReaction(new Equals("test2", 0));
 		assertEquals(2, attribute.GetReactions().size());
 	}
 
@@ -203,10 +204,10 @@ public class AbstractVaryingAttributeTest
 
 		assertEquals(0, attribute.GetMarkers().size());
 
-		long id1 = attribute.AddMarker(new Reaction("test", 0, null), "a", true);
+		long id1 = attribute.AddMarker(new Equals("test", 0), "a", true);
 		assertEquals(1, attribute.GetMarkers().size());
 
-		long id2 = attribute.AddMarker(new Reaction("test", 0, null), "a", true);
+		long id2 = attribute.AddMarker(new Equals("test", 0), "a", true);
 		assertEquals(2, attribute.GetMarkers().size());
 
 		attribute.DeleteMarker(id1);
@@ -221,13 +222,13 @@ public class AbstractVaryingAttributeTest
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
-		Reaction r1 = new Reaction("test", 1, null);
-		Reaction r2 = new Reaction("test", 2, null);
+		Reaction r1 = new Equals("test", 1);
+		Reaction r2 = new Equals("test", 2);
 
-		Reaction r3 = new Reaction("test", 3, null, 2, 0);
-		Reaction r4 = new Reaction("test", 4, null, 0, 3);
+		Reaction r3 = new Equals("test", 3).Delay(2).Repeat(0);
+		Reaction r4 = new Equals("test", 4).Delay(0).Repeat(3);
 
-		Reaction r5 = new Reaction("test", 5, null, 2, 4);
+		Reaction r5 = new Equals("test", 5).Delay(2).Repeat(4);
 
 		attribute.AddReaction(r1);
 		attribute.AddReaction(r2);

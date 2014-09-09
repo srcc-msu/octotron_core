@@ -6,14 +6,13 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.UniqueName;
 import ru.parallel.octotron.storage.PersistentStorage;
 
 import java.io.Serializable;
 
-public class Reaction implements Serializable, UniqueName
+public abstract class Reaction implements Serializable, UniqueName
 {
 	private static final long serialVersionUID = 8900268116120488911L;
 
@@ -22,43 +21,19 @@ public class Reaction implements Serializable, UniqueName
 	private final String check_name;
 	private final Object check_value;
 
-	private final Response response;
-	private final Response recover_response;
+	private Response response = null;
+	private Response recover_response = null;
 
-	private final long delay;
-	private final long repeat;
+	private long wait_delay = 0;
+	private long wait_repeat = 0;
+	private boolean repeatable = false;
 
-	public Reaction(String check_name, Object check_value
-		, Response response, long delay, long repeat, Response recover_response)
+	public Reaction(String check_name, Object check_value)
 	{
 		this.check_name = check_name;
 		this.check_value = check_value;
 
-		this.delay = delay;
-		this.repeat = repeat;
-
-		this.response = response;
-		this.recover_response = recover_response;
-
 		Register();
-	}
-
-	public Reaction(String check_name, Object check_value
-		, Response response, Response recover_response)
-	{
-		this(check_name, check_value, response, 0, 0, recover_response);
-	}
-
-	public Reaction(String check_name, Object check_value
-		, Response response, long delay, long repeat)
-	{
-		this(check_name, check_value, response, delay, repeat, null);
-	}
-
-	public Reaction(String check_name, Object check_value
-		, Response response)
-	{
-		this(check_name, check_value, response, 0, 0, null);
 	}
 
 	private void Register()
@@ -66,61 +41,91 @@ public class Reaction implements Serializable, UniqueName
 		reaction_id = PersistentStorage.INSTANCE.GetReactions().Add(this);
 	}
 
-	public long GetID()
+	@Override
+	public String GetUniqName()
+	{
+		return GetCheckName();
+	}
+
+//----------------
+
+	public final long GetID()
 	{
 		return reaction_id;
 	}
 
-	public Object GetCheckValue()
+	public final Object GetCheckValue()
 	{
 		return check_value;
 	}
 
-	public Response GetResponse()
+	public final String GetCheckName()
+	{
+		return check_name;
+	}
+
+//----------------
+
+	public static final long STATE_NONE = 0;
+	public static final long STATE_STARTED = 1;
+	public static final long STATE_EXECUTED = 2;
+
+	public abstract boolean ReactionNeeded(ModelEntity entity);
+
+//----------------
+
+	public final Response GetResponse()
 	{
 		return response;
 	}
 
-	public Response GetRecoverResponse()
+	public final Response GetRecoverResponse()
 	{
 		return recover_response;
 	}
 
 	public long GetDelay()
 	{
-		return delay;
+		return wait_delay;
 	}
 
 	public long GetRepeat()
 	{
-		return repeat;
+		return wait_repeat;
 	}
 
-	public String GetCheckName()
+	public boolean IsRepeatable()
 	{
-		return check_name;
+		return repeatable;
 	}
 
-	public static final long STATE_NONE = 0;
-	public static final long STATE_STARTED = 1;
-	public static final long STATE_EXECUTED = 2;
-
-/**
- * reaction is needed if the \check_name attribute is false
- * */
-	public boolean ReactionNeeded(ModelEntity entity)
+	public Reaction Response(Response response)
 	{
-		IMetaAttribute attr = entity.GetMetaAttribute(check_name);
-
-		if(!attr.IsValid())
-			return false;
-
-		return attr.eq(check_value);
+		this.response = response;
+		return this;
 	}
 
-	@Override
-	public String GetUniqName()
+	public Reaction RecoverResponse(Response recover_response)
 	{
-		return GetCheckName();
+		this.recover_response = recover_response;
+		return this;
+	}
+
+	public Reaction Delay(long wait_delay)
+	{
+		this.wait_delay = wait_delay;
+		return this;
+	}
+
+	public Reaction Repeat(long wait_repeat)
+	{
+		this.wait_repeat = wait_repeat;
+		return this;
+	}
+
+	public Reaction Repeatable(boolean repeatable)
+	{
+		this.repeatable = repeatable;
+		return this;
 	}
 }

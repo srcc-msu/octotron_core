@@ -7,6 +7,7 @@ import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
+import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
@@ -99,9 +100,9 @@ public class BaseFactoryTest
 	@Test
 	public void TestReactions()
 	{
-		Reaction[] reactions = { new Reaction("test2", 0, new Response(EEventStatus.INFO, "")) };
-		Reaction reaction2 = new Reaction("test3", 0, new Response(EEventStatus.INFO, ""));
-		Reaction reaction3 = new Reaction("test3", 0, new Response(EEventStatus.INFO, ""));
+		Reaction[] reactions = { new Equals("test2", 0).Response(new Response(EEventStatus.INFO, "")) };
+		Reaction reaction2 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO, ""));
+		Reaction reaction3 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO, ""));
 
 		ObjectFactory f1 = object_factory
 			.Sensors(new SimpleAttribute("test1", 0))

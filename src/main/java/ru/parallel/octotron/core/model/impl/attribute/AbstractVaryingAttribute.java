@@ -205,6 +205,9 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 				}
 				else if(state == Reaction.STATE_EXECUTED)
 				{
+					if(reaction.IsRepeatable())
+						result.add(reaction.GetResponse());
+
 					// nothing to see here
 				}
 			}

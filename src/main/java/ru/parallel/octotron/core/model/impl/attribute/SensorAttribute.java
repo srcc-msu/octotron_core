@@ -35,6 +35,6 @@ public class SensorAttribute extends AbstractVaryingAttribute<SensorObject>
 		for(ReactionObject reaction_object : reaction_objects)
 			reaction_object.Repeat(new_value);
 
-		return Update(new_value, true);
+		return InnerUpdate(new_value);
 	}
 }

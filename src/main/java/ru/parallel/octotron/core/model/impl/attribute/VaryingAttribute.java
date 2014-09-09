@@ -34,6 +34,6 @@ public class VaryingAttribute extends AbstractVaryingAttribute<VaryingObject>
 		Rule rule = meta.GetRule();
 		Object new_val = rule.Compute(parent);
 
-		return Update(new_val, false);
+		return InnerUpdate(new_val);
 	}
 }

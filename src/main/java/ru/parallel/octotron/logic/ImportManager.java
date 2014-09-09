@@ -46,7 +46,7 @@ public class ImportManager
 		return result;
 	}
 
-	public AttributeList<VaryingAttribute> CheckChanged(AttributeList<VaryingAttribute> changed)
+	/*public AttributeList<VaryingAttribute> CheckChanged(AttributeList<VaryingAttribute> changed)
 	{
 		AttributeList<VaryingAttribute> result = new AttributeList<>();
 
@@ -57,7 +57,7 @@ public class ImportManager
 		}
 
 		return result;
-	}
+	}*/
 
 	public AttributeList<VaryingAttribute> ProcessVaryings(AttributeList<SensorAttribute> changed)
 	{
@@ -67,7 +67,10 @@ public class ImportManager
 
 		do
 		{
-			dependant_varyings = CheckChanged(dependant_varyings);
+			for(VaryingAttribute dependant_varying : dependant_varyings)
+				dependant_varying.Update();
+
+//			dependant_varyings = CheckChanged(dependant_varyings);
 			result = result.append(dependant_varyings);
 			dependant_varyings = ListConverter.GetDependant(dependant_varyings);
 		}

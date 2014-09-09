@@ -35,8 +35,8 @@ public class AttributeProcessor
 
 			SensorAttribute sensor = entity.GetSensor(packet.getRight().GetName());
 
-			if(sensor.Update(packet.getRight().GetValue()))
-				changed.add(sensor);
+			sensor.Update(packet.getRight().GetValue());
+			changed.add(sensor);
 		}
 
 		return changed;

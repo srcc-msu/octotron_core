@@ -57,13 +57,13 @@ public class AbstractVaryingAttributeTest
 
 		assertNull(attribute.GetLastValue());
 
-		attribute.Update(1, true);
+		attribute.Update(1);
 		assertEquals(0, (long) attribute.GetLastValue().GetValue().GetLong());
 		assertEquals(0, attribute.GetLastValue().GetCTime());
 
 		Thread.sleep(SLEEP);
 
-		attribute.Update(2, true);
+		attribute.Update(2);
 		assertEquals(1, (long) attribute.GetLastValue().GetValue().GetLong());
 		assertEquals(JavaUtils.GetTimestamp() - 2, attribute.GetLastValue().GetCTime(), DELTA);
 	}
@@ -79,19 +79,19 @@ public class AbstractVaryingAttributeTest
 
 		assertEquals(0, attribute.GetCTime());
 
-		attribute.Update(1, true);
+		attribute.Update(1);
 		assertEquals(JavaUtils.GetTimestamp(), attribute.GetCTime(), DELTA);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(2, true);
+		attribute.Update(2);
 		assertEquals(JavaUtils.GetTimestamp(), attribute.GetCTime(), DELTA);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(2, false);
+		attribute.Update(2);
 		assertEquals(JavaUtils.GetTimestamp() - 2, attribute.GetCTime(), DELTA);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(2, true);
+		attribute.Update(2);
 		assertEquals(JavaUtils.GetTimestamp(), attribute.GetCTime(), DELTA);
 	}
 
@@ -102,19 +102,19 @@ public class AbstractVaryingAttributeTest
 
 		assertEquals(0, attribute.GetATime());
 
-		attribute.Update(1, true);
+		attribute.Update(1);
 		assertEquals(JavaUtils.GetTimestamp(), attribute.GetATime(), DELTA);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(2, true);
+		attribute.Update(2);
 		assertEquals(JavaUtils.GetTimestamp(), attribute.GetATime(), DELTA);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(2, false);
+		attribute.Update(2);
 		assertEquals(JavaUtils.GetTimestamp(), attribute.GetATime(), DELTA);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(2, true);
+		attribute.Update(2);
 		assertEquals(JavaUtils.GetTimestamp(), attribute.GetATime(), DELTA);
 	}
 
@@ -125,19 +125,19 @@ public class AbstractVaryingAttributeTest
 
 		assertEquals(0.0, attribute.GetSpeed(), GraphAttribute.EPSILON);
 
-		attribute.Update(0.0, true);
+		attribute.Update(0.0);
 		assertEquals(0.0, attribute.GetSpeed(), GraphAttribute.EPSILON);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(10.0, true);
+		attribute.Update(10.0);
 		assertEquals(10.0 / (SLEEP / 1000), attribute.GetSpeed(), 1.0);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(10.0, false);
+		attribute.Update(10.0);
 		assertEquals(10.0 / (SLEEP / 1000), attribute.GetSpeed(), 1.0);
 
 		Thread.sleep(SLEEP);
-		attribute.Update(10.0, true);
+		attribute.Update(10.0);
 		assertEquals(0.0, attribute.GetSpeed(), GraphAttribute.EPSILON);
 	}
 
@@ -148,16 +148,16 @@ public class AbstractVaryingAttributeTest
 
 		assertEquals(0L, attribute.GetValue());
 
-		attribute.Update(1, true);
+		attribute.Update(1);
 		assertEquals(1L, attribute.GetValue());
 
-		attribute.Update(1, false);
+		attribute.Update(1);
 		assertEquals(1L, attribute.GetValue());
 
-		attribute.Update(2, false);
+		attribute.Update(2);
 		assertEquals(2L, attribute.GetValue());
 
-		attribute.Update(3, false);
+		attribute.Update(3);
 		assertEquals(3L, attribute.GetValue());
 	}
 
@@ -166,7 +166,7 @@ public class AbstractVaryingAttributeTest
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
-		attribute.Update(1, true);
+		attribute.Update(1);
 
 		assertTrue(attribute.IsValid());
 

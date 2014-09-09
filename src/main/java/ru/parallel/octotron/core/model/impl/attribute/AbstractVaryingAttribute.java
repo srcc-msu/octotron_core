@@ -77,32 +77,17 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		return diff / (cur_ctime - last_ctime);
 	}
 
-	protected void RotateValue(Object new_value, long cur_time)
+	protected boolean InnerUpdate(Object new_value)
 	{
+		boolean result = ne(new_value);
+
 		meta.SetLast(GetValue(), GetCTime());
 
 		SetValue(new_value);
-		meta.SetCurrent(new_value, cur_time);
-	}
 
-	protected void Touch(long cur_time)
-	{
-		meta.Touch(cur_time);
-	}
+		meta.SetCurrent(new_value, JavaUtils.GetTimestamp());
 
-	protected boolean Update(Object new_value, boolean allow_overwrite)
-	{
-		long cur_time = JavaUtils.GetTimestamp();
-		Touch(cur_time);
-
-// if got a new value, or was not initialized or allow_overwrite is on
-		if(ne(new_value) || GetCTime() == 0 || allow_overwrite)
-		{
-			RotateValue(new_value, cur_time);
-			return true;
-		}
-
-		return false;
+		return result;
 	}
 
 	private List<ReactionObject> FilterSuppressed(List<ReactionObject> reaction_objects)

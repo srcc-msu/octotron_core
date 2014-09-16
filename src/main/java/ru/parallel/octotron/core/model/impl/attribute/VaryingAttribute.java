@@ -9,7 +9,11 @@ package ru.parallel.octotron.core.model.impl.attribute;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
+import ru.parallel.octotron.core.model.impl.meta.ReactionObjectFactory;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
+
+import java.util.List;
 
 public class VaryingAttribute extends AbstractVaryingAttribute<VaryingObject>
 {
@@ -32,8 +36,8 @@ public class VaryingAttribute extends AbstractVaryingAttribute<VaryingObject>
 	public boolean Update()
 	{
 		Rule rule = meta.GetRule();
-		Object new_val = rule.Compute(parent);
+		Object new_value = rule.Compute(parent);
 
-		return InnerUpdate(new_val);
+		return InnerUpdate(new_value);
 	}
 }

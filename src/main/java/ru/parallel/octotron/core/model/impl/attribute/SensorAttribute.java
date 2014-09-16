@@ -29,12 +29,6 @@ public class SensorAttribute extends AbstractVaryingAttribute<SensorObject>
 
 	public boolean Update(Object new_value)
 	{
-		List<ReactionObject> reaction_objects = ReactionObjectFactory
-			.INSTANCE.ObtainAll(meta.GetBaseEntity());
-
-		for(ReactionObject reaction_object : reaction_objects)
-			reaction_object.Repeat(new_value);
-
 		return InnerUpdate(new_value);
 	}
 }

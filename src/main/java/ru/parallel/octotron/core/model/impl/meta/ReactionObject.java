@@ -104,7 +104,7 @@ public class ReactionObject extends MetaObject
 
 	public void Repeat(Object new_value)
 	{
-		if(new_value == GetReaction().GetCheckValue())
+		if(new_value.equals(GetReaction().GetCheckValue()))
 			GetBaseEntity().UpdateAttribute(reaction_repeat_const, GetRepeat() + 1);
 		else
 			DropRepeat();

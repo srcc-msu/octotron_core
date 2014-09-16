@@ -81,6 +81,12 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	{
 		boolean result = ne(new_value);
 
+		List<ReactionObject> reaction_objects = ReactionObjectFactory
+			.INSTANCE.ObtainAll(meta.GetBaseEntity());
+
+		for(ReactionObject reaction_object : reaction_objects)
+			reaction_object.Repeat(new_value);
+
 		meta.SetLast(GetValue(), GetCTime());
 
 		SetValue(new_value);

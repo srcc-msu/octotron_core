@@ -15,6 +15,7 @@ public class ReactionObject extends MetaObject
 	private static final String reaction_state_const = "_status";
 	private static final String reaction_start_time_const = "_started";
 	private static final String reaction_repeat_const = "_repeat";
+	private static final String reaction_stat_const = "_stat";
 
 	public ReactionObject(GraphEntity base)
 	{
@@ -30,6 +31,7 @@ public class ReactionObject extends MetaObject
 		GetBaseObject().DeclareAttribute(reaction_state_const, Reaction.STATE_NONE);
 		GetBaseEntity().DeclareAttribute(reaction_start_time_const, 0);
 		GetBaseEntity().DeclareAttribute(reaction_repeat_const, 0);
+		GetBaseEntity().DeclareAttribute(reaction_stat_const, 0);
 	}
 
 	public long GetID()
@@ -120,4 +122,20 @@ public class ReactionObject extends MetaObject
 		GetBaseEntity().UpdateAttribute(reaction_repeat_const, 0);
 	}
 
+// -------------
+
+	public void IncStat()
+	{
+		GetBaseEntity().UpdateAttribute(reaction_stat_const, GetStat() + 1);
+	}
+
+	public long GetStat()
+	{
+		return GetAttribute(reaction_stat_const).GetLong();
+	}
+
+	public void ResetStat()
+	{
+		GetBaseEntity().UpdateAttribute(reaction_stat_const, 0);
+	}
 }

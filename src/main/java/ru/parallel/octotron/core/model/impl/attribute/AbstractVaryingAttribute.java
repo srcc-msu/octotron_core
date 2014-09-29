@@ -171,6 +171,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 					if(ready)
 					{
 						result.add(reaction.GetResponse());
+						reaction_object.IncStat();
 
 						reaction_object.SetState(Reaction.STATE_EXECUTED);
 					}
@@ -186,6 +187,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 					if(ready)
 					{
 						result.add(reaction.GetResponse());
+						reaction_object.IncStat();
 
 						reaction_object.SetState(Reaction.STATE_EXECUTED);
 					}
@@ -197,9 +199,14 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 				else if(state == Reaction.STATE_EXECUTED)
 				{
 					if(reaction.IsRepeatable())
+					{
 						result.add(reaction.GetResponse());
-
-					// nothing to see here
+						reaction_object.IncStat();
+					}
+					else
+					{
+						// nothing to see here
+					}
 				}
 			}
 			else

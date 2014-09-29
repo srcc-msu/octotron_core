@@ -55,10 +55,6 @@ public class HTTPRequest
 
 		if(result.type == E_RESULT_TYPE.JSON)
 			content_type = "application/json";
-		else if(result.type == E_RESULT_TYPE.JSONP)
-			content_type = "application/javascript";
-		else if(result.type == E_RESULT_TYPE.CSV)
-			content_type = "text/csv";
 		else
 			content_type = "text/plain";
 

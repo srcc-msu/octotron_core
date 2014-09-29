@@ -7,6 +7,7 @@ import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.model.impl.meta.SensorObjectFactory;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObjectFactory;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class ModelAttribute extends AttributeDecorator
 {
@@ -51,5 +52,10 @@ public class ModelAttribute extends AttributeDecorator
 				, VaryingObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
 
 		return ToConstant();
+	}
+
+	public String GetStringValue()
+	{
+		return SimpleAttribute.ValueToStr(GetBaseAttribute().GetValue());
 	}
 }

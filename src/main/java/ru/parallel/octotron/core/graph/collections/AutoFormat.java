@@ -23,220 +23,25 @@ import static ru.parallel.utils.JavaUtils.SortSimpleList;
 
 public class AutoFormat
 {
-	public enum E_FORMAT_PARAM {CSV, COMMA, NL, JSON, JSONP, NONE}
+	public enum E_FORMAT_PARAM { PLAIN, JSON, JSONP, NONE}
 
-	/**
-	 * print \\list objects with custom separators
-	 * if \\attributes list is empty - print all attributes
-	 * */
-	public static String PrintSeparated(EntityList<?, ?> list, List<SimpleAttribute> attributes
-		, String attr_sep, String line_sep, boolean show_name, boolean separate_objects)
-	{
-		StringBuilder result = new StringBuilder();
 
-		for(IEntity<?> entity : list)
-		{
-			List<SimpleAttribute> target;
-
-			if(attributes.size() > 0)
-				target = SortSimpleList(attributes);
-			else
-				target = entity.GetAttributes().AlphabeticSort().ToSimple();
-
-			String prefix = "";
-
-			for(SimpleAttribute attr : target)
-			{
-				if(entity.TestAttribute(attr.GetName()))
-				{
-					result.append(prefix);
-
-					if(show_name)
-					{
-						result.append(attr.GetName());
-						result.append('=');
-					}
-
-					Object value = entity.GetAttribute(attr.GetName()).GetValue();
-					result.append(SimpleAttribute.ValueToStr(value));
-				}
-				else
-					result.append("not found");
-
-				prefix = attr_sep;
-			}
-			result.append(line_sep);
-
-			if(separate_objects)
-				result.append(line_sep);
-		}
-
-		return result.toString();
-	}
-
-	/**
-	 * print \\list objects in json format
-	 * example: [{"attr_1"=0, "attr2"="test"},{"attr_name"=1.0}]
-	 * if \\attributes list is empty - print all attributes
-	 * */
-	public static String PrintJson(EntityList<?, ?> list, List<SimpleAttribute> attributes)
-	{
-		StringBuilder result = new StringBuilder();
-
-		String ent_prefix = "";
-
-		result.append('[');
-
-		for(IEntity<?> entity : list)
-		{
-			result.append(ent_prefix);
-			result.append('{');
-
-			String prefix = "";
-
-			List<SimpleAttribute> target;
-
-			if(attributes.size() > 0)
-				target = SortSimpleList(attributes);
-			else
-				target = entity.GetAttributes().AlphabeticSort().ToSimple();
-
-			for(SimpleAttribute attr : target)
-			{
-				result.append(prefix);
-				if(entity.TestAttribute(attr.GetName()))
-				{
-					result.append(JavaUtils.Quotify(attr.GetName()));
-					result.append(':');
-
-					Object value = entity.GetAttribute(attr.GetName()).GetValue();
-					result.append(SimpleAttribute.ValueToStr(value));
-				}
-				else
-					result.append("\"not found\":null");
-
-				prefix = ",";
-			}
-			result.append('}');
-			ent_prefix = ",";
-		}
-		result.append(']');
-
-		return result.toString();
-	}
-
-	public static String PrintJsonP(EntityList<?, ?> list, List<SimpleAttribute> attributes, String callback)
-	{
-		String result = callback + "({" + System.lineSeparator();
-		result += "\"modified\" : " + JavaUtils.GetTimestamp() + "," + System.lineSeparator();
-		result += "\"data\" : " + PrintJson(list, attributes);
-		result += System.lineSeparator() + "})";
-
-		return result;
-	}
-
-	public static String PrintCSV(EntityList<?, ?> list, List<SimpleAttribute> attributes)
-	{
-		StringBuilder result = new StringBuilder();
-
-		for(SimpleAttribute param : attributes)
-			result.append(param.GetName()).append(",");
-
-		result.append(System.lineSeparator());
-		result.append(PrintSeparated(list, attributes, ",", System.lineSeparator(), false, false));
-
-		return result.toString();
-	}
-
-	public static String PrintNL(EntityList<?, ?> list, List<SimpleAttribute> attributes)
-	{
-		return PrintSeparated(list, attributes, System.lineSeparator(), System.lineSeparator(), true, true);
-	}
-
-	public static String PrintComma(EntityList<?, ?> list, List<SimpleAttribute> attributes)
-	{
-		return PrintSeparated(list, attributes, ",", ",", true, false);
-	}
-
-	public static String PrintEntities(EntityList<?, ?> list, List<SimpleAttribute> attributes, E_FORMAT_PARAM format, String callback)
+	public static String PrintData(List<Map<String, Object>> data, E_FORMAT_PARAM format, String callback)
 	{
 		switch (format)
 		{
-			case CSV:
-				return PrintCSV(list, attributes);
-
-			case COMMA:
-				return PrintComma(list, attributes);
-
-			case NL:
-				return PrintNL(list, attributes);
+			case PLAIN:
+				return PrintPlain(data);
 
 			case JSON:
-				return PrintJson(list, attributes);
+				return PrintJson(data);
 
 			case JSONP:
-				return PrintJsonP(list, attributes, callback);
+				return PrintJsonp(data, callback);
 
 			default:
 				throw new IllegalArgumentException("unsupported format " + format);
 		}
-	}
-
-	public static String PrintEntitiesSpecial(EntityList<? extends ModelEntity, ?> list)
-	{
-		StringBuilder result = new StringBuilder();
-
-		for(ModelEntity entity : list)
-		{
-			result.append(System.lineSeparator()).append("----  attributes   ----")
-				.append(System.lineSeparator()).append(System.lineSeparator());
-
-			for(IAttribute attr : entity.GetAttributes().AlphabeticSort())
-			{
-				result.append(attr.GetName()).append('=');
-				Object value = entity.GetAttribute(attr.GetName()).GetValue();
-				result.append(SimpleAttribute.ValueToStr(value));
-
-				result.append(System.lineSeparator());
-			}
-
-			result.append(System.lineSeparator()).append("----  rules  ----")
-				.append(System.lineSeparator()).append(System.lineSeparator());
-
-/*			for(OctoRule rule : entity.GetRules())
-			{
-				String str = " ID: " + rule.GetID() + " attribute: \""
-					+ rule.GetName() + "\"" + System.lineSeparator();
-
-				result.append(str);
-			}*/
-
-			result.append(System.lineSeparator()).append("----  reactions  ----")
-				.append(System.lineSeparator()).append(System.lineSeparator());
-
-			for(ReactionObject reaction : entity.GetReactions())
-			{
-				String str = " ID: " + reaction.GetReaction().GetID()
-					+ " descr: \"" + reaction.GetReaction().GetResponse().GetDescription() + "\""
-					+ System.lineSeparator();
-
-				result.append(str);
-			}
-
-			result.append(System.lineSeparator()).append("----  markers  ----")
-					.append(System.lineSeparator()).append(System.lineSeparator());
-
-			for(Marker marker : entity.GetMarkers())
-			{
-				String str = " reaction: " + marker.GetTarget()
-					+ " descr: \"" + marker.GetDescription() + "\""
-					+ " suppressed = " + marker. IsSuppress()
-					+ System.lineSeparator();
-				result.append(str);
-			}
-		}
-
-		return result.toString();
 	}
 
 	public static String PrintJsonp(List<Map<String, Object>> data, String callback)

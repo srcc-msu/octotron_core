@@ -29,7 +29,8 @@ private static final Operation[] VIEW_OPERATIONS =
 	{
 		Operations.version
 		, Operations.count
-		, Operations.p, Operations.p_spec
+		, Operations.p
+		, Operations.p_const, Operations.p_sensor, Operations.p_var
 		, Operations.show_m, Operations.show_r
 		, Operations.export
 	};

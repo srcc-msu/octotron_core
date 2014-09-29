@@ -10,9 +10,11 @@ import ru.parallel.octotron.core.graph.collections.AutoFormat;
 import ru.parallel.octotron.core.graph.collections.AutoFormat.E_FORMAT_PARAM;
 import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.collections.ModelObjectList;
+import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -77,12 +79,73 @@ public abstract class Operations
 	{
 		switch(format)
 		{
-			case "csv"   : return E_FORMAT_PARAM.CSV;
-			case "comma" : return E_FORMAT_PARAM.COMMA;
-			case "nl"    : return E_FORMAT_PARAM.NL;
+			case "plain" : return E_FORMAT_PARAM.PLAIN;
 			case "json"  : return E_FORMAT_PARAM.JSON;
 			case "jsonp" : return E_FORMAT_PARAM.JSONP;
 			default      : return E_FORMAT_PARAM.NONE;
+		}
+	}
+
+	private static List<SimpleAttribute> GetAttributes(Map<String, String> params)
+	{
+
+		String attributes_str = params.get("attributes");
+		List<SimpleAttribute> attributes = new LinkedList<>();
+
+		if (attributes_str != null)
+			for (String name : attributes_str.split(","))
+				attributes.add(new SimpleAttribute(name, null));
+
+		return attributes;
+	}
+
+	private static E_FORMAT_PARAM GetFormat(Map<String, String> params)
+	{
+		E_FORMAT_PARAM format = E_FORMAT_PARAM.PLAIN;
+
+		String format_str = params.get("format");
+
+		if(format_str != null)
+			format = Operations.AttrToFormat(format_str);
+
+		return format;
+	}
+
+	private static void CheckFormat(E_FORMAT_PARAM format, String callback)
+		throws ExceptionParseError
+	{
+		if(format != E_FORMAT_PARAM.JSONP && callback != null)
+			throw new ExceptionParseError("callback is reserved argument for jsonp format");
+
+		if(format == E_FORMAT_PARAM.JSONP && callback == null)
+			throw new ExceptionParseError("specify a callback function");
+	}
+
+	private static List<ModelAttribute> GetAttributes(ModelEntity entity, List<SimpleAttribute> attributes, EAttributeType type)
+	{
+		List<ModelAttribute> result = new LinkedList<>();
+
+		if(attributes.size() > 0)
+		{
+			for(SimpleAttribute names : attributes)
+			{
+				ModelAttribute attribute = entity.GetAttribute(names.GetName());
+
+				if(type == null || attribute.ToMeta().GetType() == type)
+					result.add(attribute);
+			}
+			return result;
+		}
+		else
+		{
+			for(ModelAttribute names : entity.GetAttributes())
+			{
+				ModelAttribute attribute = entity.GetAttribute(names.GetName());
+
+				if(type == null || attribute.ToMeta().GetType() == type)
+					result.add(attribute);
+			}
+			return result;
 		}
 	}
 
@@ -154,70 +217,155 @@ public abstract class Operations
 			Operations.RequiredParams(params, "path");
 			Operations.AllParams(params, "path", "format", "callback", "attributes");
 
-			E_FORMAT_PARAM format = E_FORMAT_PARAM.NL;
-
-// check if format is specifed
-
-			String format_str = params.get("format");
-
-			if(format_str != null)
-				format = Operations.AttrToFormat(format_str);
-
-// check if attributes are specified
-
-			String attributes_str = params.get("attributes");
-			List<SimpleAttribute> attributes = new LinkedList<>();
-
-			if(attributes_str != null)
-				for(String name : attributes_str.split(","))
-					attributes.add(new SimpleAttribute(name, null));
+			E_FORMAT_PARAM format = GetFormat(params);
+			List<SimpleAttribute> attributes = GetAttributes(params);
 
 			String callback = params.get("callback");
 
-			if(format != E_FORMAT_PARAM.JSONP && callback != null)
-				throw new ExceptionParseError("callback is reserved argument for jsonp format");
-
-			if(format == E_FORMAT_PARAM.JSONP && callback == null)
-				throw new ExceptionParseError("specify a callback function");
-
-			if(format == E_FORMAT_PARAM.CSV && attributes.size() == 0)
-				throw new ExceptionParseError("specify some fields for CSV format");
+			CheckFormat(format, callback);
 
 			if(objects.size() == 0)
 				return new RequestResult(E_RESULT_TYPE.ERROR, "empty objects lists - nothing to print");
 
-			String data = AutoFormat.PrintEntities(objects, attributes, format, callback);
+			List<Map<String, Object>> data = new LinkedList<>();
 
-			if(format == E_FORMAT_PARAM.JSON)
-				return new RequestResult(E_RESULT_TYPE.JSON, data);
-			else if(format == E_FORMAT_PARAM.JSONP)
-				return new RequestResult(E_RESULT_TYPE.JSONP, data);
-			else if(format == E_FORMAT_PARAM.CSV)
-				return new RequestResult(E_RESULT_TYPE.CSV, data);
-			else
-				return new RequestResult(E_RESULT_TYPE.TEXT, data);
+			for(ModelEntity entity : objects)
+			{
+				Map<String, Object> map = new HashMap<>();
+
+				for(ModelAttribute attribute : GetAttributes(entity, attributes, null))
+				{
+					map.put(attribute.GetName(), attribute.GetStringValue());
+				}
+				data.add(map);
+			}
+
+			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
 		}
 	});
 
-/**
- * print all special(service) attributes of the given objects<br>
- * */
-	public static final Operation p_spec = new Operation("p_spec", true
+	public static final Operation p_const = new Operation("p_const", true
 		, new IExec()
 	{
 		@Override
 		public Object Execute(ExecutionController control
 			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
-				throws ExceptionParseError
+			throws ExceptionParseError
 		{
-			Operations.AllParams(params, "path");
+			Operations.RequiredParams(params, "path");
+			Operations.AllParams(params, "path", "format", "callback", "attributes");
 
-			String data = AutoFormat.PrintEntitiesSpecial(objects);
-			return new RequestResult(E_RESULT_TYPE.TEXT, data);
+			E_FORMAT_PARAM format = GetFormat(params);
+			List<SimpleAttribute> attributes = GetAttributes(params);
+
+			String callback = params.get("callback");
+
+			CheckFormat(format, callback);
+
+			if(objects.size() == 0)
+				return new RequestResult(E_RESULT_TYPE.ERROR, "empty objects lists - nothing to print");
+
+			List<Map<String, Object>> data = new LinkedList<>();
+
+			for(ModelEntity entity : objects)
+			{
+				Map<String, Object> map = new HashMap<>();
+
+				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.CONSTANT))
+				{
+					map.put(attribute.GetName(), attribute.GetStringValue());
+				}
+				data.add(map);
+			}
+
+			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
 		}
 	});
 
-/**
+	public static final Operation p_sensor = new Operation("p_sensor", true
+		, new IExec()
+	{
+		@Override
+		public Object Execute(ExecutionController control
+			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			throws ExceptionParseError
+		{
+			Operations.RequiredParams(params, "path");
+			Operations.AllParams(params, "path", "format", "callback", "attributes");
+
+			E_FORMAT_PARAM format = GetFormat(params);
+			List<SimpleAttribute> attributes = GetAttributes(params);
+
+			String callback = params.get("callback");
+
+			CheckFormat(format, callback);
+
+			if(objects.size() == 0)
+				return new RequestResult(E_RESULT_TYPE.ERROR, "empty objects lists - nothing to print");
+
+			List<Map<String, Object>> data = new LinkedList<>();
+
+			for(ModelEntity entity : objects)
+			{
+				Map<String, Object> map = new HashMap<>();
+
+				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.SENSOR))
+				{
+					map.put("name", attribute.GetName());
+					map.put("value", attribute.GetStringValue());
+					map.put("ctime", attribute.ToMeta().GetCTime());
+					map.put("valid", attribute.ToMeta().IsValid());
+				}
+				data.add(map);
+			}
+
+			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+		}
+	});
+
+	public static final Operation p_var = new Operation("p_var", true
+		, new IExec()
+	{
+		@Override
+		public Object Execute(ExecutionController control
+			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			throws ExceptionParseError
+		{
+			Operations.RequiredParams(params, "path");
+			Operations.AllParams(params, "path", "format", "callback", "attributes");
+
+			E_FORMAT_PARAM format = GetFormat(params);
+			List<SimpleAttribute> attributes = GetAttributes(params);
+
+			String callback = params.get("callback");
+
+			CheckFormat(format, callback);
+
+			if(objects.size() == 0)
+				return new RequestResult(E_RESULT_TYPE.ERROR, "empty objects lists - nothing to print");
+
+			List<Map<String, Object>> data = new LinkedList<>();
+
+			for(ModelEntity entity : objects)
+			{
+				Map<String, Object> map = new HashMap<>();
+
+				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.VARYING))
+				{
+					map.put("name", attribute.GetName());
+					map.put("value", attribute.GetStringValue());
+					map.put("ctime", attribute.ToMeta().GetCTime());
+					map.put("valid", attribute.ToMeta().IsValid());
+					map.put("rule", attribute.ToVarying().GetRule().GetID());
+				}
+				data.add(map);
+			}
+
+			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+		}
+	});
+
+	/**
  * show all markers in model<br>
  * */
 	public static final Operation show_m = new Operation("show_m", true, new IExec()
@@ -262,19 +410,9 @@ public abstract class Operations
 			Operations.RequiredParams(params);
 			Operations.AllParams(params, "format", "callback");
 
-			E_FORMAT_PARAM format = E_FORMAT_PARAM.NL;
-
-// check if format is specifed
-
-			String format_str = params.get("format");
-
-			if(format_str != null)
-				format = Operations.AttrToFormat(format_str);
-
+			E_FORMAT_PARAM format = GetFormat(params);
 			String callback = params.get("callback");
-
-			if(format == E_FORMAT_PARAM.JSONP && callback == null)
-				throw new ExceptionParseError("specify a callback function");
+			CheckFormat(format, callback);
 
 			List<Reaction> reactions = PersistentStorage.INSTANCE.GetReactions().GetAll();
 
@@ -290,19 +428,17 @@ public abstract class Operations
 				map.put("RID", reaction.GetID());
 				map.put("check_attribute", reaction.GetCheckName());
 				map.put("check_value", reaction.GetCheckValue());
-				map.put("status", reaction.GetResponse().GetStatus().toString());
-				map.put("description", reaction.GetResponse().GetDescription());
+
+				if(reaction.GetResponse() != null)
+				{
+					map.put("status", reaction.GetResponse().GetStatus().toString());
+					map.put("description", reaction.GetResponse().GetDescription());
+				}
 
 				data.add(map);
 			}
 
-			if(format == E_FORMAT_PARAM.JSON)
-				return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJson(data));
-			else if(format == E_FORMAT_PARAM.JSONP)
-				return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJsonp(data, callback));
-			else if(format == E_FORMAT_PARAM.NL)
-				return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintPlain(data));
-			else throw new ExceptionParseError("unsuppported format");
+			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
 		}
 	});
 
@@ -319,25 +455,9 @@ public abstract class Operations
 			Operations.RequiredParams(params);
 			Operations.AllParams(params, "format", "callback");
 
-			E_FORMAT_PARAM format = E_FORMAT_PARAM.NL;
-
-// check if format is specifed
-
-			String format_str = params.get("format");
-
-			if(format_str != null)
-				format = Operations.AttrToFormat(format_str);
-
+			E_FORMAT_PARAM format = GetFormat(params);
 			String callback = params.get("callback");
-
-			if(format == E_FORMAT_PARAM.JSONP && callback == null)
-				throw new ExceptionParseError("specify a callback function");
-
-
-			List<Reaction> reactions = PersistentStorage.INSTANCE.GetReactions().GetAll();
-
-			if(reactions.isEmpty())
-				return new RequestResult(E_RESULT_TYPE.TEXT, "no reactions");
+			CheckFormat(format, callback);
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
@@ -352,18 +472,12 @@ public abstract class Operations
 					data.add(version_line);
 				}
 			}
-			catch (ExceptionSystemError e)
+			catch(ExceptionSystemError e)
 			{
 				throw new ExceptionParseError(e);
 			}
 
-			if(format == E_FORMAT_PARAM.JSON)
-				return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJson(data));
-			else if(format == E_FORMAT_PARAM.JSONP)
-				return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJsonp(data, callback));
-			else if(format == E_FORMAT_PARAM.NL)
-				return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintPlain(data));
-			else throw new ExceptionParseError("unsuppported format");
+			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
 		}
 	});
 

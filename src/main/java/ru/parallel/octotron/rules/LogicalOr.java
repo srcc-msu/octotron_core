@@ -8,8 +8,8 @@ package ru.parallel.octotron.rules;
 
 
 import org.apache.commons.lang3.ArrayUtils;
-import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 

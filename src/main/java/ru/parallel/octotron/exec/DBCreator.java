@@ -13,8 +13,8 @@ import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.collections.ModelLinkList;
 import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.storage.PersistentStorage;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.storage.PersistentStorage;
 import ru.parallel.utils.FileUtils;
 
 import java.io.FileNotFoundException;

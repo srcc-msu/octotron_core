@@ -1,7 +1,7 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
-import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 
 public class VaryingObjectFactory extends MetaObjectFactory<VaryingObject, Rule>

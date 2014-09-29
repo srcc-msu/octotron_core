@@ -6,16 +6,16 @@
 
 package ru.parallel.octotron.core.model.impl.attribute;
 
-import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.*;
+import ru.parallel.octotron.core.logic.Marker;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.meta.*;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.logic.Marker;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.LinkedList;
@@ -121,13 +121,10 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 
 
 	@Override
-	public List<Response> GetExecutedReactions()
+	public List<Response> GetCurrentReactions()
 	{
 		List<Response> result = new LinkedList<>();
-
-		List<ReactionObject> reaction_objects = ReactionObjectFactory
-			.INSTANCE.ObtainAll(meta.GetBaseEntity());
-
+		List<ReactionObject> reaction_objects = GetReactions();
 		reaction_objects = FilterSuppressed(reaction_objects);
 
 		for(ReactionObject reaction_object : reaction_objects)
@@ -139,98 +136,18 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		return result;
 	}
 
-	public List<Response> GetReadyReactions()
+	public List<Response> ProcessReactions()
 	{
 		List<Response> result = new LinkedList<>();
-
-		List<ReactionObject> reaction_objects = ReactionObjectFactory
-			.INSTANCE.ObtainAll(meta.GetBaseEntity());
-
+		List<ReactionObject> reaction_objects = GetReactions();
 		reaction_objects = FilterSuppressed(reaction_objects);
 
 		for(ReactionObject reaction_object : reaction_objects)
 		{
-			Reaction reaction = reaction_object.GetReaction();
+			Response response = reaction_object.Process(GetParent());
 
-			boolean needed = reaction.ReactionNeeded(parent);
-			long state = reaction_object.GetState();
-
-			if(needed)
-			{
-				long delay = reaction.GetDelay();
-				long repeat = reaction.GetRepeat();
-
-				long current_delay = reaction_object.GetDelay();
-				long current_repeat = reaction_object.GetRepeat();
-
-				boolean ready = (current_delay >= delay)
-					&& (current_repeat >= repeat);
-
-				if(state == Reaction.STATE_NONE)
-				{
-					if(ready)
-					{
-						result.add(reaction.GetResponse());
-						reaction_object.IncStat();
-
-						reaction_object.SetState(Reaction.STATE_EXECUTED);
-					}
-					else
-					{
-						reaction_object.SetState(Reaction.STATE_STARTED);
-
-						reaction_object.StartDelay();
-					}
-				}
-				else if(state == Reaction.STATE_STARTED)
-				{
-					if(ready)
-					{
-						result.add(reaction.GetResponse());
-						reaction_object.IncStat();
-
-						reaction_object.SetState(Reaction.STATE_EXECUTED);
-					}
-					else
-					{
-						// nothing to see here
-					}
-				}
-				else if(state == Reaction.STATE_EXECUTED)
-				{
-					if(reaction.IsRepeatable())
-					{
-						result.add(reaction.GetResponse());
-						reaction_object.IncStat();
-					}
-					else
-					{
-						// nothing to see here
-					}
-				}
-			}
-			else
-			{
-				if(state == Reaction.STATE_NONE)
-				{
-					// nothing to see here
-				}
-				else if(state == Reaction.STATE_STARTED)
-				{
-					reaction_object.SetState(Reaction.STATE_NONE);
-					reaction_object.DropDelay();
-					reaction_object.DropRepeat();
-				}
-				else if(state == Reaction.STATE_EXECUTED)
-				{
-					if(reaction.GetRecoverResponse() != null)
-						result.add(reaction.GetRecoverResponse());
-
-					reaction_object.SetState(Reaction.STATE_NONE);
-					reaction_object.DropDelay();
-					reaction_object.DropRepeat();
-				}
-			}
+			if(response != null)
+				result.add(response);
 		}
 
 		return result;
@@ -298,17 +215,10 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	}
 
 	@Override
-	public List<Reaction> GetReactions()
+	public List<ReactionObject> GetReactions()
 	{
-		List<ReactionObject> reaction_objects = ReactionObjectFactory
+		return ReactionObjectFactory
 			.INSTANCE.ObtainAll(meta.GetBaseEntity());
-
-		List<Reaction> result = new LinkedList<>();
-
-		for(ReactionObject reaction_object : reaction_objects)
-			result.add(reaction_object.GetReaction());
-
-		return result;
 	}
 
 	@Override

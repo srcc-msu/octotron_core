@@ -1,7 +1,7 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.graph.collections.ListConverter;
 import ru.parallel.octotron.core.graph.IObject;
+import ru.parallel.octotron.core.graph.collections.ListConverter;
 import ru.parallel.octotron.core.graph.impl.GraphLinkList;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphObjectList;

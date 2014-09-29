@@ -1,8 +1,8 @@
 package ru.parallel.octotron.core.model.impl.meta;
 
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import javax.annotation.Nullable;

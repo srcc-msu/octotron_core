@@ -17,7 +17,7 @@ import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 /**
  * sometimes tests can fail if message did not came in time</br>

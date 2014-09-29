@@ -8,9 +8,9 @@ package ru.parallel.octotron.logic;
 
 import org.apache.commons.io.FileSystemUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.IGraph;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.*;
 import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -20,8 +20,8 @@ import ru.parallel.octotron.http.HTTPServer;
 import ru.parallel.octotron.http.ParsedHttpRequest;
 import ru.parallel.octotron.http.RequestResult;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.logic.importer.SimpleImporter;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.FileUtils;
@@ -338,15 +338,13 @@ public class ExecutionController
 	public String MakeSnapshot() {
 		StringBuilder result = new StringBuilder();
 
-		ModelObjectList list = ModelService.GetAllObjects();
-
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
 
-		for(ModelObject obj : list)
+		for(ModelEntity entity : ModelService.GetEntities())
 		{
-			for(Response response : obj.GetFails())
+			for(Response response : entity.GetCurrentReactions())
 			{
-				PreparedResponse prepared_response = new PreparedResponse(response, obj, JavaUtils.GetTimestamp());
+				PreparedResponse prepared_response = new PreparedResponse(response, entity, JavaUtils.GetTimestamp());
 
 				String descr = prepared_response.GetFullString();
 

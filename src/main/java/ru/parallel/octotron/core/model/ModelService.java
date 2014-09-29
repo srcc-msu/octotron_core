@@ -3,6 +3,7 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.graph.collections.ListConverter;
 import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.model.collections.ModelLinkList;
+import ru.parallel.octotron.core.model.collections.ModelList;
 import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
@@ -11,13 +12,23 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public abstract class ModelService
 {
+	public static ModelList GetEntities()
+	{
+		ModelList list = new ModelList();
+
+		list.append(GetAllLinks());
+		list.append(GetAllObjects());
+
+		return list;
+	}
+
 	public static void MakeRuleDependencies()
 	{
-		for(ModelObject object : GetAllObjects())
+		for(ModelEntity entity : GetEntities())
 		{
-			for(VaryingAttribute attribute : object.GetVaryings())
+			for(VaryingAttribute attribute : entity.GetVaryings())
 			{
-				for(IMetaAttribute dep : attribute.GetRule().GetDependency(object))
+				for(IMetaAttribute dep : attribute.GetRule().GetDependency(entity))
 				{
 					if(dep.GetType() != EAttributeType.CONSTANT)
 						dep.AddDependant(attribute);

@@ -6,15 +6,16 @@
 
 package ru.parallel.octotron.core.model.impl.attribute;
 
-import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.logic.Marker;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.logic.Marker;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -85,17 +86,17 @@ public class ConstantAttribute extends ModelAttribute implements IMetaAttribute
 		throw new ExceptionModelFail("can not add reaction to constant attribute");
 	}
 
-	public List<Reaction> GetReactions()
+	public List<ReactionObject> GetReactions()
 	{
 		return new LinkedList<>();
 	}
 
-	public List<Response> GetReadyReactions()
+	public List<Response> ProcessReactions()
 	{
 		return new LinkedList<>();
 	}
 
-	public List<Response> GetExecutedReactions()
+	public List<Response> GetCurrentReactions()
 	{
 		return new LinkedList<>();
 	}

@@ -5,9 +5,7 @@ import ru.parallel.octotron.core.model.impl.AttributeDecorator;
 import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
-import ru.parallel.octotron.core.model.impl.meta.SensorObject;
 import ru.parallel.octotron.core.model.impl.meta.SensorObjectFactory;
-import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObjectFactory;
 
 public class ModelAttribute extends AttributeDecorator

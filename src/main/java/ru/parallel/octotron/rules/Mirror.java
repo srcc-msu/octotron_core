@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.logic.impl.ObjectRule;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.logic.impl.ObjectRule;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 

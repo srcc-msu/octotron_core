@@ -8,11 +8,7 @@ package ru.parallel.octotron.core.model.impl.attribute;
 
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
-import ru.parallel.octotron.core.model.impl.meta.ReactionObjectFactory;
 import ru.parallel.octotron.core.model.impl.meta.SensorObject;
-
-import java.util.List;
 
 public class SensorAttribute extends AbstractVaryingAttribute<SensorObject>
 {

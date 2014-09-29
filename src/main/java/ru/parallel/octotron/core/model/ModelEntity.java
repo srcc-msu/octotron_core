@@ -1,25 +1,22 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.IEntity;
+import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphBased;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.logic.Marker;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
-import ru.parallel.octotron.core.model.impl.meta.SensorObject;
-import ru.parallel.octotron.core.model.impl.meta.SensorObjectFactory;
-import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
-import ru.parallel.octotron.core.model.impl.meta.VaryingObjectFactory;
+import ru.parallel.octotron.core.model.impl.meta.*;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.logic.Marker;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -242,9 +239,9 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 			.AddReaction(reaction);
 	}
 
-	public List<Reaction> GetReactions()
+	public List<ReactionObject> GetReactions()
 	{
-		List<Reaction> result = new LinkedList<>();
+		List<ReactionObject> result = new LinkedList<>();
 
 		for(ModelAttribute attribute : GetAttributes())
 			result.addAll(attribute.ToMeta().GetReactions());
@@ -252,9 +249,9 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 		return result;
 	}
 
-	public List<Reaction> GetReactions(String name)
+	public List<ReactionObject> GetReactions(String name)
 	{
-		List<Reaction> result = new LinkedList<>();
+		List<ReactionObject> result = new LinkedList<>();
 
 		result.addAll(GetAttribute(name).ToMeta().GetReactions());
 
@@ -271,25 +268,25 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // --------------
 
-	public List<Response> GetFails()
+	public List<Response> ProcessReactions()
 	{
 		List<Response> responses = new LinkedList<>();
 
 		for(ModelAttribute attribute : GetAttributes())
 		{
-			responses.addAll(attribute.ToMeta().GetExecutedReactions());
+			responses.addAll(attribute.ToMeta().ProcessReactions());
 		}
 
 		return responses;
 	}
 
-	public List<Response> PreparePendingReactions()
+	public List<Response> GetCurrentReactions()
 	{
 		List<Response> responses = new LinkedList<>();
 
 		for(ModelAttribute attribute : GetAttributes())
 		{
-			responses.addAll(attribute.ToMeta().GetReadyReactions());
+			responses.addAll(attribute.ToMeta().GetCurrentReactions());
 		}
 
 		return responses;

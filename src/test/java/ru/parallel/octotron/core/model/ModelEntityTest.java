@@ -1,11 +1,17 @@
 package ru.parallel.octotron.core.model;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.logic.*;
+import ru.parallel.octotron.core.logic.Marker;
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.impl.Equals;
+import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -290,7 +296,7 @@ public class ModelEntityTest
 
 			entity.AddReaction(reaction);
 
-			List<Reaction> reactions = entity.GetReactions();
+			List<ReactionObject> reactions = entity.GetReactions();
 
 			assertEquals(i + 1, reactions.size());
 		}

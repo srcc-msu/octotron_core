@@ -236,37 +236,37 @@ public class AbstractVaryingAttributeTest
 		attribute.AddReaction(r4);
 		attribute.AddReaction(r5);
 
-		assertEquals(0, attribute.GetReadyReactions().size());
+		assertEquals(0, attribute.ProcessReactions().size());
 
 		attribute.Update(1);
-		assertEquals(1, attribute.GetReadyReactions().size());
+		assertEquals(1, attribute.ProcessReactions().size());
 
 		attribute.Update(2);
-		assertEquals(1, attribute.GetReadyReactions().size());
+		assertEquals(1, attribute.ProcessReactions().size());
 
 		attribute.Update(3);
-		assertEquals(0, attribute.GetReadyReactions().size());
+		assertEquals(0, attribute.ProcessReactions().size());
 		Thread.sleep(3000);
-		assertEquals(1, attribute.GetReadyReactions().size());
+		assertEquals(1, attribute.ProcessReactions().size());
 
 		attribute.Update(4);
-		assertEquals(0, attribute.GetReadyReactions().size());
+		assertEquals(0, attribute.ProcessReactions().size());
 		attribute.Update(4);
-		assertEquals(0, attribute.GetReadyReactions().size());
+		assertEquals(0, attribute.ProcessReactions().size());
 		attribute.Update(4);
-		assertEquals(1, attribute.GetReadyReactions().size());
+		assertEquals(1, attribute.ProcessReactions().size());
 
 
 		attribute.Update(5);
-		assertEquals(0, attribute.GetReadyReactions().size());
+		assertEquals(0, attribute.ProcessReactions().size());
 		Thread.sleep(1000);
 		attribute.Update(5);
-		assertEquals(0, attribute.GetReadyReactions().size());
+		assertEquals(0, attribute.ProcessReactions().size());
 		attribute.Update(5);
-		assertEquals(0, attribute.GetReadyReactions().size());
+		assertEquals(0, attribute.ProcessReactions().size());
 		Thread.sleep(2000);
 		attribute.Update(5);
-		assertEquals(1, attribute.GetReadyReactions().size());
-		assertEquals(0, attribute.GetReadyReactions().size());
+		assertEquals(1, attribute.ProcessReactions().size());
+		assertEquals(0, attribute.ProcessReactions().size());
 	}
 }

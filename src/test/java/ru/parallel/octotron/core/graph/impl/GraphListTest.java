@@ -9,7 +9,8 @@ import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class GraphListTest
 {

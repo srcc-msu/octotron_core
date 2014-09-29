@@ -14,7 +14,6 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.logic.AttributeProcessor;
 
 import java.util.List;
 

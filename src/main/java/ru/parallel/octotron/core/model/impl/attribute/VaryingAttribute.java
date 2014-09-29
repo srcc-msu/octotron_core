@@ -6,14 +6,10 @@
 
 package ru.parallel.octotron.core.model.impl.attribute;
 
-import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
-import ru.parallel.octotron.core.model.impl.meta.ReactionObjectFactory;
 import ru.parallel.octotron.core.model.impl.meta.VaryingObject;
-
-import java.util.List;
 
 public class VaryingAttribute extends AbstractVaryingAttribute<VaryingObject>
 {

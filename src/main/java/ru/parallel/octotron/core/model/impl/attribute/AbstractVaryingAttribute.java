@@ -49,12 +49,6 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	}
 
 	@Override
-	public long GetATime()
-	{
-		return meta.GetATime();
-	}
-
-	@Override
 	public double GetSpeed()
 	{
 // check time

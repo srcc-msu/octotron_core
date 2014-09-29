@@ -4,10 +4,12 @@ import org.junit.*;
 import ru.parallel.octotron.core.graph.impl.GraphAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.JavaUtils;
 
@@ -96,29 +98,6 @@ public class AbstractVaryingAttributeTest
 	}
 
 	@Test
-	public void TestGetATime() throws Exception
-	{
-		SensorAttribute attribute = object.DeclareSensor("test", 0);
-
-		assertEquals(0, attribute.GetATime());
-
-		attribute.Update(1);
-		assertEquals(JavaUtils.GetTimestamp(), attribute.GetATime(), DELTA);
-
-		Thread.sleep(SLEEP);
-		attribute.Update(2);
-		assertEquals(JavaUtils.GetTimestamp(), attribute.GetATime(), DELTA);
-
-		Thread.sleep(SLEEP);
-		attribute.Update(2);
-		assertEquals(JavaUtils.GetTimestamp(), attribute.GetATime(), DELTA);
-
-		Thread.sleep(SLEEP);
-		attribute.Update(2);
-		assertEquals(JavaUtils.GetTimestamp(), attribute.GetATime(), DELTA);
-	}
-
-	@Test
 	public void TestGetSpeed() throws Exception
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0.0);
@@ -132,13 +111,16 @@ public class AbstractVaryingAttributeTest
 		attribute.Update(10.0);
 		assertEquals(10.0 / (SLEEP / 1000), attribute.GetSpeed(), 1.0);
 
-		Thread.sleep(SLEEP);
 		attribute.Update(10.0);
+		assertEquals(0.0, attribute.GetSpeed(), 1.0);
+
+		Thread.sleep(SLEEP);
+		attribute.Update(20.0);
 		assertEquals(10.0 / (SLEEP / 1000), attribute.GetSpeed(), 1.0);
 
 		Thread.sleep(SLEEP);
 		attribute.Update(10.0);
-		assertEquals(0.0, attribute.GetSpeed(), GraphAttribute.EPSILON);
+		assertEquals(-2.5, attribute.GetSpeed(), GraphAttribute.EPSILON);
 	}
 
 	@Test
@@ -222,13 +204,13 @@ public class AbstractVaryingAttributeTest
 	{
 		SensorAttribute attribute = object.DeclareSensor("test", 0);
 
-		Reaction r1 = new Equals("test", 1);
-		Reaction r2 = new Equals("test", 2);
+		Reaction r1 = new Equals("test", 1).Response(new Response(EEventStatus.INFO, ""));
+		Reaction r2 = new Equals("test", 2).Response(new Response(EEventStatus.INFO, ""));
 
-		Reaction r3 = new Equals("test", 3).Delay(2).Repeat(0);
-		Reaction r4 = new Equals("test", 4).Delay(0).Repeat(3);
+		Reaction r3 = new Equals("test", 3).Delay(2).Repeat(0).Response(new Response(EEventStatus.INFO, ""));
+		Reaction r4 = new Equals("test", 4).Delay(0).Repeat(3).Response(new Response(EEventStatus.INFO, ""));
 
-		Reaction r5 = new Equals("test", 5).Delay(2).Repeat(4);
+		Reaction r5 = new Equals("test", 5).Delay(2).Repeat(4).Response(new Response(EEventStatus.INFO, ""));
 
 		attribute.AddReaction(r1);
 		attribute.AddReaction(r2);

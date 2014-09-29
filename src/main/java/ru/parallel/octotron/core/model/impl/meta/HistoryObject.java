@@ -6,6 +6,9 @@ import ru.parallel.octotron.core.primitive.UniqueName;
 
 public class HistoryObject extends MetaObject
 {
+	static final String value_const = "_value";
+	static final String ctime_const = "_ctime";
+
 	public static class OldPair implements UniqueName
 	{
 		public final Object value;
@@ -33,23 +36,23 @@ public class HistoryObject extends MetaObject
 	public void Init(Object object)
 	{
 		OldPair pair = (OldPair) object;
-		GetBaseObject().DeclareAttribute(AttributeObject.value_const, pair.value);
-		GetBaseObject().DeclareAttribute(AttributeObject.ctime_const, pair.ctime);
+		GetBaseObject().DeclareAttribute(value_const, pair.value);
+		GetBaseObject().DeclareAttribute(ctime_const, pair.ctime);
 	}
 
 	public void Set(Object value, long ctime)
 	{
-		GetBaseObject().UpdateAttribute(AttributeObject.value_const, value);
-		GetBaseObject().UpdateAttribute(AttributeObject.ctime_const, ctime);
+		GetBaseObject().UpdateAttribute(value_const, value);
+		GetBaseObject().UpdateAttribute(ctime_const, ctime);
 	}
 
 	public GraphAttribute GetValue()
 	{
-		return GetBaseObject().GetAttribute(AttributeObject.value_const);
+		return GetBaseObject().GetAttribute(value_const);
 	}
 
 	public long GetCTime()
 	{
-		return GetBaseObject().GetAttribute(AttributeObject.ctime_const).GetLong();
+		return GetBaseObject().GetAttribute(ctime_const).GetLong();
 	}
 }

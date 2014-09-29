@@ -16,15 +16,11 @@ public abstract class AttributeObject extends MetaObject
 		super(base);
 	}
 
-	static final String value_const = "_value";
-	static final String atime_const = "_atime";
 	static final String ctime_const = "_ctime";
 	static final String valid_const = "_valid";
 
 	public static void Init(GraphObject object, String name, Object value)
 	{
-		object.DeclareAttribute(value_const, value);
-		object.DeclareAttribute(atime_const, 0L);
 		object.DeclareAttribute(ctime_const, 0L);
 		object.DeclareAttribute(valid_const, true);
 	}
@@ -49,11 +45,6 @@ public abstract class AttributeObject extends MetaObject
 		GetBaseObject().UpdateAttribute(valid_const, value);
 	}
 
-	public long GetATime()
-	{
-		return GetAttribute(atime_const).GetLong();
-	}
-
 	public long GetCTime()
 	{
 		return GetAttribute(ctime_const).GetLong();
@@ -61,13 +52,7 @@ public abstract class AttributeObject extends MetaObject
 
 	public void SetCurrent(Object new_value, long cur_time)
 	{
-		GetBaseObject().UpdateAttribute(value_const, new_value);
 		GetBaseObject().UpdateAttribute(ctime_const, cur_time);
-	}
-
-	public void Touch(long cur_time)
-	{
-		GetBaseObject().UpdateAttribute(atime_const, cur_time);
 	}
 
 // REACTIONS

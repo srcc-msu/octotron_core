@@ -16,7 +16,6 @@ public interface IMetaAttribute extends IAttribute
 	Object GetLastValue();
 
 	long GetCTime();
-	long GetATime();
 
 	double GetSpeed();
 

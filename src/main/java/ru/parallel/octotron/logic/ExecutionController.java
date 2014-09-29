@@ -375,7 +375,7 @@ public class ExecutionController
 		{
 			for(IMetaAttribute attr : obj.GetMetaAttributes())
 			{
-				long diff = cur_time - attr.GetATime();
+				long diff = cur_time - attr.GetCTime();
 
 				if(diff > interval)
 				{

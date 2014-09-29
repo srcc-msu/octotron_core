@@ -55,12 +55,6 @@ public class ConstantAttribute extends ModelAttribute implements IMetaAttribute
 	}
 
 	@Override
-	public long GetATime()
-	{
-		return 0;
-	}
-
-	@Override
 	public double GetSpeed()
 	{
 		return 0.0;

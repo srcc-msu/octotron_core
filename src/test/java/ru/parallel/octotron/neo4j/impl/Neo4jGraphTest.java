@@ -247,7 +247,7 @@ public class Neo4jGraphTest
 	@Test
 	public void TestLabel()
 	{
-		Uid obj1, obj2, link;
+		Uid obj1, obj2;
 
 		obj1 = Neo4jGraphTest.graph.AddObject();
 		obj2 = Neo4jGraphTest.graph.AddObject();

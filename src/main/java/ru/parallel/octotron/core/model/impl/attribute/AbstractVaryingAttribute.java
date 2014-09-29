@@ -85,7 +85,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 
 		SetValue(new_value);
 
-		meta.SetCurrent(new_value, JavaUtils.GetTimestamp());
+		meta.SetCurrent(JavaUtils.GetTimestamp());
 
 		return result;
 	}

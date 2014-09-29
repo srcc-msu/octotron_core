@@ -14,6 +14,6 @@ public class SensorObject extends AttributeObject
 	public void Init(Object object)
 	{
 		SimpleAttribute attribute = (SimpleAttribute)object;
-		Init(GetBaseObject(), attribute.GetName(), attribute.GetValue());
+		Init(GetBaseObject());
 	}
 }

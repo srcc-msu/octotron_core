@@ -19,7 +19,7 @@ public abstract class AttributeObject extends MetaObject
 	static final String ctime_const = "_ctime";
 	static final String valid_const = "_valid";
 
-	public static void Init(GraphObject object, String name, Object value)
+	public static void Init(GraphObject object)
 	{
 		object.DeclareAttribute(ctime_const, 0L);
 		object.DeclareAttribute(valid_const, true);
@@ -50,7 +50,7 @@ public abstract class AttributeObject extends MetaObject
 		return GetAttribute(ctime_const).GetLong();
 	}
 
-	public void SetCurrent(Object new_value, long cur_time)
+	public void SetCurrent(long cur_time)
 	{
 		GetBaseObject().UpdateAttribute(ctime_const, cur_time);
 	}

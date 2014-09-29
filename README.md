@@ -19,7 +19,7 @@ Build jar with all dependencies and run unit tests use next commands:
 	mvn dependency:copy-dependencies
 	mvn package assembly:single
 
-If the build is successfull jar file `octotron-%version%-jar-with-dependencies.jar` will be located in the `target/` folder.
+If the build is successful jar file `octotron-%version%-jar-with-dependencies.jar` will be located in the `target/` folder.
 
 Build without unit tests:
 

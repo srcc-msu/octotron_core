@@ -8,8 +8,8 @@ package ru.parallel.octotron.core.primitive;
 
 public class Uid
 {
-	private long uid;
-	private EEntityType type;
+	private final long uid;
+	private final EEntityType type;
 
 	public Uid(long uid, EEntityType type)
 	{

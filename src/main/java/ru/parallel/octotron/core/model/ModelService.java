@@ -16,10 +16,7 @@ public abstract class ModelService
 	{
 		ModelList list = new ModelList();
 
-		list.append(GetAllLinks());
-		list.append(GetAllObjects());
-
-		return list;
+		return list.append(GetAllLinks()).append(GetAllObjects());
 	}
 
 	public static void MakeRuleDependencies()

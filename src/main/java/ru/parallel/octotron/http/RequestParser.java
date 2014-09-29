@@ -148,7 +148,7 @@ private static final Map<String, Operation[]> REQUEST_TYPES
 		}
 	}
 
-	private static Pattern pattern = Pattern.compile("^/([a-zA-Z_]+)/([a-zA-Z_]+)$");
+	private static final Pattern pattern = Pattern.compile("^/([a-zA-Z_]+)/([a-zA-Z_]+)$");
 
 /**
  * parse http request into a ParsedHttp object, filling all required information<br>

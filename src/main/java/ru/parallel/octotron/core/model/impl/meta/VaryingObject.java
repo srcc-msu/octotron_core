@@ -22,7 +22,7 @@ public class VaryingObject extends AttributeObject
 	public void Init(Object object)
 	{
 		Rule rule = (Rule) object;
-		Init(GetBaseObject(), rule.GetName(), rule.GetDefaultValue());
+		Init(GetBaseObject());
 		GetBaseObject().DeclareAttribute(rid_const, rule.GetID());
 	}
 }

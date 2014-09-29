@@ -90,7 +90,7 @@ public class ReactionObject extends MetaObject
 		GetBaseEntity().UpdateAttribute(reaction_start_time_const, JavaUtils.GetTimestamp());
 	}
 
-	private long GetDelay()
+	public long GetDelay()
 	{
 		long value = GetAttribute(reaction_start_time_const).GetLong();
 
@@ -115,7 +115,7 @@ public class ReactionObject extends MetaObject
 			DropRepeat();
 	}
 
-	private long GetRepeat()
+	public long GetRepeat()
 	{
 		return GetAttribute(reaction_repeat_const).GetLong();
 	}
@@ -132,7 +132,7 @@ public class ReactionObject extends MetaObject
 		GetBaseEntity().UpdateAttribute(reaction_stat_const, GetStat() + 1);
 	}
 
-	private long GetStat()
+	public long GetStat()
 	{
 		return GetAttribute(reaction_stat_const).GetLong();
 	}

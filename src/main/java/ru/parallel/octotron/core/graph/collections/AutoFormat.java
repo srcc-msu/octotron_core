@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static ru.parallel.utils.JavaUtils.Quotify;
 import static ru.parallel.utils.JavaUtils.SortSimpleList;
 
 public class AutoFormat
@@ -31,7 +32,7 @@ public class AutoFormat
 		switch (format)
 		{
 			case PLAIN:
-				return PrintPlain(data);
+				return PrintNL(data);
 
 			case JSON:
 				return PrintJson(data);
@@ -51,11 +52,11 @@ public class AutoFormat
 		result.append(callback).append("({")
 			.append(System.lineSeparator());
 
-		result.append(SimpleAttribute.ValueToStr("modified")).append(':')
+		result.append(Quotify("modified")).append(':')
 			.append(JavaUtils.GetTimestamp()).append(',')
 			.append(System.lineSeparator());
 
-		result.append(SimpleAttribute.ValueToStr("data")).append(':')
+		result.append(Quotify("data")).append(':')
 			.append(System.lineSeparator());
 
 		result.append(PrintJson(data))
@@ -85,9 +86,9 @@ public class AutoFormat
 			for(String name : names)
 			{
 				result.append(inner_prefix)
-					.append(SimpleAttribute.ValueToStr(name))
+					.append(Quotify(name))
 					.append(':')
-					.append(SimpleAttribute.ValueToStr(dict.get(name)));
+					.append(dict.get(name));
 
 				inner_prefix = ",";
 			}
@@ -100,33 +101,56 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintPlain(List<Map<String, Object>> data)
+	public static String PrintNL(List<Map<String, Object>> data)
 	{
 		StringBuilder result = new StringBuilder();
-
-		String prefix = "";
 
 		for(Map<String, Object> map : data)
 		{
 			List<String> names = new ArrayList<>(map.keySet());
 			Collections.sort(names);
 
-			result.append(prefix);
-
-			String inner_prefix = "";
 			for(String name : names)
 			{
-				result.append(inner_prefix)
-					.append(name)
+				result.append(Quotify(name))
 					.append(" = ")
-					.append(SimpleAttribute.ValueToStr(map.get(name)));
-
-				inner_prefix = ", ";
+					.append(map.get(name))
+					.append(System.lineSeparator());
 			}
 
-			prefix = System.lineSeparator();
+			result.append(System.lineSeparator());
 		}
 
 		return result.toString();
 	}
+
+	public static String PrintPlain(List<Map<String, Object>> data)
+{
+	StringBuilder result = new StringBuilder();
+
+	String prefix = "";
+
+	for(Map<String, Object> map : data)
+	{
+		List<String> names = new ArrayList<>(map.keySet());
+		Collections.sort(names);
+
+		result.append(prefix);
+
+		String inner_prefix = "";
+		for(String name : names)
+		{
+			result.append(inner_prefix)
+				.append(Quotify(name))
+				.append(" = ")
+				.append(map.get(name));
+
+			inner_prefix = ", ";
+		}
+
+		prefix = System.lineSeparator();
+	}
+
+	return result.toString();
+}
 }

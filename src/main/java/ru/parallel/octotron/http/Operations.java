@@ -15,6 +15,7 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
+import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -234,9 +235,8 @@ public abstract class Operations
 				Map<String, Object> map = new HashMap<>();
 
 				for(ModelAttribute attribute : GetAttributes(entity, attributes, null))
-				{
 					map.put(attribute.GetName(), attribute.GetStringValue());
-				}
+
 				data.add(map);
 			}
 
@@ -272,9 +272,8 @@ public abstract class Operations
 				Map<String, Object> map = new HashMap<>();
 
 				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.CONSTANT))
-				{
 					map.put(attribute.GetName(), attribute.GetStringValue());
-				}
+
 				data.add(map);
 			}
 
@@ -307,16 +306,15 @@ public abstract class Operations
 
 			for(ModelEntity entity : objects)
 			{
-				Map<String, Object> map = new HashMap<>();
-
 				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.SENSOR))
 				{
+					Map<String, Object> map = new HashMap<>();
 					map.put("name", attribute.GetName());
 					map.put("value", attribute.GetStringValue());
 					map.put("ctime", attribute.ToMeta().GetCTime());
 					map.put("valid", attribute.ToMeta().IsValid());
+					data.add(map);
 				}
-				data.add(map);
 			}
 
 			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
@@ -348,16 +346,66 @@ public abstract class Operations
 
 			for(ModelEntity entity : objects)
 			{
-				Map<String, Object> map = new HashMap<>();
-
 				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.VARYING))
 				{
+					Map<String, Object> map = new HashMap<>();
 					map.put("name", attribute.GetName());
 					map.put("value", attribute.GetStringValue());
 					map.put("ctime", attribute.ToMeta().GetCTime());
 					map.put("valid", attribute.ToMeta().IsValid());
 					map.put("rule", attribute.ToVarying().GetRule().GetID());
+					data.add(map);
 				}
+			}
+
+			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+		}
+	});
+
+	public static final Operation p_react = new Operation("p_react", true
+		, new IExec()
+	{
+		@Override
+		public Object Execute(ExecutionController control
+			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			throws ExceptionParseError
+		{
+			Operations.RequiredParams(params, "path", "name");
+			Operations.AllParams(params, "path", "name", "format", "callback", "attributes");
+
+			E_FORMAT_PARAM format = GetFormat(params);
+
+			String name = params.get("name");
+			String callback = params.get("callback");
+
+			CheckFormat(format, callback);
+
+			if(objects.size() == 0)
+				return new RequestResult(E_RESULT_TYPE.ERROR, "empty objects lists - nothing to print");
+
+			if(objects.size() > 1)
+				return new RequestResult(E_RESULT_TYPE.ERROR, "too many objects to print");
+
+			List<Map<String, Object>> data = new LinkedList<>();
+
+			for(ReactionObject reaction : objects.Only().GetAttribute(name).ToMeta().GetReactions())
+			{
+				Map<String, Object> map = new HashMap<>();
+
+				map.put("name", reaction.GetReaction().GetCheckName());
+				map.put("value", SimpleAttribute.ValueToStr(reaction.GetReaction().GetCheckValue()));
+				map.put("ID", reaction.GetReaction().GetID());
+				map.put("delay_config", reaction.GetReaction().GetDelay());
+				map.put("repeat_config", reaction.GetReaction().GetRepeat());
+
+				if(reaction.GetReaction().GetResponse() != null)
+					map.put("descr", reaction.GetReaction().GetResponse().GetDescription());
+
+				map.put("state", reaction.GetState());
+				map.put("stat", reaction.GetStat());
+				map.put("delay", reaction.GetDelay());
+				map.put("repeat", reaction.GetRepeat());
+
 				data.add(map);
 			}
 

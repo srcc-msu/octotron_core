@@ -37,8 +37,8 @@ public class Changed extends Rule
 	{
 		IMetaAttribute attr = entity.GetMetaAttribute(measured_attribute);
 
-		if(!attr.IsValid() || attr.GetCTime() == 0)
-			return GetDefaultValue();
+		if(!attr.IsValid())
+			return null;
 
 		Object last_val = attr.GetLastValue();
 

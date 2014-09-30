@@ -43,11 +43,11 @@ public class VarArgMatchAprx extends Rule
 		IMetaAttribute attr = entity.GetMetaAttribute(check_attribute);
 		IMetaAttribute match_attr = entity.GetMetaAttribute(match_attribute);
 
-		if(!attr.IsValid())
-			return GetDefaultValue();
+		if(!attr.IsValid() || attr.GetCTime() == 0)
+			return null;
 
-		if(!match_attr.IsValid())
-			return GetDefaultValue();
+		if(!match_attr.IsValid() || match_attr.GetCTime() == 0)
+			return null;
 
 		return attr.aeq(match_attr.GetValue(), aprx);
 	}

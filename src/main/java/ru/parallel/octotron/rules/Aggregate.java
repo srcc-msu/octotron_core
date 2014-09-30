@@ -92,8 +92,11 @@ public abstract class Aggregate extends ObjectRule
 					continue;
 
 				IMetaAttribute attribute = obj.GetMetaAttribute(tmp);
-				if(attribute.IsValid() && attribute.GetCTime() != 0)
-					res = Accumulate(res, attribute);
+
+				if(!attribute.IsValid() || attribute.GetCTime() == 0)
+					return null;
+
+				res = Accumulate(res, attribute);
 			}
 
 		return res;

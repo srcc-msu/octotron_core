@@ -42,8 +42,8 @@ public class ToArgPct extends Rule
 		IMetaAttribute attr = entity.GetMetaAttribute(measured_attribute);
 		ModelAttribute max_value = entity.GetAttribute(max_value_arg);
 
-		if(!attr.IsValid() || attr.GetCTime() == 0)
-			return GetDefaultValue();
+		if(!attr.IsValid())
+			return null;
 
 		return (int)(attr.ToDouble() * 100.0 / max_value.ToDouble());
 	}

@@ -30,7 +30,6 @@ public class LowerArgThreshold extends Rule
 		AttributeList<IMetaAttribute> result = new AttributeList<>();
 
 		result.add(entity.GetMetaAttribute(param));
-		result.add(entity.GetMetaAttribute(arg_threshold));
 
 		return result;
 	}
@@ -41,7 +40,7 @@ public class LowerArgThreshold extends Rule
 		IMetaAttribute attr = entity.GetMetaAttribute(param);
 
 		if(!attr.IsValid())
-			return GetDefaultValue();
+			return null;
 
 		return attr.gt(entity.GetAttribute(arg_threshold).GetValue());
 	}

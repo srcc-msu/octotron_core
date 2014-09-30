@@ -40,10 +40,10 @@ public class LinkedVarArgMatch extends LinkRule
 		IMetaAttribute source_attr = link.Source().GetMetaAttribute(check_attribute);
 
 		if(!target_attr.IsValid())
-			return GetDefaultValue();
+			return null;
 
 		if(!source_attr.IsValid())
-			return GetDefaultValue();
+			return null;
 
 		return target_attr.eq(source_attr.GetValue());
 	}

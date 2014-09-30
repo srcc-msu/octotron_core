@@ -30,7 +30,6 @@ public class ArgMatch extends Rule
 		AttributeList<IMetaAttribute> result = new AttributeList<>();
 
 		result.add(entity.GetMetaAttribute(check_attribute));
-		result.add(entity.GetMetaAttribute(match_attribute));
 
 		return result;
 	}
@@ -41,7 +40,7 @@ public class ArgMatch extends Rule
 		IMetaAttribute attr = entity.GetMetaAttribute(check_attribute);
 
 		if(!attr.IsValid())
-			return GetDefaultValue();
+			return null;
 
 		return attr.eq(entity.GetAttribute(match_attribute).GetValue());
 	}

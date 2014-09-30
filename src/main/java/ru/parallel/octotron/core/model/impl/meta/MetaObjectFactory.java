@@ -41,7 +41,7 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 	}
 
 	private static final SimpleAttribute meta_type_const = new SimpleAttribute("type", "_meta");
-	private static final String owner_aid_const = "_owner_AID";
+	public static final String owner_aid_const = "_owner_AID";
 	private static final String owner_name_const = "_owner_name";
 
 	private static final SimpleAttribute object_type_const = new SimpleAttribute("owner_type", "object");
@@ -170,7 +170,6 @@ public abstract class MetaObjectFactory<T extends MetaObject, V extends UniqueNa
 		else
 			throw new ExceptionModelFail("wtf"); // TODO
 	}
-
 
 	private static GraphObjectList ObtainAll(GraphObject parent, String label)
 	{

@@ -40,7 +40,7 @@ public class ContainsString extends Rule
 		IMetaAttribute attr = entity.GetMetaAttribute(attribute);
 
 		if(!attr.IsValid())
-			return GetDefaultValue();
+			return null;
 
 		return attr.GetString().contains(match_str);
 	}

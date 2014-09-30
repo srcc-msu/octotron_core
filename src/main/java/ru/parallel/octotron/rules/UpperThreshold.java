@@ -40,7 +40,7 @@ public class UpperThreshold extends Rule
 		IMetaAttribute attr = entity.GetMetaAttribute(param);
 
 		if(!attr.IsValid())
-			return GetDefaultValue();
+			return null;
 
 		return attr.lt(threshold);
 	}

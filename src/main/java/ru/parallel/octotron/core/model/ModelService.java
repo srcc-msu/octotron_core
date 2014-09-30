@@ -7,6 +7,7 @@ import ru.parallel.octotron.core.model.collections.ModelList;
 import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
+import ru.parallel.octotron.core.model.impl.meta.MetaObjectFactory;
 import ru.parallel.octotron.core.primitive.EObjectLabels;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
@@ -21,6 +22,8 @@ public abstract class ModelService
 
 	public static void MakeRuleDependencies()
 	{
+		GraphService.Get().EnableObjectIndex(MetaObjectFactory.owner_aid_const);
+
 		for(ModelEntity entity : GetEntities())
 		{
 			for(VaryingAttribute attribute : entity.GetVaryings())

@@ -42,7 +42,7 @@ public class MatchAprx extends Rule
 		IMetaAttribute attr = entity.GetMetaAttribute(check_attribute);
 
 		if(!attr.IsValid())
-			return GetDefaultValue();
+			return null;
 
 		return attr.aeq(match_value, aprx);
 	}

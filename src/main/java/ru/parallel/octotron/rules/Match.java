@@ -40,7 +40,7 @@ public class Match extends Rule
 		IMetaAttribute attr = entity.GetMetaAttribute(check_attribute);
 
 		if(!attr.IsValid())
-			return GetDefaultValue();
+			return null;
 
 		return attr.eq(match_value);
 	}

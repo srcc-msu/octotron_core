@@ -44,8 +44,10 @@ public class LogicalAnd extends Rule
 		{
 			IMetaAttribute attr = entity.GetMetaAttribute(attr_name);
 
-			if(attr.IsValid() && attr.GetCTime() != 0)
-				res = res & attr.GetBoolean();
+			if(!attr.IsValid() || attr.GetCTime() == 0)
+				return null;
+
+			res = res & attr.GetBoolean();
 		}
 
 		return res;

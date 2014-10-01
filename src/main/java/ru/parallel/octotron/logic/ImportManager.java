@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.logic;
 
-import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.collections.ListConverter;
 import ru.parallel.octotron.core.model.ModelAttribute;
@@ -22,6 +21,18 @@ import java.util.List;
  * */
 public class ImportManager
 {
+	public static class Packet
+	{
+		public ModelEntity entity;
+		public SimpleAttribute attribute;
+
+		public Packet(ModelEntity entity, SimpleAttribute attribute)
+		{
+			this.entity = entity;
+			this.attribute = attribute;
+		}
+	}
+
 	private final AttributeProcessor static_proc;
 
 	public ImportManager()
@@ -29,7 +40,7 @@ public class ImportManager
 		this.static_proc = new AttributeProcessor();
 	}
 
-	public AttributeList<ModelAttribute> Process(List<Pair<ModelEntity, SimpleAttribute>> packet)
+	public AttributeList<ModelAttribute> Process(List<Packet> packet)
 	{
 		AttributeList<ModelAttribute> result = new AttributeList<>();
 

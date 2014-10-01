@@ -7,7 +7,6 @@
 package ru.parallel.octotron.http;
 
 import com.sun.net.httpserver.*;
-import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
@@ -88,10 +87,10 @@ public class HTTPServer
 		}
 	}
 
-	private static BasicAuthenticator GetAuth(String area, Pair<String, String> auth)
+	private static BasicAuthenticator GetAuth(String area, GlobalSettings.Credential credential)
 	{
-		final String user_ref = auth.getLeft();
-		final String password_ref = auth.getRight();
+		final String user_ref = credential.user;
+		final String password_ref = credential.password;
 
 		return new BasicAuthenticator(area)
 		{
@@ -101,9 +100,9 @@ public class HTTPServer
 				boolean result = user.equals(user_ref) && password.equals(password_ref);
 
 				if(result)
-					LOGGER.log(Level.FINE, "[SUCCESS] authentication attempt, username: " + user + ", password: " + password);
+					LOGGER.log(Level.FINE, "[SUCCESS] authentication attempt, username: '" + user + "', password: '" + password + "'");
 				else
-					LOGGER.log(Level.WARNING, "[FAIL] authentication attempt, username: " + user + ", password: " + password);
+					LOGGER.log(Level.WARNING, "[FAIL] authentication attempt, username: '" + user + "', password: '" + password + "'");
 
 				return result;
 			}

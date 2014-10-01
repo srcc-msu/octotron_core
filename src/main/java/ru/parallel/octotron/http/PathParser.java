@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.http;
 
-import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -62,7 +61,7 @@ public final class PathParser
 /**
  * parse SimpleAttribute from string "<name><op><value>"<br>
  * */
-	public static Pair<SimpleAttribute, EntityList.EQueryType> AttrFromString(String str)
+	public static PathOperations.Query AttrFromString(String str)
 		throws ExceptionParseError
 	{
 		if(str.length() == 0)
@@ -81,13 +80,13 @@ public final class PathParser
 			if(type == null)
 				throw new ExceptionParseError("unsupported operation: " + op);
 
-			return Pair.of(new SimpleAttribute(name, value), type);
+			return new PathOperations.Query(new SimpleAttribute(name, value), type);
 		}
 
 		matcher = op_pattern_word.matcher(str);
 
 		if(matcher.find())
-			return Pair.of(new SimpleAttribute(str, null), EntityList.EQueryType.NONE);
+			return new PathOperations.Query(new SimpleAttribute(str, null), EntityList.EQueryType.NONE);
 
 		throw new ExceptionParseError("can not parse: " + str);
 	}
@@ -97,10 +96,10 @@ public final class PathParser
  * name=val,name2,name3=val<br>
  * may be empty<br>
  * */
-	private static List<Pair<SimpleAttribute, EntityList.EQueryType>> StrToAttrList(String str)
+	private static List<PathOperations.Query> StrToAttrList(String str)
 		throws ExceptionParseError
 	{
-		List<Pair<SimpleAttribute, EntityList.EQueryType>> result
+		List<PathOperations.Query> result
 			= new LinkedList<>();
 
 		if(str == null || str.isEmpty())

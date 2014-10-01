@@ -6,7 +6,8 @@
 
 package ru.parallel.octotron.reactions;
 
-import org.apache.commons.lang3.ArrayUtils;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.ObjectArrays;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -18,11 +19,11 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.utils.FileUtils;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class PreparedResponse
 {
@@ -147,16 +148,12 @@ public class PreparedResponse
 			if(actual_name == null)
 				throw new ExceptionModelFail("there is no script with key: " + command[0]);
 
-			String[] full_command = ArrayUtils.addAll(command
+			FileUtils.ExecSilent(actual_name
 				, Long.toString(timestamp)
 				, response.GetStatus().toString()
 				, response.GetDescription()
 				, attribute_values
 				, parent_attribute_values);
-
-
-			full_command[0] = actual_name;
-			FileUtils.ExecSilent(full_command);
 		}
 
 		for(String log_key : response.GetLogKeys())

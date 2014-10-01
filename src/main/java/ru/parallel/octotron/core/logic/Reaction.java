@@ -14,8 +14,6 @@ import java.io.Serializable;
 
 public abstract class Reaction implements Serializable, UniqueName
 {
-	private static final long serialVersionUID = 8900268116120488911L;
-
 	private long reaction_id;
 
 	private final String check_name;

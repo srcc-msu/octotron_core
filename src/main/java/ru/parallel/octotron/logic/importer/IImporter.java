@@ -6,9 +6,7 @@
 
 package ru.parallel.octotron.logic.importer;
 
-import org.apache.commons.lang3.tuple.Pair;
-import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.logic.ImportManager;
 
 import java.util.List;
 
@@ -19,7 +17,7 @@ public interface IImporter
 	 * if the size is more than max_count, return only max_count entities
 	 * data over max_count will be returned in the next call
 	 * */
-	List<Pair<ModelEntity, SimpleAttribute>> Get(int max_count);
+	List<ImportManager.Packet> Get(int max_count);
 
 	int GetSize();
 }

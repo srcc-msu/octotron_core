@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.rules;
 
-import org.apache.commons.lang3.ArrayUtils;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.logic.impl.ObjectRule;
 import ru.parallel.octotron.core.model.IMetaAttribute;
@@ -14,6 +13,8 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+
+import java.util.Arrays;
 
 public abstract class Aggregate extends ObjectRule
 {
@@ -25,7 +26,7 @@ public abstract class Aggregate extends ObjectRule
 	{
 		super(name);
 		this.dependency = dependency;
-		this.attributes = ArrayUtils.clone(attributes);
+		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
 	protected ModelObjectList GetCandidates(ModelObject object)

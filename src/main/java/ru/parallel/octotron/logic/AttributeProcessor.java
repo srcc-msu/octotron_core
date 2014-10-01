@@ -6,11 +6,8 @@
 
 package ru.parallel.octotron.logic;
 
-import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.List;
 
@@ -25,17 +22,15 @@ public class AttributeProcessor
 	 * process each sensor value from the \packet<br>
 	 * return list of sensors, that changed<br>
 	 * */
-	public AttributeList<SensorAttribute> Process(List<Pair<ModelEntity, SimpleAttribute>> packets)
+	public AttributeList<SensorAttribute> Process(List<ImportManager.Packet> packets)
 	{
 		AttributeList<SensorAttribute> changed = new AttributeList<>();
 
-		for(Pair<ModelEntity, SimpleAttribute> packet : packets)
+		for(ImportManager.Packet packet : packets)
 		{
-			ModelEntity entity = packet.getLeft();
+			SensorAttribute sensor = packet.entity.GetSensor(packet.attribute.GetName());
 
-			SensorAttribute sensor = entity.GetSensor(packet.getRight().GetName());
-
-			sensor.Update(packet.getRight().GetValue());
+			sensor.Update(packet.attribute.GetValue());
 			changed.add(sensor);
 		}
 

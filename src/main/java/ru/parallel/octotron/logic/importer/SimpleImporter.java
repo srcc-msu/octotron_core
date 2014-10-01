@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.logic.importer;
 
-import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.logic.ImportManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
  * */
 public class SimpleImporter implements IImporter
 {
-	private List<Pair<ModelEntity, SimpleAttribute>> data
+	private List<ImportManager.Packet> data
 		= new LinkedList<>();
 	private final Object lock = new Object(); // personal lock for each instance
 
@@ -26,18 +26,18 @@ public class SimpleImporter implements IImporter
 	{
 		synchronized(lock)
 		{
-			data.add(Pair.of(entity, value));
+			data.add(new ImportManager.Packet(entity, value));
 		}
 	}
 
 	@Override
-	public List<Pair<ModelEntity, SimpleAttribute>> Get(int max_count)
+	public List<ImportManager.Packet> Get(int max_count)
 	{
 		synchronized (lock)
 		{
 			if(data.size() > max_count)
 			{
-				List<Pair<ModelEntity, SimpleAttribute>> out
+				List<ImportManager.Packet> out
 					= data.subList(0, max_count);
 
 				data = new LinkedList<>
@@ -47,7 +47,7 @@ public class SimpleImporter implements IImporter
 			}
 			else
 			{
-				List<Pair<ModelEntity, SimpleAttribute>> out = data;
+				List<ImportManager.Packet> out = data;
 				data = new LinkedList<>();
 
 				return out;

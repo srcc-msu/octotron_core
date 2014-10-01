@@ -6,7 +6,8 @@
 
 package ru.parallel.octotron.core.logic;
 
-import org.apache.commons.lang3.ArrayUtils;
+import com.google.common.collect.ObjectArrays;
+import org.apache.commons.lang.ArrayUtils;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import java.io.Serializable;
@@ -47,13 +48,13 @@ public class Response implements Serializable
 
 	public Response Print(String... attributes)
 	{
-		print_attributes = ArrayUtils.addAll(print_attributes, attributes);
+		print_attributes = ObjectArrays.concat(print_attributes, attributes, String.class);
 		return this;
 	}
 
 	public Response PrintParent(String... attributes)
 	{
-		parent_print_attributes = ArrayUtils.addAll(parent_print_attributes, attributes);
+		parent_print_attributes = ObjectArrays.concat(parent_print_attributes, attributes, String.class);
 		return this;
 	}
 

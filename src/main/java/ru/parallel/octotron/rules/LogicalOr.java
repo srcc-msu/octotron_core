@@ -6,12 +6,12 @@
 
 package ru.parallel.octotron.rules;
 
-
-import org.apache.commons.lang3.ArrayUtils;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+
+import java.util.Arrays;
 
 public class LogicalOr extends Rule
 {
@@ -20,8 +20,8 @@ public class LogicalOr extends Rule
 
 	public LogicalOr(String name, String... attributes)
 	{
-		super(name) ;
-		this.attributes = ArrayUtils.clone(attributes);
+		super(name);
+		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
 	@Override

@@ -6,6 +6,8 @@ import ru.parallel.octotron.core.model.ModelEntity;
 
 public class Equals extends Reaction
 {
+	private static final long serialVersionUID = 8157833787643278811L;
+
 	public Equals(String check_name, Object check_value)
 	{
 		super(check_name, check_value);

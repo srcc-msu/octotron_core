@@ -6,6 +6,8 @@ import ru.parallel.octotron.core.model.ModelEntity;
 
 public class NotEquals extends Reaction
 {
+	private static final long serialVersionUID = 1456789487657834621L;
+
 	public NotEquals(String check_name, Object check_value)
 	{
 		super(check_name, check_value);

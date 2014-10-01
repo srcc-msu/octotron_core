@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.http;
 
-import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
@@ -24,6 +23,18 @@ import java.util.List;
  * */
 public abstract class PathOperations
 {
+	public static class Query
+	{
+		public SimpleAttribute attribute;
+		public EntityList.EQueryType type;
+
+		public Query(SimpleAttribute attribute, EntityList.EQueryType type)
+		{
+			this.attribute = attribute;
+			this.type = type;
+		}
+	}
+
 	enum CHAIN_TYPE
 	{
 		E_START, E_OBJ_LIST, E_LINK_LIST, E_MATCH, E_ANY
@@ -32,7 +43,7 @@ public abstract class PathOperations
 	private interface ITransform
 	{
 		EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-				, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+				, Object obj, List<Query> params)
 				throws ExceptionParseError;
 	}
 
@@ -48,7 +59,7 @@ public abstract class PathOperations
 		private final CHAIN_TYPE out;
 
 		private final ITransform transform;
-		private List<Pair<SimpleAttribute, EntityList.EQueryType>> params = null;
+		private List<Query> params = null;
 
 		public final String GetName()
 		{
@@ -81,7 +92,7 @@ public abstract class PathOperations
 			this.transform = transform;
 		}
 
-		public PathToken(PathToken token, List<Pair<SimpleAttribute, EntityList.EQueryType>> params) {
+		public PathToken(PathToken token, List<Query> params) {
 			this.name = token.name;
 			this.in = token.in;
 			this.out = token.out;
@@ -122,7 +133,7 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1) // TODO
@@ -131,12 +142,12 @@ public abstract class PathOperations
 			if(obj instanceof ModelObjectList)
 			{
 				ModelObjectList list = ToObjList(obj);
-				return list.Filter(params.get(0).getLeft(), params.get(0).getRight());
+				return list.Filter(params.get(0).attribute, params.get(0).type);
 			}
 			else if(obj instanceof ModelLinkList)
 			{
 				ModelLinkList list = ToLinkList(obj);
-				return list.Filter(params.get(0).getLeft(), params.get(0).getRight());
+				return list.Filter(params.get(0).attribute, params.get(0).type);
 			}
 
 			throw new ExceptionParseError(
@@ -153,14 +164,14 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1)
 				throw new ExceptionParseError
 					("index operation must be querying a single indexed value");
 
-			SimpleAttribute attr = params.get(0).getLeft();
+			SimpleAttribute attr = params.get(0).attribute;
 
 			if(attr.GetValue() != null)
 				return ModelService.GetObjects(attr);
@@ -178,14 +189,14 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1)
 				throw new ExceptionParseError
 					("index operation must be querying a single indexed value");
 
-			SimpleAttribute attr = params.get(0).getLeft();
+			SimpleAttribute attr = params.get(0).attribute;
 
 			if(attr.GetValue() != null)
 				return ModelService.GetLinks(attr);
@@ -202,7 +213,7 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(obj instanceof ModelObjectList)
@@ -223,14 +234,14 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
 				throw new ExceptionParseError("in_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ToObjList(obj).GetInNeighbors(params.get(0).getLeft());
+				return ToObjList(obj).GetInNeighbors(params.get(0).attribute);
 
 			return ToObjList(obj).GetInNeighbors();
 		}
@@ -244,14 +255,14 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
 				throw new ExceptionParseError("out_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ToObjList(obj).GetOutNeighbors(params.get(0).getLeft());
+				return ToObjList(obj).GetOutNeighbors(params.get(0).attribute);
 
 			return ToObjList(obj).GetOutNeighbors();
 		}
@@ -265,15 +276,15 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
 				throw new ExceptionParseError("all_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ToObjList(obj).GetOutNeighbors(params.get(0).getLeft())
-					.append(ToObjList(obj).GetOutNeighbors(params.get(0).getLeft()));
+				return ToObjList(obj).GetOutNeighbors(params.get(0).attribute)
+					.append(ToObjList(obj).GetOutNeighbors(params.get(0).attribute));
 
 			return ToObjList(obj).GetOutNeighbors()
 				.append(ToObjList(obj).GetOutNeighbors());
@@ -288,7 +299,7 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetInLinks();
 		}
@@ -302,7 +313,7 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetOutLinks();
 		}
@@ -315,7 +326,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control, Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetInLinks().append(ToObjList(obj).GetOutLinks());
 		}
@@ -329,7 +340,7 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 		{
 			return ToLinkList(obj).Source();
 		}
@@ -343,7 +354,7 @@ public abstract class PathOperations
 	{
 		@Override
 		public EntityList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Pair<SimpleAttribute, EntityList.EQueryType>> params)
+			, Object obj, List<Query> params)
 		{
 			return ToLinkList(obj).Target();
 		}

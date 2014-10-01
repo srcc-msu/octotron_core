@@ -9,7 +9,6 @@ package ru.parallel.octotron.exec;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.utils.JsonUtils;
 
 import java.util.HashMap;
@@ -20,6 +19,18 @@ import java.util.Map.Entry;
 
 public class GlobalSettings
 {
+	public static class Credential
+	{
+		public String user;
+		public String password;
+
+		Credential(String user, String password)
+		{
+			this.user = user;
+			this.password = password;
+		}
+	}
+
 	private final int hash;
 
 	private String db_name;
@@ -33,9 +44,9 @@ public class GlobalSettings
 
 	private int http_port;
 
-	private Pair<String, String> view_credentials = Pair.of("", "");
-	private Pair<String, String> modify_credentials = Pair.of("", "");
-	private Pair<String, String> control_credentials = Pair.of("", "");
+	private Credential view_credentials;
+	private Credential modify_credentials;
+	private Credential control_credentials;
 
 	public GlobalSettings(String json_config)
 	{
@@ -43,14 +54,14 @@ public class GlobalSettings
 		ParseSettings(json_config);
 	}
 
-	private static Pair<String, String> GetCredential(JsonObject http_conf, String request)
+	private static Credential GetCredential(JsonObject http_conf, String request)
 	{
 		JsonObject cfg = JsonUtils.MustPresent(http_conf, request).getAsJsonObject();
 
 		String user = JsonUtils.MustPresent(cfg, "user").getAsString();
-		String pass = JsonUtils.MustPresent(cfg, "password").getAsString();
+		String password = JsonUtils.MustPresent(cfg, "password").getAsString();
 
-		return Pair.of(user, pass);
+		return new Credential(user, password);
 	}
 
 	private void ParseSettings(String json_config)
@@ -126,17 +137,17 @@ public class GlobalSettings
 		return script_map.get(key);
 	}
 
-	public Pair<String, String> GetViewCredentials()
+	public Credential GetViewCredentials()
 	{
 		return view_credentials;
 	}
 
-	public Pair<String, String> GetModifyCredentials()
+	public Credential GetModifyCredentials()
 	{
 		return modify_credentials;
 	}
 
-	public Pair<String, String> GetControlCredentials()
+	public Credential GetControlCredentials()
 	{
 		return control_credentials;
 	}

@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.logic;
 
-import org.apache.commons.io.FileSystemUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Response;
@@ -198,8 +196,8 @@ public class ExecutionController
 
 	AttributeList<ModelAttribute> ImmediateImport(ModelEntity entity, SimpleAttribute attribute)
 	{
-		List<Pair<ModelEntity, SimpleAttribute>> packet = new LinkedList<>();
-		packet.add(Pair.of(entity, attribute));
+		List<ImportManager.Packet> packet = new LinkedList<>();
+		packet.add(new ImportManager.Packet(entity, attribute));
 
 		return manager.Process(packet);
 	}
@@ -211,8 +209,7 @@ public class ExecutionController
 	 * */
 	private int ProcessImport(int max_count)
 	{
-		List<Pair<ModelEntity, SimpleAttribute>> http_packet
-			= http_importer.Get(max_count);
+		List<ImportManager.Packet> http_packet = http_importer.Get(max_count);
 		int processed_http = http_packet.size();
 
 		AttributeList<ModelAttribute> changed = manager.Process(http_packet);
@@ -230,25 +227,21 @@ public class ExecutionController
 	private int ProcessUncheckedImport(int max_count)
 		throws ExceptionSystemError
 	{
-		List<Pair<ModelEntity, SimpleAttribute>> http_packet
-			= http_unchecked_importer.Get(max_count);
+		List<ImportManager.Packet> http_packet = http_unchecked_importer.Get(max_count);
 
 		int processed_http = http_packet.size();
 
-		for(Pair<ModelEntity, SimpleAttribute> pair : http_packet)
+		for(ImportManager.Packet packet : http_packet)
 		{
-			ModelEntity entity = pair.getLeft();
-			SimpleAttribute attr = pair.getRight();
-
-			if(!entity.TestAttribute(attr.GetName()))
+			if(!packet.entity.TestAttribute(packet.attribute.GetName()))
 			{
-				entity.DeclareConstant(attr);
+				packet.entity.DeclareConstant(packet.attribute);
 				String script = settings.GetScriptByKey("on_new_attribute");
 
 				if(script != null)
 				{
 					FileUtils.ExecSilent(script
-						, entity.GetAttribute("AID").GetLong().toString(), attr.GetName());
+						, packet.entity.GetAttribute("AID").GetLong().toString(), packet.attribute.GetName());
 				}
 			}
 		}
@@ -292,7 +285,7 @@ public class ExecutionController
 		return count;
 	}
 
-	private static final double free_space_kb_thr = 1024*1024; // 1GB in KB
+	private static final double free_space_mb_thr = 1024; // 1GB in MB
 
 	public String PerformSelfTest()
 	{
@@ -303,23 +296,12 @@ public class ExecutionController
 		boolean process_test1 = request_processor.isAlive();
 		boolean process_test2 = rule_invoker.IsAlive();
 
-		long free_space_kb;
+		long free_space = new File("/").getFreeSpace();;
 		String free_space_res;
 
-		try
-		{
-			free_space_kb = FileSystemUtils.freeSpaceKb((new File("")).getAbsolutePath());
-		}
-		catch(IOException fail)
-		{
-			LOGGER.log(Level.WARNING, "could not get free disk space");
-			free_space_kb = -1;
-		}
+		long free_space_mb = free_space / 1024 / 1024;
 
-		if(free_space_kb > 0)
-			free_space_res = (free_space_kb > free_space_kb_thr) + " ( " + free_space_kb + "KB free )";
-		else
-			free_space_res = Boolean.valueOf(false).toString() + " ( can not get free space )";
+		free_space_res = (free_space_mb > free_space_mb_thr) + " ( " + free_space_mb + "MB free )";
 
 		StringBuilder result = new StringBuilder();
 

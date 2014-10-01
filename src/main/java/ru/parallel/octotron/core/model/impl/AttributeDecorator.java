@@ -32,12 +32,6 @@ public abstract class AttributeDecorator implements IAttribute
 	}
 
 	@Override
-	public void SetValue(Object value)
-	{
-		base.SetValue(value);
-	}
-
-	@Override
 	public String GetString()
 	{
 		return base.GetString();

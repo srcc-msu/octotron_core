@@ -19,22 +19,22 @@ public abstract class GraphBased //implements IEntity
 		return GetUID().equals(((GraphBased) object).GetUID());
 	}
 
-	public GraphEntity GetBaseEntity()
+	public final GraphEntity GetBaseEntity()
 	{
 		return base;
 	}
 
-	public GraphLink GetBaseLink()
+	public final GraphLink GetBaseLink()
 	{
 		return (GraphLink)base;
 	}
 
-	public GraphObject GetBaseObject()
+	public final GraphObject GetBaseObject()
 	{
 		return (GraphObject)base;
 	}
 
-	public Uid GetUID()
+	public final Uid GetUID()
 	{
 		return base.GetUID();
 	}

@@ -184,9 +184,9 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 			{
 				for (T obj : list)
 				{
-					if (!obj.TestAttribute(name))
+					if(!obj.TestAttribute(name))
 						continue;
-					if (obj.GetAttribute(name).eq(value))
+					if(obj.GetAttribute(name).eq(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -195,9 +195,9 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 			{
 				for (T obj : list)
 				{
-					if (!obj.TestAttribute(name))
+					if(!obj.TestAttribute(name))
 						continue;
-					if (obj.GetAttribute(name).ne(value))
+					if(obj.GetAttribute(name).ne(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -206,9 +206,9 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 			{
 				for (T obj : list)
 				{
-					if (!obj.TestAttribute(name))
+					if(!obj.TestAttribute(name))
 						continue;
-					if (obj.GetAttribute(name).ge(value))
+					if(obj.GetAttribute(name).ge(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -217,9 +217,9 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 			{
 				for (T obj : list)
 				{
-					if (!obj.TestAttribute(name))
+					if(!obj.TestAttribute(name))
 						continue;
-					if (obj.GetAttribute(name).gt(value))
+					if(obj.GetAttribute(name).gt(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -228,9 +228,9 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 			{
 				for (T obj : list)
 				{
-					if (!obj.TestAttribute(name))
+					if(!obj.TestAttribute(name))
 						continue;
-					if (obj.GetAttribute(name).le(value))
+					if(obj.GetAttribute(name).le(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -239,9 +239,9 @@ public abstract class EntityList<T extends IEntity<?>, R extends EntityList<T, R
 			{
 				for (T obj : list)
 				{
-					if (!obj.TestAttribute(name))
+					if(!obj.TestAttribute(name))
 						continue;
-					if (obj.GetAttribute(name).lt(value))
+					if(obj.GetAttribute(name).lt(value))
 						new_list.add(obj);
 				}
 				return new_list;

@@ -25,7 +25,7 @@ public abstract class AttributeObject extends MetaObject
 		object.DeclareAttribute(valid_const, true);
 	}
 
-	public GraphEntity GetParent()
+	public GraphObject GetParent()
 	{
 		return MetaObjectFactory.GetParent(GetBaseObject());
 	}

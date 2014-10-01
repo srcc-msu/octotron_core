@@ -4,7 +4,6 @@ public interface IAttribute
 {
 	String GetName();
 	Object GetValue();
-	void SetValue(Object value);
 
 	String GetString();
 	Long GetLong();

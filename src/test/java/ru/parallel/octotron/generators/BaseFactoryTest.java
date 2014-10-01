@@ -85,16 +85,10 @@ public class BaseFactoryTest
 			.Varyings(rule2, rule3).Varyings(rules);
 
 		ModelObject obj = f1.Create();
-		ModelLink link = f2.Constants(new SimpleAttribute("type", "1"))
-			.OneToOne(f1.Create(), f1.Create());
 
 		assertTrue(obj.TestAttribute("test1"));
 		assertTrue(obj.TestAttribute("test2"));
 		assertTrue(obj.TestAttribute("test3"));
-
-		assertTrue(link.TestAttribute("test1"));
-		assertTrue(link.TestAttribute("test2"));
-		assertTrue(link.TestAttribute("test3"));
 	}
 
 	@Test
@@ -118,15 +112,8 @@ public class BaseFactoryTest
 
 		ModelObject obj = f1.Create();
 
-		ModelLink link = f2.Constants(new SimpleAttribute("type", "test"))
-			.OneToOne(f1.Create(), f1.Create());
-
 		assertEquals(0, obj.GetMetaAttribute("test1").GetReactions().size());
 		assertEquals(1, obj.GetMetaAttribute("test2").GetReactions().size());
 		assertEquals(2, obj.GetMetaAttribute("test3").GetReactions().size());
-
-		assertEquals(0, link.GetMetaAttribute("test1").GetReactions().size());
-		assertEquals(1, link.GetMetaAttribute("test2").GetReactions().size());
-		assertEquals(2, link.GetMetaAttribute("test3").GetReactions().size());
 	}
 }

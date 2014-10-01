@@ -22,13 +22,11 @@ public abstract class ModelService
 
 	public static void MakeRuleDependencies()
 	{
-		GraphService.Get().EnableObjectIndex(MetaObjectFactory.owner_aid_const);
-
-		for(ModelEntity entity : GetEntities())
+		for(ModelObject object : GetAllObjects())
 		{
-			for(VaryingAttribute attribute : entity.GetVaryings())
+			for(VaryingAttribute attribute : object.GetVaryings())
 			{
-				for(IMetaAttribute dep : attribute.GetRule().GetDependency(entity))
+				for(IMetaAttribute dep : attribute.GetRule().GetDependency(object))
 				{
 					if(dep.GetType() != EAttributeType.CONSTANT)
 						dep.AddDependant(attribute);

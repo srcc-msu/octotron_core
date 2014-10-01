@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.UniqueName;
 import ru.parallel.octotron.storage.PersistentStorage;
 
@@ -68,7 +69,7 @@ public abstract class Reaction implements Serializable, UniqueName
 	public static final long STATE_STARTED = 1;
 	public static final long STATE_EXECUTED = 2;
 
-	public abstract boolean ReactionNeeded(ModelEntity entity);
+	public abstract boolean ReactionNeeded(ModelObject entity);
 
 //----------------
 

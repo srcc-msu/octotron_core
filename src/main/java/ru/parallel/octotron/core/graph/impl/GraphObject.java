@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.graph.IObject;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
@@ -16,7 +15,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 /**
  * implementation of object according to real \graph<br>
  * */
-public final class GraphObject extends GraphEntity implements IObject<GraphAttribute>
+public final class GraphObject extends GraphEntity
 {
 	public GraphObject(IGraph graph, Uid uid)
 	{
@@ -97,19 +96,16 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 //
 // ----
 
-	@Override
 	public GraphLinkList GetInLinks()
 	{
 		return GraphService.LinksFromUid(graph, graph.GetInLinks(uid));
 	}
 
-	@Override
 	public GraphLinkList GetOutLinks()
 	{
 		return GraphService.LinksFromUid(graph, graph.GetOutLinks(uid));
 	}
 
-	@Override
 	public GraphObjectList GetInNeighbors()
 	{
 		GraphObjectList objects = new GraphObjectList();
@@ -120,7 +116,6 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 		return objects;
 	}
 
-	@Override
 	public GraphObjectList GetOutNeighbors()
 	{
 		GraphObjectList objects = new GraphObjectList();
@@ -131,7 +126,6 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 		return objects;
 	}
 
-	@Override
 	public GraphObjectList GetInNeighbors(String link_name
 		, Object link_value)
 	{
@@ -143,7 +137,6 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 		return objects;
 	}
 
-	@Override
 	public GraphObjectList GetOutNeighbors(String link_name
 		, Object link_value)
 	{
@@ -155,7 +148,6 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 		return objects;
 	}
 
-	@Override
 	public GraphObjectList GetInNeighbors(String link_name)
 	{
 		GraphObjectList objects = new GraphObjectList();
@@ -166,7 +158,6 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 		return objects;
 	}
 
-	@Override
 	public GraphObjectList GetOutNeighbors(String link_name)
 	{
 		GraphObjectList objects = new GraphObjectList();
@@ -177,13 +168,11 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 		return objects;
 	}
 
-	@Override
 	public GraphObjectList GetInNeighbors(SimpleAttribute link_attribute)
 	{
 		return GetInNeighbors(link_attribute.GetName(), link_attribute.GetValue());
 	}
 
-	@Override
 	public GraphObjectList GetOutNeighbors(SimpleAttribute link_attribute)
 	{
 		return GetOutNeighbors(link_attribute.GetName(), link_attribute.GetValue());

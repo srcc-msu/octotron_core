@@ -5,6 +5,7 @@ import ru.parallel.octotron.core.logic.Marker;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.storage.PersistentStorage;
 import ru.parallel.utils.JavaUtils;
 
@@ -61,7 +62,7 @@ public class ReactionObject extends MetaObject
 	public long AddMarker(String description, boolean suppress)
 	{
 		MarkerObject marker_object = MarkerObjectFactory.INSTANCE
-			.Create(GetBaseEntity(), new Marker(GetReaction().GetID(), description, suppress));
+			.Create(GetBaseObject(), new Marker(GetReaction().GetID(), description, suppress));
 
 		return marker_object.GetAttribute("AID").GetLong();
 	}
@@ -71,7 +72,7 @@ public class ReactionObject extends MetaObject
 		List<Marker> result = new LinkedList<>();
 
 		for(MarkerObject marker_object : MarkerObjectFactory.INSTANCE
-			.ObtainAll(GetBaseEntity()))
+			.ObtainAll(GetBaseObject()))
 			result.add(marker_object.GetMarker());
 
 		return result;
@@ -80,7 +81,7 @@ public class ReactionObject extends MetaObject
 	public void TryDeleteMarker(long id)
 	{
 		for(MarkerObject marker_object : MarkerObjectFactory.INSTANCE
-			.ObtainAll(GetBaseEntity()))
+			.ObtainAll(GetBaseObject()))
 			if(marker_object.GetAttribute("AID").eq(id))
 				marker_object.GetBaseEntity().Delete();
 	}
@@ -145,7 +146,7 @@ public class ReactionObject extends MetaObject
 // -------------
 
 	@Nullable
-	public Response Process(ModelEntity parent)
+	public Response Process(ModelObject parent)
 	{
 		Reaction reaction = GetReaction();
 		boolean needed = reaction.ReactionNeeded(parent);

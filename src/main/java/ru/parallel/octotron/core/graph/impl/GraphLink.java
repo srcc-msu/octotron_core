@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.graph.ILink;
 import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.Uid;
@@ -16,7 +15,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 /**
  * implementation of link, that resides in \graph<br>
  * */
-public final class GraphLink extends GraphEntity implements ILink<GraphAttribute>
+public final class GraphLink extends GraphEntity
 {
 	public GraphLink(IGraph graph, Uid uid)
 	{
@@ -88,13 +87,11 @@ public final class GraphLink extends GraphEntity implements ILink<GraphAttribute
 		graph.DeleteLink(uid);
 	}
 
-	@Override
 	public GraphObject Target()
 	{
 		return new GraphObject(graph, graph.GetLinkTarget(uid));
 	}
 
-	@Override
 	public GraphObject Source()
 	{
 		return new GraphObject(graph, graph.GetLinkSource(uid));

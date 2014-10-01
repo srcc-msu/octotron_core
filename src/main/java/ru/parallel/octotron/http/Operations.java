@@ -12,6 +12,7 @@ import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
@@ -555,7 +556,7 @@ public abstract class Operations
 			if(target.GetUID().getType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("can not import value to a link");
 			else
-				control.Import(target, new SimpleAttribute(name, value));
+				control.Import((ModelObject)target, new SimpleAttribute(name, value));
 
 			String data = "added to import queue";
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -584,7 +585,7 @@ public abstract class Operations
 			if(target.GetUID().getType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("can not import value to a link");
 			else
-				control.UncheckedImport(target, new SimpleAttribute(name, value));
+				control.UncheckedImport((ModelObject)target, new SimpleAttribute(name, value));
 
 			String data = "added to unchecked import queue";
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -677,7 +678,7 @@ public abstract class Operations
 			String name = params.get("name");
 
 			for(ModelEntity entity : objects)
-				entity.GetMetaAttribute(name).SetValid();
+				entity.GetAttribute(name).ToMeta().SetValid();
 
 			int count = objects.size();
 			String data = "";
@@ -707,7 +708,7 @@ public abstract class Operations
 			String name = params.get("name");
 
 			for(ModelEntity entity : objects)
-				entity.GetMetaAttribute(name).SetInvalid();
+				entity.GetAttribute(name).ToMeta().SetInvalid();
 
 			int count = objects.size();
 			String data = "";
@@ -776,9 +777,9 @@ public abstract class Operations
 
 			long id = (long)SimpleAttribute.ValueFromStr(id_str);
 
-			ModelEntity entity = objects.Only();
+			ModelObject object = (ModelObject)objects.Only();
 
-			entity.DeleteMarker(name, id);
+			object.DeleteMarker(name, id);
 
 			String data = "deleted marker with id: " + id;
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);

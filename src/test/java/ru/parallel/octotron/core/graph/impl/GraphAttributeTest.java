@@ -200,7 +200,7 @@ public class GraphAttributeTest
 
 		try
 		{
-			object.GetAttribute("test").SetValue(object2);
+			object.UpdateAttribute("test", object2);
 		}
 		catch(ExceptionModelFail ignore)
 		{

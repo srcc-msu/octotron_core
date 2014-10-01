@@ -7,6 +7,7 @@
 package ru.parallel.octotron.logic.importer;
 
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.logic.ImportManager;
 
@@ -22,11 +23,11 @@ public class SimpleImporter implements IImporter
 		= new LinkedList<>();
 	private final Object lock = new Object(); // personal lock for each instance
 
-	public void Put(ModelEntity entity, SimpleAttribute value)
+	public void Put(ModelObject object, SimpleAttribute value)
 	{
 		synchronized(lock)
 		{
-			data.add(new ImportManager.Packet(entity, value));
+			data.add(new ImportManager.Packet(object, value));
 		}
 	}
 

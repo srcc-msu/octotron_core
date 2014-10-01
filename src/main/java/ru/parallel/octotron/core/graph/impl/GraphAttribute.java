@@ -40,12 +40,6 @@ public class GraphAttribute extends SimpleAttribute implements IAttribute
 		return parent.GetRawAttribute(name);
 	}
 
-	@Override
-	public void SetValue(Object value)
-	{
-		parent.UpdateAttribute(name, value);
-	}
-
 	final void CheckType(Object a_value)
 	{
 		if(!GetValue().getClass().equals(a_value.getClass()))

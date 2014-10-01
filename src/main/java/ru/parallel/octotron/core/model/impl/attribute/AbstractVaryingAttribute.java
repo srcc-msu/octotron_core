@@ -14,6 +14,7 @@ import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.meta.*;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.utils.JavaUtils;
@@ -25,10 +26,16 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 {
 	protected final T meta;
 
-	public AbstractVaryingAttribute(ModelEntity parent, GraphAttribute attribute, T meta)
+	public AbstractVaryingAttribute(ModelObject parent, GraphAttribute attribute, T meta)
 	{
 		super(parent, attribute);
 		this.meta = meta;
+	}
+
+	@Override
+	public ModelObject GetParent()
+	{
+		return (ModelObject)parent;
 	}
 
 	public T GetMeta()
@@ -76,14 +83,14 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		boolean result = ne(new_value);
 
 		List<ReactionObject> reaction_objects = ReactionObjectFactory
-			.INSTANCE.ObtainAll(meta.GetBaseEntity());
+			.INSTANCE.ObtainAll(meta.GetBaseObject());
 
 		for(ReactionObject reaction_object : reaction_objects)
 			reaction_object.Repeat(new_value);
 
 		meta.SetLast(GetValue(), GetCTime());
 
-		SetValue(new_value);
+		GetParent().GetBaseEntity().UpdateAttribute(GetName(), new_value);
 
 		meta.SetCurrent(JavaUtils.GetTimestamp());
 
@@ -190,13 +197,11 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 		for(GraphObject object : meta.GetBaseObject().GetOutNeighbors(dependency_link).Uniq())
 		{
 			VaryingObject attribute_object = new VaryingObject(object); // only rules will be here
-			GraphEntity parent = attribute_object.GetParent();
+			GraphObject parent = attribute_object.GetParent();
 			GraphAttribute parent_attribute = parent.GetAttribute(attribute_object.GetName());
 
-			result.add(new VaryingAttribute(
-				ModelEntity.FromGraph(parent)
-				, parent_attribute
-				, attribute_object));
+			result.add(new VaryingAttribute(new ModelObject(parent)
+				, parent_attribute, attribute_object));
 		}
 
 		return result;
@@ -205,21 +210,21 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	@Override
 	public void AddReaction(Reaction reaction)
 	{
-		ReactionObjectFactory.INSTANCE.Create(meta.GetBaseEntity(), reaction);
+		ReactionObjectFactory.INSTANCE.Create(meta.GetBaseObject(), reaction);
 	}
 
 	@Override
 	public List<ReactionObject> GetReactions()
 	{
 		return ReactionObjectFactory
-			.INSTANCE.ObtainAll(meta.GetBaseEntity());
+			.INSTANCE.ObtainAll(meta.GetBaseObject());
 	}
 
 	@Override
 	public long AddMarker(Reaction reaction, String description, boolean suppress)
 	{
 		ReactionObject reaction_object = ReactionObjectFactory
-			.INSTANCE.Create(meta.GetBaseEntity(), reaction);
+			.INSTANCE.Create(meta.GetBaseObject(), reaction);
 
 		return reaction_object.AddMarker(description, suppress);
 	}
@@ -227,12 +232,9 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	@Override
 	public List<Marker> GetMarkers()
 	{
-		List<ReactionObject> reaction_objects = ReactionObjectFactory
-			.INSTANCE.ObtainAll(meta.GetBaseEntity());
-
 		List<Marker> result = new LinkedList<>();
 
-		for(ReactionObject reaction_object : reaction_objects)
+		for(ReactionObject reaction_object : GetReactions())
 			result.addAll(reaction_object.GetMarkers());
 
 		return result;
@@ -241,10 +243,7 @@ public abstract class AbstractVaryingAttribute<T extends AttributeObject> extend
 	@Override
 	public void DeleteMarker(long id)
 	{
-		List<ReactionObject> reaction_objects = ReactionObjectFactory
-			.INSTANCE.ObtainAll(meta.GetBaseEntity());
-
-		for(ReactionObject reaction_object : reaction_objects)
+		for(ReactionObject reaction_object : GetReactions())
 			reaction_object.TryDeleteMarker(id);
 	}
 }

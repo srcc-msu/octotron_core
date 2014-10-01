@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.graph.collections.ListConverter;
 import ru.parallel.octotron.core.model.ModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
 import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -23,12 +24,12 @@ public class ImportManager
 {
 	public static class Packet
 	{
-		public ModelEntity entity;
+		public ModelObject object;
 		public SimpleAttribute attribute;
 
-		public Packet(ModelEntity entity, SimpleAttribute attribute)
+		public Packet(ModelObject object, SimpleAttribute attribute)
 		{
-			this.entity = entity;
+			this.object = object;
 			this.attribute = attribute;
 		}
 	}
@@ -78,10 +79,13 @@ public class ImportManager
 		do
 		{
 			for(VaryingAttribute dependant_varying : dependant_varyings)
-				dependant_varying.Update();
+			{
+				if(dependant_varying.Update())
+					result.add(dependant_varying);
+			}
 
 //			dependant_varyings = CheckChanged(dependant_varyings);
-			result = result.append(dependant_varyings);
+//			result = result.append(dependant_varyings);
 			dependant_varyings = ListConverter.GetDependant(dependant_varyings);
 		}
 		while(dependant_varyings.size() != 0);

@@ -134,12 +134,12 @@ public class ExecutionController
 		request_processor.start();
 	}
 
-	public void Import(ModelEntity object, SimpleAttribute attribute)
+	public void Import(ModelObject object, SimpleAttribute attribute)
 	{
 		http_importer.Put(object, attribute);
 	}
 
-	public void UncheckedImport(ModelEntity object, SimpleAttribute attribute)
+	public void UncheckedImport(ModelObject object, SimpleAttribute attribute)
 	{
 		http_unchecked_importer.Put(object, attribute);
 	}
@@ -194,10 +194,10 @@ public class ExecutionController
 		sleeper.Sleep(processed_requests + processed_blocking_requests + processed_imports == 0);
 	}
 
-	AttributeList<ModelAttribute> ImmediateImport(ModelEntity entity, SimpleAttribute attribute)
+	AttributeList<ModelAttribute> ImmediateImport(ModelObject object, SimpleAttribute attribute)
 	{
 		List<ImportManager.Packet> packet = new LinkedList<>();
-		packet.add(new ImportManager.Packet(entity, attribute));
+		packet.add(new ImportManager.Packet(object, attribute));
 
 		return manager.Process(packet);
 	}
@@ -233,15 +233,15 @@ public class ExecutionController
 
 		for(ImportManager.Packet packet : http_packet)
 		{
-			if(!packet.entity.TestAttribute(packet.attribute.GetName()))
+			if(!packet.object.TestAttribute(packet.attribute.GetName()))
 			{
-				packet.entity.DeclareConstant(packet.attribute);
+				packet.object.DeclareConstant(packet.attribute);
 				String script = settings.GetScriptByKey("on_new_attribute");
 
 				if(script != null)
 				{
 					FileUtils.ExecSilent(script
-						, packet.entity.GetAttribute("AID").GetLong().toString(), packet.attribute.GetName());
+						, packet.object.GetAttribute("AID").GetLong().toString(), packet.attribute.GetName());
 				}
 			}
 		}
@@ -322,11 +322,11 @@ public class ExecutionController
 
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
 
-		for(ModelEntity entity : ModelService.GetEntities())
+		for(ModelObject object : ModelService.GetAllObjects())
 		{
-			for(Response response : entity.GetCurrentReactions())
+			for(Response response : object.GetCurrentReactions())
 			{
-				PreparedResponse prepared_response = new PreparedResponse(response, entity, JavaUtils.GetTimestamp());
+				PreparedResponse prepared_response = new PreparedResponse(response, object, JavaUtils.GetTimestamp());
 
 				String descr = prepared_response.GetFullString();
 

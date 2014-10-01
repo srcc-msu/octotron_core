@@ -3,6 +3,7 @@ package ru.parallel.octotron.core.logic.impl;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.IMetaAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 
 public class Equals extends Reaction
 {
@@ -14,9 +15,9 @@ public class Equals extends Reaction
 	}
 
 	@Override
-	public boolean ReactionNeeded(ModelEntity entity)
+	public boolean ReactionNeeded(ModelObject object)
 	{
-		IMetaAttribute attr = entity.GetMetaAttribute(GetCheckName());
+		IMetaAttribute attr = object.GetMetaAttribute(GetCheckName());
 
 		if(!attr.IsValid())
 			return false;

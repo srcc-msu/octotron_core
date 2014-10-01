@@ -31,25 +31,25 @@ public class ModelAttribute extends AttributeDecorator
 
 	public SensorAttribute ToSensor()
 	{
-		return new SensorAttribute(GetParent(), GetBaseAttribute()
-			, SensorObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
+		return new SensorAttribute((ModelObject)GetParent(), GetBaseAttribute()
+			, SensorObjectFactory.INSTANCE.Obtain(GetParent().GetBaseObject(), GetName()));
 	}
 
 	public VaryingAttribute ToVarying()
 	{
-		return new VaryingAttribute(GetParent(), GetBaseAttribute()
-			, VaryingObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
+		return new VaryingAttribute((ModelObject)GetParent(), GetBaseAttribute()
+			, VaryingObjectFactory.INSTANCE.Obtain(GetParent().GetBaseObject(), GetName()));
 	}
 
 	public IMetaAttribute ToMeta()
 	{
-		if(SensorObjectFactory.INSTANCE.Test(GetParent().GetBaseEntity(), GetName()))
-			return new SensorAttribute(GetParent(), GetBaseAttribute()
-				, SensorObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
+		if(SensorObjectFactory.INSTANCE.Test(GetParent().GetBaseObject(), GetName()))
+			return new SensorAttribute((ModelObject)GetParent(), GetBaseAttribute()
+				, SensorObjectFactory.INSTANCE.Obtain(GetParent().GetBaseObject(), GetName()));
 
-		if(VaryingObjectFactory.INSTANCE.Test(GetParent().GetBaseEntity(), GetName()))
-			return new VaryingAttribute(GetParent(), GetBaseAttribute()
-				, VaryingObjectFactory.INSTANCE.Obtain(GetParent().GetBaseEntity(), GetName()));
+		if(VaryingObjectFactory.INSTANCE.Test(GetParent().GetBaseObject(), GetName()))
+			return new VaryingAttribute((ModelObject)GetParent(), GetBaseAttribute()
+				, VaryingObjectFactory.INSTANCE.Obtain(GetParent().GetBaseObject(), GetName()));
 
 		return ToConstant();
 	}

@@ -77,9 +77,17 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 
 // set all attributes
 		link.DeclareConstants(constants);
-		link.DeclareSensors(sensors);
+
+		if(sensors.size() > 0)
+			throw new ExceptionModelFail("sensors not supported on links");
+		if(rules.size() > 0)
+			throw new ExceptionModelFail("rules not supported on links");
+		if(reactions.size() > 0)
+			throw new ExceptionModelFail("reactions not supported on links");
+
+		/*link.DeclareSensors(sensors);
 		link.DeclareVaryings(rules);
-		link.AddReactions(reactions);
+		link.AddReactions(reactions);*/
 
 		link.DeclareConstant("source", from.GetAttribute("AID").GetLong());
 		link.DeclareConstant("target", to.GetAttribute("AID").GetLong());

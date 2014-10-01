@@ -28,7 +28,7 @@ public class AttributeProcessor
 
 		for(ImportManager.Packet packet : packets)
 		{
-			SensorAttribute sensor = packet.entity.GetSensor(packet.attribute.GetName());
+			SensorAttribute sensor = packet.object.GetSensor(packet.attribute.GetName());
 
 			sensor.Update(packet.attribute.GetValue());
 			changed.add(sensor);

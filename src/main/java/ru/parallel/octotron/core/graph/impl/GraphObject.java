@@ -47,7 +47,7 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 	}
 
 	@Override
-	public GraphAttribute UpdateAttribute(String name, Object value)
+	public void UpdateAttribute(String name, Object value)
 	{
 		value = SimpleAttribute.ConformType(value);
 
@@ -56,11 +56,10 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 
 		GetAttribute(name).CheckType(value);
 		graph.SetObjectAttribute(uid, name, value);
-		return new GraphAttribute(this, name);
 	}
 
 	@Override
-	public GraphAttribute DeclareAttribute(String name, Object value)
+	public void DeclareAttribute(String name, Object value)
 	{
 		value = SimpleAttribute.ConformType(value);
 
@@ -68,7 +67,6 @@ public final class GraphObject extends GraphEntity implements IObject<GraphAttri
 			throw new ExceptionModelFail("attribute already declared: " + name);
 
 		graph.SetObjectAttribute(uid, name, value);
-		return new GraphAttribute(this, name);
 	}
 
 	@Override

@@ -40,16 +40,15 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // ---------------
 
-	public SensorAttribute DeclareSensor(String name, Object value)
+	public void DeclareSensor(String name, Object value)
 	{
-		return DeclareSensor(new SimpleAttribute(name, value));
+		DeclareSensor(new SimpleAttribute(name, value));
 	}
 
-	public SensorAttribute DeclareSensor(SimpleAttribute attribute)
+	public void DeclareSensor(SimpleAttribute attribute)
 	{
-		GraphAttribute graph_attribute = GetBaseEntity().DeclareAttribute(attribute.GetName(), attribute.GetValue());
-		SensorObject meta = SensorObjectFactory.INSTANCE.Create(GetBaseEntity(), attribute);
-		return new SensorAttribute(this, graph_attribute, meta);
+		GetBaseEntity().DeclareAttribute(attribute.GetName(), attribute.GetValue());
+		SensorObjectFactory.INSTANCE.Create(GetBaseEntity(), attribute);
 	}
 
 	public SensorAttribute GetSensor(String name)
@@ -65,15 +64,14 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // ---------------
 
-	public ConstantAttribute DeclareConstant(SimpleAttribute attribute)
+	public void DeclareConstant(SimpleAttribute attribute)
 	{
-		return DeclareConstant(attribute.GetName(), attribute.GetValue());
+		DeclareConstant(attribute.GetName(), attribute.GetValue());
 	}
 
-	public ConstantAttribute DeclareConstant(String name, Object value)
+	public void DeclareConstant(String name, Object value)
 	{
-		GraphAttribute graph_attribute = GetBaseEntity().DeclareAttribute(name, value);
-		return new ConstantAttribute(this, graph_attribute);
+		GetBaseEntity().DeclareAttribute(name, value);
 	}
 
 	public ConstantAttribute GetConstant(String name)
@@ -89,12 +87,10 @@ public abstract class ModelEntity extends GraphBased implements IEntity<ModelAtt
 
 // ---------------
 
-	public VaryingAttribute DeclareVarying(Rule rule)
+	public void DeclareVarying(Rule rule)
 	{
-		GraphAttribute graph_attribute = GetBaseEntity().DeclareAttribute(rule.GetName(), rule.GetDefaultValue());
-		VaryingObject meta = VaryingObjectFactory.INSTANCE.Create(GetBaseEntity(), rule);
-
-		return new VaryingAttribute(this, graph_attribute, meta);
+		GetBaseEntity().DeclareAttribute(rule.GetName(), rule.GetDefaultValue());
+		VaryingObjectFactory.INSTANCE.Create(GetBaseEntity(), rule);
 	}
 
 	public void DeclareVaryings(List<Rule> rules)

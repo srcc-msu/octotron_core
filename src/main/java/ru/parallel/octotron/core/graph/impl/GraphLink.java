@@ -42,7 +42,7 @@ public final class GraphLink extends GraphEntity implements ILink<GraphAttribute
 	}
 
 	@Override
-	public GraphAttribute UpdateAttribute(String name, Object value)
+	public void UpdateAttribute(String name, Object value)
 	{
 		value = SimpleAttribute.ConformType(value);
 
@@ -51,11 +51,10 @@ public final class GraphLink extends GraphEntity implements ILink<GraphAttribute
 
 		GetAttribute(name).CheckType(value);
 		graph.SetLinkAttribute(uid, name, value);
-		return new GraphAttribute(this, name);
 	}
 
 	@Override
-	public GraphAttribute DeclareAttribute(String name, Object value)
+	public void DeclareAttribute(String name, Object value)
 	{
 		value = SimpleAttribute.ConformType(value);
 
@@ -63,7 +62,6 @@ public final class GraphLink extends GraphEntity implements ILink<GraphAttribute
 			throw new ExceptionModelFail("attribute already declared: " + name);
 
 		graph.SetLinkAttribute(uid, name, value);
-		return new GraphAttribute(this, name);
 	}
 
 	@Override

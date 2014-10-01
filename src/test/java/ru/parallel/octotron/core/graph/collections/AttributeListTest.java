@@ -49,7 +49,8 @@ public class AttributeListTest
 		AttributeList<GraphAttribute> list = new AttributeList<>();
 
 		assertEquals("list is no empty", list.size(), 0);
-		list.add(AttributeListTest.object.DeclareAttribute("test", 0));
+		object.DeclareAttribute("test", 0);
+		list.add(AttributeListTest.object.GetAttribute("test"));
 		assertEquals("list has no elements", list.size(), 1);
 
 		GraphAttribute elem = list.get(0);
@@ -61,9 +62,12 @@ public class AttributeListTest
 	{
 		AttributeList<GraphAttribute> list = new AttributeList<>();
 
-		list.add(AttributeListTest.object.DeclareAttribute("test1", 0));
-		list.add(AttributeListTest.object.DeclareAttribute("test2", 1.0));
-		list.add(AttributeListTest.object.DeclareAttribute("test3", "test"));
+		object.DeclareAttribute("test1", 0);
+		list.add(AttributeListTest.object.GetAttribute("test1"));
+		object.DeclareAttribute("test2", 1.0);
+		list.add(AttributeListTest.object.GetAttribute("test2"));
+		object.DeclareAttribute("test3", "test");
+		list.add(AttributeListTest.object.GetAttribute("test3"));
 
 		assertEquals("got something wrong", list.get(0).eq(0), true);
 		assertEquals("got something wrong", list.get(1).eq(1.0), true);
@@ -78,7 +82,10 @@ public class AttributeListTest
 		int N = 10;
 
 		for(int i = 0; i < N; i++)
-			list.add(AttributeListTest.object.DeclareAttribute("test" + i, i));
+		{
+			object.DeclareAttribute("test" + i, i);
+			list.add(AttributeListTest.object.GetAttribute("test" + i));
+		}
 
 		int i = 0;
 		for(GraphAttribute att : list)
@@ -97,7 +104,8 @@ public class AttributeListTest
 
 		for(int i = 0; i < N; i++)
 		{
-			list.add(AttributeListTest.object.DeclareAttribute("test" + i, i));
+			object.DeclareAttribute("test" + i, i);
+			list.add(AttributeListTest.object.GetAttribute("test" + i));
 			assertEquals("got something wrong", list.size(), i + 1);
 		}
 	}
@@ -110,7 +118,10 @@ public class AttributeListTest
 		int N = 10;
 
 		for(int i = 0; i < N; i++)
-			list.add(AttributeListTest.object.DeclareAttribute("test" + i, i));
+		{
+			object.DeclareAttribute("test" + i, i);
+			list.add(AttributeListTest.object.GetAttribute("test" + i));
+		}
 
 		AttributeList<GraphAttribute> le = list.le(5);
 		AttributeList<GraphAttribute> lt = list.lt(5);
@@ -150,9 +161,12 @@ public class AttributeListTest
 	{
 		AttributeList<GraphAttribute> list = new AttributeList<>();
 
-		list.add(AttributeListTest.object.DeclareAttribute("b", ""));
-		list.add(AttributeListTest.object.DeclareAttribute("c", ""));
-		list.add(AttributeListTest.object.DeclareAttribute("a", ""));
+		object.DeclareAttribute("b", "");
+		list.add(AttributeListTest.object.GetAttribute("b"));
+		object.DeclareAttribute("c", "");
+		list.add(AttributeListTest.object.GetAttribute("c"));
+		object.DeclareAttribute("a", "");
+		list.add(AttributeListTest.object.GetAttribute("a"));
 
 		list = list.AlphabeticSort();
 

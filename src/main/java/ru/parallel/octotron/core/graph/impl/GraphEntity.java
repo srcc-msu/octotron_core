@@ -67,16 +67,16 @@ public abstract class GraphEntity implements IEntity<GraphAttribute>
 
 	abstract Object GetRawAttribute(String name);
 
-	public abstract GraphAttribute UpdateAttribute(String name, Object value);
-	public GraphAttribute UpdateAttribute(SimpleAttribute att)
+	public abstract void UpdateAttribute(String name, Object value);
+	public void UpdateAttribute(SimpleAttribute att)
 	{
-		return UpdateAttribute(att.GetName(), att.GetValue());
+		UpdateAttribute(att.GetName(), att.GetValue());
 	}
 
-	public abstract GraphAttribute DeclareAttribute(String name, Object value);
-	public GraphAttribute DeclareAttribute(SimpleAttribute att)
+	public abstract void DeclareAttribute(String name, Object value);
+	public void DeclareAttribute(SimpleAttribute att)
 	{
-		return DeclareAttribute(att.GetName(), att.GetValue());
+		DeclareAttribute(att.GetName(), att.GetValue());
 	}
 
 // --------------------------------

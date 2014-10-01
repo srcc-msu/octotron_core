@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.neo4j.impl;
 
+import com.google.common.collect.Iterables;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
@@ -104,72 +105,6 @@ public final class Neo4jGraph implements IGraph
 			Delete();
 			Create();
 		}
-	}
-
-	/**
-	 * predefine relationship types -<br>
-	 * it is workaround for neo4j, since it requires a enum<br>
-	 * they will be reused with our own names<br>
-	 */
-	private enum RelTypes implements RelationshipType
-	{
-		TYPE_0,
-		TYPE_1,
-		TYPE_2,
-		TYPE_3,
-		TYPE_4,
-		TYPE_5,
-		TYPE_6,
-		TYPE_7,
-		TYPE_8,
-		TYPE_9,
-		TYPE_10,
-		TYPE_11,
-		TYPE_12,
-		TYPE_13,
-		TYPE_14,
-		TYPE_15,
-		TYPE_16,
-		TYPE_17,
-		TYPE_18,
-		TYPE_19
-	}
-
-	/**
-	 * service list that allows to iterate enum values<br>
-	 * */
-	private final List<RelTypes> relations
-		= new LinkedList<>(Arrays.asList(RelTypes.values()));
-
-	/**
-	 * mapping between enum constants and strings<br>
-	 * */
-	private final Map<String, RelTypes> rel_str_mapping
-		= new HashMap<>();
-
-	/**
-	 * register \\link_type as a new relation type<br>
-	 * neo4j will get one constant from {@link RelTypes}<br>
-	 * and we will be remember mapping<br>
-	 * */
-	private void RegisterLinkType(String link_type)
-	{
-		if(relations.isEmpty())
-			throw new ExceptionDBError("no more relationships available");
-
-		rel_str_mapping.put(link_type, relations.remove(0));
-	}
-
-	/**
-	 * method to convert from string \\link_type to RelTypes enum<br>
-	 * if the \\link_type does not exist - creates new relation type<br>
-	 */
-	private RelTypes LinkTypeToRelType(String link_type)
-	{
-		if(!rel_str_mapping.containsKey(link_type))
-			RegisterLinkType(link_type);
-
-		return rel_str_mapping.get(link_type);
 	}
 
 	private void DBInit()
@@ -361,18 +296,14 @@ public final class Neo4jGraph implements IGraph
 	{
 		transaction.Write();
 
-		Relationship rel;
-		Node source_node;
-		Node target_node;
+		Node source_node = graph_db.getNodeById(source.getUid());
+		Node target_node = graph_db.getNodeById(target.getUid());
 
-		source_node = graph_db.getNodeById(source.getUid());
-		target_node = graph_db.getNodeById(target.getUid());
+		RelationshipType type = DynamicRelationshipType.withName(link_type);
 
-		RelTypes rel_type = LinkTypeToRelType(link_type);
+		Relationship relationship = source_node.createRelationshipTo(target_node, type);
 
-		rel = source_node.createRelationshipTo(target_node, rel_type);
-
-		return new Uid(rel.getId(), EEntityType.LINK);
+		return new Uid(relationship.getId(), EEntityType.LINK);
 	}
 
 	@Override
@@ -745,15 +676,18 @@ public final class Neo4jGraph implements IGraph
 		return ExportDot(nodes);
 	}
 
-	private static String ExportDot(Iterable<Node> nodes)
+	private String ExportDot(Iterable<Node> nodes)
 	{
 		OutputStream out = new ByteArrayOutputStream();
 
 		GraphvizWriter writer = new GraphvizWriter();
 
+		Iterable<RelationshipType> types = GlobalGraphOperations.at(graph_db).getAllRelationshipTypes();
+
 		try
 		{
-			writer.emit(out, Walker.crosscut(nodes, RelTypes.values()));
+			writer.emit(out, Walker.crosscut(nodes
+				, Iterables.toArray(types, RelationshipType.class)));
 		}
 		catch (IOException e)
 		{

@@ -6,22 +6,17 @@
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.graph.collections.AutoFormat;
-import ru.parallel.octotron.core.graph.collections.AutoFormat.E_FORMAT_PARAM;
-import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.attributes.EAttributeType;
+import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
-import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
-import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
+import ru.parallel.octotron.core.model.*;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.http.AutoFormat.E_FORMAT_PARAM;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.storage.PersistentStorage;
@@ -60,7 +55,7 @@ public abstract class Operations
 		}
 
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			return exec.Execute(control, params, objects);
@@ -70,7 +65,7 @@ public abstract class Operations
 	private interface IExec
 	{
 		Object Execute(ExecutionController control
-				, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+				, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError;
 	}
 
@@ -123,28 +118,28 @@ public abstract class Operations
 			throw new ExceptionParseError("specify a callback function");
 	}
 
-	private static List<ModelAttribute> GetAttributes(ModelEntity entity, List<SimpleAttribute> attributes, EAttributeType type)
+	private static List<IModelAttribute> GetAttributes(ModelEntity entity, List<SimpleAttribute> attributes, EAttributeType type)
 	{
-		List<ModelAttribute> result = new LinkedList<>();
+		List<IModelAttribute> result = new LinkedList<>();
 
 		if(attributes.size() > 0)
 		{
 			for(SimpleAttribute names : attributes)
 			{
-				ModelAttribute attribute = entity.GetAttribute(names.GetName());
+				IModelAttribute attribute = entity.GetAttribute(names.GetName());
 
-				if(type == null || attribute.ToMeta().GetType() == type)
+				if(type == null || attribute.GetType() == type)
 					result.add(attribute);
 			}
 			return result;
 		}
 		else
 		{
-			for(ModelAttribute names : entity.GetAttributes())
+			for(IAttribute names : entity.GetAttributes())
 			{
-				ModelAttribute attribute = entity.GetAttribute(names.GetName());
+				IModelAttribute attribute = entity.GetAttribute(names.GetName());
 
-				if(type == null || attribute.ToMeta().GetType() == type)
+				if(type == null || attribute.GetType() == type)
 					result.add(attribute);
 			}
 			return result;
@@ -194,7 +189,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path");
@@ -213,7 +208,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
@@ -235,7 +230,7 @@ public abstract class Operations
 			{
 				Map<String, Object> map = new HashMap<>();
 
-				for(ModelAttribute attribute : GetAttributes(entity, attributes, null))
+				for(IAttribute attribute : GetAttributes(entity, attributes, null))
 					map.put(attribute.GetName(), attribute.GetStringValue());
 
 				data.add(map);
@@ -250,7 +245,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
@@ -272,7 +267,7 @@ public abstract class Operations
 			{
 				Map<String, Object> map = new HashMap<>();
 
-				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.CONSTANT))
+				for(IAttribute attribute : GetAttributes(entity, attributes, EAttributeType.CONST))
 					map.put(attribute.GetName(), attribute.GetStringValue());
 
 				data.add(map);
@@ -287,7 +282,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
@@ -307,13 +302,12 @@ public abstract class Operations
 
 			for(ModelEntity entity : objects)
 			{
-				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.SENSOR))
+				for(IModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.SENSOR))
 				{
 					Map<String, Object> map = new HashMap<>();
 					map.put("name", attribute.GetName());
 					map.put("value", attribute.GetStringValue());
-					map.put("ctime", attribute.ToMeta().GetCTime());
-					map.put("valid", attribute.ToMeta().IsValid());
+					map.put("valid", attribute.IsValid());
 					data.add(map);
 				}
 			}
@@ -327,7 +321,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
@@ -347,14 +341,12 @@ public abstract class Operations
 
 			for(ModelEntity entity : objects)
 			{
-				for(ModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.VARYING))
+				for(IModelAttribute attribute : GetAttributes(entity, attributes, EAttributeType.VAR))
 				{
 					Map<String, Object> map = new HashMap<>();
 					map.put("name", attribute.GetName());
 					map.put("value", attribute.GetStringValue());
-					map.put("ctime", attribute.ToMeta().GetCTime());
-					map.put("valid", attribute.ToMeta().IsValid());
-					map.put("rule", attribute.ToVarying().GetRule().GetID());
+					map.put("valid", attribute.IsValid());
 					data.add(map);
 				}
 			}
@@ -368,7 +360,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path", "name");
@@ -389,23 +381,22 @@ public abstract class Operations
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
-			for(ReactionObject reaction : objects.Only().GetAttribute(name).ToMeta().GetReactions())
+			for(Reaction reaction : objects.Only().GetAttribute(name).GetReactions())
 			{
 				Map<String, Object> map = new HashMap<>();
 
-				map.put("name", reaction.GetReaction().GetCheckName());
-				map.put("value", SimpleAttribute.ValueToStr(reaction.GetReaction().GetCheckValue()));
-				map.put("ID", reaction.GetReaction().GetID());
-				map.put("delay_config", reaction.GetReaction().GetDelay());
-				map.put("repeat_config", reaction.GetReaction().GetRepeat());
+				map.put("name", reaction.GetTemplate().GetCheckName());
+				map.put("value", SimpleAttribute.ValueToStr(reaction.GetTemplate().GetCheckValue()));
+				map.put("delay_config", reaction.GetTemplate().GetDelay());
+				map.put("repeat_config", reaction.GetTemplate().GetRepeat());
 
-				if(reaction.GetReaction().GetResponse() != null)
-					map.put("descr", reaction.GetReaction().GetResponse().GetDescription());
+				if(reaction.GetTemplate().GetResponse() != null)
+					map.put("descr", reaction.GetTemplate().GetResponse().GetDescription());
 
 				map.put("state", reaction.GetState());
 				map.put("stat", reaction.GetStat());
-				map.put("delay", reaction.GetDelay());
-				map.put("repeat", reaction.GetRepeat());
+				map.put("delay", reaction.GetTemplate().GetDelay());
+				map.put("repeat", reaction.GetTemplate().GetRepeat());
 
 				data.add(map);
 			}
@@ -421,7 +412,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params);
@@ -453,7 +444,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params);
@@ -474,14 +465,13 @@ public abstract class Operations
 			{
 				Map<String, Object> map = new HashMap<>();
 
-				map.put("RID", reaction.GetID());
-				map.put("check_attribute", reaction.GetCheckName());
-				map.put("check_value", reaction.GetCheckValue());
+				map.put("check_attribute", reaction.GetTemplate().GetCheckName());
+				map.put("check_value", reaction.GetTemplate().GetCheckValue());
 
-				if(reaction.GetResponse() != null)
+				if(reaction.GetTemplate().GetResponse() != null)
 				{
-					map.put("status", reaction.GetResponse().GetStatus().toString());
-					map.put("description", reaction.GetResponse().GetDescription());
+					map.put("status", reaction.GetTemplate().GetResponse().GetStatus().toString());
+					map.put("description", reaction.GetTemplate().GetResponse().GetDescription());
 				}
 
 				data.add(map);
@@ -498,7 +488,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params);
@@ -541,7 +531,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 			throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name", "value");
@@ -553,7 +543,7 @@ public abstract class Operations
 
 			ModelEntity target = objects.Only();
 
-			if(target.GetUID().getType() != EEntityType.OBJECT)
+			if(target.GetType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("can not import value to a link");
 			else
 				control.Import((ModelObject)target, new SimpleAttribute(name, value));
@@ -570,7 +560,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 			throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name", "value");
@@ -582,7 +572,7 @@ public abstract class Operations
 
 			ModelEntity target = objects.Only();
 
-			if(target.GetUID().getType() != EEntityType.OBJECT)
+			if(target.GetType() != EEntityType.OBJECT)
 				throw new ExceptionModelFail("can not import value to a link");
 			else
 				control.UncheckedImport((ModelObject)target, new SimpleAttribute(name, value));
@@ -600,10 +590,10 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
-			Operations.StrictParams(params, "path", "name", "value");
+/*			Operations.StrictParams(params, "path", "name", "value");
 
 			String name = params.get("name");
 			String value_str = params.get("value");
@@ -611,7 +601,7 @@ public abstract class Operations
 
 			for(ModelEntity entity : objects)
 			{
-				entity.DeclareConstant(new SimpleAttribute(name, value));
+				entity.DeclareConst(new SimpleAttribute(name, value));
 			}
 
 			int count = objects.size();
@@ -622,7 +612,8 @@ public abstract class Operations
 			else if(count > 1)
 				data = "set attribute for each of " + count + " objects";
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, data);
+			return new RequestResult(E_RESULT_TYPE.TEXT, data);*/
+			return null;
 		}
 	});
 
@@ -634,7 +625,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 		/*	Operations.AllParams(params, "name", "value");
@@ -670,7 +661,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name");
@@ -678,7 +669,7 @@ public abstract class Operations
 			String name = params.get("name");
 
 			for(ModelEntity entity : objects)
-				entity.GetAttribute(name).ToMeta().SetValid();
+				entity.GetAttribute(name).SetValid();
 
 			int count = objects.size();
 			String data = "";
@@ -700,7 +691,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "path", "name");
@@ -708,7 +699,7 @@ public abstract class Operations
 			String name = params.get("name");
 
 			for(ModelEntity entity : objects)
-				entity.GetAttribute(name).ToMeta().SetInvalid();
+				entity.GetAttribute(name).SetInvalid();
 
 			int count = objects.size();
 			String data = "";
@@ -730,7 +721,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path", "reaction_id", "description");
@@ -768,18 +759,17 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
-			Operations.StrictParams(params, "path", "name", "id");
+			Operations.StrictParams(params, "path", "id");
 			String id_str = params.get("id");
-			String name = params.get("name");
 
 			long id = (long)SimpleAttribute.ValueFromStr(id_str);
 
 			ModelObject object = (ModelObject)objects.Only();
 
-			object.DeleteMarker(name, id);
+			if(true) throw new ExceptionModelFail("NIY");
 
 			String data = "deleted marker with id: " + id;
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);
@@ -797,7 +787,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 			throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -815,7 +805,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 			throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -835,7 +825,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "silent");
@@ -862,7 +852,7 @@ public abstract class Operations
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -887,7 +877,7 @@ time = Timer.SEnd();
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.AllParams(params);
@@ -912,7 +902,7 @@ time = Timer.SEnd();
 
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "format");
@@ -954,7 +944,7 @@ time = Timer.SEnd();
 	{
 		@Override
 		public Object Execute(ExecutionController control
-			, Map<String, String> params, EntityList<? extends ModelEntity, ?> objects)
+			, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
 			Operations.StrictParams(params, "interval");

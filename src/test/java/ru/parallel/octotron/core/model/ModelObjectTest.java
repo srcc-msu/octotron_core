@@ -3,21 +3,19 @@ package ru.parallel.octotron.core.model;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Marker;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.impl.Equals;
-import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,16 +24,13 @@ import static org.junit.Assert.assertTrue;
 
 public class ModelObjectTest
 {
-	private static Neo4jGraph graph;
-
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelObjectTest.graph = new Neo4jGraph( "dbs/" + ModelObjectTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init(ModelObjectTest.graph);
+		ModelService.Init();
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
@@ -54,8 +49,7 @@ public class ModelObjectTest
 	@AfterClass
 	public static void Delete() throws Exception
 	{
-		ModelObjectTest.graph.Shutdown();
-		ModelObjectTest.graph.Delete();
+		ModelService.Finish();
 	}
 
 	/**
@@ -226,14 +220,14 @@ public class ModelObjectTest
 	@Test
 	public void TestDeclareAttribute() throws Exception
 	{
-		ModelObject entity = ModelService.AddObject();
-		entity.DeclareSensor("test", "");
+		ModelObject entity = ModelService.Get().AddObject();
+		entity.GetBuilder().DeclareSensor("test", "");
 
 		boolean catched = false;
 
 		try
 		{
-			entity.DeclareSensor("test", "");
+			entity.GetBuilder().DeclareSensor("test", "");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -247,11 +241,11 @@ public class ModelObjectTest
 	{
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
-		entity.DeclareSensor("test", 0);
-		Reaction reaction = new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test"));
+		entity.GetBuilder().DeclareSensor("test", 0);
+		Reaction reaction = new Reaction(new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test")));
 
-		entity.AddReaction(reaction);
+		entity.GetBuilder().AddReaction(reaction);
 	}
 
 	@Test
@@ -259,16 +253,16 @@ public class ModelObjectTest
 	{
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
-		entity.DeclareSensor("test", 0);
+		entity.GetBuilder().DeclareSensor("test", 0);
 
 		List<Reaction> reactions = new LinkedList<>();
 
-		reactions.add(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test")));
-		reactions.add(new Equals("test", 2)
-			.Response(new Response(EEventStatus.INFO, "test")));
+		reactions.add(new Reaction(new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"))));
+		reactions.add(new Reaction(new Equals("test", 2)
+			.Response(new Response(EEventStatus.INFO, "test"))));
 
-		entity.AddReactions(reactions);
+		entity.GetBuilder().AddReaction(reactions);
 	}
 
 	private class DummyRule extends ru.parallel.octotron.core.logic.Rule
@@ -301,7 +295,7 @@ public class ModelObjectTest
 		}
 
 		@Override
-		public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
+		public AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 		{
 			return new AttributeList<>();
 		}
@@ -312,7 +306,7 @@ public class ModelObjectTest
 	{
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
-		entity.DeclareVarying(new DummyRule("test1", EDependencyType.ALL));
+		entity.GetBuilder().DeclareVar(new DummyRule("test1", EDependencyType.ALL));
 	}
 
 	@Test
@@ -320,14 +314,14 @@ public class ModelObjectTest
 	{
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
-		entity.DeclareSensor("test", 0);
+		entity.GetBuilder().DeclareSensor("test", 0);
 
 		List<ru.parallel.octotron.core.logic.Rule> rules = new LinkedList<>();
 
 		rules.add(new DummyRule("test1", EDependencyType.ALL));
 		rules.add(new DummyRule("test2", EDependencyType.ALL));
 
-		entity.DeclareVaryings(rules);
+		entity.GetBuilder().DeclareVar(rules);
 	}
 
 	@Test
@@ -335,14 +329,14 @@ public class ModelObjectTest
 	{
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
-		entity.DeclareSensor("test", 0);
-		Reaction reaction = new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test"));
+		entity.GetBuilder().DeclareSensor("test", 0);
+		Reaction reaction = new Reaction(new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test")));
 
-		entity.AddReaction(reaction);
+		entity.GetBuilder().AddReaction(reaction);
 
-		entity.AddMarker(reaction, "test1", true);
-		entity.AddMarker(reaction, "test2", false);
+		reaction.AddMarker("test1", true);
+		reaction.AddMarker("test2", false);
 	}
 
 	@Test
@@ -350,73 +344,55 @@ public class ModelObjectTest
 	{
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
-		entity.DeclareSensor("test", 0);
-		Reaction reaction = new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test"));
+		entity.GetBuilder().DeclareSensor("test", 0);
+		Reaction reaction = new Reaction(new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test")));
 
-		entity.AddReaction(reaction);
+		entity.GetBuilder().AddReaction(reaction);
 
-		assertEquals(0, entity.GetMarkers().size());
+		assertEquals(0, reaction.GetMarkers().size());
 
-		long id1 = entity.AddMarker(reaction, "test1", true);
-		long id2 = entity.AddMarker(reaction, "test2", false);
+		long id1 = reaction.AddMarker("test1", true);
+		long id2 = reaction.AddMarker("test2", false);
 
-		assertEquals(2, entity.GetMarkers().size());
+		assertEquals(2, reaction.GetMarkers().size());
 
-		entity.DeleteMarker("test", id1);
-		assertEquals(1, entity.GetMarkers().size());
+		reaction.DeleteMarker(id1);
+		assertEquals(1, reaction.GetMarkers().size());
 
-		entity.DeleteMarker("test", id2);
-		assertEquals(0, entity.GetMarkers().size());
+		reaction.DeleteMarker(id2);
+		assertEquals(0, reaction.GetMarkers().size());
 	}
-
-	@Test
-	public void TestGetReactions()
-	{
-		ModelObject entity = ModelObjectTest.obj_factory.Create();
-
-		final int N = 10;
-
-		for(int i = 0; i < N; i++)
-			entity.DeclareSensor("test" + i, 0);
-
-		for(int i = 0; i < N; i++)
-		{
-			Reaction reaction = new Equals("test" + i, 1)
-				.Response(new Response(EEventStatus.INFO, "test"));
-
-			entity.AddReaction(reaction);
-
-			List<ReactionObject> reactions = entity.GetReactions();
-
-			assertEquals(i + 1, reactions.size());
-		}
-	}
-
 
 	@Test
 	public void TestGetMarkers()
 	{
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
-		entity.DeclareSensor("test", 0);
-		Reaction reaction = new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test"));
+		entity.GetBuilder().DeclareSensor("test", 0);
+		Reaction reaction = new Reaction(new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test")));
 
-		entity.AddReaction(reaction);
+		entity.GetBuilder().AddReaction(reaction);
 
 		final int N = 10;
 
 		for(int i = 0; i < N; i++)
 		{
-			entity.AddMarker(reaction, "test" + i, true);
+			reaction.AddMarker("test" + i, true);
 
-			List<Marker> markers = entity.GetMarkers();
+			Collection<Marker> markers = reaction.GetMarkers();
 
 			assertEquals(i + 1, markers.size());
 
-			for(int j = 0; j < i + 1; j++)
-				assertEquals("test" + j, markers.get(j).GetDescription());
+			int j = 0;
+
+			for(Marker marker : markers)
+			{
+				assertEquals("test" + j, marker.GetDescription());
+				j++;
+			}
+			assertEquals(10, j);
 		}
 	}
 }

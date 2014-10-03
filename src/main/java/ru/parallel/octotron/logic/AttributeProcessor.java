@@ -6,8 +6,9 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
+
+import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.collections.AttributeList;
 
 import java.util.List;
 

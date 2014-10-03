@@ -6,11 +6,11 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.impl.ObjectRule;
-import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
@@ -18,18 +18,17 @@ import java.util.Arrays;
 
 public abstract class Aggregate extends ObjectRule
 {
-	private static final long serialVersionUID = -1961148475047706792L;
 	private final String[] attributes;
 	private final EDependencyType dependency;
 
-	public Aggregate(String name, EDependencyType dependency, String... attributes)
+	Aggregate(String name, EDependencyType dependency, String... attributes)
 	{
 		super(name);
 		this.dependency = dependency;
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
-	protected ModelObjectList GetCandidates(ModelObject object)
+	ModelObjectList GetCandidates(ModelObject object)
 	{
 		ModelObjectList candidates = new ModelObjectList();
 
@@ -61,9 +60,9 @@ public abstract class Aggregate extends ObjectRule
 	}
 
 	@Override
-	public final AttributeList<IMetaAttribute> GetDependency(ModelObject object)
+	public final AttributeList<IModelAttribute> GetDependency(ModelObject object)
 	{
-		AttributeList<IMetaAttribute> result = new AttributeList<>();
+		AttributeList<IModelAttribute> result = new AttributeList<>();
 
 		ModelObjectList candidates = GetCandidates(object);
 
@@ -73,7 +72,7 @@ public abstract class Aggregate extends ObjectRule
 				if(!obj.TestAttribute(tmp))
 					continue;
 
-				result.add(obj.GetMetaAttribute(tmp));
+				result.add(obj.GetAttribute(tmp));
 			}
 
 		return result;
@@ -92,9 +91,9 @@ public abstract class Aggregate extends ObjectRule
 				if(!obj.TestAttribute(tmp))
 					continue;
 
-				IMetaAttribute attribute = obj.GetMetaAttribute(tmp);
+				IModelAttribute attribute = obj.GetAttribute(tmp);
 
-				if(!attribute.IsValid() || attribute.GetCTime() == 0)
+				if(!attribute.IsValid())
 					return null;
 
 				res = Accumulate(res, attribute);
@@ -103,5 +102,5 @@ public abstract class Aggregate extends ObjectRule
 		return res;
 	}
 
-	protected abstract Object Accumulate(Object res, IMetaAttribute attribute);
+	protected abstract Object Accumulate(Object res, IModelAttribute attribute);
 }

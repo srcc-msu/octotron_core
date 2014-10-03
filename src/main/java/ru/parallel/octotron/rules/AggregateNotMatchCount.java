@@ -6,12 +6,11 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AggregateNotMatchCount extends Aggregate
 {
-	private static final long serialVersionUID = -1961148475047706792L;
 	private final Object value;
 
 	public AggregateNotMatchCount(String name, Object value, EDependencyType dependency, String... attributes)
@@ -21,7 +20,7 @@ public class AggregateNotMatchCount extends Aggregate
 	}
 
 	@Override
-	protected Object Accumulate(Object res, IMetaAttribute attribute)
+	protected Object Accumulate(Object res, IModelAttribute attribute)
 	{
 		if(attribute.ne(value))
 			return (Long)res + 1;

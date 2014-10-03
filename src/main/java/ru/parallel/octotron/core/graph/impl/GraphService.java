@@ -6,15 +6,13 @@
 
 package ru.parallel.octotron.core.graph.impl;
 
-import ru.parallel.octotron.core.graph.IEntity;
+import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.collections.EntityList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.Uid;
-import ru.parallel.octotron.core.primitive.exception.ExceptionDBError;
+import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,72 +37,10 @@ public final class GraphService
 // ------------------
 
 	private final IGraph graph;
-	private GraphObject static_obj = null;
 
 	private GraphService(IGraph graph)
 	{
 		this.graph = graph;
-		InitStatic();
-	}
-
-	private static final String NEXT_AID = "_static_next_AID";
-
-/**
- * return next value for AID counter from static object<br>
- * increment and store new value in db<br>
- * */
-	private long NextAID()
-	{
-		if(!static_obj.TestAttribute(GraphService.NEXT_AID))
-			static_obj.DeclareAttribute(GraphService.NEXT_AID, 0L);
-
-		long next_AID = static_obj.GetAttribute(GraphService.NEXT_AID).GetLong();
-		static_obj.UpdateAttribute(GraphService.NEXT_AID, next_AID + 1);
-
-		return next_AID;
-	}
-
-//---------------------------------
-//          STATIC
-//---------------------------------
-
-	private static final String STATIC_PREFIX = "_static_";
-
-/**
- * create static object if it does not exist<br>
- * otherwise - find existing in the graph <br>
- * */
-	private void InitStatic()
-	{
-		if(static_obj == null)
-		{
-			EnableObjectIndex("type");
-			GraphObjectList objects = GetObjects("type", GraphService.STATIC_PREFIX);
-
-			if(objects.size() == 0)
-			{
-// have to do it manually - no AID yet
-				static_obj = new GraphObject(graph, graph.AddObject());
-
-				static_obj.DeclareAttribute("type", GraphService.STATIC_PREFIX);
-				static_obj.DeclareAttribute("AID", NextAID());
-			}
-			else if(objects.size() > 1)
-				throw new ExceptionDBError("found multiple static objects");
-			else
-				static_obj = objects.get(0);
-		}
-	}
-
-	private boolean IsStaticObject(GraphEntity entity)
-	{
-		return entity.equals(static_obj);
-	}
-
-	private void DeleteStatic()
-	{
-		graph.DeleteObject(static_obj.GetUID());
-		static_obj = null;
 	}
 
 //---------------------
@@ -112,10 +48,7 @@ public final class GraphService
 //---------------------
 	public GraphLink AddLink(GraphObject source, GraphObject target, String link_type)
 	{
-		GraphLink link = new GraphLink(graph, graph.AddLink(source.GetUID(), target.GetUID(), link_type));
-		link.DeclareAttribute("AID", NextAID());
-
-		return link;
+		return new GraphLink(graph, graph.AddLink(source.GetID(), target.GetID(), link_type));
 	}
 
 	public GraphLink AddLink(GraphObject source, GraphObject target, SimpleAttribute link_type)
@@ -128,19 +61,7 @@ public final class GraphService
 
 	public GraphObject AddObject()
 	{
-		GraphObject object = new GraphObject(graph, graph.AddObject());
-		object.DeclareAttribute("AID", NextAID());
-
-		return object;
-	}
-
-// --------------------------------
-//			LABEL
-//---------------------------------
-
-	public GraphObjectList GetAllLabeledNodes(String label)
-	{
-		return ObjectsFromUid(graph, graph.GetAllLabeledNodes(label));
+		return new GraphObject(graph, graph.AddObject());
 	}
 
 // --------------------------------
@@ -157,17 +78,16 @@ public final class GraphService
 		graph.GetIndex().EnableObjectIndex(name);
 	}
 
-	public GraphLinkList GetAllLinks()
+	public Collection<GraphLink> GetAllLinks()
 	{
 		return LinksFromUid(graph, graph.GetAllLinks());
 	}
 
-	public GraphObjectList GetAllObjects()
+	public Collection<GraphObject> GetAllObjects()
 	{
-		GraphObjectList result = new GraphObjectList();
+		List<GraphObject> result = new LinkedList<>();
 
 		for(GraphObject object : ObjectsFromUid(graph, graph.GetAllObjects()))
-			if(!IsStaticObject(object))
 				result.add(object);
 
 		return result;
@@ -180,21 +100,21 @@ public final class GraphService
 
 	public GraphLink GetLink(String name, Object value)
 	{
-		Uid uid = graph.GetIndex().GetLink(name, value);
-		return new GraphLink(graph, uid);
+		UniqueID<EGraphType> id = graph.GetIndex().GetLink(name, value);
+		return new GraphLink(graph, id);
 	}
 
-	public GraphLinkList GetLinks(SimpleAttribute att)
+	public Collection<GraphLink> GetLinks(SimpleAttribute att)
 	{
 		return GetLinks(att.GetName(), att.GetValue());
 	}
 
-	public GraphLinkList GetLinks(String name)
+	public Collection<GraphLink> GetLinks(String name)
 	{
 		return LinksFromUid(graph, graph.GetIndex().GetLinks(name));
 	}
 
-	public GraphLinkList GetLinks(String name, Object value)
+	public Collection<GraphLink> GetLinks(String name, Object value)
 	{
 		return LinksFromUid(graph, graph.GetIndex().GetLinks(name, value));
 	}
@@ -206,43 +126,43 @@ public final class GraphService
 
 	public GraphObject GetObject(String name, Object value)
 	{
-		Uid uid = graph.GetIndex().GetObject(name, value);
-		return new GraphObject(graph, uid);
+		UniqueID<EGraphType> id = graph.GetIndex().GetObject(name, value);
+		return new GraphObject(graph, id);
 	}
 
-	public GraphObjectList GetObjects(SimpleAttribute att)
+	public Collection<GraphObject> GetObjects(SimpleAttribute att)
 	{
 		return GetObjects(att.GetName(), att.GetValue());
 	}
 
-	public GraphObjectList GetObjects(String name)
+	public Collection<GraphObject> GetObjects(String name)
 	{
 		return ObjectsFromUid(graph, graph.GetIndex().GetObjects(name));
 	}
 
-	public GraphObjectList GetObjects(String name, Object value)
+	public Collection<GraphObject> GetObjects(String name, Object value)
 	{
 		return ObjectsFromUid(graph, graph.GetIndex().GetObjects(name, value));
 	}
 
-	public GraphLinkList QueryLinks(String name, String value)
+	public Collection<GraphLink> QueryLinks(String name, String value)
 	{
 		return LinksFromUid(graph, graph.GetIndex().QueryLinks(name, value));
 	}
 
-	public GraphObjectList QueryObjects(String name, String value)
+	public Collection<GraphObject> QueryObjects(String name, String value)
 	{
 		return ObjectsFromUid(graph, graph.GetIndex().QueryObjects(name, value));
 	}
 
 	public GraphObject GetLinkTarget(GraphLink link)
 	{
-		return new GraphObject(graph, graph.GetLinkTarget(link.GetUID()));
+		return new GraphObject(graph, graph.GetLinkTarget(link.GetID()));
 	}
 
 	public GraphObject GetLinkSource(GraphLink link)
 	{
-		return new GraphObject(graph, graph.GetLinkSource(link.GetUID()));
+		return new GraphObject(graph, graph.GetLinkSource(link.GetID()));
 	}
 
 // ---------------------------------
@@ -256,59 +176,43 @@ public final class GraphService
 
 		for(GraphLink link : GetAllLinks())
 			link.Delete();
-
-		DeleteStatic();
-		InitStatic();
 	}
 
 // --------------------------------
 //			converters
 //---------------------------------
 
-	protected static List<Uid> UidsFromList(EntityList<? extends GraphEntity, ?> entities)
+	protected static List<UniqueID<EGraphType>> UidsFromList(Collection<? extends GraphEntity> entities)
 	{
-		List<Uid> uids = new LinkedList<>();
+		List<UniqueID<EGraphType>> uids = new LinkedList<>();
 
-		for(IEntity<?> entity : entities)
+		for(GraphEntity entity : entities)
 		{
-			uids.add(entity.GetUID());
+			uids.add(entity.GetID());
 		}
 
 		return uids;
 	}
 
-	protected static GraphLinkList LinksFromUid(IGraph graph, List<Uid> uids)
+	protected static Collection<GraphLink> LinksFromUid(IGraph graph, List<UniqueID<EGraphType>> uids)
 	{
-		GraphLinkList links = new GraphLinkList();
+		List<GraphLink> links = new LinkedList<>();
 
-		for(Uid uid : uids)
+		for(UniqueID<EGraphType> id : uids)
 		{
-			links.add(new GraphLink(graph, uid));
+			links.add(new GraphLink(graph, id));
 		}
 
 		return links;
 	}
 
-	private static GraphObjectList ObjectsFromUid(IGraph graph, List<Uid> uids)
+	private static Collection<GraphObject> ObjectsFromUid(IGraph graph, List<UniqueID<EGraphType>> uids)
 	{
-		GraphObjectList objects = new GraphObjectList();
+		List<GraphObject> objects = new LinkedList<>();
 
-		for(Uid uid : uids)
+		for(UniqueID<EGraphType> id : uids)
 		{
-			objects.add(new GraphObject(graph, uid));
-		}
-
-		return objects;
-	}
-
-
-	protected static AttributeList<GraphAttribute> AttributesFromPair(GraphEntity parent, List<String> names)
-	{
-		AttributeList<GraphAttribute> objects = new AttributeList<>();
-
-		for(String name : names)
-		{
-			objects.add(new GraphAttribute(parent, name));
+			objects.add(new GraphObject(graph, id));
 		}
 
 		return objects;
@@ -319,7 +223,7 @@ public final class GraphService
 		return graph.ExportDot(UidsFromList(GetAllObjects()));
 	}
 
-	public String ExportDot(GraphObjectList list)
+	public String ExportDot(Collection<GraphObject> list)
 	{
 		return graph.ExportDot(UidsFromList(list));
 	}

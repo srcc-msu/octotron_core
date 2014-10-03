@@ -6,99 +6,61 @@
 
 package ru.parallel.octotron.core.graph.impl;
 
+import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.Uid;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.UniqueID;
 
 /**
  * implementation of link, that resides in \graph<br>
  * */
 public final class GraphLink extends GraphEntity
 {
-	public GraphLink(IGraph graph, Uid uid)
+	public GraphLink(IGraph graph, long id)
 	{
-		super(graph, uid);
+		super(graph, id, EGraphType.LINK);
+	}
+
+	public GraphLink(IGraph graph, UniqueID<EGraphType> id)
+	{
+		super(graph, id);
 	}
 
 	@Override
-	public GraphAttribute GetAttribute(String name)
+	public Object GetAttribute(String name)
 	{
-		return new GraphAttribute(this, name);
-	}
-
-	@Override
-	public Object GetRawAttribute(String name)
-	{
-		return graph.GetLinkAttribute(uid, name);
-	}
-
-	@Override
-	public AttributeList<GraphAttribute> GetAttributes()
-	{
-		return GraphService.AttributesFromPair(this, graph.GetLinkAttributes(uid));
+		return graph.GetLinkAttribute(id, name);
 	}
 
 	@Override
 	public void UpdateAttribute(String name, Object value)
 	{
-		value = SimpleAttribute.ConformType(value);
-
-		if(!TestAttribute(name))
-			throw new ExceptionModelFail("attribute not found: " + name);
-
-		GetAttribute(name).CheckType(value);
-		graph.SetLinkAttribute(uid, name, value);
-	}
-
-	@Override
-	public void DeclareAttribute(String name, Object value)
-	{
-		value = SimpleAttribute.ConformType(value);
-
-		if(TestAttribute(name))
-			throw new ExceptionModelFail("attribute already declared: " + name);
-
-		graph.SetLinkAttribute(uid, name, value);
-	}
-
-	@Override
-	public void AddLabel(String label)
-	{
-		throw new ExceptionModelFail("labels on links are not supported yet");
-	}
-
-	@Override
-	public boolean TestLabel(String label)
-	{
-		throw new ExceptionModelFail("labels on links are not supported yet");
+		graph.SetLinkAttribute(id, name, value);
 	}
 
 	@Override
 	public boolean TestAttribute(String name)
 	{
-		return graph.TestLinkAttribute(uid, name);
+		return graph.TestLinkAttribute(id, name);
 	}
 
 	@Override
 	public void Delete()
 	{
-		graph.DeleteLink(uid);
+		graph.DeleteLink(id);
 	}
 
 	public GraphObject Target()
 	{
-		return new GraphObject(graph, graph.GetLinkTarget(uid));
+		return new GraphObject(graph, graph.GetLinkTarget(id));
 	}
 
 	public GraphObject Source()
 	{
-		return new GraphObject(graph, graph.GetLinkSource(uid));
+		return new GraphObject(graph, graph.GetLinkSource(id));
 	}
 
 	public void DeleteAttribute(String name)
 	{
-		graph.DeleteLinkAttribute(uid, name);
+		graph.DeleteLinkAttribute(id, name);
 	}
 }

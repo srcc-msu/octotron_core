@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.logic.importer;
 
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.logic.ImportManager;

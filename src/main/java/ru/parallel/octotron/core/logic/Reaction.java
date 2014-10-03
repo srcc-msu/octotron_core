@@ -1,130 +1,58 @@
-/*******************************************************************************
- * Copyright (c) 2014 SRCC MSU
- *
- * Distributed under the MIT License - see the accompanying file LICENSE.txt.
- ******************************************************************************/
-
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.UniqueName;
-import ru.parallel.octotron.storage.PersistentStorage;
+import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.UniqueID;
 
-import java.io.Serializable;
+import java.util.Collection;
+import java.util.Map;
 
-public abstract class Reaction implements Serializable, UniqueName
+public class Reaction extends UniqueID<EEntityType>
 {
-	private long reaction_id;
+	final ReactionTemplate template;
 
-	private final String check_name;
-	private final Object check_value;
+	Map<Long, Marker> markers;
 
-	private Response response = null;
-	private Response recover_response = null;
+	private long state;
+	private long stat;
 
-	private long wait_delay = 0;
-	private long wait_repeat = 0;
-	private boolean repeatable = false;
-
-	public Reaction(String check_name, Object check_value)
+	public Reaction(ReactionTemplate template)
 	{
-		this.check_name = check_name;
-		this.check_value = check_value;
-
-		Register();
+		super(EEntityType.REACTION);
+		this.template = template;
 	}
 
-	private void Register()
+
+	public ReactionTemplate GetTemplate()
 	{
-		reaction_id = PersistentStorage.INSTANCE.GetReactions().Add(this);
+		return template;
 	}
 
-	@Override
-	public String GetUniqName()
+	public Object GetState()
 	{
-		return GetCheckName();
+		return state;
 	}
 
-//----------------
 
-	public final long GetID()
+	public long GetStat()
 	{
-		return reaction_id;
+		return stat;
 	}
 
-	public final Object GetCheckValue()
+	public long AddMarker(String descr, boolean suppress)
 	{
-		return check_value;
+		Marker m = new Marker(this, descr, suppress);
+
+		markers.put(m.GetID(), m);
+		return m.GetID();
 	}
 
-	public final String GetCheckName()
+	public Collection<Marker> GetMarkers()
 	{
-		return check_name;
+		return markers.values();
 	}
 
-//----------------
-
-	public static final long STATE_NONE = 0;
-	public static final long STATE_STARTED = 1;
-	public static final long STATE_EXECUTED = 2;
-
-	public abstract boolean ReactionNeeded(ModelObject entity);
-
-//----------------
-
-	public final Response GetResponse()
+	public void DeleteMarker(long id)
 	{
-		return response;
-	}
-
-	public final Response GetRecoverResponse()
-	{
-		return recover_response;
-	}
-
-	public long GetDelay()
-	{
-		return wait_delay;
-	}
-
-	public long GetRepeat()
-	{
-		return wait_repeat;
-	}
-
-	public boolean IsRepeatable()
-	{
-		return repeatable;
-	}
-
-	public Reaction Response(Response response)
-	{
-		this.response = response;
-		return this;
-	}
-
-	public Reaction RecoverResponse(Response recover_response)
-	{
-		this.recover_response = recover_response;
-		return this;
-	}
-
-	public Reaction Delay(long wait_delay)
-	{
-		this.wait_delay = wait_delay;
-		return this;
-	}
-
-	public Reaction Repeat(long wait_repeat)
-	{
-		this.wait_repeat = wait_repeat;
-		return this;
-	}
-
-	public Reaction Repeatable(boolean repeatable)
-	{
-		this.repeatable = repeatable;
-		return this;
+		markers.remove(id);
 	}
 }

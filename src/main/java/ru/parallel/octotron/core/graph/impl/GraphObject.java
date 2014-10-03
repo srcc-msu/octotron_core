@@ -6,109 +6,75 @@
 
 package ru.parallel.octotron.core.graph.impl;
 
+import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.Uid;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.UniqueID;
+
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * implementation of object according to real \graph<br>
  * */
 public final class GraphObject extends GraphEntity
 {
-	public GraphObject(IGraph graph, Uid uid)
+	public GraphObject(IGraph graph, UniqueID<EGraphType> id)
 	{
-		super(graph, uid);
+		super(graph, id);
+	}
+
+	public GraphObject(IGraph graph, long id)
+	{
+		super(graph, id, EGraphType.OBJECT);
 	}
 
 	@Override
-	public GraphAttribute GetAttribute(String name)
+	public Object GetAttribute(String name)
 	{
-		return new GraphAttribute(this, name);
-	}
-
-	@Override
-	public AttributeList<GraphAttribute> GetAttributes()
-	{
-		return GraphService.AttributesFromPair(this, graph.GetObjectAttributes(uid));
-	}
-
-	@Override
-	Object GetRawAttribute(String name)
-	{
-		return graph.GetObjectAttribute(uid, name);
+		return graph.GetObjectAttribute(id, name);
 	}
 
 	public void DeleteAttribute(String name)
 	{
-		graph.DeleteObjectAttribute(uid, name);
+		graph.DeleteObjectAttribute(id, name);
 	}
 
 	@Override
 	public void UpdateAttribute(String name, Object value)
 	{
-		value = SimpleAttribute.ConformType(value);
-
-		if(!TestAttribute(name))
-			throw new ExceptionModelFail("attribute not found: " + name);
-
-		GetAttribute(name).CheckType(value);
-		graph.SetObjectAttribute(uid, name, value);
-	}
-
-	@Override
-	public void DeclareAttribute(String name, Object value)
-	{
-		value = SimpleAttribute.ConformType(value);
-
-		if(TestAttribute(name))
-			throw new ExceptionModelFail("attribute already declared: " + name);
-
-		graph.SetObjectAttribute(uid, name, value);
-	}
-
-	@Override
-	public void AddLabel(String label)
-	{
-		graph.AddNodeLabel(uid, label);
-	}
-
-	@Override
-	public boolean TestLabel(String label)
-	{
-		return graph.TestNodeLabel(uid, label);
+		graph.SetObjectAttribute(id, name, value);
 	}
 
 	@Override
 	public boolean TestAttribute(String name)
 	{
-		return graph.TestObjectAttribute(uid, name);
+		return graph.TestObjectAttribute(id, name);
 	}
 
 	@Override
 	public void Delete()
 	{
-		graph.DeleteObject(uid);
+		graph.DeleteObject(id);
 	}
 
 // ----
 //
 // ----
 
-	public GraphLinkList GetInLinks()
+	public Collection<GraphLink> GetInLinks()
 	{
-		return GraphService.LinksFromUid(graph, graph.GetInLinks(uid));
+		return GraphService.LinksFromUid(graph, graph.GetInLinks(id));
 	}
 
-	public GraphLinkList GetOutLinks()
+	public Collection<GraphLink> GetOutLinks()
 	{
-		return GraphService.LinksFromUid(graph, graph.GetOutLinks(uid));
+		return GraphService.LinksFromUid(graph, graph.GetOutLinks(id));
 	}
 
-	public GraphObjectList GetInNeighbors()
+	public Collection<GraphObject> GetInNeighbors()
 	{
-		GraphObjectList objects = new GraphObjectList();
+		List<GraphObject> objects = new LinkedList<>();
 
 		for(GraphLink link : GetInLinks())
 			objects.add(link.Source());
@@ -116,65 +82,13 @@ public final class GraphObject extends GraphEntity
 		return objects;
 	}
 
-	public GraphObjectList GetOutNeighbors()
+	public Collection<GraphObject> GetOutNeighbors()
 	{
-		GraphObjectList objects = new GraphObjectList();
+		List<GraphObject> objects = new LinkedList<>();
 
 		for(GraphLink link : GetOutLinks())
 			objects.add(link.Target());
 
 		return objects;
-	}
-
-	public GraphObjectList GetInNeighbors(String link_name
-		, Object link_value)
-	{
-		GraphObjectList objects = new GraphObjectList();
-
-		for(GraphLink link : GetInLinks().Filter(link_name, link_value))
-			objects.add(link.Source());
-
-		return objects;
-	}
-
-	public GraphObjectList GetOutNeighbors(String link_name
-		, Object link_value)
-	{
-		GraphObjectList objects = new GraphObjectList();
-
-		for(GraphLink link : GetOutLinks().Filter(link_name, link_value))
-			objects.add(link.Target());
-
-		return objects;
-	}
-
-	public GraphObjectList GetInNeighbors(String link_name)
-	{
-		GraphObjectList objects = new GraphObjectList();
-
-		for(GraphLink link : GetInLinks().Filter(link_name))
-			objects.add(link.Source());
-
-		return objects;
-	}
-
-	public GraphObjectList GetOutNeighbors(String link_name)
-	{
-		GraphObjectList objects = new GraphObjectList();
-
-		for(GraphLink link : GetOutLinks().Filter(link_name))
-			objects.add(link.Target());
-
-		return objects;
-	}
-
-	public GraphObjectList GetInNeighbors(SimpleAttribute link_attribute)
-	{
-		return GetInNeighbors(link_attribute.GetName(), link_attribute.GetValue());
-	}
-
-	public GraphObjectList GetOutNeighbors(SimpleAttribute link_attribute)
-	{
-		return GetOutNeighbors(link_attribute.GetName(), link_attribute.GetValue());
 	}
 }

@@ -6,13 +6,13 @@
 
 package ru.parallel.octotron.generators;
 
+import ru.parallel.octotron.core.collections.ModelLinkList;
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.model.collections.ModelLinkList;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
@@ -60,37 +60,17 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * */
 	public ModelLink OneToOne(ModelObject from, ModelObject to)
 	{
-// find type attribute
-		SimpleAttribute type = null;
-
-		for(SimpleAttribute att : constants)
-		{
-			if(att.GetName().equals("type"))
-				type = att;
-		}
-
-		if(type == null)
-			throw new ExceptionModelFail("link type not set");
-
 // create edge
-		ModelLink link = ModelService.AddLink(from, to, (String)type.GetValue());
+		ModelLink link = ModelService.Get().AddLink(from, to);
 
 // set all attributes
-		link.DeclareConstants(constants);
+		link.GetBuilder().DeclareConst(constants);
+		link.GetBuilder().DeclareSensor(sensors);
+		link.GetBuilder().DeclareVar(rules);
+		link.GetBuilder().AddReaction(reactions);
 
-		if(sensors.size() > 0)
-			throw new ExceptionModelFail("sensors not supported on links");
-		if(rules.size() > 0)
-			throw new ExceptionModelFail("rules not supported on links");
-		if(reactions.size() > 0)
-			throw new ExceptionModelFail("reactions not supported on links");
-
-		/*link.DeclareSensors(sensors);
-		link.DeclareVaryings(rules);
-		link.AddReactions(reactions);*/
-
-		link.DeclareConstant("source", from.GetAttribute("AID").GetLong());
-		link.DeclareConstant("target", to.GetAttribute("AID").GetLong());
+		link.GetBuilder().DeclareConst("source", from.GetAttribute("AID").GetLong());
+		link.GetBuilder().DeclareConst("target", to.GetAttribute("AID").GetLong());
 
 		return link;
 	}

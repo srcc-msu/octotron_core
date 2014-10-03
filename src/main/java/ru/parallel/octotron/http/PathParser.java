@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
@@ -40,17 +40,17 @@ public final class PathParser
 		, PathOperations.source, PathOperations.target
 	};
 
-	private static final Map<String, EntityList.EQueryType> DELIMS
+	private static final Map<String, ModelList.EQueryType> DELIMS
 		= new HashMap<>();
 
 	static
 	{
-		PathParser.DELIMS.put("==", EntityList.EQueryType.EQ);
-		PathParser.DELIMS.put("!=", EntityList.EQueryType.NE);
-		PathParser.DELIMS.put("<=", EntityList.EQueryType.LE);
-		PathParser.DELIMS.put(">=", EntityList.EQueryType.GE);
-		PathParser.DELIMS.put("<", EntityList.EQueryType.LT);
-		PathParser.DELIMS.put(">", EntityList.EQueryType.GT);
+		PathParser.DELIMS.put("==", ModelList.EQueryType.EQ);
+		PathParser.DELIMS.put("!=", ModelList.EQueryType.NE);
+		PathParser.DELIMS.put("<=", ModelList.EQueryType.LE);
+		PathParser.DELIMS.put(">=", ModelList.EQueryType.GE);
+		PathParser.DELIMS.put("<", ModelList.EQueryType.LT);
+		PathParser.DELIMS.put(">", ModelList.EQueryType.GT);
 	}
 
 
@@ -75,7 +75,7 @@ public final class PathParser
 			String op = matcher.group(2);
 			Object value = SimpleAttribute.ValueFromStr(matcher.group(3));
 
-			EntityList.EQueryType type = DELIMS.get(op);
+			ModelList.EQueryType type = DELIMS.get(op);
 
 			if(type == null)
 				throw new ExceptionParseError("unsupported operation: " + op);
@@ -86,7 +86,7 @@ public final class PathParser
 		matcher = op_pattern_word.matcher(str);
 
 		if(matcher.find())
-			return new PathOperations.Query(new SimpleAttribute(str, null), EntityList.EQueryType.NONE);
+			return new PathOperations.Query(new SimpleAttribute(str, null), ModelList.EQueryType.NONE);
 
 		throw new ExceptionParseError("can not parse: " + str);
 	}

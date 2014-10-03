@@ -1,21 +1,24 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.graph.impl.GraphLink;
+import ru.parallel.octotron.core.primitive.EEntityType;
 
 public class ModelLink extends ModelEntity
 {
-	public ModelLink(GraphLink link)
+	private ModelObject target;
+	private ModelObject source;
+
+	public ModelLink()
 	{
-		super(link);
+		super(EEntityType.LINK);
 	}
 
 	public ModelObject Target()
 	{
-		return new ModelObject(GetBaseLink().Target());
+		return target;
 	}
 
 	public ModelObject Source()
 	{
-		return new ModelObject(GetBaseLink().Source());
+		return source;
 	}
 }

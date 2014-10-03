@@ -1,108 +1,107 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.graph.collections.ListConverter;
-import ru.parallel.octotron.core.graph.impl.*;
-import ru.parallel.octotron.core.model.collections.ModelLinkList;
-import ru.parallel.octotron.core.model.collections.ModelList;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
-import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
-import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
-import ru.parallel.octotron.core.model.impl.meta.MetaObjectFactory;
-import ru.parallel.octotron.core.primitive.EObjectLabels;
+import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.collections.ModelLinkList;
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
-public abstract class ModelService
+public final class ModelService
 {
-	public static ModelList GetEntities()
-	{
-		ModelList list = new ModelList();
+	private static ModelService INSTANCE = null;
 
-		return list.append(GetAllLinks()).append(GetAllObjects());
+	public static void Init(Neo4jGraph graph)
+	{
+		ModelService.INSTANCE = new ModelService();
 	}
 
-	public static void MakeRuleDependencies()
+	public static void Finish()
+	{
+		ModelService.INSTANCE = null;
+	}
+
+	public static ModelService Get()
+	{
+		return INSTANCE;
+	}
+
+// -------------------------
+
+	ModelObjectList objects;
+	ModelLinkList links;
+
+	public ModelLink AddLink(ModelObject from, ModelObject to)
+	{
+		return null;
+	}
+
+	public ModelObject AddObject()
+	{
+		return null;
+	}
+
+	public ModelObjectList GetAllObjects()
+	{
+		return objects;
+	}
+
+	public ModelLinkList GetAllLinks()
+	{
+		return links;
+	}
+
+	public void EnableLinkIndex(String attr)
+	{
+	}
+
+	public void EnableObjectIndex(String aid)
+	{
+	}
+
+	public void MakeRuleDependencies()
 	{
 		for(ModelObject object : GetAllObjects())
 		{
-			for(VaryingAttribute attribute : object.GetVaryings())
+			for(VarAttribute attribute : object.GetVar())
 			{
-				for(IMetaAttribute dep : attribute.GetRule().GetDependency(object))
-				{
-					if(dep.GetType() != EAttributeType.CONSTANT)
-						dep.AddDependant(attribute);
-				}
+				attribute.GetBuilder().MakeDependant();
 			}
 		}
 	}
 
-	public static ModelObjectList GetObjects(SimpleAttribute attr)
+	public static String ExportDot()
 	{
-		GraphObjectList result = GraphService.Get().GetObjects(attr);
-		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
-	}
-
-	public static ModelObjectList GetObjects(String name, Object value)
-	{
-		GraphObjectList result = GraphService.Get().GetObjects(name, value);
-		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
-	}
-
-	public static ModelObjectList GetObjects(String name)
-	{
-		GraphObjectList result = GraphService.Get().GetObjects(name);
-		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
-	}
-
-	public static ModelLinkList GetLinks(SimpleAttribute attr)
-	{
-		GraphLinkList result = GraphService.Get().GetLinks(attr);
-		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
-	}
-
-	public static ModelLinkList GetLinks(String name, Object value)
-	{
-		GraphLinkList result = GraphService.Get().GetLinks(name, value);
-		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
-	}
-
-	public static ModelLinkList GetLinks(String name)
-	{
-		GraphLinkList result = GraphService.Get().GetLinks(name);
-		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
-	}
-
-	public static ModelObjectList GetAllObjects()
-	{
-		GraphObjectList result = GraphService.Get().GetAllObjects();
-		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
-	}
-
-	public static ModelLinkList GetAllLinks()
-	{
-		GraphLinkList result = GraphService.Get().GetAllLinks();
-		return ListConverter.GraphToModel(ListConverter.FilterLabel(result, EObjectLabels.MODEL.toString()));
+		throw new ExceptionModelFail("NIY");
 	}
 
 	public static String ExportDot(ModelObjectList objects)
 	{
-		return GraphService.Get().ExportDot(ListConverter.ModelToGraph(objects));
+		throw new ExceptionModelFail("NIY");
 	}
 
-	public static String ExportDot()
+	public static ModelObjectList GetObjects(SimpleAttribute attribute)
 	{
-		return GraphService.Get().ExportDot();
+		return null;
 	}
 
-	public static ModelObject AddObject()
+	public static ModelObjectList GetObjects(String name)
 	{
-		GraphObject object = GraphService.Get().AddObject();
-		object.AddLabel(EObjectLabels.MODEL.toString());
-		return new ModelObject(object);
+		return null;
 	}
 
-	public static ModelLink AddLink(ModelObject obj1, ModelObject obj2, String type)
+	public static ModelLinkList GetLinks(SimpleAttribute attr)
 	{
-		GraphLink link = GraphService.Get().AddLink(obj1.GetBaseObject(), obj2.GetBaseObject(), type);
-		return new ModelLink(link);
+		return null;
+	}
+
+	public static ModelLinkList GetLinks(String name)
+	{
+		return null;
+	}
+
+	public static void Init()
+	{
+		ModelService.INSTANCE = new ModelService();
 	}
 }

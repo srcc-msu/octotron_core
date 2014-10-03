@@ -6,14 +6,13 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 public class ArgMatchAprx extends Rule
 {
-	private static final long serialVersionUID = -665317574895287470L;
 	private final String check_attribute;
 	private final String match_attribute;
 	private final Object aprx;
@@ -27,11 +26,11 @@ public class ArgMatchAprx extends Rule
 	}
 
 	@Override
-	public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<IMetaAttribute> result = new AttributeList<>();
+		AttributeList<IModelAttribute> result = new AttributeList<>();
 
-		result.add(entity.GetMetaAttribute(check_attribute));
+		result.add(entity.GetAttribute(check_attribute));
 
 		return result;
 	}
@@ -39,7 +38,7 @@ public class ArgMatchAprx extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		IMetaAttribute attr = entity.GetMetaAttribute(check_attribute);
+		IModelAttribute attr = entity.GetAttribute(check_attribute);
 
 		if(!attr.IsValid())
 			return null;

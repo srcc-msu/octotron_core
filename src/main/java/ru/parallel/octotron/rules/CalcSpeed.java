@@ -6,14 +6,13 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 public class CalcSpeed extends Rule
 {
-	private static final long serialVersionUID = -5796823312858284235L;
 	private final String measured_attribute;
 
 	public CalcSpeed(String name, String measured_attribute)
@@ -23,11 +22,11 @@ public class CalcSpeed extends Rule
 	}
 
 	@Override
-	public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<IMetaAttribute> result = new AttributeList<>();
+		AttributeList<IModelAttribute> result = new AttributeList<>();
 
-		result.add(entity.GetMetaAttribute(measured_attribute));
+		result.add(entity.GetAttribute(measured_attribute));
 
 		return result;
 	}
@@ -35,7 +34,7 @@ public class CalcSpeed extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		IMetaAttribute attr = entity.GetMetaAttribute(measured_attribute);
+		IModelAttribute attr = entity.GetAttribute(measured_attribute);
 
 		if(!attr.IsValid())
 			return null;

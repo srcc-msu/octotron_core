@@ -6,12 +6,11 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.core.graph.impl.*;
+import ru.parallel.octotron.core.collections.ModelLinkList;
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.model.collections.ModelLinkList;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.storage.PersistentStorage;
@@ -42,54 +41,33 @@ public class DBCreator
 	{
 		graph = new Neo4jGraph(settings.GetDbPath() + settings.GetDbName() + "_neo4j", Neo4jGraph.Op.RECREATE);
 
-		GraphService.Init(graph);
+		ModelService.Init(graph);
 
-		graph.GetIndex().EnableObjectIndex("AID");
-		graph.GetIndex().EnableLinkIndex("AID");
+		ModelService.Get().EnableObjectIndex("AID");
+		ModelService.Get().EnableLinkIndex("AID");
 
 		System.out.println("enabled object index: AID");
 		System.out.println("enabled link index: AID");
 
 		for(String attr : settings.GetObjectIndex())
 		{
-			graph.GetIndex().EnableObjectIndex(attr);
+			ModelService.Get().EnableObjectIndex(attr);
 			System.out.println("enabled object index: " + attr);
 		}
 
 		for(String attr : settings.GetLinkIndex())
 		{
-			graph.GetIndex().EnableLinkIndex(attr);
+			ModelService.Get().EnableLinkIndex(attr);
 			System.out.println("enabled link index: " + attr);
 		}
 	}
 
 	public void PrintStat()
 	{
-		int graph_attributes_count = 0;
-
-		GraphObjectList graph_objects = GraphService.Get().GetAllObjects();
-		GraphLinkList graph_links = GraphService.Get().GetAllLinks();
-
-		for(GraphObject obj : graph_objects)
-		{
-			graph_attributes_count += obj.GetAttributes().size();
-		}
-
-		for(GraphLink link : graph_links)
-		{
-			graph_attributes_count += link.GetAttributes().size();
-		}
-
-		System.out.println("Created graph objects: " + graph_objects.size());
-		System.out.println("Created graph links: " + graph_links.size());
-		System.out.println("Created graph attributes: " + graph_attributes_count);
-
-		System.out.println();
-
 		int model_attributes_count = 0;
 
-		ModelObjectList model_objects = ModelService.GetAllObjects();
-		ModelLinkList model_links = ModelService.GetAllLinks();
+		ModelObjectList model_objects = ModelService.Get().GetAllObjects();
+		ModelLinkList model_links = ModelService.Get().GetAllLinks();
 
 		for(ModelObject obj : model_objects)
 		{
@@ -112,7 +90,7 @@ public class DBCreator
 		throws ExceptionSystemError, FileNotFoundException
 	{
 		System.out.println("Building rule dependencies");
-		ModelService.MakeRuleDependencies();
+		ModelService.Get().MakeRuleDependencies();
 
 		PersistentStorage.INSTANCE.Save(settings.GetDbPath() + settings.GetDbName());
 

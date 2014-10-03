@@ -6,24 +6,27 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.primitive.UniqueName;
+import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.UniqueID;
 
-public class Marker implements UniqueName
+public class Marker extends UniqueID<EEntityType>
 {
-	private final long reaction_id;
+	private final Reaction reaction;
 	private final String description;
 	private final boolean suppress;
 
-	public Marker(long reaction_id, String description, boolean suppress)
+	public Marker(Reaction reaction, String description, boolean suppress)
 	{
-		this.reaction_id = reaction_id;
+		super(EEntityType.MARKER);
+
+		this.reaction = reaction;
 		this.suppress = suppress;
 		this.description = description;
 	}
 
-	public long GetTarget()
+	public Reaction GetReaction()
 	{
-		return reaction_id;
+		return reaction;
 	}
 
 	public String GetDescription()
@@ -36,9 +39,4 @@ public class Marker implements UniqueName
 		return suppress;
 	}
 
-	@Override
-	public String GetUniqName()
-	{
-		return Long.toString(reaction_id);
-	}
 }

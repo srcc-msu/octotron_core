@@ -3,7 +3,7 @@ package ru.parallel.octotron.core.primitive;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.attributes.AbstractAttribute;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -17,7 +17,7 @@ public class SimpleAttributeTest
 	public void TestValueFromStr() throws Exception
 	{
 		assertEquals(1L, SimpleAttribute.ValueFromStr("1"));
-		assertEquals(1.0, (Double)SimpleAttribute.ValueFromStr("1.0"), GraphAttribute.EPSILON);
+		assertEquals(1.0, (Double)SimpleAttribute.ValueFromStr("1.0"), AbstractAttribute.EPSILON);
 		assertEquals("str", SimpleAttribute.ValueFromStr("str"));
 		assertEquals(true, SimpleAttribute.ValueFromStr("true"));
 		assertEquals(false, SimpleAttribute.ValueFromStr("false"));

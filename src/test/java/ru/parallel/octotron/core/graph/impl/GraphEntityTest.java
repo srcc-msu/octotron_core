@@ -44,19 +44,19 @@ public class GraphEntityTest
 		assertFalse(object2.TestAttribute("exist"));
 		assertFalse(link.TestAttribute("exist"));
 
-		object1.DeclareAttribute("exist", "");
+		object1.UpdateAttribute("exist", "");
 
 		assertTrue(object1.TestAttribute("exist"));
 		assertFalse(object2.TestAttribute("exist"));
 		assertFalse(link.TestAttribute("exist"));
 
-		link.DeclareAttribute("exist", "");
+		link.UpdateAttribute("exist", "");
 
 		assertTrue(object1.TestAttribute("exist"));
 		assertFalse(object2.TestAttribute("exist"));
 		assertTrue(link.TestAttribute("exist"));
 
-		object2.DeclareAttribute("exist", "");
+		object2.UpdateAttribute("exist", "");
 
 		assertTrue(object1.TestAttribute("exist"));
 		assertTrue(object2.TestAttribute("exist"));
@@ -69,37 +69,37 @@ public class GraphEntityTest
 		GraphObject object1 = GraphService.Get().AddObject();
 		GraphObject object2 = GraphService.Get().AddObject();
 
-		object1.DeclareAttribute("test_long", 1L);
-		object1.DeclareAttribute("test_str", "a");
+		object1.UpdateAttribute("test_long", 1L);
+		object1.UpdateAttribute("test_str", "a");
 
-		object1.DeclareAttribute("test_double", 1.0);
-		object1.DeclareAttribute("test_bool", true);
+		object1.UpdateAttribute("test_double", 1.0);
+		object1.UpdateAttribute("test_bool", true);
 
 		assertEquals(Long.valueOf(1L)
-			, object1.GetAttribute("test_long").GetLong());
+			, object1.GetAttribute("test_long"));
 
-		assertEquals("a", object1.GetAttribute("test_str").GetString());
+		assertEquals("a", object1.GetAttribute("test_str"));
 
-		assertEquals(1.0, object1.GetAttribute("test_double").GetDouble(), 0.1);
+		assertEquals(1.0, object1.GetAttribute("test_double"));
 
-		assertEquals(true, object1.GetAttribute("test_bool").GetBoolean());
+		assertEquals(true, object1.GetAttribute("test_bool"));
 
 		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
 
-		link.DeclareAttribute("test_long", 1L);
-		link.DeclareAttribute("test_str", "a");
+		link.UpdateAttribute("test_long", 1L);
+		link.UpdateAttribute("test_str", "a");
 
-		link.DeclareAttribute("test_double", 1.0);
-		link.DeclareAttribute("test_bool", true);
+		link.UpdateAttribute("test_double", 1.0);
+		link.UpdateAttribute("test_bool", true);
 
 		assertEquals(Long.valueOf(1L)
-			,link.GetAttribute("test_long").GetLong());
+			,link.GetAttribute("test_long"));
 
-		assertEquals("a", link.GetAttribute("test_str").GetString());
+		assertEquals("a", link.GetAttribute("test_str"));
 
-		assertEquals(1.0, link.GetAttribute("test_double").GetDouble(), 0.1);
+		assertEquals(1.0, (double)link.GetAttribute("test_double"), 0.1);
 
-		assertEquals(true, link.GetAttribute("test_bool").GetBoolean());
+		assertEquals(true, link.GetAttribute("test_bool"));
 	}
 
 	@Test
@@ -108,14 +108,14 @@ public class GraphEntityTest
 		GraphObject object1 = GraphService.Get().AddObject();
 		GraphObject object2 = GraphService.Get().AddObject();
 
-		object1.DeclareAttribute("object", "");
+		object1.UpdateAttribute("object", "");
 
 		assertFalse(object1.TestAttribute("not_exist"));
 		assertFalse(object1.TestAttribute("link"));
 		assertTrue(object1.TestAttribute("object"));
 
 		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
-		link.DeclareAttribute("link", "");
+		link.UpdateAttribute("link", "");
 
 		assertFalse(link.TestAttribute("not_exist"));
 		assertFalse(link.TestAttribute("object"));
@@ -130,8 +130,8 @@ public class GraphEntityTest
 
 		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
 
-		object1.DeclareAttribute("object", "");
-		link.DeclareAttribute("link", "");
+		object1.UpdateAttribute("object", "");
+		link.UpdateAttribute("link", "");
 
 		assertTrue(object1.TestAttribute("object"));
 		assertTrue(link.TestAttribute("link"));
@@ -223,14 +223,13 @@ public class GraphEntityTest
 		assertEquals(0, GraphService.Get().GetAllObjects().size());
 	}
 
-	@Test
+/*	@Test
 	public void TestGetAttributes() throws Exception
 	{
 		GraphObject object1 = GraphService.Get().AddObject();
 		GraphObject object2 = GraphService.Get().AddObject();
 		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
 
-// everyone has AID
 		assertEquals(1, object1.GetAttributes().size());
 		assertEquals(1, object2.GetAttributes().size());
 		assertEquals(1, link.GetAttributes().size());
@@ -239,8 +238,8 @@ public class GraphEntityTest
 
 		for(long i = 0; i < N; i++)
 		{
-			object1.DeclareAttribute("test" + i, i);
-			link.DeclareAttribute("test" + i, N + i);
+			object1.UpdateAttribute("test" + i, i);
+			link.UpdateAttribute("test" + i, N + i);
 		}
 
 		for(long i = 0; i < N; i++)
@@ -254,6 +253,6 @@ public class GraphEntityTest
 		assertEquals(1 + N, object1.GetAttributes().size());
 		assertEquals(1 + 0, object2.GetAttributes().size());
 		assertEquals(1 + N, link.GetAttributes().size());
-	}
+	}*/
 
 }

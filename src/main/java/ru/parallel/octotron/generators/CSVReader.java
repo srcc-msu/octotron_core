@@ -6,9 +6,8 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.graph.collections.EntityList;
+import com.google.common.collect.Lists;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.collections.ModelList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -30,7 +29,7 @@ public final class CSVReader
 
 	private CSVReader() {}
 
-	public static void Declare(EntityList<? extends ModelEntity, ?> list, String file_name)
+	public static void Declare(Iterable<? extends ModelEntity> list, String file_name)
 		throws ExceptionParseError, IOException
 	{
 		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name));
@@ -54,11 +53,12 @@ public final class CSVReader
 
 				if(next_line == null)
 				{
-					throw new ExceptionModelFail("not enough data in csv, read: " + read + " expected: " + list.size());
+					throw new ExceptionModelFail("not enough data in csv, read: " + read);
 				}
 
 				if(next_line.length != fields.length)
-					throw new ExceptionModelFail("some fields are missing, read: " + read + " expected: " + list.size());
+					throw new ExceptionModelFail("some fields are missing, line[" + read + "]: "
+						+ Arrays.toString(next_line));
 
 				for(int i = 0; i < fields.length; i++)
 				{
@@ -66,15 +66,14 @@ public final class CSVReader
 
 					Object val = SimpleAttribute.ValueFromStr(str_val);
 
-					entity.DeclareConstant(fields[i], val);
+					entity.GetBuilder().DeclareConst(fields[i], val);
 				}
 
 				read++;
 			}
 
 			if((next_line = reader.readNext()) != null)
-				LOGGER.log(Level.WARNING, "some data from csv " + file_name + " were not assigned, read: " + read
-					+ " expected: " + list.size() + " next line: " + Arrays.toString(next_line));
+				LOGGER.log(Level.WARNING, "some data from csv " + file_name + " were not assigned, read: " + read);
 		}
 		finally
 		{
@@ -85,8 +84,6 @@ public final class CSVReader
 	public static <T extends ModelEntity> void Declare(T object, String file_name)
 		throws ExceptionParseError, IOException
 	{
-		ModelList list = new ModelList();
-		list.add(object);
-		Declare(list, file_name);
+		Declare(Lists.newArrayList(object), file_name);
 	}
 }

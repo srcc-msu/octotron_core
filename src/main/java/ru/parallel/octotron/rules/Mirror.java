@@ -6,14 +6,13 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.impl.ObjectRule;
-import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 
 public abstract class Mirror extends ObjectRule
 {
-	private static final long serialVersionUID = -2328141171759693459L;
 	private final String mirror_attribute;
 	private final String mirror_name_match;
 	private final Object mirror_value_match;
@@ -35,14 +34,14 @@ public abstract class Mirror extends ObjectRule
 	}
 
 	@Override
-	public AttributeList<IMetaAttribute> GetDependency(ModelObject object)
+	public AttributeList<IModelAttribute> GetDependency(ModelObject object)
 	{
-		AttributeList<IMetaAttribute> result = new AttributeList<>();
+		AttributeList<IModelAttribute> result = new AttributeList<>();
 
 		result.add(
 			object.GetInNeighbors().append(object.GetOutNeighbors())
 			.Filter(mirror_name_match, mirror_value_match)
-			.Only().GetMetaAttribute(mirror_attribute));
+			.Only().GetAttribute(mirror_attribute));
 
 		return result;
 	}}

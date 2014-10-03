@@ -8,7 +8,6 @@ package ru.parallel.octotron.rules;
 
 public class MirrorString extends Mirror
 {
-	private static final long serialVersionUID = -409794818433135695L;
 
 	public MirrorString(String mirror_attribute, String mirror_name_match, Object mirror_value_match)
 	{

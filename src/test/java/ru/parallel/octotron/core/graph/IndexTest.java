@@ -1,24 +1,8 @@
 package ru.parallel.octotron.core.graph;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import ru.parallel.octotron.core.graph.impl.GraphLinkList;
-import ru.parallel.octotron.core.graph.impl.GraphObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.generators.LinkFactory;
-import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-
-import static org.junit.Assert.assertEquals;
-
 public class IndexTest
 {
-	private static Neo4jGraph graph;
+/*	private static Neo4jGraph graph;
 
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
@@ -217,5 +201,5 @@ public class IndexTest
 		}
 
 		assertEquals(true, catched);
-	}
+	}*/
 }

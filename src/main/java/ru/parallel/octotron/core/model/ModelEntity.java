@@ -1,109 +1,198 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.graph.IEntity;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
-import ru.parallel.octotron.core.graph.impl.GraphBased;
-import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.logic.Marker;
+import ru.parallel.octotron.core.attributes.ConstAttribute;
+import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.model.impl.attribute.ConstantAttribute;
-import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
-import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
-import ru.parallel.octotron.core.model.impl.meta.*;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public abstract class ModelEntity extends GraphBased implements IEntity<ModelAttribute>
+public abstract class ModelEntity extends UniqueID<EEntityType>
 {
-	public ModelEntity(GraphEntity base)
+	public static class ModelEntityBuilder
 	{
-		super(base);
+		private final ModelEntity entity;
+
+		ModelEntityBuilder(ModelEntity entity)
+		{
+			this.entity = entity;
+		}
+
+		public void AddReaction(Reaction reaction)
+		{
+			entity.GetAttribute(reaction.GetTemplate().GetCheckName())
+				.GetBuilder().AddReaction(reaction);
+		}
+
+		public void AddReaction(List<Reaction> reactions)
+		{
+			for(Reaction reaction : reactions)
+				AddReaction(reaction);
+		}
+
+		public void DeclareConst(String name, Object value)
+		{
+			if(entity.TestAttribute(name))
+				throw new ExceptionModelFail("attribute already declared: " + name);
+
+			ConstAttribute attribute = new ConstAttribute(entity, name, value);
+
+			entity.attributes_map.put(name, attribute);
+			entity.const_map.put(name, attribute);
+		}
+
+		public void DeclareConst(SimpleAttribute attribute)
+		{
+			DeclareConst(attribute.GetName(), attribute.GetValue());
+		}
+
+		public void DeclareConst(Iterable<SimpleAttribute> attributes)
+		{
+			for(SimpleAttribute attribute : attributes)
+				DeclareConst(attribute);
+		}
+
+		public void DeclareSensor(String name, Object value)
+		{
+			if(entity.TestAttribute(name))
+				throw new ExceptionModelFail("attribute already declared: " + name);
+
+			SensorAttribute sensor = new SensorAttribute(entity, name, value);
+
+			entity.attributes_map.put(name, sensor);
+			entity.sensor_map.put(name, sensor);
+		}
+
+		public void DeclareSensor(SimpleAttribute attribute)
+		{
+			DeclareSensor(attribute.GetName(), attribute.GetValue());
+		}
+
+		public void DeclareSensor(Iterable<SimpleAttribute> attributes)
+		{
+			for(SimpleAttribute attribute : attributes)
+				DeclareSensor(attribute);
+		}
+
+		public void DeclareVar(Rule rule)
+		{
+			String name = rule.GetName();
+
+			if(entity.TestAttribute(name))
+				throw new ExceptionModelFail("attribute already declared: " + name);
+
+			VarAttribute var = new VarAttribute(entity, name, rule.GetDefaultValue());
+
+			entity.attributes_map.put(name, var);
+			entity.var_map.put(name, var);
+		}
+
+		public void DeclareVar(Iterable<Rule> rules)
+		{
+			for(Rule rule : rules)
+				DeclareVar(rule);
+		}
 	}
 
-// ---------------
-
-	public void DeclareConstant(SimpleAttribute attribute)
+	public ModelEntityBuilder GetBuilder()
 	{
-		DeclareConstant(attribute.GetName(), attribute.GetValue());
+		return new ModelEntityBuilder(this);
 	}
 
-	public void DeclareConstant(String name, Object value)
+	final Map<String, IAttribute> attributes_map;
+
+	final Map<String, ConstAttribute> const_map;
+	final Map<String, SensorAttribute> sensor_map;
+	final Map<String, VarAttribute> var_map;
+
+	public ModelEntity(EEntityType type)
 	{
-		GetBaseEntity().DeclareAttribute(name, value);
+		super(type);
+		attributes_map = new HashMap<>();
+		const_map = new HashMap<>();
+		sensor_map = new HashMap<>();
+		var_map = new HashMap<>();
 	}
 
-	public ConstantAttribute GetConstant(String name)
+	public IAttribute ReadAttribute(String name)
 	{
-		return GetAttribute(name).ToConstant();
-	}
+		IAttribute result = attributes_map.get(name);
 
-	public void DeclareConstants(List<SimpleAttribute> attributes)
-	{
-		for(SimpleAttribute attribute : attributes)
-			DeclareConstant(attribute);
-	}
-
-// ---------------
-
-	@Override
-	public ModelAttribute GetAttribute(String name)
-	{
-		return new ModelAttribute(this, GetBaseEntity().GetAttribute(name));
-	}
-
-	public IMetaAttribute GetMetaAttribute(String name)
-	{
-		return GetAttribute(name).ToMeta();
-	}
-
-	public AttributeList<IMetaAttribute> GetMetaAttributes()
-	{
-		AttributeList<IMetaAttribute> result = new AttributeList<>();
-
-		for(ModelAttribute attribute : GetAttributes())
-			result.add(attribute.ToMeta());
+		if(result == null)
+			throw new ExceptionModelFail("attribute not found: " + name);
 
 		return result;
 	}
 
-	@Override
-	public AttributeList<ModelAttribute> GetAttributes()
+	public IModelAttribute GetAttribute(String name)
 	{
-		AttributeList<ModelAttribute> attributes = new AttributeList<>();
+		IModelAttribute result = sensor_map.get(name);
 
-		for(GraphAttribute attribute : GetBaseEntity().GetAttributes())
-		{
-			attributes.add(new ModelAttribute(this, attribute));
-		}
+		if(result == null)
+			throw new ExceptionModelFail("attribute not found: " + name);
 
-		return attributes;
+		result = var_map.get(name);
+
+		if(result == null)
+			throw new ExceptionModelFail("attribute not found: " + name);
+
+		return result;
 	}
 
-// -----------------------------
+	public Collection<IAttribute> GetAttributes()
+	{
+		return attributes_map.values();
+	}
 
-	@Override
 	public boolean TestAttribute(String name)
 	{
-		return GetBaseEntity().TestAttribute(name);
+		IAttribute result = attributes_map.get(name);
+
+		return result != null;
 	}
 
-	@Override
-	public boolean TestAttribute(String name, Object value)
+// ----------------
+
+	public ConstAttribute GetConst(String name)
 	{
-		return GetBaseEntity().TestAttribute(name, value);
+		return const_map.get(name);
 	}
 
-	@Override
-	public boolean TestAttribute(SimpleAttribute attribute)
+	public Collection<ConstAttribute> GetConst()
 	{
-		return GetBaseEntity().TestAttribute(attribute);
+		return const_map.values();
+	}
+
+// ----------------
+
+	public SensorAttribute GetSensor(String name)
+	{
+		return sensor_map.get(name);
+	}
+
+	public Collection<SensorAttribute> GetSensor()
+	{
+		return sensor_map.values();
+	}
+
+// ----------------
+
+	public VarAttribute GetVar(String name)
+	{
+		return var_map.get(name);
+	}
+
+	public Collection<VarAttribute> GetVar()
+	{
+		return var_map.values();
 	}
 }
+

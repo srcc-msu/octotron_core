@@ -94,9 +94,9 @@ public class BaseFactoryTest
 	@Test
 	public void TestReactions()
 	{
-		Reaction[] reactions = { new Equals("test2", 0).Response(new Response(EEventStatus.INFO, "")) };
-		Reaction reaction2 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO, ""));
-		Reaction reaction3 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO, ""));
+		Reaction[] reactions = { new Reaction(new Equals("test2", 0).Response(new Response(EEventStatus.INFO, "")))};
+		Reaction reaction2 = new Reaction(new Equals("test3", 0).Response(new Response(EEventStatus.INFO, "")));
+		Reaction reaction3 = new Reaction(new Equals("test3", 0).Response(new Response(EEventStatus.INFO, "")));
 
 		ObjectFactory f1 = object_factory
 			.Sensors(new SimpleAttribute("test1", 0))
@@ -112,8 +112,8 @@ public class BaseFactoryTest
 
 		ModelObject obj = f1.Create();
 
-		assertEquals(0, obj.GetMetaAttribute("test1").GetReactions().size());
-		assertEquals(1, obj.GetMetaAttribute("test2").GetReactions().size());
-		assertEquals(2, obj.GetMetaAttribute("test3").GetReactions().size());
+		assertEquals(0, obj.GetAttribute("test1").GetReactions().size());
+		assertEquals(1, obj.GetAttribute("test2").GetReactions().size());
+		assertEquals(2, obj.GetAttribute("test3").GetReactions().size());
 	}
 }

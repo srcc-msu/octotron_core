@@ -6,12 +6,11 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.model.*;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.http.HTTPServer;
@@ -19,11 +18,8 @@ import ru.parallel.octotron.http.ParsedHttpRequest;
 import ru.parallel.octotron.http.RequestResult;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.importer.SimpleImporter;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.DynamicSleeper;
 import ru.parallel.utils.FileUtils;
-import ru.parallel.utils.JavaUtils;
 
 import java.io.*;
 import java.util.*;
@@ -37,7 +33,6 @@ public class ExecutionController
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private final GlobalSettings settings;
-	private final IGraph graph;
 
 	private ImportManager manager;
 	private SimpleImporter http_importer;
@@ -62,10 +57,9 @@ public class ExecutionController
 
 	private SelfTest tester;
 
-	public ExecutionController(IGraph graph, GlobalSettings settings)
+	public ExecutionController(GlobalSettings settings)
 		throws ExceptionSystemError
 	{
-		this.graph = graph;
 		this.settings = settings;
 
 		Init();
@@ -194,7 +188,7 @@ public class ExecutionController
 		sleeper.Sleep(processed_requests + processed_blocking_requests + processed_imports == 0);
 	}
 
-	AttributeList<ModelAttribute> ImmediateImport(ModelObject object, SimpleAttribute attribute)
+	AttributeList<IModelAttribute> ImmediateImport(ModelObject object, SimpleAttribute attribute)
 	{
 		List<ImportManager.Packet> packet = new LinkedList<>();
 		packet.add(new ImportManager.Packet(object, attribute));
@@ -212,7 +206,7 @@ public class ExecutionController
 		List<ImportManager.Packet> http_packet = http_importer.Get(max_count);
 		int processed_http = http_packet.size();
 
-		AttributeList<ModelAttribute> changed = manager.Process(http_packet);
+		AttributeList<IModelAttribute> changed = manager.Process(http_packet);
 
 		rule_invoker.Invoke(changed, silent);
 
@@ -235,7 +229,7 @@ public class ExecutionController
 		{
 			if(!packet.object.TestAttribute(packet.attribute.GetName()))
 			{
-				packet.object.DeclareConstant(packet.attribute);
+				packet.object.GetBuilder().DeclareConst(packet.attribute);
 				String script = settings.GetScriptByKey("on_new_attribute");
 
 				if(script != null)
@@ -246,7 +240,7 @@ public class ExecutionController
 			}
 		}
 
-		AttributeList<ModelAttribute> changed = manager.Process(http_packet);
+		AttributeList<IModelAttribute> changed = manager.Process(http_packet);
 
 		rule_invoker.Invoke(changed, silent);
 
@@ -296,7 +290,7 @@ public class ExecutionController
 		boolean process_test1 = request_processor.isAlive();
 		boolean process_test2 = rule_invoker.IsAlive();
 
-		long free_space = new File("/").getFreeSpace();;
+		long free_space = new File("/").getFreeSpace();
 		String free_space_res;
 
 		long free_space_mb = free_space / 1024 / 1024;
@@ -317,7 +311,10 @@ public class ExecutionController
  * create snapshot of all reactions with failed conditions<br>
  * and get their description<br>
  * */
-	public String MakeSnapshot() {
+	public String MakeSnapshot()
+	{
+		throw new ExceptionModelFail("NIY");
+		/*
 		StringBuilder result = new StringBuilder();
 
 		((Neo4jGraph)graph).GetTransaction().ForceWrite();
@@ -334,7 +331,7 @@ public class ExecutionController
 			}
 		}
 
-		return result.toString();
+		return result.toString();*/
 	}
 
 	public String GetStat()
@@ -345,7 +342,9 @@ public class ExecutionController
 	// TODO: entities?
 	public String CheckModTime(long interval)
 	{
-		StringBuilder result = new StringBuilder();
+		throw new ExceptionModelFail("NIY");
+
+		/*StringBuilder result = new StringBuilder();
 
 		ModelObjectList list = ModelService.GetAllObjects();
 
@@ -373,7 +372,7 @@ public class ExecutionController
 			}
 		}
 
-		return result.toString();
+		return result.toString();*/
 	}
 
 	public Map<String, String> GetVersion()

@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.graph.collections.EntityList;
+import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.http.Operations.Operation;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
@@ -32,7 +32,7 @@ public class ParsedRequest
 	{
 		try
 		{
-			EntityList<? extends ModelEntity, ?> entity_list = null;
+			ModelList<? extends ModelEntity, ?> entity_list = null;
 
 			String path = params.get("path");
 

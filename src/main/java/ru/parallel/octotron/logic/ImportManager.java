@@ -6,13 +6,11 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.collections.ListConverter;
-import ru.parallel.octotron.core.model.ModelAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
-import ru.parallel.octotron.core.model.impl.attribute.VaryingAttribute;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.List;
@@ -24,8 +22,8 @@ public class ImportManager
 {
 	public static class Packet
 	{
-		public ModelObject object;
-		public SimpleAttribute attribute;
+		public final ModelObject object;
+		public final SimpleAttribute attribute;
 
 		public Packet(ModelObject object, SimpleAttribute attribute)
 		{
@@ -41,15 +39,15 @@ public class ImportManager
 		this.static_proc = new AttributeProcessor();
 	}
 
-	public AttributeList<ModelAttribute> Process(List<Packet> packet)
+	public AttributeList<IModelAttribute> Process(List<Packet> packet)
 	{
-		AttributeList<ModelAttribute> result = new AttributeList<>();
+		AttributeList<IModelAttribute> result = new AttributeList<>();
 
 		AttributeList<SensorAttribute> changed = static_proc.Process(packet);
 
 		if(changed.size() > 0)
 		{
-			AttributeList<VaryingAttribute> changed_varyings = ProcessVaryings(changed/*.append(ProcessTimers())*/); // TODO: timers?
+			AttributeList<VarAttribute> changed_varyings = ProcessVaryings(changed/*.append(ProcessTimers())*/); // TODO: timers?
 			result = result.append(changed);
 			result = result.append(changed_varyings);
 		}
@@ -57,11 +55,11 @@ public class ImportManager
 		return result;
 	}
 
-	/*public AttributeList<VaryingAttribute> CheckChanged(AttributeList<VaryingAttribute> changed)
+	/*public AttributeList<VarAttribute> CheckChanged(AttributeList<VarAttribute> changed)
 	{
-		AttributeList<VaryingAttribute> result = new AttributeList<>();
+		AttributeList<VarAttribute> result = new AttributeList<>();
 
-		for(VaryingAttribute varying : changed)
+		for(VarAttribute varying : changed)
 		{
 			if(varying.Update())
 				result.add(varying);
@@ -70,15 +68,27 @@ public class ImportManager
 		return result;
 	}*/
 
-	public AttributeList<VaryingAttribute> ProcessVaryings(AttributeList<SensorAttribute> changed)
+	protected AttributeList<VarAttribute> GetDependant(AttributeList<? extends IModelAttribute> attributes)
 	{
-		AttributeList<VaryingAttribute> result = new AttributeList<>();
+		AttributeList<VarAttribute> result = new AttributeList<>();
 
-		AttributeList<VaryingAttribute> dependant_varyings = ListConverter.GetDependant(changed);
+		for(IModelAttribute attribute : attributes)
+		{
+			result.addAll(attribute.GetDependant());
+		}
+
+		return result;
+	}
+
+	public AttributeList<VarAttribute> ProcessVaryings(AttributeList<SensorAttribute> changed)
+	{
+		AttributeList<VarAttribute> result = new AttributeList<>();
+
+		AttributeList<VarAttribute> dependant_varyings = GetDependant(changed);
 
 		do
 		{
-			for(VaryingAttribute dependant_varying : dependant_varyings)
+			for(VarAttribute dependant_varying : dependant_varyings)
 			{
 				if(dependant_varying.Update())
 					result.add(dependant_varying);
@@ -86,7 +96,7 @@ public class ImportManager
 
 //			dependant_varyings = CheckChanged(dependant_varyings);
 //			result = result.append(dependant_varyings);
-			dependant_varyings = ListConverter.GetDependant(dependant_varyings);
+			dependant_varyings = GetDependant(dependant_varyings);
 		}
 		while(dependant_varyings.size() != 0);
 

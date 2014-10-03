@@ -7,11 +7,7 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.rules.MirrorLong;
 
 public class SelfTest
 {
@@ -31,18 +27,18 @@ public class SelfTest
 
 	public void Init()
 	{
-		ModelObjectList list = ModelService.GetObjects("type", "_selftest");
+		/*ModelObjectList list = ModelService.GetObjects("type", "_selftest");
 
 		if(list.size() == 0)
 		{
 			obj1 = ModelService.AddObject();
-			obj1.DeclareConstant("type", "_selftest");
-			obj1.DeclareConstant("lid", 0);
-			obj1.DeclareConstant("test_iteration", 0);
+			obj1.DeclareConst("type", "_selftest");
+			obj1.DeclareConst("lid", 0);
+			obj1.DeclareConst("test_iteration", 0);
 
 			obj2 = ModelService.AddObject();
-			obj2.DeclareConstant("type", "_selftest");
-			obj2.DeclareConstant("lid", 1);
+			obj2.DeclareConst("type", "_selftest");
+			obj2.DeclareConst("lid", 1);
 			obj2.DeclareVarying(new MirrorLong("test_iteration", "lid", 0));
 
 			ModelService.AddLink(obj1, obj2, "test");
@@ -55,7 +51,7 @@ public class SelfTest
 		}
 		else
 			throw new ExceptionModelFail("unexpected self-testing configuration");
-
+*/
 		Test(); // update once
 	}
 

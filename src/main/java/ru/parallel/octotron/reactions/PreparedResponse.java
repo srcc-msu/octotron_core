@@ -6,12 +6,10 @@
 
 package ru.parallel.octotron.reactions;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.ObjectArrays;
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -19,7 +17,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.utils.FileUtils;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -99,7 +96,7 @@ public class PreparedResponse
 			return;
 		}
 
-		if(entity.GetUID().getType() != EEntityType.OBJECT)
+		if(entity.GetType() != EEntityType.OBJECT)
 			throw new ExceptionModelFail("only objects have a parent");
 
 		ModelObject p_entity = (ModelObject)entity;

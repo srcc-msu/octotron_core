@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.logic;
 
 import com.google.common.collect.ObjectArrays;
-import org.apache.commons.lang.ArrayUtils;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import java.io.Serializable;

@@ -6,14 +6,13 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 public class NotMatch extends Rule
 {
-	private static final long serialVersionUID = -665317574895287470L;
 	private final String param;
 	private final Object match_value;
 
@@ -25,11 +24,11 @@ public class NotMatch extends Rule
 	}
 
 	@Override
-	public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<IMetaAttribute> result = new AttributeList<>();
+		AttributeList<IModelAttribute> result = new AttributeList<>();
 
-		result.add(entity.GetMetaAttribute(param));
+		result.add(entity.GetAttribute(param));
 
 		return result;
 	}
@@ -37,7 +36,7 @@ public class NotMatch extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		IMetaAttribute attr = entity.GetMetaAttribute(param);
+		IModelAttribute attr = entity.GetAttribute(param);
 
 		if(!attr.IsValid())
 			return null;

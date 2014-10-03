@@ -43,13 +43,13 @@ public class GraphObjectTest
 
 		GraphLink link1 = GraphService.Get().AddLink(object1, object2, "test");
 
-		assertEquals(link1.GetUID().getUid()
-			, object2.GetInLinks().Only().GetUID().getUid());
+		assertEquals(link1.GetID()
+			, object2.GetInLinks().iterator().next().GetID());
 
 		GraphLink link2 = GraphService.Get().AddLink(object2, object1, "test");
 
-		assertEquals(link2.GetUID().getUid()
-			, object1.GetInLinks().Only().GetUID().getUid());
+		assertEquals(link2.GetID()
+			, object1.GetInLinks().iterator().next().GetID());
 	}
 
 	@Test
@@ -63,12 +63,12 @@ public class GraphObjectTest
 
 		GraphLink link1 = GraphService.Get().AddLink(object1, object2, "test");
 
-		assertEquals(link1.GetUID().getUid()
-			, object1.GetOutLinks().Only().GetUID().getUid());
+		assertEquals(link1.GetID()
+			, object1.GetOutLinks().iterator().next().GetID());
 
 		GraphLink link2 = GraphService.Get().AddLink(object2, object1, "test");
 
-		assertEquals(link2.GetUID().getUid()
-			, object2.GetOutLinks().Only().GetUID().getUid());
+		assertEquals(link2.GetID()
+			, object2.GetOutLinks().iterator().next().GetID());
 	}
 }

@@ -3,15 +3,10 @@ package ru.parallel.octotron.rules;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.graph.impl.GraphAttribute;
+import ru.parallel.octotron.core.attributes.AbstractAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.model.IMetaAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.collections.ModelList;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
-import ru.parallel.octotron.core.model.impl.attribute.EAttributeType;
-import ru.parallel.octotron.core.model.impl.attribute.SensorAttribute;
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -96,7 +91,7 @@ public class ComputeTests
 
 		links.OneToEvery(obj, outs);
 
-		ModelList entities = new ModelList();
+/*		ModelList entities = new ModelList();
 
 		entities.add(obj);
 		entities = entities.append(ins);
@@ -105,7 +100,7 @@ public class ComputeTests
 		for(ModelEntity entity : entities)
 			for(IMetaAttribute attr : entity.GetMetaAttributes())
 				if(attr.GetType() == EAttributeType.SENSOR)
-					((SensorAttribute)attr).Update(attr.GetValue());
+					((SensorAttribute)attr).Update(attr.GetValue());*/
 	}
 
 	@AfterClass
@@ -128,10 +123,10 @@ public class ComputeTests
 		AggregateDoubleSum all_rule
 			= new AggregateDoubleSum("res", EDependencyType.ALL, "d1", "d2");
 
-		assertEquals(  1.0, (Double)self_rule.Compute(obj), GraphAttribute.EPSILON);
-		assertEquals( 63.0, (Double)  in_rule.Compute(obj), GraphAttribute.EPSILON);
-		assertEquals(164.0, (Double) out_rule.Compute(obj), GraphAttribute.EPSILON);
-		assertEquals(228.0, (Double) all_rule.Compute(obj), GraphAttribute.EPSILON);
+		assertEquals(  1.0, (Double)self_rule.Compute(obj), AbstractAttribute.EPSILON);
+		assertEquals( 63.0, (Double)  in_rule.Compute(obj), AbstractAttribute.EPSILON);
+		assertEquals(164.0, (Double) out_rule.Compute(obj), AbstractAttribute.EPSILON);
+		assertEquals(228.0, (Double) all_rule.Compute(obj), AbstractAttribute.EPSILON);
 	}
 
 	@Test
@@ -191,7 +186,7 @@ public class ComputeTests
 	@Test
 	public void TestArgMatchAprx()
 	{
-		ArgMatchAprx rule1 = new ArgMatchAprx("test", "d1", "d2", GraphAttribute.EPSILON);
+		ArgMatchAprx rule1 = new ArgMatchAprx("test", "d1", "d2", AbstractAttribute.EPSILON);
 		ArgMatchAprx rule2 = new ArgMatchAprx("test", "d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(obj));
@@ -390,7 +385,7 @@ public class ComputeTests
 	@Test
 	public void TestVarArgMatchAprx()
 	{
-		VarArgMatchAprx rule1 = new VarArgMatchAprx("test", "d1", "d2", GraphAttribute.EPSILON);
+		VarArgMatchAprx rule1 = new VarArgMatchAprx("test", "d1", "d2", AbstractAttribute.EPSILON);
 		VarArgMatchAprx rule2 = new VarArgMatchAprx("test", "d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(obj));

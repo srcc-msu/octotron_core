@@ -6,16 +6,15 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 import java.util.Arrays;
 
 public class LogicalAnd extends Rule
 {
-	private static final long serialVersionUID = -5698688420213900355L;
 	private final String[] attributes;
 
 	public LogicalAnd(String name, String... attributes)
@@ -25,12 +24,12 @@ public class LogicalAnd extends Rule
 	}
 
 	@Override
-	public AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<IMetaAttribute> result = new AttributeList<>();
+		AttributeList<IModelAttribute> result = new AttributeList<>();
 
 		for(String attr_name : attributes)
-			result.add(entity.GetMetaAttribute(attr_name));
+			result.add(entity.GetAttribute(attr_name));
 
 		return result;
 	}
@@ -42,9 +41,9 @@ public class LogicalAnd extends Rule
 
 		for(String attr_name : attributes)
 		{
-			IMetaAttribute attr = entity.GetMetaAttribute(attr_name);
+			IModelAttribute attr = entity.GetAttribute(attr_name);
 
-			if(!attr.IsValid() || attr.GetCTime() == 0)
+			if(!attr.IsValid())
 				return null;
 
 			res = res & attr.GetBoolean();

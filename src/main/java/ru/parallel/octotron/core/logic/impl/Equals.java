@@ -1,11 +1,10 @@
 package ru.parallel.octotron.core.logic.impl;
 
-import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.model.IMetaAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.logic.ReactionTemplate;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 
-public class Equals extends Reaction
+public class Equals extends ReactionTemplate
 {
 	private static final long serialVersionUID = 8157833787643278811L;
 
@@ -17,7 +16,7 @@ public class Equals extends Reaction
 	@Override
 	public boolean ReactionNeeded(ModelObject object)
 	{
-		IMetaAttribute attr = object.GetMetaAttribute(GetCheckName());
+		IModelAttribute attr = object.GetAttribute(GetCheckName());
 
 		if(!attr.IsValid())
 			return false;

@@ -6,28 +6,22 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.model.IMetaAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.UniqueName;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.storage.PersistentStorage;
 
-import java.io.Serializable;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 /**
  * currently Octopy supports only only one constructor for rules</br>
  * */
-public abstract class Rule implements UniqueName, Serializable
+public abstract class Rule
 {
-	private static final long serialVersionUID = 6126662649331847764L;
 	protected final String name;
-	private long rule_id;
 
 	protected Rule(String name)
 	{
 		this.name = name;
-		rule_id = PersistentStorage.INSTANCE.GetRules().Add(this);
 	}
 
 	protected Rule()
@@ -35,10 +29,6 @@ public abstract class Rule implements UniqueName, Serializable
 		throw new ExceptionModelFail("super(attribute_name) must be called in the constructor");
 	}
 
-	public final long GetID()
-	{
-		return rule_id;
-	}
 
 	public final String GetName()
 	{
@@ -48,11 +38,5 @@ public abstract class Rule implements UniqueName, Serializable
 	public abstract Object Compute(ModelEntity entity);
 	public abstract Object GetDefaultValue();
 
-	public abstract AttributeList<IMetaAttribute> GetDependency(ModelEntity entity);
-
-	@Override
-	public String GetUniqName()
-	{
-		return GetName();
-	}
+	public abstract AttributeList<IModelAttribute> GetDependency(ModelEntity entity);
 }

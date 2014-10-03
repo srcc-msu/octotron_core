@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
@@ -125,9 +125,9 @@ public class StartOctotron
 		try
 		{
 			graph = new Neo4jGraph(path + "_neo4j", Neo4jGraph.Op.LOAD, bootstrap);
-			GraphService.Init(graph);
+			ModelService.Init(graph);
 
-			exec_control = new ExecutionController(graph, settings);
+			exec_control = new ExecutionController(settings);
 
 			PersistentStorage.INSTANCE.Load(path);
 
@@ -152,7 +152,7 @@ public class StartOctotron
 		}
 
 // --- shutdown
-		Exception shutdown_exception = StartOctotron.Shutdown(settings, graph, exec_control);
+		Exception shutdown_exception = StartOctotron.Shutdown(settings, exec_control);
 
 		if(shutdown_exception != null)
 		{
@@ -188,7 +188,7 @@ public class StartOctotron
 /**
  * shutdown the graph and all execution processes<br>
  * */
-	public static Exception Shutdown(GlobalSettings settings, Neo4jGraph graph, ExecutionController exec_control)
+	public static Exception Shutdown(GlobalSettings settings, ExecutionController exec_control)
 	{
 		String path = settings.GetDbPath() + settings.GetDbName();
 
@@ -197,8 +197,7 @@ public class StartOctotron
 			if(exec_control != null)
 				exec_control.Finish();
 
-			if(graph != null)
-				graph.Shutdown();
+			ModelService.Finish();
 
 			PersistentStorage.INSTANCE.Save(path);
 		}

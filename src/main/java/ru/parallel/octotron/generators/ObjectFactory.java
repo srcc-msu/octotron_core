@@ -6,11 +6,11 @@
 
 package ru.parallel.octotron.generators;
 
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.model.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.List;
@@ -38,12 +38,12 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * */
 	public ModelObject Create()
 	{
-		ModelObject object = ModelService.AddObject();
+		ModelObject object = ModelService.Get().AddObject();
 
-		object.DeclareConstants(constants);
-		object.DeclareSensors(sensors);
-		object.DeclareVaryings(rules);
-		object.AddReactions(reactions);
+		object.GetBuilder().DeclareConst(constants);
+		object.GetBuilder().DeclareSensor(sensors);
+		object.GetBuilder().DeclareVar(rules);
+		object.GetBuilder().AddReaction(reactions);
 
 		return object;
 	}

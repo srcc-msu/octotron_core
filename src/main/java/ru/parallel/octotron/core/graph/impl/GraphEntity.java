@@ -6,39 +6,29 @@
 
 package ru.parallel.octotron.core.graph.impl;
 
-import ru.parallel.octotron.core.graph.IEntity;
+import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.Uid;
-
+import ru.parallel.octotron.core.primitive.UniqueID;
 /**
- * some entity, that resides in model<br>
+ * some entity, that resides in model_old<br>
  * all operations with it go through the \graph interface, no caching<br>
  * */
-public abstract class GraphEntity implements IEntity<GraphAttribute>
+abstract class GraphEntity
 {
 	protected final IGraph graph;
-	protected final Uid uid;
+	protected final UniqueID<EGraphType> id;
 
-	public GraphEntity(IGraph graph, Uid uid)
+	public GraphEntity(IGraph graph, long id, EGraphType type)
 	{
 		this.graph = graph;
-		this.uid = uid;
+		this.id = new UniqueID<>(id, type);
 	}
 
-	public final Uid GetUID()
+	public GraphEntity(IGraph graph, UniqueID<EGraphType> id)
 	{
-		return uid;
-	}
-
-	@Override
-	public final boolean equals(Object object)
-	{
-		if (!(object instanceof GraphEntity))
-			return false;
-
-		return uid.equals(((GraphEntity) object).GetUID());
+		this.graph = graph;
+		this.id = id;
 	}
 
 	public abstract void Delete();
@@ -47,17 +37,13 @@ public abstract class GraphEntity implements IEntity<GraphAttribute>
 //			ATTRIBUTES
 //---------------------------------
 
-	@Override
-	public abstract GraphAttribute GetAttribute(String name);
-	@Override
-	public abstract AttributeList<GraphAttribute> GetAttributes();
+	public abstract Object GetAttribute(String name);
+	public abstract boolean TestAttribute(String name);
 
-	@Override
 	public boolean TestAttribute(String name, Object value)
 	{
-		return TestAttribute(name) && GetAttribute(name).eq(value);
+		return TestAttribute(name) && GetAttribute(name).equals(value);
 	}
-	@Override
 	public boolean TestAttribute(SimpleAttribute test)
 	{
 		return TestAttribute(test.GetName(), test.GetValue());
@@ -65,24 +51,14 @@ public abstract class GraphEntity implements IEntity<GraphAttribute>
 
 // ---
 
-	abstract Object GetRawAttribute(String name);
-
 	public abstract void UpdateAttribute(String name, Object value);
 	public void UpdateAttribute(SimpleAttribute att)
 	{
 		UpdateAttribute(att.GetName(), att.GetValue());
 	}
 
-	public abstract void DeclareAttribute(String name, Object value);
-	public void DeclareAttribute(SimpleAttribute att)
+	public UniqueID<EGraphType> GetID()
 	{
-		DeclareAttribute(att.GetName(), att.GetValue());
+		return id;
 	}
-
-// --------------------------------
-//			ATTRIBUTES
-//---------------------------------
-
-	public abstract void AddLabel(String label);
-	public abstract boolean TestLabel(String label);
 }

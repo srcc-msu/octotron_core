@@ -5,38 +5,21 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import ru.parallel.octotron.core.graph.collections.AttributeList;
-import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.logic.Marker;
-import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.logic.impl.Equals;
-import ru.parallel.octotron.core.model.impl.meta.ReactionObject;
-import ru.parallel.octotron.core.primitive.EDependencyType;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class ModelEntityTest
 {
-	private static Neo4jGraph graph;
-
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelEntityTest.graph = new Neo4jGraph( "dbs/" + ModelEntityTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init (graph);
+		ModelService.Init();
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
@@ -55,14 +38,12 @@ public class ModelEntityTest
 	@AfterClass
 	public static void Delete() throws Exception
 	{
-		ModelEntityTest.graph.Shutdown();
-		ModelEntityTest.graph.Delete();
+		ModelService.Finish();
 	}
 
 	@After
 	public void Clean()
 	{
-		GraphService.Get().Clean();
 	}
 
 	@org.junit.Rule
@@ -103,7 +84,7 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.DeclareConstant("test", 0);
+		entity.DeclareConst("test", 0);
 
 		OctoReaction reaction = new OctoReaction("test", 1
 			, new OctoResponse(EEventStatus.INFO, "test"));
@@ -121,7 +102,7 @@ public class ModelEntityTest
 
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.DeclareConstant("test", 0);
+		entity.DeclareConst("test", 0);
 
 		OctoReaction reaction1 = new OctoReaction("test", 1
 			, new OctoResponse(EEventStatus.INFO, "test"));

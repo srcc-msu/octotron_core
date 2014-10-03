@@ -21,8 +21,8 @@ public class GlobalSettings
 {
 	public static class Credential
 	{
-		public String user;
-		public String password;
+		public final String user;
+		public final String password;
 
 		Credential(String user, String password)
 		{

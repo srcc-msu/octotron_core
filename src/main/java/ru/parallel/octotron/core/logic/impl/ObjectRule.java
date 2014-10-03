@@ -6,9 +6,10 @@
 
 package ru.parallel.octotron.core.logic.impl;
 
-import ru.parallel.octotron.core.graph.collections.AttributeList;
+
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.model.IMetaAttribute;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 
@@ -30,10 +31,10 @@ public abstract class ObjectRule extends Rule
 	public abstract Object Compute(ModelObject object);
 
 	@Override
-	public final AttributeList<IMetaAttribute> GetDependency(ModelEntity entity)
+	public final AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 	{
 		return GetDependency((ModelObject) entity);
 	}
 
-	public abstract AttributeList<IMetaAttribute> GetDependency(ModelObject object);
+	public abstract AttributeList<IModelAttribute> GetDependency(ModelObject object);
 }

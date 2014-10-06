@@ -28,20 +28,41 @@ public final class ModelService
 
 // -------------------------
 
+	ModelCache cache;
+
 	ModelObjectList objects;
 	ModelLinkList links;
+
+	public ModelService()
+	{
+		objects = new ModelObjectList();
+		links = new ModelLinkList();
+
+		cache = new ModelCache();
+	}
 
 	public ModelLink AddLink(ModelObject source, ModelObject target)
 	{
 		ModelLink link = new ModelLink(source, target);
+
 		source.GetBuilder().AddOutLink(link);
 		target.GetBuilder().AddInLink(link);
+
+		links.add(link);
+		link.GetBuilder().DeclareConst("AID", link.GetID());
+
 		return link;
 	}
 
 	public ModelObject AddObject()
 	{
-		return new ModelObject();
+		ModelObject object = new ModelObject();
+
+		objects.add(object);
+		object.GetBuilder().DeclareConst("AID", object.GetID());
+
+
+		return object;
 	}
 
 	public ModelObjectList GetAllObjects()
@@ -54,12 +75,14 @@ public final class ModelService
 		return links;
 	}
 
-	public void EnableLinkIndex(String attr)
+	public void EnableLinkIndex(String name)
 	{
+		cache.EnableLinkIndex(name, links);
 	}
 
-	public void EnableObjectIndex(String aid)
+	public void EnableObjectIndex(String name)
 	{
+		cache.EnableObjectIndex(name, objects);
 	}
 
 	public void MakeRuleDependencies()
@@ -83,24 +106,24 @@ public final class ModelService
 		throw new ExceptionModelFail("NIY");
 	}
 
-	public static ModelObjectList GetObjects(SimpleAttribute attribute)
+	public ModelObjectList GetObjects(SimpleAttribute attribute)
 	{
-		return null;
+		return cache.GetObjects(attribute.GetName()).Filter(attribute);
 	}
 
-	public static ModelObjectList GetObjects(String name)
+	public ModelObjectList GetObjects(String name)
 	{
-		return null;
+		return cache.GetObjects(name);
 	}
 
-	public static ModelLinkList GetLinks(SimpleAttribute attr)
+	public ModelLinkList GetLinks(SimpleAttribute attribute)
 	{
-		return null;
+		return cache.GetLinks(attribute.GetName()).Filter(attribute);
 	}
 
-	public static ModelLinkList GetLinks(String name)
+	public ModelLinkList GetLinks(String name)
 	{
-		return null;
+		return cache.GetLinks(name);
 	}
 
 	public static void Init()

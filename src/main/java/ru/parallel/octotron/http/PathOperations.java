@@ -174,9 +174,9 @@ public abstract class PathOperations
 			SimpleAttribute attr = params.get(0).attribute;
 
 			if(attr.GetValue() != null)
-				return ModelService.GetObjects(attr);
+				return ModelService.Get().GetObjects(attr);
 			else
-				return ModelService.GetObjects(attr.GetName());
+				return ModelService.Get().GetObjects(attr.GetName());
 		}
 	});
 
@@ -199,9 +199,9 @@ public abstract class PathOperations
 			SimpleAttribute attr = params.get(0).attribute;
 
 			if(attr.GetValue() != null)
-				return ModelService.GetLinks(attr);
+				return ModelService.Get().GetLinks(attr);
 			else
-				return ModelService.GetLinks(attr.GetName());
+				return ModelService.Get().GetLinks(attr.GetName());
 		}
 	});
 

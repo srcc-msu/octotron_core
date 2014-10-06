@@ -109,6 +109,8 @@ public class RequestEmulationTest
 	public void HttpRequest() throws Exception
 	{
 		RequestEmulationTest.factory.Create(10);
+		ModelService.Get().EnableObjectIndex("AID");
+
 		String test = GetRequestResult("/view/p?path=obj(AID)");
 
 		if(test == null || !test.contains("AID"))
@@ -119,6 +121,7 @@ public class RequestEmulationTest
 	public void HttpObjRequest() throws Exception
 	{
 		RequestEmulationTest.factory.Create(10);
+		ModelService.Get().EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/p?path=obj(AID)");
 
@@ -130,6 +133,8 @@ public class RequestEmulationTest
 	public void HttpQueryRequest() throws Exception
 	{
 		ModelObjectList l = RequestEmulationTest.factory.Create(10);
+		ModelService.Get().EnableObjectIndex("AID");
+
 		long AID = l.get(0).GetAttribute("AID").GetLong();
 
 		String test = GetRequestResult("/view/p?path=obj(AID).q(AID=="+AID+")");
@@ -142,6 +147,8 @@ public class RequestEmulationTest
 	public void HttpUniqRequest() throws Exception
 	{
 		RequestEmulationTest.factory.Create(10);
+		ModelService.Get().EnableObjectIndex("AID");
+
 		String test = GetRequestResult("/view/p?path=obj(AID).uniq()");
 
 		if(test == null || !test.contains("AID"))
@@ -152,7 +159,10 @@ public class RequestEmulationTest
 	public void HttpNeighbourRequest() throws Exception
 	{
 		ModelObjectList objects = RequestEmulationTest.factory.Create(10);
+		ModelService.Get().EnableObjectIndex("AID");
+
 		RequestEmulationTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		ModelService.Get().EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/p?path=obj(AID).in_n()");
 		if(test == null || !test.contains("AID"))
@@ -171,8 +181,10 @@ public class RequestEmulationTest
 	public void HttpObjLinkRequest() throws Exception
 	{
 		ModelObjectList objects = RequestEmulationTest.factory.Create(10);
+		ModelService.Get().EnableObjectIndex("AID");
 
 		RequestEmulationTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		ModelService.Get().EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/p?path=obj(AID).in_l()");
 		if(test == null || !test.contains("AID"))
@@ -191,8 +203,10 @@ public class RequestEmulationTest
 	public void HttpLinkRequest() throws Exception
 	{
 		ModelObjectList objects = RequestEmulationTest.factory.Create(10);
+		ModelService.Get().EnableObjectIndex("AID");
 
 		RequestEmulationTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		ModelService.Get().EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/p?path=link(AID)");
 		if(test == null || !test.contains("AID"))
@@ -205,6 +219,7 @@ public class RequestEmulationTest
 		ModelObjectList objects = RequestEmulationTest.factory.Create(10);
 
 		RequestEmulationTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		ModelService.Get().EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/p?path=link(AID).source()");
 		if(test == null || !test.contains("AID"))

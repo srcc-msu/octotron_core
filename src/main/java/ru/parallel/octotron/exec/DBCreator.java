@@ -13,7 +13,6 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
-import ru.parallel.octotron.storage.PersistentStorage;
 import ru.parallel.utils.FileUtils;
 
 import java.io.FileNotFoundException;
@@ -91,8 +90,6 @@ public class DBCreator
 	{
 		System.out.println("Building rule dependencies");
 		ModelService.Get().MakeRuleDependencies();
-
-		PersistentStorage.INSTANCE.Save(settings.GetDbPath() + settings.GetDbName());
 
 		FileUtils.SaveToFile(settings.GetDbPath() + settings.GetDbName() + DBCreator.HASH_FILE
 			, Integer.toString(settings.GetHash()));

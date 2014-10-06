@@ -16,6 +16,11 @@ public final class ModelService
 		ModelService.INSTANCE = new ModelService();
 	}
 
+	public static void Init()
+	{
+		ModelService.INSTANCE = new ModelService();
+	}
+
 	public static void Finish()
 	{
 		ModelService.INSTANCE = null;
@@ -124,11 +129,6 @@ public final class ModelService
 	public ModelLinkList GetLinks(String name)
 	{
 		return cache.GetLinks(name);
-	}
-
-	public static void Init()
-	{
-		ModelService.INSTANCE = new ModelService();
 	}
 
 	public void Clean()

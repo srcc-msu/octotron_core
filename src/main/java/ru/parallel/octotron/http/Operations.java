@@ -19,7 +19,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.AutoFormat.E_FORMAT_PARAM;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.ExecutionController;
-import ru.parallel.octotron.storage.PersistentStorage;
 import ru.parallel.utils.JavaUtils;
 import ru.parallel.utils.Timer;
 
@@ -454,30 +453,8 @@ public abstract class Operations
 			String callback = params.get("callback");
 			CheckFormat(format, callback);
 
-			List<Reaction> reactions = PersistentStorage.INSTANCE.GetReactions().GetAll();
 
-			if(reactions.isEmpty())
-				return new RequestResult(E_RESULT_TYPE.TEXT, "no reactions");
-
-			List<Map<String, Object>> data = new LinkedList<>();
-
-			for(Reaction reaction : reactions)
-			{
-				Map<String, Object> map = new HashMap<>();
-
-				map.put("check_attribute", reaction.GetTemplate().GetCheckName());
-				map.put("check_value", reaction.GetTemplate().GetCheckValue());
-
-				if(reaction.GetTemplate().GetResponse() != null)
-				{
-					map.put("status", reaction.GetTemplate().GetResponse().GetStatus().toString());
-					map.put("description", reaction.GetTemplate().GetResponse().GetDescription());
-				}
-
-				data.add(map);
-			}
-
-			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+			return new RequestResult(format, null);
 		}
 	});
 

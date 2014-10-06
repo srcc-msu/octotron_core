@@ -1,10 +1,16 @@
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
-public class ConstAttribute extends AbstractAttribute
+import java.util.Collection;
+import java.util.LinkedList;
+
+public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 {
 	private static final String err_msg = "unsupported operation on const attribute: ";
 
@@ -34,7 +40,7 @@ public class ConstAttribute extends AbstractAttribute
 		return EAttributeType.CONST;
 	}
 
-/*	@Override
+	@Override
 	public Reaction GetReaction(long id)
 	{
 		throw new ExceptionModelFail(err_msg + "GetReaction");
@@ -73,5 +79,11 @@ public class ConstAttribute extends AbstractAttribute
 	public Collection<Response> ProcessReactions()
 	{
 		return new LinkedList<>();
-	}*/
+	}
+
+	@Override
+	public IAttributeBuilder GetBuilder()
+	{
+		return new ConstAttributeBuilder();
+	}
 }

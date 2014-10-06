@@ -4,12 +4,22 @@ import ru.parallel.octotron.core.primitive.EEntityType;
 
 public class ModelLink extends ModelEntity
 {
-	private ModelObject target;
-	private ModelObject source;
+	public static class ModelLinkBuilder extends ModelEntityBuilder<ModelLink>
+	{
+		ModelLinkBuilder(ModelLink entity)
+		{
+			super(entity);
+		}
+	}
 
-	public ModelLink()
+	private ModelObject source;
+	private ModelObject target;
+
+	public ModelLink(ModelObject source, ModelObject target)
 	{
 		super(EEntityType.LINK);
+		this.target = target;
+		this.source = source;
 	}
 
 	public ModelObject Target()
@@ -20,5 +30,11 @@ public class ModelLink extends ModelEntity
 	public ModelObject Source()
 	{
 		return source;
+	}
+
+	@Override
+	public ModelLinkBuilder GetBuilder()
+	{
+		return new ModelLinkBuilder(this);
 	}
 }

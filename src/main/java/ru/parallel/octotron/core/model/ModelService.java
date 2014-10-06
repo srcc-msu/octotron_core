@@ -31,14 +31,17 @@ public final class ModelService
 	ModelObjectList objects;
 	ModelLinkList links;
 
-	public ModelLink AddLink(ModelObject from, ModelObject to)
+	public ModelLink AddLink(ModelObject source, ModelObject target)
 	{
-		return null;
+		ModelLink link = new ModelLink(source, target);
+		source.GetBuilder().AddOutLink(link);
+		target.GetBuilder().AddInLink(link);
+		return link;
 	}
 
 	public ModelObject AddObject()
 	{
-		return null;
+		return new ModelObject();
 	}
 
 	public ModelObjectList GetAllObjects()
@@ -103,5 +106,11 @@ public final class ModelService
 	public static void Init()
 	{
 		ModelService.INSTANCE = new ModelService();
+	}
+
+	public void Clean()
+	{
+		objects = new ModelObjectList();
+		links = new ModelLinkList();
 	}
 }

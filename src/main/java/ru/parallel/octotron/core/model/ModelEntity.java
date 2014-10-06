@@ -17,11 +17,11 @@ import java.util.Map;
 
 public abstract class ModelEntity extends UniqueID<EEntityType>
 {
-	public static class ModelEntityBuilder
+	public abstract static class ModelEntityBuilder<T extends ModelEntity>
 	{
-		private final ModelEntity entity;
+		protected final T entity;
 
-		ModelEntityBuilder(ModelEntity entity)
+		ModelEntityBuilder(T entity)
 		{
 			this.entity = entity;
 		}
@@ -43,7 +43,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 			if(entity.TestAttribute(name))
 				throw new ExceptionModelFail("attribute already declared: " + name);
 
-			ConstAttribute attribute = new ConstAttribute(entity, name, value);
+			ConstAttribute attribute = new ConstAttribute(entity, name, SimpleAttribute.ConformType(value));
 
 			entity.attributes_map.put(name, attribute);
 			entity.const_map.put(name, attribute);
@@ -65,7 +65,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 			if(entity.TestAttribute(name))
 				throw new ExceptionModelFail("attribute already declared: " + name);
 
-			SensorAttribute sensor = new SensorAttribute(entity, name, value);
+			SensorAttribute sensor = new SensorAttribute(entity, name, SimpleAttribute.ConformType(value));
 
 			entity.attributes_map.put(name, sensor);
 			entity.sensor_map.put(name, sensor);
@@ -89,7 +89,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 			if(entity.TestAttribute(name))
 				throw new ExceptionModelFail("attribute already declared: " + name);
 
-			VarAttribute var = new VarAttribute(entity, name, rule.GetDefaultValue());
+			VarAttribute var = new VarAttribute(entity, name, SimpleAttribute.ConformType(rule.GetDefaultValue()));
 
 			entity.attributes_map.put(name, var);
 			entity.var_map.put(name, var);
@@ -102,12 +102,9 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 		}
 	}
 
-	public ModelEntityBuilder GetBuilder()
-	{
-		return new ModelEntityBuilder(this);
-	}
+	public abstract ModelEntityBuilder GetBuilder();
 
-	final Map<String, IAttribute> attributes_map;
+	final Map<String, IModelAttribute> attributes_map;
 
 	final Map<String, ConstAttribute> const_map;
 	final Map<String, SensorAttribute> sensor_map;
@@ -122,32 +119,26 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 		var_map = new HashMap<>();
 	}
 
-	public IAttribute ReadAttribute(String name)
-	{
-		IAttribute result = attributes_map.get(name);
-
-		if(result == null)
-			throw new ExceptionModelFail("attribute not found: " + name);
-
-		return result;
-	}
-
 	public IModelAttribute GetAttribute(String name)
 	{
-		IModelAttribute result = sensor_map.get(name);
+		IModelAttribute result;
 
-		if(result == null)
-			throw new ExceptionModelFail("attribute not found: " + name);
+		result = const_map.get(name);
+		if(result != null)
+			return result;
+
+		result = sensor_map.get(name);
+		if(result != null)
+			return result;
 
 		result = var_map.get(name);
+		if(result != null)
+			return result;
 
-		if(result == null)
-			throw new ExceptionModelFail("attribute not found: " + name);
-
-		return result;
+		throw new ExceptionModelFail("attribute not found: " + name);
 	}
 
-	public Collection<IAttribute> GetAttributes()
+	public Collection<IModelAttribute> GetAttributes()
 	{
 		return attributes_map.values();
 	}

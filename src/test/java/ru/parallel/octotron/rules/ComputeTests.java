@@ -4,9 +4,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.attributes.AbstractAttribute;
+import ru.parallel.octotron.core.attributes.EAttributeType;
+import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.collections.ModelObjectList;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -20,15 +26,13 @@ import static org.junit.Assert.assertEquals;
 //they do not work because invalid or wrong ctime, need to fix somehow
 public class ComputeTests
 {
-	private static Neo4jGraph graph;
 	private static ModelObject obj;
 
 	@BeforeClass
 	public static void Init()
 		throws ExceptionSystemError
 	{
-		ComputeTests.graph = new Neo4jGraph( "dbs/" + ComputeTests.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init(graph);
+		ModelService.Init();
 
 		ObjectFactory in = new ObjectFactory()
 			.Sensors(new SimpleAttribute("in_d1", 10.0))
@@ -91,24 +95,23 @@ public class ComputeTests
 
 		links.OneToEvery(obj, outs);
 
-/*		ModelList entities = new ModelList();
+		ModelObjectList objects = new ModelObjectList();
 
-		entities.add(obj);
-		entities = entities.append(ins);
-		entities = entities.append(outs);
+		objects.add(obj);
+		objects = objects.append(ins);
+		objects = objects.append(outs);
 
-		for(ModelEntity entity : entities)
-			for(IMetaAttribute attr : entity.GetMetaAttributes())
+		for(ModelEntity entity : objects)
+			for(IModelAttribute attr : entity.GetAttributes())
 				if(attr.GetType() == EAttributeType.SENSOR)
-					((SensorAttribute)attr).Update(attr.GetValue());*/
+					((SensorAttribute)attr).Update(attr.GetValue());
 	}
 
 	@AfterClass
 	public static void Delete()
 		throws ExceptionSystemError
 	{
-		ComputeTests.graph.Shutdown();
-		ComputeTests.graph.Delete();
+		ModelService.Finish();
 	}
 
 	@Test

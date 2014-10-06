@@ -35,7 +35,7 @@ public class UniqueID<T>
 		if(!(object instanceof UniqueID))
 			return false;
 
-		UniqueID cmp = ((UniqueID)object);
+		UniqueID<T> cmp = ((UniqueID<T>)object);
 
 		return id == cmp.id && type.equals(cmp.type);
 	}

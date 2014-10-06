@@ -4,6 +4,7 @@ import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.UniqueID;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Reaction extends UniqueID<EEntityType>
@@ -19,6 +20,11 @@ public class Reaction extends UniqueID<EEntityType>
 	{
 		super(EEntityType.REACTION);
 		this.template = template;
+
+		markers = new HashMap<>();
+
+		state = 0;
+		stat = 0;
 	}
 
 

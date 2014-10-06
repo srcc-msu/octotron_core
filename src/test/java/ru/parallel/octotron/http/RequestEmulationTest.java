@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.generators.LinkFactory;
@@ -27,8 +28,6 @@ public class RequestEmulationTest
 {
 	private static final int HTTP_PORT = 4300;
 
-	private static Neo4jGraph graph;
-
 	private static LinkFactory links;
 	private static ObjectFactory factory;
 
@@ -39,10 +38,7 @@ public class RequestEmulationTest
 	{
 		RequestEmulationTest.http = HTTPServer.GetDummyServer(RequestEmulationTest.HTTP_PORT);
 
-		RequestEmulationTest.graph = new Neo4jGraph( "dbs/" + RequestEmulationTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init(graph);
-		GraphService.Get().EnableObjectIndex("AID");
-		GraphService.Get().EnableLinkIndex("AID");
+		ModelService.Init();
 
 		RequestEmulationTest.factory = new ObjectFactory();
 		RequestEmulationTest.links = new LinkFactory()
@@ -52,8 +48,7 @@ public class RequestEmulationTest
 	@AfterClass
 	public static void Delete() throws Exception
 	{
-		RequestEmulationTest.graph.Shutdown();
-		RequestEmulationTest.graph.Delete();
+		ModelService.Finish();
 	}
 
 	private static final long SLEEP = 100;
@@ -61,8 +56,7 @@ public class RequestEmulationTest
 	@Before
 	public void Clean() throws Exception
 	{
-		GraphService.Get().Clean();
-		RequestEmulationTest.http.Clear();
+		ModelService.Get().Clean();
 	}
 
 /**

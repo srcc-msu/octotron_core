@@ -18,7 +18,7 @@ import java.text.DecimalFormat;
 public class SimpleAttribute
 {
 	protected final String name;
-	protected final Object value;
+	protected Object value;
 
 	public SimpleAttribute(String name, Object value)
 	{

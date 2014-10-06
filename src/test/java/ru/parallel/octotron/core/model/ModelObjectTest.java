@@ -392,7 +392,8 @@ public class ModelObjectTest
 				assertEquals("test" + j, marker.GetDescription());
 				j++;
 			}
-			assertEquals(10, j);
+
+			assertEquals(i+1, j);
 		}
 	}
 }

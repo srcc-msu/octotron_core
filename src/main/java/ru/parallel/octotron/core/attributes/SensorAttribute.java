@@ -32,6 +32,6 @@ public class SensorAttribute extends AbstractModAttribute
 
 	public void Update(Object new_value)
 	{
-		throw new ExceptionModelFail("NIY");
+		super.Update(new_value);
 	}
 }

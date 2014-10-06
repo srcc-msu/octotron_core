@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
@@ -20,17 +21,13 @@ import static org.junit.Assert.assertTrue;
 
 public class BaseFactoryTest
 {
-	private static Neo4jGraph graph;
-
 	private static ObjectFactory object_factory;
 	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		BaseFactoryTest.graph = new Neo4jGraph( "dbs/"
-			+ BaseFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE, true);
-		GraphService.Init(BaseFactoryTest.graph);
+		ModelService.Init();
 
 		object_factory = new ObjectFactory();
 		link_factory = new LinkFactory();
@@ -39,8 +36,7 @@ public class BaseFactoryTest
 	@AfterClass
 	public static void Delete() throws Exception
 	{
-		BaseFactoryTest.graph.Shutdown();
-		BaseFactoryTest.graph.Delete();
+		ModelService.Finish();
 	}
 
 /**

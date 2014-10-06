@@ -69,8 +69,8 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		link.GetBuilder().DeclareVar(rules);
 		link.GetBuilder().AddReaction(reactions);
 
-		link.GetBuilder().DeclareConst("source", from.GetAttribute("AID").GetLong());
-		link.GetBuilder().DeclareConst("target", to.GetAttribute("AID").GetLong());
+		link.GetBuilder().DeclareConst("source", from.GetID());
+		link.GetBuilder().DeclareConst("target", to.GetID());
 
 		return link;
 	}

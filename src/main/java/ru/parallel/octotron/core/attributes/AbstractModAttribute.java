@@ -5,6 +5,7 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.utils.JavaUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,21 +35,26 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		}
 	}
 
-	public abstract AbstractModAttributeBuilder GetBuilder();
+	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder();
 
 // ------------------
 
 	private History history;
 
-	protected final Map<Long, Reaction> reactions;
 	protected boolean is_valid;
-	protected final AttributeList<VarAttribute> dependants;
-
 	private long ctime;
+
+	protected final Map<Long, Reaction> reactions;
+	protected final AttributeList<VarAttribute> dependants;
 
 	AbstractModAttribute(ModelEntity parent, String name, Object value)
 	{
 		super(parent, name, value);
+
+		history = new History();
+
+		is_valid = true;
+		ctime = 0;
 
 		reactions = new HashMap<>();
 		dependants = new AttributeList<>();
@@ -57,7 +63,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	@Override
 	public boolean IsValid()
 	{
-		return is_valid;
+		return is_valid && ctime != 0;
 	}
 
 	@Override
@@ -99,6 +105,14 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		double diff = ToDouble() - (Double)last.value;
 
 		return diff / (cur_ctime - last_ctime);
+	}
+
+	protected void Update(Object new_value)
+	{
+		history.add(value, ctime);
+
+		ctime = JavaUtils.GetTimestamp();
+		value = new_value;
 	}
 
 	@Override

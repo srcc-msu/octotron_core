@@ -93,6 +93,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 	@Override
 	public final boolean eq(Object new_value)
 	{
+		new_value = ConformType(new_value);
 		CheckType(new_value);
 
 		return GetValue().equals(new_value);
@@ -101,6 +102,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 	@Override
 	public final boolean aeq(Object new_value, Object aprx)
 	{
+		new_value = ConformType(new_value);
 		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();
@@ -124,6 +126,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 	@Override
 	public final boolean gt(Object new_value)
 	{
+		new_value = ConformType(new_value);
 		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();
@@ -139,6 +142,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 	@Override
 	public final boolean lt(Object new_value)
 	{
+		new_value = ConformType(new_value);
 		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();

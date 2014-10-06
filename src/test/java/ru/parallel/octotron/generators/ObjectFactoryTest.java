@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.collections.ModelObjectList;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
@@ -12,16 +13,12 @@ import static org.junit.Assert.assertEquals;
 
 public class ObjectFactoryTest
 {
-	private static Neo4jGraph graph;
-
 	private static ObjectFactory obj_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ObjectFactoryTest.graph = new Neo4jGraph( "dbs/"
-			+ ObjectFactoryTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init(ObjectFactoryTest.graph);
+		ModelService.Init();
 
 		ObjectFactoryTest.obj_factory = new ObjectFactory()
 			.Constants(new SimpleAttribute("object", "ok"));
@@ -30,8 +27,7 @@ public class ObjectFactoryTest
 	@AfterClass
 	public static void Delete() throws Exception
 	{
-		ObjectFactoryTest.graph.Shutdown();
-		ObjectFactoryTest.graph.Delete();
+		ModelService.Finish();
 	}
 
 /**

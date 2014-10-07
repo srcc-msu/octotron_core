@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PreparedResponse
+public class PreparedResponse implements Runnable
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
@@ -31,16 +31,18 @@ public class PreparedResponse
 	private final Response response;
 
 	private final List<String[]> composed_commands = new LinkedList<>();
+	private final GlobalSettings settings;
 
 	private String attribute_values;
 	private String parent_attribute_values;
 
 	private final long timestamp;
 
-	public PreparedResponse(Response response, ModelEntity entity, long timestamp)
+	public PreparedResponse(Response response, ModelEntity entity, long timestamp, GlobalSettings settings)
 	{
 		this.response = response;
 		this.timestamp = timestamp;
+		this.settings = settings;
 
 		СomposeAttributes(entity);
 		СomposeParentAttributes(entity);
@@ -135,8 +137,8 @@ public class PreparedResponse
 /**
  * add attributes to the command and replace the command key by actual file<br>
  * */
-	public void Invoke(GlobalSettings settings)
-		throws ExceptionSystemError
+	@Override
+ 	public void run()
 	{
 		for(String[] command : composed_commands)
 		{
@@ -145,12 +147,19 @@ public class PreparedResponse
 			if(actual_name == null)
 				throw new ExceptionModelFail("there is no script with key: " + command[0]);
 
-			FileUtils.ExecSilent(actual_name
-				, Long.toString(timestamp)
-				, response.GetStatus().toString()
-				, response.GetDescription()
-				, attribute_values
-				, parent_attribute_values);
+			try
+			{
+				FileUtils.ExecSilent(actual_name
+					, Long.toString(timestamp)
+					, response.GetStatus().toString()
+					, response.GetDescription()
+					, attribute_values
+					, parent_attribute_values);
+			}
+			catch(ExceptionSystemError e)
+			{
+				LOGGER.log(Level.SEVERE, "could not invoke reaction script", e);
+			}
 		}
 
 		for(String log_key : response.GetLogKeys())
@@ -160,9 +169,16 @@ public class PreparedResponse
 			if(fname == null)
 				throw new ExceptionModelFail("there is no logging entry with key: " + log_key);
 
-			FileLog file = new FileLog(fname);
-			file.Log(GetFullString());
-			file.Close();
+			try
+			{
+				FileLog file = new FileLog(fname);
+				file.Log(GetFullString());
+				file.Close();
+			}
+			catch(ExceptionSystemError e)
+			{
+				LOGGER.log(Level.WARNING, "could not create a log entry", e);
+			}
 		}
 	}
 

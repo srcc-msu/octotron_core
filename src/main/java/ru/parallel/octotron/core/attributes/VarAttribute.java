@@ -52,6 +52,10 @@ public class VarAttribute extends AbstractModAttribute
 	public boolean Update()
 	{
 		Object new_value = rule.Compute(GetParent());
+
+		if(new_value == null)
+			return false;
+
 		super.Update(new_value);
 		return true;
 	}

@@ -53,8 +53,6 @@ public class Start
 		}
 	}
 
-	private static final int PROCESS_CHUNK = 1024; // seems ok
-
 /**
  * main executable function<br>
  * uses one input parameter from args - path to the configuration file<br>
@@ -215,11 +213,10 @@ public class Start
  * */
 	private static void Run(GlobalSettings settings)
 	{
-		ExecutionController exec_control = null;
 // --- create
 		try
 		{
-			exec_control = new ExecutionController(settings);
+			ExecutionController.Init(settings);
 
 			ProcessStart(settings);
 		}
@@ -227,14 +224,13 @@ public class Start
 		{
 			ProcessCrash(settings, start_exception, "start");
 
-			if(exec_control != null)
-				exec_control.Finish();
+			ExecutionController.Get().Finish();
 
 			System.exit(1);
 		}
 
 // --- main loop
-		Exception loop_exception = MainLoop(settings, exec_control);
+		Exception loop_exception = MainLoop(settings);
 
 		if(loop_exception != null)
 		{
@@ -242,7 +238,7 @@ public class Start
 		}
 
 // --- shutdown
-		Exception shutdown_exception = Shutdown(settings, exec_control);
+		Exception shutdown_exception = Shutdown();
 
 		if(shutdown_exception != null)
 		{
@@ -254,15 +250,15 @@ public class Start
  * run the main program loop<br>
  * if it crashes - returns exception, otherwise returns nothing<br>
  * */
-	private static Exception MainLoop(GlobalSettings settings, ExecutionController exec_control)
+	private static Exception MainLoop(GlobalSettings settings)
 	{
 		LOGGER.log(Level.INFO, "main loop started");
 
 		try
 		{
-			while(!exec_control.ShouldExit())
+			while(!ExecutionController.Get().ShouldExit())
 			{
-				exec_control.Process(PROCESS_CHUNK); // it may sleep inside
+				ExecutionController.Get().Process();
 			}
 
 			ProcessFinish(settings);
@@ -278,14 +274,11 @@ public class Start
 /**
  * shutdown the graph and all execution processes<br>
  * */
-	public static Exception Shutdown(GlobalSettings settings, ExecutionController exec_control)
+	public static Exception Shutdown()
 	{
-		String path = settings.GetDbPath() + settings.GetModelMain();
-
 		try
 		{
-			if(exec_control != null)
-				exec_control.Finish();
+			ExecutionController.Get().Finish();
 
 			ModelService.Finish();
 		}

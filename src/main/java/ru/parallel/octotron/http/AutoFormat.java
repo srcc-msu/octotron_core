@@ -19,7 +19,6 @@ public class AutoFormat
 {
 	public enum E_FORMAT_PARAM { PLAIN, JSON, JSONP, NONE}
 
-
 	public static String PrintData(List<Map<String, Object>> data, E_FORMAT_PARAM format, String callback)
 	{
 		switch (format)

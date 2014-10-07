@@ -6,18 +6,22 @@
 
 package ru.parallel.octotron.logic;
 
+import ru.parallel.octotron.http.AutoFormat;
 import ru.parallel.utils.Timer;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class Statistics
 {
 	private final Metric request_queue_60 = new Metric();
-	private final Metric blocking_request_queue_60 = new Metric();
+	private final Metric http_queue_60 = new Metric();
 	private final Metric import_queue_60 = new Metric();
 
-	private final Metric sleep_60 = new Metric();
-
 	private final Metric request_processed_60 = new Metric();
-	private final Metric blocking_request_processed_60 = new Metric();
+	private final Metric http_processed_60 = new Metric();
 	private final Metric import_processed_60 = new Metric();
 
 	private final Timer timer_60 = new Timer();
@@ -27,21 +31,16 @@ public class Statistics
 		timer_60.Start();
 	}
 
-	public void SleepTime(long sleep_time)
-	{
-		sleep_60.Collect(sleep_time);
-	}
-
 	public void Request(int add, int queue)
 	{
 		request_processed_60.Collect(add);
 		request_queue_60.Collect(queue);
 	}
 
-	public void BlockingRequest(int add, int queue)
+	public void Http(int add, int queue)
 	{
-		blocking_request_processed_60.Collect(add);
-		blocking_request_queue_60.Collect(queue);
+		http_processed_60.Collect(add);
+		http_queue_60.Collect(queue);
 	}
 
 	public void Import(int add, int queue)
@@ -50,56 +49,42 @@ public class Statistics
 		import_queue_60.Collect(queue);
 	}
 
-	private static String GetAvgs(Metric metric, String name)
+	private static Map<String, Object> GetAvgs(Metric metric, String name)
 	{
-		StringBuilder res = new StringBuilder();
+		Map<String, Object> res = new HashMap<>();
 
-		res.append(name).append(" avg: ").append(String.format("%.2f", metric.GetAvg())).append(System.lineSeparator());
-		res.append(name).append(" min: ").append(metric.GetMin()).append(System.lineSeparator());
-		res.append(name).append(" max: ").append(metric.GetMax()).append(System.lineSeparator());
+		res.put(name + " avg", String.format("%.2f", metric.GetAvg()));
+		res.put(name + " min", String.valueOf(metric.GetMin()));
+		res.put(name + " max", String.valueOf(metric.GetMax()));
 
-		return res.toString();
+		return res;
 	}
 
-	private static String GetChange(Metric metric, int seconds, String name)
+	private static Map<String, Object> GetChange(Metric metric, int seconds, String name)
 	{
-		StringBuilder res = new StringBuilder();
+		Map<String, Object> res = new HashMap<>();
 
-		res.append(name).append(" for ").append(seconds).append(" secs: ")
-			.append(metric.GetValue()).append(System.lineSeparator());
+		res.put(name + " for " + seconds + " secs"
+			, String.valueOf(metric.GetValue()));
 
 		if(seconds > 0)
-			res.append(name).append(" per sec: ")
-				.append(String.format("%.2f", 1.0 * metric.GetValue() / seconds))
-					.append(System.lineSeparator());
+			res.put(name + " per sec"
+				, String.format("%.2f", 1.0 * metric.GetValue() / seconds));
 
-		return res.toString();
+		return res;
 	}
 
-	public String GetStat()
+	public List<Map<String, Object>> GetStat()
 	{
-		String res = "";
+		List<Map<String, Object>> res = new LinkedList<>();
 
-		res += Statistics.GetAvgs(sleep_60, "sleep time");
-		res += System.lineSeparator();
+		res.add(Statistics.GetAvgs(request_queue_60, "request queue"));
+		res.add(Statistics.GetAvgs(http_queue_60, "http queue"));
+		res.add(Statistics.GetAvgs(import_queue_60, "import queue"));
 
-		res += Statistics.GetAvgs(request_queue_60, "request queue");
-		res += System.lineSeparator();
-
-		res += Statistics.GetAvgs(blocking_request_queue_60, "blocking request queue");
-		res += System.lineSeparator();
-
-		res += Statistics.GetAvgs(import_queue_60, "import queue");
-		res += System.lineSeparator();
-
-		res += Statistics.GetChange(request_processed_60, (int)timer_60.Get(), "requests");
-		res += System.lineSeparator();
-
-		res += Statistics.GetChange(blocking_request_processed_60, (int)timer_60.Get(), "blocking requests");
-		res += System.lineSeparator();
-
-		res += Statistics.GetChange(import_processed_60, (int)timer_60.Get(), "imported");
-		res += System.lineSeparator();
+		res.add(Statistics.GetChange(request_processed_60, (int)timer_60.Get(), "requests"));
+		res.add(Statistics.GetChange(http_processed_60, (int)timer_60.Get(), "http"));
+		res.add(Statistics.GetChange(import_processed_60, (int)timer_60.Get(), "imported"));
 
 		return res;
 	}
@@ -109,11 +94,11 @@ public class Statistics
 		if(timer_60.Get() > 60) /*secs in min..*/
 		{
 			request_queue_60.Reset();
-			blocking_request_queue_60.Reset();
+			http_queue_60.Reset();
 			import_queue_60.Reset();
 
 			request_processed_60.Reset();
-			blocking_request_processed_60.Reset();
+			http_processed_60.Reset();
 			import_processed_60.Reset();
 
 			timer_60.Start();

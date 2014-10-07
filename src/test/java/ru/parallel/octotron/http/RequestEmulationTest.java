@@ -60,10 +60,8 @@ public class RequestEmulationTest
 /**
  * get info about request and close it
  * */
-	private HTTPRequest GetHttpRequest(String str) throws Exception
+	private HttpExchangeWrapper GetHttpRequest(String str) throws Exception
 	{
-		RequestEmulationTest.http.Clear();
-
 		HttpClient client = new DefaultHttpClient();
 		HttpGet request = new HttpGet("http://127.0.0.1:" + RequestEmulationTest.HTTP_PORT + str);
 
@@ -80,27 +78,29 @@ public class RequestEmulationTest
 
 		client.getConnectionManager().shutdown();
 
-		ParsedHttpRequest parsed_request = RequestEmulationTest.http.GetBlockingRequest();
+/*		ParsedHttpRequest parsed_request = RequestEmulationTest.http.GetBlockingRequest();
 
 		if(parsed_request == null)
 			fail("did not get the message");
 
 		parsed_request.GetHttpRequest().FinishString("");
 
-		return parsed_request.GetHttpRequest();
+		return parsed_request.GetHttpRequest();*/
+		return null;
 	}
 
 	private String GetRequestResult(String str_request) throws Exception
 	{
-		HTTPRequest request = GetHttpRequest(str_request);
+		HttpExchangeWrapper request = GetHttpRequest(str_request);
 
-		RequestResult result = RequestParser.ParseFromHttp(request)
-			.GetParsedRequest().Execute(null);
+		ParsedModelRequest r = HttpRequestParser.ParseFromExchange(request);
 
-		if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
-			throw new ExceptionParseError(result.data);
+		new ModelRequestExecutor(r, request).run();
 
-		return result.data;
+		/*if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
+			throw new ExceptionParseError(result.data);*/
+
+		return null;//result.data;
 	}
 
 	@Test

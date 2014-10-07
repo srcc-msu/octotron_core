@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,77 +31,34 @@ public class ReactionInvoker
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	private final Queue<PreparedResponse> pending_response
-		= new ConcurrentLinkedQueue<>();
-
-	private Thread invoker;
-
 	private final GlobalSettings settings;
+	private final ExecutorService executor;
 
-	public ReactionInvoker(GlobalSettings settings)
+	public ReactionInvoker(GlobalSettings settings, ExecutorService executor)
 	{
 		this.settings = settings;
-		BackgroundInvoke();
+		this.executor = executor;
 	}
 
-	private void BackgroundInvoke()
+	public void Invoke(List<PreparedResponse> responses, boolean silent)
 	{
-		invoker = new Thread()
+		if(silent)
 		{
-			@Override
-			public void run()
-			{
-				DynamicSleeper sleeper = new DynamicSleeper();
+			if(!responses.isEmpty())
+				LOGGER.log(Level.INFO, "silent mode, reactions ignored: " + responses.size());
 
-				try
-				{
-					while(true)
-					{
-						try
-						{
-							PreparedResponse response = pending_response.poll();
+			return;
+		}
 
-							if(response == null)
-							{
-								sleeper.Delay();
-								sleeper.Sleep();
-								continue;
-							}
-
-							response.Invoke(settings);
-							sleeper.Act();
-						}
-						catch(ExceptionSystemError | ExceptionModelFail e)
-						{
-							LOGGER.log(Level.WARNING, "reaction invocation failed", e);
-						}
-					}
-				}
-				catch (InterruptedException ignore){}
-
-				LOGGER.log(Level.INFO, "reaction invoker thread finished");
-			}
-		};
-
-		invoker.setName("reaction_invoker");
-		invoker.start();
+		for(PreparedResponse response : responses)
+			executor.execute(response);
 	}
 
-	public void Finish()
-	{
-		invoker.interrupt();
-	}
-
-	public boolean IsAlive()
-	{
-		return invoker.isAlive();
-	}
-
-	public void Invoke(AttributeList<IModelAttribute> changed, boolean silent)
+	/*public void Invoke(AttributeList<IModelAttribute> changed, boolean silent)
 	{
 		List<PreparedResponse> responses = new LinkedList<>();
 
-		/*for(IModelAttribute attribute : changed)
+		for(IModelAttribute attribute : changed)
 			for(Response response : attribute.ProcessReactions())
 			{
 				responses.add(new PreparedResponse(response, attribute.GetParent(), JavaUtils.GetTimestamp()));
@@ -109,6 +67,6 @@ public class ReactionInvoker
 		if(!silent)
 			pending_response.addAll(responses);
 		else if(!responses.isEmpty())
-			LOGGER.log(Level.INFO, "silent mode, reactions ignored: " + responses.size());*/
-	}
+			LOGGER.log(Level.INFO, "silent mode, reactions ignored: " + responses.size());
+	}*/
 }

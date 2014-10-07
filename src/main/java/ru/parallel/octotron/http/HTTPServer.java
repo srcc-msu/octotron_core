@@ -10,13 +10,11 @@ import com.sun.net.httpserver.*;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.logic.ExecutionController;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,9 +24,6 @@ import java.util.logging.Logger;
 public class HTTPServer
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
-
-	private final Queue<ParsedHttpRequest> requests;
-	private final Queue<ParsedHttpRequest> blocking_requests;
 
 	private HttpServer server;
 	private final ExecutorService executor;
@@ -43,31 +38,31 @@ public class HTTPServer
 		public void handle(HttpExchange http_exchange)
 			throws IOException
 		{
-			HTTPRequest http_request = new HTTPRequest(http_exchange);
+			HttpExchangeWrapper http_exchange_wrapper = new HttpExchangeWrapper(http_exchange);
 
-			ParsedHttpRequest request;
+			ParsedModelRequest request;
 
 			try
 			{
-				request = RequestParser.ParseFromHttp(http_request);
+				request = HttpRequestParser.ParseFromExchange(http_exchange_wrapper);
 			}
 			catch (ExceptionParseError e)
 			{
-				http_request.FinishError(e.getMessage());
+				http_exchange_wrapper.FinishError(e.getMessage());
 
 				LOGGER.log(Level.WARNING, "request failed: "
-					+ http_request.GetPath() + http_request.GetQuery(), e);
+					+ http_exchange_wrapper.GetPath() + http_exchange_wrapper.GetQuery(), e);
 
 				return;
 			}
 
-			if(!request.GetParsedRequest().IsBlocking())
+			if(!request.IsBlocking())
 			{
-				http_request.FinishString("request queued");
-				requests.add(request);
+				http_exchange_wrapper.FinishString("request queued");
+				ExecutionController.Get().AddRequest(request);
 			}
 			else
-				blocking_requests.add(request);
+				ExecutionController.Get().AddBlockingRequest(request, http_exchange_wrapper);
 		}
 	}
 
@@ -81,7 +76,7 @@ public class HTTPServer
 		public void handle(HttpExchange http_exchange)
 			throws IOException
 		{
-			HTTPRequest http_request = new HTTPRequest(http_exchange);
+			HttpExchangeWrapper http_request = new HttpExchangeWrapper(http_exchange);
 
 			http_request.FinishString("URI is not in format /request_type/operation");
 		}
@@ -99,9 +94,7 @@ public class HTTPServer
 			{
 				boolean result = user.equals(user_ref) && password.equals(password_ref);
 
-				if(result)
-					LOGGER.log(Level.FINE, "[SUCCESS] authentication attempt, username: '" + user + "', password: '" + password + "'");
-				else
+				if(!result)
 					LOGGER.log(Level.WARNING, "[FAIL] authentication attempt, username: '" + user + "', password: '" + password + "'");
 
 				return result;
@@ -113,17 +106,14 @@ public class HTTPServer
  * create and start the server, listening on /port<br>
  * messages are not guaranteed to come in fixed order<br>
  * */
-	public HTTPServer(GlobalSettings settings)
+	public HTTPServer(GlobalSettings settings, ExecutorService executor)
 		throws ExceptionSystemError
 	{
+		this.executor = executor;
+
 		// why is it turned off by default >.<
 		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
 			LOGGER.log(Level.CONFIG, "nodelay is not set to true, import will be slow. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");
-
-		requests = new ConcurrentLinkedQueue<>();
-		blocking_requests = new ConcurrentLinkedQueue<>();
-
-		executor = Executors.newCachedThreadPool();
 
 		try
 		{
@@ -157,9 +147,6 @@ public class HTTPServer
 	private HTTPServer(int port)
 		throws ExceptionSystemError
 	{
-		requests = new ConcurrentLinkedQueue<>();
-		blocking_requests = new ConcurrentLinkedQueue<>();
-
 		executor = Executors.newCachedThreadPool();
 
 		try
@@ -189,36 +176,10 @@ public class HTTPServer
 	}
 
 /**
- * returns a single request, if got something. other way returns \null<br>
- * */
-	public ParsedHttpRequest GetRequest()
-	{
-		return requests.poll();
-	}
-
-/**
- * returns a single request, if got something. other way returns \null<br>
- * */
-	public ParsedHttpRequest GetBlockingRequest()
-	{
-		return blocking_requests.poll();
-	}
-
-/**
  * stop the server<br>
  * */
 	public void Finish()
 	{
 		server.stop(0);
-		executor.shutdown();
-	}
-
-/**
- * clean all unclaimed messages from the requests queue<br>
- * */
-	public void Clear()
-	{
-		requests.clear();
-		blocking_requests.clear();
 	}
 }

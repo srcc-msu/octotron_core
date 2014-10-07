@@ -57,7 +57,7 @@ public final class DynamicSleeper
 	public void Sleep(boolean more)
 		throws InterruptedException
 	{
-		Thread.sleep(1);
+//		Thread.sleep(1);
 
 		if(more)
 			Delay();

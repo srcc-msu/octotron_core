@@ -8,34 +8,31 @@ package ru.parallel.octotron.http;
 
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.http.PathOperations.PathToken;
+import ru.parallel.octotron.http.Operations.Operation;
+import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.ExecutionController;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * parsed request with correct tokens list<br>
  * */
-public class ParsedPath
+public class ParsedModelRequest
 {
-	private final List<PathToken> tokens;
+	final Operation operation;
+	final Map<String, String> params;
 
-	public ParsedPath(List<PathToken> tokens)
+	public ParsedModelRequest(Operation operation, Map<String, String> params)
 	{
-		this.tokens = tokens;
+		this.operation = operation;
+		this.params = params;
 	}
 
-	public ModelList<? extends ModelEntity, ?> Execute()
-		throws ExceptionParseError
+	public boolean IsBlocking()
 	{
-		ModelList<? extends ModelEntity, ?> entity_list = null;
-
-		for(PathToken token : tokens)
-		{
-			entity_list = token.Transform(entity_list);
-		}
-
-		return entity_list;
+		return operation.IsBlocking();
 	}
 }

@@ -42,8 +42,7 @@ public abstract class PathOperations
 
 	private interface ITransform
 	{
-		ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-				, Object obj, List<Query> params)
+		ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 				throws ExceptionParseError;
 	}
 
@@ -76,11 +75,10 @@ public abstract class PathOperations
 			return out;
 		}
 
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj)
 				throws ExceptionParseError
 		{
-			return transform.Transform(exec_control, obj, params);
+			return transform.Transform(obj, params);
 		}
 
 		private PathToken(String name, CHAIN_TYPE in, CHAIN_TYPE out
@@ -132,8 +130,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1) // TODO
@@ -163,8 +160,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1)
@@ -188,8 +184,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1)
@@ -212,8 +207,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(obj instanceof ModelObjectList)
@@ -233,8 +227,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
@@ -254,8 +247,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
@@ -275,8 +267,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
@@ -298,8 +289,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetInLinks();
 		}
@@ -312,8 +302,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetOutLinks();
 		}
@@ -326,7 +315,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetInLinks().append(ToObjList(obj).GetOutLinks());
 		}
@@ -339,8 +328,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToLinkList(obj).Source();
 		}
@@ -353,8 +341,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ExecutionController exec_control
-			, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToLinkList(obj).Target();
 		}

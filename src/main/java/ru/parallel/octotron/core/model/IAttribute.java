@@ -23,7 +23,5 @@ public interface IAttribute
 	boolean ge(Object val);
 	boolean le(Object val);
 
-	EAttributeType GetType();
-
 	String GetStringValue();
 }

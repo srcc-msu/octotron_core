@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * stores all request information and<br>
  * allows to finish them with certain results<br>
  * */
-public class HTTPRequest
+public class HttpExchangeWrapper
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
@@ -34,7 +34,7 @@ public class HTTPRequest
 	private final String query;
 	private final String path;
 
-	public HTTPRequest(HttpExchange http_request)
+	public HttpExchangeWrapper(HttpExchange http_request)
 	{
 		this.http_request = http_request;
 		http_request_writer = http_request.getResponseBody();

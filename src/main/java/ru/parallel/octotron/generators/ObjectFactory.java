@@ -8,10 +8,13 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.rules.ArgMatch;
+import ru.parallel.octotron.rules.Match;
 
 import java.util.List;
 
@@ -28,7 +31,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	private ObjectFactory(List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
 		, List<Rule> rules
-		, List<Reaction> reactions)
+		, List<ReactionTemplate> reactions)
 	{
 		super(constants, sensors, rules, reactions);
 	}
@@ -44,6 +47,10 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 		object.GetBuilder().DeclareSensor(sensors);
 		object.GetBuilder().DeclareVar(rules);
 		object.GetBuilder().AddReaction(reactions);
+
+		object.GetBuilder().DeclareSensor("tt1", 1);
+		object.GetBuilder().DeclareSensor("tt2", 2);
+		object.GetBuilder().DeclareVar(new Match("ttt", "tt1", "tt2"));
 
 		return object;
 	}
@@ -66,7 +73,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 		List<SimpleAttribute> new_constants
 		, List<SimpleAttribute> new_sensors
 		, List<Rule> new_rules
-		, List<Reaction> new_reactions)
+		, List<ReactionTemplate> new_reactions)
 	{
 		return new ObjectFactory(new_constants, new_sensors, new_rules, new_reactions);
 	}

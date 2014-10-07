@@ -17,7 +17,7 @@ public class ModelLinkTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init();
+		ModelService.Init(ModelService.EMode.CREATION);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")

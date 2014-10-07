@@ -3,6 +3,7 @@ package ru.parallel.octotron.core.attributes;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 public class VarAttribute extends AbstractModAttribute
@@ -31,9 +32,10 @@ public class VarAttribute extends AbstractModAttribute
 
 	protected Rule rule;
 
-	public VarAttribute(ModelEntity parent, String name, Object value)
+	public VarAttribute(ModelEntity parent, String name, Rule rule)
 	{
-		super(parent, name, value);
+		super(parent, name, SimpleAttribute.ConformType(rule.GetDefaultValue()));
+		this.rule = rule;
 	}
 
 	@Override
@@ -49,6 +51,8 @@ public class VarAttribute extends AbstractModAttribute
 
 	public boolean Update()
 	{
-		throw new ExceptionModelFail("NIY");
+		Object new_value = rule.Compute(GetParent());
+		super.Update(new_value);
+		return true;
 	}
 }

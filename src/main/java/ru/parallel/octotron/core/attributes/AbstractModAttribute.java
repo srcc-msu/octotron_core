@@ -5,6 +5,8 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Collection;
@@ -20,6 +22,9 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 
 		public AbstractModAttributeBuilder(T attribute)
 		{
+			if(ModelService.Get().GetMode() != ModelService.EMode.CREATION)
+				throw new ExceptionModelFail("objects creation is not allowed in operational mode");
+
 			this.attribute = attribute;
 		}
 
@@ -130,6 +135,8 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	@Override
 	public Collection<Response> ProcessReactions()
 	{
+
+
 		return null;
 	}
 }

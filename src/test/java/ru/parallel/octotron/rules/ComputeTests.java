@@ -6,8 +6,6 @@ import org.junit.Test;
 import ru.parallel.octotron.core.attributes.AbstractAttribute;
 import ru.parallel.octotron.core.attributes.EAttributeType;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -19,7 +17,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,7 +29,7 @@ public class ComputeTests
 	public static void Init()
 		throws ExceptionSystemError
 	{
-		ModelService.Init();
+		ModelService.Init(ModelService.EMode.CREATION);
 
 		ObjectFactory in = new ObjectFactory()
 			.Sensors(new SimpleAttribute("in_d1", 10.0))

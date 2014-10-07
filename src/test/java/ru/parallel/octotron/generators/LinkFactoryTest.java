@@ -3,14 +3,12 @@ package ru.parallel.octotron.generators;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,7 +22,7 @@ public class LinkFactoryTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init();
+		ModelService.Init(ModelService.EMode.CREATION);
 
 		LinkFactoryTest.obj_factory = new ObjectFactory()
 			.Constants(new SimpleAttribute("object", "ok"));

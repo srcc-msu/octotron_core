@@ -5,20 +5,24 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 public final class ModelService
 {
-	private static ModelService INSTANCE = null;
-
-	public static void Init(Neo4jGraph graph)
+	public static enum EMode
 	{
-		ModelService.INSTANCE = new ModelService();
+		CREATION, LOAD, OPERATION
 	}
 
-	public static void Init()
+	private static ModelService INSTANCE = null;
+
+	public static void Init(EMode mode, String path, String name)
 	{
-		ModelService.INSTANCE = new ModelService();
+		ModelService.INSTANCE = new ModelService(mode, path, name);
+	}
+
+	public static void Init(EMode mode)
+	{
+		ModelService.INSTANCE = new ModelService(mode);
 	}
 
 	public static void Finish()
@@ -33,17 +37,44 @@ public final class ModelService
 
 // -------------------------
 
-	ModelCache cache;
+	private EMode mode;
+	private final boolean db;
 
-	ModelObjectList objects;
-	ModelLinkList links;
+	private final ModelCache cache;
 
-	public ModelService()
+	private ModelObjectList objects;
+	private ModelLinkList links;
+
+	private ModelService(EMode mode, boolean db, String path, String name)
 	{
 		objects = new ModelObjectList();
 		links = new ModelLinkList();
 
 		cache = new ModelCache();
+
+		this.mode = mode;
+
+		this.db = db;
+	}
+
+	protected ModelService(EMode mode)
+	{
+		this(mode, false, "", "");
+	}
+
+	protected ModelService(EMode mode, String path, String name)
+	{
+		this(mode, true, path, name);
+	}
+
+	public EMode GetMode()
+	{
+		return mode;
+	}
+
+	public void Operate()
+	{
+		mode = EMode.OPERATION;
 	}
 
 	public ModelLink AddLink(ModelObject source, ModelObject target)
@@ -135,5 +166,7 @@ public final class ModelService
 	{
 		objects = new ModelObjectList();
 		links = new ModelLinkList();
+
+		cache.Clean();
 	}
 }

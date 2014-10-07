@@ -8,6 +8,11 @@ import java.util.Map;
 
 public class ModelCache
 {
+	public void Clean()
+	{
+
+	}
+
 	private static class ObjectCache
 	{
 		private final String name;

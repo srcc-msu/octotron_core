@@ -14,7 +14,7 @@ public class AttributeListTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init();
+		ModelService.Init(ModelService.EMode.CREATION);
 	}
 
 	@Before

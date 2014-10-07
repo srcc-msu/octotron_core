@@ -33,8 +33,15 @@ public class GlobalSettings
 
 	private final int hash;
 
-	private String db_name;
+	private String model_name;
+	private String model_path;
+	private String model_main;
+
 	private String db_path;
+
+	private String sys_path;
+
+	private boolean db = false;
 
 	private final Map<String, String> log_map = new HashMap<>();
 	private final Map<String, String> script_map = new HashMap<>();
@@ -54,6 +61,11 @@ public class GlobalSettings
 		ParseSettings(json_config);
 	}
 
+	public boolean IsDb()
+	{
+		return db;
+	}
+
 	private static Credential GetCredential(JsonObject http_conf, String request)
 	{
 		JsonObject cfg = JsonUtils.MustPresent(http_conf, request).getAsJsonObject();
@@ -68,11 +80,33 @@ public class GlobalSettings
 	{
 		JsonObject root = new JsonParser().parse(json_config).getAsJsonObject();
 
-// --- db config
-		JsonObject db_conf = JsonUtils.MustPresent(root, "db").getAsJsonObject();
+// --- model config
 
-		db_name = JsonUtils.MustPresent(db_conf, "name").getAsString();
-		db_path = JsonUtils.MustPresent(db_conf, "path").getAsString();
+		JsonObject model_conf = JsonUtils.MustPresent(root, "model").getAsJsonObject();
+
+		model_name = JsonUtils.MustPresent(model_conf, "name").getAsString();
+		model_path = JsonUtils.MustPresent(model_conf, "path").getAsString();
+		model_main = JsonUtils.MustPresent(model_conf, "main").getAsString();
+
+// --- sys config
+
+		if(JsonUtils.IsPresent(root, "sys"))
+		{
+			JsonObject sys_conf = JsonUtils.MustPresent(root, "sys").getAsJsonObject();
+
+			sys_path = JsonUtils.MustPresent(sys_conf, "path").getAsString();
+		}
+
+// --- db config
+
+		if(JsonUtils.IsPresent(root, "db"))
+		{
+			JsonObject db_conf = JsonUtils.MustPresent(root, "db").getAsJsonObject();
+
+			db_path = JsonUtils.MustPresent(db_conf, "path").getAsString();
+
+			db = true;
+		}
 
 // --- logging config
 		JsonObject logs_conf = JsonUtils.MustPresent(root, "logs").getAsJsonObject();
@@ -117,9 +151,22 @@ public class GlobalSettings
 		return http_port;
 	}
 
-	public String GetDbName()
+	public String GetModelName()
 	{
-		return db_name;
+		return model_name;
+	}
+	public String GetModelPath()
+	{
+		return model_path;
+	}
+	public String GetModelMain()
+	{
+		return model_main;
+	}
+
+	public String GetSysPath()
+	{
+		return sys_path;
 	}
 
 	public String GetDbPath()

@@ -90,7 +90,7 @@ public class ImportManager
 		{
 			for(VarAttribute dependant_varying : dependant_varyings)
 			{
-				if(dependant_varying.Update())
+//				if(dependant_varying.Update())
 					result.add(dependant_varying);
 			}
 

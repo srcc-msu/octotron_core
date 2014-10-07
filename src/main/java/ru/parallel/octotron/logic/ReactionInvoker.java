@@ -100,7 +100,7 @@ public class ReactionInvoker
 	{
 		List<PreparedResponse> responses = new LinkedList<>();
 
-		for(IModelAttribute attribute : changed)
+		/*for(IModelAttribute attribute : changed)
 			for(Response response : attribute.ProcessReactions())
 			{
 				responses.add(new PreparedResponse(response, attribute.GetParent(), JavaUtils.GetTimestamp()));
@@ -109,6 +109,6 @@ public class ReactionInvoker
 		if(!silent)
 			pending_response.addAll(responses);
 		else if(!responses.isEmpty())
-			LOGGER.log(Level.INFO, "silent mode, reactions ignored: " + responses.size());
+			LOGGER.log(Level.INFO, "silent mode, reactions ignored: " + responses.size());*/
 	}
 }

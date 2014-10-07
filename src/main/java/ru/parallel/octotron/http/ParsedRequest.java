@@ -21,25 +21,27 @@ public class ParsedRequest
 {
 	private final Operation operation;
 	private final Map<String, String> params;
+	private final ModelList path;
 
-	public ParsedRequest(Operation operation, Map<String, String> params)
+	public ParsedRequest(Operation operation, Map<String, String> params, ModelList path)
 	{
 		this.operation = operation;
 		this.params = params;
+		this.path = path;
 	}
 
 	public RequestResult Execute(ExecutionController exec_control)
 	{
 		try
 		{
-			ModelList<? extends ModelEntity, ?> entity_list = null;
+//			ModelList<? extends ModelEntity, ?> entity_list = null;
 
-			String path = params.get("path");
+//			String path = params.get("path");
 
-			if(path != null)
-				entity_list = PathParser.Parse(path).Execute(exec_control);
+//			if(path != null)
+//				entity_list = PathParser.Parse(path).Execute(exec_control);
 
-			return (RequestResult) operation.Execute(exec_control, params, entity_list);
+			return (RequestResult) operation.Execute(exec_control, params, path);
 		}
 		catch(Exception e)
 		{

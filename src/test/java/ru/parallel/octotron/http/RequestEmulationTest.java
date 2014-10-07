@@ -10,13 +10,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import static org.junit.Assert.fail;
 
@@ -38,7 +36,7 @@ public class RequestEmulationTest
 	{
 		RequestEmulationTest.http = HTTPServer.GetDummyServer(RequestEmulationTest.HTTP_PORT);
 
-		ModelService.Init();
+		ModelService.Init(ModelService.EMode.CREATION);
 
 		RequestEmulationTest.factory = new ObjectFactory();
 		RequestEmulationTest.links = new LinkFactory()

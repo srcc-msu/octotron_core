@@ -139,6 +139,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 	 * */
 	protected List<T> InnerFilter(String name, Object value, EQueryType type)
 	{
+		value = SimpleAttribute.ConformType(value);
 		if(name == null)
 			return list;
 

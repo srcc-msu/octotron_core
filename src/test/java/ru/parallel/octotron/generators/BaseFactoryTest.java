@@ -3,8 +3,8 @@ package ru.parallel.octotron.generators;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
@@ -13,7 +13,6 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.rules.Match;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +26,7 @@ public class BaseFactoryTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init();
+		ModelService.Init(ModelService.EMode.CREATION);
 
 		object_factory = new ObjectFactory();
 		link_factory = new LinkFactory();
@@ -90,9 +89,9 @@ public class BaseFactoryTest
 	@Test
 	public void TestReactions()
 	{
-		Reaction[] reactions = { new Reaction(new Equals("test2", 0).Response(new Response(EEventStatus.INFO, "")))};
-		Reaction reaction2 = new Reaction(new Equals("test3", 0).Response(new Response(EEventStatus.INFO, "")));
-		Reaction reaction3 = new Reaction(new Equals("test3", 0).Response(new Response(EEventStatus.INFO, "")));
+		ReactionTemplate[] reactions = { new Equals("test2", 0).Response(new Response(EEventStatus.INFO, ""))};
+		ReactionTemplate reaction2 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO, ""));
+		ReactionTemplate reaction3 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO, ""));
 
 		ObjectFactory f1 = object_factory
 			.Sensors(new SimpleAttribute("test1", 0))

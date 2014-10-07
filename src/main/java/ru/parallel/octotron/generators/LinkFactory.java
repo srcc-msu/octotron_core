@@ -9,6 +9,7 @@ package ru.parallel.octotron.generators;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -37,7 +38,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	private LinkFactory(List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
 		, List<Rule> rules
-		, List<Reaction> reactions)
+		, List<ReactionTemplate> reactions)
 	{
 		super(constants, sensors, rules, reactions);
 	}
@@ -301,7 +302,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		List<SimpleAttribute> new_constants
 		, List<SimpleAttribute> new_sensors
 		, List<Rule> new_rules
-		, List<Reaction> new_reactions)
+		, List<ReactionTemplate> new_reactions)
 	{
 		return new LinkFactory(new_constants, new_sensors, new_rules, new_reactions);
 	}

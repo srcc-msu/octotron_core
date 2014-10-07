@@ -25,7 +25,8 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 		@Override
 		public void AddDependant(VarAttribute attribute)
 		{
-			throw new ExceptionModelFail(err_msg + "AddDependant");
+			// nothing to see here
+			// throw new ExceptionModelFail(err_msg + "AddDependant");
 		}
 	}
 

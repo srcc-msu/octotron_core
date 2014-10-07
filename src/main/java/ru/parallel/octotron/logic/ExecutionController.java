@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 public class ExecutionController
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
+	public static ExecutionController in;
 
 	private final GlobalSettings settings;
 
@@ -63,6 +64,7 @@ public class ExecutionController
 		this.settings = settings;
 
 		Init();
+		in = this;
 	}
 
 	public void Init()

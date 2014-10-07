@@ -4,6 +4,7 @@ import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -23,18 +24,21 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 
 		ModelEntityBuilder(T entity)
 		{
+			if(ModelService.Get().GetMode() != ModelService.EMode.CREATION)
+				throw new ExceptionModelFail("objects creation is not allowed in operational mode");
+
 			this.entity = entity;
 		}
 
-		public void AddReaction(Reaction reaction)
+		public void AddReaction(ReactionTemplate reaction)
 		{
-			entity.GetAttribute(reaction.GetTemplate().GetCheckName())
-				.GetBuilder().AddReaction(reaction);
+			entity.GetAttribute(reaction.GetCheckName())
+				.GetBuilder().AddReaction(new Reaction(reaction));
 		}
 
-		public void AddReaction(List<Reaction> reactions)
+		public void AddReaction(List<ReactionTemplate> reactions)
 		{
-			for(Reaction reaction : reactions)
+			for(ReactionTemplate reaction : reactions)
 				AddReaction(reaction);
 		}
 
@@ -89,7 +93,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 			if(entity.TestAttribute(name))
 				throw new ExceptionModelFail("attribute already declared: " + name);
 
-			VarAttribute var = new VarAttribute(entity, name, SimpleAttribute.ConformType(rule.GetDefaultValue()));
+			VarAttribute var = new VarAttribute(entity, name, rule);
 
 			entity.attributes_map.put(name, var);
 			entity.var_map.put(name, var);

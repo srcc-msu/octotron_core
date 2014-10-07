@@ -11,6 +11,11 @@ import com.google.gson.JsonObject;
 
 public abstract class JsonUtils
 {
+	public static boolean IsPresent(JsonObject base, String name)
+	{
+		return base.get(name) != null;
+	}
+
 	public static JsonElement MustPresent(JsonObject base, String name)
 	{
 		if(base.get(name) == null)

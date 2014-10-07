@@ -6,6 +6,7 @@ import org.junit.Test;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Marker;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.primitive.EDependencyType;
@@ -30,7 +31,7 @@ public class ModelObjectTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init();
+		ModelService.Init(ModelService.EMode.CREATION);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
@@ -242,8 +243,8 @@ public class ModelObjectTest
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
 		entity.GetBuilder().DeclareSensor("test", 0);
-		Reaction reaction = new Reaction(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test")));
+		ReactionTemplate reaction = new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"));
 
 		entity.GetBuilder().AddReaction(reaction);
 	}
@@ -255,12 +256,12 @@ public class ModelObjectTest
 
 		entity.GetBuilder().DeclareSensor("test", 0);
 
-		List<Reaction> reactions = new LinkedList<>();
+		List<ReactionTemplate> reactions = new LinkedList<>();
 
-		reactions.add(new Reaction(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test"))));
-		reactions.add(new Reaction(new Equals("test", 2)
-			.Response(new Response(EEventStatus.INFO, "test"))));
+		reactions.add(new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test")));
+		reactions.add(new Equals("test", 2)
+			.Response(new Response(EEventStatus.INFO, "test")));
 
 		entity.GetBuilder().AddReaction(reactions);
 	}
@@ -330,13 +331,14 @@ public class ModelObjectTest
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
 		entity.GetBuilder().DeclareSensor("test", 0);
-		Reaction reaction = new Reaction(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test")));
+
+		ReactionTemplate reaction = new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"));
 
 		entity.GetBuilder().AddReaction(reaction);
 
-		reaction.AddMarker("test1", true);
-		reaction.AddMarker("test2", false);
+//		reaction.AddMarker("test1", true);
+//		reaction.AddMarker("test2", false);
 	}
 
 	@Test
@@ -345,12 +347,12 @@ public class ModelObjectTest
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
 		entity.GetBuilder().DeclareSensor("test", 0);
-		Reaction reaction = new Reaction(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test")));
+		ReactionTemplate reaction = new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"));
 
 		entity.GetBuilder().AddReaction(reaction);
 
-		assertEquals(0, reaction.GetMarkers().size());
+/*		assertEquals(0, reaction.GetMarkers().size());
 
 		long id1 = reaction.AddMarker("test1", true);
 		long id2 = reaction.AddMarker("test2", false);
@@ -361,7 +363,7 @@ public class ModelObjectTest
 		assertEquals(1, reaction.GetMarkers().size());
 
 		reaction.DeleteMarker(id2);
-		assertEquals(0, reaction.GetMarkers().size());
+		assertEquals(0, reaction.GetMarkers().size());*/
 	}
 
 	@Test
@@ -370,14 +372,14 @@ public class ModelObjectTest
 		ModelObject entity = ModelObjectTest.obj_factory.Create();
 
 		entity.GetBuilder().DeclareSensor("test", 0);
-		Reaction reaction = new Reaction(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test")));
+		ReactionTemplate reaction = new Equals("test", 1)
+			.Response(new Response(EEventStatus.INFO, "test"));
 
 		entity.GetBuilder().AddReaction(reaction);
 
 		final int N = 10;
 
-		for(int i = 0; i < N; i++)
+	/*	for(int i = 0; i < N; i++)
 		{
 			reaction.AddMarker("test" + i, true);
 
@@ -394,6 +396,6 @@ public class ModelObjectTest
 			}
 
 			assertEquals(i+1, j);
-		}
+		}*/
 	}
 }

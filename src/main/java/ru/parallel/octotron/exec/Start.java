@@ -6,10 +6,17 @@
 
 package ru.parallel.octotron.exec;
 
+import org.python.core.Py;
+import org.python.core.PyString;
+import org.python.core.PySystemState;
+import org.python.util.PythonInterpreter;
+import ru.parallel.octotron.core.collections.ModelLinkList;
+import ru.parallel.octotron.core.collections.ModelObjectList;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.logic.ExecutionController;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
@@ -23,35 +30,30 @@ import java.util.logging.SimpleFormatter;
 /**
  * main executable function<br>
  * */
-public class StartOctotron
+public class Start
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
-
-	private static final int EXIT_ERROR = 1;
-	private static final int PROCESS_CHUNK = 1024; // seems ok
 	private static final int SYS_LOG_SIZE = 10*1024*1024; // 10 MB
+	private static final String LOG_DIR = "log/";
 
 	private static void ConfigLogging()
 	{
 		try
 		{
 			FileHandler file_handler
-				= new FileHandler("log/octotron_%g.log"
-					, SYS_LOG_SIZE, 1, true); // rotate to 1 file, allow append
+				= new FileHandler(LOG_DIR + "octotron_%g.log"
+				, SYS_LOG_SIZE, 1, true); // rotate to 1 file, allow append
 			file_handler.setFormatter(new SimpleFormatter());
 
 			LOGGER.addHandler(file_handler);
 		}
 		catch(IOException e)
 		{
-			LOGGER.log(Level.CONFIG, "could not create log file", e);
+			LOGGER.log(Level.CONFIG, "could not create log file in: " + LOG_DIR, e);
 		}
 	}
 
-
-// for debugging
-	private static String debug_config = null;
-	private static boolean bootstrap = false;
+	private static final int PROCESS_CHUNK = 1024; // seems ok
 
 /**
  * main executable function<br>
@@ -64,18 +66,13 @@ public class StartOctotron
 
 		String config_fname;
 
-		if(debug_config == null)
+		if(args.length != 1)
 		{
-			if (args.length != 1)
-			{
-				LOGGER.log(Level.SEVERE, "specify the config file");
-				System.exit(StartOctotron.EXIT_ERROR);
-			}
-
-			config_fname = args[0];
+			LOGGER.log(Level.SEVERE, "specify the config file");
+			System.exit(1);
 		}
-		else
-			config_fname = debug_config;
+
+		config_fname = args[0];
 
 		LOGGER.log(Level.INFO, "starting Octotron using config file: " + config_fname);
 
@@ -85,28 +82,131 @@ public class StartOctotron
 		{
 			String json_config = FileUtils.FileToString(config_fname);
 			settings = new GlobalSettings(json_config);
-			StartOctotron.CheckConfig(settings);
 		}
 		catch(ExceptionSystemError e)
 		{
 			LOGGER.log(Level.SEVERE, "could not load config file", e);
-			System.exit(StartOctotron.EXIT_ERROR);
+			System.exit(1);
 		}
 
-		StartOctotron.Run(settings);
+		try
+		{
+			Create(settings);
+		}
+		catch(Exception creation_exception)
+		{
+			LOGGER.log(Level.SEVERE, "could not create the model", creation_exception);
+			System.exit(1);
+		}
+
+		ModelService.Get().Operate();
+
+		Run(settings);
 	}
 
-/**
- * compare hashes to check if the new config does not match the old one<br>
- * */
-	private static void CheckConfig(GlobalSettings settings)
+	public static void Begin(GlobalSettings settings)
 		throws ExceptionSystemError
 	{
-		String path = settings.GetDbPath() + settings.GetDbName();
-		int old_hash = Integer.parseInt(FileUtils.FileToString(path + DBCreator.HASH_FILE));
+		if(settings.IsDb())
+		{
+			if(FileUtils.IsDirEmpty(settings.GetDbPath() + settings.GetModelName()))
+			{
+				ModelService.Init(ModelService.EMode.CREATION, settings.GetDbPath(), settings.GetModelName());
+				LOGGER.log(Level.INFO, "No DB found, creating a new in: " + settings.GetDbPath());
+			}
+			else
+			{
+				ModelService.Init(ModelService.EMode.LOAD, settings.GetDbPath(), settings.GetModelName());
+				LOGGER.log(Level.INFO, "DB found, attempting to use data from: " + settings.GetDbPath());
+			}
+		}
+		else
+		{
+			ModelService.Init(ModelService.EMode.CREATION);
+			LOGGER.log(Level.INFO, "No DB settings, starting Octotron without DB");
+			LOGGER.log(Level.WARNING, "All data will be lost when execution ends!");
+		}
+	}
 
-		if(settings.GetHash() != old_hash)
-			LOGGER.log(Level.CONFIG, "config file has been changed since database creation consistency is not guaranteed");
+	public static void Create(GlobalSettings settings)
+		throws ExceptionSystemError
+	{
+		Begin(settings);
+
+		PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
+
+		PySystemState sys = Py.getSystemState();
+
+		sys.path.append(new PyString(settings.GetModelPath()));
+
+		if(settings.GetSysPath() != null)
+			sys.path.append(new PyString(settings.GetSysPath()));
+
+		ModelService.Init(ModelService.EMode.CREATION);
+
+		LOGGER.log(Level.INFO, "Creating model...");
+
+		interpreter.execfile(settings.GetModelPath() + '/' + settings.GetModelMain());
+
+		LOGGER.log(Level.INFO, "done");
+
+		End(settings);
+	}
+
+	public static void PrintStat()
+	{
+		int model_attributes_count = 0;
+
+		ModelObjectList model_objects = ModelService.Get().GetAllObjects();
+		ModelLinkList model_links = ModelService.Get().GetAllLinks();
+
+		for(ModelObject obj : model_objects)
+		{
+			model_attributes_count += obj.GetAttributes().size();
+		}
+
+		for(ModelLink link : model_links)
+		{
+			model_attributes_count += link.GetAttributes().size();
+		}
+
+		LOGGER.log(Level.INFO, "Created model objects: " + model_objects.size());
+		LOGGER.log(Level.INFO, "Created model links: " + model_links.size());
+		LOGGER.log(Level.INFO, "Created model attributes: " + model_attributes_count);
+	}
+
+	public static void End(GlobalSettings settings)
+	{
+		LOGGER.log(Level.INFO, "Building rule dependencies...");
+		ModelService.Get().MakeRuleDependencies();
+
+		PrintStat();
+
+		LOGGER.log(Level.INFO, "done");
+
+// -------------
+
+		LOGGER.log(Level.INFO, "Building cache...");
+
+		ModelService.Get().EnableObjectIndex("AID");
+		ModelService.Get().EnableLinkIndex("AID");
+
+		LOGGER.log(Level.INFO, "enabled object cache: AID");
+		LOGGER.log(Level.INFO, "enabled link cache: AID");
+
+		for(String attr : settings.GetObjectIndex())
+		{
+			ModelService.Get().EnableObjectIndex(attr);
+			LOGGER.log(Level.INFO, "enabled object cache: " + attr);
+		}
+
+		for(String attr : settings.GetLinkIndex())
+		{
+			ModelService.Get().EnableLinkIndex(attr);
+			LOGGER.log(Level.INFO, "enabled link cache: " + attr);
+		}
+
+		LOGGER.log(Level.INFO, "done");
 	}
 
 /**
@@ -115,45 +215,38 @@ public class StartOctotron
  * */
 	private static void Run(GlobalSettings settings)
 	{
-		Neo4jGraph graph;
 		ExecutionController exec_control = null;
-
-		String path = settings.GetDbPath() + settings.GetDbName();
-
 // --- create
 		try
 		{
-			graph = new Neo4jGraph(path + "_neo4j", Neo4jGraph.Op.LOAD, bootstrap);
-			ModelService.Init(graph);
-
 			exec_control = new ExecutionController(settings);
 
-			StartOctotron.ProcessStart(settings);
+			ProcessStart(settings);
 		}
 		catch(Exception start_exception)
 		{
-			StartOctotron.ProcessCrash(settings, start_exception, "start");
+			ProcessCrash(settings, start_exception, "start");
 
 			if(exec_control != null)
 				exec_control.Finish();
 
-			return;
+			System.exit(1);
 		}
 
 // --- main loop
-		Exception loop_exception = StartOctotron.MainLoop(settings, exec_control);
+		Exception loop_exception = MainLoop(settings, exec_control);
 
 		if(loop_exception != null)
 		{
-			StartOctotron.ProcessCrash(settings, loop_exception, "mainloop");
+			ProcessCrash(settings, loop_exception, "mainloop");
 		}
 
 // --- shutdown
-		Exception shutdown_exception = StartOctotron.Shutdown(settings, exec_control);
+		Exception shutdown_exception = Shutdown(settings, exec_control);
 
 		if(shutdown_exception != null)
 		{
-			StartOctotron.ProcessCrash(settings, shutdown_exception, "shutdown");
+			ProcessCrash(settings, shutdown_exception, "shutdown");
 		}
 	}
 
@@ -169,10 +262,10 @@ public class StartOctotron
 		{
 			while(!exec_control.ShouldExit())
 			{
-				exec_control.Process(StartOctotron.PROCESS_CHUNK); // it may sleep inside
+				exec_control.Process(PROCESS_CHUNK); // it may sleep inside
 			}
 
-			StartOctotron.ProcessFinish(settings);
+			ProcessFinish(settings);
 		}
 		catch(Exception e)
 		{
@@ -187,7 +280,7 @@ public class StartOctotron
  * */
 	public static Exception Shutdown(GlobalSettings settings, ExecutionController exec_control)
 	{
-		String path = settings.GetDbPath() + settings.GetDbName();
+		String path = settings.GetDbPath() + settings.GetModelMain();
 
 		try
 		{

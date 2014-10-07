@@ -6,8 +6,11 @@
 
 package ru.parallel.octotron.http;
 
+import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.Operations.Operation;
+import ru.parallel.octotron.logic.ExecutionController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -137,7 +140,11 @@ private static final Map<String, Operation[]> REQUEST_TYPES
 
 			Map<String, String> params = RequestParser.ParseParams(query);
 
-			return new ParsedRequest(operation, params);
+			ModelList<? extends ModelEntity, ?> p = null;
+			if(params.get("path") != null)
+				p = PathParser.Parse(params.get("path")).Execute(ExecutionController.in);
+
+			return new ParsedRequest(operation, params, p);
 		}
 		catch(ExceptionParseError e)
 		{

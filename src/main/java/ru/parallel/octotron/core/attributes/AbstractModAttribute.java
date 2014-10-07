@@ -91,12 +91,10 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	@Override
 	public double GetSpeed()
 	{
-		List<History.Entry> entries = history.Get();
+		History.Entry last = history.GetLast();
 
-		if(entries.size() == 0)
+		if(last == null)
 			return 0.0;
-
-		History.Entry last = entries.get(0);
 
 		long cur_ctime = ctime;
 		long last_ctime = last.ctime;
@@ -114,7 +112,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 
 	protected void Update(Object new_value)
 	{
-		history.add(value, ctime);
+		history.Add(value, ctime);
 
 		ctime = JavaUtils.GetTimestamp();
 		value = new_value;

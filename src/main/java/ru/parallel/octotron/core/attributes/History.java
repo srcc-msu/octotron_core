@@ -1,11 +1,12 @@
 package ru.parallel.octotron.core.attributes;
 
-import java.util.LinkedList;
-import java.util.List;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class History
 {
-	private static final long HISTORY_SIZE = 2;
+	private static final int HISTORY_SIZE = 3;
 
 	public static class Entry
 	{
@@ -19,23 +20,32 @@ public class History
 		}
 	}
 
-	List<Entry> history;
+	LinkedList<Entry> history;
 
 	public History()
 	{
 		history = new LinkedList<>();
 	}
 
-	public List<Entry> Get()
+	@Nullable
+	public Entry GetLast()
+	{
+		if(history.size() > 0)
+			return history.getFirst();
+		else
+			return null;
+	}
+
+	public Collection<Entry> Get()
 	{
 		return history;
 	}
 
-	public void add(Object value, long ctime)
+	public void Add(Object value, long ctime)
 	{
-		history.add(0, new Entry(value, ctime));
+		history.addFirst(new Entry(value, ctime));
 
 		if(history.size() > HISTORY_SIZE)
-			history.remove(HISTORY_SIZE);
+			history.removeLast();
 	}
 }

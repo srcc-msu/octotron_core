@@ -31,11 +31,11 @@ public class Importer implements Runnable
 		return result;
 	}
 
-	public AttributeList<VarAttribute> ProcessVaryings(AttributeList<SensorAttribute> changed)
+	public AttributeList<IModelAttribute> ProcessVaryings(SensorAttribute changed)
 	{
-		AttributeList<VarAttribute> result = new AttributeList<>();
+		AttributeList<IModelAttribute> result = new AttributeList<>();
 
-		AttributeList<VarAttribute> dependant_varyings = GetDependant(changed);
+		AttributeList<VarAttribute> dependant_varyings = changed.GetDependant();
 
 		do
 		{
@@ -58,9 +58,10 @@ public class Importer implements Runnable
 		SensorAttribute sensor = entity.GetSensor(attribute.GetName());
 		sensor.Update(attribute.GetValue());
 
-		AttributeList<SensorAttribute> sensors = new AttributeList<SensorAttribute>();
-		sensors.add(sensor);
+		AttributeList<IModelAttribute> result = ProcessVaryings(sensor);
 
-		AttributeList<VarAttribute> result = ProcessVaryings(sensors);
+		result.add(sensor);
+
+		ExecutionController.Get().CheckReactions(result);
 	}
 }

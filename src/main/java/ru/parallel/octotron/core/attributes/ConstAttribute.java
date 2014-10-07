@@ -6,6 +6,7 @@ import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.reactions.PreparedResponse;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -77,7 +78,7 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	}
 
 	@Override
-	public Collection<Response> ProcessReactions()
+	public Collection<PreparedResponse> ProcessReactions()
 	{
 		return new LinkedList<>();
 	}

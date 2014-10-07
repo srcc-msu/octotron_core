@@ -1,7 +1,6 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 public class SensorAttribute extends AbstractModAttribute
 {
@@ -30,8 +29,8 @@ public class SensorAttribute extends AbstractModAttribute
 		return EAttributeType.SENSOR;
 	}
 
-	public void Update(Object new_value)
+	public boolean Update(Object new_value)
 	{
-		super.Update(new_value);
+		return super.Update(new_value);
 	}
 }

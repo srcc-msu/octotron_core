@@ -7,6 +7,7 @@ import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Collection;
@@ -110,12 +111,15 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		return diff / (cur_ctime - last_ctime);
 	}
 
-	protected void Update(Object new_value)
+	protected boolean Update(Object new_value)
 	{
+		boolean result = value != new_value;
 		history.Add(value, ctime);
 
 		ctime = JavaUtils.GetTimestamp();
 		value = new_value;
+
+		return result;
 	}
 
 	@Override
@@ -131,10 +135,8 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	}
 
 	@Override
-	public Collection<Response> ProcessReactions()
+	public Collection<PreparedResponse> ProcessReactions()
 	{
-
-
 		return null;
 	}
 }

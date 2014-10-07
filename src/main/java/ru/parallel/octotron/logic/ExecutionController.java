@@ -16,6 +16,7 @@ import ru.parallel.octotron.http.HTTPServer;
 import ru.parallel.octotron.http.HttpExchangeWrapper;
 import ru.parallel.octotron.http.ModelRequestExecutor;
 import ru.parallel.octotron.http.ParsedModelRequest;
+import ru.parallel.octotron.reactions.PreparedResponse;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,9 +46,10 @@ public class ExecutionController
 
 	private HTTPServer http;
 
-	ThreadPoolExecutor import_executor;
-	ThreadPoolExecutor request_executor;
-	ThreadPoolExecutor http_executor;
+	private ThreadPoolExecutor import_executor;
+	private ThreadPoolExecutor request_executor;
+	private ThreadPoolExecutor http_executor;
+	private ThreadPoolExecutor reactions_executor;
 
 	private boolean exit = false;
 	private boolean silent = false;
@@ -72,13 +74,13 @@ public class ExecutionController
 	public void Init()
 		throws ExceptionSystemError
 	{
-/*		import_executor = new ThreadPoolExecutor(1, 1,
+		import_executor = new ThreadPoolExecutor(1, 1,
 			0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());*/
+			new LinkedBlockingQueue<Runnable>());
 
-		import_executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-			60L, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
+		reactions_executor = new ThreadPoolExecutor(1, 1,
+			0L, TimeUnit.MILLISECONDS,
+			new LinkedBlockingQueue<Runnable>());
 
 		request_executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
 			60L, TimeUnit.SECONDS,
@@ -180,13 +182,16 @@ public class ExecutionController
 		http_executor.shutdown();
 		import_executor.shutdown();
 		request_executor.shutdown();
+		reactions_executor.shutdown();
+
 		http.Finish();
 
 		LOGGER.log(Level.INFO, "waiting for all tasks to finish");
 
 		while(!http_executor.isShutdown()
 			|| !import_executor.isShutdown()
-			|| !request_executor.isShutdown())
+			|| !request_executor.isShutdown()
+			|| !reactions_executor.isShutdown())
 		{
 			try
 			{
@@ -198,5 +203,14 @@ public class ExecutionController
 		ExecutionController.INSTANCE = null;
 
 		LOGGER.log(Level.INFO, "all processing finished");
+	}
+
+	public void CheckReactions(AttributeList<IModelAttribute> attributes)
+	{
+		for(IModelAttribute attribute : attributes)
+		{
+			for(PreparedResponse response : attribute.ProcessReactions())
+				reactions_executor.execute(response);
+		}
 	}
 }

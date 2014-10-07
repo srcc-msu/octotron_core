@@ -56,7 +56,6 @@ public class VarAttribute extends AbstractModAttribute
 		if(new_value == null)
 			return false;
 
-		super.Update(new_value);
-		return true;
+		return super.Update(new_value);
 	}
 }

@@ -6,20 +6,16 @@
 
 package ru.parallel.octotron.http;
 
-import com.sun.net.httpserver.*;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import com.sun.net.httpserver.HttpContext;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.GlobalSettings;
-import ru.parallel.octotron.logic.ExecutionController;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * HTTP server for requests processing<br>

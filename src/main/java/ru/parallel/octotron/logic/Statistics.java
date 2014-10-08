@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.logic;
 
-import com.google.common.collect.Queues;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.utils.Timer;
 
 import java.util.HashMap;

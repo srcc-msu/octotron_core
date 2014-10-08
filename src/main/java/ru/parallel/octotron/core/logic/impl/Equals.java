@@ -3,7 +3,6 @@ package ru.parallel.octotron.core.logic.impl;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelObject;
 
 public class Equals extends ReactionTemplate
 {

@@ -7,7 +7,6 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -18,11 +17,17 @@ import ru.parallel.octotron.http.HttpExchangeWrapper;
 import ru.parallel.octotron.http.ModelRequestExecutor;
 import ru.parallel.octotron.http.ParsedModelRequest;
 import ru.parallel.octotron.reactions.PreparedResponse;
+import ru.parallel.utils.FileUtils;
 
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
 
 public class ExecutionController
 {
@@ -181,30 +186,24 @@ public class ExecutionController
 
 	public void Finish()
 	{
-		http_executor.shutdown();
-		import_executor.shutdown();
-		request_executor.shutdown();
-		reactions_executor.shutdown();
+		LOGGER.log(Level.INFO, "waiting for all tasks to finish");
+
+		ShutdownExecutor(request_executor);
+		ShutdownExecutor(import_executor);
+		ShutdownExecutor(reactions_executor);
+		ShutdownExecutor(reactions_invoker);
+		ShutdownExecutor(http_executor);
+
+		// http server throws something if closed too fast..
+		try { Thread.sleep(10); } catch (InterruptedException ignore){}
 
 		http.Finish();
 
-		LOGGER.log(Level.INFO, "waiting for all tasks to finish");
-
-		while(!http_executor.isShutdown()
-			|| !import_executor.isShutdown()
-			|| !request_executor.isShutdown()
-			|| !reactions_executor.isShutdown())
-		{
-			try
-			{
-				Thread.sleep(1);
-			}
-			catch (InterruptedException ignore){}
-		}
-
-		ExecutionController.INSTANCE = null;
+		FileUtils.Finish();
 
 		LOGGER.log(Level.INFO, "all processing finished");
+
+		ExecutionController.INSTANCE = null;
 	}
 
 	public void CheckReactions(AttributeList<IModelAttribute> attributes)

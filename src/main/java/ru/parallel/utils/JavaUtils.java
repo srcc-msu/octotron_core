@@ -11,6 +11,7 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 public abstract class JavaUtils
 {
@@ -46,5 +47,18 @@ public abstract class JavaUtils
 		});
 
 		return new_list;
+	}
+
+	public static void ShutdownExecutor(ExecutorService executor)
+	{
+		executor.shutdown();
+		while(!executor.isShutdown())
+		{
+			try
+			{
+				Thread.sleep(1);
+			}
+			catch (InterruptedException ignore){}
+		}
 	}
 }

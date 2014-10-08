@@ -299,7 +299,7 @@ public class Start
 		String script = settings.GetScriptByKey("on_start");
 
 		if(script != null)
-			FileUtils.ExecSilent(true, script);
+			FileUtils.ExecSilent(script);
 	}
 
 /**
@@ -311,7 +311,7 @@ public class Start
 		String script = settings.GetScriptByKey("on_finish");
 
 		if(script != null)
-			FileUtils.ExecSilent(true, script);
+			FileUtils.ExecSilent(script);
 	}
 
 /**
@@ -345,7 +345,7 @@ public class Start
 			String script = settings.GetScriptByKey("on_crash");
 
 			if(script != null)
-				FileUtils.ExecSilent(true, script, error_fname);
+				FileUtils.ExecSilent(script, error_fname);
 		}
 		catch (ExceptionSystemError e) // giving up now - exception during exception processing..
 		{

@@ -11,10 +11,12 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
 
 // TODO move to executors
 public abstract class FileUtils
@@ -42,99 +44,64 @@ public abstract class FileUtils
 		return new BufferedReader(isr);
 	}
 
-	private static final Queue<Process> active_processes = new ConcurrentLinkedQueue<>();
-	static
+	private static final ExecutorService executor = Executors.newCachedThreadPool();
+
+	public static void Finish()
 	{
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
+		LOGGER.log(Level.WARNING, "Exec: waiting for all exec scripts to finish");
 
-				int counter = 0;
+		ShutdownExecutor(executor);
 
-				for(Process p : FileUtils.active_processes)
-				{
-					p.destroy();
-					counter++;
-				}
-
-				if(counter > 0)
-					LOGGER.log(Level.WARNING, counter
-						+ " processes did not finish and were killed");
-			}
-		});
+		LOGGER.log(Level.WARNING, "Exec: finished");
 	}
 
-	public static void ExecSilent(String... command)
-		throws ExceptionSystemError
-	{
-		FileUtils.ExecSilent(false, command);
-	}
-
-	public static void ExecSilent(boolean blocking, final String... command)
+	public static void ExecSilent(final String... command)
 		throws ExceptionSystemError
 	{
 		if(command.length == 0)
 			throw new ExceptionSystemError("can not execute empty command");
 
-		Thread exec_thread = new Thread()
-		{
-			@Override
-			public void run()
+		executor.execute(
+			new Runnable()
 			{
-				try
+				@Override
+				public void run()
 				{
-					ProcessBuilder pb = new ProcessBuilder(command);
-					pb.redirectErrorStream(true); // merge stdout and stderr of process
-
-					Process process = pb.start();
-Timer.SStart();
-					FileUtils.active_processes.add(process);
-
-					InputStreamReader isr = new InputStreamReader(
-						process.getInputStream());
-					BufferedReader br = new BufferedReader(isr);
-
-					String line;
-					String output = "";
-
-					while ((line = br.readLine()) != null)
+					try
 					{
-						output += line + System.lineSeparator();
+						ProcessBuilder pb = new ProcessBuilder(command);
+						pb.redirectErrorStream(true); // merge stdout and stderr of process
+
+						Process process = pb.start();
+Timer.SStart();
+
+						InputStreamReader isr = new InputStreamReader(process.getInputStream());
+						BufferedReader br = new BufferedReader(isr);
+
+						String line;
+						String output = "";
+
+						while ((line = br.readLine()) != null)
+						{
+							output += line + System.lineSeparator();
+						}
+
+						if(output.length() > 0)
+							LOGGER.log(Level.INFO, output);
+
+						process.waitFor();
+LOGGER.log(Level.INFO, command[0] + " finished, took: " + Timer.SGet());
+
+						process.destroy();
+						br.close();
+						isr.close();
 					}
-
-					if(output.length() > 0)
-						LOGGER.log(Level.INFO, output);
-
-					process.waitFor();
-					LOGGER.log(Level.INFO, command[0] + " finished, took: " + Timer.SGet());
-
-					process.destroy();
-					br.close();
-					isr.close();
-
-					FileUtils.active_processes.remove(process);
+					catch(IOException | InterruptedException e)
+					{
+						e.printStackTrace();
+					}
 				}
-				catch(IOException | InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		};
-
-		exec_thread.setName("exec thread");
-		exec_thread.start();
-
-		if(blocking)
-		{
-			try
-			{
-				exec_thread.join();
-			}
-			catch (InterruptedException e)
-			{
-				throw new ExceptionSystemError(e);
-			}
-		}
+			});
 	}
 
 	public static String FileToString(String fname)

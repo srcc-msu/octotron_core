@@ -4,7 +4,6 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.reactions.PreparedResponse;
 
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

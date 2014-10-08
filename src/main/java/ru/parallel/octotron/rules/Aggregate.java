@@ -32,7 +32,7 @@ public abstract class Aggregate extends ObjectRule
 	ModelObjectList GetCandidates(ModelObject object)
 	{
 		ModelObjectList candidates = new ModelObjectList();
-
+		if(true)return candidates;
 		switch(dependency)
 		{
 			case SELF:
@@ -57,7 +57,7 @@ public abstract class Aggregate extends ObjectRule
 				throw new ExceptionModelFail("unknown dependency: " + dependency);
 		}
 
-		return candidates;
+		return candidates.Uniq();
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public abstract class Aggregate extends ObjectRule
 
 		ModelObjectList candidates = GetCandidates(object);
 
-		for(ModelObject obj : candidates.Uniq())
+		for(ModelObject obj : candidates)
 			for(String tmp : attributes)
 			{
 				if(!obj.TestAttribute(tmp))
@@ -86,7 +86,7 @@ public abstract class Aggregate extends ObjectRule
 
 		ModelObjectList candidates = GetCandidates(object);
 
-		for(ModelObject obj : candidates.Uniq())
+		for(ModelObject obj : candidates)
 			for(String tmp : attributes)
 			{
 				if(!obj.TestAttribute(tmp))

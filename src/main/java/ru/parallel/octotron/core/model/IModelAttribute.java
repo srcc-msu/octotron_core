@@ -5,8 +5,6 @@ import ru.parallel.octotron.core.attributes.IAttributeBuilder;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.reactions.PreparedResponse;
 
 import java.util.Collection;

@@ -26,7 +26,6 @@ public class ReactionInvoker implements Runnable
 		{
 			for (PreparedResponse response : attribute.ProcessReactions())
 			{
-
 				if(!ExecutionController.Get().IsSilent())
 					ExecutionController.Get().AddResponse(response);
 

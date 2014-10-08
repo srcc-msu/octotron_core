@@ -144,7 +144,7 @@ public final class ModelService
 
 	public ModelObjectList GetObjects(SimpleAttribute attribute)
 	{
-		return cache.GetObjects(attribute.GetName()).Filter(attribute);
+		return cache.GetObjects(attribute);
 	}
 
 	public ModelObjectList GetObjects(String name)
@@ -154,7 +154,7 @@ public final class ModelService
 
 	public ModelLinkList GetLinks(SimpleAttribute attribute)
 	{
-		return cache.GetLinks(attribute.GetName()).Filter(attribute);
+		return cache.GetLinks(attribute);
 	}
 
 	public ModelLinkList GetLinks(String name)

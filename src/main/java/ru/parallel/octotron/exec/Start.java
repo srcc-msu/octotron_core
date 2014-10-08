@@ -224,7 +224,8 @@ public class Start
 		{
 			ProcessCrash(settings, start_exception, "start");
 
-			ExecutionController.Get().Finish();
+			if(ExecutionController.Get() != null)
+				ExecutionController.Get().Finish();
 
 			System.exit(1);
 		}

@@ -19,6 +19,8 @@ import java.util.Map.Entry;
 
 public class GlobalSettings
 {
+	private static final int DEFAULT_THREADS = 4;
+
 	public static class Credential
 	{
 		public final String user;
@@ -40,6 +42,7 @@ public class GlobalSettings
 	private String db_path;
 
 	private String sys_path;
+	private int threads;
 
 	private boolean db = false;
 
@@ -95,6 +98,11 @@ public class GlobalSettings
 			JsonObject sys_conf = JsonUtils.MustPresent(root, "sys").getAsJsonObject();
 
 			sys_path = JsonUtils.MustPresent(sys_conf, "path").getAsString();
+
+			if(JsonUtils.IsPresent(sys_conf, "threads"))
+				threads = JsonUtils.MustPresent(sys_conf, "threads").getAsInt();
+			else
+				threads = DEFAULT_THREADS;
 		}
 
 // --- db config
@@ -167,6 +175,10 @@ public class GlobalSettings
 	public String GetSysPath()
 	{
 		return sys_path;
+	}
+	public int GetNumThreads()
+	{
+		return threads;
 	}
 
 	public String GetDbPath()

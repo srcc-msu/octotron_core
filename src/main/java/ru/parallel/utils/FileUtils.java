@@ -44,7 +44,8 @@ public abstract class FileUtils
 		return new BufferedReader(isr);
 	}
 
-	private static final ExecutorService executor = Executors.newCachedThreadPool();
+	private static final ExecutorService executor
+		= Executors.newFixedThreadPool(4);
 
 	public static void Finish()
 	{

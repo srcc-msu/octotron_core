@@ -82,21 +82,21 @@ public class ExecutionController
 			0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>());
 
-		reactions_executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-			60L, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
+		reactions_executor = new ThreadPoolExecutor(settings.GetNumThreads(), settings.GetNumThreads(),
+			0L, TimeUnit.MILLISECONDS,
+			new LinkedBlockingQueue<Runnable>());
 
-		reactions_invoker = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-			60L, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
+		reactions_invoker = new ThreadPoolExecutor(settings.GetNumThreads(), settings.GetNumThreads(),
+			0L, TimeUnit.MILLISECONDS,
+			new LinkedBlockingQueue<Runnable>());
 
-		request_executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-			60L, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
+		request_executor = new ThreadPoolExecutor(settings.GetNumThreads(), settings.GetNumThreads(),
+			0L, TimeUnit.MILLISECONDS,
+			new LinkedBlockingQueue<Runnable>());
 
-		http_executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-			60L, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
+		http_executor = new ThreadPoolExecutor(settings.GetNumThreads(), settings.GetNumThreads(),
+			0L, TimeUnit.MILLISECONDS,
+			new LinkedBlockingQueue<Runnable>());
 
 		http = new HTTPServer(settings, http_executor);
 

@@ -72,17 +72,18 @@ public class ExecutionController
 	public void Init()
 		throws ExceptionSystemError
 	{
+		//Executors
 		import_executor = new ThreadPoolExecutor(1, 1,
 			0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>());
 
-		reactions_executor = new ThreadPoolExecutor(1, 1,
-			0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());
+		reactions_executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+			60L, TimeUnit.SECONDS,
+			new SynchronousQueue<Runnable>());
 
-		reactions_invoker = new ThreadPoolExecutor(1, 1,
-			0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());
+		reactions_invoker = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+			60L, TimeUnit.SECONDS,
+			new SynchronousQueue<Runnable>());
 
 		request_executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
 			60L, TimeUnit.SECONDS,
@@ -100,7 +101,7 @@ public class ExecutionController
 	public void Import(ModelObject object, SimpleAttribute attribute)
 	{
 		import_executor.execute(new Importer(object, attribute));
-		stat.Import(1, import_executor.getQueue().size());
+		stat.Add("import_executor", 1, import_executor.getQueue().size());
 	}
 
 	public void SetExit(boolean exit)
@@ -155,21 +156,22 @@ public class ExecutionController
 	public void Process()
 		throws InterruptedException
 	{
-		stat.Http(0, reactions_invoker.getQueue().size());
 		Thread.sleep(1);
 		stat.Process();
 	}
 
 	public void AddRequest(ParsedModelRequest request)
 	{
+		stat.Add("request_executor", 1, request_executor.getQueue().size());
+
 		request_executor.execute(new ModelRequestExecutor(request));
-		stat.Request(1, request_executor.getQueue().size());
 	}
 
 	public void AddBlockingRequest(ParsedModelRequest request, HttpExchangeWrapper http_exchange_wrapper)
 	{
+		stat.Add("request_executor", 1, request_executor.getQueue().size());
+
 		request_executor.execute(new ModelRequestExecutor(request, http_exchange_wrapper));
-		stat.Request(1, request_executor.getQueue().size());
 	}
 
 	public void UncheckedImport(ModelObject target, SimpleAttribute attribute)
@@ -207,6 +209,8 @@ public class ExecutionController
 
 	public void CheckReactions(AttributeList<IModelAttribute> attributes)
 	{
+		stat.Add("reactions_invoker", 1, reactions_invoker.getQueue().size());
+
 		reactions_invoker.execute(new ReactionInvoker(attributes));
 	}
 
@@ -217,11 +221,18 @@ public class ExecutionController
 
 	public void AddResponse(PreparedResponse response)
 	{
+		stat.Add("reactions_executor", 1, reactions_executor.getQueue().size());
+
 		reactions_executor.execute(response);
 	}
 
 	public boolean IsSilent()
 	{
 		return silent;
+	}
+
+	public void NewHttp()
+	{
+		stat.Add("http", 1, http_executor.getQueue().size());
 	}
 }

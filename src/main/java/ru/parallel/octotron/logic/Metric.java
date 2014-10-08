@@ -11,6 +11,7 @@ public final class Metric
 	private Long sum;
 	private Long min_value;
 	private Long max_value;
+	private Long current;
 
 	private int count;
 
@@ -19,29 +20,39 @@ public final class Metric
 		Reset();
 	}
 
+	private Object lock = new Object();
+
 	public void Reset()
 	{
-		sum = null;
-		min_value = null;
-		max_value = null;
+		synchronized(lock)
+		{
+			sum = null;
+			min_value = null;
+			max_value = null;
 
-		count = 0;
+			count = 0;
+		}
 	}
 
 	public void Collect(long value)
 	{
-		if(sum == null)
-			sum = value;
-		else
-			sum += value;
+		synchronized(lock)
+		{
+			current = value;
 
-		if(min_value == null || min_value > value)
-			min_value = value;
+			if (sum == null)
+				sum = value;
+			else
+				sum += value;
 
-		if(max_value == null || max_value < value)
-			max_value = value;
+			if (min_value == null || min_value > value)
+				min_value = value;
 
-		count++;
+			if (max_value == null || max_value < value)
+				max_value = value;
+
+			count++;
+		}
 	}
 
 	public double GetAvg()
@@ -74,5 +85,10 @@ public final class Metric
 			return 0;
 
 		return sum;
+	}
+
+	public long GetCurrent()
+	{
+		return current;
 	}
 }

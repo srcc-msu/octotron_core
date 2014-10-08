@@ -6,6 +6,8 @@
 
 package ru.parallel.octotron.logic;
 
+import com.google.common.collect.Queues;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.utils.Timer;
 
 import java.util.HashMap;
@@ -15,13 +17,20 @@ import java.util.Map;
 
 public class Statistics
 {
-	private final Metric request_queue_60 = new Metric();
-	private final Metric http_queue_60 = new Metric();
-	private final Metric import_queue_60 = new Metric();
+	public static class Stat
+	{
+		public final String name;
 
-	private final Metric request_processed_60 = new Metric();
-	private final Metric http_processed_60 = new Metric();
-	private final Metric import_processed_60 = new Metric();
+		public Metric queue = new Metric();
+		public Metric total = new Metric();
+
+		public Stat(String name)
+		{
+			this.name = name;
+		}
+	}
+
+	Map<String, Stat> stats = new HashMap<>();
 
 	private final Timer timer_60 = new Timer();
 
@@ -30,31 +39,28 @@ public class Statistics
 		timer_60.Start();
 	}
 
-	public void Request(int add, int queue)
+	public void Add(String name, int add, int queue)
 	{
-		request_processed_60.Collect(add);
-		request_queue_60.Collect(queue);
-	}
+		Stat stat = stats.get(name);
 
-	public void Http(int add, int queue)
-	{
-		http_processed_60.Collect(add);
-		http_queue_60.Collect(queue);
-	}
+		if(stat == null)
+		{
+			stat = new Stat(name);
+			stats.put(name, stat);
+		}
 
-	public void Import(int add, int queue)
-	{
-		import_processed_60.Collect(add);
-		import_queue_60.Collect(queue);
+		stat.total.Collect(add);
+		stat.queue.Collect(queue);
 	}
 
 	private static Map<String, Object> GetAvgs(Metric metric, String name)
 	{
 		Map<String, Object> res = new HashMap<>();
 
-		res.put(name + " avg", String.format("%.2f", metric.GetAvg()));
+		res.put(name + " current", String.valueOf(metric.GetCurrent()));
 		res.put(name + " min", String.valueOf(metric.GetMin()));
 		res.put(name + " max", String.valueOf(metric.GetMax()));
+		res.put(name + " avg", String.format("%.2f", metric.GetAvg()));
 
 		return res;
 	}
@@ -77,13 +83,11 @@ public class Statistics
 	{
 		List<Map<String, Object>> res = new LinkedList<>();
 
-		res.add(Statistics.GetAvgs(request_queue_60, "request queue"));
-		res.add(Statistics.GetAvgs(http_queue_60, "http queue"));
-		res.add(Statistics.GetAvgs(import_queue_60, "import queue"));
+		for(Stat stat : stats.values())
+			res.add(Statistics.GetAvgs(stat.queue, stat.name + " queue"));
 
-		res.add(Statistics.GetChange(request_processed_60, (int)timer_60.Get(), "requests"));
-		res.add(Statistics.GetChange(http_processed_60, (int)timer_60.Get(), "http"));
-		res.add(Statistics.GetChange(import_processed_60, (int)timer_60.Get(), "imported"));
+		for(Stat stat : stats.values())
+			res.add(Statistics.GetChange(stat.total, (int)timer_60.Get(), stat.name + " total"));
 
 		return res;
 	}
@@ -92,13 +96,11 @@ public class Statistics
 	{
 		if(timer_60.Get() > 60) /*secs in min..*/
 		{
-			request_queue_60.Reset();
-			http_queue_60.Reset();
-			import_queue_60.Reset();
-
-			request_processed_60.Reset();
-			http_processed_60.Reset();
-			import_processed_60.Reset();
+			for(Stat stat : stats.values())
+			{
+				stat.queue.Reset();
+				stat.total.Reset();
+			}
 
 			timer_60.Start();
 		}

@@ -28,6 +28,7 @@ public abstract class Aggregate extends ObjectRule
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
+	// TODO: this is slow, add clone and caching or something
 	ModelObjectList GetCandidates(ModelObject object)
 	{
 		ModelObjectList candidates = new ModelObjectList();

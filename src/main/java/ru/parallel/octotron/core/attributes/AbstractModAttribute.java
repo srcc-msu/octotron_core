@@ -7,13 +7,11 @@ import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractModAttribute extends AbstractAttribute implements IModelAttribute
 {
@@ -137,6 +135,19 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	@Override
 	public Collection<PreparedResponse> ProcessReactions()
 	{
-		return null;
+		long time = JavaUtils.GetTimestamp();
+
+		List<PreparedResponse> result = new LinkedList<>();
+
+		for(Reaction reaction : GetReactions())
+		{
+			Response response = reaction.Process();
+
+			if(response != null)
+				result.add(new PreparedResponse(response
+					, GetParent(), time, ExecutionController.Get().GetSettings()));
+		}
+
+		return result;
 	}
 }

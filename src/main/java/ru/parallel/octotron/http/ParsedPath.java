@@ -10,7 +10,6 @@ import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.PathOperations.PathToken;
-import ru.parallel.octotron.logic.ExecutionController;
 
 import java.util.List;
 

@@ -7,6 +7,7 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -18,13 +19,11 @@ import ru.parallel.octotron.http.ModelRequestExecutor;
 import ru.parallel.octotron.http.ParsedModelRequest;
 import ru.parallel.octotron.reactions.PreparedResponse;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// TODO refactor this class
 public class ExecutionController
 {
 	private static ExecutionController INSTANCE = null;
@@ -50,6 +49,7 @@ public class ExecutionController
 	private ThreadPoolExecutor request_executor;
 	private ThreadPoolExecutor http_executor;
 	private ThreadPoolExecutor reactions_executor;
+	private ThreadPoolExecutor reactions_invoker;
 
 	private boolean exit = false;
 	private boolean silent = false;
@@ -60,8 +60,6 @@ public class ExecutionController
 	{
 		return stat.GetStat();
 	}
-
-	private ReactionInvoker rule_invoker;
 
 	private ExecutionController(GlobalSettings settings)
 		throws ExceptionSystemError
@@ -82,6 +80,10 @@ public class ExecutionController
 			0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>());
 
+		reactions_invoker = new ThreadPoolExecutor(1, 1,
+			0L, TimeUnit.MILLISECONDS,
+			new LinkedBlockingQueue<Runnable>());
+
 		request_executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
 			60L, TimeUnit.SECONDS,
 			new SynchronousQueue<Runnable>());
@@ -91,8 +93,6 @@ public class ExecutionController
 			new SynchronousQueue<Runnable>());
 
 		http = new HTTPServer(settings, http_executor);
-
-		rule_invoker = new ReactionInvoker(settings, request_executor);
 
 		stat = new Statistics();
 	}
@@ -155,7 +155,7 @@ public class ExecutionController
 	public void Process()
 		throws InterruptedException
 	{
-		stat.Http(0, http_executor.getQueue().size());
+		stat.Http(0, reactions_invoker.getQueue().size());
 		Thread.sleep(1);
 		stat.Process();
 	}
@@ -207,10 +207,21 @@ public class ExecutionController
 
 	public void CheckReactions(AttributeList<IModelAttribute> attributes)
 	{
-		for(IModelAttribute attribute : attributes)
-		{
-			for(PreparedResponse response : attribute.ProcessReactions())
-				reactions_executor.execute(response);
-		}
+		reactions_invoker.execute(new ReactionInvoker(attributes));
+	}
+
+	public GlobalSettings GetSettings()
+	{
+		return settings;
+	}
+
+	public void AddResponse(PreparedResponse response)
+	{
+		reactions_executor.execute(response);
+	}
+
+	public boolean IsSilent()
+	{
+		return silent;
 	}
 }

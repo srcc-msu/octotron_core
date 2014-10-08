@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core.logic;
 
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 
 import java.io.Serializable;
@@ -40,11 +41,7 @@ public abstract class ReactionTemplate implements Serializable
 
 //----------------
 
-	public static final long STATE_NONE = 0;
-	public static final long STATE_STARTED = 1;
-	public static final long STATE_EXECUTED = 2;
-
-	public abstract boolean ReactionNeeded(ModelObject entity);
+	public abstract boolean ReactionNeeded(ModelEntity entity);
 
 //----------------
 

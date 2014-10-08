@@ -2,7 +2,8 @@ package ru.parallel.octotron.core.attributes;
 
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class History
 {

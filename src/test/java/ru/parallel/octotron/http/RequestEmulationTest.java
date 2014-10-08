@@ -29,12 +29,12 @@ public class RequestEmulationTest
 	private static LinkFactory links;
 	private static ObjectFactory factory;
 
-	private static HTTPServer http;
+	private static DummyHTTPServer http;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		RequestEmulationTest.http = HTTPServer.GetDummyServer(RequestEmulationTest.HTTP_PORT);
+		RequestEmulationTest.http = new DummyHTTPServer(RequestEmulationTest.HTTP_PORT);
 
 		ModelService.Init(ModelService.EMode.CREATION);
 
@@ -78,15 +78,14 @@ public class RequestEmulationTest
 
 		client.getConnectionManager().shutdown();
 
-/*		ParsedHttpRequest parsed_request = RequestEmulationTest.http.GetBlockingRequest();
+		Thread.sleep(RequestEmulationTest.SLEEP);
 
-		if(parsed_request == null)
+		HttpExchangeWrapper exchange = http.GetExchange();
+
+		if(exchange == null)
 			fail("did not get the message");
 
-		parsed_request.GetHttpRequest().FinishString("");
-
-		return parsed_request.GetHttpRequest();*/
-		return null;
+		return exchange;
 	}
 
 	private String GetRequestResult(String str_request) throws Exception
@@ -95,12 +94,12 @@ public class RequestEmulationTest
 
 		ParsedModelRequest r = HttpRequestParser.ParseFromExchange(request);
 
-		new ModelRequestExecutor(r, request).run();
+		RequestResult result = new ModelRequestExecutor(r, request).GetResult();
 
-		/*if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
-			throw new ExceptionParseError(result.data);*/
+		if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
+			throw new ExceptionParseError(result.data);
 
-		return null;//result.data;
+		return result.data;
 	}
 
 	@Test

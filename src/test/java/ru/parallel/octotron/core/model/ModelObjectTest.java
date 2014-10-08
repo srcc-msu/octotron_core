@@ -4,8 +4,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.logic.Marker;
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.impl.Equals;
@@ -16,7 +14,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 

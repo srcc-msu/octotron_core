@@ -102,10 +102,11 @@ Timer.SStart();
 						output += line + System.lineSeparator();
 					}
 
-					LOGGER.log(Level.INFO, output);
+					if(output.length() > 0)
+						LOGGER.log(Level.INFO, output);
 
 					process.waitFor();
-LOGGER.log(Level.INFO, command[0] + " finished, took: " + Timer.SGet());
+					LOGGER.log(Level.INFO, command[0] + " finished, took: " + Timer.SGet());
 
 					process.destroy();
 					br.close();

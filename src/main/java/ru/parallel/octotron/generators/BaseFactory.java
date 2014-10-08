@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;

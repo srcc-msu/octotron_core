@@ -1,7 +1,5 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.attributes.EAttributeType;
-
 public interface IAttribute
 {
 	String GetName();

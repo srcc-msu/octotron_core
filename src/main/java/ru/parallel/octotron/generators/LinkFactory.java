@@ -8,7 +8,6 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelLink;

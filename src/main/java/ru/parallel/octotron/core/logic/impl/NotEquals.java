@@ -2,6 +2,7 @@ package ru.parallel.octotron.core.logic.impl;
 
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 
 public class NotEquals extends ReactionTemplate
@@ -14,7 +15,7 @@ public class NotEquals extends ReactionTemplate
 	}
 
 	@Override
-	public boolean ReactionNeeded(ModelObject object)
+	public boolean ReactionNeeded(ModelEntity object)
 	{
 		IModelAttribute attr = object.GetAttribute(GetCheckName());
 

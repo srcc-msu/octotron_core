@@ -9,7 +9,8 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ModelEntityTest
 {
@@ -19,7 +20,7 @@ public class ModelEntityTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init(ModelService.EMode.OPERATION);
+		ModelService.Init(ModelService.EMode.CREATION);
 
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")

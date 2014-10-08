@@ -14,6 +14,8 @@ import ru.parallel.octotron.logic.ExecutionController;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -22,14 +24,18 @@ import java.util.logging.Logger;
 /**
  * HTTP server for requests processing<br>
  * */
-public class HTTPServer
+public class DummyHTTPServer
 {
-	private final static Logger LOGGER = Logger.getLogger("octotron");
-
 	private HttpServer server;
-	private final ExecutorService executor;
 
-/**
+	public HttpExchangeWrapper GetExchange()
+	{
+		return requests.remove(0);
+	}
+
+	private List<HttpExchangeWrapper> requests = new LinkedList<>();
+
+	/**
  * parse request to tokens and add parsed_request to message queue
  * id the parsed_request is not blocking - close the underlying request
  * */
@@ -41,29 +47,7 @@ public class HTTPServer
 		{
 			HttpExchangeWrapper http_exchange_wrapper = new HttpExchangeWrapper(http_exchange);
 
-			ParsedModelRequest request;
-
-			try
-			{
-				request = HttpRequestParser.ParseFromExchange(http_exchange_wrapper);
-			}
-			catch (ExceptionParseError e)
-			{
-				http_exchange_wrapper.FinishError(e.getMessage());
-
-				LOGGER.log(Level.WARNING, "request failed: "
-					+ http_exchange_wrapper.GetPath() + http_exchange_wrapper.GetQuery(), e);
-
-				return;
-			}
-
-			if(!request.IsBlocking())
-			{
-				http_exchange_wrapper.FinishString("request queued");
-				ExecutionController.Get().AddRequest(request);
-			}
-			else
-				ExecutionController.Get().AddBlockingRequest(request, http_exchange_wrapper);
+			requests.add(http_exchange_wrapper);
 		}
 	}
 
@@ -83,49 +67,23 @@ public class HTTPServer
 		}
 	}
 
-	private static BasicAuthenticator GetAuth(String area, GlobalSettings.Credential credential)
-	{
-		final String user_ref = credential.user;
-		final String password_ref = credential.password;
-
-		return new BasicAuthenticator(area)
-		{
-			@Override
-			public boolean checkCredentials(String user, String password)
-			{
-				boolean result = user.equals(user_ref) && password.equals(password_ref);
-
-				if(!result)
-					LOGGER.log(Level.WARNING, "[FAIL] authentication attempt, username: '" + user + "', password: '" + password + "'");
-
-				return result;
-			}
-		};
-	}
-
 /**
  * create and start the server, listening on /port<br>
  * messages are not guaranteed to come in fixed order<br>
  * */
-	public HTTPServer(GlobalSettings settings, ExecutorService executor)
+	public DummyHTTPServer(int port)
 		throws ExceptionSystemError
 	{
-		this.executor = executor;
-
-		// why is it turned off by default >.<
-		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
-			LOGGER.log(Level.CONFIG, "nodelay is not set to true, import will be slow. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");
-
 		try
 		{
-			server = HttpServer.create(new InetSocketAddress(settings.GetPort()), 0);
+			server = HttpServer.create(new InetSocketAddress(port), 0);
 		}
 		catch (IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}
 
-		server.setExecutor(executor);
+		server.setExecutor(null);
 
 		HttpContext request = server.createContext("/view", new StandardHandler());
 		HttpContext modify  = server.createContext("/modify", new StandardHandler());
@@ -133,13 +91,7 @@ public class HTTPServer
 
 		server.createContext("/", new DefaultHandler());
 
-		request.setAuthenticator(HTTPServer.GetAuth("view", settings.GetViewCredentials()));
-		modify.setAuthenticator(HTTPServer.GetAuth("modify", settings.GetModifyCredentials()));
-		control.setAuthenticator(HTTPServer.GetAuth("control", settings.GetControlCredentials()));
-
 		server.start();
-
-		LOGGER.log(Level.INFO, "request server listening on port: " + settings.GetPort());
 	}
 
 /**

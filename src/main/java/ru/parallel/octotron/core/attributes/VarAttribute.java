@@ -4,7 +4,6 @@ import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 public class VarAttribute extends AbstractModAttribute
 {

@@ -6,16 +6,9 @@
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.http.Operations.Operation;
-import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
-import ru.parallel.octotron.logic.ExecutionController;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * parsed request with correct tokens list<br>

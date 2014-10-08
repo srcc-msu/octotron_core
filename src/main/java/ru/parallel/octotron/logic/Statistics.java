@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.http.AutoFormat;
 import ru.parallel.utils.Timer;
 
 import java.util.HashMap;

@@ -5,7 +5,6 @@ import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class Importer implements Runnable

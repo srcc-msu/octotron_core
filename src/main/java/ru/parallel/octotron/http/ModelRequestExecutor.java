@@ -25,10 +25,8 @@ public class ModelRequestExecutor implements Runnable
 		this(request, null);
 	}
 
-	@Override
-	public void run()
+	public RequestResult GetResult()
 	{
-		RequestResult result;
 		try
 		{
 			ModelList<? extends ModelEntity, ?> entity_list = null;
@@ -38,10 +36,7 @@ public class ModelRequestExecutor implements Runnable
 			if(path != null)
 				entity_list = PathParser.Parse(path).Execute();
 
-			result = (RequestResult) request.operation.Execute(request.params, entity_list);
-
-			if(exchange != null)
-				exchange.Finish(result);
+			return (RequestResult) request.operation.Execute(request.params, entity_list);
 		}
 		catch(Exception e)
 		{
@@ -56,16 +51,24 @@ public class ModelRequestExecutor implements Runnable
 
 			LOGGER.log(Level.WARNING, msg);
 
-			if(exchange != null)
+			return new RequestResult(RequestResult.E_RESULT_TYPE.ERROR, msg);
+		}
+	}
+
+	@Override
+	public void run()
+	{
+		RequestResult result = GetResult();
+
+		if(exchange != null)
+		{
+			try
 			{
-				try
-				{
-					exchange.Finish(new RequestResult(RequestResult.E_RESULT_TYPE.ERROR, msg));
-				}
-				catch (IOException error)
-				{
-					LOGGER.log(Level.WARNING, "could not finish request: ", error);
-				}
+				exchange.Finish(result);
+			}
+			catch (IOException error)
+			{
+				LOGGER.log(Level.WARNING, "could not finish request: ", error);
 			}
 		}
 	}

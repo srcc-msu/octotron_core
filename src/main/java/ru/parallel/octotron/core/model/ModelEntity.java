@@ -33,7 +33,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 		public void AddReaction(ReactionTemplate reaction)
 		{
 			entity.GetAttribute(reaction.GetCheckName())
-				.GetBuilder().AddReaction(new Reaction(reaction));
+				.GetBuilder().AddReaction(new Reaction(reaction, entity));
 		}
 
 		public void AddReaction(List<ReactionTemplate> reactions)

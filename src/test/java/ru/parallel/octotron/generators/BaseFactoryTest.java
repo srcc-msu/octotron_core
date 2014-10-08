@@ -3,7 +3,6 @@ package ru.parallel.octotron.generators;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;

@@ -7,13 +7,11 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.rules.ArgMatch;
 import ru.parallel.octotron.rules.Match;
 
 import java.util.List;

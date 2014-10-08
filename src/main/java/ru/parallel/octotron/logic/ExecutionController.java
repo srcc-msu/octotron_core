@@ -188,14 +188,14 @@ public class ExecutionController
 	{
 		LOGGER.log(Level.INFO, "waiting for all tasks to finish");
 
+		// silently ignore all new requests
+		http_executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+
+		ShutdownExecutor(http_executor);
 		ShutdownExecutor(request_executor);
 		ShutdownExecutor(import_executor);
 		ShutdownExecutor(reactions_executor);
 		ShutdownExecutor(reactions_invoker);
-		ShutdownExecutor(http_executor);
-
-		// http server throws something if closed too fast..
-		try { Thread.sleep(10); } catch (InterruptedException ignore){}
 
 		http.Finish();
 

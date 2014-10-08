@@ -28,7 +28,7 @@ public class HTTPServer
 	private HttpServer server;
 	private final ExecutorService executor;
 
-/**
+	/**
  * parse request to tokens and add parsed_request to message queue
  * id the parsed_request is not blocking - close the underlying request
  * */
@@ -142,9 +142,9 @@ public class HTTPServer
 		LOGGER.log(Level.INFO, "request server listening on port: " + settings.GetPort());
 	}
 
-/**
- * stop the server<br>
- * */
+	/**
+	 * stop the server, closes all exchanges<br>
+	 * */
 	public void Finish()
 	{
 		server.stop(0);

@@ -12,9 +12,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class JavaUtils
 {
+	private final static Logger LOGGER = Logger.getLogger("octotron");
+
 	public static long GetTimestamp()
 	{
 		return System.currentTimeMillis() / 1000L; /*milliseconds in second*/
@@ -49,16 +54,20 @@ public abstract class JavaUtils
 		return new_list;
 	}
 
+	private static final long EXECUTOR_TIMEOUT = 2;
+
 	public static void ShutdownExecutor(ExecutorService executor)
 	{
 		executor.shutdown();
-		while(!executor.isShutdown())
+
+		boolean result = false;
+		try
 		{
-			try
-			{
-				Thread.sleep(1);
-			}
-			catch (InterruptedException ignore){}
+			result = executor.awaitTermination(EXECUTOR_TIMEOUT, TimeUnit.SECONDS);
 		}
+		catch(InterruptedException ignore){}
+
+		if(result == false)
+			LOGGER.log(Level.WARNING, "failed to stop executor: timeout");
 	}
 }

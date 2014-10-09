@@ -32,7 +32,7 @@ public abstract class Aggregate extends ObjectRule
 	ModelObjectList GetCandidates(ModelObject object)
 	{
 		ModelObjectList candidates = new ModelObjectList();
-		if(true)return candidates;
+
 		switch(dependency)
 		{
 			case SELF:

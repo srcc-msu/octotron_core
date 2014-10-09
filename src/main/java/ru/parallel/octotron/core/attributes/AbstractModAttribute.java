@@ -111,6 +111,9 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 
 	protected boolean Update(Object new_value)
 	{
+		for(Reaction reaction : GetReactions())
+			reaction.Repeat(new_value);
+
 		boolean result = value != new_value;
 		history.Add(value, ctime);
 

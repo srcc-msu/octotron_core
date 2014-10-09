@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.io.Serializable;
 
@@ -25,7 +26,7 @@ public abstract class ReactionTemplate implements Serializable
 	public ReactionTemplate(String check_name, Object check_value)
 	{
 		this.check_name = check_name;
-		this.check_value = check_value;
+		this.check_value = SimpleAttribute.ConformType(check_value);
 	}
 
 	public final Object GetCheckValue()
@@ -93,9 +94,9 @@ public abstract class ReactionTemplate implements Serializable
 		return this;
 	}
 
-	public ReactionTemplate Repeatable(boolean repeatable)
+	public ReactionTemplate Repeatable()
 	{
-		this.repeatable = repeatable;
+		this.repeatable = true;
 		return this;
 	}
 }

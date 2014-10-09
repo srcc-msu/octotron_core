@@ -3,6 +3,7 @@ package ru.parallel.octotron.core.attributes;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class VarAttribute extends AbstractModAttribute
@@ -33,7 +34,7 @@ public class VarAttribute extends AbstractModAttribute
 
 	public VarAttribute(ModelEntity parent, String name, Rule rule)
 	{
-		super(parent, name, SimpleAttribute.ConformType(rule.GetDefaultValue()));
+		super(EAttributeType.VAR, parent, name, SimpleAttribute.ConformType(rule.GetDefaultValue()));
 		this.rule = rule;
 	}
 

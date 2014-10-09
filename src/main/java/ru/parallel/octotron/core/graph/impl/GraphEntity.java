@@ -14,7 +14,7 @@ import ru.parallel.octotron.core.primitive.UniqueID;
  * some entity, that resides in model_old<br>
  * all operations with it go through the \graph interface, no caching<br>
  * */
-abstract class GraphEntity
+public abstract class GraphEntity
 {
 	protected final IGraph graph;
 	protected final UniqueID<EGraphType> id;

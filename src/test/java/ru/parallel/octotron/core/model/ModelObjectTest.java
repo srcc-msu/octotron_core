@@ -3,22 +3,11 @@ package ru.parallel.octotron.core.model;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.logic.ReactionTemplate;
-import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.logic.impl.Equals;
-import ru.parallel.octotron.core.primitive.EDependencyType;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class ModelObjectTest
 {

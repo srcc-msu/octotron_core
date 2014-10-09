@@ -4,7 +4,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.attributes.AbstractAttribute;
-import ru.parallel.octotron.core.attributes.EAttributeType;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.IModelAttribute;

@@ -61,6 +61,6 @@ public class Importer implements Runnable
 
 		result.add(sensor);
 
-		ExecutionController.Get().CheckReactions(result);
+		new ReactionInvoker(result).run();
 	}
 }

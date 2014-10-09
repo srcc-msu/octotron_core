@@ -1,6 +1,6 @@
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.attributes.EAttributeType;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.attributes.IAttributeBuilder;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;

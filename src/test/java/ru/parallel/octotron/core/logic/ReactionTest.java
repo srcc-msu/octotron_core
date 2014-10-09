@@ -5,17 +5,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.logic.impl.Equals;
-import ru.parallel.octotron.core.logic.impl.NotEquals;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.reactions.PreparedResponse;
-
-import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -84,78 +79,6 @@ public class ReactionTest
 
 		assertEquals(1, reaction1.GetState());
 		assertEquals(2, reaction2.GetState());
-	}
-
-	@Test
-	public void TestAddMarker()
-	{
-		ModelObject entity = ReactionTest.obj_factory.Create();
-
-		entity.GetBuilder().DeclareSensor("test", 0);
-
-		ReactionTemplate reaction_template = new Equals("test", 1);
-
-		entity.GetBuilder().AddReaction(reaction_template);
-
-		Reaction reaction
-			= Iterables.get(entity.GetAttribute("test").GetReactions(), 0);
-
-		reaction.AddMarker("test1", true);
-		reaction.AddMarker("test2", false);
-	}
-
-	@Test
-	public void TestDeleteMarker()
-	{
-		ModelObject entity = ReactionTest.obj_factory.Create();
-
-		entity.GetBuilder().DeclareSensor("test", 0);
-
-		ReactionTemplate reaction_template = new Equals("test", 1);
-
-		entity.GetBuilder().AddReaction(reaction_template);
-
-		Reaction reaction
-			= Iterables.get(entity.GetAttribute("test").GetReactions(), 0);
-
-		assertEquals(0, reaction.GetMarkers().size());
-
-		long id1 = reaction.AddMarker("test1", true);
-		long id2 = reaction.AddMarker("test2", false);
-
-		assertEquals(2, reaction.GetMarkers().size());
-
-		reaction.DeleteMarker(id1);
-		assertEquals(1, reaction.GetMarkers().size());
-
-		reaction.DeleteMarker(id2);
-		assertEquals(0, reaction.GetMarkers().size());
-	}
-
-	@Test
-	public void TestGetMarkers()
-	{
-		ModelObject entity = ReactionTest.obj_factory.Create();
-
-		entity.GetBuilder().DeclareSensor("test", 0);
-
-		ReactionTemplate reaction_template = new Equals("test", 1);
-
-		entity.GetBuilder().AddReaction(reaction_template);
-
-		Reaction reaction
-			= Iterables.get(entity.GetAttribute("test").GetReactions(), 0);
-
-		final int N = 10;
-
-		for(int i = 0; i < N; i++)
-		{
-			reaction.AddMarker("test" + i, true);
-
-			Collection<Marker> markers = reaction.GetMarkers();
-
-			assertEquals(i + 1, markers.size());
-		}
 	}
 
 	@Test

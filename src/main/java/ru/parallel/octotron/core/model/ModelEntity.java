@@ -7,6 +7,7 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.Persistent;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ModelEntity extends UniqueID<EEntityType>
+public abstract class ModelEntity extends Persistent<EEntityType>
 {
 	public abstract static class ModelEntityBuilder<T extends ModelEntity>
 	{
@@ -24,7 +25,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 
 		ModelEntityBuilder(T entity)
 		{
-			if(ModelService.Get().GetMode() != ModelService.EMode.CREATION)
+			if(ModelService.Get().GetMode() == ModelService.EMode.OPERATION)
 				throw new ExceptionModelFail("objects creation is not allowed in operational mode");
 
 			this.entity = entity;
@@ -106,7 +107,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 		}
 	}
 
-	public abstract ModelEntityBuilder GetBuilder();
+	public abstract ModelEntityBuilder<?> GetBuilder();
 
 	final Map<String, IModelAttribute> attributes_map;
 
@@ -117,6 +118,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 	public ModelEntity(EEntityType type)
 	{
 		super(type);
+
 		attributes_map = new HashMap<>();
 		const_map = new HashMap<>();
 		sensor_map = new HashMap<>();

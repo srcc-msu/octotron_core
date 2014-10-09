@@ -1,6 +1,7 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 
 public class SensorAttribute extends AbstractModAttribute
 {
@@ -20,7 +21,7 @@ public class SensorAttribute extends AbstractModAttribute
 
 	public SensorAttribute(ModelEntity parent, String name, Object value)
 	{
-		super(parent, name, value);
+		super(EAttributeType.SENSOR, parent, name, value);
 	}
 
 	@Override

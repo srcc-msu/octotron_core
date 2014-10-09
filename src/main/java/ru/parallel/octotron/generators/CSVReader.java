@@ -84,6 +84,6 @@ public final class CSVReader
 	public static <T extends ModelEntity> void Declare(T object, String file_name)
 		throws ExceptionParseError, IOException
 	{
-		Declare(Lists.newArrayList(object), file_name);
+		Declare(java.util.Collections.singleton(object), file_name);
 	}
 }

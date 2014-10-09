@@ -115,20 +115,13 @@ public class RuntimeService
 
 		try
 		{
-			String system = reader.readLine();
-			String request = reader.readLine();
-			String dsl = reader.readLine();
+			String line;
+			while((line = reader.readLine()) != null)
+			{
+				String[] pair = line.split("=");
 
-			if(system == null || request == null || dsl == null)
-				throw new ExceptionSystemError("could not read version information");
-
-			String[] system_arr = system.split("=");
-			String[] request_arr = request.split("=");
-			String[] dsl_arr = dsl.split("=");
-
-			version.put(system_arr[0], system_arr[1]);
-			version.put(request_arr[0], request_arr[1]);
-			version.put(dsl_arr[0], dsl_arr[1]);
+				version.put(pair[0], pair[1]);
+			}
 		}
 		catch (IOException e)
 		{

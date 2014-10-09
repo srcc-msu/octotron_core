@@ -1,6 +1,9 @@
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.graph.impl.GraphEntity;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.Persistent;
 
 public class ModelLink extends ModelEntity
 {
@@ -12,12 +15,23 @@ public class ModelLink extends ModelEntity
 		}
 	}
 
+	@Override
+	public void InitPersistent()
+	{
+		persistent = ModelService.Get()
+			.GetPersistentLink(this
+				, (GraphObject)Source().GetPersistent()
+				, (GraphObject)Target().GetPersistent()
+				, "link");
+	}
+
 	private ModelObject source;
 	private ModelObject target;
 
 	public ModelLink(ModelObject source, ModelObject target)
 	{
 		super(EEntityType.LINK);
+
 		this.target = target;
 		this.source = source;
 	}

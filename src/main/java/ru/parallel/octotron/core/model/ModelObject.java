@@ -43,11 +43,11 @@ public class ModelObject extends ModelEntity
 	{
 		super(EEntityType.OBJECT);
 
-		out_links = new ModelLinkList ();
-		in_links = new ModelLinkList ();
+		out_links = new ModelLinkList();
+		in_links = new ModelLinkList();
 
-		out_neighbors = new ModelObjectList ();
-		in_neighbors = new ModelObjectList ();
+		out_neighbors = new ModelObjectList();
+		in_neighbors = new ModelObjectList();
 	}
 
 	public ModelLinkList GetInLinks()

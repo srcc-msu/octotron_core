@@ -72,6 +72,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		link.GetBuilder().DeclareConst("source", from.GetID());
 		link.GetBuilder().DeclareConst("target", to.GetID());
 
+		link.InitPersistent();
 		return link;
 	}
 

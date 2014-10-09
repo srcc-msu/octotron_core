@@ -11,6 +11,7 @@ import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -226,5 +227,10 @@ public final class GraphService
 	public String ExportDot(Collection<GraphObject> list)
 	{
 		return graph.ExportDot(UidsFromList(list));
+	}
+
+	public IGraph GetGraph()
+	{
+		return graph;
 	}
 }

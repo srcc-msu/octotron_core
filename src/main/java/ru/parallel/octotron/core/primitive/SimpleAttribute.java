@@ -104,9 +104,4 @@ public class SimpleAttribute
 		else
 			throw new ExceptionModelFail("unsupported type: " + value.getClass());
 	}
-
-	public String GetStringValue()
-	{
-		return ValueToStr(GetValue());
-	}
 }

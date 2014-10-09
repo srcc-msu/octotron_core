@@ -1,6 +1,5 @@
 package ru.parallel.octotron.core.model;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

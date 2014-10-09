@@ -1,27 +1,28 @@
 package ru.parallel.octotron.core.logic;
 
+import ru.parallel.octotron.core.graph.EGraphType;
+import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.Persistent;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.utils.JavaUtils;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-public class Reaction extends UniqueID<EEntityType>
+public class Reaction extends Persistent<EEntityType>
 {
 	private final ReactionTemplate template;
 	private final ModelEntity parent;
 
-	private Map<Long, Marker> markers;
+	private long delay;
+	private long repeat;
 
 	private long state;
 	private long stat;
-
-	private long delay;
-	private long repeat;
+	private String descr;
+	private boolean suppress;
 
 	public static final long STATE_NONE = 0;
 	public static final long STATE_STARTED = 1;
@@ -34,16 +35,28 @@ public class Reaction extends UniqueID<EEntityType>
 		this.template = template;
 		this.parent = parent;
 
-		markers = new HashMap<>();
+		delay = 0;
+		repeat = 0;
 
-		state = 0;
-		stat = 0;
+		InitPersistent();
+
+		state = (Long) GetPersistentAttribute("state", 0L);
+		stat = (Long) GetPersistentAttribute("stat", 0L);
+		descr = (String) GetPersistentAttribute("descr", "");
+		suppress = (Boolean) GetPersistentAttribute("suppress", false);
+
+		StorePersistentAttribute("state", state);
+		StorePersistentAttribute("stat", stat);
+		StorePersistentAttribute("descr", descr);
+		StorePersistentAttribute("suppress", suppress);
 	}
 
 	public ReactionTemplate GetTemplate()
 	{
 		return template;
 	}
+
+// -------------
 
 	public long GetState()
 	{
@@ -53,30 +66,44 @@ public class Reaction extends UniqueID<EEntityType>
 	public void SetState(long new_state)
 	{
 		state = new_state;
+		StorePersistentAttribute("state", state);
 	}
 
-	public long AddMarker(String descr, boolean suppress)
-	{
-		Marker m = new Marker(this, descr, suppress);
+// -------------
 
-		markers.put(m.GetID(), m);
-		return m.GetID();
+	private void IncStat()
+	{
+		stat++;
+		StorePersistentAttribute("stat", stat);
 	}
 
-	public Collection<Marker> GetMarkers()
+	public long GetStat()
 	{
-		return markers.values();
+		return stat;
 	}
 
-	public void DeleteMarker(long id)
+	public void ResetStat()
 	{
-		markers.remove(id);
+		stat = 0;
+	}
+
+// -------------
+
+	public void Mark(String descr, boolean suppress)
+	{
+		this.descr = descr;
+		this.suppress = suppress;
+
+		StorePersistentAttribute("descr", descr);
+		StorePersistentAttribute("suppress", suppress);
 	}
 
 	@Nullable
 	public Response Process()
 	{
 		boolean needed = template.ReactionNeeded(parent);
+
+		Response result = null;
 
 		if(needed)
 		{
@@ -90,7 +117,7 @@ public class Reaction extends UniqueID<EEntityType>
 					IncStat();
 					SetState(STATE_EXECUTED);
 
-					return template.GetResponse();
+					result = template.GetResponse();
 				}
 				else
 				{
@@ -106,7 +133,7 @@ public class Reaction extends UniqueID<EEntityType>
 					IncStat();
 					SetState(STATE_EXECUTED);
 
-					return template.GetResponse();
+					result =  template.GetResponse();
 				}
 				else
 				{
@@ -118,7 +145,7 @@ public class Reaction extends UniqueID<EEntityType>
 				if(template.IsRepeatable())
 				{
 					IncStat();
-					return template.GetResponse();
+					result = template.GetResponse();
 				}
 				else
 				{
@@ -145,11 +172,11 @@ public class Reaction extends UniqueID<EEntityType>
 				DropRepeat();
 
 				if(template.GetRecoverResponse() != null)
-					return template.GetRecoverResponse();
+					result = template.GetRecoverResponse();
 			}
 		}
 
-		return null;
+		return suppress ? result : null;
 	}
 
 
@@ -189,22 +216,5 @@ public class Reaction extends UniqueID<EEntityType>
 	private void DropRepeat()
 	{
 		repeat = 0;
-	}
-
-// -------------
-
-	private void IncStat()
-	{
-		stat++;
-	}
-
-	public long GetStat()
-	{
-		return stat;
-	}
-
-	public void ResetStat()
-	{
-		stat = 0;
 	}
 }

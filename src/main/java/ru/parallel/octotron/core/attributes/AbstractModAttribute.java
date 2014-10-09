@@ -6,6 +6,7 @@ import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.logic.ExecutionController;
 import ru.parallel.octotron.reactions.PreparedResponse;
@@ -21,7 +22,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 
 		public AbstractModAttributeBuilder(T attribute)
 		{
-			if(ModelService.Get().GetMode() != ModelService.EMode.CREATION)
+			if (ModelService.Get().GetMode() == ModelService.EMode.OPERATION)
 				throw new ExceptionModelFail("objects creation is not allowed in operational mode");
 
 			this.attribute = attribute;
@@ -51,14 +52,14 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	protected final Map<Long, Reaction> reactions;
 	protected final AttributeList<VarAttribute> dependants;
 
-	AbstractModAttribute(ModelEntity parent, String name, Object value)
+	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Object value)
 	{
-		super(parent, name, value);
+		super(type, parent, name, value);
 
 		history = new History();
 
-		is_valid = true;
-		ctime = 0;
+		is_valid = (Boolean) GetPersistentAttribute("is_valid", true);
+		ctime = (Long) GetPersistentAttribute("ctime", 0L);
 
 		reactions = new HashMap<>();
 		dependants = new AttributeList<>();
@@ -67,19 +68,32 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	@Override
 	public boolean IsValid()
 	{
-		return is_valid && ctime != 0;
+		return is_valid && GetCTime() != 0L;
 	}
 
 	@Override
 	public void SetValid()
 	{
 		is_valid = true;
+		StorePersistentAttribute("is_valid", is_valid);
 	}
 
 	@Override
 	public void SetInvalid()
 	{
 		is_valid = false;
+		StorePersistentAttribute("is_valid", is_valid);
+	}
+
+	public long GetCTime()
+	{
+		return ctime;
+	}
+
+	public void SetCTime(long new_ctime)
+	{
+		ctime = new_ctime;
+		StorePersistentAttribute("ctime", new_ctime);
 	}
 
 	public Reaction GetReaction(long id)
@@ -95,10 +109,9 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		if(last == null)
 			return 0.0;
 
-		long cur_ctime = ctime;
 		long last_ctime = last.ctime;
 
-		if(cur_ctime - last_ctime == 0) // speed is zero
+		if(GetCTime() - last_ctime == 0) // speed is zero
 			return 0.0;
 
 		if(last_ctime == 0) // last value was default
@@ -106,7 +119,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 
 		double diff = ToDouble() - (Double)last.value;
 
-		return diff / (cur_ctime - last_ctime);
+		return diff / (GetCTime() - last_ctime);
 	}
 
 	protected boolean Update(Object new_value)
@@ -114,11 +127,11 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		for(Reaction reaction : GetReactions())
 			reaction.Repeat(new_value);
 
-		boolean result = value != new_value;
-		history.Add(value, ctime);
+		boolean result = (GetValue() != new_value);
+		history.Add(GetValue(), GetCTime());
 
-		ctime = JavaUtils.GetTimestamp();
-		value = new_value;
+		SetCTime(JavaUtils.GetTimestamp());
+		SetValue(new_value);
 
 		return result;
 	}

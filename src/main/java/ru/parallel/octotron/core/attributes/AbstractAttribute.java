@@ -1,20 +1,55 @@
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.core.primitive.Persistent;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
-public abstract class AbstractAttribute extends SimpleAttribute implements IAttribute
+public abstract class AbstractAttribute extends Persistent<EAttributeType> implements IAttribute
 {
 	public static final double EPSILON = 0.00001;
 
 	private final ModelEntity parent;
+	private final String name;
+	private Object value;
 
-	AbstractAttribute(ModelEntity parent, String name, Object value)
+	AbstractAttribute(EAttributeType type, ModelEntity parent, String name, Object value)
 	{
-		super(name, value);
+		super(type);
+		this.name = name;
 		this.parent = parent;
+
+		this.value = GetPersistentAttribute("value", value);
+		StorePersistentAttribute("value", this.value);
+		StorePersistentAttribute("name", name);
+	}
+
+	@Override
+	public String GetName()
+	{
+		return name;
+	}
+
+	@Override
+	public Object GetValue()
+	{
+		return value;
+	}
+
+	protected void SetValue(Object new_value)
+	{
+		value = new_value;
+		StorePersistentAttribute("value", value);
+	}
+
+	@Override
+	public String GetStringValue()
+	{
+		return SimpleAttribute.ValueToStr(GetValue());
 	}
 
 	private void CheckType(Object a_value)
@@ -22,7 +57,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 		if(!GetValue().getClass().equals(a_value.getClass()))
 		{
 			String error = String.format("mismatch types: %s=%s[%s] and %s[%s]"
-				, name, GetValue(), GetValue().getClass().getName(), a_value, a_value.getClass().getName());
+				, GetName(), GetValue(), GetValue().getClass().getName(), a_value, a_value.getClass().getName());
 
 			throw new ExceptionModelFail(error);
 		}
@@ -33,7 +68,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 		if(!GetValue().getClass().equals(check_class))
 		{
 			String error = String.format("mismatch types: %s=%s[%s] and [%s]"
-				, name, GetValue(), GetValue().getClass().getName(), check_class.getName());
+				, GetName(), GetValue(), GetValue().getClass().getName(), check_class.getName());
 
 			throw new ExceptionModelFail(error);
 		}
@@ -93,7 +128,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 	@Override
 	public final boolean eq(Object new_value)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckType(new_value);
 
 		return GetValue().equals(new_value);
@@ -102,7 +137,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 	@Override
 	public final boolean aeq(Object new_value, Object aprx)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();
@@ -126,7 +161,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 	@Override
 	public final boolean gt(Object new_value)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();
@@ -142,7 +177,7 @@ public abstract class AbstractAttribute extends SimpleAttribute implements IAttr
 	@Override
 	public final boolean lt(Object new_value)
 	{
-		new_value = ConformType(new_value);
+		new_value = SimpleAttribute.ConformType(new_value);
 		CheckType(new_value);
 
 		Class<?> my_class = GetValue().getClass();

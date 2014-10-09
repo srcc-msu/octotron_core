@@ -17,6 +17,7 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.logic.ExecutionController;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
@@ -109,13 +110,13 @@ public class Start
 		{
 			if(FileUtils.IsDirEmpty(settings.GetDbPath() + settings.GetModelName()))
 			{
-				ModelService.Init(ModelService.EMode.CREATION, settings.GetDbPath(), settings.GetModelName());
 				LOGGER.log(Level.INFO, "No DB found, creating a new in: " + settings.GetDbPath());
+				ModelService.Init(ModelService.EMode.CREATION, settings.GetDbPath(), settings.GetModelName());
 			}
 			else
 			{
-				ModelService.Init(ModelService.EMode.LOAD, settings.GetDbPath(), settings.GetModelName());
 				LOGGER.log(Level.INFO, "DB found, attempting to use data from: " + settings.GetDbPath());
+				ModelService.Init(ModelService.EMode.LOAD, settings.GetDbPath(), settings.GetModelName());
 			}
 		}
 		else
@@ -140,8 +141,6 @@ public class Start
 		if(settings.GetSysPath() != null)
 			sys.path.append(new PyString(settings.GetSysPath()));
 
-		ModelService.Init(ModelService.EMode.CREATION);
-
 		LOGGER.log(Level.INFO, "Creating model...");
 
 		interpreter.execfile(settings.GetModelPath() + '/' + settings.GetModelMain());
@@ -149,6 +148,7 @@ public class Start
 		LOGGER.log(Level.INFO, "done");
 
 		End(settings);
+		((Neo4jGraph)ModelService.Get().graph).GetTransaction().Close();
 	}
 
 	public static void PrintStat()

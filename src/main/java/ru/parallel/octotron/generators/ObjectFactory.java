@@ -46,10 +46,6 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 		object.GetBuilder().DeclareVar(rules);
 		object.GetBuilder().AddReaction(reactions);
 
-		object.GetBuilder().DeclareSensor("tt1", 1);
-		object.GetBuilder().DeclareSensor("tt2", 2);
-		object.GetBuilder().DeclareVar(new Match("ttt", "tt1", "tt2"));
-
 		return object;
 	}
 

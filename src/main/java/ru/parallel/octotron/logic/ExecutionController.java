@@ -7,6 +7,7 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -16,12 +17,12 @@ import ru.parallel.octotron.http.HTTPServer;
 import ru.parallel.octotron.http.HttpExchangeWrapper;
 import ru.parallel.octotron.http.ModelRequestExecutor;
 import ru.parallel.octotron.http.ParsedModelRequest;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.FileUtils;
 
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -101,6 +102,18 @@ public class ExecutionController
 		http = new HTTPServer(settings, http_executor);
 
 		stat = new Statistics();
+
+		Runnable checker = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				((Neo4jGraph)GraphService.Get().GetGraph()).CheckTransaction();
+			}
+		};
+
+		import_executor.execute(checker);
+		reactions_invoker.execute(checker);
 	}
 
 	public void Import(ModelObject object, SimpleAttribute attribute)
@@ -190,6 +203,18 @@ public class ExecutionController
 
 		// silently ignore all new requests
 		http_executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+
+		Runnable finisher = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				((Neo4jGraph)GraphService.Get().GetGraph()).GetTransaction().Close();
+			}
+		};
+
+		import_executor.execute(finisher);
+		reactions_invoker.execute(finisher);
 
 		ShutdownExecutor(http_executor);
 		ShutdownExecutor(request_executor);

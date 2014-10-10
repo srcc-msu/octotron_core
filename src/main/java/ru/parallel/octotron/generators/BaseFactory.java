@@ -8,6 +8,7 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import java.util.List;
  * */
 public abstract class BaseFactory<T>
 {
+	protected final ModelService service;
 /**
  * attribute template that will be used for all created entities<br>
  * must be cloned<br>
@@ -30,20 +32,22 @@ public abstract class BaseFactory<T>
 	protected final List<Rule> rules;
 	protected final List<ReactionTemplate> reactions;
 
-	protected BaseFactory(List<SimpleAttribute> constants
+	protected BaseFactory(ModelService service, List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
 		, List<Rule> rules
 		, List<ReactionTemplate> reactions)
 	{
+		this.service = service;
 		this.constants = constants;
 		this.sensors = sensors;
 		this.rules = rules;
 		this.reactions = reactions;
 	}
 
-	protected BaseFactory()
+	protected BaseFactory(ModelService service)
 	{
-		this(new LinkedList<SimpleAttribute>()
+		this(service
+			, new LinkedList<SimpleAttribute>()
 			, new LinkedList<SimpleAttribute>()
 			, new LinkedList<Rule>()
 			, new LinkedList<ReactionTemplate>());

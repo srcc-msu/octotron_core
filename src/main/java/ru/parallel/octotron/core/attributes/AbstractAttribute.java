@@ -4,12 +4,11 @@ import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.Persistent;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
-public abstract class AbstractAttribute extends Persistent<EAttributeType> implements IAttribute
+public abstract class AbstractAttribute extends UniqueID<EAttributeType> implements IAttribute
 {
 	public static final double EPSILON = 0.00001;
 
@@ -23,9 +22,7 @@ public abstract class AbstractAttribute extends Persistent<EAttributeType> imple
 		this.name = name;
 		this.parent = parent;
 
-		this.value = GetPersistentAttribute("value", value);
-		StorePersistentAttribute("value", this.value);
-		StorePersistentAttribute("name", name);
+		this.value = value;
 	}
 
 	@Override
@@ -43,7 +40,6 @@ public abstract class AbstractAttribute extends Persistent<EAttributeType> imple
 	protected void SetValue(Object new_value)
 	{
 		value = new_value;
-		StorePersistentAttribute("value", value);
 	}
 
 	@Override

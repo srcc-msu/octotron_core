@@ -13,6 +13,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * simplifies statistics collection
+ * add is thread safe, read functions are not
+ * */
 public class Statistics
 {
 	public static class Stat
@@ -37,18 +41,23 @@ public class Statistics
 		timer_60.Start();
 	}
 
+	private final Object lock = new Object();
+
 	public void Add(String name, int add, int queue)
 	{
-		Stat stat = stats.get(name);
-
-		if(stat == null)
+		synchronized(lock)
 		{
-			stat = new Stat(name);
-			stats.put(name, stat);
-		}
+			Stat stat = stats.get(name);
 
-		stat.total.Collect(add);
-		stat.queue.Collect(queue);
+			if (stat == null)
+			{
+				stat = new Stat(name);
+				stats.put(name, stat);
+			}
+
+			stat.total.Collect(add);
+			stat.queue.Collect(queue);
+		}
 	}
 
 	private static Map<String, Object> GetAvgs(Metric metric, String name)
@@ -92,15 +101,18 @@ public class Statistics
 
 	public void Process()
 	{
-		if(timer_60.Get() > 60) /*secs in min..*/
+		synchronized(lock)
 		{
-			for(Stat stat : stats.values())
+			if (timer_60.Get() > 60) /*secs in min..*/
 			{
-				stat.queue.Reset();
-				stat.total.Reset();
-			}
+				for (Stat stat : stats.values())
+				{
+					stat.queue.Reset();
+					stat.total.Reset();
+				}
 
-			timer_60.Start();
+				timer_60.Start();
+			}
 		}
 	}
 }

@@ -14,6 +14,8 @@ import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
@@ -23,15 +25,21 @@ import static org.junit.Assert.assertEquals;
 //they do not work because invalid or wrong ctime, need to fix somehow
 public class ComputeTests
 {
-	private static ModelObject obj;
+	private static Context context;
+
+	@BeforeClass
+	public static void InitController() throws Exception
+	{
+		context = Context.CreateTestContext(0);
+	}
+
+	private static ModelObject object;
 
 	@BeforeClass
 	public static void Init()
 		throws ExceptionSystemError
 	{
-		ModelService.Init(ModelService.EMode.CREATION);
-
-		ObjectFactory in = new ObjectFactory()
+		ObjectFactory in = new ObjectFactory(context.model_service)
 			.Sensors(new SimpleAttribute("in_d1", 10.0))
 			.Sensors(new SimpleAttribute("in_l1", 20))
 			.Sensors(new SimpleAttribute("in_b1", true))
@@ -45,7 +53,7 @@ public class ComputeTests
 			.Sensors(new SimpleAttribute("str1", "yes"))
 			.Sensors(new SimpleAttribute("str2", "yes"));
 
-		ObjectFactory out = new ObjectFactory()
+		ObjectFactory out = new ObjectFactory(context.model_service)
 			.Sensors(new SimpleAttribute("out_d1", 20.0))
 			.Sensors(new SimpleAttribute("out_l1", 10))
 			.Sensors(new SimpleAttribute("out_b1", false))
@@ -61,7 +69,7 @@ public class ComputeTests
 			.Sensors(new SimpleAttribute("mismatch_num", 333))
 			.Sensors(new SimpleAttribute("match_num", 444));
 
-		ObjectFactory self = new ObjectFactory()
+		ObjectFactory self = new ObjectFactory(context.model_service)
 			.Sensors(new SimpleAttribute("d1", 0.0))
 			.Sensors(new SimpleAttribute("d2", 1.0))
 			.Sensors(new SimpleAttribute("l1", 2))
@@ -77,24 +85,24 @@ public class ComputeTests
 			.Sensors(new SimpleAttribute("mismatch_num", 222))
 			.Sensors(new SimpleAttribute("match_num", 444));
 
-		obj = self.Create();
+		object = self.Create();
 
-		LinkFactory links = new LinkFactory()
+		LinkFactory links = new LinkFactory(context.model_service)
 			.Constants(new SimpleAttribute("type", "test"));
 
 		ModelObjectList ins = in.Create(3);
 		ModelObjectList outs = out.Create(4);
 
-		Enumerator.Sequence(ins, "in_lid");
-		Enumerator.Sequence(outs, "out_lid");
+		Enumerator.Sequence(context.model_service, ins, "in_lid");
+		Enumerator.Sequence(context.model_service, outs, "out_lid");
 
-		links.EveryToOne(ins, obj);
+		links.EveryToOne(ins, object);
 
-		links.OneToEvery(obj, outs);
+		links.OneToEvery(object, outs);
 
 		ModelObjectList objects = new ModelObjectList();
 
-		objects.add(obj);
+		objects.add(object);
 		objects = objects.append(ins);
 		objects = objects.append(outs);
 
@@ -102,13 +110,6 @@ public class ComputeTests
 			for(IModelAttribute attr : entity.GetAttributes())
 				if(attr.GetType() == EAttributeType.SENSOR)
 					((SensorAttribute)attr).Update(attr.GetValue());
-	}
-
-	@AfterClass
-	public static void Delete()
-		throws ExceptionSystemError
-	{
-		ModelService.Finish();
 	}
 
 	@Test
@@ -123,10 +124,10 @@ public class ComputeTests
 		AggregateDoubleSum all_rule
 			= new AggregateDoubleSum("res", EDependencyType.ALL, "d1", "d2");
 
-		assertEquals(  1.0, (Double)self_rule.Compute(obj), AbstractAttribute.EPSILON);
-		assertEquals( 63.0, (Double)  in_rule.Compute(obj), AbstractAttribute.EPSILON);
-		assertEquals(164.0, (Double) out_rule.Compute(obj), AbstractAttribute.EPSILON);
-		assertEquals(228.0, (Double) all_rule.Compute(obj), AbstractAttribute.EPSILON);
+		assertEquals(  1.0, (Double)self_rule.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals( 63.0, (Double)  in_rule.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals(164.0, (Double) out_rule.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals(228.0, (Double) all_rule.Compute(object), AbstractAttribute.EPSILON);
 	}
 
 	@Test
@@ -141,10 +142,10 @@ public class ComputeTests
 		AggregateLongSum all_rule
 			= new AggregateLongSum("res", EDependencyType.ALL, "l1", "l2");
 
-		assertEquals(  5L, self_rule.Compute(obj));
-		assertEquals(123L,   in_rule.Compute(obj));
-		assertEquals( 84L,  out_rule.Compute(obj));
-		assertEquals(212L,  all_rule.Compute(obj));
+		assertEquals(  5L, self_rule.Compute(object));
+		assertEquals(123L,   in_rule.Compute(object));
+		assertEquals( 84L,  out_rule.Compute(object));
+		assertEquals(212L,  all_rule.Compute(object));
 	}
 
 	@Test
@@ -159,10 +160,10 @@ public class ComputeTests
 		AggregateMatchCount all_rule
 			= new AggregateMatchCount("res", true, EDependencyType.ALL, "b1", "b2");
 
-		assertEquals(1L, self_rule.Compute(obj));
-		assertEquals(6L,   in_rule.Compute(obj));
-		assertEquals(0L,  out_rule.Compute(obj));
-		assertEquals(7L,  all_rule.Compute(obj));
+		assertEquals(1L, self_rule.Compute(object));
+		assertEquals(6L,   in_rule.Compute(object));
+		assertEquals(0L,  out_rule.Compute(object));
+		assertEquals(7L,  all_rule.Compute(object));
 	}
 
 	@Test
@@ -177,10 +178,10 @@ public class ComputeTests
 		AggregateNotMatchCount all_rule
 			= new AggregateNotMatchCount("res", true, EDependencyType.ALL, "b1", "b2");
 
-		assertEquals(1L, self_rule.Compute(obj));
-		assertEquals(0L,   in_rule.Compute(obj));
-		assertEquals(8L,  out_rule.Compute(obj));
-		assertEquals(9L,  all_rule.Compute(obj));
+		assertEquals(1L, self_rule.Compute(object));
+		assertEquals(0L,   in_rule.Compute(object));
+		assertEquals(8L,  out_rule.Compute(object));
+		assertEquals(9L,  all_rule.Compute(object));
 	}
 
 	@Test
@@ -189,8 +190,8 @@ public class ComputeTests
 		ArgMatchAprx rule1 = new ArgMatchAprx("test", "d1", "d2", AbstractAttribute.EPSILON);
 		ArgMatchAprx rule2 = new ArgMatchAprx("test", "d1", "d2", 2.0);
 
-		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true , rule2.Compute(obj));
+		assertEquals(false, rule1.Compute(object));
+		assertEquals(true , rule2.Compute(object));
 	}
 
 	@Test
@@ -199,8 +200,8 @@ public class ComputeTests
 		ArgMatch rule1 = new ArgMatch("test", "l1", "l2");
 		ArgMatch rule2 = new ArgMatch("test", "str1", "str2");
 
-		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true , rule2.Compute(obj));
+		assertEquals(false, rule1.Compute(object));
+		assertEquals(true , rule2.Compute(object));
 	}
 
 	@Test
@@ -209,8 +210,8 @@ public class ComputeTests
 		ContainsString rule1 = new ContainsString("test", "str1", "may");
 		ContainsString rule2 = new ContainsString("test", "str2", "bee");
 
-		assertEquals(true , rule1.Compute(obj));
-		assertEquals(false, rule2.Compute(obj));
+		assertEquals(true , rule1.Compute(object));
+		assertEquals(false, rule2.Compute(object));
 	}
 
 	@Test
@@ -221,10 +222,10 @@ public class ComputeTests
 		LogicalAnd rule3 = new LogicalAnd("test", "bf2");
 		LogicalAnd rule4 = new LogicalAnd("test", "bf1", "bf2");
 
-		assertEquals(true , rule1.Compute(obj));
-		assertEquals(false, rule2.Compute(obj));
-		assertEquals(false, rule3.Compute(obj));
-		assertEquals(false, rule4.Compute(obj));
+		assertEquals(true , rule1.Compute(object));
+		assertEquals(false, rule2.Compute(object));
+		assertEquals(false, rule3.Compute(object));
+		assertEquals(false, rule4.Compute(object));
 	}
 
 	@Test
@@ -235,10 +236,10 @@ public class ComputeTests
 		LogicalOr rule3 = new LogicalOr("test", "bt1");
 		LogicalOr rule4 = new LogicalOr("test", "bf1", "bf2");
 
-		assertEquals(true , rule1.Compute(obj));
-		assertEquals(true , rule2.Compute(obj));
-		assertEquals(true , rule3.Compute(obj));
-		assertEquals(false, rule4.Compute(obj));
+		assertEquals(true , rule1.Compute(object));
+		assertEquals(true , rule2.Compute(object));
+		assertEquals(true , rule3.Compute(object));
+		assertEquals(false, rule4.Compute(object));
 	}
 
 	@Test
@@ -249,10 +250,10 @@ public class ComputeTests
 		LowerArgThreshold rule3 = new LowerArgThreshold("test", "d1", "d2");
 		LowerArgThreshold rule4 = new LowerArgThreshold("test", "d2", "d1");
 
-		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true , rule2.Compute(obj));
-		assertEquals(false, rule3.Compute(obj));
-		assertEquals(true , rule4.Compute(obj));
+		assertEquals(false, rule1.Compute(object));
+		assertEquals(true , rule2.Compute(object));
+		assertEquals(false, rule3.Compute(object));
+		assertEquals(true , rule4.Compute(object));
 	}
 
 	@Test
@@ -263,10 +264,10 @@ public class ComputeTests
 		LowerThreshold rule3 = new LowerThreshold("test", "d1", 10.0);
 		LowerThreshold rule4 = new LowerThreshold("test", "d2", 0.0);
 
-		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true , rule2.Compute(obj));
-		assertEquals(false, rule3.Compute(obj));
-		assertEquals(true , rule4.Compute(obj));
+		assertEquals(false, rule1.Compute(object));
+		assertEquals(true , rule2.Compute(object));
+		assertEquals(false, rule3.Compute(object));
+		assertEquals(true , rule4.Compute(object));
 	}
 
 	@Test
@@ -278,10 +279,10 @@ public class ComputeTests
 		MatchAprx rule3 = new MatchAprx("test", "l1", 0L, 1L);
 		MatchAprx rule4 = new MatchAprx("test", "l2", -1L, 5L);
 
-		assertEquals(true, rule1.Compute(obj));
-		assertEquals(true , rule2.Compute(obj));
-		assertEquals(false, rule3.Compute(obj));
-		assertEquals(true , rule4.Compute(obj));
+		assertEquals(true, rule1.Compute(object));
+		assertEquals(true , rule2.Compute(object));
+		assertEquals(false, rule3.Compute(object));
+		assertEquals(true , rule4.Compute(object));
 	}
 
 	@Test
@@ -293,10 +294,10 @@ public class ComputeTests
 		Match rule3 = new Match("test", "l1", 2);
 		Match rule4 = new Match("test", "l2", -1);
 
-		assertEquals(true , rule1.Compute(obj));
-		assertEquals(false, rule2.Compute(obj));
-		assertEquals(true , rule3.Compute(obj));
-		assertEquals(false, rule4.Compute(obj));
+		assertEquals(true , rule1.Compute(object));
+		assertEquals(false, rule2.Compute(object));
+		assertEquals(true , rule3.Compute(object));
+		assertEquals(false, rule4.Compute(object));
 	}
 
 	@Test
@@ -305,8 +306,8 @@ public class ComputeTests
 		MirrorBoolean rule1 = new MirrorBoolean("in_b1", "in_lid", 0);
 		MirrorBoolean rule2 = new MirrorBoolean("out_b1", "out_lid", 0);
 
-		assertEquals(true, rule1.Compute(obj));
-		assertEquals(false, rule2.Compute(obj));
+		assertEquals(true, rule1.Compute(object));
+		assertEquals(false, rule2.Compute(object));
 	}
 
 	@Test
@@ -315,8 +316,8 @@ public class ComputeTests
 		MirrorDouble rule1 = new MirrorDouble("in_d1", "in_lid", 1);
 		MirrorDouble rule2 = new MirrorDouble("out_d1", "out_lid", 1);
 
-		assertEquals(10.0, rule1.Compute(obj));
-		assertEquals(20.0, rule2.Compute(obj));
+		assertEquals(10.0, rule1.Compute(object));
+		assertEquals(20.0, rule2.Compute(object));
 	}
 
 	@Test
@@ -325,8 +326,8 @@ public class ComputeTests
 		MirrorDouble rule1 = new MirrorDouble("in_l1", "in_lid", 2);
 		MirrorDouble rule2 = new MirrorDouble("out_l1", "out_lid", 2);
 
-		assertEquals(20L, rule1.Compute(obj));
-		assertEquals(10L, rule2.Compute(obj));
+		assertEquals(20L, rule1.Compute(object));
+		assertEquals(10L, rule2.Compute(object));
 	}
 
 	@Test
@@ -335,8 +336,8 @@ public class ComputeTests
 		MirrorDouble rule1 = new MirrorDouble("in_str1", "in_lid", 2);
 		MirrorDouble rule2 = new MirrorDouble("out_str1", "out_lid", 2);
 
-		assertEquals("yes", rule1.Compute(obj));
-		assertEquals("no", rule2.Compute(obj));
+		assertEquals("yes", rule1.Compute(object));
+		assertEquals("no", rule2.Compute(object));
 	}
 
 	@Test
@@ -348,10 +349,10 @@ public class ComputeTests
 		Match rule3 = new Match("test", "l1", -1);
 		Match rule4 = new Match("test", "l2", 3);
 
-		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true , rule2.Compute(obj));
-		assertEquals(false, rule3.Compute(obj));
-		assertEquals(true , rule4.Compute(obj));
+		assertEquals(false, rule1.Compute(object));
+		assertEquals(true , rule2.Compute(object));
+		assertEquals(false, rule3.Compute(object));
+		assertEquals(true , rule4.Compute(object));
 	}
 
 	@Test
@@ -362,10 +363,10 @@ public class ComputeTests
 		UpperArgThreshold rule3 = new UpperArgThreshold("test", "d1", "d2");
 		UpperArgThreshold rule4 = new UpperArgThreshold("test", "d2", "d1");
 
-		assertEquals(true, rule1.Compute(obj));
-		assertEquals(false, rule2.Compute(obj));
-		assertEquals(true, rule3.Compute(obj));
-		assertEquals(false, rule4.Compute(obj));
+		assertEquals(true, rule1.Compute(object));
+		assertEquals(false, rule2.Compute(object));
+		assertEquals(true, rule3.Compute(object));
+		assertEquals(false, rule4.Compute(object));
 	}
 
 	@Test
@@ -376,10 +377,10 @@ public class ComputeTests
 		UpperThreshold rule3 = new UpperThreshold("test", "d1", 10.0);
 		UpperThreshold rule4 = new UpperThreshold("test", "d2", 0.0);
 
-		assertEquals(true, rule1.Compute(obj));
-		assertEquals(false, rule2.Compute(obj));
-		assertEquals(true, rule3.Compute(obj));
-		assertEquals(false, rule4.Compute(obj));
+		assertEquals(true, rule1.Compute(object));
+		assertEquals(false, rule2.Compute(object));
+		assertEquals(true, rule3.Compute(object));
+		assertEquals(false, rule4.Compute(object));
 	}
 
 	@Test
@@ -388,8 +389,8 @@ public class ComputeTests
 		VarArgMatchAprx rule1 = new VarArgMatchAprx("test", "d1", "d2", AbstractAttribute.EPSILON);
 		VarArgMatchAprx rule2 = new VarArgMatchAprx("test", "d1", "d2", 2.0);
 
-		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true, rule2.Compute(obj));
+		assertEquals(false, rule1.Compute(object));
+		assertEquals(true, rule2.Compute(object));
 	}
 
 	@Test
@@ -398,8 +399,8 @@ public class ComputeTests
 		VarArgMatch rule1 = new VarArgMatch("test", "l1", "l2");
 		VarArgMatch rule2 = new VarArgMatch("test", "str1", "str2");
 
-		assertEquals(false, rule1.Compute(obj));
-		assertEquals(true, rule2.Compute(obj));
+		assertEquals(false, rule1.Compute(object));
+		assertEquals(true, rule2.Compute(object));
 	}
 
 	@Test
@@ -410,11 +411,11 @@ public class ComputeTests
 		LinkedVarArgMatch rule3 = new LinkedVarArgMatch("test", "match_num");
 		LinkedVarArgMatch rule4 = new LinkedVarArgMatch("test", "mismatch_num");
 
-		assertEquals(false, rule1.Compute(obj.GetOutLinks().get(0)));
-		assertEquals(true , rule2.Compute(obj.GetOutLinks().get(0)));
+		assertEquals(false, rule1.Compute(object.GetOutLinks().get(0)));
+		assertEquals(true , rule2.Compute(object.GetOutLinks().get(0)));
 
-		assertEquals(true , rule3.Compute(obj.GetOutLinks().get(0)));
-		assertEquals(false, rule4.Compute(obj.GetOutLinks().get(0)));
+		assertEquals(true , rule3.Compute(object.GetOutLinks().get(0)));
+		assertEquals(false, rule4.Compute(object.GetOutLinks().get(0)));
 	}
 
 	@Test
@@ -423,8 +424,8 @@ public class ComputeTests
 		ToArgPct rule1 = new ToArgPct("test", "l1", "l2");
 		ToPct rule2 = new ToPct("test", "l2", 6);
 
-		assertEquals(66, rule1.Compute(obj));
-		assertEquals(50, rule2.Compute(obj));
+		assertEquals(66, rule1.Compute(object));
+		assertEquals(50, rule2.Compute(object));
 	}
 
 	@Test
@@ -433,18 +434,18 @@ public class ComputeTests
 		// d1 = 0.0
 		// l1 = 2
 
-		assertEquals(0, new Interval("test", "d1", 0.5, 2.0).Compute(obj));
-		assertEquals(1, new Interval("test", "d1", -1.5).Compute(obj));
-		assertEquals(1, new Interval("test", "d1", -0.5, 2.0).Compute(obj));
-		assertEquals(1, new Interval("test", "d1", 0.0, 2.0).Compute(obj));
-		assertEquals(2, new Interval("test", "d1", -0.5, 0.0, 2.0).Compute(obj));
-		assertEquals(2, new Interval("test", "d1", -1.5, -0.5, 2.0).Compute(obj));
+		assertEquals(0, new Interval("test", "d1", 0.5, 2.0).Compute(object));
+		assertEquals(1, new Interval("test", "d1", -1.5).Compute(object));
+		assertEquals(1, new Interval("test", "d1", -0.5, 2.0).Compute(object));
+		assertEquals(1, new Interval("test", "d1", 0.0, 2.0).Compute(object));
+		assertEquals(2, new Interval("test", "d1", -0.5, 0.0, 2.0).Compute(object));
+		assertEquals(2, new Interval("test", "d1", -1.5, -0.5, 2.0).Compute(object));
 
-		assertEquals(0, new Interval("test", "l1", 4).Compute(obj));
-		assertEquals(0, new Interval("test", "l1", 4, 5).Compute(obj));
-		assertEquals(1, new Interval("test", "l1", 2).Compute(obj));
-		assertEquals(1, new Interval("test", "l1", 2, 4).Compute(obj));
-		assertEquals(2, new Interval("test", "l1", 1, 2, 4).Compute(obj));
-		assertEquals(2, new Interval("test", "l1", 1, 2).Compute(obj));
+		assertEquals(0, new Interval("test", "l1", 4).Compute(object));
+		assertEquals(0, new Interval("test", "l1", 4, 5).Compute(object));
+		assertEquals(1, new Interval("test", "l1", 2).Compute(object));
+		assertEquals(1, new Interval("test", "l1", 2, 4).Compute(object));
+		assertEquals(2, new Interval("test", "l1", 1, 2, 4).Compute(object));
+		assertEquals(2, new Interval("test", "l1", 1, 2).Compute(object));
 	}
 }

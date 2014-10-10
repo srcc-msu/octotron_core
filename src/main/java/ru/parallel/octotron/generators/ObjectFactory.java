@@ -12,7 +12,6 @@ import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.rules.Match;
 
 import java.util.List;
 
@@ -21,17 +20,18 @@ import java.util.List;
  * */
 public class ObjectFactory extends BaseFactory<ObjectFactory>
 {
-	public ObjectFactory()
+	public ObjectFactory(ModelService service)
 	{
-		super();
+		super(service);
 	}
 
-	private ObjectFactory(List<SimpleAttribute> constants
+	private ObjectFactory(ModelService service
+		, List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
 		, List<Rule> rules
 		, List<ReactionTemplate> reactions)
 	{
-		super(constants, sensors, rules, reactions);
+		super(service, constants, sensors, rules, reactions);
 	}
 
 	/**
@@ -39,12 +39,12 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * */
 	public ModelObject Create()
 	{
-		ModelObject object = ModelService.Get().AddObject();
+		ModelObject object = service.AddObject();
 
-		object.GetBuilder().DeclareConst(constants);
-		object.GetBuilder().DeclareSensor(sensors);
-		object.GetBuilder().DeclareVar(rules);
-		object.GetBuilder().AddReaction(reactions);
+		object.GetBuilder(service).DeclareConst(constants);
+		object.GetBuilder(service).DeclareSensor(sensors);
+		object.GetBuilder(service).DeclareVar(rules);
+		object.GetBuilder(service).AddReaction(reactions);
 
 		return object;
 	}
@@ -69,6 +69,6 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 		, List<Rule> new_rules
 		, List<ReactionTemplate> new_reactions)
 	{
-		return new ObjectFactory(new_constants, new_sensors, new_rules, new_reactions);
+		return new ObjectFactory(service, new_constants, new_sensors, new_rules, new_reactions);
 	}
 }

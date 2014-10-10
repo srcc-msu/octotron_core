@@ -90,7 +90,7 @@ public class HttpRequestParser
 			String name;
 			String params;
 
-			if (idx != -1)
+			if(idx != -1)
 			{
 				name = operation.substring(0, idx);
 				params = operation.substring(idx + 1, operation.length());

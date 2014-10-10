@@ -152,7 +152,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		{
 			case EQ:
 			{
-				for (T obj : list)
+				for(T obj : list)
 				{
 					if(!obj.TestAttribute(name))
 						continue;
@@ -163,7 +163,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 			}
 			case NE:
 			{
-				for (T obj : list)
+				for(T obj : list)
 				{
 					if(!obj.TestAttribute(name))
 						continue;
@@ -174,7 +174,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 			}
 			case GE:
 			{
-				for (T obj : list)
+				for(T obj : list)
 				{
 					if(!obj.TestAttribute(name))
 						continue;
@@ -185,7 +185,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 			}
 			case GT:
 			{
-				for (T obj : list)
+				for(T obj : list)
 				{
 					if(!obj.TestAttribute(name))
 						continue;
@@ -196,7 +196,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 			}
 			case LE:
 			{
-				for (T obj : list)
+				for(T obj : list)
 				{
 					if(!obj.TestAttribute(name))
 						continue;
@@ -207,7 +207,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 			}
 			case LT:
 			{
-				for (T obj : list)
+				for(T obj : list)
 				{
 					if(!obj.TestAttribute(name))
 						continue;
@@ -249,7 +249,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 	{
 		Map<Long, T> map = new LinkedHashMap<>();
 
-		for (T elem : list)
+		for(T elem : list)
 			map.put(elem.GetID(), elem);
 
 		List<T> new_list = new LinkedList<>();

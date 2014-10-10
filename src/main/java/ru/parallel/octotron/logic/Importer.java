@@ -6,14 +6,17 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.exec.ExecutionController;
 
 public class Importer implements Runnable
 {
 	private final ModelEntity entity;
 	private final SimpleAttribute attribute;
+	private final ExecutionController controller;
 
-	public Importer(ModelEntity entity, SimpleAttribute attribute)
+	public Importer(ExecutionController controller, ModelEntity entity, SimpleAttribute attribute)
 	{
+		this.controller = controller;
 		this.entity = entity;
 		this.attribute = attribute;
 	}
@@ -61,6 +64,6 @@ public class Importer implements Runnable
 
 		result.add(sensor);
 
-		new ReactionInvoker(result).run();
+		controller.CheckReactions(result);
 	}
 }

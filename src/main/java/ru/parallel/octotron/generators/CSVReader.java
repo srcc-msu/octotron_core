@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.generators;
 
-import com.google.common.collect.Lists;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -29,7 +29,7 @@ public final class CSVReader
 
 	private CSVReader() {}
 
-	public static void Declare(Iterable<? extends ModelEntity> list, String file_name)
+	public static void Declare(ModelService service, Iterable<? extends ModelEntity> list, String file_name)
 		throws ExceptionParseError, IOException
 	{
 		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name));
@@ -66,7 +66,7 @@ public final class CSVReader
 
 					Object val = SimpleAttribute.ValueFromStr(str_val);
 
-					entity.GetBuilder().DeclareConst(fields[i], val);
+					entity.GetBuilder(service).DeclareConst(fields[i], val);
 				}
 
 				read++;
@@ -81,9 +81,9 @@ public final class CSVReader
 		}
 	}
 
-	public static <T extends ModelEntity> void Declare(T object, String file_name)
+	public static <T extends ModelEntity> void Declare(ModelService service, T object, String file_name)
 		throws ExceptionParseError, IOException
 	{
-		Declare(java.util.Collections.singleton(object), file_name);
+		Declare(service, java.util.Collections.singleton(object), file_name);
 	}
 }

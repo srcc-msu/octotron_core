@@ -33,8 +33,6 @@ public class GlobalSettings
 		}
 	}
 
-	private final int hash;
-
 	private String model_name;
 	private String model_path;
 	private String model_main;
@@ -49,8 +47,8 @@ public class GlobalSettings
 	private final Map<String, String> log_map = new HashMap<>();
 	private final Map<String, String> script_map = new HashMap<>();
 
-	private List<String> object_index;
-	private List<String> link_index;
+	private List<String> object_index = new LinkedList<>();
+	private List<String> link_index = new LinkedList<>();
 
 	private int http_port;
 
@@ -60,8 +58,15 @@ public class GlobalSettings
 
 	public GlobalSettings(String json_config)
 	{
-		hash = json_config.hashCode();
 		ParseSettings(json_config);
+	}
+
+	/**
+	 * dummy config for testing
+	 * */
+	public GlobalSettings(int port)
+	{
+		DummySettings(port);
 	}
 
 	public boolean IsDb()
@@ -77,6 +82,37 @@ public class GlobalSettings
 		String password = JsonUtils.MustPresent(cfg, "password").getAsString();
 
 		return new Credential(user, password);
+	}
+
+	private void DummySettings(int port)
+	{
+		model_name = "test";
+		model_path = "";
+		model_main = "";
+
+// --- sys config
+
+		sys_path = "";
+
+		threads = 2;
+
+// --- db config
+
+		db = false;
+
+// --- logging config
+
+// --- scripts config
+
+// --- graph settings
+
+// --- http config
+		http_port = port;
+
+// --- credentials config
+		view_credentials = new Credential("", "");
+		modify_credentials = new Credential("", "");
+		control_credentials = new Credential("", "");
 	}
 
 	private void ParseSettings(String json_config)
@@ -130,9 +166,6 @@ public class GlobalSettings
 
 // --- graph settings
 		JsonObject graph_conf = JsonUtils.MustPresent(root, "graph").getAsJsonObject();
-
-		object_index = new LinkedList<>();
-		link_index = new LinkedList<>();
 
 		if(graph_conf.get("object_index") != null)
 			for(JsonElement elem : JsonUtils.MustPresent(graph_conf, "object_index").getAsJsonArray())
@@ -219,10 +252,5 @@ public class GlobalSettings
 	public List<String> GetLinkIndex()
 	{
 		return link_index;
-	}
-
-	public int GetHash()
-	{
-		return hash;
 	}
 }

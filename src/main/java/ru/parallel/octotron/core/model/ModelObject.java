@@ -7,37 +7,11 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class ModelObject extends ModelEntity
 {
-	public static class ModelObjectBuilder extends ModelEntityBuilder<ModelObject>
-	{
-		ModelObjectBuilder(ModelObject object)
-		{
-			super(object);
-		}
+	ModelLinkList out_links;
+	ModelLinkList in_links;
 
-		public void AddOutLink(ModelLink link)
-		{
-			entity.out_links.add(link);
-			entity.out_neighbors.add(link.Target());
-		}
-
-		public void AddInLink(ModelLink link)
-		{
-			entity.in_links.add(link);
-			entity.in_neighbors.add(link.Source());
-		}
-	}
-
-	@Override
-	public ModelObjectBuilder GetBuilder()
-	{
-		return new ModelObjectBuilder(this);
-	}
-
-	private ModelLinkList out_links;
-	private ModelLinkList in_links;
-
-	private ModelObjectList out_neighbors;
-	private ModelObjectList in_neighbors;
+	ModelObjectList out_neighbors;
+	ModelObjectList in_neighbors;
 
 	public ModelObject()
 	{
@@ -48,6 +22,14 @@ public class ModelObject extends ModelEntity
 
 		out_neighbors = new ModelObjectList();
 		in_neighbors = new ModelObjectList();
+	}
+
+	@Override
+	public ModelObjectBuilder GetBuilder(ModelService service)
+	{
+		service.CheckModification();
+
+		return new ModelObjectBuilder(service, this);
 	}
 
 	public ModelLinkList GetInLinks()

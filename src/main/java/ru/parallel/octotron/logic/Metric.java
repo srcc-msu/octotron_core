@@ -40,15 +40,15 @@ public final class Metric
 		{
 			current = value;
 
-			if (sum == null)
+			if(sum == null)
 				sum = value;
 			else
 				sum += value;
 
-			if (min_value == null || min_value > value)
+			if(min_value == null || min_value > value)
 				min_value = value;
 
-			if (max_value == null || max_value < value)
+			if(max_value == null || max_value < value)
 				max_value = value;
 
 			count++;

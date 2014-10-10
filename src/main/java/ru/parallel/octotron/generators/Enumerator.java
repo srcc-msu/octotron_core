@@ -7,18 +7,19 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
 
 public final class Enumerator
 {
 	private Enumerator(){}
 
-	public static void Sequence(Iterable<? extends ModelEntity> list, String att, int div)
+	public static void Sequence(ModelService service, Iterable<? extends ModelEntity> list, String att, int div)
 	{
 		int i = 0;
 
 		for(ModelEntity entity : list)
 		{
-			entity.GetBuilder().DeclareConst(att, i);
+			entity.GetBuilder(service).DeclareConst(att, i);
 
 			i++;
 			if(div != 0)
@@ -26,8 +27,8 @@ public final class Enumerator
 		}
 	}
 
-	public static void Sequence(Iterable<? extends ModelEntity> list, String att)
+	public static void Sequence(ModelService service, Iterable<? extends ModelEntity> list, String att)
 	{
-		Enumerator.Sequence(list, att, 0);
+		Enumerator.Sequence(service, list, att, 0);
 	}
 }

@@ -12,6 +12,8 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.rules.Match;
 
 import static org.junit.Assert.assertEquals;
@@ -19,22 +21,22 @@ import static org.junit.Assert.assertTrue;
 
 public class BaseFactoryTest
 {
+	private static Context context;
+
+	@BeforeClass
+	public static void InitController() throws Exception
+	{
+		context = Context.CreateTestContext(0);
+	}
+
 	private static ObjectFactory object_factory;
 	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init(ModelService.EMode.CREATION);
-
-		object_factory = new ObjectFactory();
-		link_factory = new LinkFactory();
-	}
-
-	@AfterClass
-	public static void Delete() throws Exception
-	{
-		ModelService.Finish();
+		object_factory = new ObjectFactory(context.model_service);
+		link_factory = new LinkFactory(context.model_service);
 	}
 
 /**

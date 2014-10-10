@@ -4,6 +4,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 
@@ -11,32 +13,32 @@ import static org.junit.Assert.assertEquals;
 
 public class ModelObjectTest
 {
+	private static Context context;
+
+	@BeforeClass
+	public static void InitController() throws Exception
+	{
+		context = Context.CreateTestContext(0);
+	}
+
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init(ModelService.EMode.CREATION);
-
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
 		};
 
-		ModelObjectTest.obj_factory = new ObjectFactory().Constants(obj_att);
+		ModelObjectTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("link", "ok"),
 			new SimpleAttribute("type", "contain"),
 		};
 
-		ModelObjectTest.link_factory = new LinkFactory().Constants(link_att);
-	}
-
-	@AfterClass
-	public static void Delete() throws Exception
-	{
-		ModelService.Finish();
+		ModelObjectTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);
 	}
 
 	/**

@@ -1,33 +1,20 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class VarAttribute extends AbstractModAttribute
 {
-	public static class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribute>
-	{
-		VarAttributeBuilder(VarAttribute attribute)
-		{
-			super(attribute);
-		}
-
-		public void MakeDependant()
-		{
-			for(IModelAttribute dependant : attribute.rule.GetDependency(attribute.GetParent()))
-			{
-				dependant.GetBuilder().AddDependant(attribute);
-			}
-		}
-	}
 
 	@Override
-	public VarAttributeBuilder GetBuilder()
+	public VarAttributeBuilder GetBuilder(ModelService service)
 	{
-		return new VarAttributeBuilder(this);
+		service.CheckModification();
+
+		return new VarAttributeBuilder(service, this);
 	}
 
 	protected Rule rule;

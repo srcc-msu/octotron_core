@@ -14,10 +14,7 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.logic.ExecutionController;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
@@ -75,12 +72,10 @@ public class Start
 
 		LOGGER.log(Level.INFO, "starting Octotron using config file: " + config_fname);
 
-		GlobalSettings settings = null;
-
+		String json_config = null;
 		try
 		{
-			String json_config = FileUtils.FileToString(config_fname);
-			settings = new GlobalSettings(json_config);
+			json_config = FileUtils.FileToString(config_fname);
 		}
 		catch(ExceptionSystemError e)
 		{
@@ -88,9 +83,11 @@ public class Start
 			System.exit(1);
 		}
 
+		Context context = Context.CreateFromConfig(json_config);
+
 		try
 		{
-			Create(settings);
+			Create(context);
 		}
 		catch(Exception creation_exception)
 		{
@@ -98,17 +95,15 @@ public class Start
 			System.exit(1);
 		}
 
-		ModelService.Get().Operate();
-
-		Run(settings);
+		Run(context);
 	}
 
-	public static void Begin(GlobalSettings settings)
+	public static void Begin(Context context)
 		throws ExceptionSystemError
 	{
-		if(settings.IsDb())
+		/*if(context.settings.IsDb())
 		{
-			if(FileUtils.IsDirEmpty(settings.GetDbPath() + settings.GetModelName()))
+			if(FileUtils.IsDirEmpty(context.settings.GetDbPath() + settings.GetModelName()))
 			{
 				LOGGER.log(Level.INFO, "No DB found, creating a new in: " + settings.GetDbPath());
 				ModelService.Init(ModelService.EMode.CREATION, settings.GetDbPath(), settings.GetModelName());
@@ -124,39 +119,38 @@ public class Start
 			ModelService.Init(ModelService.EMode.CREATION);
 			LOGGER.log(Level.INFO, "No DB settings, starting Octotron without DB");
 			LOGGER.log(Level.WARNING, "All data will be lost when execution ends!");
-		}
+		}*/
 	}
 
-	public static void Create(GlobalSettings settings)
+	public static void Create(Context context)
 		throws ExceptionSystemError
 	{
-		Begin(settings);
+		Begin(context);
 
 		PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
 
 		PySystemState sys = Py.getSystemState();
 
-		sys.path.append(new PyString(settings.GetModelPath()));
+		sys.path.append(new PyString(context.settings.GetModelPath()));
 
-		if(settings.GetSysPath() != null)
-			sys.path.append(new PyString(settings.GetSysPath()));
+		if(context.settings.GetSysPath() != null)
+			sys.path.append(new PyString(context.settings.GetSysPath()));
 
 		LOGGER.log(Level.INFO, "Creating model...");
 
-		interpreter.execfile(settings.GetModelPath() + '/' + settings.GetModelMain());
+		interpreter.execfile(context.settings.GetModelPath() + '/' + context.settings.GetModelMain());
 
 		LOGGER.log(Level.INFO, "done");
 
-		End(settings);
-		((Neo4jGraph)ModelService.Get().graph).GetTransaction().Close();
+		End(context);
 	}
 
-	public static void PrintStat()
+	public static void PrintStat(Context context)
 	{
 		int model_attributes_count = 0;
 
-		ModelObjectList model_objects = ModelService.Get().GetAllObjects();
-		ModelLinkList model_links = ModelService.Get().GetAllLinks();
+		ModelObjectList model_objects = context.model_data.GetAllObjects();
+		ModelLinkList model_links = context.model_data.GetAllLinks();
 
 		for(ModelObject obj : model_objects)
 		{
@@ -173,34 +167,27 @@ public class Start
 		LOGGER.log(Level.INFO, "Created model attributes: " + model_attributes_count);
 	}
 
-	public static void End(GlobalSettings settings)
+	public static void End(Context context)
 	{
-		LOGGER.log(Level.INFO, "Building rule dependencies...");
-		ModelService.Get().MakeRuleDependencies();
-
-		PrintStat();
-
-		LOGGER.log(Level.INFO, "done");
-
-// -------------
+		PrintStat(context);
 
 		LOGGER.log(Level.INFO, "Building cache...");
 
-		ModelService.Get().EnableObjectIndex("AID");
-		ModelService.Get().EnableLinkIndex("AID");
+		context.model_service.EnableObjectIndex("AID");
+		context.model_service.EnableLinkIndex("AID");
 
 		LOGGER.log(Level.INFO, "enabled object cache: AID");
 		LOGGER.log(Level.INFO, "enabled link cache: AID");
 
-		for(String attr : settings.GetObjectIndex())
+		for(String attr : context.settings.GetObjectIndex())
 		{
-			ModelService.Get().EnableObjectIndex(attr);
+			context.model_service.EnableObjectIndex(attr);
 			LOGGER.log(Level.INFO, "enabled object cache: " + attr);
 		}
 
-		for(String attr : settings.GetLinkIndex())
+		for(String attr : context.settings.GetLinkIndex())
 		{
-			ModelService.Get().EnableLinkIndex(attr);
+			context.model_service.EnableLinkIndex(attr);
 			LOGGER.log(Level.INFO, "enabled link cache: " + attr);
 		}
 
@@ -211,39 +198,45 @@ public class Start
  * created db, start main loop and shutdown, when finished<br>
  * all errors are printed and may be reported by special scripts<br>
  * */
-	private static void Run(GlobalSettings settings)
+	private static void Run(Context context)
 	{
+		LOGGER.log(Level.INFO, "Building rule dependencies and running the model");
+
+		context.model_service.Operate();
+
+
+		ExecutionController controller = null;
 // --- create
 		try
 		{
-			ExecutionController.Init(settings);
+			controller = new ExecutionController(context);
 
-			ProcessStart(settings);
+			ProcessStart(context);
 		}
 		catch(Exception start_exception)
 		{
-			ProcessCrash(settings, start_exception, "start");
+			ProcessCrash(context, start_exception, "start");
 
-			if(ExecutionController.Get() != null)
-				ExecutionController.Get().Finish();
+			if(controller != null)
+				controller.Finish();
 
 			System.exit(1);
 		}
 
 // --- main loop
-		Exception loop_exception = MainLoop(settings);
+		Exception loop_exception = MainLoop(context, controller);
 
 		if(loop_exception != null)
 		{
-			ProcessCrash(settings, loop_exception, "mainloop");
+			ProcessCrash(context, loop_exception, "mainloop");
 		}
 
 // --- shutdown
-		Exception shutdown_exception = Shutdown();
+		Exception shutdown_exception = Shutdown(context, controller);
 
 		if(shutdown_exception != null)
 		{
-			ProcessCrash(settings, shutdown_exception, "shutdown");
+			ProcessCrash(context, shutdown_exception, "shutdown");
 		}
 	}
 
@@ -251,18 +244,18 @@ public class Start
  * run the main program loop<br>
  * if it crashes - returns exception, otherwise returns nothing<br>
  * */
-	private static Exception MainLoop(GlobalSettings settings)
+	private static Exception MainLoop(Context context, ExecutionController controller)
 	{
 		LOGGER.log(Level.INFO, "main loop started");
 
 		try
 		{
-			while(!ExecutionController.Get().ShouldExit())
+			while(!controller.ShouldExit())
 			{
-				ExecutionController.Get().Process();
+				controller.Process();
 			}
 
-			ProcessFinish(settings);
+			ProcessFinish(context);
 		}
 		catch(Exception e)
 		{
@@ -275,13 +268,11 @@ public class Start
 /**
  * shutdown the graph and all execution processes<br>
  * */
-	public static Exception Shutdown()
+	public static Exception Shutdown(Context context, ExecutionController controller)
 	{
 		try
 		{
-			ExecutionController.Get().Finish();
-
-			ModelService.Finish();
+			controller.Finish();
 		}
 		catch(Exception e)
 		{
@@ -294,10 +285,10 @@ public class Start
 /**
  * reaction to normal execution start<br>
  * */
-	private static void ProcessStart(GlobalSettings settings)
+	private static void ProcessStart(Context context)
 		throws ExceptionSystemError
 	{
-		String script = settings.GetScriptByKey("on_start");
+		String script = context.settings.GetScriptByKey("on_start");
 
 		if(script != null)
 			FileUtils.ExecSilent(script);
@@ -306,10 +297,10 @@ public class Start
 /**
  * reaction to normal execution finish<br>
  * */
-	private static void ProcessFinish(GlobalSettings settings)
+	private static void ProcessFinish(Context context)
 		throws ExceptionSystemError
 	{
-		String script = settings.GetScriptByKey("on_finish");
+		String script = context.settings.GetScriptByKey("on_finish");
 
 		if(script != null)
 			FileUtils.ExecSilent(script);
@@ -319,7 +310,7 @@ public class Start
  * reaction to an exception<br>
  * creates the file with exception info<br>
  * */
-	private static void ProcessCrash(GlobalSettings settings, Exception catched_exception, String suffix)
+	private static void ProcessCrash(Context context, Exception catched_exception, String suffix)
 	{
 		LOGGER.log(Level.SEVERE, "Octotron crashed during " + suffix, catched_exception);
 
@@ -343,7 +334,7 @@ public class Start
 
 		try
 		{
-			String script = settings.GetScriptByKey("on_crash");
+			String script = context.settings.GetScriptByKey("on_crash");
 
 			if(script != null)
 				FileUtils.ExecSilent(script, error_fname);

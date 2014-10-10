@@ -12,6 +12,8 @@ import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 
@@ -23,32 +25,32 @@ import static org.junit.Assert.assertTrue;
 
 public class ModelEntityTest
 {
+	private static Context context;
+
+	@BeforeClass
+	public static void InitController() throws Exception
+	{
+		context = Context.CreateTestContext(0);
+	}
+
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init(ModelService.EMode.CREATION);
-
 		SimpleAttribute[] obj_att = {
 			new SimpleAttribute("object", "ok")
 		};
 
-		ModelEntityTest.obj_factory = new ObjectFactory().Constants(obj_att);
+		ModelEntityTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("link", "ok"),
 			new SimpleAttribute("type", "contain"),
 		};
 
-		ModelEntityTest.link_factory = new LinkFactory().Constants(link_att);
-	}
-
-	@AfterClass
-	public static void Delete() throws Exception
-	{
-		ModelService.Finish();
+		ModelEntityTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);
 	}
 
 	@org.junit.Rule
@@ -88,14 +90,14 @@ public class ModelEntityTest
 	@Test
 	public void TestDeclareAttribute() throws Exception
 	{
-		ModelObject entity = ModelService.Get().AddObject();
-		entity.GetBuilder().DeclareSensor("test", "");
+		ModelObject entity = context.model_service.AddObject();
+		entity.GetBuilder(context.model_service).DeclareSensor("test", "");
 
 		boolean catched = false;
 
 		try
 		{
-			entity.GetBuilder().DeclareSensor("test", "");
+			entity.GetBuilder(context.model_service).DeclareSensor("test", "");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -109,11 +111,11 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder().DeclareSensor("test", 0);
+		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 		ReactionTemplate reaction = new Equals("test", 1)
 			.Response(new Response(EEventStatus.INFO, "test"));
 
-		entity.GetBuilder().AddReaction(reaction);
+		entity.GetBuilder(context.model_service).AddReaction(reaction);
 	}
 
 	@Test
@@ -121,7 +123,7 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder().DeclareSensor("test", 0);
+		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		List<ReactionTemplate> reactions = new LinkedList<>();
 
@@ -130,7 +132,7 @@ public class ModelEntityTest
 		reactions.add(new Equals("test", 2)
 			.Response(new Response(EEventStatus.INFO, "test")));
 
-		entity.GetBuilder().AddReaction(reactions);
+		entity.GetBuilder(context.model_service).AddReaction(reactions);
 	}
 
 	private class DummyRule extends ru.parallel.octotron.core.logic.Rule
@@ -174,7 +176,7 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder().DeclareVar(new DummyRule("test1", EDependencyType.ALL));
+		entity.GetBuilder(context.model_service).DeclareVar(new DummyRule("test1", EDependencyType.ALL));
 	}
 
 	@Test
@@ -182,13 +184,13 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder().DeclareSensor("test", 0);
+		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		List<ru.parallel.octotron.core.logic.Rule> rules = new LinkedList<>();
 
 		rules.add(new DummyRule("test1", EDependencyType.ALL));
 		rules.add(new DummyRule("test2", EDependencyType.ALL));
 
-		entity.GetBuilder().DeclareVar(rules);
+		entity.GetBuilder(context.model_service).DeclareVar(rules);
 	}
 }

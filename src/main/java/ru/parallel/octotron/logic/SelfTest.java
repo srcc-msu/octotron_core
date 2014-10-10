@@ -7,6 +7,7 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.exec.ExecutionController;
 
 public class SelfTest
 {

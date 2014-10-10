@@ -29,17 +29,17 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	public LinkFactory()
+	public LinkFactory(ModelService service)
 	{
-		super();
+		super(service);
 	}
 
-	private LinkFactory(List<SimpleAttribute> constants
+	private LinkFactory(ModelService service, List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
 		, List<Rule> rules
 		, List<ReactionTemplate> reactions)
 	{
-		super(constants, sensors, rules, reactions);
+		super(service, constants, sensors, rules, reactions);
 	}
 /*
 @Override
@@ -61,18 +61,17 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	public ModelLink OneToOne(ModelObject from, ModelObject to)
 	{
 // create edge
-		ModelLink link = ModelService.Get().AddLink(from, to);
+		ModelLink link = service.AddLink(from, to);
 
 // set all attributes
-		link.GetBuilder().DeclareConst(constants);
-		link.GetBuilder().DeclareSensor(sensors);
-		link.GetBuilder().DeclareVar(rules);
-		link.GetBuilder().AddReaction(reactions);
+		link.GetBuilder(service).DeclareConst(constants);
+		link.GetBuilder(service).DeclareSensor(sensors);
+		link.GetBuilder(service).DeclareVar(rules);
+		link.GetBuilder(service).AddReaction(reactions);
 
-		link.GetBuilder().DeclareConst("source", from.GetID());
-		link.GetBuilder().DeclareConst("target", to.GetID());
+		link.GetBuilder(service).DeclareConst("source", from.GetID());
+		link.GetBuilder(service).DeclareConst("target", to.GetID());
 
-		link.InitPersistent();
 		return link;
 	}
 
@@ -304,6 +303,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		, List<Rule> new_rules
 		, List<ReactionTemplate> new_reactions)
 	{
-		return new LinkFactory(new_constants, new_sensors, new_rules, new_reactions);
+		return new LinkFactory(service, new_constants, new_sensors, new_rules, new_reactions);
 	}
 }

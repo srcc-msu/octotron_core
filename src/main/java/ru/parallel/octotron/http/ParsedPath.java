@@ -7,6 +7,7 @@
 package ru.parallel.octotron.http;
 
 import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.core.model.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.PathOperations.PathToken;
@@ -25,14 +26,14 @@ public class ParsedPath
 		this.tokens = tokens;
 	}
 
-	public ModelList<? extends ModelEntity, ?> Execute()
+	public ModelList<? extends ModelEntity, ?> Execute(ModelData model_data)
 		throws ExceptionParseError
 	{
 		ModelList<? extends ModelEntity, ?> entity_list = null;
 
 		for(PathToken token : tokens)
 		{
-			entity_list = token.Transform(entity_list);
+			entity_list = token.Transform(model_data, entity_list);
 		}
 
 		return entity_list;

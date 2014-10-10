@@ -1,5 +1,6 @@
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.attributes.IAttributeBuilder;
 import ru.parallel.octotron.core.attributes.VarAttribute;
@@ -23,7 +24,7 @@ public interface IModelAttribute extends IAttribute
 	double GetSpeed();
 
 	AttributeList<VarAttribute> GetDependant();
-	Collection<PreparedResponse> ProcessReactions();
+	Collection<Response> ProcessReactions();
 
-	IAttributeBuilder GetBuilder();
+	IAttributeBuilder GetBuilder(ModelService service);
 }

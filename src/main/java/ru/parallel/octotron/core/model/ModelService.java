@@ -1,18 +1,13 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 public final class ModelService
 {
@@ -21,51 +16,15 @@ public final class ModelService
 		CREATION, LOAD, OPERATION
 	}
 
-	private static ModelService INSTANCE = null;
-
-	public static void Init(EMode mode, String path, String name)
-	{
-		ModelService.INSTANCE = new ModelService(mode, path, name);
-	}
-
-	public static void Init(EMode mode)
-	{
-		ModelService.INSTANCE = new ModelService(mode);
-	}
-
-	public static void Finish()
-	{
-		((Neo4jGraph)INSTANCE.graph).Shutdown();
-		ModelService.INSTANCE = null;
-	}
-
-	public static ModelService Get()
-	{
-		return INSTANCE;
-	}
-
-// -------------------------
-
+	private ModelData model_data;
 	private EMode mode;
-	private final boolean db;
-	public IGraph graph;
 
-	private final ModelCache cache;
-
-	private ModelObjectList objects;
-	private ModelLinkList links;
-
-	private ModelService(EMode mode, boolean db, String path, String name)
+	public ModelService(ModelData model_data, EMode mode)
 	{
-		objects = new ModelObjectList();
-		links = new ModelLinkList();
-
-		cache = new ModelCache();
-
+		this.model_data = model_data;
 		this.mode = mode;
-		this.db = db;
 
-		try
+/*		try
 		{
 			if(mode == EMode.CREATION)
 				graph = new Neo4jGraph(path + "/" + name, Neo4jGraph.Op.RECREATE, true);
@@ -80,17 +39,7 @@ public final class ModelService
 		catch (ExceptionSystemError exceptionSystemError)
 		{
 			exceptionSystemError.printStackTrace();
-		}
-	}
-
-	protected ModelService(EMode mode)
-	{
-		this(mode, false, "", "");
-	}
-
-	protected ModelService(EMode mode, String path, String name)
-	{
-		this(mode, true, path, name);
+		}*/
 	}
 
 	public EMode GetMode()
@@ -98,64 +47,68 @@ public final class ModelService
 		return mode;
 	}
 
+	public void CheckModification()
+	{
+		if(GetMode() == ModelService.EMode.OPERATION)
+			throw new ExceptionModelFail("model modification is not allowed in operational mode");
+	}
+
 	public void Operate()
 	{
+		MakeRuleDependencies();
 		mode = EMode.OPERATION;
+	}
+
+	private void MakeRuleDependencies()
+	{
+		for(ModelObject object : model_data.GetAllObjects())
+		{
+			for(VarAttribute attribute : object.GetVar())
+			{
+				attribute.GetBuilder(this).MakeDependant();
+			}
+		}
 	}
 
 	public ModelLink AddLink(ModelObject source, ModelObject target)
 	{
+		CheckModification();
+
 		ModelLink link = new ModelLink(source, target);
 
-		source.GetBuilder().AddOutLink(link);
-		target.GetBuilder().AddInLink(link);
+		source.GetBuilder(this).AddOutLink(link);
+		target.GetBuilder(this).AddInLink(link);
 
-		links.add(link);
-		link.GetBuilder().DeclareConst("AID", link.GetID());
+		model_data.links.add(link);
+		link.GetBuilder(this).DeclareConst("AID", link.GetID());
 
 		return link;
 	}
 
 	public ModelObject AddObject()
 	{
+		CheckModification();
+
 		ModelObject object = new ModelObject();
 
-		objects.add(object);
-		object.GetBuilder().DeclareConst("AID", object.GetID());
+		model_data.objects.add(object);
+		object.GetBuilder(this).DeclareConst("AID", object.GetID());
 
-		object.InitPersistent();
 		return object;
-	}
-
-	public ModelObjectList GetAllObjects()
-	{
-		return objects;
-	}
-
-	public ModelLinkList GetAllLinks()
-	{
-		return links;
 	}
 
 	public void EnableLinkIndex(String name)
 	{
-		cache.EnableLinkIndex(name, links);
+		CheckModification();
+
+		model_data.cache.EnableLinkIndex(name, model_data.links);
 	}
 
 	public void EnableObjectIndex(String name)
 	{
-		cache.EnableObjectIndex(name, objects);
-	}
+		CheckModification();
 
-	public void MakeRuleDependencies()
-	{
-		for(ModelObject object : GetAllObjects())
-		{
-			for(VarAttribute attribute : object.GetVar())
-			{
-				attribute.GetBuilder().MakeDependant();
-			}
-		}
+		model_data.cache.EnableObjectIndex(name, model_data.objects);
 	}
 
 	public static String ExportDot()
@@ -166,34 +119,6 @@ public final class ModelService
 	public static String ExportDot(ModelObjectList objects)
 	{
 		throw new ExceptionModelFail("NIY");
-	}
-
-	public ModelObjectList GetObjects(SimpleAttribute attribute)
-	{
-		return cache.GetObjects(attribute);
-	}
-
-	public ModelObjectList GetObjects(String name)
-	{
-		return cache.GetObjects(name);
-	}
-
-	public ModelLinkList GetLinks(SimpleAttribute attribute)
-	{
-		return cache.GetLinks(attribute);
-	}
-
-	public ModelLinkList GetLinks(String name)
-	{
-		return cache.GetLinks(name);
-	}
-
-	public void Clean()
-	{
-		objects = new ModelObjectList();
-		links = new ModelLinkList();
-
-		cache.Clean();
 	}
 
 	public GraphEntity GetPersistentObject(UniqueID<?> id)

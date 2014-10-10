@@ -9,11 +9,21 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.ExecutionController;
 
 import static org.junit.Assert.assertEquals;
 
 public class LinkFactoryTest
 {
+	private static Context context;
+
+	@BeforeClass
+	public static void InitController() throws Exception
+	{
+		context = Context.CreateTestContext(0);
+	}
+
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
 
@@ -22,19 +32,11 @@ public class LinkFactoryTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ModelService.Init(ModelService.EMode.CREATION);
-
-		LinkFactoryTest.obj_factory = new ObjectFactory()
+		LinkFactoryTest.obj_factory = new ObjectFactory(context.model_service)
 			.Constants(new SimpleAttribute("object", "ok"));
 
-		LinkFactoryTest.link_factory = new LinkFactory()
+		LinkFactoryTest.link_factory = new LinkFactory(context.model_service)
 			.Constants(new SimpleAttribute("type", "contain"));
-	}
-
-	@AfterClass
-	public static void Delete() throws Exception
-	{
-		ModelService.Finish();
 	}
 
 /**

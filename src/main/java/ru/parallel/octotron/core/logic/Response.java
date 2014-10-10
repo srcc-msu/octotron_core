@@ -24,6 +24,8 @@ public class Response implements Serializable
 	private final List<String[]> commands = new LinkedList<>();
 	private final List<String> log_keys = new LinkedList<>();
 
+	private boolean suppress = false;
+
 	private String[] print_attributes = new String[0];
 	private String[] parent_print_attributes = new String[0];
 
@@ -36,6 +38,12 @@ public class Response implements Serializable
 	public Response Log(String log_key) {
 		log_keys.add(log_key);
 
+		return this;
+	}
+
+	public Response Suppress(boolean suppress)
+	{
+		this.suppress = suppress;
 		return this;
 	}
 
@@ -85,5 +93,10 @@ public class Response implements Serializable
 	public String[] GetParentPrintAttributes()
 	{
 		return parent_print_attributes;
+	}
+
+	public boolean IsSuppress()
+	{
+		return suppress;
 	}
 }

@@ -46,7 +46,7 @@ public final class Neo4jGraph implements IGraph
 
 	private GraphDatabaseService graph_db;
 
-	private ThreadLocal<NinjaTransaction> transaction = new ThreadLocal<>();
+	private NinjaTransaction transaction;
 
 	private String db_name;
 
@@ -59,16 +59,7 @@ public final class Neo4jGraph implements IGraph
 	 * */
 	public NinjaTransaction GetTransaction()
 	{
-		return transaction.get();
-	}
-
-	/**
-	 * ensure that calling thread has its own transaction
-	 * */
-	public void CheckTransaction()
-	{
-		if(transaction.get() == null)
-			transaction.set(new NinjaTransaction(graph_db, Neo4jGraph.COUNT_THRESHOLD));
+		return transaction;
 	}
 
 	/**
@@ -130,7 +121,7 @@ public final class Neo4jGraph implements IGraph
 		if(bootstrap)
 			DoBootstrap();
 
-		transaction.set(new NinjaTransaction(graph_db, Neo4jGraph.COUNT_THRESHOLD));
+		transaction = new NinjaTransaction(graph_db, Neo4jGraph.COUNT_THRESHOLD);
 	}
 
 	/**
@@ -199,7 +190,7 @@ public final class Neo4jGraph implements IGraph
 	 */
 	public void Shutdown()
 	{
-		transaction.get().Close();
+		transaction.Close();
 
 		graph_db.shutdown();
 
@@ -229,7 +220,7 @@ public final class Neo4jGraph implements IGraph
 
 	public UniqueID<EGraphType> AddObject()
 	{
-		transaction.get().Write();
+		transaction.Write();
 
 		Node node = graph_db.createNode();
 
@@ -242,7 +233,7 @@ public final class Neo4jGraph implements IGraph
 	 * */
 	public void DeleteObject(UniqueID<EGraphType> uid)
 	{
-		transaction.get().Delete();
+		transaction.Delete();
 
 		MatchType(uid, EGraphType.OBJECT);
 
@@ -261,7 +252,7 @@ public final class Neo4jGraph implements IGraph
 	 * */
 	public void DeleteLink(UniqueID<EGraphType> uid)
 	{
-		transaction.get().Delete();
+		transaction.Delete();
 
 		MatchType(uid, EGraphType.LINK);
 
@@ -306,7 +297,7 @@ public final class Neo4jGraph implements IGraph
 
 	public UniqueID<EGraphType> AddLink(UniqueID<EGraphType> source, UniqueID<EGraphType> target, String link_type)
 	{
-		transaction.get().Write();
+		transaction.Write();
 
 		Node source_node = graph_db.getNodeById(source.GetID());
 		Node target_node = graph_db.getNodeById(target.GetID());
@@ -320,7 +311,7 @@ public final class Neo4jGraph implements IGraph
 
 	public void SetObjectAttribute(UniqueID<EGraphType> uid, String name, Object value)
 	{
-		transaction.get().Write();
+		transaction.Write();
 
 		MatchType(uid, EGraphType.OBJECT);
 
@@ -342,7 +333,7 @@ public final class Neo4jGraph implements IGraph
 
 	public Object GetObjectAttribute(UniqueID<EGraphType> uid, String name)
 	{
-		transaction.get().Read();
+		transaction.Read();
 
 		MatchType(uid, EGraphType.OBJECT);
 
@@ -373,7 +364,7 @@ public final class Neo4jGraph implements IGraph
 
 	public void SetLinkAttribute(UniqueID<EGraphType> uid, String name, Object value)
 	{
-		transaction.get().Write();
+		transaction.Write();
 
 		MatchType(uid, EGraphType.LINK);
 
@@ -390,7 +381,7 @@ public final class Neo4jGraph implements IGraph
 
 	public Object GetLinkAttribute(UniqueID<EGraphType> uid, String name)
 	{
-		transaction.get().Read();
+		transaction.Read();
 
 		MatchType(uid, EGraphType.LINK);
 
@@ -450,7 +441,7 @@ public final class Neo4jGraph implements IGraph
 
 	public List<UniqueID<EGraphType>> GetOutLinks(UniqueID<EGraphType> uid)
 	{
-		transaction.get().Read();
+		transaction.Read();
 
 		MatchType(uid, EGraphType.OBJECT);
 
@@ -469,7 +460,7 @@ public final class Neo4jGraph implements IGraph
 
 	public List<UniqueID<EGraphType>> GetInLinks(UniqueID<EGraphType> uid)
 	{
-		transaction.get().Read();
+		transaction.Read();
 
 		MatchType(uid, EGraphType.OBJECT);
 
@@ -488,7 +479,7 @@ public final class Neo4jGraph implements IGraph
 
 	public List<UniqueID<EGraphType>> GetAllObjects()
 	{
-		transaction.get().Read();
+		transaction.Read();
 
 		List<UniqueID<EGraphType>> list = new LinkedList<>();
 
@@ -502,7 +493,7 @@ public final class Neo4jGraph implements IGraph
 
 	public List<UniqueID<EGraphType>> GetAllLinks()
 	{
-		transaction.get().Read();
+		transaction.Read();
 
 		List<UniqueID<EGraphType>> list = new LinkedList<>();
 
@@ -516,7 +507,7 @@ public final class Neo4jGraph implements IGraph
 
 	public UniqueID<EGraphType> GetLinkTarget(UniqueID<EGraphType> uid)
 	{
-		transaction.get().Read();
+		transaction.Read();
 
 		MatchType(uid, EGraphType.LINK);
 
@@ -537,7 +528,7 @@ public final class Neo4jGraph implements IGraph
 
 	public UniqueID<EGraphType> GetLinkSource(UniqueID<EGraphType> uid)
 	{
-		transaction.get().Read();
+		transaction.Read();
 
 		MatchType(uid, EGraphType.LINK);
 
@@ -557,14 +548,14 @@ public final class Neo4jGraph implements IGraph
 
 	public List<String> GetObjectAttributes(UniqueID<EGraphType> uid)
 	{
-		transaction.get().Read();
+		transaction.Read();
 		MatchType(uid, EGraphType.OBJECT);
 
 		List<String> attrs = new LinkedList<>();
 
 		Node node = graph_db.getNodeById(uid.GetID());
 
-		for (String name : node.getPropertyKeys())
+		for(String name : node.getPropertyKeys())
 			attrs.add(name);
 
 		return attrs;
@@ -572,14 +563,14 @@ public final class Neo4jGraph implements IGraph
 
 	public List<String> GetLinkAttributes(UniqueID<EGraphType> uid)
 	{
-		transaction.get().Read();
+		transaction.Read();
 		MatchType(uid, EGraphType.LINK);
 
 		List<String> attrs = new LinkedList<>();
 
 		Relationship rel = graph_db.getRelationshipById(uid.GetID());
 
-		for (String name : rel.getPropertyKeys())
+		for(String name : rel.getPropertyKeys())
 			attrs.add(name);
 
 		return attrs;
@@ -587,12 +578,12 @@ public final class Neo4jGraph implements IGraph
 
 	public void DeleteObjectAttribute(UniqueID<EGraphType> uid, String name)
 	{
-		transaction.get().Write();
+		transaction.Write();
 		MatchType(uid, EGraphType.OBJECT);
 
 		Node node = graph_db.getNodeById(uid.GetID());
 
-		if (!node.hasProperty(name))
+		if(!node.hasProperty(name))
 			throw new ExceptionModelFail("attribute not found: " + name);
 
 		node.removeProperty(name);
@@ -600,12 +591,12 @@ public final class Neo4jGraph implements IGraph
 
 	public void DeleteLinkAttribute(UniqueID<EGraphType> uid, String name)
 	{
-		transaction.get().Write();
+		transaction.Write();
 		MatchType(uid, EGraphType.LINK);
 
 		Relationship rel = graph_db.getRelationshipById(uid.GetID());
 
-		if (!rel.hasProperty(name))
+		if(!rel.hasProperty(name))
 			throw new ExceptionModelFail("attribute not found: " + name);
 
 		rel.removeProperty(name);
@@ -613,7 +604,7 @@ public final class Neo4jGraph implements IGraph
 
 	public boolean TestObjectAttribute(UniqueID<EGraphType> uid, String name)
 	{
-		transaction.get().Read();
+		transaction.Read();
 		MatchType(uid, EGraphType.OBJECT);
 
 		boolean res;
@@ -632,7 +623,7 @@ public final class Neo4jGraph implements IGraph
 
 	public boolean TestLinkAttribute(UniqueID<EGraphType> uid, String name)
 	{
-		transaction.get().Read();
+		transaction.Read();
 		MatchType(uid, EGraphType.LINK);
 
 		boolean res;

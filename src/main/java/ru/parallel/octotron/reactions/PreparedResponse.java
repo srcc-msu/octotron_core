@@ -140,27 +140,28 @@ public class PreparedResponse implements Runnable
 	@Override
  	public void run()
 	{
-		for(String[] command : composed_commands)
-		{
-			String actual_name = settings.GetScriptByKey(command[0]);
-
-			if(actual_name == null)
-				throw new ExceptionModelFail("there is no script with key: " + command[0]);
-
-			try
+		if(!response.IsSuppress())
+			for(String[] command : composed_commands)
 			{
-				FileUtils.ExecSilent(actual_name
-					, Long.toString(timestamp)
-					, response.GetStatus().toString()
-					, response.GetDescription()
-					, attribute_values
-					, parent_attribute_values);
+				String actual_name = settings.GetScriptByKey(command[0]);
+
+				if(actual_name == null)
+					throw new ExceptionModelFail("there is no script with key: " + command[0]);
+
+				try
+				{
+					FileUtils.ExecSilent(actual_name
+						, Long.toString(timestamp)
+						, response.GetStatus().toString()
+						, response.GetDescription()
+						, attribute_values
+						, parent_attribute_values);
+				}
+				catch(ExceptionSystemError e)
+				{
+					LOGGER.log(Level.SEVERE, "could not invoke reaction script", e);
+				}
 			}
-			catch(ExceptionSystemError e)
-			{
-				LOGGER.log(Level.SEVERE, "could not invoke reaction script", e);
-			}
-		}
 
 		for(String log_key : response.GetLogKeys())
 		{

@@ -21,14 +21,14 @@ public class IndexTest
 			new SimpleAttribute("att_obj", "value12345")
 		};
 
-		IndexTest.obj_factory = new ObjectFactory().Constants(obj_att);
+		IndexTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
 
 		SimpleAttribute[] link_att = {
 			new SimpleAttribute("type", "contain"),
 			new SimpleAttribute("att_link", "value23456")
 		};
 
-		IndexTest.link_factory = new LinkFactory().Constants(link_att);
+		IndexTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);
 	}
 
 	@AfterClass

@@ -7,8 +7,7 @@ import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.logic.ExecutionController;
+import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 
@@ -16,34 +15,6 @@ import java.util.*;
 
 public abstract class AbstractModAttribute extends AbstractAttribute implements IModelAttribute
 {
-	public static class AbstractModAttributeBuilder<T extends AbstractModAttribute> implements IAttributeBuilder
-	{
-		protected final T attribute;
-
-		public AbstractModAttributeBuilder(T attribute)
-		{
-			if (ModelService.Get().GetMode() == ModelService.EMode.OPERATION)
-				throw new ExceptionModelFail("objects creation is not allowed in operational mode");
-
-			this.attribute = attribute;
-		}
-
-		public void AddReaction(Reaction reaction)
-		{
-			attribute.reactions.put(reaction.GetID(), reaction);
-		}
-
-		@Override
-		public void AddDependant(VarAttribute dependant)
-		{
-			attribute.dependants.add(dependant);
-		}
-	}
-
-	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder();
-
-// ------------------
-
 	private History history;
 
 	protected boolean is_valid;
@@ -58,12 +29,14 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 
 		history = new History();
 
-		is_valid = (Boolean) GetPersistentAttribute("is_valid", true);
-		ctime = (Long) GetPersistentAttribute("ctime", 0L);
+		is_valid = true;
+		ctime = 0L;
 
 		reactions = new HashMap<>();
 		dependants = new AttributeList<>();
 	}
+
+	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder(ModelService service);
 
 	@Override
 	public boolean IsValid()
@@ -75,14 +48,12 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	public void SetValid()
 	{
 		is_valid = true;
-		StorePersistentAttribute("is_valid", is_valid);
 	}
 
 	@Override
 	public void SetInvalid()
 	{
 		is_valid = false;
-		StorePersistentAttribute("is_valid", is_valid);
 	}
 
 	public long GetCTime()
@@ -93,7 +64,6 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	public void SetCTime(long new_ctime)
 	{
 		ctime = new_ctime;
-		StorePersistentAttribute("ctime", new_ctime);
 	}
 
 	public Reaction GetReaction(long id)
@@ -149,19 +119,16 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	}
 
 	@Override
-	public Collection<PreparedResponse> ProcessReactions()
+	public Collection<Response> ProcessReactions()
 	{
-		long time = JavaUtils.GetTimestamp();
-
-		List<PreparedResponse> result = new LinkedList<>();
+		List<Response> result = new LinkedList<>();
 
 		for(Reaction reaction : GetReactions())
 		{
 			Response response = reaction.Process();
 
 			if(response != null)
-				result.add(new PreparedResponse(response
-					, GetParent(), time, ExecutionController.Get().GetSettings()));
+				result.add(response);
 		}
 
 		return result;

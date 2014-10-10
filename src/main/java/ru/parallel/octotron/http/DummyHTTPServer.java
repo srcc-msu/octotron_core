@@ -23,6 +23,7 @@ import java.util.List;
 public class DummyHTTPServer
 {
 	private HttpServer server;
+	private int port;
 
 	public HttpExchangeWrapper GetExchange()
 	{
@@ -30,6 +31,11 @@ public class DummyHTTPServer
 	}
 
 	private List<HttpExchangeWrapper> requests = new LinkedList<>();
+
+	public int GetPort()
+	{
+		return port;
+	}
 
 	/**
  * parse request to tokens and add parsed_request to message queue
@@ -88,6 +94,8 @@ public class DummyHTTPServer
 		server.createContext("/", new DefaultHandler());
 
 		server.start();
+
+		this.port = server.getAddress().getPort();
 	}
 
 /**

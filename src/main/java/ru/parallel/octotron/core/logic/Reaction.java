@@ -5,13 +5,12 @@ import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEntityType;
-import ru.parallel.octotron.core.primitive.Persistent;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.utils.JavaUtils;
 
 import javax.annotation.Nullable;
 
-public class Reaction extends Persistent<EEntityType>
+public class Reaction extends UniqueID<EEntityType>
 {
 	private final ReactionTemplate template;
 	private final ModelEntity parent;
@@ -21,6 +20,7 @@ public class Reaction extends Persistent<EEntityType>
 
 	private long state;
 	private long stat;
+
 	private String descr;
 	private boolean suppress;
 
@@ -35,20 +35,13 @@ public class Reaction extends Persistent<EEntityType>
 		this.template = template;
 		this.parent = parent;
 
-		delay = 0;
-		repeat = 0;
+		delay = 0L;
+		repeat = 0L;
 
-		InitPersistent();
-
-		state = (Long) GetPersistentAttribute("state", 0L);
-		stat = (Long) GetPersistentAttribute("stat", 0L);
-		descr = (String) GetPersistentAttribute("descr", "");
-		suppress = (Boolean) GetPersistentAttribute("suppress", false);
-
-		StorePersistentAttribute("state", state);
-		StorePersistentAttribute("stat", stat);
-		StorePersistentAttribute("descr", descr);
-		StorePersistentAttribute("suppress", suppress);
+		state = 0L;
+		stat = 0L;
+		descr = "";
+		suppress = false;
 	}
 
 	public ReactionTemplate GetTemplate()
@@ -66,7 +59,6 @@ public class Reaction extends Persistent<EEntityType>
 	public void SetState(long new_state)
 	{
 		state = new_state;
-		StorePersistentAttribute("state", state);
 	}
 
 // -------------
@@ -74,7 +66,6 @@ public class Reaction extends Persistent<EEntityType>
 	private void IncStat()
 	{
 		stat++;
-		StorePersistentAttribute("stat", stat);
 	}
 
 	public long GetStat()
@@ -93,9 +84,6 @@ public class Reaction extends Persistent<EEntityType>
 	{
 		this.descr = descr;
 		this.suppress = suppress;
-
-		StorePersistentAttribute("descr", descr);
-		StorePersistentAttribute("suppress", suppress);
 	}
 
 	@Nullable
@@ -176,7 +164,7 @@ public class Reaction extends Persistent<EEntityType>
 			}
 		}
 
-		return suppress ? result : null;
+		return suppress ? null : result;
 	}
 
 

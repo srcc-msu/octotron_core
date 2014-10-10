@@ -10,7 +10,7 @@ import com.sun.net.httpserver.*;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
-import ru.parallel.octotron.logic.ExecutionController;
+import ru.parallel.octotron.exec.ExecutionController;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -26,7 +26,7 @@ public class HTTPServer
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private HttpServer server;
-	private final ExecutorService executor;
+	private final ExecutionController controller;
 
 	/**
  * parse request to tokens and add parsed_request to message queue
@@ -38,7 +38,7 @@ public class HTTPServer
 		public void handle(HttpExchange http_exchange)
 			throws IOException
 		{
-			ExecutionController.Get().NewHttp();
+			controller.HttpRequestInform();
 			HttpExchangeWrapper http_exchange_wrapper = new HttpExchangeWrapper(http_exchange);
 
 			ParsedModelRequest request;
@@ -60,10 +60,10 @@ public class HTTPServer
 			if(!request.IsBlocking())
 			{
 				http_exchange_wrapper.FinishString("request queued");
-				ExecutionController.Get().AddRequest(request);
+				controller.AddRequest(request);
 			}
 			else
-				ExecutionController.Get().AddBlockingRequest(request, http_exchange_wrapper);
+				controller.AddBlockingRequest(request, http_exchange_wrapper);
 		}
 	}
 
@@ -107,10 +107,10 @@ public class HTTPServer
  * create and start the server, listening on /port<br>
  * messages are not guaranteed to come in fixed order<br>
  * */
-	public HTTPServer(GlobalSettings settings, ExecutorService executor)
+	public HTTPServer(ExecutionController controller, ExecutorService executor)
 		throws ExceptionSystemError
 	{
-		this.executor = executor;
+		this.controller = controller;
 
 		// why is it turned off by default >.<
 		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
@@ -118,7 +118,7 @@ public class HTTPServer
 
 		try
 		{
-			server = HttpServer.create(new InetSocketAddress(settings.GetPort()), 0);
+			server = HttpServer.create(new InetSocketAddress(controller.GetContext().settings.GetPort()), 0);
 		}
 		catch (IOException e)
 		{
@@ -133,13 +133,13 @@ public class HTTPServer
 
 		server.createContext("/", new DefaultHandler());
 
-		request.setAuthenticator(HTTPServer.GetAuth("view", settings.GetViewCredentials()));
-		modify.setAuthenticator(HTTPServer.GetAuth("modify", settings.GetModifyCredentials()));
-		control.setAuthenticator(HTTPServer.GetAuth("control", settings.GetControlCredentials()));
+		request.setAuthenticator(HTTPServer.GetAuth("view", controller.GetContext().settings.GetViewCredentials()));
+		modify.setAuthenticator(HTTPServer.GetAuth("modify", controller.GetContext().settings.GetModifyCredentials()));
+		control.setAuthenticator(HTTPServer.GetAuth("control", controller.GetContext().settings.GetControlCredentials()));
 
 		server.start();
 
-		LOGGER.log(Level.INFO, "request server listening on port: " + settings.GetPort());
+		LOGGER.log(Level.INFO, "request server listening on port: " + controller.GetContext().settings.GetPort());
 	}
 
 	/**

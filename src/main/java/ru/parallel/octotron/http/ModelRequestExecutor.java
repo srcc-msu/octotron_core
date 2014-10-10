@@ -1,7 +1,9 @@
 package ru.parallel.octotron.http;
 
 import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.core.model.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.exec.ExecutionController;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -14,15 +16,20 @@ public class ModelRequestExecutor implements Runnable
 	private final HttpExchangeWrapper exchange;
 	private final ParsedModelRequest request;
 
-	public ModelRequestExecutor(ParsedModelRequest request, HttpExchangeWrapper exchange)
+	private final ExecutionController controller;
+
+	public ModelRequestExecutor(ExecutionController controller
+		, ParsedModelRequest request, HttpExchangeWrapper exchange)
 	{
+		this.controller = controller;
 		this.request = request;
 		this.exchange = exchange;
 	}
 
-	public ModelRequestExecutor(ParsedModelRequest request)
+	public ModelRequestExecutor(ExecutionController controller
+		, ParsedModelRequest request)
 	{
-		this(request, null);
+		this(controller, request, null);
 	}
 
 	public RequestResult GetResult()
@@ -34,9 +41,11 @@ public class ModelRequestExecutor implements Runnable
 			String path = request.params.get("path");
 
 			if(path != null)
-				entity_list = PathParser.Parse(path).Execute();
+				entity_list = PathParser.Parse(path)
+					.Execute(controller.GetContext().model_data);
 
-			return (RequestResult) request.operation.Execute(request.params, entity_list);
+			return (RequestResult) request.operation
+				.Execute(controller, request.params, entity_list);
 		}
 		catch(Exception e)
 		{

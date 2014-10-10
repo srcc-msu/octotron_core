@@ -1,22 +1,18 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 
 public class SensorAttribute extends AbstractModAttribute
 {
-	public static class SensorAttributeBuilder extends AbstractModAttributeBuilder<SensorAttribute>
-	{
-		SensorAttributeBuilder(SensorAttribute attribute)
-		{
-			super(attribute);
-		}
-	}
 
 	@Override
-	public SensorAttributeBuilder GetBuilder()
+	public SensorAttributeBuilder GetBuilder(ModelService service)
 	{
-		return new SensorAttributeBuilder(this);
+		service.CheckModification();
+
+		return new SensorAttributeBuilder(service, this);
 	}
 
 	public SensorAttribute(ModelEntity parent, String name, Object value)

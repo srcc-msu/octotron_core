@@ -6,6 +6,8 @@
 
 package ru.parallel.utils;
 
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -79,7 +81,7 @@ public class AutoFormat
 				result.append(inner_prefix)
 					.append(Quotify(name))
 					.append(':')
-					.append(dict.get(name));
+					.append(SimpleAttribute.ValueToStr(dict.get(name)));
 
 				inner_prefix = ",";
 			}
@@ -107,7 +109,7 @@ public class AutoFormat
 			{
 				result.append(Quotify(name))
 					.append(" = ")
-					.append(map.get(name))
+					.append(SimpleAttribute.ValueToStr(map.get(name)))
 					.append(System.lineSeparator());
 			}
 
@@ -136,7 +138,7 @@ public class AutoFormat
 				result.append(inner_prefix)
 					.append(Quotify(name))
 					.append(" = ")
-					.append(map.get(name));
+					.append(SimpleAttribute.ValueToStr(map.get(name)));
 
 				inner_prefix = ", ";
 			}

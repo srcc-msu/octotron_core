@@ -41,12 +41,6 @@ public abstract class AbstractAttribute extends UniqueID<EAttributeType> impleme
 		value = new_value;
 	}
 
-	@Override
-	public String GetStringValue()
-	{
-		return SimpleAttribute.ValueToStr(GetValue());
-	}
-
 	private void CheckType(Object a_value)
 	{
 		if(!GetValue().getClass().equals(a_value.getClass()))

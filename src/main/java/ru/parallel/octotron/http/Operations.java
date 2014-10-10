@@ -230,7 +230,7 @@ public abstract class Operations
 				Map<String, Object> map = new HashMap<>();
 
 				for(IAttribute attribute : GetAttributes(entity, attributes, null))
-					map.put(attribute.GetName(), attribute.GetStringValue());
+					map.put(attribute.GetName(), attribute.GetValue());
 
 				data.add(map);
 			}
@@ -266,7 +266,7 @@ public abstract class Operations
 				Map<String, Object> map = new HashMap<>();
 
 				for(IAttribute attribute : GetAttributes(entity, attributes, EAttributeType.CONST))
-					map.put(attribute.GetName(), attribute.GetStringValue());
+					map.put(attribute.GetName(), attribute.GetValue());
 
 				data.add(map);
 			}
@@ -303,7 +303,7 @@ public abstract class Operations
 				{
 					Map<String, Object> map = new HashMap<>();
 					map.put("name", attribute.GetName());
-					map.put("value", attribute.GetStringValue());
+					map.put("value", attribute.GetValue());
 					map.put("valid", attribute.IsValid());
 					data.add(map);
 				}
@@ -341,7 +341,7 @@ public abstract class Operations
 				{
 					Map<String, Object> map = new HashMap<>();
 					map.put("name", attribute.GetName());
-					map.put("value", attribute.GetStringValue());
+					map.put("value", attribute.GetValue());
 					map.put("valid", attribute.IsValid());
 					data.add(map);
 				}
@@ -381,7 +381,7 @@ public abstract class Operations
 				Map<String, Object> map = new HashMap<>();
 
 				map.put("name", reaction.GetTemplate().GetCheckName());
-				map.put("value", SimpleAttribute.ValueToStr(reaction.GetTemplate().GetCheckValue()));
+				map.put("value", reaction.GetTemplate().GetCheckValue());
 				map.put("delay_config", reaction.GetTemplate().GetDelay());
 				map.put("repeat_config", reaction.GetTemplate().GetRepeat());
 

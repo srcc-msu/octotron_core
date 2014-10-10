@@ -52,37 +52,11 @@ public class PreparedResponse implements Runnable
 		СomposeCommands(entity);
 	}
 
-	private static String GetAttrStr(String[] attributes, ModelEntity entity)
-	{
-		StringBuilder str = new StringBuilder();
-
-		if(attributes.length > 0)
-		{
-			String prefix = "";
-
-			for(String attr : attributes)
-			{
-				if(entity.TestAttribute(attr))
-				{
-					Object value = entity.GetAttribute(attr).GetValue();
-
-					str.append(prefix)
-						.append(SimpleAttribute.ValueToStr(attr)).append(':')
-						.append(SimpleAttribute.ValueToStr(value));
-
-					prefix = ",";
-				}
-			}
-		}
-
-		return str.toString();
-	}
-
 	private void СomposeAttributes(ModelEntity entity)
 	{
 		for(String attribute : response.GetPrintAttributes())
 			attribute_values.put(attribute
-				, entity.GetAttribute(attribute).GetStringValue());
+				, entity.GetAttribute(attribute).GetValue());
 	}
 
 	private void СomposeParentAttributes(ModelEntity entity)
@@ -104,7 +78,7 @@ public class PreparedResponse implements Runnable
 
 		for(String attribute : response.GetParentPrintAttributes())
 			parent_attribute_values.put(attribute
-				, parent.GetAttribute(attribute).GetStringValue());
+				, parent.GetAttribute(attribute).GetValue());
 	}
 
 	private void СomposeCommands(ModelEntity entity)
@@ -182,10 +156,10 @@ public class PreparedResponse implements Runnable
 			, Long.toString(timestamp));
 
 		result.put("event"
-			, SimpleAttribute.ValueToStr(response.GetStatus().toString()));
+			, response.GetStatus().toString());
 
 		result.put("msg"
-			, SimpleAttribute.ValueToStr(response.GetDescription()));
+			, response.GetDescription());
 
 		result.put("this"
 			, AutoFormat.PrintJson(Arrays.asList(attribute_values)));

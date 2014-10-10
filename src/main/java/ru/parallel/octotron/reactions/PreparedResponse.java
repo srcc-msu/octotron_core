@@ -15,10 +15,10 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.FileUtils;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,8 +33,8 @@ public class PreparedResponse implements Runnable
 	private final List<String[]> composed_commands = new LinkedList<>();
 	private final GlobalSettings settings;
 
-	private String attribute_values;
-	private String parent_attribute_values;
+	private Map<String, Object> attribute_values;
+	private Map<String, Object> parent_attribute_values;
 
 	private final long timestamp;
 
@@ -43,6 +43,9 @@ public class PreparedResponse implements Runnable
 		this.response = response;
 		this.timestamp = timestamp;
 		this.settings = settings;
+
+		attribute_values = new HashMap<>();
+		parent_attribute_values = new HashMap<>();
 
 		СomposeAttributes(entity);
 		СomposeParentAttributes(entity);
@@ -77,27 +80,13 @@ public class PreparedResponse implements Runnable
 
 	private void СomposeAttributes(ModelEntity entity)
 	{
-		String[] print_attributes = response.GetPrintAttributes();
-
-		if(print_attributes.length == 0)
-		{
-			attribute_values = "";
-			return;
-		}
-
-		attribute_values = GetAttrStr(print_attributes, entity);
+		for(String attribute : response.GetPrintAttributes())
+			attribute_values.put(attribute
+				, entity.GetAttribute(attribute).GetStringValue());
 	}
 
 	private void СomposeParentAttributes(ModelEntity entity)
 	{
-		String[] print_attributes = response.GetParentPrintAttributes();
-
-		if(print_attributes.length == 0)
-		{
-			parent_attribute_values = "";
-			return;
-		}
-
 		if(entity.GetType() != EEntityType.OBJECT)
 			throw new ExceptionModelFail("only objects have a parent");
 
@@ -113,7 +102,9 @@ public class PreparedResponse implements Runnable
 
 		ModelObject parent = parents.Only();
 
-		parent_attribute_values = GetAttrStr(print_attributes, parent);
+		for(String attribute : response.GetParentPrintAttributes())
+			parent_attribute_values.put(attribute
+				, parent.GetAttribute(attribute).GetStringValue());
 	}
 
 	private void СomposeCommands(ModelEntity entity)
@@ -154,8 +145,8 @@ public class PreparedResponse implements Runnable
 						, Long.toString(timestamp)
 						, response.GetStatus().toString()
 						, response.GetDescription()
-						, attribute_values
-						, parent_attribute_values);
+						, AutoFormat.PrintJson(Arrays.asList(attribute_values))
+						, AutoFormat.PrintJson(Arrays.asList(parent_attribute_values)));
 				}
 				catch(ExceptionSystemError e)
 				{
@@ -185,12 +176,26 @@ public class PreparedResponse implements Runnable
 
 	public String GetFullString()
 	{
-		return "{ "
-			+        SimpleAttribute.ValueToStr("time")   + ":" + Long.toString(timestamp)
-			+ ", " + SimpleAttribute.ValueToStr("event")  + ":" + SimpleAttribute.ValueToStr(response.GetStatus().toString())
-			+ ", " + SimpleAttribute.ValueToStr("msg")    + ":" + SimpleAttribute.ValueToStr(response.GetDescription())
-			+ ", " + SimpleAttribute.ValueToStr("this")   + ":" + "{" + attribute_values + "}"
-			+ ", " + SimpleAttribute.ValueToStr("parent") + ":" + "{" + parent_attribute_values + "}"
-			+ "}";
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("time"
+			, Long.toString(timestamp));
+
+		result.put("event"
+			, SimpleAttribute.ValueToStr(response.GetStatus().toString()));
+
+		result.put("msg"
+			, SimpleAttribute.ValueToStr(response.GetDescription()));
+
+		result.put("this"
+			, AutoFormat.PrintJson(Arrays.asList(attribute_values)));
+
+		result.put("parent"
+			, AutoFormat.PrintJson(Arrays.asList(parent_attribute_values)));
+
+		result.put("parent"
+			, AutoFormat.PrintJson(Arrays.asList(parent_attribute_values)));
+
+		return AutoFormat.PrintJson(Arrays.asList(result));
 	}
 }

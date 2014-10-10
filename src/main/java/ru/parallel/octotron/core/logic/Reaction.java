@@ -1,9 +1,6 @@
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.graph.EGraphType;
-import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.utils.JavaUtils;
@@ -164,7 +161,9 @@ public class Reaction extends UniqueID<EEntityType>
 			}
 		}
 
-		return suppress ? null : result;
+		if(result != null)
+			return result.Suppress(suppress);
+		return null;
 	}
 
 

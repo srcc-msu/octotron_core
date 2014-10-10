@@ -1,7 +1,6 @@
 package ru.parallel.octotron.http;
 
 import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.model.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.ExecutionController;
 

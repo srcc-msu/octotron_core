@@ -1,6 +1,5 @@
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;

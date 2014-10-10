@@ -6,20 +6,21 @@
 
 package ru.parallel.octotron.http;
 
-import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.*;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.http.AutoFormat.E_FORMAT_PARAM;
-import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.RuntimeService;
+import ru.parallel.utils.AutoFormat;
+import ru.parallel.utils.AutoFormat.E_FORMAT_PARAM;
 import ru.parallel.utils.JavaUtils;
 import ru.parallel.utils.Timer;
 

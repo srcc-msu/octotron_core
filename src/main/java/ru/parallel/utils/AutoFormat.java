@@ -4,9 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.http;
-
-import ru.parallel.utils.JavaUtils;
+package ru.parallel.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +61,8 @@ public class AutoFormat
 	{
 		StringBuilder result = new StringBuilder();
 
-		result.append('[');
+		if(data.size() > 1)
+			result.append('[');
 
 		String prefix = "";
 
@@ -89,7 +88,9 @@ public class AutoFormat
 			prefix = ",";
 		}
 
-		result.append(']');
+		if(data.size() > 1)
+			result.append(']');
+
 		return result.toString();
 	}
 

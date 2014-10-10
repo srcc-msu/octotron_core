@@ -208,8 +208,6 @@ public class ExecutionController
 	{
 		long time = JavaUtils.GetTimestamp();
 
-		long reactions_count = 0;
-
 		for(IModelAttribute attribute : attributes)
 		{
 			for(Response response : attribute.ProcessReactions())
@@ -218,8 +216,6 @@ public class ExecutionController
 					, attribute.GetParent()
 					, time
 					, context.settings));
-
-				reactions_count++;
 			}
 		}
 	}

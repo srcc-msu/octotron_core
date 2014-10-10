@@ -13,7 +13,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.ReadableIndex;
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IIndex;
-import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 

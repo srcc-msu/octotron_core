@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.http;
 
-import static ru.parallel.octotron.http.AutoFormat.E_FORMAT_PARAM;
+import static ru.parallel.utils.AutoFormat.E_FORMAT_PARAM;
 
 /**
  * plain class for storing two request result and its type<br>

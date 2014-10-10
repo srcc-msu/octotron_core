@@ -138,6 +138,11 @@ public class Start
 
 		LOGGER.log(Level.INFO, "Creating model...");
 
+// some magic to pass context to all python modules
+		interpreter.set("context", context);
+		interpreter.exec("import __builtin__");
+		interpreter.exec("__builtin__.context = context");
+
 		interpreter.execfile(context.settings.GetModelPath() + '/' + context.settings.GetModelMain());
 
 		LOGGER.log(Level.INFO, "done");
@@ -203,7 +208,6 @@ public class Start
 		LOGGER.log(Level.INFO, "Building rule dependencies and running the model");
 
 		context.model_service.Operate();
-
 
 		ExecutionController controller = null;
 // --- create

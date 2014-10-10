@@ -8,7 +8,6 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.reactions.PreparedResponse;
 
 import java.util.Collection;
 import java.util.LinkedList;

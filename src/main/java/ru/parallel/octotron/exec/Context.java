@@ -10,7 +10,8 @@ public final class Context
 	public final ModelData model_data;
 	public final ModelService model_service;
 
-	private Context(GlobalSettings settings, ModelData model_data, ModelService model_service)
+	private Context(GlobalSettings settings, ModelData model_data
+		, ModelService model_service)
 	{
 		this.settings = settings;
 		this.model_data = model_data;
@@ -22,8 +23,8 @@ public final class Context
 	{
 		GlobalSettings settings = new GlobalSettings(json_config);
 		ModelData model_data = new ModelData();
-		ModelService model_service = new ModelService(model_data, ModelService.EMode.CREATION
-			, settings.GetDbPath() + "/" + settings.GetModelName());
+		ModelService model_service = new ModelService(model_data
+			, ModelService.EMode.CREATION, settings);
 
 		return new Context(settings, model_data, model_service);
 	}
@@ -33,8 +34,8 @@ public final class Context
 	{
 		GlobalSettings settings = new GlobalSettings(port);
 		ModelData model_data = new ModelData();
-		ModelService model_service = new ModelService(model_data, ModelService.EMode.CREATION
-			, settings.GetDbPath() + "/" + settings.GetModelName());
+		ModelService model_service = new ModelService(model_data
+			, ModelService.EMode.CREATION, settings);
 
 		return new Context(settings, model_data, model_service);
 	}

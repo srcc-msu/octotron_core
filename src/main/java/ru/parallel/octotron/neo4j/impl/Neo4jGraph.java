@@ -53,6 +53,7 @@ public final class Neo4jGraph implements IGraph
 	private static final int COUNT_THRESHOLD = 10000; // write counts to commit new transaction
 
 	private boolean bootstrap = false;
+	private WrappingNeoServerBootstrapper webserver;
 
 	/**
 	 * Get access to current transaction<br>
@@ -136,8 +137,8 @@ public final class Neo4jGraph implements IGraph
 		config.configuration()
 			.setProperty(Configurator.WEBSERVER_ADDRESS_PROPERTY_KEY, "0.0.0.0");
 
-		new WrappingNeoServerBootstrapper((GraphDatabaseAPI) graph_db, config)
-			.start();
+		webserver = new WrappingNeoServerBootstrapper((GraphDatabaseAPI) graph_db, config);
+		webserver.start();
 
 		LOGGER.log(Level.INFO, "neo4j is accessible through the web");
 	}
@@ -191,6 +192,9 @@ public final class Neo4jGraph implements IGraph
 	public void Shutdown()
 	{
 		transaction.Close();
+
+		if(bootstrap)
+			webserver.stop();
 
 		graph_db.shutdown();
 

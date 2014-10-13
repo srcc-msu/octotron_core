@@ -1,9 +1,12 @@
-package ru.parallel.octotron.core.graph.impl;
+package ru.parallel.octotron.core.persistence;
 
 import com.google.common.collect.Iterables;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
+import ru.parallel.octotron.core.graph.impl.GraphEntity;
+import ru.parallel.octotron.core.graph.impl.GraphLink;
+import ru.parallel.octotron.core.graph.impl.GraphObject;
+import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
@@ -14,18 +17,19 @@ import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import java.util.Collection;
 
-public class GraphManager
+public class GraphManager implements IPersistenceManager
 {
 	public enum ELinkType
 	{
 		MODEL_LINK
 	}
 
-	private Neo4jGraph graph;
-	private GraphService graph_service;
 	private ModelService.EMode mode;
 
-	public GraphManager(ModelService.EMode mode, String path)
+	private Neo4jGraph graph;
+	private GraphService graph_service;
+
+	public GraphManager(ModelService service, ModelService.EMode mode, String path)
 		throws ExceptionSystemError
 	{
 		this.mode = mode;
@@ -43,16 +47,19 @@ public class GraphManager
 
 	private GraphObject GetObject(UniqueID<?> id)
 	{
+
 		return graph_service.GetObject("AID", id.GetID());
 	}
 
 	private GraphLink GetLink(UniqueID<?> id)
 	{
+
 		return graph_service.GetLink("AID", id.GetID());
 	}
 
 	private GraphEntity GetEntity(UniqueID<?> id)
 	{
+
 		Collection<GraphLink> links = graph_service.GetLinks("AID", id.GetID());
 		Collection<GraphObject> objects = graph_service.GetObjects("AID", id.GetID());
 
@@ -72,8 +79,10 @@ public class GraphManager
 		throw new ExceptionModelFail("could not get entity for AID: " + id.GetID());
 	}
 
+	@Override
 	public void AddObject(ModelObject object)
 	{
+
 		if(mode == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
@@ -90,8 +99,10 @@ public class GraphManager
 		}
 	}
 
+	@Override
 	public void AddLink(ModelLink link)
 	{
+
 		if(mode == ModelService.EMode.CREATION)
 		{
 			GraphLink graph_object = graph_service.AddLink(
@@ -110,8 +121,10 @@ public class GraphManager
 		}
 	}
 
+	@Override
 	public void AddReaction(Reaction reaction)
 	{
+
 		if(mode == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
@@ -139,8 +152,10 @@ public class GraphManager
 		}
 	}
 
+	@Override
 	public void RegisterConst(ModelService model_service, ConstAttribute attribute)
 	{
+
 		if(mode == ModelService.EMode.CREATION)
 		{
 			GraphEntity graph_entity = GetEntity(attribute.GetParent());
@@ -159,5 +174,11 @@ public class GraphManager
 		{
 			throw new ExceptionModelFail("no database modification in operational mode");
 		}
+	}
+
+	@Override
+	public void Finish()
+	{
+		graph.Shutdown();
 	}
 }

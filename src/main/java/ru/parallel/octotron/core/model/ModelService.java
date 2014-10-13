@@ -2,10 +2,13 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.persistence.GhostManager;
+import ru.parallel.octotron.core.persistence.GraphManager;
+import ru.parallel.octotron.core.persistence.IPersistenceManager;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.GlobalSettings;
 
 public final class ModelService
 {
@@ -16,15 +19,27 @@ public final class ModelService
 
 	private ModelData model_data;
 	private EMode mode;
-	private GraphManager manager;
+	private IPersistenceManager manager;
 
-	public ModelService(ModelData model_data, EMode mode, String db_path)
+	public ModelService(ModelData model_data, EMode mode, GlobalSettings settings)
 		throws ExceptionSystemError
 	{
 		this.model_data = model_data;
 		this.mode = mode;
 
-		manager = new GraphManager(mode, db_path);
+		if(settings.IsDb())
+			manager = new GraphManager(this, mode, settings.GetDbPath() + "/" + settings.GetModelName());
+		else
+			manager = new GhostManager();
+	}
+
+	public ModelService(EMode mode, String path)
+		throws ExceptionSystemError
+	{
+		this.model_data = new ModelData();
+		this.mode = mode;
+
+		manager = new GraphManager(this, mode, path);
 	}
 
 	public EMode GetMode()
@@ -114,5 +129,11 @@ public final class ModelService
 	public void RegisterConst(ConstAttribute attribute)
 	{
 		manager.RegisterConst(this, attribute);
+	}
+
+	public void Finish()
+	{
+		manager.Finish();
+		manager = null;
 	}
 }

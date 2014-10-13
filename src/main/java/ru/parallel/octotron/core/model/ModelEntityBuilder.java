@@ -43,6 +43,8 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 		entity.attributes_map.put(name, attribute);
 		entity.const_map.put(name, attribute);
+
+		service.RegisterConst(attribute);
 	}
 
 	public void DeclareConst(SimpleAttribute attribute)

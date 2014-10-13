@@ -6,7 +6,6 @@ import ru.parallel.octotron.core.primitive.EAttributeType;
 
 public class SensorAttribute extends AbstractModAttribute
 {
-
 	@Override
 	public SensorAttributeBuilder GetBuilder(ModelService service)
 	{

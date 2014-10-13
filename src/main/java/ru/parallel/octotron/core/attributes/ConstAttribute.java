@@ -17,11 +17,11 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	static final String err_msg = "unsupported operation on const attribute: ";
 
 	@Override
-	public IAttributeBuilder GetBuilder(ModelService service)
+	public ConstAttributeBuilder GetBuilder(ModelService service)
 	{
 		service.CheckModification();
 
-		return new ConstAttributeBuilder(service);
+		return new ConstAttributeBuilder(service, this);
 	}
 
 	public ConstAttribute(ModelEntity parent, String name, Object value)

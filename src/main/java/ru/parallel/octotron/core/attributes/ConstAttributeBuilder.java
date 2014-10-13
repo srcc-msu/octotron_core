@@ -8,10 +8,12 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 public class ConstAttributeBuilder implements IAttributeBuilder
 {
 	private final ModelService service;
+	private final ConstAttribute attribute;
 
-	ConstAttributeBuilder(ModelService service)
+	ConstAttributeBuilder(ModelService service, ConstAttribute attribute)
 	{
 		this.service = service;
+		this.attribute = attribute;
 	}
 
 	@Override
@@ -25,5 +27,10 @@ public class ConstAttributeBuilder implements IAttributeBuilder
 	{
 		// nothing to see here
 		// throw new ExceptionModelFail(err_msg + "AddDependant");
+	}
+
+	public void ModifyValue(Object new_value)
+	{
+		attribute.SetValue(new_value);
 	}
 }

@@ -1,10 +1,9 @@
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 
@@ -56,19 +55,22 @@ public final class ModelService
 		}
 	}
 
+// ---------------------
+
 	public ModelLink AddLink(ModelObject source, ModelObject target)
 	{
 		CheckModification();
 
 		ModelLink link = new ModelLink(source, target);
+		manager.AddLink(link);
+
+		model_data.links.add(link);
 
 		source.GetBuilder(this).AddOutLink(link);
 		target.GetBuilder(this).AddInLink(link);
 
-		model_data.links.add(link);
 		link.GetBuilder(this).DeclareConst("AID", link.GetID());
 
-		manager.AddLink(link);
 		return link;
 	}
 
@@ -77,13 +79,16 @@ public final class ModelService
 		CheckModification();
 
 		ModelObject object = new ModelObject();
+		manager.AddObject(object);
 
 		model_data.objects.add(object);
+
 		object.GetBuilder(this).DeclareConst("AID", object.GetID());
 
-		manager.AddObject(object);
 		return object;
 	}
+
+// ---------------------
 
 	public void EnableLinkIndex(String name)
 	{
@@ -99,8 +104,15 @@ public final class ModelService
 		model_data.cache.EnableObjectIndex(name, model_data.objects);
 	}
 
+// ---------------------
+
 	public void RegisterReaction(Reaction reaction)
 	{
 		manager.AddReaction(reaction);
+	}
+
+	public void RegisterConst(ConstAttribute attribute)
+	{
+		manager.RegisterConst(this, attribute);
 	}
 }

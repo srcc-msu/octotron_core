@@ -25,18 +25,18 @@ public abstract class AbstractAttribute extends UniqueID<EAttributeType> impleme
 	}
 
 	@Override
-	public String GetName()
+	public final String GetName()
 	{
 		return name;
 	}
 
 	@Override
-	public Object GetValue()
+	public final Object GetValue()
 	{
 		return value;
 	}
 
-	protected void SetValue(Object new_value)
+	protected final void SetValue(Object new_value)
 	{
 		value = new_value;
 	}
@@ -64,7 +64,7 @@ public abstract class AbstractAttribute extends UniqueID<EAttributeType> impleme
 	}
 
 	@Override
-	public ModelEntity GetParent()
+	public final ModelEntity GetParent()
 	{
 		return parent;
 	}

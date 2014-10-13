@@ -1,6 +1,7 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.model.ModelService;
 
 public class AbstractModAttributeBuilder<T extends AbstractModAttribute> implements IAttributeBuilder
@@ -21,9 +22,12 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 	}
 
 	@Override
-	public void AddReaction(Reaction reaction)
+	public void AddReaction(ReactionTemplate reaction_template)
 	{
+		Reaction reaction = new Reaction(reaction_template, attribute);
 		attribute.reactions.put(reaction.GetID(), reaction);
+
+		service.RegisterReaction(reaction);
 	}
 
 	@Override

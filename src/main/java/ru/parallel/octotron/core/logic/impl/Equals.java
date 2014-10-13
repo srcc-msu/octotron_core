@@ -14,13 +14,11 @@ public class Equals extends ReactionTemplate
 	}
 
 	@Override
-	public boolean ReactionNeeded(ModelEntity object)
+	public boolean ReactionNeeded(IModelAttribute attribute)
 	{
-		IModelAttribute attr = object.GetAttribute(GetCheckName());
-
-		if(!attr.IsValid())
+		if(!attribute.IsValid())
 			return false;
 
-		return attr.eq(GetCheckValue());
+		return attribute.eq(GetCheckValue());
 	}
 }

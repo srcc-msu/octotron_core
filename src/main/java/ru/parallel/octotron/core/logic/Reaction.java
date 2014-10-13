@@ -1,5 +1,6 @@
 package ru.parallel.octotron.core.logic;
 
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.UniqueID;
@@ -10,7 +11,7 @@ import javax.annotation.Nullable;
 public class Reaction extends UniqueID<EEntityType>
 {
 	private final ReactionTemplate template;
-	private final ModelEntity parent;
+	private final IModelAttribute attribute;
 
 	private long delay;
 	private long repeat;
@@ -25,12 +26,12 @@ public class Reaction extends UniqueID<EEntityType>
 	public static final long STATE_STARTED = 1;
 	public static final long STATE_EXECUTED = 2;
 
-	public Reaction(ReactionTemplate template, ModelEntity parent)
+	public Reaction(ReactionTemplate template, IModelAttribute attribute)
 	{
 		super(EEntityType.REACTION);
 
 		this.template = template;
-		this.parent = parent;
+		this.attribute = attribute;
 
 		delay = 0L;
 		repeat = 0L;
@@ -44,6 +45,10 @@ public class Reaction extends UniqueID<EEntityType>
 	public ReactionTemplate GetTemplate()
 	{
 		return template;
+	}
+	public IModelAttribute GetAttribute()
+	{
+		return attribute;
 	}
 
 // -------------
@@ -70,6 +75,11 @@ public class Reaction extends UniqueID<EEntityType>
 		return stat;
 	}
 
+	public void SetStat(long stat)
+	{
+		this.stat = stat;
+	}
+
 	public void ResetStat()
 	{
 		stat = 0;
@@ -77,16 +87,32 @@ public class Reaction extends UniqueID<EEntityType>
 
 // -------------
 
-	public void Mark(String descr, boolean suppress)
+	public void SetDescription(String descr)
 	{
 		this.descr = descr;
+	}
+
+	public void SetSuppress(boolean suppress)
+	{
 		this.suppress = suppress;
 	}
+
+	public String GetDescription()
+	{
+		return descr;
+	}
+
+	public boolean GetSuppress()
+	{
+		return suppress;
+	}
+
+// -------------
 
 	@Nullable
 	public Response Process()
 	{
-		boolean needed = template.ReactionNeeded(parent);
+		boolean needed = template.ReactionNeeded(attribute);
 
 		Response result = null;
 

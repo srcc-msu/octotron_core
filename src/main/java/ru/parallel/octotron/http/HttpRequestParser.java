@@ -33,7 +33,6 @@ public class HttpRequestParser
 		, Operations.p_react
 		, Operations.p_const, Operations.p_sensor, Operations.p_var
 		, Operations.show_m, Operations.show_r
-		, Operations.export
 	};
 
 	/**

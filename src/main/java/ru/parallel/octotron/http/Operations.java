@@ -846,53 +846,6 @@ time = Timer.SEnd();
 	});
 
 /**
- * export full graph information in required format<br>
- * only dot format is supported now<br>
- * works only once per 60 seconds, returns cached result if used too much<br>
- * */
-	public static final Operation export = new Operation("export", true, new IExec()
-	{
-		private static final long EXPORT_THRESHOLD = 60;
-
-		private long last_export = 0;
-		private String cached_result = null;
-
-		@Override
-		public Object Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
-				throws ExceptionParseError
-		{
-			Operations.RequiredParams(params, "format");
-			Operations.AllParams(params, "format", "path");
-
-			String format = params.get("format");
-			String path = params.get("path");
-
-			if(!format.equals("dot"))
-				throw new ExceptionParseError("unsupported format: " + format);
-
-//if it is a full graph operation and timelimit is not finished - return a cached value
-			if(path == null)
-			{
-				long cur_time = JavaUtils.GetTimestamp();
-				if(cur_time - last_export > EXPORT_THRESHOLD || cached_result == null)
-				{
-					cached_result = ModelService.ExportDot();
-					last_export = cur_time;
-				}
-
-				return new RequestResult(E_RESULT_TYPE.TEXT, cached_result);
-			}
-			else
-			{
-				if(!(objects instanceof ModelObjectList))
-					return new RequestResult(E_RESULT_TYPE.ERROR, "export works only with objects");
-
-				return new RequestResult(E_RESULT_TYPE.TEXT, ModelService.ExportDot((ModelObjectList)objects));
-			}
-		}
-	});
-
-/**
  * collects and shows attributes, which were modified long ago<br>
  * param - for how long (in seconds)<br>
  * */

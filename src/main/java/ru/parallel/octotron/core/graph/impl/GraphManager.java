@@ -1,5 +1,6 @@
 package ru.parallel.octotron.core.graph.impl;
 
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
@@ -72,6 +73,36 @@ public class GraphManager
 			throw new ExceptionModelFail("no database modification in operational mode");
 		}
 	}
+
+	public void AddReaction(Reaction reaction)
+	{
+		if(mode == ModelService.EMode.CREATION)
+		{
+			GraphObject graph_object = graph_service.AddObject();
+
+			graph_object.UpdateAttribute("AID", reaction.GetID());
+
+			graph_object.UpdateAttribute("state", reaction.GetState());
+			graph_object.UpdateAttribute("stat", reaction.GetStat());
+
+			graph_object.UpdateAttribute("suppress", reaction.GetSuppress());
+			graph_object.UpdateAttribute("descr", reaction.GetDescription());
+		}
+		else if(mode == ModelService.EMode.LOAD)
+		{
+			GraphObject graph_object = GetObject(reaction);
+
+			reaction.SetState((Long)graph_object.GetAttribute("state"));
+			reaction.SetStat((Long)graph_object.GetAttribute("stat"));
+			reaction.SetSuppress((Boolean)graph_object.GetAttribute("suppress"));
+			reaction.SetDescription((String)graph_object.GetAttribute("descr"));
+		}
+		else
+		{
+			throw new ExceptionModelFail("no database modification in operational mode");
+		}
+	}
+
 
 	private GraphObject GetObject(UniqueID<?> id)
 	{

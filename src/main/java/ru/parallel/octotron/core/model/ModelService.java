@@ -3,6 +3,7 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.graph.impl.*;
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -98,13 +99,8 @@ public final class ModelService
 		model_data.cache.EnableObjectIndex(name, model_data.objects);
 	}
 
-	public static String ExportDot()
+	public void RegisterReaction(Reaction reaction)
 	{
-		throw new ExceptionModelFail("NIY");
-	}
-
-	public static String ExportDot(ModelObjectList objects)
-	{
-		throw new ExceptionModelFail("NIY");
+		manager.AddReaction(reaction);
 	}
 }

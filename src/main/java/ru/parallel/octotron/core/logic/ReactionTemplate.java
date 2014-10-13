@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core.logic;
 
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
@@ -41,7 +42,7 @@ public abstract class ReactionTemplate implements Serializable
 
 //----------------
 
-	public abstract boolean ReactionNeeded(ModelEntity entity);
+	public abstract boolean ReactionNeeded(IModelAttribute attribute);
 
 //----------------
 

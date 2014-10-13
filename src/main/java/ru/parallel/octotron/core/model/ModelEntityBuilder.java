@@ -22,10 +22,10 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		this.entity = entity;
 	}
 
-	public void AddReaction(ReactionTemplate reaction)
+	public void AddReaction(ReactionTemplate reaction_template)
 	{
-		entity.GetAttribute(reaction.GetCheckName())
-			.GetBuilder(service).AddReaction(new Reaction(reaction, entity));
+		entity.GetAttribute(reaction_template.GetCheckName())
+			.GetBuilder(service).AddReaction(reaction_template);
 	}
 
 	public void AddReaction(List<ReactionTemplate> reactions)

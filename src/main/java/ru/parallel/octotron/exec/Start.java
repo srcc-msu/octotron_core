@@ -83,10 +83,11 @@ public class Start
 			System.exit(1);
 		}
 
-		Context context = Context.CreateFromConfig(json_config);
+		Context context = null;
 
 		try
 		{
+			context = Context.CreateFromConfig(json_config);
 			Create(context);
 		}
 		catch(Exception creation_exception)

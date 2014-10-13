@@ -5,6 +5,7 @@ import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 
 public final class ModelService
 {
@@ -17,10 +18,13 @@ public final class ModelService
 	private EMode mode;
 	private GraphManager manager;
 
-	public ModelService(ModelData model_data, EMode mode)
+	public ModelService(ModelData model_data, EMode mode, String db_path)
+		throws ExceptionSystemError
 	{
 		this.model_data = model_data;
 		this.mode = mode;
+
+		manager = new GraphManager(mode, db_path);
 	}
 
 	public EMode GetMode()
@@ -63,6 +67,7 @@ public final class ModelService
 		model_data.links.add(link);
 		link.GetBuilder(this).DeclareConst("AID", link.GetID());
 
+		manager.AddLink(link);
 		return link;
 	}
 

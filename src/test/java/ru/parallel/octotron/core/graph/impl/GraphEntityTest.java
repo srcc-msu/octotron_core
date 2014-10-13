@@ -11,12 +11,13 @@ import static org.junit.Assert.*;
 public class GraphEntityTest
 {
 	private static Neo4jGraph graph;
+	private static GraphService graph_service;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
 		GraphEntityTest.graph = new Neo4jGraph( "dbs/" + GraphEntityTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init(graph);
+		graph_service = new GraphService(graph);
 	}
 
 	@AfterClass
@@ -29,16 +30,16 @@ public class GraphEntityTest
 	@After
 	public void Clean()
 	{
-		GraphService.Get().Clean();
+		graph_service.Clean();
 	}
 
 	@Test
 	public void TestSetAttribute() throws Exception
 	{
-		GraphObject object1 = GraphService.Get().AddObject();
-		GraphObject object2 = GraphService.Get().AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
-		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		assertFalse(object1.TestAttribute("exist"));
 		assertFalse(object2.TestAttribute("exist"));
@@ -66,8 +67,8 @@ public class GraphEntityTest
 	@Test
 	public void TestGetAttribute() throws Exception
 	{
-		GraphObject object1 = GraphService.Get().AddObject();
-		GraphObject object2 = GraphService.Get().AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		object1.UpdateAttribute("test_long", 1L);
 		object1.UpdateAttribute("test_str", "a");
@@ -84,7 +85,7 @@ public class GraphEntityTest
 
 		assertEquals(true, object1.GetAttribute("test_bool"));
 
-		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		link.UpdateAttribute("test_long", 1L);
 		link.UpdateAttribute("test_str", "a");
@@ -105,8 +106,8 @@ public class GraphEntityTest
 	@Test
 	public void TestTestAttribute() throws Exception
 	{
-		GraphObject object1 = GraphService.Get().AddObject();
-		GraphObject object2 = GraphService.Get().AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
 		object1.UpdateAttribute("object", "");
 
@@ -114,7 +115,7 @@ public class GraphEntityTest
 		assertFalse(object1.TestAttribute("link"));
 		assertTrue(object1.TestAttribute("object"));
 
-		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 		link.UpdateAttribute("link", "");
 
 		assertFalse(link.TestAttribute("not_exist"));
@@ -125,10 +126,10 @@ public class GraphEntityTest
 	@Test
 	public void TestDeleteAttribute() throws Exception
 	{
-		GraphObject object1 = GraphService.Get().AddObject();
-		GraphObject object2 = GraphService.Get().AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
-		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		object1.UpdateAttribute("object", "");
 		link.UpdateAttribute("link", "");
@@ -150,12 +151,12 @@ public class GraphEntityTest
 	@Test
 	public void TestAddSelfLink() throws Exception
 	{
-		GraphObject object = GraphService.Get().AddObject();
+		GraphObject object = graph_service.AddObject();
 
 		assertEquals(0, object.GetOutLinks().size());
 		assertEquals(0, object.GetInLinks().size());
 
-		GraphService.Get().AddLink(object, object, "test");
+		graph_service.AddLink(object, object, "test");
 
 		assertEquals(1, object.GetOutLinks().size());
 		assertEquals(1, object.GetInLinks().size());
@@ -164,12 +165,12 @@ public class GraphEntityTest
 	@Test
 	public void TestAddLink() throws Exception
 	{
-		GraphObject object1 = GraphService.Get().AddObject();
-		GraphObject object2 = GraphService.Get().AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
-		assertEquals(0, GraphService.Get().GetAllLinks().size());
+		assertEquals(0, graph_service.GetAllLinks().size());
 
-		GraphService.Get().AddLink(object1, object2, "test");
+		graph_service.AddLink(object1, object2, "test");
 
 		assertEquals(0, object1.GetInLinks().size());
 		assertEquals(1, object1.GetOutLinks().size());
@@ -177,9 +178,9 @@ public class GraphEntityTest
 		assertEquals(1, object2.GetInLinks().size());
 		assertEquals(0, object2.GetOutLinks().size());
 
-		assertEquals(1, GraphService.Get().GetAllLinks().size());
+		assertEquals(1, graph_service.GetAllLinks().size());
 
-		GraphService.Get().AddLink(object2, object1, "test");
+		graph_service.AddLink(object2, object1, "test");
 
 		assertEquals(1, object1.GetInLinks().size());
 		assertEquals(1, object1.GetOutLinks().size());
@@ -187,48 +188,48 @@ public class GraphEntityTest
 		assertEquals(1, object2.GetInLinks().size());
 		assertEquals(1, object2.GetOutLinks().size());
 
-		assertEquals(2, GraphService.Get().GetAllLinks().size());
+		assertEquals(2, graph_service.GetAllLinks().size());
 	}
 
 	@Test
 	public void TestAddObject() throws Exception
 	{
-		assertEquals(0, GraphService.Get().GetAllObjects().size());
-		GraphService.Get().AddObject();
-		assertEquals(1, GraphService.Get().GetAllObjects().size());
-		GraphService.Get().AddObject();
-		assertEquals(2, GraphService.Get().GetAllObjects().size());
+		assertEquals(0, graph_service.GetAllObjects().size());
+		graph_service.AddObject();
+		assertEquals(1, graph_service.GetAllObjects().size());
+		graph_service.AddObject();
+		assertEquals(2, graph_service.GetAllObjects().size());
 	}
 
 	@Test
 	public void TestDelete() throws Exception
 	{
-		GraphObject object1 = GraphService.Get().AddObject();
-		GraphObject object2 = GraphService.Get().AddObject();
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
 
-		assertEquals(0, GraphService.Get().GetAllLinks().size());
-		GraphLink link1 = GraphService.Get().AddLink(object1, object2, "test");
-		assertEquals(1, GraphService.Get().GetAllLinks().size());
-		GraphLink link2 = GraphService.Get().AddLink(object1, object2, "test");
-		assertEquals(2, GraphService.Get().GetAllLinks().size());
+		assertEquals(0, graph_service.GetAllLinks().size());
+		GraphLink link1 = graph_service.AddLink(object1, object2, "test");
+		assertEquals(1, graph_service.GetAllLinks().size());
+		GraphLink link2 = graph_service.AddLink(object1, object2, "test");
+		assertEquals(2, graph_service.GetAllLinks().size());
 		link1.Delete();
-		assertEquals(1, GraphService.Get().GetAllLinks().size());
+		assertEquals(1, graph_service.GetAllLinks().size());
 		link2.Delete();
-		assertEquals(0, GraphService.Get().GetAllLinks().size());
+		assertEquals(0, graph_service.GetAllLinks().size());
 
-		assertEquals(2, GraphService.Get().GetAllObjects().size());
+		assertEquals(2, graph_service.GetAllObjects().size());
 		object2.Delete();
-		assertEquals(1, GraphService.Get().GetAllObjects().size());
+		assertEquals(1, graph_service.GetAllObjects().size());
 		object1.Delete();
-		assertEquals(0, GraphService.Get().GetAllObjects().size());
+		assertEquals(0, graph_service.GetAllObjects().size());
 	}
 
 /*	@Test
 	public void TestGetAttributes() throws Exception
 	{
-		GraphObject object1 = GraphService.Get().AddObject();
-		GraphObject object2 = GraphService.Get().AddObject();
-		GraphLink link = GraphService.Get().AddLink(object1, object2, "test");
+		GraphObject object1 = graph_service.AddObject();
+		GraphObject object2 = graph_service.AddObject();
+		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
 		assertEquals(1, object1.GetAttributes().size());
 		assertEquals(1, object2.GetAttributes().size());

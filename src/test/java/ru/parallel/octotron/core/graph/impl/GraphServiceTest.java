@@ -14,12 +14,13 @@ import static org.junit.Assert.assertEquals;
 public class GraphServiceTest
 {
 	private static Neo4jGraph graph;
+	private static GraphService graph_service;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
 		GraphServiceTest.graph = new Neo4jGraph( "dbs/" + GraphServiceTest.class.getSimpleName(), Neo4jGraph.Op.RECREATE);
-		GraphService.Init (graph);
+		graph_service = new GraphService(graph);
 	}
 
 	@AfterClass
@@ -32,7 +33,7 @@ public class GraphServiceTest
 	@After
 	public void Clean()
 	{
-		GraphService.Get().Clean();
+		graph_service.Clean();
 	}
 
 
@@ -44,15 +45,15 @@ public class GraphServiceTest
 		final int N = 10;
 		for(int i = 0; i < N; i++)
 		{
-			objects.add(GraphService.Get().AddObject());
+			objects.add(graph_service.AddObject());
 		}
 
-		assertEquals(0, GraphService.Get().GetAllLinks().size());
+		assertEquals(0, graph_service.GetAllLinks().size());
 
 		for(int i = 0; i < N; i++)
 		{
-			GraphService.Get().AddLink(objects.get(i), objects.get((i * 2) % N), "test");
-			assertEquals(i + 1, GraphService.Get().GetAllLinks().size());
+			graph_service.AddLink(objects.get(i), objects.get((i * 2) % N), "test");
+			assertEquals(i + 1, graph_service.GetAllLinks().size());
 		}
 	}
 
@@ -62,32 +63,32 @@ public class GraphServiceTest
 		final int N = 10;
 
 		// static must not be visible
-		assertEquals(0, GraphService.Get().GetAllObjects().size());
+		assertEquals(0, graph_service.GetAllObjects().size());
 
 		for(int i = 0; i < N; i++)
 		{
-			GraphService.Get().AddObject();
+			graph_service.AddObject();
 
-			assertEquals(i + 1, GraphService.Get().GetAllObjects().size());
+			assertEquals(i + 1, graph_service.GetAllObjects().size());
 		}
 	}
 
 	@Test
 	public void TestClean() throws Exception
 	{
-		GraphObject obj1 = GraphService.Get().AddObject();
-		GraphObject obj2 = GraphService.Get().AddObject();
-		GraphService.Get().AddObject();
-		GraphService.Get().AddLink(obj1, obj2, "test");
+		GraphObject obj1 = graph_service.AddObject();
+		GraphObject obj2 = graph_service.AddObject();
+		graph_service.AddObject();
+		graph_service.AddLink(obj1, obj2, "test");
 
-		GraphService.Get().Clean();
+		graph_service.Clean();
 
 		assertEquals("unexpected objects found"
 			, 0
-			, GraphService.Get().GetAllObjects().size());
+			, graph_service.GetAllObjects().size());
 
 		assertEquals("some links found"
 			, 0
-			, GraphService.Get().GetAllLinks().size());
+			, graph_service.GetAllLinks().size());
 	}
 }

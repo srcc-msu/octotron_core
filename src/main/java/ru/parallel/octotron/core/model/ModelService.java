@@ -2,10 +2,7 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.graph.impl.GraphEntity;
-import ru.parallel.octotron.core.graph.impl.GraphLink;
-import ru.parallel.octotron.core.graph.impl.GraphObject;
-import ru.parallel.octotron.core.graph.impl.GraphService;
+import ru.parallel.octotron.core.graph.impl.*;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
@@ -18,28 +15,12 @@ public final class ModelService
 
 	private ModelData model_data;
 	private EMode mode;
+	private GraphManager manager;
 
 	public ModelService(ModelData model_data, EMode mode)
 	{
 		this.model_data = model_data;
 		this.mode = mode;
-
-/*		try
-		{
-			if(mode == EMode.CREATION)
-				graph = new Neo4jGraph(path + "/" + name, Neo4jGraph.Op.RECREATE, true);
-			else
-				graph = new Neo4jGraph(path + "/" + name, Neo4jGraph.Op.LOAD, true);
-
-			graph.GetIndex().EnableLinkIndex("AID");
-			graph.GetIndex().EnableObjectIndex("AID");
-
-			GraphService.Init(graph);
-		}
-		catch (ExceptionSystemError exceptionSystemError)
-		{
-			exceptionSystemError.printStackTrace();
-		}*/
 	}
 
 	public EMode GetMode()
@@ -94,6 +75,7 @@ public final class ModelService
 		model_data.objects.add(object);
 		object.GetBuilder(this).DeclareConst("AID", object.GetID());
 
+		manager.AddObject(object);
 		return object;
 	}
 
@@ -119,42 +101,5 @@ public final class ModelService
 	public static String ExportDot(ModelObjectList objects)
 	{
 		throw new ExceptionModelFail("NIY");
-	}
-
-	public GraphEntity GetPersistentObject(UniqueID<?> id)
-	{
-		switch(GetMode())
-		{
-			case CREATION :
-			{
-				GraphObject obj = GraphService.Get().AddObject();
-				obj.UpdateAttribute("AID", id.GetID());
-				obj.UpdateAttribute("_label", id.GetType().toString());
-				return obj;
-			}
-			case LOAD:
-				return GraphService.Get().GetObjects("AID", id.GetID()).iterator().next();
-			default:
-				throw new ExceptionModelFail("wrong mode: " + GetMode());
-		}
-	}
-
-	public GraphEntity GetPersistentLink(UniqueID<?> id
-		, GraphObject o1, GraphObject o2, String type)
-	{
-		switch(GetMode())
-		{
-			case CREATION :
-			{
-				GraphLink link = GraphService.Get().AddLink(o1, o2, type);
-				link.UpdateAttribute("AID", id.GetID());
-				link.UpdateAttribute("_label", id.GetType().toString());
-				return link;
-			}
-			case LOAD:
-				return GraphService.Get().GetLinks("AID", id.GetID()).iterator().next();
-			default:
-				throw new ExceptionModelFail("wrong mode: " + GetMode());
-		}
 	}
 }

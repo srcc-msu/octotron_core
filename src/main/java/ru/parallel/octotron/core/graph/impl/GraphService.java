@@ -23,22 +23,9 @@ import java.util.List;
  * */
 public final class GraphService
 {
-	private static GraphService INSTANCE = null;
-	public static void Init(IGraph graph)
-	{
-		GraphService.INSTANCE = new GraphService(graph);
-	}
-
-	public static GraphService Get()
-	{
-		return INSTANCE;
-	}
-
-// ------------------
-
 	private final IGraph graph;
 
-	private GraphService(IGraph graph)
+	public GraphService(IGraph graph)
 	{
 		this.graph = graph;
 	}
@@ -216,20 +203,5 @@ public final class GraphService
 		}
 
 		return objects;
-	}
-
-	public String ExportDot()
-	{
-		return graph.ExportDot(UidsFromList(GetAllObjects()));
-	}
-
-	public String ExportDot(Collection<GraphObject> list)
-	{
-		return graph.ExportDot(UidsFromList(list));
-	}
-
-	public IGraph GetGraph()
-	{
-		return graph;
 	}
 }

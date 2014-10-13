@@ -8,7 +8,7 @@ package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.primitive.UniqueID;
+import ru.parallel.octotron.core.primitive.IUniqueID;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -19,7 +19,7 @@ import java.util.List;
  * */
 public final class GraphObject extends GraphEntity
 {
-	public GraphObject(IGraph graph, UniqueID<EGraphType> id)
+	public GraphObject(IGraph graph, IUniqueID<EGraphType> id)
 	{
 		super(graph, id);
 	}

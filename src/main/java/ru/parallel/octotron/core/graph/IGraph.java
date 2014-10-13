@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.graph;
 
-import ru.parallel.octotron.core.primitive.UniqueID;
+import ru.parallel.octotron.core.primitive.IUniqueID;
 
 import java.util.List;
 
@@ -16,41 +16,41 @@ import java.util.List;
  * */
 public interface IGraph
 {
-	UniqueID<EGraphType> AddObject();
+	IUniqueID<EGraphType> AddObject();
 
-	List<UniqueID<EGraphType>> GetOutLinks(UniqueID<EGraphType> id);
+	List<IUniqueID<EGraphType>> GetOutLinks(IUniqueID<EGraphType> id);
 
-	List<UniqueID<EGraphType>> GetInLinks(UniqueID<EGraphType> id);
+	List<IUniqueID<EGraphType>> GetInLinks(IUniqueID<EGraphType> id);
 
-	List<String> GetObjectAttributes(UniqueID<EGraphType> id);
-	void DeleteObjectAttribute(UniqueID<EGraphType> id, String name);
-	boolean TestObjectAttribute(UniqueID<EGraphType> id, String name);
+	List<String> GetObjectAttributes(IUniqueID<EGraphType> id);
+	void DeleteObjectAttribute(IUniqueID<EGraphType> id, String name);
+	boolean TestObjectAttribute(IUniqueID<EGraphType> id, String name);
 
-	void DeleteObject(UniqueID<EGraphType> id);
-
-// ----------------------------------------------------------
-// **********************************************************
-// ----------------------------------------------------------
-
-	UniqueID<EGraphType> AddLink(UniqueID<EGraphType> source, UniqueID<EGraphType> target, String link_type);
-
-	UniqueID<EGraphType> GetLinkTarget(UniqueID<EGraphType> id);
-	UniqueID<EGraphType> GetLinkSource(UniqueID<EGraphType> id);
-
-	List<String> GetLinkAttributes(UniqueID<EGraphType> id);
-	void DeleteLinkAttribute(UniqueID<EGraphType> id, String name);
-	boolean TestLinkAttribute(UniqueID<EGraphType> id, String name);
-
-	void DeleteLink(UniqueID<EGraphType> id);
+	void DeleteObject(IUniqueID<EGraphType> id);
 
 // ----------------------------------------------------------
 // **********************************************************
 // ----------------------------------------------------------
 
-	void AddNodeLabel(UniqueID<EGraphType> id, String label);
-	boolean TestNodeLabel(UniqueID<EGraphType> id, String label);
+	IUniqueID<EGraphType> AddLink(IUniqueID<EGraphType> source, IUniqueID<EGraphType> target, String link_type);
 
-	List<UniqueID<EGraphType>> GetAllLabeledNodes(String label);
+	IUniqueID<EGraphType> GetLinkTarget(IUniqueID<EGraphType> id);
+	IUniqueID<EGraphType> GetLinkSource(IUniqueID<EGraphType> id);
+
+	List<String> GetLinkAttributes(IUniqueID<EGraphType> id);
+	void DeleteLinkAttribute(IUniqueID<EGraphType> id, String name);
+	boolean TestLinkAttribute(IUniqueID<EGraphType> id, String name);
+
+	void DeleteLink(IUniqueID<EGraphType> id);
+
+// ----------------------------------------------------------
+// **********************************************************
+// ----------------------------------------------------------
+
+	void AddNodeLabel(IUniqueID<EGraphType> id, String label);
+	boolean TestNodeLabel(IUniqueID<EGraphType> id, String label);
+
+	List<IUniqueID<EGraphType>> GetAllLabeledNodes(String label);
 
 // ----------------------------------------------------------
 // **********************************************************
@@ -58,21 +58,21 @@ public interface IGraph
 
 	IIndex GetIndex();
 
-	List<UniqueID<EGraphType>> GetAllObjects();
-	List<UniqueID<EGraphType>> GetAllLinks();
+	List<IUniqueID<EGraphType>> GetAllObjects();
+	List<IUniqueID<EGraphType>> GetAllLinks();
 
-	void SetObjectAttribute(UniqueID<EGraphType> id, String name, Object value);
+	void SetObjectAttribute(IUniqueID<EGraphType> id, String name, Object value);
 
-	Object GetObjectAttribute(UniqueID<EGraphType> id, String name);
+	Object GetObjectAttribute(IUniqueID<EGraphType> id, String name);
 
-	Object GetLinkAttribute(UniqueID<EGraphType> id, String name);
+	Object GetLinkAttribute(IUniqueID<EGraphType> id, String name);
 
-	void SetLinkAttribute(UniqueID<EGraphType> id, String name, Object value);
+	void SetLinkAttribute(IUniqueID<EGraphType> id, String name, Object value);
 
 // ----------------------------------------------------------
 // **********************************************************
 // ----------------------------------------------------------
 
-	String ExportDot(List<UniqueID<EGraphType>> uids);
+	String ExportDot(List<IUniqueID<EGraphType>> uids);
 }
 

@@ -8,7 +8,6 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class VarAttribute extends AbstractModAttribute
 {
-
 	@Override
 	public VarAttributeBuilder GetBuilder(ModelService service)
 	{

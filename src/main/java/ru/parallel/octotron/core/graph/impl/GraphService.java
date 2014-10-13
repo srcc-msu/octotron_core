@@ -8,8 +8,8 @@ package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
+import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.Collection;
@@ -87,7 +87,7 @@ public final class GraphService
 
 	public GraphLink GetLink(String name, Object value)
 	{
-		UniqueID<EGraphType> id = graph.GetIndex().GetLink(name, value);
+		IUniqueID<EGraphType> id = graph.GetIndex().GetLink(name, value);
 		return new GraphLink(graph, id);
 	}
 
@@ -113,7 +113,7 @@ public final class GraphService
 
 	public GraphObject GetObject(String name, Object value)
 	{
-		UniqueID<EGraphType> id = graph.GetIndex().GetObject(name, value);
+		IUniqueID<EGraphType> id = graph.GetIndex().GetObject(name, value);
 		return new GraphObject(graph, id);
 	}
 
@@ -169,9 +169,9 @@ public final class GraphService
 //			converters
 //---------------------------------
 
-	protected static List<UniqueID<EGraphType>> UidsFromList(Collection<? extends GraphEntity> entities)
+	protected static List<IUniqueID<EGraphType>> UidsFromList(Collection<? extends GraphEntity> entities)
 	{
-		List<UniqueID<EGraphType>> uids = new LinkedList<>();
+		List<IUniqueID<EGraphType>> uids = new LinkedList<>();
 
 		for(GraphEntity entity : entities)
 		{
@@ -181,11 +181,11 @@ public final class GraphService
 		return uids;
 	}
 
-	protected static Collection<GraphLink> LinksFromUid(IGraph graph, List<UniqueID<EGraphType>> uids)
+	protected static Collection<GraphLink> LinksFromUid(IGraph graph, List<IUniqueID<EGraphType>> uids)
 	{
 		List<GraphLink> links = new LinkedList<>();
 
-		for(UniqueID<EGraphType> id : uids)
+		for(IUniqueID<EGraphType> id : uids)
 		{
 			links.add(new GraphLink(graph, id));
 		}
@@ -193,11 +193,11 @@ public final class GraphService
 		return links;
 	}
 
-	private static Collection<GraphObject> ObjectsFromUid(IGraph graph, List<UniqueID<EGraphType>> uids)
+	private static Collection<GraphObject> ObjectsFromUid(IGraph graph, List<IUniqueID<EGraphType>> uids)
 	{
 		List<GraphObject> objects = new LinkedList<>();
 
-		for(UniqueID<EGraphType> id : uids)
+		for(IUniqueID<EGraphType> id : uids)
 		{
 			objects.add(new GraphObject(graph, id));
 		}

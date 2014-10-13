@@ -3,7 +3,6 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -67,6 +66,8 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 		entity.attributes_map.put(name, sensor);
 		entity.sensor_map.put(name, sensor);
+
+		service.RegisterSensor(sensor);
 	}
 
 	public void DeclareSensor(SimpleAttribute attribute)
@@ -91,6 +92,8 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 		entity.attributes_map.put(name, var);
 		entity.var_map.put(name, var);
+
+		service.RegisterVar(var);
 	}
 
 	public void DeclareVar(Iterable<Rule> rules)

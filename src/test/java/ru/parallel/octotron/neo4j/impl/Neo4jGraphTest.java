@@ -4,7 +4,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.EGraphType;
-import ru.parallel.octotron.core.primitive.UniqueID;
+import ru.parallel.octotron.core.primitive.IUniqueID;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class Neo4jGraphTest
 	@Test
 	public void Load() throws Exception
 	{
-		UniqueID<EGraphType> obj1;
+		IUniqueID<EGraphType> obj1;
 
 		obj1 = Neo4jGraphTest.graph.AddObject();
 		Neo4jGraphTest.graph.SetObjectAttribute(obj1, "test", 1);
@@ -55,7 +55,7 @@ public class Neo4jGraphTest
 	@Test
 	public void GetAttribute()
 	{
-		UniqueID<EGraphType> obj1, obj2, link1, link2;
+		IUniqueID<EGraphType> obj1, obj2, link1, link2;
 
 		// first create two objects
 		obj1 = Neo4jGraphTest.graph.AddObject();
@@ -120,18 +120,18 @@ public class Neo4jGraphTest
 	@Test
 	public void RelOrder()
 	{
-		UniqueID<EGraphType> obj1, obj2;
+		IUniqueID<EGraphType> obj1, obj2;
 
 		obj1 = Neo4jGraphTest.graph.AddObject();
 		obj2 = Neo4jGraphTest.graph.AddObject();
 
 		for(int i = 0; i < Neo4jGraphTest.ITER; i++)
 		{
-			UniqueID<EGraphType> link = Neo4jGraphTest.graph.AddLink(obj1, obj2, "contain");
+			IUniqueID<EGraphType> link = Neo4jGraphTest.graph.AddLink(obj1, obj2, "contain");
 			Neo4jGraphTest.graph.SetLinkAttribute(link, "n", i);
 		}
 
-		List<UniqueID<EGraphType>> links = Neo4jGraphTest.graph.GetInLinks(obj2);
+		List<IUniqueID<EGraphType>> links = Neo4jGraphTest.graph.GetInLinks(obj2);
 
 		for(int i = 0; i < Neo4jGraphTest.ITER; i++)
 		{
@@ -143,7 +143,7 @@ public class Neo4jGraphTest
 	@Test
 	public void GetOutLinks()
 	{
-		UniqueID<EGraphType> obj1, obj2, link1, link2, link_useless;
+		IUniqueID<EGraphType> obj1, obj2, link1, link2, link_useless;
 
 		obj1 = Neo4jGraphTest.graph.AddObject();
 		obj2 = Neo4jGraphTest.graph.AddObject();
@@ -161,7 +161,7 @@ public class Neo4jGraphTest
 
 		Neo4jGraphTest.graph.SetLinkAttribute(link_useless, "test_uniq", "i am useless");
 
-		List<UniqueID<EGraphType>> links = Neo4jGraphTest.graph.GetOutLinks(obj1); // obj1
+		List<IUniqueID<EGraphType>> links = Neo4jGraphTest.graph.GetOutLinks(obj1); // obj1
 
 		assertEquals("number of edges do not match", links.size(), 2);
 
@@ -177,7 +177,7 @@ public class Neo4jGraphTest
 	@Test
 	public void GetInLinks()
 	{
-		UniqueID<EGraphType> obj1, obj2, link1, link2, link_useless;
+		IUniqueID<EGraphType> obj1, obj2, link1, link2, link_useless;
 
 		obj1 = Neo4jGraphTest.graph.AddObject();
 		obj2 = Neo4jGraphTest.graph.AddObject();
@@ -195,7 +195,7 @@ public class Neo4jGraphTest
 
 		Neo4jGraphTest.graph.SetLinkAttribute(link_useless, "test_uniq", "i am useless");
 
-		List<UniqueID<EGraphType>> links = Neo4jGraphTest.graph.GetInLinks(obj2); // obj2
+		List<IUniqueID<EGraphType>> links = Neo4jGraphTest.graph.GetInLinks(obj2); // obj2
 
 		assertEquals("number of edges do not match", links.size(), 2);
 
@@ -213,7 +213,7 @@ public class Neo4jGraphTest
 	@Test
 	public void GetObject()
 	{
-		UniqueID<EGraphType> obj1 = Neo4jGraphTest.graph.AddObject();
+		IUniqueID<EGraphType> obj1 = Neo4jGraphTest.graph.AddObject();
 
 		Neo4jGraphTest.graph.SetObjectAttribute(obj1, "test", "ok");
 
@@ -227,7 +227,7 @@ public class Neo4jGraphTest
 	@Test
 	public void GetLink()
 	{
-		UniqueID<EGraphType> obj1, obj2, link;
+		IUniqueID<EGraphType> obj1, obj2, link;
 
 		obj1 = Neo4jGraphTest.graph.AddObject();
 		obj2 = Neo4jGraphTest.graph.AddObject();
@@ -244,7 +244,7 @@ public class Neo4jGraphTest
 	@Test
 	public void TestLabel()
 	{
-		UniqueID<EGraphType> obj1, obj2;
+		IUniqueID<EGraphType> obj1, obj2;
 
 		obj1 = Neo4jGraphTest.graph.AddObject();
 		obj2 = Neo4jGraphTest.graph.AddObject();

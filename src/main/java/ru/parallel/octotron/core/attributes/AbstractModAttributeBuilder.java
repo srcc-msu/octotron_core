@@ -35,4 +35,14 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 	{
 		attribute.dependants.add(dependant);
 	}
+
+	public void SetCTime(Long ctime)
+	{
+		attribute.SetCTime(ctime);
+	}
+
+	public void SetValid(Boolean is_valid)
+	{
+		attribute.SetValid(is_valid);
+	}
 }

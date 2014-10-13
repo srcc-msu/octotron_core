@@ -1,7 +1,10 @@
 package ru.parallel.octotron.core.persistence;
 
 import com.google.common.collect.Iterables;
+import ru.parallel.octotron.core.attributes.AbstractModAttribute;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
+import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
@@ -10,7 +13,7 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.primitive.UniqueID;
+import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
@@ -21,20 +24,20 @@ public class GraphManager implements IPersistenceManager
 {
 	public enum ELinkType
 	{
-		MODEL_LINK
+		MODEL_LINK, ATTRIBUTE_LINK, REACTION_LINK
 	}
 
-	private ModelService.EMode mode;
+	ModelService model_service;
 
 	private Neo4jGraph graph;
 	private GraphService graph_service;
 
-	public GraphManager(ModelService service, ModelService.EMode mode, String path)
+	public GraphManager(ModelService model_service, ModelService.EMode mode, String path)
 		throws ExceptionSystemError
 	{
-		this.mode = mode;
+		this.model_service = model_service;
 
-		if(mode == ModelService.EMode.CREATION)
+		if(model_service.GetMode() == ModelService.EMode.CREATION)
 			graph = new Neo4jGraph(path, Neo4jGraph.Op.RECREATE, true);
 		else
 			graph = new Neo4jGraph(path, Neo4jGraph.Op.LOAD, true);
@@ -45,19 +48,19 @@ public class GraphManager implements IPersistenceManager
 		graph_service = new GraphService(graph);
 	}
 
-	private GraphObject GetObject(UniqueID<?> id)
+	private GraphObject GetObject(IUniqueID<?> id)
 	{
 
 		return graph_service.GetObject("AID", id.GetID());
 	}
 
-	private GraphLink GetLink(UniqueID<?> id)
+	private GraphLink GetLink(IUniqueID<?> id)
 	{
 
 		return graph_service.GetLink("AID", id.GetID());
 	}
 
-	private GraphEntity GetEntity(UniqueID<?> id)
+	private GraphEntity GetEntity(IUniqueID<?> id)
 	{
 
 		Collection<GraphLink> links = graph_service.GetLinks("AID", id.GetID());
@@ -80,16 +83,16 @@ public class GraphManager implements IPersistenceManager
 	}
 
 	@Override
-	public void AddObject(ModelObject object)
+	public void RegisterObject(ModelObject object)
 	{
 
-		if(mode == ModelService.EMode.CREATION)
+		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
 
 			graph_object.UpdateAttribute("AID", object.GetID());
 		}
-		else if(mode == ModelService.EMode.LOAD)
+		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
 			GetObject(object);
 		}
@@ -100,10 +103,10 @@ public class GraphManager implements IPersistenceManager
 	}
 
 	@Override
-	public void AddLink(ModelLink link)
+	public void RegisterLink(ModelLink link)
 	{
 
-		if(mode == ModelService.EMode.CREATION)
+		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphLink graph_object = graph_service.AddLink(
 				GetObject(link.Source()), GetObject(link.Target())
@@ -111,7 +114,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("AID", link.GetID());
 		}
-		else if(mode == ModelService.EMode.LOAD)
+		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
 			GetLink(link);
 		}
@@ -122,10 +125,10 @@ public class GraphManager implements IPersistenceManager
 	}
 
 	@Override
-	public void AddReaction(Reaction reaction)
+	public void RegisterReaction(Reaction reaction)
 	{
 
-		if(mode == ModelService.EMode.CREATION)
+		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
 
@@ -136,8 +139,11 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("suppress", reaction.GetSuppress());
 			graph_object.UpdateAttribute("descr", reaction.GetDescription());
+
+			graph_service.AddLink(GetObject(reaction.GetAttribute()), graph_object
+				, reaction.GetType().name());
 		}
-		else if(mode == ModelService.EMode.LOAD)
+		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
 			GraphObject graph_object = GetObject(reaction);
 
@@ -153,16 +159,15 @@ public class GraphManager implements IPersistenceManager
 	}
 
 	@Override
-	public void RegisterConst(ModelService model_service, ConstAttribute attribute)
+	public void RegisterConst(ConstAttribute attribute)
 	{
-
-		if(mode == ModelService.EMode.CREATION)
+		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphEntity graph_entity = GetEntity(attribute.GetParent());
 
 			graph_entity.UpdateAttribute(attribute.GetName(), attribute.GetValue());
 		}
-		else if(mode == ModelService.EMode.LOAD)
+		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
 			GraphEntity graph_entity = GetEntity(attribute.GetParent());
 
@@ -174,6 +179,48 @@ public class GraphManager implements IPersistenceManager
 		{
 			throw new ExceptionModelFail("no database modification in operational mode");
 		}
+	}
+
+	private void RegisterMod(AbstractModAttribute attribute)
+	{
+		if(model_service.GetMode() == ModelService.EMode.CREATION)
+		{
+			GraphObject graph_object = graph_service.AddObject();
+
+			graph_object.UpdateAttribute("AID", attribute.GetID());
+
+			graph_object.UpdateAttribute("is_valid", attribute.IsValid());
+			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
+
+			graph_service.AddLink(GetObject(attribute.GetParent()), graph_object
+				, attribute.GetType().name());
+		}
+		else if(model_service.GetMode() == ModelService.EMode.LOAD)
+		{
+			GraphObject graph_object = GetObject(attribute);
+
+			attribute.GetBuilder(model_service)
+				.SetCTime((Long)graph_object.GetAttribute("ctime"));
+
+			attribute.GetBuilder(model_service)
+				.SetValid((Boolean) graph_object.GetAttribute("ctime"));
+		}
+		else
+		{
+			throw new ExceptionModelFail("no database modification in operational mode");
+		}
+	}
+
+	@Override
+	public void RegisterVar(VarAttribute attribute)
+	{
+		RegisterMod(attribute);
+	}
+
+	@Override
+	public void RegisterSensor(SensorAttribute attribute)
+	{
+		RegisterMod(attribute);
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package ru.parallel.octotron.core.primitive;
 
-public class UniqueID<T>
+public class UniqueID<T> implements IUniqueID<T>
 {
 	private static long static_id = 0;
 
@@ -19,11 +19,13 @@ public class UniqueID<T>
 		this.id = static_id++;
 	}
 
+	@Override
 	public long GetID()
 	{
 		return id;
 	}
 
+	@Override
 	public T GetType()
 	{
 		return type;

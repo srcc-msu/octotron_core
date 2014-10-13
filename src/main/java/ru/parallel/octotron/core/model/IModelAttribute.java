@@ -6,13 +6,12 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.core.primitive.IUniqueID;
 
 import java.util.Collection;
 
-public interface IModelAttribute extends IAttribute
+public interface IModelAttribute extends IAttribute, IUniqueID<EAttributeType>
 {
-	EAttributeType GetType();
-
 	boolean IsValid();
 	void SetValid();
 	void SetInvalid();

@@ -54,6 +54,11 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		is_valid = false;
 	}
 
+	public void SetValid(boolean is_valid)
+	{
+		this.is_valid = is_valid;
+	}
+
 	public long GetCTime()
 	{
 		return ctime;

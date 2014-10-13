@@ -8,7 +8,7 @@ package ru.parallel.octotron.core.graph.impl;
 
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
-import ru.parallel.octotron.core.primitive.UniqueID;
+import ru.parallel.octotron.core.primitive.IUniqueID;
 
 /**
  * implementation of link, that resides in \graph<br>
@@ -20,7 +20,7 @@ public final class GraphLink extends GraphEntity
 		super(graph, id, EGraphType.LINK);
 	}
 
-	public GraphLink(IGraph graph, UniqueID<EGraphType> id)
+	public GraphLink(IGraph graph, IUniqueID<EGraphType> id)
 	{
 		super(graph, id);
 	}

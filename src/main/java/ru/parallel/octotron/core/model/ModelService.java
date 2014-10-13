@@ -1,6 +1,7 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.ConstAttribute;
+import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.persistence.GhostManager;
@@ -77,7 +78,7 @@ public final class ModelService
 		CheckModification();
 
 		ModelLink link = new ModelLink(source, target);
-		manager.AddLink(link);
+		manager.RegisterLink(link);
 
 		model_data.links.add(link);
 
@@ -94,7 +95,7 @@ public final class ModelService
 		CheckModification();
 
 		ModelObject object = new ModelObject();
-		manager.AddObject(object);
+		manager.RegisterObject(object);
 
 		model_data.objects.add(object);
 
@@ -123,12 +124,22 @@ public final class ModelService
 
 	public void RegisterReaction(Reaction reaction)
 	{
-		manager.AddReaction(reaction);
+		manager.RegisterReaction(reaction);
 	}
 
 	public void RegisterConst(ConstAttribute attribute)
 	{
-		manager.RegisterConst(this, attribute);
+		manager.RegisterConst(attribute);
+	}
+
+	public void RegisterSensor(SensorAttribute attribute)
+	{
+		manager.RegisterSensor(attribute);
+	}
+
+	public void RegisterVar(VarAttribute attribute)
+	{
+		manager.RegisterVar(attribute);
 	}
 
 	public void Finish()

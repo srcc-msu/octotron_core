@@ -9,7 +9,9 @@ package ru.parallel.octotron.core.graph.impl;
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.UniqueID;
+
 /**
  * some entity, that resides in model_old<br>
  * all operations with it go through the \graph interface, no caching<br>
@@ -17,7 +19,7 @@ import ru.parallel.octotron.core.primitive.UniqueID;
 public abstract class GraphEntity
 {
 	protected final IGraph graph;
-	protected final UniqueID<EGraphType> id;
+	protected final IUniqueID<EGraphType> id;
 
 	public GraphEntity(IGraph graph, long id, EGraphType type)
 	{
@@ -25,7 +27,7 @@ public abstract class GraphEntity
 		this.id = new UniqueID<>(id, type);
 	}
 
-	public GraphEntity(IGraph graph, UniqueID<EGraphType> id)
+	public GraphEntity(IGraph graph, IUniqueID<EGraphType> id)
 	{
 		this.graph = graph;
 		this.id = id;
@@ -57,7 +59,7 @@ public abstract class GraphEntity
 		UpdateAttribute(att.GetName(), att.GetValue());
 	}
 
-	public UniqueID<EGraphType> GetID()
+	public IUniqueID<EGraphType> GetID()
 	{
 		return id;
 	}

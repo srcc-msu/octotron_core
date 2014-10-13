@@ -1,6 +1,8 @@
 package ru.parallel.octotron.core.persistence;
 
 import ru.parallel.octotron.core.attributes.ConstAttribute;
+import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -9,28 +11,41 @@ import ru.parallel.octotron.core.model.ModelService;
 public class GhostManager implements IPersistenceManager
 {
 	@Override
-	public void AddObject(ModelObject object)
+	public void RegisterObject(ModelObject object)
 	{
 		// there is nothing here
 	}
 
 	@Override
-	public void AddLink(ModelLink link)
+	public void RegisterLink(ModelLink link)
 	{
 		// there is nothing here
 	}
 
 	@Override
-	public void AddReaction(Reaction reaction)
+	public void RegisterReaction(Reaction reaction)
 	{
 		// there is nothing here
 	}
 
 	@Override
-	public void RegisterConst(ModelService model_service, ConstAttribute attribute)
+	public void RegisterConst(ConstAttribute attribute)
 	{
 		// there is nothing here
 	}
+
+	@Override
+	public void RegisterSensor(SensorAttribute attribute)
+	{
+		// there is nothing here
+	}
+
+	@Override
+	public void RegisterVar(VarAttribute attribute)
+	{
+		// there is nothing here
+	}
+
 	@Override
 	public void Finish()
 	{

@@ -10,8 +10,7 @@ import com.google.common.collect.ObjectArrays;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Response implements Serializable
 {
@@ -20,14 +19,12 @@ public class Response implements Serializable
 	private final EEventStatus status;
 
 	private final String[] messages;
+	private final Map<String, String[]> commands = new HashMap<>();
 
-	private final List<String[]> commands = new LinkedList<>();
-	private final List<String> log_keys = new LinkedList<>();
+	private final List<String> attributes = new LinkedList<>();
+	private final List<String> parent_attributes = new LinkedList<>();
 
 	private boolean suppress = false;
-
-	private String[] print_attributes = new String[0];
-	private String[] parent_print_attributes = new String[0];
 
 	public Response(EEventStatus status, String... messages)
 	{
@@ -35,36 +32,9 @@ public class Response implements Serializable
 		this.messages = messages;
 	}
 
-	public Response Log(String log_key) {
-		log_keys.add(log_key);
-
-		return this;
-	}
-
-	/**
-	 * does not suppress logging
-	 * */
-	public Response Suppress(boolean suppress)
+	public Response Exec(String script_key, String... arguments)
 	{
-		this.suppress = suppress;
-		return this;
-	}
-
-	public Response Exec(String... command)
-	{
-		commands.add(command);
-		return this;
-	}
-
-	public Response Print(String... attributes)
-	{
-		print_attributes = ObjectArrays.concat(print_attributes, attributes, String.class);
-		return this;
-	}
-
-	public Response PrintParent(String... attributes)
-	{
-		parent_print_attributes = ObjectArrays.concat(parent_print_attributes, attributes, String.class);
+		commands.put(script_key, arguments);
 		return this;
 	}
 
@@ -78,28 +48,45 @@ public class Response implements Serializable
 		return messages;
 	}
 
-	public List<String[]> GetCommands()
+	public List<String> GetAttributes()
+	{
+		return attributes;
+	}
+
+	public List<String> GetParentAttributes()
+	{
+		return parent_attributes;
+	}
+
+	public Map<String, String[]> GetCommands()
 	{
 		return commands;
 	}
 
-	public List<String> GetLogKeys()
+	/**
+	 * suppress any scripts
+	 * does not suppress logging
+	 * */
+	public Response Suppress(boolean suppress)
 	{
-		return log_keys;
-	}
-
-	public String[] GetPrintAttributes()
-	{
-		return print_attributes;
-	}
-
-	public String[] GetParentPrintAttributes()
-	{
-		return parent_print_attributes;
+		this.suppress = suppress;
+		return this;
 	}
 
 	public boolean IsSuppress()
 	{
 		return suppress;
+	}
+
+	public Response Print(String... new_attributes)
+	{
+		attributes.addAll(Arrays.asList(new_attributes));
+		return this;
+	}
+
+	public Response PrintParent(String... new_attributes)
+	{
+		parent_attributes.addAll(Arrays.asList(new_attributes));
+		return this;
 	}
 }

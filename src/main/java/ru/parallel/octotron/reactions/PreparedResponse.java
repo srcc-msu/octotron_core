@@ -11,7 +11,10 @@ import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.JsonString;
+import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.utils.AutoFormat;
@@ -25,15 +28,14 @@ public class PreparedResponse implements Runnable
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	private static final char ARG_CHAR = '$';
-
+	private final GlobalSettings settings;
 	private final Response response;
 
-	private final List<String[]> composed_commands = new LinkedList<>();
-	private final GlobalSettings settings;
+	private final List<String[]> compiled_commands = new LinkedList<>();
+	private final List<String> compiled_messages = new LinkedList<>();
 
-	private Map<String, Object> attribute_values;
-	private Map<String, Object> parent_attribute_values;
+	private Map<String, Object> attributes = new HashMap<>();
+	private final List<Map<String, Object>> parent_attributes = new LinkedList<>();
 
 	private final long timestamp;
 
@@ -43,58 +45,139 @@ public class PreparedResponse implements Runnable
 		this.timestamp = timestamp;
 		this.settings = settings;
 
-		attribute_values = new HashMap<>();
-		parent_attribute_values = new HashMap<>();
-
-		СomposeAttributes(entity);
-		СomposeParentAttributes(entity);
-		СomposeCommands(entity);
+		ComposeAttributes(entity);
+		ComposeParentAttributes(entity);
+		ComposeMessages(entity);
+		ComposeCommands(entity);
 	}
 
-	private void СomposeAttributes(ModelEntity entity)
+	private static final String NOT_FOUND = "<not_found>";
+
+	private static Map<String, Object> GetAttributes(ModelEntity entity, Iterable<String> names)
 	{
-		for(String attribute : response.GetPrintAttributes())
-			attribute_values.put(attribute
-				, entity.GetAttribute(attribute).GetValue());
+		Map<String, Object> result = new HashMap<>();
+
+		for(String name : names)
+		{
+			Object value;
+
+			if(entity.TestAttribute(name))
+				value = entity.GetAttribute(name).GetValue();
+			else
+				value = NOT_FOUND;
+
+			result.put(name, value);
+		}
+
+		return result;
 	}
 
-	private void СomposeParentAttributes(ModelEntity entity)
+
+	private void ComposeParentAttributes(ModelEntity entity)
 	{
 		if(entity.GetType() != EEntityType.OBJECT)
 			throw new ExceptionModelFail("only objects have a parent");
 
-		ModelObject p_entity = (ModelObject)entity;
-
-		ModelObjectList parents = p_entity.GetInLinks().Filter("type", "contain").Source();
-
-		if(parents.size() > 1)
-			LOGGER.log(Level.WARNING, "could not traceback parents - ambiguity");
-
-		if(parents.size() == 0)
-			LOGGER.log(Level.WARNING, "could not traceback parents - no parents");
-
-		ModelObject parent = parents.Only();
-
-		for(String attribute : response.GetParentPrintAttributes())
-			parent_attribute_values.put(attribute
-				, parent.GetAttribute(attribute).GetValue());
+		for(ModelEntity parent : ((ModelObject)entity).GetInNeighbors())
+		{
+			parent_attributes.add(GetAttributes(parent, response.GetAttributes()));
+		}
 	}
 
-	private void СomposeCommands(ModelEntity entity)
+	private void ComposeAttributes(ModelEntity entity)
 	{
-		for(String[] command : response.GetCommands())
-		{
-			String[] composed_command = new String[command.length];
+		attributes = GetAttributes(entity, response.GetAttributes());
+	}
 
-			for(int i = 0; i < command.length; i++)
+	public static String ReplaceOne(String string, ModelEntity entity, int start, int end)
+	{
+		String name = string.substring(start + 1, end);
+
+		String value;
+
+		if(entity.TestAttribute(name))
+			value = entity.GetAttribute(name).GetStringValue();
+		else
+			value = NOT_FOUND;
+
+		return string.replace("{" + name + "}", value);
+	}
+
+	public static String ComposeString(String string, ModelEntity entity)
+		throws ExceptionParseError
+	{
+		String result = string;
+
+		while(true)
+		{
+			int start = result.indexOf("{");
+
+			if(start == -1)
+				break;
+
+			int end = result.indexOf("}");
+
+			if(end <= start)
+				throw new ExceptionParseError("wrong string format: " + string);
+
+			result = ReplaceOne(result, entity, start, end);
+		}
+
+		return result.replaceAll("\"", "");
+	}
+
+	private void ComposeMessages(ModelEntity entity)
+	{
+		for(String message : response.GetMessages())
+		{
+			try
 			{
-				if(command[i].length() > 1 && command[i].charAt(0) == PreparedResponse.ARG_CHAR)
-					composed_command[i] = entity.GetAttribute(command[i].substring(1)).GetValue().toString();
-				else
-					composed_command[i] = command[i];
+				compiled_messages.add(ComposeString(message, entity));
+			}
+			catch (Exception e)
+			{
+				compiled_messages.add(message);
+				LOGGER.log(Level.WARNING, "failed to compile message string: " + message, e);
+			}
+		}
+	}
+
+	/**
+	 * must be called after ComposeMessages
+	 * */
+	private void ComposeCommands(ModelEntity entity)
+	{
+		for(String key : response.GetCommands().keySet())
+		{
+			String actual_name = settings.GetScriptByKey(key);
+
+			if (actual_name == null)
+				throw new ExceptionModelFail("there is no script with key: " + key);
+
+			List<String> result = new LinkedList<>();
+			result.add(actual_name);
+
+			String[] params = response.GetCommands().get(key);
+
+			for(String param : params)
+			{
+				try
+				{
+					result.add(ComposeString(param, entity));
+				}
+				catch (ExceptionParseError e)
+				{
+					LOGGER.log(Level.WARNING, "failed to compile script param: " + param, e);
+				}
 			}
 
-			composed_commands.add(composed_command);
+			result.add(Long.toString(timestamp));
+			result.add(response.GetStatus().toString());
+
+			for(String message : compiled_messages)
+				result.add(message);
+
+			compiled_commands.add(result.toArray(new String[0]));
 		}
 	}
 
@@ -105,45 +188,29 @@ public class PreparedResponse implements Runnable
  	public void run()
 	{
 		if(!response.IsSuppress())
-			for(String[] command : composed_commands)
+		{
+			for (String[] command : compiled_commands)
 			{
-				String actual_name = settings.GetScriptByKey(command[0]);
-
-				if(actual_name == null)
-					throw new ExceptionModelFail("there is no script with key: " + command[0]);
-
 				try
 				{
-					FileUtils.ExecSilent(actual_name
-						, Long.toString(timestamp)
-						, response.GetStatus().toString()
-						, response.GetDescription()
-						, AutoFormat.PrintJson(Arrays.asList(attribute_values))
-						, AutoFormat.PrintJson(Arrays.asList(parent_attribute_values)));
+					FileUtils.ExecSilent(command);
 				}
-				catch(ExceptionSystemError e)
+				catch (ExceptionSystemError e)
 				{
-					LOGGER.log(Level.SEVERE, "could not invoke reaction script", e);
+					LOGGER.log(Level.SEVERE, "could not invoke reaction script: " + command.toString(), e);
 				}
 			}
+		}
 
-		for(String log_key : response.GetLogKeys())
+		try
 		{
-			String fname = settings.GetLogByKey(log_key);
-
-			if(fname == null)
-				throw new ExceptionModelFail("there is no logging entry with key: " + log_key);
-
-			try
-			{
-				FileLog file = new FileLog(fname);
-				file.Log(GetFullString());
-				file.Close();
-			}
-			catch(ExceptionSystemError e)
-			{
-				LOGGER.log(Level.WARNING, "could not create a log entry", e);
-			}
+			FileLog file = new FileLog(settings.GetLogDir());
+			file.Log(GetFullString());
+			file.Close();
+		}
+		catch(ExceptionSystemError e)
+		{
+			LOGGER.log(Level.WARNING, "could not create a log entry", e);
 		}
 	}
 
@@ -151,23 +218,22 @@ public class PreparedResponse implements Runnable
 	{
 		Map<String, Object> result = new HashMap<>();
 
-		result.put("time"
-			, Long.toString(timestamp));
+		result.put("time", timestamp);
 
-		result.put("event"
-			, response.GetStatus().toString());
+		result.put("event", response.GetStatus().toString());
 
-		result.put("msg"
-			, response.GetDescription());
+		for(int i = 0; i < compiled_messages.size(); i++)
+			result.put("msg_" + i, compiled_messages.get(i));
 
-		result.put("this"
-			, AutoFormat.PrintJson(Arrays.asList(attribute_values)));
+		if(attributes.size() > 0)
+			result.put("attributes", new JsonString(AutoFormat.PrintJson(Arrays.asList(attributes))));
 
-		result.put("parent"
-			, AutoFormat.PrintJson(Arrays.asList(parent_attribute_values)));
+		if(parent_attributes.size() > 0)
+			result.put("parent_attributes", new JsonString(AutoFormat.PrintJson(parent_attributes)));
 
-		result.put("parent"
-			, AutoFormat.PrintJson(Arrays.asList(parent_attribute_values)));
+//		result.put("this", AutoFormat.PrintJson(Arrays.asList(attribute_values)));
+
+//		result.put("parent", AutoFormat.PrintJson(Arrays.asList(parent_attribute_values)));
 
 		return AutoFormat.PrintJson(Arrays.asList(result));
 	}

@@ -101,6 +101,8 @@ public class SimpleAttribute
 		}
 		else if(value instanceof String)
 			return JavaUtils.Quotify((String)value);
+		else if(value instanceof JsonString)
+			return ((JsonString)value).string;
 		else
 			throw new ExceptionModelFail("unsupported type: " + value.getClass());
 	}

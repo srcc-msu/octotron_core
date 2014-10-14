@@ -6,6 +6,7 @@
 
 package ru.parallel.utils;
 
+import com.google.gson.Gson;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.ArrayList;
@@ -78,10 +79,12 @@ public class AutoFormat
 			String inner_prefix = "";
 			for(String name : names)
 			{
+				String string_value = SimpleAttribute.ValueToStr(dict.get(name));
+
 				result.append(inner_prefix)
 					.append(Quotify(name))
 					.append(':')
-					.append(SimpleAttribute.ValueToStr(dict.get(name)));
+					.append(string_value);
 
 				inner_prefix = ",";
 			}

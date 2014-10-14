@@ -13,50 +13,38 @@ public final class CommonReactions
 {
 	private CommonReactions() {}
 
-	public static Response Critical(String str, String... attributes)
+	public static Response Critical(String... messages)
 	{
-		return new Response(EEventStatus.CRITICAL, str)
-			.Print("AID")
-			.Print(attributes)
-			.Log("errors")
-			.Log("all")
+		return new Response(EEventStatus.CRITICAL, messages)
+			.Print("AID", "type", "ip")
 			.Exec("on_critical");
 	}
 
-	public static Response Danger(String str, String... attributes)
+	public static Response Danger(String... messages)
 	{
-		return new Response(EEventStatus.DANGER, str)
-			.Print("AID")
-			.Print(attributes)
-			.Log("errors")
-			.Log("all")
+		return new Response(EEventStatus.DANGER, messages)
+			.Print("AID", "type", "ip")
 			.Exec("on_danger");
 	}
 
-	public static Response Warning(String str, String... attributes)
+	public static Response Warning(String... messages)
 	{
-		return new Response(EEventStatus.WARNING, str)
-			.Print("AID")
-			.Print(attributes)
-			.Log("all")
+		return new Response(EEventStatus.WARNING, messages)
+			.Print("AID", "type", "ip")
 			.Exec("on_warning");
 	}
 
-	public static Response Info(String str, String... attributes)
+	public static Response Info(String... messages)
 	{
-		return new Response(EEventStatus.INFO, str)
-			.Print("AID")
-			.Print(attributes)
-			.Log("all")
+		return new Response(EEventStatus.INFO, messages)
+			.Print("AID", "type", "ip")
 			.Exec("on_info");
 	}
 
-	public static Response Recover(String str, String... attributes)
+	public static Response Recover(String... messages)
 	{
-		return new Response(EEventStatus.RECOVER, str)
-			.Print("AID")
-			.Print(attributes)
-			.Log("all")
+		return new Response(EEventStatus.RECOVER, messages)
+			.Print("AID", "type", "ip")
 			.Exec("on_recover");
 	}
 }

@@ -40,11 +40,12 @@ public class GlobalSettings
 	private String db_path;
 
 	private String sys_path;
+	private String log_dir;
+
 	private int threads;
 
 	private boolean db = false;
 
-	private final Map<String, String> log_map = new HashMap<>();
 	private final Map<String, String> script_map = new HashMap<>();
 
 	private List<String> object_index = new LinkedList<>();
@@ -93,6 +94,7 @@ public class GlobalSettings
 // --- sys config
 
 		sys_path = "";
+		log_dir = "";
 
 		threads = 2;
 
@@ -129,17 +131,15 @@ public class GlobalSettings
 
 // --- sys config
 
-		if(JsonUtils.IsPresent(root, "sys"))
-		{
-			JsonObject sys_conf = JsonUtils.MustPresent(root, "sys").getAsJsonObject();
+		JsonObject sys_conf = JsonUtils.MustPresent(root, "system").getAsJsonObject();
 
-			sys_path = JsonUtils.MustPresent(sys_conf, "path").getAsString();
+		log_dir = JsonUtils.MustPresent(sys_conf, "log_dir").getAsString();
+		sys_path = JsonUtils.MustPresent(sys_conf, "path").getAsString();
 
-			if(JsonUtils.IsPresent(sys_conf, "threads"))
-				threads = JsonUtils.MustPresent(sys_conf, "threads").getAsInt();
-			else
-				threads = DEFAULT_THREADS;
-		}
+		if(JsonUtils.IsPresent(sys_conf, "threads"))
+			threads = JsonUtils.MustPresent(sys_conf, "threads").getAsInt();
+		else
+			threads = DEFAULT_THREADS;
 
 // --- db config
 
@@ -151,12 +151,6 @@ public class GlobalSettings
 
 			db = true;
 		}
-
-// --- logging config
-		JsonObject logs_conf = JsonUtils.MustPresent(root, "logs").getAsJsonObject();
-
-		for(Entry<String, JsonElement> pair : logs_conf.entrySet())
-			log_map.put(pair.getKey(), pair.getValue().getAsString());
 
 // --- scripts config
 		JsonObject scripts_conf = JsonUtils.MustPresent(root, "scripts").getAsJsonObject();
@@ -205,23 +199,22 @@ public class GlobalSettings
 		return model_main;
 	}
 
-	public String GetSysPath()
-	{
-		return sys_path;
-	}
-	public int GetNumThreads()
-	{
-		return threads;
-	}
-
 	public String GetDbPath()
 	{
 		return db_path;
 	}
 
-	public String GetLogByKey(String key)
+	public String GetSysPath()
 	{
-		return log_map.get(key);
+		return sys_path;
+	}
+	public String GetLogDir()
+	{
+		return log_dir;
+	}
+	public int GetNumThreads()
+	{
+		return threads;
 	}
 
 	public String GetScriptByKey(String key)

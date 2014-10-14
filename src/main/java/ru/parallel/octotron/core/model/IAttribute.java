@@ -20,4 +20,6 @@ public interface IAttribute
 	boolean lt(Object new_value);
 	boolean ge(Object val);
 	boolean le(Object val);
+
+	public String GetStringValue();
 }

@@ -190,4 +190,10 @@ public abstract class AbstractAttribute extends UniqueID<EAttributeType> impleme
 	{
 		return !gt(val);
 	}
+
+	@Override
+	public final String GetStringValue()
+	{
+		return SimpleAttribute.ValueToStr(GetValue());
+	}
 }

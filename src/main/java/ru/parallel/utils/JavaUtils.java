@@ -27,7 +27,7 @@ public abstract class JavaUtils
 
 	public static String GetDate()
 	{
-		DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
 		Date date = new Date();
 		return dateFormat.format(date);
 	}

@@ -107,7 +107,7 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(1L);
 		assertNull(reaction.Process());
@@ -137,10 +137,10 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(2L);
 		assertNull(reaction.Process());
@@ -169,7 +169,7 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(1L);
 		assertNull(reaction.Process());
@@ -201,10 +201,10 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(2L);
 		assertNull(reaction.Process());
@@ -233,7 +233,7 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		Thread.sleep(1500);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(1L);
 		assertNull(reaction.Process());
@@ -265,10 +265,10 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		Thread.sleep(1500);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(2L);
 		assertNull(reaction.Process());
@@ -300,7 +300,7 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(1L);
 		assertNull(reaction.Process());
@@ -335,13 +335,12 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetDescription());
+		assertEquals("descr", reaction.Process().GetMessages()[0]);
 
 		sensor.Update(2L);
 		assertNull(reaction.Process());
 	}
-
 }

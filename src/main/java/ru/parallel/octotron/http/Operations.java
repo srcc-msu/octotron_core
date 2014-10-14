@@ -305,7 +305,7 @@ public abstract class Operations
 					Map<String, Object> map = new HashMap<>();
 					map.put("name", attribute.GetName());
 					map.put("value", attribute.GetValue());
-					map.put("valid", attribute.IsValid());
+					map.put("valid", attribute.CheckValid());
 					data.add(map);
 				}
 			}
@@ -343,7 +343,7 @@ public abstract class Operations
 					Map<String, Object> map = new HashMap<>();
 					map.put("name", attribute.GetName());
 					map.put("value", attribute.GetValue());
-					map.put("valid", attribute.IsValid());
+					map.put("valid", attribute.CheckValid());
 					data.add(map);
 				}
 			}
@@ -387,7 +387,12 @@ public abstract class Operations
 				map.put("repeat_config", reaction.GetTemplate().GetRepeat());
 
 				if(reaction.GetTemplate().GetResponse() != null)
-					map.put("descr", reaction.GetTemplate().GetResponse().GetDescription());
+				{
+					String[] messages = reaction.GetTemplate().GetResponse().GetMessages();
+
+					for (int i = 0; i < messages.length; i++)
+						map.put("msg" + i, messages[i]);
+				}
 
 				map.put("state", reaction.GetState());
 				map.put("stat", reaction.GetStat());

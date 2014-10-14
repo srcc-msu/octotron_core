@@ -37,7 +37,7 @@ public class LowerArgThreshold extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(param);
 
-		if(!attr.IsValid())
+		if(!attr.CheckValid())
 			return null;
 
 		return attr.gt(entity.GetAttribute(arg_threshold).GetValue());

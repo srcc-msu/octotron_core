@@ -10,11 +10,13 @@ public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribut
 		super(service, attribute);
 	}
 
-	public void MakeDependant()
+	public void ConnectDependency()
 	{
-		for(IModelAttribute dependant : attribute.rule.GetDependency(attribute.GetParent()))
+		for(IModelAttribute dependency
+			: attribute.rule.GetDependency(attribute.GetParent()))
 		{
-			dependant.GetBuilder(service).AddDependant(attribute);
+			dependency.GetBuilder(service).AddDependant(attribute);
+			attribute.dependency.add(dependency);
 		}
 	}
 }

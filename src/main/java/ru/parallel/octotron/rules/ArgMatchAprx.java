@@ -39,7 +39,7 @@ public class ArgMatchAprx extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(check_attribute);
 
-		if(!attr.IsValid())
+		if(!attr.CheckValid())
 			return null;
 
 		return attr.aeq(entity.GetAttribute(match_attribute).GetValue(), aprx);

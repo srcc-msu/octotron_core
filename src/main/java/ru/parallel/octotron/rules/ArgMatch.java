@@ -37,7 +37,7 @@ public class ArgMatch extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(check_attribute);
 
-		if(!attr.IsValid())
+		if(!attr.CheckValid())
 			return null;
 
 		return attr.eq(entity.GetAttribute(match_attribute).GetValue());

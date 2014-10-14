@@ -93,7 +93,7 @@ public abstract class Aggregate extends ObjectRule
 
 				IModelAttribute attribute = obj.GetAttribute(tmp);
 
-				if(!attribute.IsValid())
+				if(!attribute.CheckValid())
 					return null;
 
 				res = Accumulate(res, attribute);

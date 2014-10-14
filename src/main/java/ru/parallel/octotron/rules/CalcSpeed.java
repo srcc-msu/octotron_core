@@ -35,7 +35,7 @@ public class CalcSpeed extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(measured_attribute);
 
-		if(!attr.IsValid())
+		if(!attr.CheckValid())
 			return null;
 
 		return attr.GetSpeed();

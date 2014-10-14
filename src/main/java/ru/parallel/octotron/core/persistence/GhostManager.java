@@ -50,4 +50,16 @@ public class GhostManager implements IPersistenceManager
 	{
 		// there is nothing here
 	}
+
+	@Override
+	public void MakeRuleDependency(VarAttribute attribute)
+	{
+		// there is nothing here
+	}
+
+	@Override
+	public void Operate()
+	{
+		// there is nothing here
+	}
 }

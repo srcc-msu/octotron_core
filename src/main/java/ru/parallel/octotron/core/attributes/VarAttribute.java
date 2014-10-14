@@ -1,6 +1,8 @@
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -9,6 +11,7 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 public class VarAttribute extends AbstractModAttribute
 {
 	protected Rule rule;
+	protected AttributeList<IModelAttribute> dependency;
 
 	@Override
 	public VarAttributeBuilder GetBuilder(ModelService service)
@@ -22,7 +25,10 @@ public class VarAttribute extends AbstractModAttribute
 	{
 		super(EAttributeType.VAR, parent, name
 			, SimpleAttribute.ConformType(rule.GetDefaultValue()));
+
 		this.rule = rule;
+
+		dependency = new AttributeList<>();
 	}
 
 	@Override
@@ -44,5 +50,10 @@ public class VarAttribute extends AbstractModAttribute
 			return false;
 
 		return super.Update(new_value);
+	}
+
+	public Iterable<IModelAttribute> GetDependency()
+	{
+		return dependency;
 	}
 }

@@ -42,7 +42,7 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	}
 
 	@Override
-	public boolean IsValid()
+	public boolean CheckValid()
 	{
 		return true;
 	}

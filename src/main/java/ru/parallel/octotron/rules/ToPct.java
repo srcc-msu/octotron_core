@@ -37,7 +37,7 @@ public class ToPct extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(measured_attribute);
 
-		if(!attr.IsValid())
+		if(!attr.CheckValid())
 			return null;
 
 		return (int)(attr.ToDouble() * 100.0 / (double) max_value);

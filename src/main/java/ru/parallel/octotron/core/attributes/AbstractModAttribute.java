@@ -19,7 +19,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	private long ctime;
 
 	protected final Map<Long, Reaction> reactions;
-	protected final AttributeList<VarAttribute> dependants;
+	protected final AttributeList<VarAttribute> dependant;
 
 	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Object value)
 	{
@@ -31,13 +31,13 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		ctime = 0L;
 
 		reactions = new HashMap<>();
-		dependants = new AttributeList<>();
+		dependant = new AttributeList<>();
 	}
 
 	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder(ModelService service);
 
 	@Override
-	public boolean IsValid()
+	public boolean CheckValid()
 	{
 		return is_valid && GetCTime() != 0L;
 	}
@@ -54,9 +54,16 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		is_valid = false;
 	}
 
+// ---------------
+
 	public void SetValid(boolean is_valid)
 	{
 		this.is_valid = is_valid;
+	}
+
+	public boolean GetIsValid()
+	{
+		return is_valid;
 	}
 
 	public long GetCTime()
@@ -112,7 +119,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	@Override
 	public AttributeList<VarAttribute> GetDependant()
 	{
-		return dependants;
+		return dependant;
 	}
 
 	@Override

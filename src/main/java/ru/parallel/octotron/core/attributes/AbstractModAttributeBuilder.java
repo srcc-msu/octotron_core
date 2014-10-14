@@ -33,7 +33,7 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 	@Override
 	public void AddDependant(VarAttribute dependant)
 	{
-		attribute.dependants.add(dependant);
+		attribute.dependant.add(dependant);
 	}
 
 	public void SetCTime(Long ctime)

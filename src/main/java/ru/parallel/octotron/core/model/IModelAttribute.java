@@ -12,7 +12,7 @@ import java.util.Collection;
 
 public interface IModelAttribute extends IAttribute, IUniqueID<EAttributeType>
 {
-	boolean IsValid();
+	boolean CheckValid();
 	void SetValid();
 	void SetInvalid();
 

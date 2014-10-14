@@ -18,4 +18,7 @@ public interface IPersistenceManager
 
 	void Finish();
 
+	void MakeRuleDependency(VarAttribute attribute);
+
+	void Operate();
 }

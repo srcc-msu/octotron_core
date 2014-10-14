@@ -10,9 +10,11 @@ import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -122,7 +124,6 @@ public class GraphManager implements IPersistenceManager
 	@Override
 	public void RegisterReaction(Reaction reaction)
 	{
-
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
@@ -134,6 +135,9 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("suppress", reaction.GetSuppress());
 			graph_object.UpdateAttribute("descr", reaction.GetDescription());
+
+// info
+			graph_object.UpdateAttribute("name", reaction.GetAttribute().GetName());
 
 			graph_service.AddLink(GetObject(reaction.GetAttribute()), graph_object
 				, reaction.GetType().name());
@@ -184,8 +188,11 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("AID", attribute.GetID());
 
-			graph_object.UpdateAttribute("is_valid", attribute.IsValid());
+			graph_object.UpdateAttribute("is_valid", attribute.GetIsValid());
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
+
+// info
+			graph_object.UpdateAttribute("name", attribute.GetName());
 
 			graph_service.AddLink(GetObject(attribute.GetParent()), graph_object
 				, attribute.GetType().name());
@@ -222,5 +229,29 @@ public class GraphManager implements IPersistenceManager
 	public void Finish()
 	{
 		graph.Shutdown();
+	}
+
+	private static final String DEPENDS = "DEPENDS";
+
+	@Override
+	public void MakeRuleDependency(VarAttribute attribute)
+	{
+		GraphObject object = GetObject(attribute);
+
+		for(IModelAttribute dependency : attribute.GetDependency())
+		{
+			if(dependency.GetType() == EAttributeType.CONST)
+				continue;
+
+			GraphObject dependency_object = GetObject(dependency);
+
+			graph_service.AddLink(object, dependency_object, DEPENDS);
+		}
+	}
+
+	@Override
+	public void Operate()
+	{
+		graph.GetTransaction().ForceWrite();
 	}
 }

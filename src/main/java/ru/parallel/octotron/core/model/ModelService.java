@@ -56,17 +56,19 @@ public final class ModelService
 
 	public void Operate()
 	{
-		MakeRuleDependencies();
+		MakeRuleDependency();
 		mode = EMode.OPERATION;
+		manager.Operate();
 	}
 
-	private void MakeRuleDependencies()
+	private void MakeRuleDependency()
 	{
 		for(ModelObject object : model_data.GetAllObjects())
 		{
 			for(VarAttribute attribute : object.GetVar())
 			{
-				attribute.GetBuilder(this).MakeDependant();
+				attribute.GetBuilder(this).ConnectDependency();
+				manager.MakeRuleDependency(attribute);
 			}
 		}
 	}

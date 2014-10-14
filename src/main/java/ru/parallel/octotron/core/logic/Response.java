@@ -19,7 +19,7 @@ public class Response implements Serializable
 
 	private final EEventStatus status;
 
-	private final String description;
+	private final String[] messages;
 
 	private final List<String[]> commands = new LinkedList<>();
 	private final List<String> log_keys = new LinkedList<>();
@@ -29,10 +29,10 @@ public class Response implements Serializable
 	private String[] print_attributes = new String[0];
 	private String[] parent_print_attributes = new String[0];
 
-	public Response(EEventStatus status, String description)
+	public Response(EEventStatus status, String... messages)
 	{
 		this.status = status;
-		this.description = description;
+		this.messages = messages;
 	}
 
 	public Response Log(String log_key) {
@@ -41,6 +41,9 @@ public class Response implements Serializable
 		return this;
 	}
 
+	/**
+	 * does not suppress logging
+	 * */
 	public Response Suppress(boolean suppress)
 	{
 		this.suppress = suppress;
@@ -70,9 +73,9 @@ public class Response implements Serializable
 		return status;
 	}
 
-	public String GetDescription()
+	public String[] GetMessages()
 	{
-		return description;
+		return messages;
 	}
 
 	public List<String[]> GetCommands()

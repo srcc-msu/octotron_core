@@ -8,6 +8,5 @@ package ru.parallel.octotron.core.primitive;
 
 public enum EEventStatus
 {
-	INFO, WARNING, DANGER, CRITICAL,
-	RECOVER
+	INFO, WARNING, DANGER, CRITICAL, RECOVER
 }

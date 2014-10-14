@@ -29,7 +29,7 @@ public final class ModelService
 		this.mode = mode;
 
 		if(settings.IsDb())
-			manager = new GraphManager(this, mode, settings.GetDbPath() + "/" + settings.GetModelName());
+			manager = new GraphManager(this, settings.GetDbPath() + "/" + settings.GetModelName());
 		else
 			manager = new GhostManager();
 	}
@@ -40,7 +40,7 @@ public final class ModelService
 		this.model_data = new ModelData();
 		this.mode = mode;
 
-		manager = new GraphManager(this, mode, path);
+		manager = new GraphManager(this, path);
 	}
 
 	public EMode GetMode()

@@ -22,17 +22,12 @@ import java.util.Collection;
 
 public class GraphManager implements IPersistenceManager
 {
-	public enum ELinkType
-	{
-		MODEL_LINK, ATTRIBUTE_LINK, REACTION_LINK
-	}
-
 	ModelService model_service;
 
 	private Neo4jGraph graph;
 	private GraphService graph_service;
 
-	public GraphManager(ModelService model_service, ModelService.EMode mode, String path)
+	public GraphManager(ModelService model_service, String path)
 		throws ExceptionSystemError
 	{
 		this.model_service = model_service;
@@ -110,7 +105,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			GraphLink graph_object = graph_service.AddLink(
 				GetObject(link.Source()), GetObject(link.Target())
-				, GraphManager.ELinkType.MODEL_LINK.name());
+				, link.GetType().name());
 
 			graph_object.UpdateAttribute("AID", link.GetID());
 		}

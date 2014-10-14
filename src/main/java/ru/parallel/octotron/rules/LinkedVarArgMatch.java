@@ -15,9 +15,8 @@ public class LinkedVarArgMatch extends LinkRule
 {
 	private final String check_attribute;
 
-	public LinkedVarArgMatch(String name, String check_attribute)
+	public LinkedVarArgMatch(String check_attribute)
 	{
-		super(name) ;
 		this.check_attribute = check_attribute;
 	}
 

@@ -16,9 +16,8 @@ public class ContainsString extends Rule
 	private final String attribute;
 	private final String match_str;
 
-	public ContainsString(String name, String attribute, String match_str)
+	public ContainsString(String attribute, String match_str)
 	{
-		super(name) ;
 		this.attribute = attribute;
 		this.match_str = match_str;
 	}

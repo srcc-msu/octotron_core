@@ -8,6 +8,8 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class VarAttribute extends AbstractModAttribute
 {
+	protected Rule rule;
+
 	@Override
 	public VarAttributeBuilder GetBuilder(ModelService service)
 	{
@@ -16,11 +18,10 @@ public class VarAttribute extends AbstractModAttribute
 		return new VarAttributeBuilder(service, this);
 	}
 
-	protected Rule rule;
-
 	public VarAttribute(ModelEntity parent, String name, Rule rule)
 	{
-		super(EAttributeType.VAR, parent, name, SimpleAttribute.ConformType(rule.GetDefaultValue()));
+		super(EAttributeType.VAR, parent, name
+			, SimpleAttribute.ConformType(rule.GetDefaultValue()));
 		this.rule = rule;
 	}
 

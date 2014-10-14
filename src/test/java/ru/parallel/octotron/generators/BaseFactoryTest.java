@@ -1,6 +1,5 @@
 package ru.parallel.octotron.generators;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
@@ -9,11 +8,9 @@ import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.rules.Match;
 
 import static org.junit.Assert.assertEquals;
@@ -71,14 +68,17 @@ public class BaseFactoryTest
 	@Test
 	public void TestVaryings()
 	{
-		Rule[] rules = { new Match("test1", "", "") };
-		Rule rule2 = new Match("test2", "", "");
-		Rule rule3 = new Match("test3", "", "");
+		SimpleAttribute[] rules = { new SimpleAttribute("test1", new Match("", "")) };
+		Rule rule2 = new Match("", "");
+		Rule rule3 = new Match("", "");
 
 		ObjectFactory f1 = object_factory
-			.Varyings(rules).Varyings(rule2, rule3);
+			.Varyings(rules)
+			.Varyings(new SimpleAttribute("test2", rule2), new SimpleAttribute("test3", rule3));
+
 		LinkFactory f2 = link_factory
-			.Varyings(rule2, rule3).Varyings(rules);
+			.Varyings(new SimpleAttribute("test2", rule2), new SimpleAttribute("test3", rule3))
+			.Varyings(rules);
 
 		ModelObject obj = f1.Create();
 

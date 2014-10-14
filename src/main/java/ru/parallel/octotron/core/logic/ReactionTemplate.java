@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.model.IModelAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.io.Serializable;

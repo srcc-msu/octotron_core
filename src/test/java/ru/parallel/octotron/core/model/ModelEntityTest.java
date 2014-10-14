@@ -1,19 +1,18 @@
 package ru.parallel.octotron.core.model;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 
@@ -135,15 +134,14 @@ public class ModelEntityTest
 		entity.GetBuilder(context.model_service).AddReaction(reactions);
 	}
 
-	private class DummyRule extends ru.parallel.octotron.core.logic.Rule
+	private class DummyRule extends Rule
 	{
 		private static final long serialVersionUID = -6085542113382606406L;
 		private final EDependencyType dep_type;
 		private long n = 0L;
 
-		DummyRule(String name, EDependencyType dep_type)
+		DummyRule(EDependencyType dep_type)
 		{
-			super(name);
 			this.dep_type = dep_type;
 		}
 
@@ -176,7 +174,7 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareVar(new DummyRule("test1", EDependencyType.ALL));
+		entity.GetBuilder(context.model_service).DeclareVar("test1", new DummyRule(EDependencyType.ALL));
 	}
 
 	@Test
@@ -186,10 +184,10 @@ public class ModelEntityTest
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
-		List<ru.parallel.octotron.core.logic.Rule> rules = new LinkedList<>();
+		List<SimpleAttribute> rules = new LinkedList<>();
 
-		rules.add(new DummyRule("test1", EDependencyType.ALL));
-		rules.add(new DummyRule("test2", EDependencyType.ALL));
+		rules.add(new SimpleAttribute("test1", new DummyRule(EDependencyType.ALL)));
+		rules.add(new SimpleAttribute("test2", new DummyRule(EDependencyType.ALL)));
 
 		entity.GetBuilder(context.model_service).DeclareVar(rules);
 	}

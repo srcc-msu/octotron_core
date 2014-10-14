@@ -16,10 +16,7 @@ public abstract class LinkRule extends Rule
 {
 	private static final long serialVersionUID = -943099846881874234L;
 
-	protected LinkRule(String name)
-	{
-		super(name);
-	}
+	protected LinkRule() {}
 
 	@Override
 	public final Object Compute(ModelEntity entity)

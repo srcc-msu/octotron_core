@@ -15,9 +15,8 @@ public class CalcSpeed extends Rule
 {
 	private final String measured_attribute;
 
-	public CalcSpeed(String name, String measured_attribute)
+	public CalcSpeed(String measured_attribute)
 	{
-		super(name) ;
 		this.measured_attribute = measured_attribute;
 	}
 

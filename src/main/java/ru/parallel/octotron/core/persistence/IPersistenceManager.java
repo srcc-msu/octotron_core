@@ -6,7 +6,6 @@ import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
 
 public interface IPersistenceManager
 {

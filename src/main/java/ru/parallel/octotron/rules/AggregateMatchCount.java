@@ -13,9 +13,9 @@ public class AggregateMatchCount extends Aggregate
 {
 	private final Object value;
 
-	public AggregateMatchCount(String name, Object value, EDependencyType dependency, String... attributes)
+	public AggregateMatchCount(Object value, EDependencyType dependency, String... attributes)
 	{
-		super(name, dependency, attributes);
+		super(dependency, attributes);
 		this.value = value;
 	}
 

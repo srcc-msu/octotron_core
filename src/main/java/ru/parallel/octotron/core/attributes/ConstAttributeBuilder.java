@@ -1,6 +1,5 @@
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;

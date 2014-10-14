@@ -16,9 +16,8 @@ public class ToPct extends Rule
 	private final String measured_attribute;
 	private final int max_value;
 
-	public ToPct(String name, String measured_attribute, int max_value)
+	public ToPct(String measured_attribute, int max_value)
 	{
-		super(name) ;
 		this.measured_attribute = measured_attribute;
 		this.max_value = max_value;
 	}

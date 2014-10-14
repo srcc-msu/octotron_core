@@ -16,9 +16,8 @@ public class ToArgPct extends Rule
 	private final String measured_attribute;
 	private final String max_value_arg;
 
-	public ToArgPct(String name, String measured_attribute, String max_value_arg)
+	public ToArgPct(String measured_attribute, String max_value_arg)
 	{
-		super(name) ;
 		this.measured_attribute = measured_attribute;
 		this.max_value_arg = max_value_arg;
 	}

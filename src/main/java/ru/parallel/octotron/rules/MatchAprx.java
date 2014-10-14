@@ -17,9 +17,8 @@ public class MatchAprx extends Rule
 	private final Object match_value;
 	private final Object aprx;
 
-	public MatchAprx(String name, String check_attribute, Object match_value, Object aprx)
+	public MatchAprx(String check_attribute, Object match_value, Object aprx)
 	{
-		super(name) ;
 		this.check_attribute = check_attribute;
 		this.match_value = match_value;
 		this.aprx = aprx;

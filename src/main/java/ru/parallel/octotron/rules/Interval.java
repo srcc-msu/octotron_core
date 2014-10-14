@@ -16,9 +16,8 @@ public class Interval extends Rule
 	private final String param;
 	private final Object[] thresholds;
 
-	public Interval(String name, String param, Object... thresholds)
+	public Interval(String param, Object... thresholds)
 	{
-		super(name) ;
 		this.param = param;
 		this.thresholds = thresholds;
 	}

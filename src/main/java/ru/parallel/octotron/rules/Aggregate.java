@@ -21,9 +21,8 @@ public abstract class Aggregate extends ObjectRule
 	private final String[] attributes;
 	private final EDependencyType dependency;
 
-	Aggregate(String name, EDependencyType dependency, String... attributes)
+	Aggregate(EDependencyType dependency, String... attributes)
 	{
-		super(name);
 		this.dependency = dependency;
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}

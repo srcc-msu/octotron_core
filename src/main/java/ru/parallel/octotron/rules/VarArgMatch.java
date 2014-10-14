@@ -16,9 +16,8 @@ public class VarArgMatch extends Rule
 	private final String check_attribute;
 	private final String match_attribute;
 
-	public VarArgMatch(String name, String check_attribute, String match_attribute)
+	public VarArgMatch(String check_attribute, String match_attribute)
 	{
-		super(name) ;
 		this.check_attribute = check_attribute;
 		this.match_attribute = match_attribute;
 	}

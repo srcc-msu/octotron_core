@@ -17,9 +17,8 @@ public class LogicalOr extends Rule
 {
 	private final String[] attributes;
 
-	public LogicalOr(String name, String... attributes)
+	public LogicalOr(String... attributes)
 	{
-		super(name);
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 

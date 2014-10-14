@@ -17,10 +17,7 @@ public abstract class ObjectRule extends Rule
 {
 	private static final long serialVersionUID = -1936097371431183834L;
 
-	protected ObjectRule(String name)
-	{
-		super(name);
-	}
+	protected ObjectRule() {}
 
 	@Override
 	public final Object Compute(ModelEntity entity)

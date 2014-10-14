@@ -11,9 +11,9 @@ import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AggregateLongSum extends Aggregate
 {
-	public AggregateLongSum(String name, EDependencyType dependency, String... attributes)
+	public AggregateLongSum(EDependencyType dependency, String... attributes)
 	{
-		super(name, dependency, attributes);
+		super(dependency, attributes);
 	}
 
 	@Override

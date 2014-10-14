@@ -13,9 +13,9 @@ public class AggregateNotMatchCount extends Aggregate
 {
 	private final Object value;
 
-	public AggregateNotMatchCount(String name, Object value, EDependencyType dependency, String... attributes)
+	public AggregateNotMatchCount(Object value, EDependencyType dependency, String... attributes)
 	{
-		super(name, dependency, attributes);
+		super(dependency, attributes);
 		this.value = value;
 	}
 

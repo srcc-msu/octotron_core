@@ -81,10 +81,8 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 			DeclareSensor(attribute);
 	}
 
-	public void DeclareVar(Rule rule)
+	public void DeclareVar(String name, Rule rule)
 	{
-		String name = rule.GetName();
-
 		if(entity.TestAttribute(name))
 			throw new ExceptionModelFail("attribute already declared: " + name);
 
@@ -96,9 +94,9 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		service.RegisterVar(var);
 	}
 
-	public void DeclareVar(Iterable<Rule> rules)
+	public void DeclareVar(Iterable<SimpleAttribute> rules)
 	{
-		for(Rule rule : rules)
-			DeclareVar(rule);
+		for(SimpleAttribute pair : rules)
+			DeclareVar(pair.GetName(), (Rule)(pair.GetValue()));
 	}
 }

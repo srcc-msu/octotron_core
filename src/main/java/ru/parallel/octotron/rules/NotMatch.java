@@ -16,9 +16,8 @@ public class NotMatch extends Rule
 	private final String param;
 	private final Object match_value;
 
-	public NotMatch(String name, String param, Object match_value)
+	public NotMatch(String param, Object match_value)
 	{
-		super(name) ;
 		this.param = param;
 		this.match_value = match_value;
 	}

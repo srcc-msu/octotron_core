@@ -11,9 +11,9 @@ import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AggregateDoubleSum extends Aggregate
 {
-	public AggregateDoubleSum(String name, EDependencyType dependency, String... attributes)
+	public AggregateDoubleSum(EDependencyType dependency, String... attributes)
 	{
-		super(name, dependency, attributes);
+		super(dependency, attributes);
 	}
 
 	@Override

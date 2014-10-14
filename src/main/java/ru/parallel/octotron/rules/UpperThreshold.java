@@ -16,9 +16,8 @@ public class UpperThreshold extends Rule
 	private final String param;
 	private final Object threshold;
 
-	public UpperThreshold(String name, String param, Object threshold)
+	public UpperThreshold(String param, Object threshold)
 	{
-		super(name) ;
 		this.param = param;
 		this.threshold = threshold;
 	}

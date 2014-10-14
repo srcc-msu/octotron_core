@@ -16,9 +16,8 @@ public class Match extends Rule
 	private final String check_attribute;
 	private final Object match_value;
 
-	public Match(String name, String check_attribute, Object match_value)
+	public Match(String check_attribute, Object match_value)
 	{
-		super(name) ;
 		this.check_attribute = check_attribute;
 		this.match_value = match_value;
 	}

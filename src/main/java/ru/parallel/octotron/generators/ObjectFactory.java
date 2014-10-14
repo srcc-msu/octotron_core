@@ -8,7 +8,6 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.ReactionTemplate;
-import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -28,7 +27,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	private ObjectFactory(ModelService service
 		, List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
-		, List<Rule> rules
+		, List<SimpleAttribute> rules
 		, List<ReactionTemplate> reactions)
 	{
 		super(service, constants, sensors, rules, reactions);
@@ -66,7 +65,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	protected ObjectFactory Clone(
 		List<SimpleAttribute> new_constants
 		, List<SimpleAttribute> new_sensors
-		, List<Rule> new_rules
+		, List<SimpleAttribute> new_rules
 		, List<ReactionTemplate> new_reactions)
 	{
 		return new ObjectFactory(service, new_constants, new_sensors, new_rules, new_reactions);

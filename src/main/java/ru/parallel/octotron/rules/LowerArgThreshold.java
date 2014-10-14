@@ -16,9 +16,8 @@ public class LowerArgThreshold extends Rule
 	private final String param;
 	private final String arg_threshold;
 
-	public LowerArgThreshold(String name, String param, String arg_threshold)
+	public LowerArgThreshold(String param, String arg_threshold)
 	{
-		super(name) ;
 		this.param = param;
 		this.arg_threshold = arg_threshold;
 	}

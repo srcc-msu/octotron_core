@@ -7,10 +7,8 @@ import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 

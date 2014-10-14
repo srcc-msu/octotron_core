@@ -17,9 +17,8 @@ public class VarArgMatchAprx extends Rule
 	private final String match_attribute;
 	private final Object aprx;
 
-	public VarArgMatchAprx(String name, String check_attribute, String match_attribute, Object aprx)
+	public VarArgMatchAprx(String check_attribute, String match_attribute, Object aprx)
 	{
-		super(name) ;
 		this.check_attribute = check_attribute;
 		this.match_attribute = match_attribute;
 		this.aprx = aprx;

@@ -1,14 +1,11 @@
 package ru.parallel.octotron.core.collections;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ExecutionController;
 
 import static org.junit.Assert.assertEquals;
 

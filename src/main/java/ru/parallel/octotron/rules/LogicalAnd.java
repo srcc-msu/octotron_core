@@ -17,9 +17,8 @@ public class LogicalAnd extends Rule
 {
 	private final String[] attributes;
 
-	public LogicalAnd(String name, String... attributes)
+	public LogicalAnd(String... attributes)
 	{
-		super(name);
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 

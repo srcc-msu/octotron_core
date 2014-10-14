@@ -7,7 +7,6 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.logic.ReactionTemplate;
-import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
@@ -29,12 +28,12 @@ public abstract class BaseFactory<T>
  * */
 	protected final List<SimpleAttribute> constants;
 	protected final List<SimpleAttribute> sensors;
-	protected final List<Rule> rules;
+	protected final List<SimpleAttribute> rules;
 	protected final List<ReactionTemplate> reactions;
 
 	protected BaseFactory(ModelService service, List<SimpleAttribute> constants
 		, List<SimpleAttribute> sensors
-		, List<Rule> rules
+		, List<SimpleAttribute> rules
 		, List<ReactionTemplate> reactions)
 	{
 		this.service = service;
@@ -49,7 +48,7 @@ public abstract class BaseFactory<T>
 		this(service
 			, new LinkedList<SimpleAttribute>()
 			, new LinkedList<SimpleAttribute>()
-			, new LinkedList<Rule>()
+			, new LinkedList<SimpleAttribute>()
 			, new LinkedList<ReactionTemplate>());
 	}
 
@@ -69,9 +68,9 @@ public abstract class BaseFactory<T>
 		return Clone(constants, new_sensors, rules, reactions);
 	}
 
-	public T Varyings(Rule... addition)
+	public T Varyings(SimpleAttribute... addition)
 	{
-		List<Rule> new_rules = new LinkedList<>(rules);
+		List<SimpleAttribute> new_rules = new LinkedList<>(rules);
 		new_rules.addAll(Arrays.asList(addition));
 
 		return Clone(constants, sensors, new_rules, reactions);
@@ -88,6 +87,6 @@ public abstract class BaseFactory<T>
 	protected abstract T Clone(
 		List<SimpleAttribute> new_constants
 		, List<SimpleAttribute> new_sensors
-		, List<Rule> new_rules
+		, List<SimpleAttribute> new_rules
 		, List<ReactionTemplate> new_reactions);
 }

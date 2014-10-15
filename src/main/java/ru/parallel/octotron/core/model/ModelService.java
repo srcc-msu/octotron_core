@@ -17,9 +17,13 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 public final class ModelService
 {
-	public long SetSuppress(ModelEntity entity, long template_id, boolean value)
+	public long SetSuppress(ModelEntity entity, long template_id, boolean value, String description)
 	{
 		long suppressed = 0;
 		long AID = -1;
@@ -31,6 +35,7 @@ public final class ModelService
 				if(reaction.GetTemplate().GetID() == template_id)
 				{
 					reaction.SetSuppress(value);
+					reaction.SetDescription(description);
 					suppressed++;
 					AID = reaction.GetID();
 				}
@@ -41,6 +46,21 @@ public final class ModelService
 			throw new ExceptionModelFail("ambiguous reaction suppressing: few matches");
 
 		return AID;
+	}
+
+	public Collection<Reaction> GetSuppressedReactions()
+	{
+		List<Reaction> reactions = new LinkedList<>();
+
+		for(ModelObject object : model_data.GetAllObjects())
+			for(IModelAttribute attribute : object.GetAttributes())
+				for (Reaction reaction : attribute.GetReactions())
+				{
+					if(reaction.GetSuppress())
+						reactions.add(reaction);
+				}
+
+		return reactions;
 	}
 
 	public static enum EMode

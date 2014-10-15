@@ -32,7 +32,7 @@ public class HttpRequestParser
 		, Operations.p
 		, Operations.p_react
 		, Operations.p_const, Operations.p_sensor, Operations.p_var
-		, Operations.show_m, Operations.show_r
+		, Operations.show_suppressed, Operations.show_r
 	};
 
 	/**
@@ -42,9 +42,8 @@ public class HttpRequestParser
 	private static final Operation[] MODIFY_OPERATIONS =
 	{
 		Operations.import_token, Operations.unchecked_import_token
-		, Operations.set, Operations.static_op
 		, Operations.set_valid, Operations.set_invalid
-		, Operations.add_m, Operations.del_m
+		, Operations.suppress, Operations.unsuppress
 	};
 
 	/**

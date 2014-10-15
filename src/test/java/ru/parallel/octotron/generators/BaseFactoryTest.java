@@ -76,10 +76,6 @@ public class BaseFactoryTest
 			.Varyings(rules)
 			.Varyings(new SimpleAttribute("test2", rule2), new SimpleAttribute("test3", rule3));
 
-		LinkFactory f2 = link_factory
-			.Varyings(new SimpleAttribute("test2", rule2), new SimpleAttribute("test3", rule3))
-			.Varyings(rules);
-
 		ModelObject obj = f1.Create();
 
 		assertTrue(obj.TestAttribute("test1"));
@@ -99,12 +95,6 @@ public class BaseFactoryTest
 			.Sensors(new SimpleAttribute("test2", 0))
 			.Sensors(new SimpleAttribute("test3", 0))
 			.Reactions(reactions).Reactions(reaction2, reaction3);
-
-		LinkFactory f2 = link_factory
-			.Sensors(new SimpleAttribute("test1", 0))
-			.Sensors(new SimpleAttribute("test2", 0))
-			.Sensors(new SimpleAttribute("test3", 0))
-			.Reactions(reaction2, reaction3).Reactions(reactions);
 
 		ModelObject obj = f1.Create();
 

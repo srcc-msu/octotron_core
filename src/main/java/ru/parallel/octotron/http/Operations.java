@@ -737,7 +737,7 @@ public abstract class Operations
 
 			ModelObject object = (ModelObject)objects.Only();
 
-			if(true) throw new ExceptionModelFail("NIY");
+			if(true) throw new ExceptionModelFail("NIY"); // TODO
 
 			String data = "deleted marker with id: " + id;
 			return new RequestResult(E_RESULT_TYPE.TEXT, data);

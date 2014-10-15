@@ -1,6 +1,5 @@
 package ru.parallel.octotron.reactions;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,15 +8,12 @@ import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 
 import static org.junit.Assert.*;
 import static ru.parallel.octotron.reactions.PreparedResponse.ComposeString;
-import static ru.parallel.octotron.reactions.PreparedResponse.ReplaceOne;
 
 public class PreparedResponseTest
 {
@@ -41,7 +37,7 @@ public class PreparedResponseTest
 	}
 
 	@Rule
-	public ExpectedException exception = ExpectedException.none();
+	public final ExpectedException exception = ExpectedException.none();
 
 	@Test
 	public void TestReplace() throws Exception

@@ -6,7 +6,6 @@
 
 package ru.parallel.utils;
 
-import com.google.gson.Gson;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.ArrayList;

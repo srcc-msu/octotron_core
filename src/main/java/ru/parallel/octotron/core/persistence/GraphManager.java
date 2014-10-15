@@ -30,7 +30,7 @@ import java.util.Collection;
 
 public class GraphManager implements IPersistenceManager
 {
-	ModelService model_service;
+	final ModelService model_service;
 
 	private Neo4jGraph graph;
 	private GraphService graph_service;
@@ -53,19 +53,16 @@ public class GraphManager implements IPersistenceManager
 
 	private GraphObject GetObject(IUniqueID<?> id)
 	{
-
 		return graph_service.GetObject("AID", id.GetID());
 	}
 
 	private GraphLink GetLink(IUniqueID<?> id)
 	{
-
 		return graph_service.GetLink("AID", id.GetID());
 	}
 
 	private GraphEntity GetEntity(IUniqueID<?> id)
 	{
-
 		Collection<GraphLink> links = graph_service.GetLinks("AID", id.GetID());
 		Collection<GraphObject> objects = graph_service.GetObjects("AID", id.GetID());
 
@@ -88,7 +85,6 @@ public class GraphManager implements IPersistenceManager
 	@Override
 	public void RegisterObject(ModelObject object)
 	{
-
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
@@ -108,7 +104,6 @@ public class GraphManager implements IPersistenceManager
 	@Override
 	public void RegisterLink(ModelLink link)
 	{
-
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphLink graph_object = graph_service.AddLink(

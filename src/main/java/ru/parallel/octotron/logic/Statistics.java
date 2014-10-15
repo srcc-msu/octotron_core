@@ -23,8 +23,8 @@ public class Statistics
 	{
 		public final String name;
 
-		public Metric queue = new Metric();
-		public Metric total = new Metric();
+		public final Metric queue = new Metric();
+		public final Metric total = new Metric();
 
 		public Stat(String name)
 		{
@@ -32,7 +32,7 @@ public class Statistics
 		}
 	}
 
-	Map<String, Stat> stats = new HashMap<>();
+	final Map<String, Stat> stats = new HashMap<>();
 
 	private final Timer timer_60 = new Timer();
 

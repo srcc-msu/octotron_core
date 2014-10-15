@@ -14,15 +14,15 @@ public final class ModelData
 {
 	final ModelCache cache;
 
-	ModelObjectList objects;
-	ModelLinkList links;
+	final ModelObjectList objects;
+	final ModelLinkList links;
 
 	public ModelData()
 	{
+		cache = new ModelCache();
+
 		objects = new ModelObjectList();
 		links = new ModelLinkList();
-
-		cache = new ModelCache();
 	}
 
 	public ModelObjectList GetAllObjects()

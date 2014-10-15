@@ -10,8 +10,8 @@ import ru.parallel.octotron.core.primitive.EEntityType;
 
 public class ModelLink extends ModelEntity
 {
-	private ModelObject source;
-	private ModelObject target;
+	private final ModelObject source;
+	private final ModelObject target;
 
 	public ModelLink(ModelObject source, ModelObject target)
 	{

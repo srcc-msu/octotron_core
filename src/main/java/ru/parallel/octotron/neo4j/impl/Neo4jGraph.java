@@ -292,7 +292,7 @@ public final class Neo4jGraph implements IGraph
 	}
 
 
-	Neo4jIndex index = new Neo4jIndex(this);
+	final Neo4jIndex index = new Neo4jIndex(this);
 
 	@Override
 	public IIndex GetIndex()

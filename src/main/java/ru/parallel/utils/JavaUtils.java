@@ -67,7 +67,7 @@ public abstract class JavaUtils
 		}
 		catch(InterruptedException ignore){}
 
-		if(result == false)
+		if(!result)
 			LOGGER.log(Level.WARNING, "failed to stop executor: timeout");
 	}
 }

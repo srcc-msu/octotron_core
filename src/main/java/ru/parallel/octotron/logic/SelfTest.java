@@ -27,6 +27,7 @@ public class SelfTest
 
 	public void Init()
 	{
+// TODO
 		/*ModelObjectList list = ModelService.GetObjects("type", "_selftest");
 
 		if(list.size() == 0)
@@ -57,6 +58,7 @@ public class SelfTest
 
 	public boolean Test()
 	{
+		// TODO
 	/*	test_iteration++;
 
 		controller.ImmediateImport(obj1, new SimpleAttribute("test_iteration", test_iteration));

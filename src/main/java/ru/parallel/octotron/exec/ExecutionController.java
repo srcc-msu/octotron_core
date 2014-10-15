@@ -35,7 +35,7 @@ public class ExecutionController
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	private Context context;
+	private final Context context;
 
 	private HTTPServer http;
 
@@ -182,7 +182,7 @@ public class ExecutionController
 
 	public void UncheckedImport(ModelObject target, SimpleAttribute attribute)
 	{
-
+// TODO
 	}
 
 	public void Finish()

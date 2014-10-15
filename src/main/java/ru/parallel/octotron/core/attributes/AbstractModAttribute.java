@@ -19,9 +19,9 @@ import java.util.*;
 
 public abstract class AbstractModAttribute extends AbstractAttribute implements IModelAttribute
 {
-	private History history;
+	private final History history;
 
-	protected boolean is_valid;
+	private boolean is_valid;
 	private long ctime;
 
 	protected final Map<Long, Reaction> reactions;

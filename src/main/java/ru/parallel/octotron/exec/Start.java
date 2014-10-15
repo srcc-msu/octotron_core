@@ -102,6 +102,7 @@ public class Start
 	public static void Begin(Context context)
 		throws ExceptionSystemError
 	{
+		// TODO
 		/*if(context.settings.IsDb())
 		{
 			if(FileUtils.IsDirEmpty(context.settings.GetDbPath() + settings.GetModelName()))

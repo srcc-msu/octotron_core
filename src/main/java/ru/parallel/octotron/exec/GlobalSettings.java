@@ -48,8 +48,8 @@ public class GlobalSettings
 
 	private final Map<String, String> script_map = new HashMap<>();
 
-	private List<String> object_index = new LinkedList<>();
-	private List<String> link_index = new LinkedList<>();
+	private final List<String> object_index = new LinkedList<>();
+	private final List<String> link_index = new LinkedList<>();
 
 	private int http_port;
 

@@ -13,11 +13,11 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class ModelObject extends ModelEntity
 {
-	ModelLinkList out_links;
-	ModelLinkList in_links;
+	final ModelLinkList out_links;
+	final ModelLinkList in_links;
 
-	ModelObjectList out_neighbors;
-	ModelObjectList in_neighbors;
+	final ModelObjectList out_neighbors;
+	final ModelObjectList in_neighbors;
 
 	public ModelObject()
 	{

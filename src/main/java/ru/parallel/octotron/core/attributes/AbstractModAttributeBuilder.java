@@ -19,7 +19,7 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 	{
 		this.attribute = null;
 		this.service = null;
-	};
+	}
 
 	AbstractModAttributeBuilder(ModelService service, T attribute)
 	{

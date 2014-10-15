@@ -16,8 +16,8 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class VarAttribute extends AbstractModAttribute
 {
-	protected Rule rule;
-	protected AttributeList<IModelAttribute> dependency;
+	protected final Rule rule;
+	protected final AttributeList<IModelAttribute> dependency;
 
 	@Override
 	public VarAttributeBuilder GetBuilder(ModelService service)

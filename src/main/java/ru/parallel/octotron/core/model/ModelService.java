@@ -24,7 +24,7 @@ public final class ModelService
 		CREATION, LOAD, OPERATION
 	}
 
-	private ModelData model_data;
+	private final ModelData model_data;
 	private EMode mode;
 	private IPersistenceManager manager;
 

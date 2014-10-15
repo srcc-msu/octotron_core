@@ -30,7 +30,7 @@ public class DummyHTTPServer
 		return requests.remove(0);
 	}
 
-	private List<HttpExchangeWrapper> requests = new LinkedList<>();
+	private final List<HttpExchangeWrapper> requests = new LinkedList<>();
 
 	public int GetPort()
 	{
@@ -87,9 +87,9 @@ public class DummyHTTPServer
 
 		server.setExecutor(null);
 
-		HttpContext request = server.createContext("/view", new StandardHandler());
-		HttpContext modify  = server.createContext("/modify", new StandardHandler());
-		HttpContext control = server.createContext("/control", new StandardHandler());
+		server.createContext("/view", new StandardHandler());
+		server.createContext("/modify", new StandardHandler());
+		server.createContext("/control", new StandardHandler());
 
 		server.createContext("/", new DefaultHandler());
 

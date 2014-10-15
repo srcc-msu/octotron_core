@@ -56,8 +56,6 @@ public class ReactionTest
 	@Test
 	public void TestGetReactionState()
 	{
-		final int N = 4;
-
 		ModelEntity entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);

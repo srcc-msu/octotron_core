@@ -17,8 +17,8 @@ public class History
 
 	public static class Entry
 	{
-		Object value;
-		long ctime;
+		final Object value;
+		final long ctime;
 
 		public Entry(Object value, long ctime)
 		{
@@ -27,7 +27,7 @@ public class History
 		}
 	}
 
-	LinkedList<Entry> history;
+	private final LinkedList<Entry> history;
 
 	public History()
 	{

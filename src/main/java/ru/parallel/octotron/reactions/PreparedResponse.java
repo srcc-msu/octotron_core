@@ -6,13 +6,11 @@
 
 package ru.parallel.octotron.reactions;
 
-import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.JsonString;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -197,7 +195,7 @@ public class PreparedResponse implements Runnable
 				}
 				catch (ExceptionSystemError e)
 				{
-					LOGGER.log(Level.SEVERE, "could not invoke reaction script: " + command.toString(), e);
+					LOGGER.log(Level.SEVERE, "could not invoke reaction script: " + Arrays.toString(command), e);
 				}
 			}
 		}

@@ -532,7 +532,8 @@ public abstract class Operations
 			ModelEntity target = entities.Only();
 
 			if(target.GetSensor(name) == null)
-				throw new ExceptionModelFail("can not import, attribute not found: " + name);
+				return new RequestResult(E_RESULT_TYPE.ERROR
+					, "sesnor does not exist: " + name);
 
 			controller.Import(target, new SimpleAttribute(name, value));
 

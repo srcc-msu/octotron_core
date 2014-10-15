@@ -24,6 +24,7 @@ import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -66,6 +67,7 @@ public class ExecutionController
 	private boolean silent = false;
 
 	private Statistics stat;
+	private ConcurrentLinkedQueue<AttributeList<IModelAttribute>> to_update = new ConcurrentLinkedQueue<>();
 
 	public List<java.util.Map<String, Object>> GetStat()
 	{
@@ -134,7 +136,15 @@ public class ExecutionController
 	public void Process()
 		throws InterruptedException
 	{
-		Thread.sleep(1);
+		AttributeList<IModelAttribute> list = to_update.poll();
+
+		if(list == null)
+		{
+			Thread.sleep(1);
+			return;
+		}
+
+		context.model_service.RegisterUpdate(list);
 		stat.Process();
 	}
 
@@ -192,7 +202,7 @@ public class ExecutionController
 			}
 		}
 
-		context.model_service.RegisterUpdate(attributes);
+		to_update.add(attributes);
 	}
 
 	public void AddResponse(PreparedResponse response)

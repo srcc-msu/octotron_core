@@ -850,22 +850,18 @@ time = Timer.SEnd();
 			long interval = (long)SimpleAttribute.ValueFromStr(value_str);
 
 			double time;
-			String result;
+			List<Map<String, Object>> result;
 
 			try
 			{
-Timer.SStart();
-				result = RuntimeService.CheckModTime(interval);
-time = Timer.SEnd();
+				result = RuntimeService.CheckModTime(controller.GetContext(), interval);
 			}
 			catch (ExceptionModelFail e)
 			{
 				throw new ExceptionParseError(e);
 			}
 
-			result = "mod_time creation took "+ time + " sec" + System.lineSeparator() + result;
-
-			return new RequestResult(E_RESULT_TYPE.TEXT, result);
+			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJson(result));
 		}
 	});
 

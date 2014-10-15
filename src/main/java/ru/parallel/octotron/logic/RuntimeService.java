@@ -6,11 +6,22 @@
 
 package ru.parallel.octotron.logic;
 
+import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.core.collections.ModelObjectList;
+import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.utils.JavaUtils;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,39 +83,34 @@ public class RuntimeService
 	}
 
 	// TODO: entities?
-	public static String CheckModTime(long interval)
+	public static List<Map<String, Object>> CheckModTime(Context context, long interval)
 	{
-		throw new ExceptionModelFail("NIY");
+		List<Map<String, Object>> result = new LinkedList<>();
 
-		/*StringBuilder result = new StringBuilder();
-
-		ModelObjectList list = ModelService.GetAllObjects();
-
-		((Neo4jGraph)graph).GetTransaction().ForceWrite();
-
+		ModelList<ModelEntity, ?> list = context.model_data.GetAllEntities();
 		long cur_time = JavaUtils.GetTimestamp();
 
-		for(ModelObject obj : list)
+		for(ModelEntity entity : list)
 		{
-			for(IMetaAttribute attr : obj.GetMetaAttributes())
+			for(SensorAttribute sensor : entity.GetSensor())
 			{
-				long diff = cur_time - attr.GetCTime();
+				long diff = cur_time - sensor.GetCTime();
 
 				if(diff > interval)
 				{
-					long aid = obj.GetAttribute("AID").GetLong();
-					String type = obj.GetAttribute("type").GetString();
+					Map<String, Object> map = new HashMap<>();
 
-					result.append("[AID: ").append(aid)
-						.append(", type: ").append(type)
-						.append(", attribute: ").append(attr.GetName()).append("]: ")
-						.append("last change: ").append(diff).append(" secs ago")
-						.append(System.lineSeparator());
+					map.put("parent AID", entity.GetID());
+					map.put("sensor name", sensor.GetName());
+					map.put("sensor AID", sensor.GetID());
+					map.put("not changed", diff);
+
+					result.add(map);
 				}
 			}
 		}
 
-		return result.toString();*/
+		return result;
 	}
 
 	public static Map<String, String> GetVersion()
@@ -141,7 +147,7 @@ public class RuntimeService
 			}
 			catch (IOException e)
 			{
-				LOGGER.log(Level.SEVERE, "failed to close the version file");
+				LOGGER.log(Level.WARNING, "failed to close the version file");
 			}
 		}
 

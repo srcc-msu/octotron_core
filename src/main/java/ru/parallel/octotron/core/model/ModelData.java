@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.collections.ModelLinkList;
+import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
@@ -33,6 +34,11 @@ public final class ModelData
 	public ModelLinkList GetAllLinks()
 	{
 		return links;
+	}
+
+	public ModelList<ModelEntity, ?> GetAllEntities()
+	{
+		return ((ModelList)objects).append(links);
 	}
 
 	public ModelObjectList GetObjects(SimpleAttribute attribute)

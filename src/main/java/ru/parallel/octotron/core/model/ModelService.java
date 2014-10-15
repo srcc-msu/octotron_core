@@ -52,8 +52,8 @@ public final class ModelService
 	{
 		List<Reaction> reactions = new LinkedList<>();
 
-		for(ModelObject object : model_data.GetAllObjects())
-			for(IModelAttribute attribute : object.GetAttributes())
+		for(ModelEntity entity : model_data.GetAllEntities())
+			for(IModelAttribute attribute : entity.GetAttributes())
 				for (Reaction reaction : attribute.GetReactions())
 				{
 					if(reaction.GetSuppress())

@@ -52,6 +52,7 @@ public class GlobalSettings
 	private final List<String> link_index = new LinkedList<>();
 
 	private int http_port;
+	private String host;
 
 	private Credential view_credentials;
 	private Credential modify_credentials;
@@ -175,6 +176,11 @@ public class GlobalSettings
 
 		http_port = JsonUtils.MustPresent(http_conf, "port").getAsInt();
 
+		if(JsonUtils.IsPresent(http_conf, "host"))
+			host = JsonUtils.MustPresent(http_conf, "host").getAsString();
+		else
+			host = "127.0.0.1";
+
 // --- credentials config
 		view_credentials = GlobalSettings.GetCredential(http_conf, "view");
 		modify_credentials = GlobalSettings.GetCredential(http_conf, "modify");
@@ -185,6 +191,12 @@ public class GlobalSettings
 	{
 		return http_port;
 	}
+
+	public String GetHost()
+	{
+		return host;
+	}
+
 
 	public String GetModelName()
 	{

@@ -125,20 +125,4 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	{
 		return reactions.values();
 	}
-
-	@Override
-	public Collection<Response> ProcessReactions()
-	{
-		List<Response> result = new LinkedList<>();
-
-		for(Reaction reaction : GetReactions())
-		{
-			Response response = reaction.Process();
-
-			if(response != null)
-				result.add(response);
-		}
-
-		return result;
-	}
 }

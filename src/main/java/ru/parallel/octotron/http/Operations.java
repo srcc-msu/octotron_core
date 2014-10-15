@@ -531,6 +531,9 @@ public abstract class Operations
 
 			ModelEntity target = entities.Only();
 
+			if(target.GetSensor(name) == null)
+				throw new ExceptionModelFail("can not import, attribute not found: " + name);
+
 			controller.Import(target, new SimpleAttribute(name, value));
 
 			return new RequestResult(E_RESULT_TYPE.TEXT
@@ -556,7 +559,7 @@ public abstract class Operations
 
 			ModelEntity target = entities.Only();
 
-			if(!target.TestAttribute(name))
+			if(target.GetSensor(name) == null)
 			{
 				try
 				{
@@ -568,7 +571,7 @@ public abstract class Operations
 				}
 
 				return new RequestResult(E_RESULT_TYPE.TEXT
-					, "attribute not found, but registered, import phase skipped");
+					, "attribute not found, but registered, import skipped");
 			}
 			else
 			{

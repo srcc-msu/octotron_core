@@ -7,10 +7,10 @@
 package ru.parallel.octotron.exec;
 
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.HTTPServer;
@@ -177,12 +177,16 @@ public class ExecutionController
 
 		for(IModelAttribute attribute : attributes)
 		{
-			for(Response response : attribute.ProcessReactions())
+			for(Reaction reaction : attribute.GetReactions())
 			{
-				AddResponse(new PreparedResponse(response
-					, attribute.GetParent()
-					, time
-					, context.settings));
+				Response response = reaction.Process();
+
+				if(response == null)
+					continue;
+
+				AddResponse(new PreparedResponse(attribute.GetParent()
+					, reaction, response
+					, time, context.settings));
 			}
 		}
 	}

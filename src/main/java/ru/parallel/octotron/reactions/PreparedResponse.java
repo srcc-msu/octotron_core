@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.reactions;
 
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -31,13 +32,14 @@ public class PreparedResponse implements Runnable
 
 	private final List<String[]> compiled_commands = new LinkedList<>();
 	private final List<String> compiled_messages = new LinkedList<>();
+	private final List<String> specials = new LinkedList<>();
 
 	private Map<String, Object> attributes = new HashMap<>();
 	private final List<Map<String, Object>> parent_attributes = new LinkedList<>();
 
 	private final long timestamp;
 
-	public PreparedResponse(Response response, ModelEntity entity, long timestamp, GlobalSettings settings)
+	public PreparedResponse(ModelEntity entity, Reaction reaction, Response response, long timestamp, GlobalSettings settings)
 	{
 		this.response = response;
 		this.timestamp = timestamp;
@@ -46,10 +48,38 @@ public class PreparedResponse implements Runnable
 		ComposeAttributes(entity);
 		ComposeParentAttributes(entity);
 		ComposeMessages(entity);
+		ComposeSpecialMessages(entity, reaction, settings);
 		ComposeCommands(entity);
 	}
 
-	private static final String NOT_FOUND = "<not_found>";
+	/**
+	 * for testing
+	 * */
+	PreparedResponse(ModelEntity entity, Response response, long timestamp)
+	{
+		this.response = response;
+		this.timestamp = timestamp;
+		this.settings = null;
+
+		ComposeAttributes(entity);
+		ComposeParentAttributes(entity);
+		ComposeMessages(entity);
+		ComposeCommands(entity);
+	}
+
+	private void ComposeSpecialMessages(ModelEntity entity, Reaction reaction, GlobalSettings settings)
+	{
+		String suppress = String.format("to suppress this reaction: http://%s:%d/modify/suppress?path=obj(AID==%d)&template_id=%d&description=spam"
+			, settings.GetHost(), settings.GetPort()
+			, entity.GetID(), reaction.GetTemplate().GetID());
+		specials.add(suppress);
+
+		String show_all = String.format("to view all suppressed reactions: http://%s:%d/view/show_suppressed"
+			, settings.GetHost(), settings.GetPort());
+		specials.add(show_all);
+	}
+
+	private static final String NOT_FOUND = "<%s:not_found>";
 
 	private static Map<String, Object> GetAttributes(ModelEntity entity, Iterable<String> names)
 	{
@@ -62,7 +92,7 @@ public class PreparedResponse implements Runnable
 			if(entity.TestAttribute(name))
 				value = entity.GetAttribute(name).GetValue();
 			else
-				value = NOT_FOUND;
+				value = String.format(NOT_FOUND, name);
 
 			result.put(name, value);
 		}
@@ -96,7 +126,7 @@ public class PreparedResponse implements Runnable
 		if(entity.TestAttribute(name))
 			value = entity.GetAttribute(name).GetStringValue();
 		else
-			value = NOT_FOUND;
+			value = String.format(NOT_FOUND, name);
 
 		return string.replace("{" + name + "}", value);
 	}
@@ -174,6 +204,9 @@ public class PreparedResponse implements Runnable
 
 			for(String message : compiled_messages)
 				result.add(message);
+
+			for(String special : specials)
+				result.add(special);
 
 			compiled_commands.add(result.toArray(new String[0]));
 		}

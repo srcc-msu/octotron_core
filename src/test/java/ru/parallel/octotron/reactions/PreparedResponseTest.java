@@ -15,6 +15,9 @@ import ru.parallel.octotron.generators.ObjectFactory;
 import static org.junit.Assert.*;
 import static ru.parallel.octotron.reactions.PreparedResponse.ComposeString;
 
+/**
+ * AIDS may differ if you run a single test.. TODO
+ * */
 public class PreparedResponseTest
 {
 	private static Context context;
@@ -60,9 +63,9 @@ public class PreparedResponseTest
 		ModelEntity entity = obj_factory.Create();
 		Response response = new Response(EEventStatus.INFO, "TAG");
 
-		PreparedResponse prepared_response = new PreparedResponse(response, entity, 1, null);
+		PreparedResponse prepared_response = new PreparedResponse(entity, response, 1);
 
-		assertEquals("{\"event\":\"INFO\",\"msg0\":\"TAG\",\"time\":\"1\"}"
+		assertEquals("{\"event\":\"INFO\",\"msg_0\":\"TAG\",\"time\":1}"
 			, prepared_response.GetFullString());
 	}
 
@@ -72,9 +75,9 @@ public class PreparedResponseTest
 		ModelEntity entity = obj_factory.Create();
 		Response response = new Response(EEventStatus.INFO, "{test} {type}");
 
-		PreparedResponse prepared_response = new PreparedResponse(response, entity, 1, null);
+		PreparedResponse prepared_response = new PreparedResponse(entity, response, 1);
 
-		assertEquals("{\"event\":\"INFO\",\"msg0\":\"1 test\",\"time\":\"1\"}"
+		assertEquals("{\"event\":\"INFO\",\"msg_0\":\"1 test\",\"time\":1}"
 			, prepared_response.GetFullString());
 	}
 
@@ -84,9 +87,9 @@ public class PreparedResponseTest
 		ModelEntity entity = obj_factory.Create();
 		Response response = new Response(EEventStatus.INFO, "{AID} {type} {fail}");
 
-		PreparedResponse prepared_response = new PreparedResponse(response, entity, 1, null);
+		PreparedResponse prepared_response = new PreparedResponse(entity, response, 1);
 
-		assertEquals("{\"event\":\"INFO\",\"msg0\":\"12 test <not_found>\",\"time\":\"1\"}"
+		assertEquals("{\"event\":\"INFO\",\"msg_0\":\"12 test <fail:not_found>\",\"time\":1}"
 			, prepared_response.GetFullString());
 	}
 
@@ -96,9 +99,9 @@ public class PreparedResponseTest
 		ModelEntity entity = obj_factory.Create();
 		Response response = new Response(EEventStatus.INFO, "test").Print("test", "type");
 
-		PreparedResponse prepared_response = new PreparedResponse(response, entity, 1, null);
+		PreparedResponse prepared_response = new PreparedResponse(entity, response, 1);
 
-		assertEquals("{\"attributes\":{\"test\":1,\"type\":\"test\"},\"event\":\"INFO\",\"msg0\":\"test\",\"time\":\"1\"}"
+		assertEquals("{\"attributes\":{\"test\":1,\"type\":\"test\"},\"event\":\"INFO\",\"msg_0\":\"test\",\"time\":1}"
 			, prepared_response.GetFullString());
 	}
 }

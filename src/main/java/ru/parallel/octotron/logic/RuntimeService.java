@@ -86,7 +86,6 @@ public class RuntimeService
 		return result.toString();*/
 	}
 
-	// TODO: entities?
 	public static List<Map<String, Object>> CheckModTime(Context context, long interval)
 	{
 		List<Map<String, Object>> result = new LinkedList<>();

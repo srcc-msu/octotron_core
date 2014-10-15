@@ -75,10 +75,4 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	{
 		return new LinkedList<>();
 	}
-
-	@Override
-	public Collection<Response> ProcessReactions()
-	{
-		return new LinkedList<>();
-	}
 }

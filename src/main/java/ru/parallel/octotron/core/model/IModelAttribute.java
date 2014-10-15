@@ -28,7 +28,6 @@ public interface IModelAttribute extends IAttribute, IUniqueID<EAttributeType>
 	double GetSpeed();
 
 	AttributeList<VarAttribute> GetDependant();
-	Collection<Response> ProcessReactions();
 
 	IAttributeBuilder GetBuilder(ModelService service);
 }

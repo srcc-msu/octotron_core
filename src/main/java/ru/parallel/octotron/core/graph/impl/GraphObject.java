@@ -59,8 +59,6 @@ public final class GraphObject extends GraphEntity
 	}
 
 // ----
-//
-// ----
 
 	public Collection<GraphLink> GetInLinks()
 	{

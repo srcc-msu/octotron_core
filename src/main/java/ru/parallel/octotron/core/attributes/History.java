@@ -27,12 +27,7 @@ public class History
 		}
 	}
 
-	private final LinkedList<Entry> history;
-
-	public History()
-	{
-		history = new LinkedList<>();
-	}
+	private final LinkedList<Entry> history = new LinkedList<>();
 
 	@Nullable
 	public Entry GetLast()

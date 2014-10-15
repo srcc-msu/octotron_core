@@ -25,12 +25,13 @@ public class DummyHTTPServer
 	private HttpServer server;
 	private int port;
 
+	private final List<HttpExchangeWrapper> requests = new LinkedList<>();
+
 	public HttpExchangeWrapper GetExchange()
 	{
 		return requests.remove(0);
 	}
 
-	private final List<HttpExchangeWrapper> requests = new LinkedList<>();
 
 	public int GetPort()
 	{

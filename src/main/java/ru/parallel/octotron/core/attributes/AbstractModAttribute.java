@@ -19,25 +19,17 @@ import java.util.*;
 
 public abstract class AbstractModAttribute extends AbstractAttribute implements IModelAttribute
 {
-	private final History history;
+	private final History history = new History();
 
-	private boolean is_valid;
-	private long ctime;
+	private boolean is_valid = true;
+	private long ctime = 0;
 
-	protected final Map<Long, Reaction> reactions;
-	protected final AttributeList<VarAttribute> dependant;
+	protected final Map<Long, Reaction> reactions = new HashMap<>();
+	protected final AttributeList<VarAttribute> dependant = new AttributeList<>();
 
 	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Object value)
 	{
 		super(type, parent, name, value);
-
-		history = new History();
-
-		is_valid = true;
-		ctime = 0L;
-
-		reactions = new HashMap<>();
-		dependant = new AttributeList<>();
 	}
 
 	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder(ModelService service);

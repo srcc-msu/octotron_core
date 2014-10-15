@@ -109,14 +109,8 @@ public class ModelCache
 	}
 
 
-	Map<String, ObjectValueCache> object_cache;
-	Map<String, LinkValueCache> link_cache;
-
-	public ModelCache()
-	{
-		object_cache = new HashMap<>();
-		link_cache = new HashMap<>();
-	}
+	Map<String, ObjectValueCache> object_cache = new HashMap<>();
+	Map<String, LinkValueCache> link_cache = new HashMap<>();
 
 	public void EnableObjectIndex(String name, ModelObjectList data)
 	{

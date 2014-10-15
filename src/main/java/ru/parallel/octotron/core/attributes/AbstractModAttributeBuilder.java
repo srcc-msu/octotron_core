@@ -15,12 +15,6 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 	protected final T attribute;
 	protected final ModelService service;
 
-	private AbstractModAttributeBuilder()
-	{
-		this.attribute = null;
-		this.service = null;
-	}
-
 	AbstractModAttributeBuilder(ModelService service, T attribute)
 	{
 		this.service = service;

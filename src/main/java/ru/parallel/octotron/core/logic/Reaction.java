@@ -18,14 +18,14 @@ public class Reaction extends UniqueID<EEntityType>
 	private final ReactionTemplate template;
 	private final IModelAttribute attribute;
 
-	private long delay;
-	private long repeat;
+	private long delay = 0;
+	private long repeat = 0;
 
-	private long state;
-	private long stat;
+	private long state = 0;
+	private long stat = 0;
 
-	private String descr;
-	private boolean suppress;
+	private String descr = "";
+	private boolean suppress = false;
 
 	public static final long STATE_NONE = 0;
 	public static final long STATE_STARTED = 1;
@@ -37,14 +37,6 @@ public class Reaction extends UniqueID<EEntityType>
 
 		this.template = template;
 		this.attribute = attribute;
-
-		delay = 0L;
-		repeat = 0L;
-
-		state = 0L;
-		stat = 0L;
-		descr = "";
-		suppress = false;
 	}
 
 	public ReactionTemplate GetTemplate()

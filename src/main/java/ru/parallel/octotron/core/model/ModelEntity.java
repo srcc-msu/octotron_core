@@ -19,20 +19,15 @@ import java.util.Map;
 
 public abstract class ModelEntity extends UniqueID<EEntityType>
 {
-	final Map<String, IModelAttribute> attributes_map;
+	final Map<String, IModelAttribute> attributes_map = new HashMap<>();
 
-	final Map<String, ConstAttribute> const_map;
-	final Map<String, SensorAttribute> sensor_map;
-	final Map<String, VarAttribute> var_map;
+	final Map<String, ConstAttribute> const_map = new HashMap<>();
+	final Map<String, SensorAttribute> sensor_map = new HashMap<>();
+	final Map<String, VarAttribute> var_map = new HashMap<>();
 
 	public ModelEntity(EEntityType type)
 	{
 		super(type);
-
-		attributes_map = new HashMap<>();
-		const_map = new HashMap<>();
-		sensor_map = new HashMap<>();
-		var_map = new HashMap<>();
 	}
 
 	public abstract ModelEntityBuilder<?> GetBuilder(ModelService service);

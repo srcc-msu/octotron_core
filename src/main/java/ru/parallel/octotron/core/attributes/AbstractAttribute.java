@@ -18,15 +18,17 @@ public abstract class AbstractAttribute extends UniqueID<EAttributeType> impleme
 	public static final double EPSILON = 0.00001;
 
 	private final ModelEntity parent;
+
 	private final String name;
 	private Object value;
 
 	AbstractAttribute(EAttributeType type, ModelEntity parent, String name, Object value)
 	{
 		super(type);
-		this.name = name;
+
 		this.parent = parent;
 
+		this.name = name;
 		this.value = value;
 	}
 

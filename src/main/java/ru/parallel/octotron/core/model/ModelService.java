@@ -17,6 +17,8 @@ import ru.parallel.octotron.core.persistence.IPersistenceManager;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.utils.FileUtils;
+import ru.parallel.utils.JavaUtils;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -73,25 +75,22 @@ public final class ModelService
 	private EMode mode;
 	private IPersistenceManager persistence_manager;
 
-	public ModelService(ModelData model_data, EMode mode, GlobalSettings settings)
+	public ModelService(ModelData model_data, GlobalSettings settings)
 		throws ExceptionSystemError
 	{
 		this.model_data = model_data;
-		this.mode = mode;
+
+		String db_path = settings.GetDbPath() + "/" + settings.GetModelName();
+
+		if(FileUtils.IsDirEmpty(db_path))
+			mode = EMode.CREATION;
+		else
+			mode = EMode.LOAD;
 
 		if(settings.IsDb())
-			persistence_manager = new GraphManager(this, settings.GetDbPath() + "/" + settings.GetModelName());
+			persistence_manager = new GraphManager(this, db_path);
 		else
 			persistence_manager = new GhostManager();
-	}
-
-	public ModelService(EMode mode, String path)
-		throws ExceptionSystemError
-	{
-		this.model_data = new ModelData();
-		this.mode = mode;
-
-		persistence_manager = new GraphManager(this, path);
 	}
 
 	public EMode GetMode()

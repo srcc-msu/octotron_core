@@ -148,7 +148,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			GraphObject graph_object = GetObject(reaction);
 
-			reaction.SetState((Long)graph_object.GetAttribute("state"));
+			reaction.SetState((Long) graph_object.GetAttribute("state"));
 			reaction.SetStat((Long) graph_object.GetAttribute("stat"));
 			reaction.SetSuppress((Boolean) graph_object.GetAttribute("suppress"));
 			reaction.SetDescription((String) graph_object.GetAttribute("descr"));
@@ -214,7 +214,10 @@ public class GraphManager implements IPersistenceManager
 				.SetCTime((Long)graph_object.GetAttribute("ctime"));
 
 			attribute.GetBuilder(model_service)
-				.SetValid((Boolean) graph_object.GetAttribute("ctime"));
+				.SetValid((Boolean) graph_object.GetAttribute("is_valid"));
+
+			attribute.GetBuilder(model_service)
+				.SetValue(graph_object.GetAttribute("value"));
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
@@ -282,5 +285,7 @@ public class GraphManager implements IPersistenceManager
 			for(Reaction reaction : attribute.GetReactions())
 				RegisterReaction(reaction);
 		}
+
+		graph.GetTransaction().ForceWrite();
 	}
 }

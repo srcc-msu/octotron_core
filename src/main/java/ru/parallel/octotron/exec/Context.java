@@ -29,8 +29,8 @@ public final class Context
 	{
 		GlobalSettings settings = new GlobalSettings(json_config);
 		ModelData model_data = new ModelData();
-		ModelService model_service = new ModelService(model_data
-			, ModelService.EMode.CREATION, settings);
+
+		ModelService model_service = new ModelService(model_data, settings);
 
 		return new Context(settings, model_data, model_service);
 	}
@@ -40,8 +40,7 @@ public final class Context
 	{
 		GlobalSettings settings = new GlobalSettings(port);
 		ModelData model_data = new ModelData();
-		ModelService model_service = new ModelService(model_data
-			, ModelService.EMode.CREATION, settings);
+		ModelService model_service = new ModelService(model_data, settings);
 
 		return new Context(settings, model_data, model_service);
 	}

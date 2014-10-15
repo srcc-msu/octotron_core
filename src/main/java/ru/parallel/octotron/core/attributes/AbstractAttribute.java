@@ -44,7 +44,7 @@ public abstract class AbstractAttribute extends UniqueID<EAttributeType> impleme
 		return value;
 	}
 
-	protected final void SetValue(Object new_value)
+	final void SetValue(Object new_value)
 	{
 		value = new_value;
 	}

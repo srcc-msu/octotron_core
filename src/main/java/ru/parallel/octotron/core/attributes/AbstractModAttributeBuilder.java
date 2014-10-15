@@ -45,4 +45,6 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 	{
 		attribute.SetValid(is_valid);
 	}
+
+	public void SetValue(Object new_value) { attribute.SetValue(new_value); }
 }

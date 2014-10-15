@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO blocking and not blocking
 public class ModelRequestExecutor implements Runnable
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
@@ -59,9 +60,10 @@ public class ModelRequestExecutor implements Runnable
 			for(StackTraceElement s : e.getStackTrace())
 				msg += System.lineSeparator() + s;
 
-			LOGGER.log(Level.WARNING, "request failed: "
-				+ exchange.GetPath()
-				+ exchange.GetQuery());
+			if(exchange != null)
+				LOGGER.log(Level.WARNING, "request failed: "
+					+ exchange.GetPath()
+					+ exchange.GetQuery());
 
 			LOGGER.log(Level.WARNING, msg);
 

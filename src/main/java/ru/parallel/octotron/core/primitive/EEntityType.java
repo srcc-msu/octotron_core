@@ -8,5 +8,5 @@ package ru.parallel.octotron.core.primitive;
 
 public enum EEntityType
 {
-	LINK, OBJECT, REACTION
+	LINK, OBJECT, REACTION, REACTION_TEMPLATE
 }

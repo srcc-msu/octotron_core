@@ -686,41 +686,89 @@ public abstract class Operations
 /**
  * adds the marker to the all given objects<br>
  * */
-	public static final Operation add_m = new Operation("add_m", true
+	public static final Operation suppress = new Operation("suppress", true
 		, new IExec()
 	{
 		@Override
 		public Object Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
 				throws ExceptionParseError
 		{
-			Operations.RequiredParams(params, "path", "reaction_id", "description");
-			Operations.AllParams(params, "path", "reaction_id", "description", "suppress");
+			Operations.RequiredParams(params, "path", "template_id");
+			Operations.AllParams(params, "path", "template_id");
 
-			String reaction_id_str = params.get("reaction_id");
-			String description_str = params.get("description");
-			String suppress_str = params.get("suppress");
+			String template_id_str = params.get("template_id");
 
-			long reaction_id = (long)SimpleAttribute.ValueFromStr(reaction_id_str);
+			long template_id = (long)SimpleAttribute.ValueFromStr(template_id_str);
 
-			String description = (String)SimpleAttribute.ValueFromStr(description_str);
+			String res = "";
 
-			boolean suppress = false;
-			if(suppress_str != null)
-				suppress = (boolean)SimpleAttribute.ValueFromStr(suppress_str);
+			for(ModelEntity entity : objects)
+			{
+				long AID = controller.GetContext().model_service
+					.SetSuppress(entity, template_id, true);
 
-			StringBuilder res = new StringBuilder();
+				if(AID != -1)
+				{
+					res += "suppressed reaction: " + AID
+						+ " with template: " + template_id
+						+ System.lineSeparator();
+				}
+				else
+				{
+					res += "reaction with template: " + template_id
+						+ " not found on object: " + entity.GetID()
+						+ System.lineSeparator();
+				}
+			}
 
-			//TODO
-/*			for(ModelEntity object : objects)
-				res.append("marker id=")
-					.append(object.AddMarker(reaction_id, description, suppress))
-					.append(System.lineSeparator());*/
-
-			return new RequestResult(E_RESULT_TYPE.TEXT, res.toString());
+			return new RequestResult(E_RESULT_TYPE.TEXT, res);
 		}
 	});
 
-/**
+
+	/**
+	 * adds the marker to the all given objects<br>
+	 * */
+	public static final Operation unsuppress = new Operation("unsuppress", true
+		, new IExec()
+	{
+		@Override
+		public Object Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> objects)
+			throws ExceptionParseError
+		{
+			Operations.RequiredParams(params, "path", "template_id");
+			Operations.AllParams(params, "path", "template_id");
+
+			String template_id_str = params.get("template_id");
+
+			long template_id = (long)SimpleAttribute.ValueFromStr(template_id_str);
+
+			String res = "";
+
+			for(ModelEntity entity : objects)
+			{
+				long AID = controller.GetContext().model_service
+					.SetSuppress(entity, template_id, false);
+
+				if(AID != -1)
+				{
+					res += "suppressed reaction: " + AID
+						+ " with template: " + template_id
+						+ System.lineSeparator();
+				}
+				else
+				{
+					res += "reaction with template: " + template_id
+						+ " not found on object: " + entity.GetID()
+						+ System.lineSeparator();
+				}
+			}
+
+			return new RequestResult(E_RESULT_TYPE.TEXT, res);
+		}
+	});
+
+	/**
  * delete the marker from object by id<br>
  * */
 	public static final Operation del_m = new Operation("del_m", true

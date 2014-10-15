@@ -180,11 +180,6 @@ public class ExecutionController
 		request_executor.execute(new ModelRequestExecutor(this, request, http_exchange_wrapper));
 	}
 
-	public void UncheckedImport(ModelObject target, SimpleAttribute attribute)
-	{
-// TODO
-	}
-
 	public void Finish()
 	{
 		LOGGER.log(Level.INFO, "waiting for all tasks to finish");

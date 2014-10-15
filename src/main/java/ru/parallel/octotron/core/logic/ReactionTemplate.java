@@ -7,11 +7,13 @@
 package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.UniqueID;
 
 import java.io.Serializable;
 
-public abstract class ReactionTemplate implements Serializable
+public abstract class ReactionTemplate extends UniqueID<EEntityType>
 {
 	private final String check_name;
 	private final Object check_value;
@@ -25,6 +27,8 @@ public abstract class ReactionTemplate implements Serializable
 
 	public ReactionTemplate(String check_name, Object check_value)
 	{
+		super(EEntityType.REACTION_TEMPLATE);
+
 		this.check_name = check_name;
 		this.check_value = SimpleAttribute.ConformType(check_value);
 	}

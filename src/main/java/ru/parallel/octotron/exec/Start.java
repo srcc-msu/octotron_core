@@ -88,7 +88,9 @@ public class Start
 		try
 		{
 			context = Context.CreateFromConfig(json_config);
-			Create(context);
+			CreateFromPython(context);
+			PrintStat(context);
+			CreateCache(context);
 		}
 		catch(Exception creation_exception)
 		{
@@ -99,36 +101,9 @@ public class Start
 		Run(context);
 	}
 
-	public static void Begin(Context context)
+	private static void CreateFromPython(Context context)
 		throws ExceptionSystemError
 	{
-		// TODO
-		/*if(context.settings.IsDb())
-		{
-			if(FileUtils.IsDirEmpty(context.settings.GetDbPath() + settings.GetModelName()))
-			{
-				LOGGER.log(Level.INFO, "No DB found, creating a new in: " + settings.GetDbPath());
-				ModelService.Init(ModelService.EMode.CREATION, settings.GetDbPath(), settings.GetModelName());
-			}
-			else
-			{
-				LOGGER.log(Level.INFO, "DB found, attempting to use data from: " + settings.GetDbPath());
-				ModelService.Init(ModelService.EMode.LOAD, settings.GetDbPath(), settings.GetModelName());
-			}
-		}
-		else
-		{
-			ModelService.Init(ModelService.EMode.CREATION);
-			LOGGER.log(Level.INFO, "No DB settings, starting Octotron without DB");
-			LOGGER.log(Level.WARNING, "All data will be lost when execution ends!");
-		}*/
-	}
-
-	public static void Create(Context context)
-		throws ExceptionSystemError
-	{
-		Begin(context);
-
 		PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
 
 		PySystemState sys = Py.getSystemState();
@@ -148,11 +123,9 @@ public class Start
 		interpreter.execfile(context.settings.GetModelPath() + '/' + context.settings.GetModelMain());
 
 		LOGGER.log(Level.INFO, "done");
-
-		End(context);
 	}
 
-	public static void PrintStat(Context context)
+	private static void PrintStat(Context context)
 	{
 		int model_attributes_count = 0;
 
@@ -174,10 +147,8 @@ public class Start
 		LOGGER.log(Level.INFO, "Created model attributes: " + model_attributes_count);
 	}
 
-	public static void End(Context context)
+	private static void CreateCache(Context context)
 	{
-		PrintStat(context);
-
 		LOGGER.log(Level.INFO, "Building cache...");
 
 		context.model_service.EnableObjectIndex("AID");

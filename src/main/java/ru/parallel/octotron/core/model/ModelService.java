@@ -19,6 +19,30 @@ import ru.parallel.octotron.exec.GlobalSettings;
 
 public final class ModelService
 {
+	public long SetSuppress(ModelEntity entity, long template_id, boolean value)
+	{
+		long suppressed = 0;
+		long AID = -1;
+
+		for(IModelAttribute attribute : entity.GetAttributes())
+		{
+			for(Reaction reaction : attribute.GetReactions())
+			{
+				if(reaction.GetTemplate().GetID() == template_id)
+				{
+					reaction.SetSuppress(value);
+					suppressed++;
+					AID = reaction.GetID();
+				}
+			}
+		}
+
+		if(suppressed > 1)
+			throw new ExceptionModelFail("ambiguous reaction suppressing: few matches");
+
+		return AID;
+	}
+
 	public static enum EMode
 	{
 		CREATION, LOAD, OPERATION

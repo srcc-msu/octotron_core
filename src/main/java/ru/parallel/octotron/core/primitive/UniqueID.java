@@ -6,9 +6,11 @@
 
 package ru.parallel.octotron.core.primitive;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class UniqueID<T> implements IUniqueID<T>
 {
-	private static long static_id = 0;
+	private static AtomicLong static_id = new AtomicLong(0);
 
 	private final long id;
 	private final T type;
@@ -22,7 +24,7 @@ public class UniqueID<T> implements IUniqueID<T>
 	public UniqueID(T type)
 	{
 		this.type = type;
-		this.id = static_id++;
+		this.id = static_id.incrementAndGet();
 	}
 
 	@Override

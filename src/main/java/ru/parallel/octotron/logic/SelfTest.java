@@ -33,8 +33,6 @@ public class SelfTest
 		obj2.GetBuilder(service).DeclareVar("check", new AggregateLongSum(EDependencyType.ALL, "test_iteration"));
 
 		service.AddLink(obj1, obj2);
-
-		Test(controller); // update once
 	}
 
 	public boolean Test(ExecutionController controller)

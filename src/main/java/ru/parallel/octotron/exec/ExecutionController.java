@@ -166,6 +166,8 @@ public class ExecutionController
 
 		http.Finish();
 
+		context.model_service.Finish();
+
 		FileUtils.Finish();
 
 		LOGGER.log(Level.INFO, "all processing finished");
@@ -189,6 +191,8 @@ public class ExecutionController
 					, time, context.settings));
 			}
 		}
+
+		context.model_service.RegisterUpdate(attributes);
 	}
 
 	public void AddResponse(PreparedResponse response)
@@ -220,8 +224,7 @@ public class ExecutionController
 
 		try
 		{
-			FileUtils.ExecSilent(script
-				, target.GetAttribute("AID").GetStringValue(), attribute.GetName());
+			FileUtils.ExecSilent(script, Long.toString(target.GetID()), attribute.GetName());
 		}
 		catch (ExceptionSystemError e)
 		{

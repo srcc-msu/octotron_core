@@ -13,11 +13,11 @@ import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class ModelObject extends ModelEntity
 {
-	final ModelLinkList out_links = new ModelLinkList();;
-	final ModelLinkList in_links = new ModelLinkList();;
+	final ModelLinkList out_links = new ModelLinkList();
+	final ModelLinkList in_links = new ModelLinkList();
 
-	final ModelObjectList out_neighbors = new ModelObjectList();;
-	final ModelObjectList in_neighbors = new ModelObjectList();;
+	final ModelObjectList out_neighbors = new ModelObjectList();
+	final ModelObjectList in_neighbors = new ModelObjectList();
 
 	public ModelObject()
 	{

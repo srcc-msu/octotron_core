@@ -9,6 +9,7 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.persistence.GhostManager;
 import ru.parallel.octotron.core.persistence.GraphManager;
@@ -70,7 +71,7 @@ public final class ModelService
 
 	private final ModelData model_data;
 	private EMode mode;
-	private IPersistenceManager manager;
+	private IPersistenceManager persistence_manager;
 
 	public ModelService(ModelData model_data, EMode mode, GlobalSettings settings)
 		throws ExceptionSystemError
@@ -79,9 +80,9 @@ public final class ModelService
 		this.mode = mode;
 
 		if(settings.IsDb())
-			manager = new GraphManager(this, settings.GetDbPath() + "/" + settings.GetModelName());
+			persistence_manager = new GraphManager(this, settings.GetDbPath() + "/" + settings.GetModelName());
 		else
-			manager = new GhostManager();
+			persistence_manager = new GhostManager();
 	}
 
 	public ModelService(EMode mode, String path)
@@ -90,7 +91,7 @@ public final class ModelService
 		this.model_data = new ModelData();
 		this.mode = mode;
 
-		manager = new GraphManager(this, path);
+		persistence_manager = new GraphManager(this, path);
 	}
 
 	public EMode GetMode()
@@ -108,7 +109,7 @@ public final class ModelService
 	{
 		MakeRuleDependency();
 		mode = EMode.OPERATION;
-		manager.Operate();
+		persistence_manager.Operate();
 	}
 
 	private void MakeRuleDependency()
@@ -118,7 +119,7 @@ public final class ModelService
 			for(VarAttribute attribute : object.GetVar())
 			{
 				attribute.GetBuilder(this).ConnectDependency();
-				manager.MakeRuleDependency(attribute);
+				persistence_manager.MakeRuleDependency(attribute);
 			}
 		}
 	}
@@ -130,7 +131,7 @@ public final class ModelService
 		CheckModification();
 
 		ModelLink link = new ModelLink(source, target);
-		manager.RegisterLink(link);
+		persistence_manager.RegisterLink(link);
 
 		model_data.links.add(link);
 
@@ -147,7 +148,7 @@ public final class ModelService
 		CheckModification();
 
 		ModelObject object = new ModelObject();
-		manager.RegisterObject(object);
+		persistence_manager.RegisterObject(object);
 
 		model_data.objects.add(object);
 
@@ -176,27 +177,32 @@ public final class ModelService
 
 	public void RegisterReaction(Reaction reaction)
 	{
-		manager.RegisterReaction(reaction);
+		persistence_manager.RegisterReaction(reaction);
 	}
 
 	public void RegisterConst(ConstAttribute attribute)
 	{
-		manager.RegisterConst(attribute);
+		persistence_manager.RegisterConst(attribute);
 	}
 
 	public void RegisterSensor(SensorAttribute attribute)
 	{
-		manager.RegisterSensor(attribute);
+		persistence_manager.RegisterSensor(attribute);
 	}
 
 	public void RegisterVar(VarAttribute attribute)
 	{
-		manager.RegisterVar(attribute);
+		persistence_manager.RegisterVar(attribute);
+	}
+
+	public void RegisterUpdate(AttributeList<IModelAttribute> attributes)
+	{
+		persistence_manager.RegisterUpdate(attributes);
 	}
 
 	public void Finish()
 	{
-		manager.Finish();
-		manager = null;
+		persistence_manager.Finish();
+		persistence_manager = null;
 	}
 }

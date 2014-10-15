@@ -131,7 +131,7 @@ public class Neo4jIndex implements IIndex
 
 		if(iterator.hasNext())
 			throw new ExceptionModelFail
-				("more than one element match the criteria");
+				("more than one element match the criteria: " + name + " " + value.toString());
 
 		return obj_uid;
 	}
@@ -153,7 +153,7 @@ public class Neo4jIndex implements IIndex
 
 		if(iterator.hasNext())
 			throw new ExceptionModelFail
-				("more than one element match the criteria");
+				("more than one element match the criteria: " + name + " " + value.toString());
 
 		return link_uid;
 	}

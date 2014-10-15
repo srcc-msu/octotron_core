@@ -186,6 +186,9 @@ public class Start
 		try
 		{
 			controller = new ExecutionController(context);
+			RuntimeService.PerformSelfTest(controller);
+
+			context.model_service.Operate();
 
 			ProcessStart(context);
 		}
@@ -198,10 +201,6 @@ public class Start
 
 			System.exit(1);
 		}
-
-		RuntimeService.PerformSelfTest(controller);
-
-		context.model_service.Operate();
 
 // --- main loop
 		Exception loop_exception = MainLoop(context, controller);

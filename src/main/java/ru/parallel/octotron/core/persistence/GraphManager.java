@@ -11,6 +11,7 @@ import ru.parallel.octotron.core.attributes.AbstractModAttribute;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
@@ -95,7 +96,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			GetObject(object);
 		}
-		else
+		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
 			throw new ExceptionModelFail("no database modification in operational mode");
 		}
@@ -116,7 +117,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			GetLink(link);
 		}
-		else
+		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
 			throw new ExceptionModelFail("no database modification in operational mode");
 		}
@@ -152,9 +153,15 @@ public class GraphManager implements IPersistenceManager
 			reaction.SetSuppress((Boolean) graph_object.GetAttribute("suppress"));
 			reaction.SetDescription((String) graph_object.GetAttribute("descr"));
 		}
-		else
+		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
-			throw new ExceptionModelFail("no database modification in operational mode");
+			GraphObject graph_object = GetObject(reaction);
+
+			graph_object.UpdateAttribute("state", reaction.GetState());
+			graph_object.UpdateAttribute("stat", reaction.GetStat());
+
+			graph_object.UpdateAttribute("suppress", reaction.GetSuppress());
+			graph_object.UpdateAttribute("descr", reaction.GetDescription());
 		}
 	}
 
@@ -175,7 +182,7 @@ public class GraphManager implements IPersistenceManager
 
 			attribute.GetBuilder(model_service).ModifyValue(new_value);
 		}
-		else
+		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
 			throw new ExceptionModelFail("no database modification in operational mode");
 		}
@@ -191,6 +198,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("is_valid", attribute.GetIsValid());
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
+			graph_object.UpdateAttribute("value", attribute.GetValue());
 
 // info
 			graph_object.UpdateAttribute("name", attribute.GetName());
@@ -208,9 +216,13 @@ public class GraphManager implements IPersistenceManager
 			attribute.GetBuilder(model_service)
 				.SetValid((Boolean) graph_object.GetAttribute("ctime"));
 		}
-		else
+		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
-			throw new ExceptionModelFail("no database modification in operational mode");
+			GraphObject graph_object = GetObject(attribute);
+
+			graph_object.UpdateAttribute("is_valid", attribute.GetIsValid());
+			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
+			graph_object.UpdateAttribute("value", attribute.GetValue());
 		}
 	}
 
@@ -254,5 +266,21 @@ public class GraphManager implements IPersistenceManager
 	public void Operate()
 	{
 		graph.GetTransaction().ForceWrite();
+	}
+
+	// TODO: executor?
+	@Override
+	public void RegisterUpdate(AttributeList<IModelAttribute> attributes)
+	{
+		for(IModelAttribute attribute : attributes)
+		{
+			if(attribute.GetType() == EAttributeType.SENSOR)
+				RegisterSensor((SensorAttribute)attribute);
+			else if(attribute.GetType() == EAttributeType.VAR)
+				RegisterVar((VarAttribute)attribute);
+
+			for(Reaction reaction : attribute.GetReactions())
+				RegisterReaction(reaction);
+		}
 	}
 }

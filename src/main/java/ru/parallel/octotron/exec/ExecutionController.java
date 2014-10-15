@@ -105,6 +105,11 @@ public class ExecutionController
 		stat = new Statistics();
 	}
 
+	public void ImmediateImport(ModelEntity entity, SimpleAttribute attribute)
+	{
+		new Importer(this, entity, attribute).run();
+	}
+
 	public void Import(ModelEntity entity, SimpleAttribute attribute)
 	{
 		import_executor.execute(new Importer(this, entity, attribute));

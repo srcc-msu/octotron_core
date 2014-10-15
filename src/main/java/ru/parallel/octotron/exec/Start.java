@@ -15,6 +15,7 @@ import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
@@ -180,8 +181,6 @@ public class Start
 	{
 		LOGGER.log(Level.INFO, "Building rule dependencies and running the model");
 
-		context.model_service.Operate();
-
 		ExecutionController controller = null;
 // --- create
 		try
@@ -199,6 +198,10 @@ public class Start
 
 			System.exit(1);
 		}
+
+		RuntimeService.PerformSelfTest(controller);
+
+		context.model_service.Operate();
 
 // --- main loop
 		Exception loop_exception = MainLoop(context, controller);

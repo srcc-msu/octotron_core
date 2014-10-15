@@ -15,6 +15,7 @@ import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.JavaUtils;
 
@@ -30,29 +31,32 @@ public class RuntimeService
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	private static SelfTest tester;
-
 	private static final double free_space_mb_thr = 1024; // 1GB in MB
 
-	public static String PerformSelfTest()
-	{
-		tester.Init();
+	private static SelfTest tester = null;
 
-		boolean graph_test = tester.Test();
+	public static Map<String, Object> PerformSelfTest(ExecutionController controller)
+	{
+		if(tester == null)
+		{
+			tester = new SelfTest();
+			tester.Init(controller);
+		}
+
+		boolean graph_test = tester.Test(controller);
 
 		long free_space = new File("/").getFreeSpace();
 		String free_space_res;
 
 		long free_space_mb = free_space / 1024 / 1024;
 
-		free_space_res = (free_space_mb > free_space_mb_thr) + " ( " + free_space_mb + "MB free )";
+		Map<String, Object> map = new HashMap<>();
 
-		StringBuilder result = new StringBuilder();
+		map.put("graph_test", graph_test);
+		map.put("disk_space_MB", free_space_mb);
+		map.put("disk_test", free_space_mb > free_space_mb_thr);
 
-		result.append("graph test: ").append(graph_test).append(System.lineSeparator());
-		result.append("disk space: ").append(free_space_res).append(System.lineSeparator());
-
-		return result.toString();
+		return map;
 	}
 
 	/**

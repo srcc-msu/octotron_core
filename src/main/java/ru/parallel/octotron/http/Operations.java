@@ -759,9 +759,9 @@ public abstract class Operations
 		{
 			Operations.AllParams(params);
 
-			String result = RuntimeService.PerformSelfTest();
+			Map<String, Object> result = RuntimeService.PerformSelfTest(controller);
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, result);
+			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJson(Collections.singleton(result)));
 		}
 	});
 

@@ -8,10 +8,7 @@ package ru.parallel.utils;
 
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ru.parallel.utils.JavaUtils.Quotify;
 
@@ -19,7 +16,7 @@ public class AutoFormat
 {
 	public enum E_FORMAT_PARAM { PLAIN, JSON, JSONP, NONE}
 
-	public static String PrintData(List<Map<String, Object>> data, E_FORMAT_PARAM format, String callback)
+	public static String PrintData(Collection<Map<String, Object>> data, E_FORMAT_PARAM format, String callback)
 	{
 		switch (format)
 		{
@@ -37,7 +34,7 @@ public class AutoFormat
 		}
 	}
 
-	public static String PrintJsonp(List<Map<String, Object>> data, String callback)
+	public static String PrintJsonp(Collection<Map<String, Object>> data, String callback)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -59,7 +56,7 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintJson(List<Map<String, Object>> data)
+	public static String PrintJson(Collection<Map<String, Object>> data)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -98,7 +95,7 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintNL(List<Map<String, Object>> data)
+	public static String PrintNL(Collection<Map<String, Object>> data)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -121,7 +118,7 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintPlain(List<Map<String, Object>> data)
+	public static String PrintPlain(Collection<Map<String, Object>> data)
 	{
 		StringBuilder result = new StringBuilder();
 

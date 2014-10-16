@@ -125,6 +125,8 @@ public final class PathParser
 // matches <id>(<anything but closing bracket>)<optional dot>
 		Matcher matcher = token_pattern.matcher(path);
 
+		int last = -1;
+
 		while(matcher.find())
 		{
 			if(matcher.groupCount() != 2) // found id and part in brackets
@@ -146,7 +148,12 @@ public final class PathParser
 				throw new ExceptionParseError("unknown path token: " + name);
 
 			result.add(new PathToken(base_token, StrToAttrList(params)));
+
+			last = matcher.end();
 		}
+
+		if(last != path.length())
+			throw new ExceptionParseError("Unclaimed suffix: " + path.substring(last));
 
 		return result;
 	}

@@ -6,8 +6,10 @@
 
 package ru.parallel.octotron.reactions;
 
+import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.model.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEntityType;
@@ -15,19 +17,24 @@ import ru.parallel.octotron.core.primitive.JsonString;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.http.ParsedPath;
+import ru.parallel.octotron.http.PathParser;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.FileUtils;
 
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PreparedResponse implements Runnable
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	private final GlobalSettings settings;
+	private final Context context;
 	private final Response response;
 
 	private final List<String[]> compiled_commands = new LinkedList<>();
@@ -39,43 +46,28 @@ public class PreparedResponse implements Runnable
 
 	private final long timestamp;
 
-	public PreparedResponse(ModelEntity entity, Reaction reaction, Response response, long timestamp, GlobalSettings settings)
+	public PreparedResponse(ModelEntity entity, Reaction reaction, Response response, long timestamp, Context context)
 	{
 		this.response = response;
 		this.timestamp = timestamp;
-		this.settings = settings;
+		this.context = context;
 
 		ComposeAttributes(entity);
 		ComposeParentAttributes(entity);
 		ComposeMessages(entity);
-		ComposeSpecialMessages(entity, reaction, settings);
+		ComposeSpecialMessages(entity, reaction);
 		ComposeCommands(entity);
 	}
 
-	/**
-	 * for testing
-	 * */
-	PreparedResponse(ModelEntity entity, Response response, long timestamp)
-	{
-		this.response = response;
-		this.timestamp = timestamp;
-		this.settings = null;
-
-		ComposeAttributes(entity);
-		ComposeParentAttributes(entity);
-		ComposeMessages(entity);
-		ComposeCommands(entity);
-	}
-
-	private void ComposeSpecialMessages(ModelEntity entity, Reaction reaction, GlobalSettings settings)
+	private void ComposeSpecialMessages(ModelEntity entity, Reaction reaction)
 	{
 		String suppress = String.format("to suppress this reaction: http://%s:%d/modify/suppress?path=obj(AID==%d)&template_id=%d&description=spam"
-			, settings.GetHost(), settings.GetPort()
+			, context.settings.GetHost(), context.settings.GetPort()
 			, entity.GetID(), reaction.GetTemplate().GetID());
 		specials.add(suppress);
 
 		String show_all = String.format("to view all suppressed reactions: http://%s:%d/view/show_suppressed"
-			, settings.GetHost(), settings.GetPort());
+			, context.settings.GetHost(), context.settings.GetPort());
 		specials.add(show_all);
 	}
 
@@ -100,7 +92,6 @@ public class PreparedResponse implements Runnable
 		return result;
 	}
 
-
 	private void ComposeParentAttributes(ModelEntity entity)
 	{
 		if(entity.GetType() != EEntityType.OBJECT)
@@ -117,41 +108,71 @@ public class PreparedResponse implements Runnable
 		attributes = GetAttributes(entity, response.GetAttributes());
 	}
 
-	public static String ReplaceOne(String string, ModelEntity entity, int start, int end)
+	private static Pattern PATTERN_NAME_PATH = Pattern.compile("\\{([^:{}]+):([^:{}]+)\\}");
+	private static Pattern PATTERN_NAME = Pattern.compile("\\{([^{}]+)\\}");
+
+	public static String ReplaceWithPath(String path, String name, ModelEntity entity, ModelData model_data)
+		throws ExceptionParseError
 	{
-		String name = string.substring(start + 1, end);
+		String where = String.format("obj(AID==%d).", entity.GetID());
 
-		String value;
+		ParsedPath parsed_path = PathParser.Parse(where + path);
 
-		if(entity.TestAttribute(name))
-			value = entity.GetAttribute(name).GetStringValue();
+		ModelList<? extends ModelEntity, ?> targets = parsed_path.Execute(
+			ModelList.Single(entity), model_data);
+
+		String result = "";
+
+		if(targets.size() > 0)
+		{
+			String prefix = "";
+			for(ModelEntity target : targets)
+			{
+				result += prefix + target.GetAttribute(name).GetStringValue();
+				prefix = ",";
+			}
+
+			return result.replaceAll("\"", "");
+		}
 		else
-			value = String.format(NOT_FOUND, name);
-
-		return string.replace("{" + name + "}", value);
+			return String.format(NOT_FOUND, name);
 	}
 
-	public static String ComposeString(String string, ModelEntity entity)
+	public static String ReplaceSimple(String name, ModelEntity entity)
+	{
+		if(entity.TestAttribute(name))
+			return entity.GetAttribute(name).GetStringValue().replaceAll("\"", "");
+		else
+			return String.format(NOT_FOUND, name);
+	}
+
+	public static String ComposeString(String string, ModelEntity entity, ModelData model_data)
 		throws ExceptionParseError
 	{
 		String result = string;
 
-		while(true)
+		Matcher matcher = PATTERN_NAME_PATH.matcher(result);
+
+		while(matcher.find())
 		{
-			int start = result.indexOf("{");
+			String path = matcher.group(1);
+			String name = matcher.group(2);
+			String all = matcher.group(0);
 
-			if(start == -1)
-				break;
-
-			int end = result.indexOf("}");
-
-			if(end <= start)
-				throw new ExceptionParseError("wrong string format: " + string);
-
-			result = ReplaceOne(result, entity, start, end);
+			result = result.replace(all, ReplaceWithPath(path, name, entity, model_data));
 		}
 
-		return result.replaceAll("\"", "");
+		Matcher simple_matcher = PATTERN_NAME.matcher(result);
+
+		while(simple_matcher.find())
+		{
+			String name = simple_matcher.group(1);
+			String all = simple_matcher.group(0);
+
+			result = result.replace(all, ReplaceSimple(name, entity));
+		}
+
+		return result;
 	}
 
 	private void ComposeMessages(ModelEntity entity)
@@ -160,7 +181,7 @@ public class PreparedResponse implements Runnable
 		{
 			try
 			{
-				compiled_messages.add(ComposeString(message, entity));
+				compiled_messages.add(ComposeString(message, entity, context.model_data));
 			}
 			catch (Exception e)
 			{
@@ -177,7 +198,7 @@ public class PreparedResponse implements Runnable
 	{
 		for(String key : response.GetCommands().keySet())
 		{
-			String actual_name = settings.GetScriptByKey(key);
+			String actual_name = context.settings.GetScriptByKey(key);
 
 			if (actual_name == null)
 				throw new ExceptionModelFail("there is no script with key: " + key);
@@ -191,7 +212,7 @@ public class PreparedResponse implements Runnable
 			{
 				try
 				{
-					result.add(ComposeString(param, entity));
+					result.add(ComposeString(param, entity, context.model_data));
 				}
 				catch (ExceptionParseError e)
 				{
@@ -235,7 +256,7 @@ public class PreparedResponse implements Runnable
 
 		try
 		{
-			FileLog file = new FileLog(settings.GetLogDir());
+			FileLog file = new FileLog(context.settings.GetLogDir());
 			file.Log(GetFullString());
 			file.Close();
 		}

@@ -111,6 +111,7 @@ public class GlobalSettings
 
 // --- http config
 		http_port = port;
+		host = "127.0.0.1";
 
 // --- credentials config
 		view_credentials = new Credential("", "");

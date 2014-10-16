@@ -29,13 +29,19 @@ public class ParsedPath
 	public ModelList<? extends ModelEntity, ?> Execute(ModelData model_data)
 		throws ExceptionParseError
 	{
-		ModelList<? extends ModelEntity, ?> entity_list = null;
+		return Execute(null, model_data);
+	}
+
+	public ModelList<? extends ModelEntity, ?> Execute(ModelList<? extends ModelEntity, ?> entity_list, ModelData model_data)
+		throws ExceptionParseError
+	{
+		ModelList<? extends ModelEntity, ?> result = entity_list;
 
 		for(PathToken token : tokens)
 		{
-			entity_list = token.Transform(model_data, entity_list);
+			result = token.Transform(model_data, result);
 		}
 
-		return entity_list;
+		return result;
 	}
 }

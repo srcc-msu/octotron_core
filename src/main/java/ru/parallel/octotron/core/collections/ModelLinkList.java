@@ -25,7 +25,6 @@ public class ModelLinkList extends ModelList<ModelLink, ModelLinkList>
 		super(list);
 	}
 
-
 	/**
 	 * list reuse
 	 * */

@@ -8,6 +8,9 @@ package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
@@ -37,6 +40,24 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 	{
 		this.list = new LinkedList<>();
 		this.list.addAll(list.list);
+	}
+
+	public static ModelList Single(ModelEntity entity)
+	{
+		if(entity.GetType() == EEntityType.OBJECT)
+		{
+			ModelObjectList result = new ModelObjectList();
+			result.add((ModelObject)entity);
+			return result;
+		}
+		else if(entity.GetType() == EEntityType.OBJECT)
+		{
+			ModelLinkList result = new ModelLinkList();
+			result.add((ModelLink)entity);
+			return result;
+		}
+		else
+			throw new ExceptionModelFail("can not create ModelList for: " + entity);
 	}
 
 	public final void add(T t)

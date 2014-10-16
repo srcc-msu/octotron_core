@@ -199,7 +199,7 @@ public class ExecutionController
 
 				AddResponse(new PreparedResponse(attribute.GetParent()
 					, reaction, response
-					, time, context.settings));
+					, time, context));
 			}
 		}
 

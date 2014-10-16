@@ -18,7 +18,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.http.ParsedPath;
 import ru.parallel.octotron.http.PathParser;
 import ru.parallel.utils.AutoFormat;

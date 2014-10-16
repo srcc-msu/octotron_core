@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.generators;
 
+import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -84,6 +85,6 @@ public final class CSVReader
 	public static <T extends ModelEntity> void Declare(ModelService service, T object, String file_name)
 		throws ExceptionParseError, IOException
 	{
-		Declare(service, java.util.Collections.singleton(object), file_name);
+		Declare(service, ModelList.Single(object), file_name);
 	}
 }

@@ -8,15 +8,11 @@ package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 import ru.parallel.utils.JavaUtils;
 
 import java.io.*;

@@ -11,8 +11,6 @@ import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.UniqueID;
 
-import java.io.Serializable;
-
 public abstract class ReactionTemplate extends UniqueID<EEntityType>
 {
 	private final String check_name;

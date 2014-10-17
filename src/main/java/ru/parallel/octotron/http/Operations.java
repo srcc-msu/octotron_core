@@ -390,13 +390,7 @@ public abstract class Operations
 				map.put("delay_config", reaction.GetTemplate().GetDelay());
 				map.put("repeat_config", reaction.GetTemplate().GetRepeat());
 
-				if(reaction.GetTemplate().GetResponse() != null)
-				{
-					String[] messages = reaction.GetTemplate().GetResponse().GetMessages();
-
-					for (int i = 0; i < messages.length; i++)
-						map.put("msg" + i, messages[i]);
-				}
+				map.put("usr", reaction.GetTemplate().GetResponse().GetMessages());
 
 				map.put("state", reaction.GetState());
 				map.put("stat", reaction.GetStat());
@@ -434,12 +428,7 @@ public abstract class Operations
 				map.put("attribute_AID", reaction.GetAttribute().GetID());
 				map.put("suppress", reaction.GetSuppress());
 				map.put("description", reaction.GetDescription());
-
-				int i = 0;
-				for(String message : reaction.GetTemplate().GetResponse().GetMessages())
-				{
-					map.put("msg_" + i, message);
-				}
+				map.put("usr", reaction.GetTemplate().GetResponse().GetMessages());
 
 				result.add(map);
 			}

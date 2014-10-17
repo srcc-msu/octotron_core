@@ -84,11 +84,11 @@ public class BaseFactoryTest
 	}
 
 	@Test
-	public void TestReactions()
+	public void TestReactions() throws Exception
 	{
-		ReactionTemplate[] reactions = { new Equals("test2", 0).Response(new Response(EEventStatus.INFO, ""))};
-		ReactionTemplate reaction2 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO, ""));
-		ReactionTemplate reaction3 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO, ""));
+		ReactionTemplate[] reactions = { new Equals("test2", 0).Response(new Response(EEventStatus.INFO))};
+		ReactionTemplate reaction2 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO));
+		ReactionTemplate reaction3 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO));
 
 		ObjectFactory f1 = object_factory
 			.Sensors(new SimpleAttribute("test1", 0))

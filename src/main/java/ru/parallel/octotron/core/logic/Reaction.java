@@ -9,6 +9,7 @@ package ru.parallel.octotron.core.logic;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.UniqueID;
+import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 
 import javax.annotation.Nullable;
@@ -26,6 +27,7 @@ public class Reaction extends UniqueID<EEntityType>
 
 	private String descr = "";
 	private boolean suppress = false;
+	private PreparedResponse prepared_response = null;
 
 	public static final long STATE_NONE = 0;
 	public static final long STATE_STARTED = 1;
@@ -186,6 +188,7 @@ public class Reaction extends UniqueID<EEntityType>
 
 		if(result != null)
 			return result.Suppress(suppress);
+
 		return null;
 	}
 
@@ -226,5 +229,15 @@ public class Reaction extends UniqueID<EEntityType>
 	private void DropRepeat()
 	{
 		repeat = 0;
+	}
+
+	public void RegisterPreparedResponse(PreparedResponse new_prepared_response)
+	{
+		prepared_response = new_prepared_response;
+	}
+
+	public PreparedResponse GetPreparedResponse()
+	{
+		return prepared_response;
 	}
 }

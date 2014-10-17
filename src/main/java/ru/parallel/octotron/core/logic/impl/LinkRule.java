@@ -14,8 +14,6 @@ import ru.parallel.octotron.core.model.ModelLink;
 
 public abstract class LinkRule extends Rule
 {
-	private static final long serialVersionUID = -943099846881874234L;
-
 	protected LinkRule() {}
 
 	@Override

@@ -86,14 +86,14 @@ public class ReactionTest
 	}
 
 	@Test
-	public void TestProcess1()
+	public void TestProcess1() throws Exception
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "descr")));
+			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
@@ -105,7 +105,7 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(1L);
 		assertNull(reaction.Process());
@@ -116,14 +116,14 @@ public class ReactionTest
 
 
 	@Test
-	public void TestProcess2()
+	public void TestProcess2() throws Exception
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Repeatable()
-			.Response(new Response(EEventStatus.INFO, "descr")));
+			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
@@ -135,24 +135,24 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(2L);
 		assertNull(reaction.Process());
 	}
 
 	@Test
-	public void TestProcess3()
+	public void TestProcess3() throws Exception
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Repeat(2)
-			.Response(new Response(EEventStatus.INFO, "descr")));
+			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
@@ -167,7 +167,7 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(1L);
 		assertNull(reaction.Process());
@@ -177,14 +177,14 @@ public class ReactionTest
 	}
 
 	@Test
-	public void TestProcess4()
+	public void TestProcess4() throws Exception
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Repeat(2).Repeatable()
-			.Response(new Response(EEventStatus.INFO, "descr")));
+			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
@@ -199,24 +199,24 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(2L);
 		assertNull(reaction.Process());
 	}
 
 	@Test
-	public void TestProcess5() throws InterruptedException
+	public void TestProcess5() throws Exception
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Delay(1)
-			.Response(new Response(EEventStatus.INFO, "descr")));
+			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
@@ -231,7 +231,7 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		Thread.sleep(1500);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(1L);
 		assertNull(reaction.Process());
@@ -241,14 +241,14 @@ public class ReactionTest
 	}
 
 	@Test
-	public void TestProcess6() throws InterruptedException
+	public void TestProcess6() throws Exception
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Delay(1).Repeatable()
-			.Response(new Response(EEventStatus.INFO, "descr")));
+			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
@@ -263,24 +263,24 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		Thread.sleep(1500);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(2L);
 		assertNull(reaction.Process());
 	}
 
 	@Test
-	public void TestProcess7() throws InterruptedException
+	public void TestProcess7() throws Exception
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2)
-			.Response(new Response(EEventStatus.INFO, "descr")));
+			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
@@ -298,7 +298,7 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(1L);
 		assertNull(reaction.Process());
@@ -308,14 +308,14 @@ public class ReactionTest
 	}
 
 	@Test
-	public void TestProcess8() throws InterruptedException
+	public void TestProcess8() throws Exception
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
 		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2).Repeatable()
-			.Response(new Response(EEventStatus.INFO, "descr")));
+			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
@@ -333,10 +333,10 @@ public class ReactionTest
 		assertNull(reaction.Process());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages()[0]);
+		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
 
 		sensor.Update(2L);
 		assertNull(reaction.Process());

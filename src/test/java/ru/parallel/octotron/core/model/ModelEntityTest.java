@@ -8,7 +8,6 @@ import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
-import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -106,19 +105,19 @@ public class ModelEntityTest
 	}
 
 	@Test
-	public void TestAddReaction()
+	public void TestAddReaction() throws Exception
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 		ReactionTemplate reaction = new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test"));
+			.Response(new Response(EEventStatus.INFO, "tst#test"));
 
 		entity.GetBuilder(context.model_service).AddReaction(reaction);
 	}
 
 	@Test
-	public void TestAddReactions()
+	public void TestAddReactions() throws Exception
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
@@ -127,23 +126,16 @@ public class ModelEntityTest
 		List<ReactionTemplate> reactions = new LinkedList<>();
 
 		reactions.add(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "test")));
+			.Response(new Response(EEventStatus.INFO, "tst#test")));
 		reactions.add(new Equals("test", 2)
-			.Response(new Response(EEventStatus.INFO, "test")));
+			.Response(new Response(EEventStatus.INFO, "tst#test")));
 
 		entity.GetBuilder(context.model_service).AddReaction(reactions);
 	}
 
 	private class DummyRule extends Rule
 	{
-		private static final long serialVersionUID = -6085542113382606406L;
-		private final EDependencyType dep_type;
 		private long n = 0L;
-
-		DummyRule(EDependencyType dep_type)
-		{
-			this.dep_type = dep_type;
-		}
 
 		public long GetN()
 		{
@@ -174,7 +166,7 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareVar("test1", new DummyRule(EDependencyType.ALL));
+		entity.GetBuilder(context.model_service).DeclareVar("test1", new DummyRule());
 	}
 
 	@Test
@@ -186,8 +178,8 @@ public class ModelEntityTest
 
 		List<SimpleAttribute> rules = new LinkedList<>();
 
-		rules.add(new SimpleAttribute("test1", new DummyRule(EDependencyType.ALL)));
-		rules.add(new SimpleAttribute("test2", new DummyRule(EDependencyType.ALL)));
+		rules.add(new SimpleAttribute("test1", new DummyRule()));
+		rules.add(new SimpleAttribute("test2", new DummyRule()));
 
 		entity.GetBuilder(context.model_service).DeclareVar(rules);
 	}

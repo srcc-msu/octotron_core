@@ -7,7 +7,6 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -86,10 +85,9 @@ public class RuntimeService
 	{
 		List<Map<String, Object>> result = new LinkedList<>();
 
-		ModelList<ModelEntity, ?> list = context.model_data.GetAllEntities();
 		long cur_time = JavaUtils.GetTimestamp();
 
-		for(ModelEntity entity : list)
+		for(ModelEntity entity : context.model_data.GetAllEntities())
 		{
 			for(SensorAttribute sensor : entity.GetSensor())
 			{

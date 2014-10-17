@@ -20,6 +20,7 @@ import ru.parallel.octotron.http.ParsedModelRequest;
 import ru.parallel.octotron.logic.Importer;
 import ru.parallel.octotron.logic.Statistics;
 import ru.parallel.octotron.reactions.PreparedResponse;
+import ru.parallel.octotron.reactions.PreparedResponseFactory;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
@@ -184,8 +185,13 @@ public class ExecutionController
 		LOGGER.log(Level.INFO, "all processing finished");
 	}
 
+	private PreparedResponseFactory response_factory = null;
+
 	public void CheckReactions(AttributeList<IModelAttribute> attributes)
 	{
+		if(response_factory == null)
+			response_factory = new PreparedResponseFactory(context);
+
 		long time = JavaUtils.GetTimestamp();
 
 		for(IModelAttribute attribute : attributes)
@@ -195,11 +201,17 @@ public class ExecutionController
 				Response response = reaction.Process();
 
 				if(response == null)
+				{
+					reaction.RegisterPreparedResponse(null);
 					continue;
+				}
 
-				AddResponse(new PreparedResponse(attribute.GetParent()
-					, reaction, response
-					, time, context));
+				PreparedResponse prepared_response = response_factory
+					.Construct(attribute.GetParent(), reaction, response);
+
+				reaction.RegisterPreparedResponse(prepared_response);
+
+				AddResponse(prepared_response);
 			}
 		}
 

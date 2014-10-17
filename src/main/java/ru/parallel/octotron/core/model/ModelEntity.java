@@ -9,13 +9,13 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.reactions.PreparedResponse;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class ModelEntity extends UniqueID<EEntityType>
 {
@@ -54,6 +54,18 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 	public Collection<IModelAttribute> GetAttributes()
 	{
 		return attributes_map.values();
+	}
+
+	public Map<String, Object> GetAttributesValues()
+	{
+		Map<String, Object> result = new HashMap<>();
+
+		for(IModelAttribute attribute : GetAttributes())
+		{
+			result.put(attribute.GetName(), attribute.GetValue());
+		}
+
+		return result;
 	}
 
 	public boolean TestAttribute(String name)
@@ -97,6 +109,24 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 	public Collection<VarAttribute> GetVar()
 	{
 		return var_map.values();
+	}
+
+	public Collection<PreparedResponse> GetPreparedResponses()
+	{
+		List<PreparedResponse> result = new LinkedList<>();
+
+		for(IModelAttribute attribute : GetAttributes())
+		{
+			for(Reaction reaction : attribute.GetReactions())
+			{
+				PreparedResponse prepared_response = reaction.GetPreparedResponse();
+
+				if(prepared_response != null)
+					result.add(prepared_response);
+			}
+		}
+
+		return result;
 	}
 }
 

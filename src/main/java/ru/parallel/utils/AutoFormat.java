@@ -6,6 +6,7 @@
 
 package ru.parallel.utils;
 
+import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.*;
@@ -56,44 +57,74 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintJson(Collection<Map<String, Object>> data)
+	public static String PrintJson(Map<String, Object> data)
 	{
 		StringBuilder result = new StringBuilder();
 
-		if(data.size() > 1)
-			result.append('[');
+		List<String> names = new ArrayList<>(data.keySet());
+		Collections.sort(names);
 
-		String prefix = "";
+		result.append("{");
 
-		for(Map<String, Object> dict : data)
+		String inner_prefix = "";
+		for(String name : names)
 		{
-			List<String> names = new ArrayList<>(dict.keySet());
-			Collections.sort(names);
+			String string_value = PrintJson(data.get(name));
 
-			result.append(prefix).append("{");
+			result.append(inner_prefix)
+				.append(Quotify(name))
+				.append(':')
+				.append(string_value);
 
-			String inner_prefix = "";
-			for(String name : names)
-			{
-				String string_value = SimpleAttribute.ValueToStr(dict.get(name));
-
-				result.append(inner_prefix)
-					.append(Quotify(name))
-					.append(':')
-					.append(string_value);
-
-				inner_prefix = ",";
-			}
-
-			result.append('}');
-			prefix = ",";
+			inner_prefix = ",";
 		}
 
-		if(data.size() > 1)
-			result.append(']');
+		result.append('}');
 
 		return result.toString();
 	}
+
+	public static String PrintJson(Collection<Object> data)
+	{
+		StringBuilder result = new StringBuilder();
+
+		result.append('[');
+
+		String prefix = "";
+
+		for(Object string : data)
+		{
+			result.append(prefix).append(PrintJson(string));
+			prefix = ",";
+		}
+
+		result.append(']');
+
+		return result.toString();
+	}
+
+	public static String PrintJson(Object data)
+	{
+		if(data instanceof Map)
+			return PrintJson((Map<String, Object>) data);
+		if(data instanceof Collection)
+			return PrintJson((Collection<Object>) data);
+		if(data instanceof EEventStatus)
+			return PrintJson(data.toString());
+		else
+			return SimpleAttribute.ValueToStr(data);
+	}
+
+/*
+	public static String PrintJson(Collection<Map<String, Object>> data)
+	{
+		List<String> strings = new LinkedList<>();
+
+		for(Map<String, Object> dict : data)
+			strings.add(PrintJson(dict));
+
+		return PrintJson(strings);
+	}*/
 
 	public static String PrintNL(Collection<Map<String, Object>> data)
 	{

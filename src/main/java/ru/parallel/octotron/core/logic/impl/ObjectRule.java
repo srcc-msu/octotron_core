@@ -15,8 +15,6 @@ import ru.parallel.octotron.core.model.ModelObject;
 
 public abstract class ObjectRule extends Rule
 {
-	private static final long serialVersionUID = -1936097371431183834L;
-
 	protected ObjectRule() {}
 
 	@Override

@@ -11,21 +11,18 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.ObjectFactory;
 
-import static org.junit.Assert.*;
-import static ru.parallel.octotron.reactions.PreparedResponse.ComposeString;
+import static org.junit.Assert.assertEquals;
+import static ru.parallel.octotron.reactions.PreparedResponseFactory.ComposeString;
 
-/**
- * AIDS may differ if you run a single test.. TODO
- * */
 public class PreparedResponseTest
 {
 	private static Context context;
 	private static ModelObject entity;
 	private static Reaction reaction;
+	private static PreparedResponseFactory factory;
 
 	@BeforeClass
 	public static void InitController() throws Exception
@@ -41,7 +38,10 @@ public class PreparedResponseTest
 	{
 		PreparedResponseTest.obj_factory = new ObjectFactory(context.model_service)
 			.Constants(new SimpleAttribute("type", "test"))
+			.Constants(new SimpleAttribute("ggg", "7"))
 			.Sensors(new SimpleAttribute("test", 1));
+
+		PreparedResponseTest.factory = new PreparedResponseFactory(context);
 
 		entity = obj_factory.Create();
 
@@ -64,53 +64,49 @@ public class PreparedResponseTest
 
 		assertEquals("<test gg:not_found>{", ComposeString("{test gg}{", entity, context.model_data));
 
-		exception.expect(ExceptionParseError.class);
-		assertEquals("{te:st gg}{", ComposeString("{te:st gg}{", entity, context.model_data));
+		assertEquals("<st gg:not_found>{", ComposeString("{te:st gg}{", entity, context.model_data));
 	}
 
 	@Test
-	public void Test1()
+	public void Test1() throws Exception
 	{
-		Response response = new Response(EEventStatus.INFO, "TAG");
+		Response response = new Response(EEventStatus.INFO, "tst1#TAG");
 
-		PreparedResponse prepared_response = new PreparedResponse(entity, reaction, response, 1, context);
+		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 
-		assertEquals("{\"event\":\"INFO\",\"msg_0\":\"TAG\",\"time\":1}"
-			, prepared_response.GetFullString());
+		assertEquals("TAG", prepared_response.usr.get("tst1"));
 	}
 
 	@Test
-	public void Test2()
+	public void Test2() throws Exception
 	{
-		Response response = new Response(EEventStatus.INFO, "{test} {type}");
+		Response response = new Response(EEventStatus.INFO, "tst2#{test} {type}");
 
-		PreparedResponse prepared_response = new PreparedResponse(entity, reaction, response, 1, context);
+		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 
-		assertEquals("{\"event\":\"INFO\",\"msg_0\":\"1 test\",\"time\":1}"
-			, prepared_response.GetFullString());
+		assertEquals("1 test", prepared_response.usr.get("tst2"));
 	}
 
 	@Test
-	public void Test3()
+	public void Test3() throws Exception
 	{
 		ModelEntity entity = obj_factory.Create();
-		Response response = new Response(EEventStatus.INFO, "{AID} {type} {fail}");
+		Response response = new Response(EEventStatus.INFO, "tst3#{ggg} {type} {fail}");
 
-		PreparedResponse prepared_response = new PreparedResponse(entity, reaction, response, 1, context);
+		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 
-		assertEquals("{\"event\":\"INFO\",\"msg_0\":\"7 test <fail:not_found>\",\"time\":1}"
-			, prepared_response.GetFullString());
+		assertEquals("7 test <fail:not_found>", prepared_response.usr.get("tst3"));
 	}
 
 	@Test
-	public void Test4()
+	public void Test4() throws Exception
 	{
 		ModelEntity entity = obj_factory.Create();
-		Response response = new Response(EEventStatus.INFO, "test").Print("test", "type");
+		Response response = (new Response(EEventStatus.INFO, "tst4#t{est")).Msg("tst2#tes}t");
 
-		PreparedResponse prepared_response = new PreparedResponse(entity, reaction, response, 1, context);
+		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 
-		assertEquals("{\"attributes\":{\"test\":1,\"type\":\"test\"},\"event\":\"INFO\",\"msg_0\":\"test\",\"time\":1}"
-			, prepared_response.GetFullString());
+		assertEquals("t{est" , prepared_response.usr.get("tst4"));
+		assertEquals("tes}t" , prepared_response.usr.get("tst2"));
 	}
 }

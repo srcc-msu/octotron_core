@@ -6,10 +6,13 @@
 
 package ru.parallel.octotron.core.model;
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import ru.parallel.octotron.core.collections.ModelLinkList;
-import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
+import java.util.Collection;
 
 public final class ModelData
 {
@@ -36,11 +39,6 @@ public final class ModelData
 		return links;
 	}
 
-	public ModelList<ModelEntity, ?> GetAllEntities()
-	{
-		return ((ModelList)objects).append(links);
-	}
-
 	public ModelObjectList GetObjects(SimpleAttribute attribute)
 	{
 		return cache.GetObjects(attribute);
@@ -59,5 +57,10 @@ public final class ModelData
 	public ModelLinkList GetLinks(String name)
 	{
 		return cache.GetLinks(name);
+	}
+
+	public Collection<ModelEntity> GetAllEntities()
+	{
+		return Lists.newArrayList(Iterators.concat(GetAllLinks().iterator(), GetAllObjects().iterator()));
 	}
 }

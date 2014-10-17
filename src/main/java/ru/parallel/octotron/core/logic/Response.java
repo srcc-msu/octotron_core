@@ -6,35 +6,33 @@
 
 package ru.parallel.octotron.core.logic;
 
+import com.google.common.collect.ObjectArrays;
 import ru.parallel.octotron.core.primitive.EEventStatus;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class Response implements Serializable
+public class Response
 {
-	private static final long serialVersionUID = 4220431577263770147L;
-
 	private final EEventStatus status;
 
-	private final String[] messages;
-	private final Map<String, String[]> commands = new HashMap<>();
-
-	private final List<String> attributes = new LinkedList<>();
-	private final List<String> parent_attributes = new LinkedList<>();
+	private final Map<String, String> messages;
+	private final List<String[]> commands = new LinkedList<>();
 
 	private boolean suppress = false;
 
-	public Response(EEventStatus status, String... messages)
+	public Response(EEventStatus status, String... strings)
+		throws ExceptionParseError
 	{
 		this.status = status;
-		this.messages = messages;
-	}
 
-	public Response Exec(String script_key, String... arguments)
-	{
-		commands.put(script_key, arguments);
-		return this;
+		this.messages = new HashMap<>();
+
+		for(String string : strings)
+			Msg(string);
 	}
 
 	public EEventStatus GetStatus()
@@ -42,22 +40,12 @@ public class Response implements Serializable
 		return status;
 	}
 
-	public String[] GetMessages()
+	public Map<String, String> GetMessages()
 	{
 		return messages;
 	}
 
-	public List<String> GetAttributes()
-	{
-		return attributes;
-	}
-
-	public List<String> GetParentAttributes()
-	{
-		return parent_attributes;
-	}
-
-	public Map<String, String[]> GetCommands()
+	public List<String[]> GetCommands()
 	{
 		return commands;
 	}
@@ -77,15 +65,46 @@ public class Response implements Serializable
 		return suppress;
 	}
 
-	public Response Print(String... new_attributes)
+	public Response Msg(String string)
+		throws ExceptionParseError
 	{
-		attributes.addAll(Arrays.asList(new_attributes));
+		Msg(GetHash(string), GetMessage(string));
 		return this;
 	}
 
-	public Response PrintParent(String... new_attributes)
+	private Response Msg(String hash, String message)
 	{
-		parent_attributes.addAll(Arrays.asList(new_attributes));
+		messages.put(hash, message);
 		return this;
+	}
+
+	public Response Exec(String script_key, String... arguments)
+	{
+		commands.add(ObjectArrays.concat(script_key, arguments));
+		return this;
+	}
+
+	private final char TAG_SEPARATOR = '#';
+
+	private String GetHash(String string)
+		throws ExceptionParseError
+	{
+		int pos = string.indexOf(TAG_SEPARATOR);
+
+		if(pos == -1)
+			throw new ExceptionParseError("tag not found: " + string);
+
+		return string.substring(0, pos);
+	}
+
+	private String GetMessage(String string)
+		throws ExceptionParseError
+	{
+		int pos = string.indexOf(TAG_SEPARATOR);
+
+		if(pos == -1)
+			throw new ExceptionParseError("tag not found: " + string);
+
+		return string.substring(pos + 1);
 	}
 }

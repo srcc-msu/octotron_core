@@ -14,38 +14,43 @@ public final class CommonReactions
 {
 	private CommonReactions() {}
 
-	public static Response Critical(String... messages)
+	public static Response Critical(String tag, String message)
 		throws ExceptionParseError
 	{
-		return new Response(EEventStatus.CRITICAL, messages)
+		return new Response(EEventStatus.CRITICAL)
+			.Msg(tag, message)
 			.Exec("on_critical");
 	}
 
-	public static Response Danger(String... messages)
+	public static Response Danger(String tag, String message)
 		throws ExceptionParseError
 	{
-		return new Response(EEventStatus.DANGER, messages)
+		return new Response(EEventStatus.DANGER)
+			.Msg(tag, message)
 			.Exec("on_danger");
 	}
 
-	public static Response Warning(String... messages)
+	public static Response Warning(String tag, String message)
 		throws ExceptionParseError
 	{
-		return new Response(EEventStatus.WARNING, messages)
+		return new Response(EEventStatus.WARNING)
+			.Msg(tag, message)
 			.Exec("on_warning");
 	}
 
-	public static Response Info(String... messages)
+	public static Response Info(String tag, String message)
 		throws ExceptionParseError
 	{
-		return new Response(EEventStatus.INFO, messages)
+		return new Response(EEventStatus.INFO)
+			.Msg(tag, message)
 			.Exec("on_info");
 	}
 
-	public static Response Recover(String... messages)
+	public static Response Recover(String tag, String message)
 		throws ExceptionParseError
 	{
-		return new Response(EEventStatus.RECOVER, messages)
+		return new Response(EEventStatus.RECOVER)
+			.Msg(tag, message)
 			.Exec("on_recover");
 	}
 }

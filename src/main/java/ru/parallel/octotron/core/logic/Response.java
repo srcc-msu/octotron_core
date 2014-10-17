@@ -8,6 +8,7 @@ package ru.parallel.octotron.core.logic;
 
 import com.google.common.collect.ObjectArrays;
 import ru.parallel.octotron.core.primitive.EEventStatus;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 import java.util.HashMap;
@@ -72,9 +73,11 @@ public class Response
 		return this;
 	}
 
-	private Response Msg(String hash, String message)
+	public Response Msg(String tag, String message)
 	{
-		messages.put(hash, message);
+		if(messages.get(tag) != null)
+			throw new ExceptionModelFail("tag already defined: " + tag);
+		messages.put(tag, message);
 		return this;
 	}
 

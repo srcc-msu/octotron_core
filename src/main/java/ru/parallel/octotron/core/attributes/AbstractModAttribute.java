@@ -96,7 +96,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		if(last_ctime == 0) // last value was default
 			return 0.0;
 
-		double diff = ToDouble() - (Double)last.value;
+		double diff = ToDouble() - ToDouble(last.value);
 
 		return diff / (GetCTime() - last_ctime);
 	}

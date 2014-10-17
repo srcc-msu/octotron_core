@@ -122,6 +122,17 @@ public abstract class AbstractAttribute extends UniqueID<EAttributeType> impleme
 			throw new ExceptionModelFail("bad value type for casting to Double");
 	}
 
+	// TODO?
+	public static final Double ToDouble(Object value)
+	{
+		if(value instanceof Double)
+			return (Double) value;
+		else if(value instanceof Long)
+			return ((Long)value).doubleValue();
+		else
+			throw new ExceptionModelFail("bad value type for casting to Double");
+	}
+
 	@Override
 	public final boolean eq(Object new_value)
 	{

@@ -43,8 +43,8 @@ public class ComputeTests
 			.Sensors(new SimpleAttribute("in_str1", "yes"))
 			.Sensors(new SimpleAttribute("d1", 10.0))
 			.Sensors(new SimpleAttribute("d2", 11.0))
-			.Sensors(new SimpleAttribute("l1", 20))
-			.Sensors(new SimpleAttribute("l2", 21))
+			.Sensors(new SimpleAttribute("l1", 20L))
+			.Sensors(new SimpleAttribute("l2", 21L))
 			.Sensors(new SimpleAttribute("b1", true))
 			.Sensors(new SimpleAttribute("b2", true))
 			.Sensors(new SimpleAttribute("str1", "yes"))
@@ -57,20 +57,20 @@ public class ComputeTests
 			.Sensors(new SimpleAttribute("out_str1", "no"))
 			.Sensors(new SimpleAttribute("d1", 20.0))
 			.Sensors(new SimpleAttribute("d2", 21.0))
-			.Sensors(new SimpleAttribute("l1", 10))
-			.Sensors(new SimpleAttribute("l2", 11))
+			.Sensors(new SimpleAttribute("l1", 10L))
+			.Sensors(new SimpleAttribute("l2", 11L))
 			.Sensors(new SimpleAttribute("b1", false))
 			.Sensors(new SimpleAttribute("b2", false))
 			.Sensors(new SimpleAttribute("str1", "no"))
 			.Sensors(new SimpleAttribute("str2", "no"))
-			.Sensors(new SimpleAttribute("mismatch_num", 333))
-			.Sensors(new SimpleAttribute("match_num", 444));
+			.Sensors(new SimpleAttribute("mismatch_num", 333L))
+			.Sensors(new SimpleAttribute("match_num", 444L));
 
 		ObjectFactory self = new ObjectFactory(context.model_service)
 			.Sensors(new SimpleAttribute("d1", 0.0))
 			.Sensors(new SimpleAttribute("d2", 1.0))
-			.Sensors(new SimpleAttribute("l1", 2))
-			.Sensors(new SimpleAttribute("l2", 3))
+			.Sensors(new SimpleAttribute("l1", 2L))
+			.Sensors(new SimpleAttribute("l2", 3L))
 			.Sensors(new SimpleAttribute("b1", true))
 			.Sensors(new SimpleAttribute("b2", false))
 			.Sensors(new SimpleAttribute("str1", "maybe"))
@@ -79,8 +79,8 @@ public class ComputeTests
 			.Sensors(new SimpleAttribute("bt2", true))
 			.Sensors(new SimpleAttribute("bf1", false))
 			.Sensors(new SimpleAttribute("bf2", false))
-			.Sensors(new SimpleAttribute("mismatch_num", 222))
-			.Sensors(new SimpleAttribute("match_num", 444));
+			.Sensors(new SimpleAttribute("mismatch_num", 222L))
+			.Sensors(new SimpleAttribute("match_num", 444L));
 
 		object = self.Create();
 
@@ -142,7 +142,7 @@ public class ComputeTests
 		assertEquals(  5L, self_rule.Compute(object));
 		assertEquals(123L,   in_rule.Compute(object));
 		assertEquals( 84L,  out_rule.Compute(object));
-		assertEquals(212L,  all_rule.Compute(object));
+		assertEquals(212L, all_rule.Compute(object));
 	}
 
 	@Test
@@ -383,6 +383,40 @@ public class ComputeTests
 
 		assertEquals(66, rule1.Compute(object));
 		assertEquals(50, rule2.Compute(object));
+	}
+
+	@Test
+	public void TestCalcSpeed() throws Exception
+	{
+		CalcSpeed rule_l = new CalcSpeed("l1");
+		CalcSpeed rule_d = new CalcSpeed("d1");
+
+		Object l1 = object.GetAttribute("l1").GetValue();
+		Object d1 = object.GetAttribute("d1").GetValue();
+
+		object.GetSensor("l1").Update(10L);
+		object.GetSensor("d1").Update(10.0);
+
+		assertEquals(0.0, (Double)rule_l.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals(0.0, (Double)rule_d.Compute(object), AbstractAttribute.EPSILON);
+
+		Thread.sleep(2000);
+
+		object.GetSensor("l1").Update(20L);
+		object.GetSensor("d1").Update(20.0);
+
+		assertEquals(5.0, (double)rule_l.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals(5.0, (double)rule_d.Compute(object), AbstractAttribute.EPSILON);
+
+		object.GetSensor("l1").Update(20L);
+		object.GetSensor("d1").Update(20.0);
+
+		assertEquals(0.0, (Double)rule_l.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals(0.0, (Double)rule_d.Compute(object), AbstractAttribute.EPSILON);
+
+		object.GetSensor("l1").Update(l1);
+		object.GetSensor("d1").Update(d1);
+
 	}
 
 	@Test

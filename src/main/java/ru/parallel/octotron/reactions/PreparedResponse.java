@@ -6,6 +6,8 @@
 
 package ru.parallel.octotron.reactions;
 
+import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.utils.AutoFormat;
@@ -65,7 +67,9 @@ import java.util.logging.Logger;
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private final Context context;
-	private final boolean suppress_script;
+	private final Reaction reaction;
+
+	private final Response response;
 
 	final Map<String, Object> info = new HashMap<>();
 	final Map<String, Map<String, Object>> model = new HashMap<>();
@@ -75,10 +79,11 @@ import java.util.logging.Logger;
 	final List<String[]> scripts = new LinkedList<>();
 	public List<String> specials = new LinkedList<>();
 
-	public PreparedResponse(Context context, boolean suppress_script)
+	public PreparedResponse(Context context, Reaction reaction, Response response)
 	{
 		this.context = context;
-		this.suppress_script = suppress_script;
+		this.reaction = reaction;
+		this.response = response;
 	}
 
 /**
@@ -89,7 +94,7 @@ import java.util.logging.Logger;
 	{
 		String log_string = GetFullString();
 
-		if(!suppress_script)
+		if(!response.IsSuppress())
 		{
 			for(String[] command : scripts)
 			{
@@ -133,5 +138,10 @@ import java.util.logging.Logger;
 		result.put("surround", surround);
 
 		return AutoFormat.PrintJson(result);
+	}
+
+	public Reaction GetReaction()
+	{
+		return reaction;
 	}
 }

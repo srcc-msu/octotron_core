@@ -34,7 +34,7 @@ public class PreparedResponseFactory
 
 	public PreparedResponse Construct(ModelEntity entity, Reaction reaction, Response response)
 	{
-		PreparedResponse prepared_response = new PreparedResponse(context, response.IsSuppress());
+		PreparedResponse prepared_response = new PreparedResponse(context, reaction, response);
 
 		FillInfo(prepared_response, response);
 		FillModel(prepared_response, entity, reaction);
@@ -68,8 +68,8 @@ public class PreparedResponseFactory
 			links = links.append(object.GetInLinks());
 			links = links.append(object.GetOutLinks());
 
-			objects = objects.append(object.GetInNeighbors());
-			objects = objects.append(object.GetOutNeighbors());
+			objects = objects.append(object.GetInNeighbors()).Uniq();
+			objects = objects.append(object.GetOutNeighbors()).Uniq();
 		}
 
 		Iterator<ModelEntity> it = Iterators.concat(links.iterator(), objects.iterator());
@@ -81,13 +81,13 @@ public class PreparedResponseFactory
 			{
 				Map<String, Object> map = new HashMap<>();
 
-				map.put("entity.AID", entity.GetID());
+				map.put("entity.AID", surround.GetID());
 
-				map.put("attribute.AID", reaction.GetAttribute().GetID());
-				map.put("attribute.name", reaction.GetAttribute().GetName());
+				map.put("attribute.AID", surround_responses.GetReaction().GetAttribute().GetID());
+				map.put("attribute.name", surround_responses.GetReaction().GetAttribute().GetName());
 
-				map.put("reaction.AID", reaction.GetID());
-				map.put("reaction.status", reaction.GetTemplate().GetResponse().GetStatus());
+				map.put("reaction.AID", surround_responses.GetReaction().GetID());
+				map.put("reaction.status", surround_responses.GetReaction().GetTemplate().GetResponse().GetStatus());
 
 				String tag = (String)surround_responses.usr.get("tag");
 				String place = (String)surround_responses.usr.get("place");

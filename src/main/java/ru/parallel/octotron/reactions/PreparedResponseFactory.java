@@ -39,7 +39,6 @@ public class PreparedResponseFactory
 		FillInfo(prepared_response, response);
 		FillModel(prepared_response, entity, reaction);
 		FillUsr(prepared_response, entity, response);
-		FillSpecial(prepared_response, entity, reaction);
 
 		FillSurround(prepared_response, entity, reaction);
 

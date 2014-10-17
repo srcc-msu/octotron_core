@@ -87,13 +87,22 @@ import java.util.logging.Logger;
 	@Override
  	public void run()
 	{
+		String log_string = GetFullString();
+
 		if(!suppress_script)
 		{
 			for(String[] command : scripts)
 			{
+				List<String> call = new LinkedList<>(Arrays.asList(command));
+
+				call.add(log_string);
+
+				for(String key : usr.keySet())
+					call.add(key + ": " + usr.get(key));
+
 				try
 				{
-					FileUtils.ExecSilent(command);
+					FileUtils.ExecSilent(call.toArray(new String[0]));
 				}
 				catch (ExceptionSystemError e)
 				{
@@ -105,7 +114,7 @@ import java.util.logging.Logger;
 		try
 		{
 			FileLog file = new FileLog(context.settings.GetLogDir());
-			file.Log(GetFullString());
+			file.Log(log_string);
 			file.Close();
 		}
 		catch(ExceptionSystemError e)

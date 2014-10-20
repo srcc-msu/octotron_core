@@ -89,4 +89,16 @@ public final class GraphObject extends GraphEntity
 
 		return objects;
 	}
+
+// ---
+
+	public boolean TestLabel(String label)
+	{
+		return graph.TestNodeLabel(id, label);
+	}
+
+	public void AddLabel(String label)
+	{
+		graph.AddNodeLabel(id, label);
+	}
 }

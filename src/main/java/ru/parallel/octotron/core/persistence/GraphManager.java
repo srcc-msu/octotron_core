@@ -57,6 +57,17 @@ public class GraphManager implements IPersistenceManager
 		return graph_service.GetObject("AID", id.GetID());
 	}
 
+	private GraphObject CheckObject(IUniqueID<?> id, String check_label)
+	{
+		GraphObject graph_object = graph_service.GetObject("AID", id.GetID());
+
+		if(!graph_object.TestLabel(check_label))
+			throw new ExceptionModelFail("graph check failed, mismatched labels for AID: "
+				+ id.GetID() + " required label: " + check_label);
+
+		return graph_object;
+	}
+
 	private GraphLink GetLink(IUniqueID<?> id)
 	{
 		return graph_service.GetLink("AID", id.GetID());
@@ -89,12 +100,13 @@ public class GraphManager implements IPersistenceManager
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
+			graph_object.AddLabel(object.GetType().toString());
 
 			graph_object.UpdateAttribute("AID", object.GetID());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
-			GetObject(object);
+			CheckObject(object, object.GetType().toString());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
@@ -129,6 +141,7 @@ public class GraphManager implements IPersistenceManager
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
+			graph_object.AddLabel(reaction.GetType().toString());
 
 			graph_object.UpdateAttribute("AID", reaction.GetID());
 
@@ -146,7 +159,7 @@ public class GraphManager implements IPersistenceManager
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
-			GraphObject graph_object = GetObject(reaction);
+			GraphObject graph_object = CheckObject(reaction, reaction.GetType().toString());
 
 			reaction.SetState((Long) graph_object.GetAttribute("state"));
 			reaction.SetStat((Long) graph_object.GetAttribute("stat"));
@@ -193,6 +206,7 @@ public class GraphManager implements IPersistenceManager
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
+			graph_object.AddLabel(attribute.GetType().toString());
 
 			graph_object.UpdateAttribute("AID", attribute.GetID());
 
@@ -208,7 +222,7 @@ public class GraphManager implements IPersistenceManager
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
-			GraphObject graph_object = GetObject(attribute);
+			GraphObject graph_object = CheckObject(attribute, attribute.GetType().toString());
 
 			attribute.GetBuilder(model_service)
 				.SetCTime((Long)graph_object.GetAttribute("ctime"));

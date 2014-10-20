@@ -105,5 +105,5 @@
 			<version>2.5.4-rc1</version>
 		</dependency>
 	</dependencies>
-	<version>3.0.0</version>
+	<version>3.1.1</version>
 </project>

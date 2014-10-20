@@ -425,18 +425,18 @@ public class ComputeTests
 		// d1 = 0.0
 		// l1 = 2
 
-		assertEquals(0, new Interval("d1", 0.5, 2.0).Compute(object));
-		assertEquals(1, new Interval("d1", -1.5).Compute(object));
-		assertEquals(1, new Interval("d1", -0.5, 2.0).Compute(object));
-		assertEquals(1, new Interval("d1", 0.0, 2.0).Compute(object));
-		assertEquals(2, new Interval("d1", -0.5, 0.0, 2.0).Compute(object));
-		assertEquals(2, new Interval("d1", -1.5, -0.5, 2.0).Compute(object));
+		assertEquals(0L, new Interval("d1", 0.5, 2.0).Compute(object));
+		assertEquals(1L, new Interval("d1", -1.5).Compute(object));
+		assertEquals(1L, new Interval("d1", -0.5, 2.0).Compute(object));
+		assertEquals(1L, new Interval("d1", 0.0, 2.0).Compute(object));
+		assertEquals(2L, new Interval("d1", -0.5, 0.0, 2.0).Compute(object));
+		assertEquals(2L, new Interval("d1", -1.5, -0.5, 2.0).Compute(object));
 
-		assertEquals(0, new Interval("l1", 4).Compute(object));
-		assertEquals(0, new Interval("l1", 4, 5).Compute(object));
-		assertEquals(1, new Interval("l1", 2).Compute(object));
-		assertEquals(1, new Interval("l1", 2, 4).Compute(object));
-		assertEquals(2, new Interval("l1", 1, 2, 4).Compute(object));
-		assertEquals(2, new Interval("l1", 1, 2).Compute(object));
+		assertEquals(0L, new Interval("l1", 4).Compute(object));
+		assertEquals(0L, new Interval("l1", 4, 5).Compute(object));
+		assertEquals(1L, new Interval("l1", 2).Compute(object));
+		assertEquals(1L, new Interval("l1", 2, 4).Compute(object));
+		assertEquals(2L, new Interval("l1", 1, 2, 4).Compute(object));
+		assertEquals(2L, new Interval("l1", 1, 2).Compute(object));
 	}
 }

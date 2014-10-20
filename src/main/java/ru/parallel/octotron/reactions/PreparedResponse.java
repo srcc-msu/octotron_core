@@ -105,6 +105,8 @@ import java.util.logging.Logger;
 				for(String key : usr.keySet())
 					call.add(key + ": " + usr.get(key));
 
+				call.addAll(specials);
+
 				try
 				{
 					FileUtils.ExecSilent(call.toArray(new String[0]));

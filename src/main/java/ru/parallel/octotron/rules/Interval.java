@@ -40,7 +40,7 @@ public class Interval extends Rule
 		if(!attr.CheckValid())
 			return null;
 
-		int result = 0;
+		long result = 0;
 
 		for(Object threshold : thresholds)
 		{
@@ -56,6 +56,6 @@ public class Interval extends Rule
 	@Override
 	public Object GetDefaultValue()
 	{
-		return -1;
+		return -1L;
 	}
 }

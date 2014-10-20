@@ -11,6 +11,7 @@ import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.reactions.PreparedResponse;
@@ -121,7 +122,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 			{
 				PreparedResponse prepared_response = reaction.GetPreparedResponse();
 
-				if(prepared_response != null)
+				if(prepared_response != null && prepared_response.GetResponse().GetStatus() != EEventStatus.RECOVER)
 					result.add(prepared_response);
 			}
 		}

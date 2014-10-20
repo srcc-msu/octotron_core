@@ -146,4 +146,9 @@ import java.util.logging.Logger;
 	{
 		return reaction;
 	}
+
+	public Response GetResponse()
+	{
+		return response;
+	}
 }

@@ -192,8 +192,6 @@ public class ExecutionController
 		if(response_factory == null)
 			response_factory = new PreparedResponseFactory(context);
 
-		long time = JavaUtils.GetTimestamp();
-
 		for(IModelAttribute attribute : attributes)
 		{
 			for(Reaction reaction : attribute.GetReactions())
@@ -205,6 +203,9 @@ public class ExecutionController
 					reaction.RegisterPreparedResponse(null);
 					continue;
 				}
+
+				if(IsSilent())
+					response.Suppress(true);
 
 				PreparedResponse prepared_response = response_factory
 					.Construct(attribute.GetParent(), reaction, response);

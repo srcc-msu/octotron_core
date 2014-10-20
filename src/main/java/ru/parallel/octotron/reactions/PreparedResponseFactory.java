@@ -2,6 +2,8 @@ package ru.parallel.octotron.reactions;
 
 import com.google.common.collect.Iterators;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
+import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
@@ -85,18 +87,24 @@ public class PreparedResponseFactory
 
 				map.put("attribute.AID", surround_responses.GetReaction().GetAttribute().GetID());
 				map.put("attribute.name", surround_responses.GetReaction().GetAttribute().GetName());
+				map.put("attribute.value", surround_responses.GetReaction().GetAttribute().GetValue());
 
 				map.put("reaction.AID", surround_responses.GetReaction().GetID());
 				map.put("reaction.status", surround_responses.GetReaction().GetTemplate().GetResponse().GetStatus());
 
 				String tag = (String)surround_responses.usr.get("tag");
 				String place = (String)surround_responses.usr.get("place");
+				String descr = (String)surround_responses.usr.get("descr");
 
+				// TODO, rework
 				if(tag != null)
 					map.put("reaction.tag", tag);
 
 				if(place != null)
 					map.put("reaction.place", place);
+
+				if(descr != null)
+					map.put("reaction.descr", descr);
 
 				prepared_response.surround.add(map);
 			}
@@ -131,24 +139,39 @@ public class PreparedResponseFactory
 
 	private void FillModel(PreparedResponse prepared_response, ModelEntity entity, Reaction reaction)
 	{
+		Map<String, Object> const_map = new HashMap<>();
+		for(ConstAttribute attribute : entity.GetConst())
+			const_map.put(attribute.GetName(), attribute.GetValue());
+
+		Map<String, Object> sensor_map = new HashMap<>();
+		for(SensorAttribute attribute : entity.GetSensor())
+			sensor_map.put(attribute.GetName(), attribute.GetValue());
+
+		Map<String, Object> var_map = new HashMap<>();
+		for(VarAttribute attribute : entity.GetVar())
+			var_map.put(attribute.GetName(), attribute.GetValue());
+
 		Map<String, Object> entity_map = new HashMap<>();
 
-		for(ConstAttribute attribute : entity.GetConst())
-			entity_map.put(attribute.GetName(), attribute.GetValue());
+		entity_map.put("const", const_map);
+		entity_map.put("sensor", sensor_map);
+		entity_map.put("var", var_map);
 
 		prepared_response.model.put("entity", entity_map);
 
 		Map<String, Object> attribute_map = new HashMap<>();
 		attribute_map.put("AID", reaction.GetAttribute().GetID());
 		attribute_map.put("name", reaction.GetAttribute().GetName());
+		attribute_map.put("value", reaction.GetAttribute().GetValue());
 
 		prepared_response.model.put("attribute", attribute_map);
 
 		Map<String, Object> reaction_map = new HashMap<>();
 		reaction_map.put("AID", reaction.GetID());
-		reaction_map.put("template", reaction.GetTemplate());
+		reaction_map.put("template AID", reaction.GetTemplate().GetID());
+		reaction_map.put("repeated", reaction.GetStat());
 
-		prepared_response.model.put("reaction", attribute_map);
+		prepared_response.model.put("reaction", reaction_map);
 	}
 
 	private void FillInfo(PreparedResponse prepared_response, Response response)

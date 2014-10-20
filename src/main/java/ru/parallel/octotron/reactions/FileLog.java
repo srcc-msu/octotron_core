@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class FileLog
 {
-	public static final String FILENAME = "octotron.log";
+	public static final String FILENAME = "octotron.events.log";
 
 	private BufferedWriter out = null;
 

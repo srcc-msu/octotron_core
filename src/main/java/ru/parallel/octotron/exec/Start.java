@@ -40,8 +40,8 @@ public class Start
 		try
 		{
 			FileHandler file_handler
-				= new FileHandler(LOG_DIR + "octotron_%g.log"
-				, SYS_LOG_SIZE, 1, true); // rotate to 1 file, allow append
+				= new FileHandler(LOG_DIR + "octotron.system.log.%g"
+				, SYS_LOG_SIZE, 10, true); // rotate to 10 files, allow append
 			file_handler.setFormatter(new SimpleFormatter());
 
 			LOGGER.addHandler(file_handler);

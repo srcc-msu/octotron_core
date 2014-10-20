@@ -12,8 +12,6 @@ import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 
-import javax.annotation.Nullable;
-
 public class Reaction extends UniqueID<EEntityType>
 {
 	private final ReactionTemplate template;
@@ -108,7 +106,6 @@ public class Reaction extends UniqueID<EEntityType>
 
 // -------------
 
-	@Nullable
 	public Response Process()
 	{
 		boolean needed = template.ReactionNeeded(attribute);

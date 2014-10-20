@@ -28,16 +28,21 @@ import java.util.logging.Logger;
  *     {
  *         "entity" :
  *         {
- *             entity.GetAttributes()
+ *             "const" : {...},
+ *             "sensor" : {...},
+ *             "var" : {...},
  *         },
  *         "attribute" :
  *         {
  *             "AID" : reaction.GetAttribute().GetName(),
- *             "name" : reaction.GetAttribute().GetID()
+ *             "name" : reaction.GetAttribute().GetID(),
+ *             "value" : reaction.GetAttribute().GetValue()
  *         }
  *         "reaction" :
  *         {
  *             "AID" : reaction.GetID(),
+ *             "repeated" : reaction.GetRepeat(),
+ *             "suppressed" : reaction.IsSuppressed(),
  *             "template" : reaction.GetTemplate()
  *         }
  *     }

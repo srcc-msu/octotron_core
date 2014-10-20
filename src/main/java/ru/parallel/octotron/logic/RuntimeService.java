@@ -7,11 +7,12 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.model.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 
 import java.io.*;
@@ -58,27 +59,19 @@ public class RuntimeService
 	 * create snapshot of all reactions with failed conditions<br>
 	 * and get their description<br>
 	 * */
-	public static String MakeSnapshot()
+	public static String MakeSnapshot(ModelData model_data)
 	{
-		throw new ExceptionModelFail("NIY");
-		/*
 		StringBuilder result = new StringBuilder();
 
-		((Neo4jGraph)graph).GetTransaction().ForceWrite();
-
-		for(ModelObject object : ModelService.GetAllObjects())
+		for(ModelEntity entity : model_data.GetAllEntities())
 		{
-			for(Response response : object.GetCurrentReactions())
+			for(PreparedResponse response : entity.GetPreparedResponses())
 			{
-				PreparedResponse prepared_response = new PreparedResponse(response, object, JavaUtils.GetTimestamp());
-
-				String descr = prepared_response.GetFullString();
-
-				result.append(descr).append(System.lineSeparator());
+				result.append(response.GetFullString()).append(System.lineSeparator());
 			}
 		}
 
-		return result.toString();*/
+		return result.toString();
 	}
 
 	public static List<Map<String, Object>> CheckModTime(Context context, long interval)

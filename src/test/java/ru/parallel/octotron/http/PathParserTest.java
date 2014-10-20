@@ -3,8 +3,6 @@ package ru.parallel.octotron.http;
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelList;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
 public class PathParserTest

@@ -42,7 +42,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		this.list.addAll(list.list);
 	}
 
-	public static ModelList Single(ModelEntity entity)
+	public static ModelList<?, ?> Single(ModelEntity entity)
 	{
 		if(entity.GetType() == EEntityType.OBJECT)
 		{

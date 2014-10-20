@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.core.attributes;
 
-
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -29,7 +27,6 @@ public class History
 
 	private final LinkedList<Entry> history = new LinkedList<>();
 
-	@Nullable
 	public Entry GetLast()
 	{
 		if(history.size() > 0)

@@ -21,7 +21,6 @@ import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.AutoFormat.E_FORMAT_PARAM;
-import ru.parallel.utils.Timer;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -795,16 +794,8 @@ public abstract class Operations
 		{
 			Operations.AllParams(params);
 
-			double time;
-			String result;
-
-Timer.SStart();
-			result = RuntimeService.MakeSnapshot();
-time = Timer.SEnd();
-
-			result = "snapshot creation took "+ time + " sec" + System.lineSeparator() + result;
-
-			return new RequestResult(E_RESULT_TYPE.TEXT, result);
+			return new RequestResult(E_RESULT_TYPE.TEXT
+				, RuntimeService.MakeSnapshot(controller.GetContext().model_data));
 		}
 	});
 

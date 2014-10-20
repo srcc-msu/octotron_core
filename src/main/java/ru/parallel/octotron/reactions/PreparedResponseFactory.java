@@ -169,6 +169,7 @@ public class PreparedResponseFactory
 		Map<String, Object> reaction_map = new HashMap<>();
 		reaction_map.put("AID", reaction.GetID());
 		reaction_map.put("template AID", reaction.GetTemplate().GetID());
+		reaction_map.put("suppressed", reaction.GetSuppress());
 		reaction_map.put("repeated", reaction.GetStat());
 
 		prepared_response.model.put("reaction", reaction_map);

@@ -22,7 +22,6 @@ import ru.parallel.octotron.logic.Statistics;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.octotron.reactions.PreparedResponseFactory;
 import ru.parallel.utils.FileUtils;
-import ru.parallel.utils.JavaUtils;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;

@@ -207,14 +207,19 @@ public class PreparedResponseFactory
 
 	private static String ReplaceWithPath(String path, String name, ModelEntity entity, ModelData model_data)
 	{
-		String where = String.format("obj(AID==%d).", entity.GetID());
+		String where;
+
+		if(entity.GetType() == EEntityType.OBJECT)
+			where = String.format("obj(AID==%d).%s.uniq()", entity.GetID(), path);
+		else
+			where = String.format("link(AID==%d).%s.uniq()", entity.GetID(), path);
 
 		ParsedPath parsed_path = null;
 		ModelList<? extends ModelEntity, ?> targets = null;
 
 		try
 		{
-			parsed_path = PathParser.Parse(where + path);
+			parsed_path = PathParser.Parse(where);
 			targets = parsed_path.Execute(ModelList.Single(entity), model_data);
 		}
 		catch (ExceptionParseError exceptionParseError)

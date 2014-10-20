@@ -115,30 +115,41 @@ public final class PathParser
 		return result;
 	}
 
-	private static final Pattern token_pattern = Pattern.compile("([a-zA-Z_\\-]+)\\(([^)]*)\\)\\.?");
+// matches <id>(<anything but closing bracket>)<optional dot> or
+// matches <id><optional dot>
+	private static final Pattern token_pattern = Pattern.compile("([a-zA-Z_\\-]+)(\\(([^)]*)\\))?\\.?");
 
-	private static List<PathToken> ParseTokens(String path)
+	static List<PathToken> ParseTokens(String path)
 		throws ExceptionParseError
 	{
 		List<PathToken> result = new LinkedList<>();
 
-// matches <id>(<anything but closing bracket>)<optional dot>
 		Matcher matcher = token_pattern.matcher(path);
 
 		int last = -1;
 
 		while(matcher.find())
 		{
-			if(matcher.groupCount() != 2) // found id and part in brackets
-				throw new ExceptionParseError("could not parse path");
+			String name;
+			String params;
 
-			String name = matcher.group(1);
-			String params = matcher.group(2);
+			if(matcher.groupCount() == 3) // single command, no params
+			{
+				name = matcher.group(1);
+				params = matcher.group(3);
+			}
+			else if(matcher.groupCount() == 1) // single command, no args
+			{
+				name = matcher.group(1);
+				params = null;
+			}
+			else
+				throw new ExceptionParseError("could not parse path");
 
 			PathToken base_token = null;
 
 			for(PathToken token : TOKENS)
-				if(token.GetName().equals(name))
+				if (token.GetName().equals(name))
 				{
 					base_token = token;
 					break;

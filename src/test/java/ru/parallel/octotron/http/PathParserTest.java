@@ -3,10 +3,22 @@ package ru.parallel.octotron.http;
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelList;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public class PathParserTest
 {
+	@Test
+	public void TestTokens() throws Exception
+	{
+		assertEquals(1, PathParser.ParseTokens("obj").size());
+		assertEquals(2, PathParser.ParseTokens("obj.uniq").size());
+		assertEquals(2, PathParser.ParseTokens("obj(AID==33).uniq").size());
+		assertEquals(2, PathParser.ParseTokens("obj(AID==33).uniq()").size());
+		assertEquals(4, PathParser.ParseTokens("obj(AID==33).uniq().in_n().q(test==\" t \")").size());
+	}
+
 	@Test
 	public void TestAttrFromString() throws Exception
 	{

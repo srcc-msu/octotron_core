@@ -188,6 +188,9 @@ public class ExecutionController
 
 	public void CheckReactions(AttributeList<IModelAttribute> attributes)
 	{
+		if(IsSilent())
+			return;
+
 		if(response_factory == null)
 			response_factory = new PreparedResponseFactory(context);
 
@@ -202,9 +205,6 @@ public class ExecutionController
 					reaction.RegisterPreparedResponse(null);
 					continue;
 				}
-
-				if(IsSilent())
-					response.Suppress(true);
 
 				PreparedResponse prepared_response = response_factory
 					.Construct(attribute.GetParent(), reaction, response);

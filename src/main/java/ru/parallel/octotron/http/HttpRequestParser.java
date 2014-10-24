@@ -134,7 +134,7 @@ public class HttpRequestParser
 
 			Map<String, String> params = HttpRequestParser.ParseParams(query);
 
-			return new ParsedModelRequest(operation, params);
+			return new ParsedModelRequest(operation, params, query);
 		}
 		catch(ExceptionParseError e)
 		{

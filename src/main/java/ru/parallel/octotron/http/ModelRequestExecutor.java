@@ -53,9 +53,11 @@ public class ModelRequestExecutor implements Runnable
 			return (RequestResult) request.operation
 				.Execute(controller, request.params, entity_list);
 		}
-		catch(Exception e) // TODO add info
+		catch(Exception e)
 		{
-			String msg = "could not execute request: " + e + System.lineSeparator();
+			String msg = "could not execute request: " + request.GetQuery();
+
+			msg += e + System.lineSeparator();
 
 			for(StackTraceElement s : e.getStackTrace())
 				msg += System.lineSeparator() + s;

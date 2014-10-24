@@ -17,15 +17,22 @@ public class ParsedModelRequest
 {
 	final Operation operation;
 	final Map<String, String> params;
+	private final String query;
 
-	public ParsedModelRequest(Operation operation, Map<String, String> params)
+	public ParsedModelRequest(Operation operation, Map<String, String> params, String query)
 	{
 		this.operation = operation;
 		this.params = params;
+		this.query = query;
 	}
 
 	public boolean IsBlocking()
 	{
 		return operation.IsBlocking();
+	}
+
+	public String GetQuery()
+	{
+		return query;
 	}
 }

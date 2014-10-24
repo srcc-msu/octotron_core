@@ -55,7 +55,8 @@ public class ModelRequestExecutor implements Runnable
 		}
 		catch(Exception e)
 		{
-			String msg = "could not execute request: " + request.GetQuery();
+			String msg = "could not execute request: "
+				+ request.GetQuery() + System.lineSeparator();
 
 			msg += e + System.lineSeparator();
 

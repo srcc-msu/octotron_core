@@ -11,6 +11,7 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.HTTPServer;
@@ -197,16 +198,19 @@ public class ExecutionController
 			{
 				Response response = reaction.Process();
 
+				if(reaction.GetState() == Reaction.STATE_NONE)
+					reaction.RegisterPreparedResponse(null);
+
 				if(response == null)
 				{
-					reaction.RegisterPreparedResponse(null);
 					continue;
 				}
 
 				PreparedResponse prepared_response = response_factory
 					.Construct(attribute.GetParent(), reaction, response);
 
-				reaction.RegisterPreparedResponse(prepared_response);
+				if(prepared_response.GetResponse().GetStatus() != EEventStatus.RECOVER)
+					reaction.RegisterPreparedResponse(prepared_response);
 
 				if(IsSilent())
 					return;

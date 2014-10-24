@@ -83,12 +83,15 @@ public class HTTPServer
 		}
 	}
 
-	private static BasicAuthenticator GetAuth(String area, GlobalSettings.Credential credential)
+	private static void SetAuth(HttpContext context, String area, GlobalSettings.Credential credential)
 	{
 		final String user_ref = credential.user;
 		final String password_ref = credential.password;
 
-		return new BasicAuthenticator(area)
+		if(user_ref.isEmpty() && password_ref.isEmpty())
+			return;
+
+		context.setAuthenticator(new BasicAuthenticator(area)
 		{
 			@Override
 			public boolean checkCredentials(String user, String password)
@@ -100,7 +103,7 @@ public class HTTPServer
 
 				return result;
 			}
-		};
+		});
 	}
 
 /**
@@ -127,15 +130,15 @@ public class HTTPServer
 
 		server.setExecutor(executor);
 
-		HttpContext request = server.createContext("/view", new StandardHandler());
+		HttpContext view = server.createContext("/view", new StandardHandler());
 		HttpContext modify  = server.createContext("/modify", new StandardHandler());
 		HttpContext control = server.createContext("/control", new StandardHandler());
 
 		server.createContext("/", new DefaultHandler());
 
-		request.setAuthenticator(HTTPServer.GetAuth("view", controller.GetContext().settings.GetViewCredentials()));
-		modify.setAuthenticator(HTTPServer.GetAuth("modify", controller.GetContext().settings.GetModifyCredentials()));
-		control.setAuthenticator(HTTPServer.GetAuth("control", controller.GetContext().settings.GetControlCredentials()));
+		HTTPServer.SetAuth(view, "view", controller.GetContext().settings.GetViewCredentials());
+		HTTPServer.SetAuth(modify, "modify", controller.GetContext().settings.GetModifyCredentials());
+		HTTPServer.SetAuth(control, "control", controller.GetContext().settings.GetControlCredentials());
 
 		server.start();
 

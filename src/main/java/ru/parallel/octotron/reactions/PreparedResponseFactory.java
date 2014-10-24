@@ -139,23 +139,35 @@ public class PreparedResponseFactory
 
 	private void FillModel(PreparedResponse prepared_response, ModelEntity entity, Reaction reaction)
 	{
-		Map<String, Object> const_map = new HashMap<>();
+		List<Map<String, Object>> const_list = new LinkedList<>();
 		for(ConstAttribute attribute : entity.GetConst())
+		{
+			Map<String, Object> const_map = new HashMap<>();
 			const_map.put(attribute.GetName(), attribute.GetValue());
+			const_list.add(const_map);
+		}
 
-		Map<String, Object> sensor_map = new HashMap<>();
+		List<Map<String, Object>> sensor_list = new LinkedList<>();
 		for(SensorAttribute attribute : entity.GetSensor())
+		{
+			Map<String, Object> sensor_map = new HashMap<>();
 			sensor_map.put(attribute.GetName(), attribute.GetValue());
+			sensor_list.add(sensor_map);
+		}
 
-		Map<String, Object> var_map = new HashMap<>();
+		List<Map<String, Object>> var_list = new LinkedList<>();
 		for(VarAttribute attribute : entity.GetVar())
+		{
+			Map<String, Object> var_map = new HashMap<>();
 			var_map.put(attribute.GetName(), attribute.GetValue());
+			var_list.add(var_map);
+		}
 
 		Map<String, Object> entity_map = new HashMap<>();
 
-		entity_map.put("const", const_map);
-		entity_map.put("sensor", sensor_map);
-		entity_map.put("var", var_map);
+		entity_map.put("const", const_list);
+		entity_map.put("sensor", sensor_list);
+		entity_map.put("var", var_list);
 
 		prepared_response.model.put("entity", entity_map);
 

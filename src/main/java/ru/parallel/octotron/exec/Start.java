@@ -33,14 +33,13 @@ public class Start
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 	private static final int SYS_LOG_SIZE = 10*1024*1024; // 10 MB
-	private static final String LOG_DIR = "log/";
 
-	private static void ConfigLogging()
+	private static void ConfigLogging(String log_dir)
 	{
 		try
 		{
 			FileHandler file_handler
-				= new FileHandler(LOG_DIR + "octotron.system.log.%g"
+				= new FileHandler(log_dir + "octotron.system.log.%g"
 				, SYS_LOG_SIZE, 10, true); // rotate to 10 files, allow append
 			file_handler.setFormatter(new SimpleFormatter());
 
@@ -48,7 +47,7 @@ public class Start
 		}
 		catch(IOException e)
 		{
-			LOGGER.log(Level.CONFIG, "could not create log file in: " + LOG_DIR, e);
+			LOGGER.log(Level.CONFIG, "could not create log file in: " + log_dir, e);
 		}
 	}
 
@@ -59,8 +58,6 @@ public class Start
  * */
 	public static void main(String[] args)
 	{
-		ConfigLogging();
-
 		String config_fname;
 
 		if(args.length != 1)
@@ -89,6 +86,9 @@ public class Start
 		try
 		{
 			context = Context.CreateFromConfig(json_config);
+
+			ConfigLogging(context.settings.GetLogDir());
+
 			CreateFromPython(context);
 			PrintStat(context);
 			CreateCache(context);
@@ -298,8 +298,10 @@ public class Start
 		for(StackTraceElement elem : catched_exception.getStackTrace())
 			error += elem + System.lineSeparator();
 
-		File error_file = new File("log/crash_" + JavaUtils.GetDate()
-			+ "_" + JavaUtils.GetTimestamp() + "_" + suffix + ".txt");
+		String fname = String.format("/octotron.crash.log.%s.%s.%d"
+			, suffix, JavaUtils.GetDate(), JavaUtils.GetTimestamp());
+
+		File error_file = new File(context.settings.GetLogDir() + fname);
 		String error_fname = error_file.getAbsolutePath();
 
 		try

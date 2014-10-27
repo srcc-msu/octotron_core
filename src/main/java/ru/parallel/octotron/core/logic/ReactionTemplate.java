@@ -11,6 +11,9 @@ import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.UniqueID;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class ReactionTemplate extends UniqueID<EEntityType>
 {
 	private final String check_name;
@@ -100,5 +103,21 @@ public abstract class ReactionTemplate extends UniqueID<EEntityType>
 	{
 		this.repeatable = true;
 		return this;
+	}
+
+	public Map<String, Object> GetInfo()
+	{
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("AID", GetID());
+
+		result.put("check_value", GetCheckValue());
+		result.put("check_name", GetCheckName());
+
+		result.put("delay_config", GetDelay());
+		result.put("repeat_config", GetRepeat());
+		result.put("repeatable", IsRepeatable());
+
+		return result;
 	}
 }

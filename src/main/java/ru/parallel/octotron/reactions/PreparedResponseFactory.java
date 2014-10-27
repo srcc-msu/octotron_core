@@ -182,7 +182,7 @@ public class PreparedResponseFactory
 		reaction_map.put("AID", reaction.GetID());
 		reaction_map.put("template AID", reaction.GetTemplate().GetID());
 		reaction_map.put("suppressed", reaction.GetSuppress());
-		reaction_map.put("repeated", reaction.GetStat());
+		reaction_map.put("repeated", reaction.GetGlobalStat());
 
 		prepared_response.model.put("reaction", reaction_map);
 	}

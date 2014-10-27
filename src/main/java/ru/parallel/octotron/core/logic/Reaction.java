@@ -12,6 +12,9 @@ import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Reaction extends UniqueID<EEntityType>
 {
 	private final ReactionTemplate template;
@@ -21,7 +24,7 @@ public class Reaction extends UniqueID<EEntityType>
 	private long repeat = 0;
 
 	private long state = 0;
-	private long stat = 0;
+	private long global_stat = 0;
 
 	private String descr = "";
 	private boolean suppress = false;
@@ -62,24 +65,24 @@ public class Reaction extends UniqueID<EEntityType>
 
 // -------------
 
-	private void IncStat()
+	private void IncGlobalStat()
 	{
-		stat++;
+		global_stat++;
 	}
 
-	public long GetStat()
+	public long GetGlobalStat()
 	{
-		return stat;
+		return global_stat;
 	}
 
-	public void SetStat(long stat)
+	public void SetGlobalStat(long stat)
 	{
-		this.stat = stat;
+		this.global_stat = stat;
 	}
 
-	public void ResetStat()
+	public void ResetGlobalStat()
 	{
-		stat = 0;
+		global_stat = 0;
 	}
 
 // -------------
@@ -121,7 +124,7 @@ public class Reaction extends UniqueID<EEntityType>
 			{
 				if(ready)
 				{
-					IncStat();
+					IncGlobalStat();
 					SetState(STATE_EXECUTED);
 
 					result = template.GetResponse();
@@ -137,7 +140,7 @@ public class Reaction extends UniqueID<EEntityType>
 			{
 				if(ready)
 				{
-					IncStat();
+					IncGlobalStat();
 					SetState(STATE_EXECUTED);
 
 					result =  template.GetResponse();
@@ -151,7 +154,7 @@ public class Reaction extends UniqueID<EEntityType>
 			{
 				if(template.IsRepeatable())
 				{
-					IncStat();
+					IncGlobalStat();
 					result = template.GetResponse();
 				}
 				else
@@ -237,4 +240,44 @@ public class Reaction extends UniqueID<EEntityType>
 	{
 		return prepared_response;
 	}
+
+	public Map<String, Object> GetInfo()
+	{
+		Map<String, Object> result = new HashMap<>();
+
+		Map<String, Object> reaction_map = new HashMap<>();
+		result.put("info", reaction_map);
+
+		reaction_map.put("AID", GetID());
+
+		reaction_map.put("delay", GetDelay());
+		reaction_map.put("repeat", GetRepeat());
+
+		reaction_map.put("state", GetState());
+		reaction_map.put("global_stat", GetGlobalStat());
+
+		reaction_map.put("descr", GetDescription());
+		reaction_map.put("suppressed", GetSuppress());
+
+		result.put("template", GetTemplate().GetInfo());
+
+		Map<String, Object> model_map = new HashMap<>();
+		result.put("model", model_map);
+
+		Map<String, Object> attribute_map = new HashMap<>();
+		model_map.put("attribute", attribute_map);
+
+		attribute_map.put("AID", attribute.GetID());
+		attribute_map.put("name", attribute.GetName());
+		attribute_map.put("value", attribute.GetValue());
+
+		Map<String, Object> entity_map = new HashMap<>();
+		model_map.put("entity", entity_map);
+
+		entity_map.put("AID", attribute.GetParent().GetID());
+
+		result.put("usr", GetTemplate().GetResponse().GetMessages());
+		return result;
+	}
+
 }

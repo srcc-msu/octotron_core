@@ -376,27 +376,7 @@ public abstract class Operations
 
 			for(Reaction reaction : entities.Only().GetAttribute(name).GetReactions())
 			{
-				Map<String, Object> map = new HashMap<>();
-
-				map.put("AID", reaction.GetID());
-				map.put("template_id", reaction.GetTemplate().GetID());
-				map.put("attribute_name", reaction.GetTemplate().GetCheckName());
-				map.put("attribute_AID", reaction.GetAttribute().GetID());
-				map.put("suppress", reaction.GetSuppress());
-				map.put("description", reaction.GetDescription());
-
-				map.put("value", reaction.GetTemplate().GetCheckValue());
-				map.put("delay_config", reaction.GetTemplate().GetDelay());
-				map.put("repeat_config", reaction.GetTemplate().GetRepeat());
-
-				map.put("usr", reaction.GetTemplate().GetResponse().GetMessages());
-
-				map.put("state", reaction.GetState());
-				map.put("stat", reaction.GetStat());
-				map.put("delay", reaction.GetTemplate().GetDelay());
-				map.put("repeat", reaction.GetTemplate().GetRepeat());
-
-				data.add(map);
+				data.add(reaction.GetInfo());
 			}
 
 			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
@@ -424,17 +404,7 @@ public abstract class Operations
 			for(Reaction reaction : controller.GetContext().model_service
 				.GetSuppressedReactions())
 			{
-				Map<String, Object> map = new HashMap<>();
-
-				map.put("AID", reaction.GetID());
-				map.put("template_id", reaction.GetTemplate().GetID());
-				map.put("attribute_name", reaction.GetTemplate().GetCheckName());
-				map.put("attribute_AID", reaction.GetAttribute().GetID());
-				map.put("suppress", reaction.GetSuppress());
-				map.put("description", reaction.GetDescription());
-				map.put("usr", reaction.GetTemplate().GetResponse().GetMessages());
-
-				result.add(map);
+				result.add(reaction.GetInfo());
 			}
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintData(result, format, callback));

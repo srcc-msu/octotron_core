@@ -59,19 +59,19 @@ public class RuntimeService
 	 * create snapshot of all reactions with failed conditions<br>
 	 * and get their description<br>
 	 * */
-	public static String MakeSnapshot(ModelData model_data)
+	public static List<Map<String, Object>> MakeSnapshot(ModelData model_data)
 	{
-		StringBuilder result = new StringBuilder();
+		List<Map<String, Object>> result = new LinkedList<>();
 
 		for(ModelEntity entity : model_data.GetAllEntities())
 		{
 			for(PreparedResponse response : entity.GetPreparedResponses())
 			{
-				result.append(response.GetFullString()).append(System.lineSeparator());
+				result.add(response.GetFullInfo());
 			}
 		}
 
-		return result.toString();
+		return result;
 	}
 
 	public static List<Map<String, Object>> CheckModTime(Context context, long interval)

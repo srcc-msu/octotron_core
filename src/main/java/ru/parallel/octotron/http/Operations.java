@@ -792,10 +792,16 @@ public abstract class Operations
 		public Object Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Operations.AllParams(params);
+			Operations.AllParams(params, "format", "callback");
 
-			return new RequestResult(E_RESULT_TYPE.TEXT
-				, RuntimeService.MakeSnapshot(controller.GetContext().model_data));
+			E_FORMAT_PARAM format = GetFormat(params);
+
+			String callback = params.get("callback");
+			CheckFormat(format, callback);
+
+			List<Map<String, Object>> data = RuntimeService.MakeSnapshot(controller.GetContext().model_data);
+
+			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintData(data, format, callback));
 		}
 	});
 

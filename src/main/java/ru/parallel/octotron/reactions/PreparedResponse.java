@@ -97,7 +97,7 @@ import java.util.logging.Logger;
 	@Override
  	public void run()
 	{
-		String log_string = GetFullString();
+		String log_string = AutoFormat.PrintJson(GetFullInfo());
 
 		if(!response.IsSuppress())
 		{
@@ -135,7 +135,7 @@ import java.util.logging.Logger;
 		}
 	}
 
-	public String GetFullString()
+	public Map<String, Object> GetFullInfo()
 	{
 		Map<String, Object> result = new HashMap<>();
 
@@ -144,7 +144,7 @@ import java.util.logging.Logger;
 		result.put("usr", usr);
 		result.put("surround", surround);
 
-		return AutoFormat.PrintJson(result);
+		return result;
 	}
 
 	public Reaction GetReaction()

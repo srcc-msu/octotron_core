@@ -412,7 +412,12 @@ public abstract class Operations
 		public Object Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Operations.StrictParams(params);
+			Operations.AllParams(params, "format", "callback");
+
+			E_FORMAT_PARAM format = GetFormat(params);
+
+			String callback = params.get("callback");
+			CheckFormat(format, callback);
 
 			List<Map<String, Object>> result = new LinkedList<>();
 
@@ -432,7 +437,7 @@ public abstract class Operations
 				result.add(map);
 			}
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJson(result));
+			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintData(result, format, callback));
 		}
 	});
 
@@ -701,7 +706,7 @@ public abstract class Operations
 
 				if(AID != -1)
 				{
-					res += "suppressed reaction: " + AID
+					res += "unsuppressed reaction: " + AID
 						+ " with template: " + template_id
 						+ System.lineSeparator();
 				}

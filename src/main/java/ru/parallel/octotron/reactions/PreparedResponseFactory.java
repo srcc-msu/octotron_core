@@ -170,21 +170,6 @@ public class PreparedResponseFactory
 		entity_map.put("var", var_list);
 
 		prepared_response.model.put("entity", entity_map);
-
-		Map<String, Object> attribute_map = new HashMap<>();
-		attribute_map.put("AID", reaction.GetAttribute().GetID());
-		attribute_map.put("name", reaction.GetAttribute().GetName());
-		attribute_map.put("value", reaction.GetAttribute().GetValue());
-
-		prepared_response.model.put("attribute", attribute_map);
-
-		Map<String, Object> reaction_map = new HashMap<>();
-		reaction_map.put("AID", reaction.GetID());
-		reaction_map.put("template AID", reaction.GetTemplate().GetID());
-		reaction_map.put("suppressed", reaction.GetSuppress());
-		reaction_map.put("repeated", reaction.GetGlobalStat());
-
-		prepared_response.model.put("reaction", reaction_map);
 	}
 
 	private void FillInfo(PreparedResponse prepared_response, Response response)

@@ -141,6 +141,7 @@ import java.util.logging.Logger;
 
 		result.put("info", info);
 		result.put("model", model);
+		result.put("reaction", reaction.GetInfo());
 		result.put("usr", usr);
 		result.put("surround", surround);
 

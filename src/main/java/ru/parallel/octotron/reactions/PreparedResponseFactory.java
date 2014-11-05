@@ -192,10 +192,6 @@ public class PreparedResponseFactory
 			, context.settings.GetHost(), context.settings.GetPort()
 			, entity.GetID(), reaction.GetTemplate().GetID());
 		prepared_response.specials.add(suppress);
-
-		String show_all = String.format("to view all suppressed reactions: http://%s:%d/view/show_suppressed"
-			, context.settings.GetHost(), context.settings.GetPort());
-		prepared_response.specials.add(show_all);
 	}
 
 	private static final String NOT_FOUND = "<%s:not_found>";

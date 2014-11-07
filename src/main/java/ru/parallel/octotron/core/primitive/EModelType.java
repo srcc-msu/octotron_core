@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.primitive;
 
-public enum EEntityType
+public enum EModelType
 {
-	LINK, OBJECT, REACTION, REACTION_TEMPLATE
+	LINK, OBJECT
 }

@@ -7,7 +7,8 @@
 package ru.parallel.octotron.core.logic;
 
 import com.google.common.collect.ObjectArrays;
-import ru.parallel.octotron.core.IPresentable;
+import ru.parallel.octotron.core.primitive.ELogicalType;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -17,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Response implements IPresentable
+public class Response extends LogicID<ELogicalType> implements IPresentable
 {
 	private final EEventStatus status;
 
@@ -29,6 +30,7 @@ public class Response implements IPresentable
 	public Response(EEventStatus status, String... strings)
 		throws ExceptionParseError
 	{
+		super(ELogicalType.RESPONSE);
 		this.status = status;
 
 		this.messages = new HashMap<>();
@@ -113,13 +115,22 @@ public class Response implements IPresentable
 	}
 
 	@Override
-	public Map<String, Object> GetRepresentation()
+	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
 
 		result.put("status", status.toString());
 
-		result.putAll(GetMessages());
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetLongRepresentation()
+	{
+		Map<String, Object> result = GetShortRepresentation();
+
+		result.put("messages", commands);
+		result.put("commands", commands);
 
 		return result;
 	}

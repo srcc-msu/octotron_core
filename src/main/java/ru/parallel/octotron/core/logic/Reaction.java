@@ -6,38 +6,41 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.IPresentable;
+import ru.parallel.octotron.core.primitive.ELogicalType;
+import ru.parallel.octotron.core.primitive.EModelType;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.model.IModelAttribute;
-import ru.parallel.octotron.core.primitive.EEntityType;
-import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Reaction extends UniqueID<EEntityType> implements IPresentable
+public class Reaction extends LogicID<ELogicalType> implements IPresentable
 {
+	public enum State
+	{
+		NONE, STARTED, EXECUTED
+	}
+
+	private State state = State.NONE;
+
 	private final ReactionTemplate template;
 	private final IModelAttribute attribute;
 
 	private long delay = 0;
 	private long repeat = 0;
 
-	private long state = 0;
 	private long global_stat = 0;
 
 	private String descr = "";
 	private boolean suppress = false;
-	private PreparedResponse prepared_response = null;
 
-	public static final long STATE_NONE = 0;
-	public static final long STATE_STARTED = 1;
-	public static final long STATE_EXECUTED = 2;
+	private PreparedResponse prepared_response = null;
 
 	public Reaction(ReactionTemplate template, IModelAttribute attribute)
 	{
-		super(EEntityType.REACTION);
+		super(ELogicalType.REACTION);
 
 		this.template = template;
 		this.attribute = attribute;
@@ -54,12 +57,12 @@ public class Reaction extends UniqueID<EEntityType> implements IPresentable
 
 // -------------
 
-	public long GetState()
+	public State GetState()
 	{
 		return state;
 	}
 
-	public void SetState(long new_state)
+	public void SetState(State new_state)
 	{
 		state = new_state;
 	}
@@ -121,28 +124,28 @@ public class Reaction extends UniqueID<EEntityType> implements IPresentable
 			boolean ready = (delay >= template.GetDelay())
 				&& (repeat >= template.GetRepeat());
 
-			if(state == STATE_NONE)
+			if(state == State.NONE)
 			{
 				if(ready)
 				{
 					IncGlobalStat();
-					SetState(STATE_EXECUTED);
+					SetState(State.EXECUTED);
 
 					result = template.GetResponse();
 				}
 				else
 				{
-					SetState(STATE_STARTED);
+					SetState(State.STARTED);
 
 					StartDelay();
 				}
 			}
-			else if(state == STATE_STARTED)
+			else if(state == State.STARTED)
 			{
 				if(ready)
 				{
 					IncGlobalStat();
-					SetState(STATE_EXECUTED);
+					SetState(State.EXECUTED);
 
 					result =  template.GetResponse();
 				}
@@ -151,7 +154,7 @@ public class Reaction extends UniqueID<EEntityType> implements IPresentable
 					// nothing to see here
 				}
 			}
-			else if(state == STATE_EXECUTED)
+			else if(state == State.EXECUTED)
 			{
 				if(template.IsRepeatable())
 				{
@@ -166,19 +169,19 @@ public class Reaction extends UniqueID<EEntityType> implements IPresentable
 		}
 		else
 		{
-			if(state == STATE_NONE)
+			if(state == State.NONE)
 			{
 				// nothing to see here
 			}
-			else if(state == STATE_STARTED)
+			else if(state == State.STARTED)
 			{
-				SetState(STATE_NONE);
+				SetState(State.NONE);
 				DropDelay();
 				DropRepeat();
 			}
-			else if(state == STATE_EXECUTED)
+			else if(state == State.EXECUTED)
 			{
-				SetState(STATE_NONE);
+				SetState(State.NONE);
 				DropDelay();
 				DropRepeat();
 
@@ -192,7 +195,6 @@ public class Reaction extends UniqueID<EEntityType> implements IPresentable
 
 		return null;
 	}
-
 
 	private void StartDelay()
 	{
@@ -242,43 +244,32 @@ public class Reaction extends UniqueID<EEntityType> implements IPresentable
 		return prepared_response;
 	}
 
-	public Map<String, Object> GetRepresentation()
+	@Override
+	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
+		result.put("AID", GetID());
+		result.put("state", GetState().toString());
 
-		Map<String, Object> reaction_map = new HashMap<>();
-		result.put("info", reaction_map);
+		result.put("template", GetTemplate().GetID());
+		result.put("attribute", attribute.GetID());
 
-		reaction_map.put("AID", GetID());
-
-		reaction_map.put("delay", GetDelay());
-		reaction_map.put("repeat", GetRepeat());
-
-		reaction_map.put("state", GetState());
-		reaction_map.put("global_stat", GetGlobalStat());
-
-		reaction_map.put("descr", GetDescription());
-		reaction_map.put("suppressed", GetSuppress());
-
-		result.put("template", GetTemplate().GetRepresentation());
-
-		Map<String, Object> model_map = new HashMap<>();
-		result.put("model", model_map);
-
-		Map<String, Object> attribute_map = new HashMap<>();
-		model_map.put("attribute", attribute_map);
-
-		attribute_map.put("AID", attribute.GetID());
-		attribute_map.put("name", attribute.GetName());
-		attribute_map.put("value", attribute.GetValue());
-
-		Map<String, Object> entity_map = new HashMap<>();
-		model_map.put("entity", entity_map);
-
-		entity_map.put("AID", attribute.GetParent().GetID());
-
-		result.put("usr", GetTemplate().GetResponse().GetMessages());
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> GetLongRepresentation()
+	{
+		Map<String, Object> result = GetShortRepresentation();
+
+		result.put("delay", GetDelay());
+		result.put("repeat", GetRepeat());
+
+		result.put("global_stat", GetGlobalStat());
+
+		result.put("descr", GetDescription());
+		result.put("suppressed", GetSuppress());
+
+		return result;
+	}
 }

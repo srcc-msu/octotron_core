@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.EModelType;
 
 public class ModelLink extends ModelEntity
 {
@@ -15,7 +15,7 @@ public class ModelLink extends ModelEntity
 
 	public ModelLink(ModelObject source, ModelObject target)
 	{
-		super(EEntityType.LINK);
+		super(EModelType.LINK);
 
 		this.target = target;
 		this.source = source;

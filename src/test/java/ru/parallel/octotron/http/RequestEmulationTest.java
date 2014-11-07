@@ -89,7 +89,7 @@ public class RequestEmulationTest
 
 		RequestResult result = new ModelRequestExecutor(controller, parsed_request).GetResult();
 
-		if(result.type.equals(RequestResult.E_RESULT_TYPE.ERROR))
+		if(result.type.equals(RequestResult.EResultType.ERROR))
 			throw new ExceptionParseError(result.data);
 
 		return result.data;

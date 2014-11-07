@@ -35,12 +35,6 @@ public class VarAttribute extends AbstractModAttribute
 		this.rule = rule;
 	}
 
-	@Override
-	public EAttributeType GetType()
-	{
-		return EAttributeType.VAR;
-	}
-
 	public Rule GetRule()
 	{
 		return rule;

@@ -6,19 +6,19 @@
 
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.primitive.EModelType;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
-import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.reactions.PreparedResponse;
 
 import java.util.*;
 
-public abstract class ModelEntity extends UniqueID<EEntityType>
+public abstract class ModelEntity extends ModelID<EModelType> implements IPresentable
 {
 	final Map<String, IModelAttribute> attributes_map = new HashMap<>();
 
@@ -26,7 +26,7 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 	final Map<String, SensorAttribute> sensor_map = new HashMap<>();
 	final Map<String, VarAttribute> var_map = new HashMap<>();
 
-	public ModelEntity(EEntityType type)
+	public ModelEntity(EModelType type)
 	{
 		super(type);
 	}
@@ -126,6 +126,70 @@ public abstract class ModelEntity extends UniqueID<EEntityType>
 					result.add(prepared_response);
 			}
 		}
+
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetShortRepresentation()
+	{
+		Map<String, Object> result = new HashMap<>();
+		result.put("AID", GetID());
+
+		List<Map<String, Object>> const_list = new LinkedList<>();
+
+		for(ConstAttribute attribute : GetConst())
+		{
+			const_list.add(attribute.GetShortRepresentation());
+		}
+
+		List<Map<String, Object>> sensor_list = new LinkedList<>();
+		for(SensorAttribute attribute : GetSensor())
+		{
+			sensor_list.add(attribute.GetShortRepresentation());
+		}
+
+		List<Map<String, Object>> var_list = new LinkedList<>();
+		for(VarAttribute attribute : GetVar())
+		{
+			var_list.add(attribute.GetShortRepresentation());
+		}
+
+		result.put("const", const_list);
+		result.put("sensor", sensor_list);
+		result.put("var", var_list);
+
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetLongRepresentation()
+	{
+		Map<String, Object> result = new HashMap<>();
+		result.put("AID", GetID());
+
+		List<Map<String, Object>> const_list = new LinkedList<>();
+
+		for(ConstAttribute attribute : GetConst())
+		{
+			const_list.add(attribute.GetLongRepresentation());
+		}
+
+		List<Map<String, Object>> sensor_list = new LinkedList<>();
+		for(SensorAttribute attribute : GetSensor())
+		{
+			sensor_list.add(attribute.GetLongRepresentation());
+		}
+
+		List<Map<String, Object>> var_list = new LinkedList<>();
+		for(VarAttribute attribute : GetVar())
+		{
+			var_list.add(attribute.GetLongRepresentation());
+		}
+
+		result.put("const", const_list);
+		result.put("sensor", sensor_list);
+		result.put("var", var_list);
 
 		return result;
 	}

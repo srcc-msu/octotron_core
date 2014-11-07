@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.reactions;
 
-import ru.parallel.octotron.core.IPresentable;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -68,7 +68,7 @@ import java.util.logging.Logger;
  *         {...},
  *     ]
  * */
- public class PreparedResponse implements Runnable, IPresentable
+ public class PreparedResponse implements Runnable
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
@@ -142,7 +142,7 @@ import java.util.logging.Logger;
 
 		result.put("info", info);
 		result.put("model", model);
-		result.put("reaction", reaction.GetRepresentation());
+		result.put("reaction", reaction.GetID());
 		result.put("usr", usr);
 		result.put("surround", surround);
 

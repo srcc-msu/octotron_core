@@ -10,7 +10,7 @@ import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
@@ -44,13 +44,13 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 	public static ModelList<?, ?> Single(ModelEntity entity)
 	{
-		if(entity.GetType() == EEntityType.OBJECT)
+		if(entity.GetType() == EModelType.OBJECT)
 		{
 			ModelObjectList result = new ModelObjectList();
 			result.add((ModelObject)entity);
 			return result;
 		}
-		else if(entity.GetType() == EEntityType.OBJECT)
+		else if(entity.GetType() == EModelType.OBJECT)
 		{
 			ModelLinkList result = new ModelLinkList();
 			result.add((ModelLink)entity);

@@ -25,12 +25,6 @@ public class SensorAttribute extends AbstractModAttribute
 		super(EAttributeType.SENSOR, parent, name, value);
 	}
 
-	@Override
-	public EAttributeType GetType()
-	{
-		return EAttributeType.SENSOR;
-	}
-
 	public boolean Update(Object new_value)
 	{
 		return super.Update(new_value);

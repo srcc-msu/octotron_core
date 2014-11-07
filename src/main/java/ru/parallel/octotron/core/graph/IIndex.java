@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.graph;
 
-import ru.parallel.octotron.core.primitive.IUniqueID;
+import ru.parallel.octotron.core.primitive.ID;
 
 import java.util.List;
 
@@ -32,24 +32,24 @@ public interface IIndex
  * get one entity, that has attribute /name = /value
  * if there are more than one such entities - throws exception
  * */
-	IUniqueID<EGraphType> GetObject(String name, Object value);
-	IUniqueID<EGraphType> GetLink(String name, Object value);
+	ID<EGraphType> GetObject(String name, Object value);
+	ID<EGraphType> GetLink(String name, Object value);
 
 /**
  * get all entities, that have attribute /name = /value
  * */
-	List<IUniqueID<EGraphType>> GetObjects(String name, Object value);
-	List<IUniqueID<EGraphType>> GetLinks(String name, Object value);
+	List<ID<EGraphType>> GetObjects(String name, Object value);
+	List<ID<EGraphType>> GetLinks(String name, Object value);
 
 /**
  * get all entities, that have attribute /name with any value
  * */
-	List<IUniqueID<EGraphType>> GetObjects(String name);
-	List<IUniqueID<EGraphType>> GetLinks(String name);
+	List<ID<EGraphType>> GetObjects(String name);
+	List<ID<EGraphType>> GetLinks(String name);
 
 /**
  * get all entities that have attribute /name and it matches the /pattern
  * */
-	List<IUniqueID<EGraphType>> QueryObjects(String name, String pattern);
-	List<IUniqueID<EGraphType>> QueryLinks(String name, String pattern);
+	List<ID<EGraphType>> QueryObjects(String name, String pattern);
+	List<ID<EGraphType>> QueryLinks(String name, String pattern);
 }

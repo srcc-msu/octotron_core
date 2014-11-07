@@ -18,14 +18,14 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.ExecutionController;
-import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.octotron.reactions.CommonReactions;
 import ru.parallel.utils.AutoFormat;
-import ru.parallel.utils.AutoFormat.E_FORMAT_PARAM;
 
 import java.util.*;
 import java.util.Map.Entry;
+
+import static ru.parallel.octotron.http.RequestResult.EResultType.*;
 
 /**
  * implementation of all available http operations<br>
@@ -70,20 +70,6 @@ public abstract class Operations
 			throws ExceptionParseError;
 	}
 
-	/**
-	 * tests if the \\attr declares a proper print format<br>
-	 * */
-	private static E_FORMAT_PARAM AttrToFormat(String format)
-	{
-		switch(format)
-		{
-			case "plain" : return E_FORMAT_PARAM.PLAIN;
-			case "json"  : return E_FORMAT_PARAM.JSON;
-			case "jsonp" : return E_FORMAT_PARAM.JSONP;
-			default      : return E_FORMAT_PARAM.NONE;
-		}
-	}
-
 	private static List<SimpleAttribute> GetAttributes(Map<String, String> params)
 	{
 
@@ -95,56 +81,6 @@ public abstract class Operations
 				attributes.add(new SimpleAttribute(name, null));
 
 		return attributes;
-	}
-
-	private static E_FORMAT_PARAM GetFormat(Map<String, String> params)
-	{
-		E_FORMAT_PARAM format = E_FORMAT_PARAM.PLAIN;
-
-		String format_str = params.get("format");
-
-		if(format_str != null)
-			format = Operations.AttrToFormat(format_str);
-
-		return format;
-	}
-
-	private static void CheckFormat(E_FORMAT_PARAM format, String callback)
-		throws ExceptionParseError
-	{
-		if(format != E_FORMAT_PARAM.JSONP && callback != null)
-			throw new ExceptionParseError("callback is reserved argument for jsonp format");
-
-		if(format == E_FORMAT_PARAM.JSONP && callback == null)
-			throw new ExceptionParseError("specify a callback function");
-	}
-
-	private static List<IModelAttribute> GetAttributes(ModelEntity entity, List<SimpleAttribute> attributes, EAttributeType type)
-	{
-		List<IModelAttribute> result = new LinkedList<>();
-
-		if(attributes.size() > 0)
-		{
-			for(SimpleAttribute names : attributes)
-			{
-				IModelAttribute attribute = entity.GetAttribute(names.GetName());
-
-				if(type == null || attribute.GetType() == type)
-					result.add(attribute);
-			}
-			return result;
-		}
-		else
-		{
-			for(IAttribute names : entity.GetAttributes())
-			{
-				IModelAttribute attribute = entity.GetAttribute(names.GetName());
-
-				if(type == null || attribute.GetType() == type)
-					result.add(attribute);
-			}
-			return result;
-		}
 	}
 
 	private static void RequiredParams(Map<String, String> params, String... names)
@@ -178,6 +114,65 @@ public abstract class Operations
 		Operations.AllParams(params, names);
 	}
 
+	private static List<IModelAttribute> GetAttributes(ModelEntity entity, List<SimpleAttribute> attributes, EAttributeType type)
+	{
+		List<IModelAttribute> result = new LinkedList<>();
+
+		if(attributes.size() > 0)
+		{
+			for(SimpleAttribute names : attributes)
+			{
+				IModelAttribute attribute = entity.GetAttribute(names.GetName());
+
+				if(type == null || attribute.GetType() == type)
+					result.add(attribute);
+			}
+			return result;
+		}
+		else
+		{
+			for(IAttribute names : entity.GetAttributes())
+			{
+				IModelAttribute attribute = entity.GetAttribute(names.GetName());
+
+				if(type == null || attribute.GetType() == type)
+					result.add(attribute);
+			}
+			return result;
+		}
+	}
+
+	private static Object GetAttributes(ModelList<? extends ModelEntity, ?> entities
+		, List<SimpleAttribute> attributes, EAttributeType type)
+	{
+		if(attributes.size() > 0)
+		{
+			List<List<Map<String, Object>>> data = new LinkedList<>();
+
+			for (ModelEntity entity : entities)
+			{
+				List<Map<String, Object>> list = new LinkedList<>();
+
+				for (IModelAttribute attribute : GetAttributes(entity, attributes, type))
+					list.add(attribute.GetShortRepresentation());
+
+				data.add(list);
+			}
+
+			return data;
+		}
+		else
+		{
+			List<Map<String, Object>> data = new LinkedList<>();
+
+			for (ModelEntity entity : entities)
+			{
+				data.add(entity.GetShortRepresentation());
+			}
+			return data;
+		}
+	}
+
 //----------------------------
 //------------VIEW------------
 //----------------------------
@@ -195,14 +190,37 @@ public abstract class Operations
 			Operations.StrictParams(params, "path");
 
 			String data = String.valueOf(entities.size());
-			return new RequestResult(E_RESULT_TYPE.TEXT, data);
+			return new RequestResult(RequestResult.EResultType.TEXT, data);
 		}
 	});
 
-/**
- * prints properties of the given list entities<br>
- * properties and format are taken from params<br>
- * */
+	/**
+	 * prints properties of the given list entities<br>
+	 * properties and format are taken from params<br>
+	 * */
+	public static final Operation p2 = new Operation("p2", true
+		, new IExec()
+	{
+		@Override
+		public Object Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
+			throws ExceptionParseError
+		{
+			Operations.RequiredParams(params, "path");
+			Operations.AllParams(params, "path", "callback", "attributes");
+
+			List<SimpleAttribute> attributes = GetAttributes(params);
+
+			String callback = params.get("callback");
+
+			if(entities.size() == 0)
+				return new RequestResult(RequestResult.EResultType.ERROR, "empty entities lists - nothing to print");
+
+			Object data = GetAttributes(entities, attributes, null);
+
+			return new RequestResult(JSON, AutoFormat.PrintData(data, callback));
+		}
+	});
+
 	public static final Operation p = new Operation("p", true
 		, new IExec()
 	{
@@ -211,31 +229,18 @@ public abstract class Operations
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
-			Operations.AllParams(params, "path", "format", "callback", "attributes");
+			Operations.AllParams(params, "path", "callback");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 			List<SimpleAttribute> attributes = GetAttributes(params);
 
 			String callback = params.get("callback");
 
-			CheckFormat(format, callback);
-
 			if(entities.size() == 0)
-				return new RequestResult(E_RESULT_TYPE.ERROR, "empty entities lists - nothing to print");
+				return new RequestResult(RequestResult.EResultType.ERROR, "empty entities lists - nothing to print");
 
-			List<Map<String, Object>> data = new LinkedList<>();
+			Object data = GetAttributes(entities, attributes, null);
 
-			for(ModelEntity entity : entities)
-			{
-				Map<String, Object> map = new HashMap<>();
-
-				for(IAttribute attribute : GetAttributes(entity, attributes, null))
-					map.put(attribute.GetName(), attribute.GetValue());
-
-				data.add(map);
-			}
-
-			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+			return new RequestResult(JSON, AutoFormat.PrintData(data, callback));
 		}
 	});
 
@@ -247,17 +252,15 @@ public abstract class Operations
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
-			Operations.AllParams(params, "path", "format", "callback", "attributes");
+			Operations.AllParams(params, "path", "callback", "attributes");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 			List<SimpleAttribute> attributes = GetAttributes(params);
 
 			String callback = params.get("callback");
 
-			CheckFormat(format, callback);
 
 			if(entities.size() == 0)
-				return new RequestResult(E_RESULT_TYPE.ERROR, "empty entities lists - nothing to print");
+				return new RequestResult(RequestResult.EResultType.ERROR, "empty entities lists - nothing to print");
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
@@ -271,7 +274,7 @@ public abstract class Operations
 				data.add(map);
 			}
 
-			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+			return new RequestResult(JSON, AutoFormat.PrintData(data, callback));
 		}
 	});
 
@@ -283,17 +286,15 @@ public abstract class Operations
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
-			Operations.AllParams(params, "path", "format", "callback", "attributes");
+			Operations.AllParams(params, "path", "callback", "attributes");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 			List<SimpleAttribute> attributes = GetAttributes(params);
 
 			String callback = params.get("callback");
 
-			CheckFormat(format, callback);
 
 			if(entities.size() == 0)
-				return new RequestResult(E_RESULT_TYPE.ERROR, "empty entities lists - nothing to print");
+				return new RequestResult(RequestResult.EResultType.ERROR, "empty entities lists - nothing to print");
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
@@ -309,7 +310,7 @@ public abstract class Operations
 				}
 			}
 
-			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+			return new RequestResult(JSON, AutoFormat.PrintData(data, callback));
 		}
 	});
 
@@ -321,17 +322,15 @@ public abstract class Operations
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path");
-			Operations.AllParams(params, "path", "format", "callback", "attributes");
+			Operations.AllParams(params, "path", "callback", "attributes");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 			List<SimpleAttribute> attributes = GetAttributes(params);
 
 			String callback = params.get("callback");
 
-			CheckFormat(format, callback);
 
 			if(entities.size() == 0)
-				return new RequestResult(E_RESULT_TYPE.ERROR, "empty entities lists - nothing to print");
+				return new RequestResult(RequestResult.EResultType.ERROR, "empty entities lists - nothing to print");
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
@@ -347,7 +346,7 @@ public abstract class Operations
 				}
 			}
 
-			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+			return new RequestResult(JSON, AutoFormat.PrintData(data, callback));
 		}
 	});
 
@@ -359,29 +358,27 @@ public abstract class Operations
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params, "path", "name");
-			Operations.AllParams(params, "path", "name", "format", "callback", "attributes");
+			Operations.AllParams(params, "path", "name", "callback", "attributes");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 
 			String name = params.get("name");
 			String callback = params.get("callback");
 
-			CheckFormat(format, callback);
 
 			if(entities.size() == 0)
-				return new RequestResult(E_RESULT_TYPE.ERROR, "empty entities lists - nothing to print");
+				return new RequestResult(RequestResult.EResultType.ERROR, "empty entities lists - nothing to print");
 
 			if(entities.size() > 1)
-				return new RequestResult(E_RESULT_TYPE.ERROR, "too many entities to print");
+				return new RequestResult(RequestResult.EResultType.ERROR, "too many entities to print");
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
 			for(Reaction reaction : entities.Only().GetAttribute(name).GetReactions())
 			{
-				data.add(reaction.GetRepresentation());
+				data.add(reaction.GetShortRepresentation());
 			}
 
-			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+			return new RequestResult(JSON, AutoFormat.PrintData(data, callback));
 		}
 	});
 
@@ -394,22 +391,20 @@ public abstract class Operations
 		public Object Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Operations.AllParams(params, "format", "callback");
+			Operations.AllParams(params, "callback");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 
 			String callback = params.get("callback");
-			CheckFormat(format, callback);
 
 			List<Map<String, Object>> result = new LinkedList<>();
 
 			for(Reaction reaction : controller.GetContext().model_service
 				.GetSuppressedReactions())
 			{
-				result.add(reaction.GetRepresentation());
+				result.add(reaction.GetShortRepresentation());
 			}
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintData(result, format, callback));
+			return new RequestResult(JSON, AutoFormat.PrintData(result, callback));
 		}
 	});
 
@@ -423,20 +418,18 @@ public abstract class Operations
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params);
-			Operations.AllParams(params, "format", "callback");
+			Operations.AllParams(params, "callback");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 			String callback = params.get("callback");
-			CheckFormat(format, callback);
 
 			List<Response> responses = CommonReactions.GetRegisteredResponses();
 
 			List<Map<String, Object>> result = new LinkedList<>();
 
 			for(Response response : responses)
-				result.add(response.GetRepresentation());
+				result.add(response.GetShortRepresentation());
 
-			return new RequestResult(format, AutoFormat.PrintData(result, format, callback));
+			return new RequestResult(JSON, AutoFormat.PrintData(result, callback));
 		}
 	});
 
@@ -450,11 +443,9 @@ public abstract class Operations
 			throws ExceptionParseError
 		{
 			Operations.RequiredParams(params);
-			Operations.AllParams(params, "format", "callback");
+			Operations.AllParams(params, "callback");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 			String callback = params.get("callback");
-			CheckFormat(format, callback);
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
@@ -474,7 +465,7 @@ public abstract class Operations
 				throw new ExceptionParseError(e);
 			}
 
-			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
+			return new RequestResult(JSON, AutoFormat.PrintData(data, callback));
 		}
 	});
 
@@ -501,12 +492,12 @@ public abstract class Operations
 			ModelEntity target = entities.Only();
 
 			if(target.GetSensor(name) == null)
-				return new RequestResult(E_RESULT_TYPE.ERROR
+				return new RequestResult(RequestResult.EResultType.ERROR
 					, "sesnor does not exist: " + name);
 
 			controller.Import(target, new SimpleAttribute(name, value));
 
-			return new RequestResult(E_RESULT_TYPE.TEXT
+			return new RequestResult(RequestResult.EResultType.TEXT
 				, "added to import queue");
 		}
 	});
@@ -540,7 +531,7 @@ public abstract class Operations
 					throw new ExceptionModelFail(e);
 				}
 
-				return new RequestResult(E_RESULT_TYPE.TEXT
+				return new RequestResult(RequestResult.EResultType.TEXT
 					, "attribute not found, but registered, import skipped");
 			}
 			else
@@ -548,7 +539,7 @@ public abstract class Operations
 				controller.Import(target, new SimpleAttribute(name, value));
 			}
 
-			return new RequestResult(E_RESULT_TYPE.TEXT
+			return new RequestResult(RequestResult.EResultType.TEXT
 				, "added to unchecked import queue");
 		}
 	});
@@ -578,7 +569,7 @@ public abstract class Operations
 			else if(count > 1)
 				data = "set valid attribute for each of " + count + " entities";
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, data);
+			return new RequestResult(RequestResult.EResultType.TEXT, data);
 		}
 	});
 
@@ -607,7 +598,7 @@ public abstract class Operations
 			else if(count > 1)
 				data = "set invalid attribute for each of " + count + " entities";
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, data);
+			return new RequestResult(RequestResult.EResultType.TEXT, data);
 		}
 	});
 
@@ -653,7 +644,7 @@ public abstract class Operations
 				}
 			}
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, res);
+			return new RequestResult(RequestResult.EResultType.TEXT, res);
 		}
 	});
 
@@ -696,7 +687,7 @@ public abstract class Operations
 				}
 			}
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, res);
+			return new RequestResult(RequestResult.EResultType.TEXT, res);
 		}
 	});
 
@@ -717,7 +708,7 @@ public abstract class Operations
 
 			controller.SetExit(true);
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, "quiting now");
+			return new RequestResult(RequestResult.EResultType.TEXT, "quiting now");
 		}
 	});
 
@@ -734,7 +725,7 @@ public abstract class Operations
 
 			Map<String, Object> result = RuntimeService.PerformSelfTest(controller);
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJson(Collections.singleton(result)));
+			return new RequestResult(RequestResult.EResultType.TEXT, AutoFormat.PrintJson(Collections.singleton(result)));
 		}
 	});
 
@@ -758,10 +749,10 @@ public abstract class Operations
 			controller.SetSilent(mode);
 
 			if(mode)
-				return new RequestResult(E_RESULT_TYPE.TEXT
+				return new RequestResult(RequestResult.EResultType.TEXT
 					, "silent mode activated - no reactions will be invoked");
 			else
-				return new RequestResult(E_RESULT_TYPE.TEXT
+				return new RequestResult(RequestResult.EResultType.TEXT
 					, "silent mode deactivated");
 		}
 	});
@@ -775,16 +766,14 @@ public abstract class Operations
 		public Object Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Operations.AllParams(params, "format", "callback");
+			Operations.AllParams(params, "callback");
 
-			E_FORMAT_PARAM format = GetFormat(params);
 
 			String callback = params.get("callback");
-			CheckFormat(format, callback);
 
 			List<Map<String, Object>> data = RuntimeService.MakeSnapshot(controller.GetContext().model_data);
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintData(data, format, callback));
+			return new RequestResult(RequestResult.EResultType.TEXT, AutoFormat.PrintData(data, callback));
 		}
 	});
 
@@ -799,9 +788,9 @@ public abstract class Operations
 		{
 			Operations.AllParams(params);
 
-			String result = AutoFormat.PrintNL(controller.GetStat());
+			String result = AutoFormat.PrintData(controller.GetStat(), null);
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, result);
+			return new RequestResult(RequestResult.EResultType.TEXT, result);
 		}
 	});
 
@@ -832,7 +821,7 @@ public abstract class Operations
 				throw new ExceptionParseError(e);
 			}
 
-			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintJson(result));
+			return new RequestResult(RequestResult.EResultType.TEXT, AutoFormat.PrintJson(result));
 		}
 	});
 

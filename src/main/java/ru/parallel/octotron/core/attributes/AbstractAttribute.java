@@ -9,11 +9,11 @@ package ru.parallel.octotron.core.attributes;
 import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.core.model.ModelID;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.UniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
-public abstract class AbstractAttribute extends UniqueID<EAttributeType> implements IAttribute
+public abstract class AbstractAttribute extends ModelID<EAttributeType> implements IAttribute
 {
 	public static final double EPSILON = 0.00001;
 

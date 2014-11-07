@@ -198,7 +198,7 @@ public class ExecutionController
 			{
 				Response response = reaction.Process();
 
-				if(reaction.GetState() == Reaction.STATE_NONE)
+				if(reaction.GetState() == Reaction.State.NONE)
 					reaction.RegisterPreparedResponse(null);
 
 				if(response == null)

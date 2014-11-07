@@ -145,7 +145,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("AID", reaction.GetID());
 
-			graph_object.UpdateAttribute("state", reaction.GetState());
+			graph_object.UpdateAttribute("state", reaction.GetState().toString());
 			graph_object.UpdateAttribute("stat", reaction.GetGlobalStat());
 
 			graph_object.UpdateAttribute("suppress", reaction.GetSuppress());
@@ -161,7 +161,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			GraphObject graph_object = CheckObject(reaction, reaction.GetType().toString());
 
-			reaction.SetState((Long) graph_object.GetAttribute("state"));
+			reaction.SetState(Reaction.State.valueOf((String) graph_object.GetAttribute("state")));
 			reaction.SetGlobalStat((Long) graph_object.GetAttribute("stat"));
 			reaction.SetSuppress((Boolean) graph_object.GetAttribute("suppress"));
 			reaction.SetDescription((String) graph_object.GetAttribute("descr"));
@@ -170,7 +170,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			GraphObject graph_object = GetObject(reaction);
 
-			graph_object.UpdateAttribute("state", reaction.GetState());
+			graph_object.UpdateAttribute("state", reaction.GetState().toString());
 			graph_object.UpdateAttribute("stat", reaction.GetGlobalStat());
 
 			graph_object.UpdateAttribute("suppress", reaction.GetSuppress());

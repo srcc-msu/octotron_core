@@ -9,7 +9,6 @@ package ru.parallel.octotron.http;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.io.IOUtils;
-import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,12 +52,12 @@ public class HttpExchangeWrapper
 		String content_type;
 		int return_code;
 
-		if(result.type == E_RESULT_TYPE.JSON)
+		if(result.type == RequestResult.EResultType.JSON)
 			content_type = "application/json";
 		else
 			content_type = "text/plain";
 
-		if(result.type == E_RESULT_TYPE.ERROR)
+		if(result.type == RequestResult.EResultType.ERROR)
 			return_code = HttpURLConnection.HTTP_BAD_REQUEST;
 		else
 			return_code = HttpURLConnection.HTTP_OK;

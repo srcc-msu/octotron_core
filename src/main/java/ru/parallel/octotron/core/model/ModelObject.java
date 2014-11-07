@@ -8,7 +8,7 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public class ModelObject extends ModelEntity
@@ -21,7 +21,7 @@ public class ModelObject extends ModelEntity
 
 	public ModelObject()
 	{
-		super(EEntityType.OBJECT);
+		super(EModelType.OBJECT);
 	}
 
 	@Override

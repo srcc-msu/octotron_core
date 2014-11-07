@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.graph;
 
-import ru.parallel.octotron.core.primitive.IUniqueID;
+import ru.parallel.octotron.core.primitive.ID;
 
 import java.util.List;
 
@@ -16,41 +16,41 @@ import java.util.List;
  * */
 public interface IGraph
 {
-	IUniqueID<EGraphType> AddObject();
+	ID<EGraphType> AddObject();
 
-	List<IUniqueID<EGraphType>> GetOutLinks(IUniqueID<EGraphType> id);
+	List<ID<EGraphType>> GetOutLinks(ID<EGraphType> id);
 
-	List<IUniqueID<EGraphType>> GetInLinks(IUniqueID<EGraphType> id);
+	List<ID<EGraphType>> GetInLinks(ID<EGraphType> id);
 
-	List<String> GetObjectAttributes(IUniqueID<EGraphType> id);
-	void DeleteObjectAttribute(IUniqueID<EGraphType> id, String name);
-	boolean TestObjectAttribute(IUniqueID<EGraphType> id, String name);
+	List<String> GetObjectAttributes(ID<EGraphType> id);
+	void DeleteObjectAttribute(ID<EGraphType> id, String name);
+	boolean TestObjectAttribute(ID<EGraphType> id, String name);
 
-	void DeleteObject(IUniqueID<EGraphType> id);
-
-// ----------------------------------------------------------
-// **********************************************************
-// ----------------------------------------------------------
-
-	IUniqueID<EGraphType> AddLink(IUniqueID<EGraphType> source, IUniqueID<EGraphType> target, String link_type);
-
-	IUniqueID<EGraphType> GetLinkTarget(IUniqueID<EGraphType> id);
-	IUniqueID<EGraphType> GetLinkSource(IUniqueID<EGraphType> id);
-
-	List<String> GetLinkAttributes(IUniqueID<EGraphType> id);
-	void DeleteLinkAttribute(IUniqueID<EGraphType> id, String name);
-	boolean TestLinkAttribute(IUniqueID<EGraphType> id, String name);
-
-	void DeleteLink(IUniqueID<EGraphType> id);
+	void DeleteObject(ID<EGraphType> id);
 
 // ----------------------------------------------------------
 // **********************************************************
 // ----------------------------------------------------------
 
-	void AddNodeLabel(IUniqueID<EGraphType> id, String label);
-	boolean TestNodeLabel(IUniqueID<EGraphType> id, String label);
+	ID<EGraphType> AddLink(ID<EGraphType> source, ID<EGraphType> target, String link_type);
 
-	List<IUniqueID<EGraphType>> GetAllLabeledNodes(String label);
+	ID<EGraphType> GetLinkTarget(ID<EGraphType> id);
+	ID<EGraphType> GetLinkSource(ID<EGraphType> id);
+
+	List<String> GetLinkAttributes(ID<EGraphType> id);
+	void DeleteLinkAttribute(ID<EGraphType> id, String name);
+	boolean TestLinkAttribute(ID<EGraphType> id, String name);
+
+	void DeleteLink(ID<EGraphType> id);
+
+// ----------------------------------------------------------
+// **********************************************************
+// ----------------------------------------------------------
+
+	void AddNodeLabel(ID<EGraphType> id, String label);
+	boolean TestNodeLabel(ID<EGraphType> id, String label);
+
+	List<ID<EGraphType>> GetAllLabeledNodes(String label);
 
 // ----------------------------------------------------------
 // **********************************************************
@@ -58,21 +58,21 @@ public interface IGraph
 
 	IIndex GetIndex();
 
-	List<IUniqueID<EGraphType>> GetAllObjects();
-	List<IUniqueID<EGraphType>> GetAllLinks();
+	List<ID<EGraphType>> GetAllObjects();
+	List<ID<EGraphType>> GetAllLinks();
 
-	void SetObjectAttribute(IUniqueID<EGraphType> id, String name, Object value);
+	void SetObjectAttribute(ID<EGraphType> id, String name, Object value);
 
-	Object GetObjectAttribute(IUniqueID<EGraphType> id, String name);
+	Object GetObjectAttribute(ID<EGraphType> id, String name);
 
-	Object GetLinkAttribute(IUniqueID<EGraphType> id, String name);
+	Object GetLinkAttribute(ID<EGraphType> id, String name);
 
-	void SetLinkAttribute(IUniqueID<EGraphType> id, String name, Object value);
+	void SetLinkAttribute(ID<EGraphType> id, String name, Object value);
 
 // ----------------------------------------------------------
 // **********************************************************
 // ----------------------------------------------------------
 
-	String ExportDot(List<IUniqueID<EGraphType>> uids);
+	String ExportDot(List<ID<EGraphType>> uids);
 }
 

@@ -8,33 +8,25 @@ package ru.parallel.octotron.core.primitive;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class UniqueID<T> implements IUniqueID<T>
+public class ID<T> implements IUniqueID<T>
 {
-	private static AtomicLong static_id = new AtomicLong(0);
-
 	private final long id;
 	private final T type;
 
-	public UniqueID(long id, T type)
+	public ID(long id, T type)
 	{
 		this.type = type;
 		this.id = id;
 	}
 
-	public UniqueID(T type)
-	{
-		this.type = type;
-		this.id = static_id.incrementAndGet();
-	}
-
 	@Override
-	public long GetID()
+	public final long GetID()
 	{
 		return id;
 	}
 
 	@Override
-	public T GetType()
+	public final T GetType()
 	{
 		return type;
 	}
@@ -42,10 +34,10 @@ public class UniqueID<T> implements IUniqueID<T>
 	@Override
 	public final boolean equals(Object object)
 	{
-		if(!(object instanceof UniqueID))
+		if(!(object instanceof ID))
 			return false;
 
-		UniqueID<?> cmp = ((UniqueID<?>)object);
+		ID<?> cmp = ((ID<?>)object);
 
 		return id == cmp.id && type.equals(cmp.type);
 	}

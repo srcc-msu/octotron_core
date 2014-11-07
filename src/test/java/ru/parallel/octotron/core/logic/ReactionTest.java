@@ -49,8 +49,8 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(entity.GetAttribute("test").GetReactions(), 0);
 
-		reaction.SetState(0);
-		reaction.SetState(1);
+		reaction.SetState(Reaction.State.NONE);
+		reaction.SetState(Reaction.State.STARTED);
 	}
 
 	@Test
@@ -71,18 +71,18 @@ public class ReactionTest
 		Reaction reaction2
 			= Iterables.get(entity.GetAttribute("test").GetReactions(), 1);
 
-		assertEquals(0, reaction1.GetState());
-		assertEquals(0, reaction2.GetState());
+		assertEquals(Reaction.State.NONE, reaction1.GetState());
+		assertEquals(Reaction.State.NONE, reaction2.GetState());
 
-		reaction1.SetState(1);
+		reaction1.SetState(Reaction.State.STARTED);
 
-		assertEquals(1, reaction1.GetState());
-		assertEquals(0, reaction2.GetState());
+		assertEquals(Reaction.State.STARTED, reaction1.GetState());
+		assertEquals(Reaction.State.NONE, reaction2.GetState());
 
-		reaction2.SetState(2);
+		reaction2.SetState(Reaction.State.EXECUTED);
 
-		assertEquals(1, reaction1.GetState());
-		assertEquals(2, reaction2.GetState());
+		assertEquals(Reaction.State.STARTED, reaction1.GetState());
+		assertEquals(Reaction.State.EXECUTED, reaction2.GetState());
 	}
 
 	@Test

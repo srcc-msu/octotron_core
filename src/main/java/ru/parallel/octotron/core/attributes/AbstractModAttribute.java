@@ -128,10 +128,22 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	}
 
 	@Override
-	public Map<String, Object> GetRepresentation()
+	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
 
+		result.put(GetName(), GetValue());
+
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetLongRepresentation()
+	{
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("AID", GetID());
+		result.put("parent", GetParent().GetID());
 		result.put("name", GetName());
 		result.put("value", GetValue());
 		result.put("is_valid", GetIsValid());

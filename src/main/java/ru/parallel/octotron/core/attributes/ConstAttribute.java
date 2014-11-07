@@ -37,12 +37,6 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	}
 
 	@Override
-	public EAttributeType GetType()
-	{
-		return EAttributeType.CONST;
-	}
-
-	@Override
 	public Reaction GetReaction(long id)
 	{
 		throw new ExceptionModelFail(err_msg + "GetReaction");
@@ -78,12 +72,25 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	}
 
 	@Override
-	public Map<String, Object> GetRepresentation()
+	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
 
+		result.put("AID", GetID());
+		result.put("parent", GetParent().GetID());
+
 		result.put("name", GetName());
 		result.put("value", GetValue());
+
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetShortRepresentation()
+	{
+		Map<String, Object> result = new HashMap<>();
+
+		result.put(GetName(), GetValue());
 
 		return result;
 	}

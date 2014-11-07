@@ -6,16 +6,16 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.IPresentable;
+import ru.parallel.octotron.core.primitive.ELogicalType;
+import ru.parallel.octotron.core.primitive.EModelType;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.model.IModelAttribute;
-import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.UniqueID;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ReactionTemplate extends UniqueID<EEntityType> implements IPresentable
+public abstract class ReactionTemplate extends LogicID<ELogicalType> implements IPresentable
 {
 	private final String check_name;
 	private final Object check_value;
@@ -29,7 +29,7 @@ public abstract class ReactionTemplate extends UniqueID<EEntityType> implements 
 
 	public ReactionTemplate(String check_name, Object check_value)
 	{
-		super(EEntityType.REACTION_TEMPLATE);
+		super(ELogicalType.REACTION_TEMPLATE);
 
 		this.check_name = check_name;
 		this.check_value = SimpleAttribute.ConformType(check_value);
@@ -106,18 +106,33 @@ public abstract class ReactionTemplate extends UniqueID<EEntityType> implements 
 		return this;
 	}
 
-	public Map<String, Object> GetRepresentation()
+	@Override
+	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
-
 		result.put("AID", GetID());
 
 		result.put("check_value", GetCheckValue());
 		result.put("check_name", GetCheckName());
 
-		result.put("delay_config", GetDelay());
-		result.put("repeat_config", GetRepeat());
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetLongRepresentation()
+	{
+		Map<String, Object> result = GetShortRepresentation();
+
+		result.put("wait_delay", GetDelay());
+		result.put("wait_repeat", GetRepeat());
 		result.put("repeatable", IsRepeatable());
+
+		result.put("response", response.GetID());
+
+		if(recover_response != null)
+			result.put("recover_response", recover_response.GetID());
+		else
+			result.put("recover_response", -1);
 
 		return result;
 	}

@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.IPresentable;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.attributes.IAttributeBuilder;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
@@ -16,7 +16,7 @@ import ru.parallel.octotron.core.primitive.IUniqueID;
 
 import java.util.Collection;
 
-public interface IModelAttribute extends IAttribute, IUniqueID<EAttributeType>, IPresentable
+public interface IModelAttribute extends IUniqueID<EAttributeType>, IAttribute, IPresentable
 {
 	boolean CheckValid();
 	void SetValid();

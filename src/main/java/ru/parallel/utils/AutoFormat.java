@@ -6,7 +6,7 @@
 
 package ru.parallel.utils;
 
-import ru.parallel.octotron.core.IPresentable;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
@@ -16,27 +16,25 @@ import static ru.parallel.utils.JavaUtils.Quotify;
 
 public class AutoFormat
 {
-	public enum E_FORMAT_PARAM { PLAIN, JSON, JSONP, NONE}
-
-	public static String PrintData(Collection<Map<String, Object>> data, E_FORMAT_PARAM format, String callback)
+	public static String PrintData(Object data, String callback)
 	{
-		switch (format)
-		{
-			case PLAIN:
-				return PrintNL(data);
-
-			case JSON:
-				return PrintJson(data);
-
-			case JSONP:
-				return PrintJsonp(data, callback);
-
-			default:
-				throw new IllegalArgumentException("unsupported format " + format);
-		}
+		if(callback == null)
+			return PrintJson(data);
+		else
+			return PrintJsonp(data, callback);
 	}
 
-	public static String PrintJsonp(Collection<Map<String, Object>> data, String callback)
+	public static String PrintJson(Object data)
+	{
+		if(data instanceof Map)
+			return PrintJson((Map<String, Object>) data);
+		if(data instanceof Collection)
+			return PrintJson((Collection<Object>) data);
+		else
+			return SimpleAttribute.ValueToStr(data);
+	}
+
+	public static String PrintJsonp(Object data, String callback)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -104,32 +102,7 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintJson(Object data)
-	{
-		if(data instanceof IPresentable)
-			return PrintJson(((IPresentable)data).GetRepresentation());
-		if(data instanceof Map)
-			return PrintJson((Map<String, Object>) data);
-		if(data instanceof Collection)
-			return PrintJson((Collection<Object>) data);
-		if(data instanceof EEventStatus)
-			return PrintJson(data.toString());
-		else
-			return SimpleAttribute.ValueToStr(data);
-	}
-
-/*
-	public static String PrintJson(Collection<Map<String, Object>> data)
-	{
-		List<String> strings = new LinkedList<>();
-
-		for(Map<String, Object> dict : data)
-			strings.add(PrintJson(dict));
-
-		return PrintJson(strings);
-	}*/
-
-	public static String PrintNL(Collection<Map<String, Object>> data)
+/*	public static String PrintNL(Collection<Map<String, Object>> data)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -180,5 +153,5 @@ public class AutoFormat
 		}
 
 		return result.toString();
-	}
+	}*/
 }

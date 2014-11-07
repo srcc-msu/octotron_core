@@ -1,9 +1,6 @@
 package ru.parallel.octotron.reactions;
 
 import com.google.common.collect.Iterators;
-import ru.parallel.octotron.core.attributes.ConstAttribute;
-import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
@@ -13,7 +10,7 @@ import ru.parallel.octotron.core.model.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EEntityType;
+import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
@@ -55,7 +52,7 @@ public class PreparedResponseFactory
 		ModelLinkList links = new ModelLinkList();
 		ModelObjectList objects = new ModelObjectList();
 
-		if(entity.GetType() == EEntityType.LINK)
+		if(entity.GetType() == EModelType.LINK)
 		{
 			ModelLink link = (ModelLink) entity;
 
@@ -63,7 +60,7 @@ public class PreparedResponseFactory
 			objects.add(link.Source());
 			objects.add(link.Target());
 		}
-		else if(entity.GetType() == EEntityType.OBJECT)
+		else if(entity.GetType() == EModelType.OBJECT)
 		{
 			ModelObject object = (ModelObject) entity;
 
@@ -118,37 +115,7 @@ public class PreparedResponseFactory
 
 	private void FillModel(PreparedResponse prepared_response, ModelEntity entity, Reaction reaction)
 	{
-		List<Map<String, Object>> const_list = new LinkedList<>();
-		for(ConstAttribute attribute : entity.GetConst())
-		{
-			Map<String, Object> const_map = new HashMap<>();
-			const_map.put(attribute.GetName(), attribute.GetValue());
-			const_list.add(const_map);
-		}
-
-		List<Map<String, Object>> sensor_list = new LinkedList<>();
-		for(SensorAttribute attribute : entity.GetSensor())
-		{
-			Map<String, Object> sensor_map = new HashMap<>();
-			sensor_map.put(attribute.GetName(), attribute.GetValue());
-			sensor_list.add(sensor_map);
-		}
-
-		List<Map<String, Object>> var_list = new LinkedList<>();
-		for(VarAttribute attribute : entity.GetVar())
-		{
-			Map<String, Object> var_map = new HashMap<>();
-			var_map.put(attribute.GetName(), attribute.GetValue());
-			var_list.add(var_map);
-		}
-
-		Map<String, Object> entity_map = new HashMap<>();
-
-		entity_map.put("const", const_list);
-		entity_map.put("sensor", sensor_list);
-		entity_map.put("var", var_list);
-
-		prepared_response.model.put("entity", entity_map);
+		prepared_response.model.put("entity", entity.GetLongRepresentation());
 	}
 
 	private void FillInfo(PreparedResponse prepared_response, Response response)
@@ -182,7 +149,7 @@ public class PreparedResponseFactory
 	{
 		String where;
 
-		if(entity.GetType() == EEntityType.OBJECT)
+		if(entity.GetType() == EModelType.OBJECT)
 			where = String.format("obj(AID==%d).%s.uniq()", entity.GetID(), path);
 		else
 			where = String.format("link(AID==%d).%s.uniq()", entity.GetID(), path);

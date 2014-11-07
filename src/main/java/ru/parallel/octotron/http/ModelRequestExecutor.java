@@ -70,7 +70,7 @@ public class ModelRequestExecutor implements Runnable
 
 			LOGGER.log(Level.WARNING, msg);
 
-			return new RequestResult(RequestResult.E_RESULT_TYPE.ERROR, msg);
+			return new RequestResult(RequestResult.EResultType.ERROR, msg);
 		}
 	}
 

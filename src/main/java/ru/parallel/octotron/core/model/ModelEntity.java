@@ -6,13 +6,13 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.primitive.EEventStatus;
+import ru.parallel.octotron.core.primitive.EModelType;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.reactions.PreparedResponse;
 

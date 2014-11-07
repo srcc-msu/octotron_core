@@ -1,7 +1,9 @@
-package ru.parallel.octotron.http;
+package ru.parallel.octotron.http.path;
 
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.http.path.PathOperations;
+import ru.parallel.octotron.http.path.PathParser;
 
 import static org.junit.Assert.assertEquals;
 

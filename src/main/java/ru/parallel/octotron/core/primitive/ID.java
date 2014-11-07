@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.core.primitive;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 public class ID<T> implements IUniqueID<T>
 {
 	private final long id;

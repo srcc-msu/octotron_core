@@ -4,11 +4,13 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.http;
+package ru.parallel.octotron.http.requests;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.io.IOUtils;
+import ru.parallel.utils.format.ErrorString;
+import ru.parallel.utils.format.TypedString;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,23 +48,17 @@ public class HttpExchangeWrapper
  * finish the current request, fill content_type and<br>
  * return code with data from result<br>
  * */
-	public void Finish(RequestResult result)
+	public void Finish(TypedString result)
 		throws IOException
 	{
-		String content_type;
 		int return_code;
 
-		if(result.type == RequestResult.EResultType.JSON)
-			content_type = "application/json";
-		else
-			content_type = "text/plain";
-
-		if(result.type == RequestResult.EResultType.ERROR)
+		if(result instanceof ErrorString)
 			return_code = HttpURLConnection.HTTP_BAD_REQUEST;
 		else
 			return_code = HttpURLConnection.HTTP_OK;
 
-		Finish(result.data, content_type, return_code);
+		Finish(result.string, result.GetContentType(), return_code);
 	}
 
 /**

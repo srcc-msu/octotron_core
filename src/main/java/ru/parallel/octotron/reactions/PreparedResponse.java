@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.reactions;
 
-import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -98,7 +97,7 @@ import java.util.logging.Logger;
 	@Override
  	public void run()
 	{
-		String log_string = AutoFormat.PrintJson(GetRepresentation());
+		String log_string = AutoFormat.FormatJson(GetRepresentation());
 
 		if(!response.IsSuppress())
 		{

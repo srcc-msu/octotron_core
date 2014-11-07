@@ -4,13 +4,11 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.http;
+package ru.parallel.octotron.http.path;
 
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.http.PathOperations.CHAIN_TYPE;
-import ru.parallel.octotron.http.PathOperations.PathToken;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,7 +28,7 @@ public final class PathParser
  * tokens that are allowed in modify area<br>
  * this area is used for import and direct model manipulations<br>
  * */
-	static final PathToken[] TOKENS =
+	static final PathOperations.PathToken[] TOKENS =
 	{
 		PathOperations.obj, PathOperations.link
 		, PathOperations.q
@@ -119,10 +117,10 @@ public final class PathParser
 // matches <id><optional dot>
 	private static final Pattern token_pattern = Pattern.compile("([a-zA-Z_\\-]+)(\\(([^)]*)\\))?\\.?");
 
-	static List<PathToken> ParseTokens(String path)
+	static List<PathOperations.PathToken> ParseTokens(String path)
 		throws ExceptionParseError
 	{
-		List<PathToken> result = new LinkedList<>();
+		List<PathOperations.PathToken> result = new LinkedList<>();
 
 		Matcher matcher = token_pattern.matcher(path);
 
@@ -146,9 +144,9 @@ public final class PathParser
 			else
 				throw new ExceptionParseError("could not parse path");
 
-			PathToken base_token = null;
+			PathOperations.PathToken base_token = null;
 
-			for(PathToken token : TOKENS)
+			for(PathOperations.PathToken token : TOKENS)
 				if (token.GetName().equals(name))
 				{
 					base_token = token;
@@ -158,7 +156,7 @@ public final class PathParser
 			if(base_token == null)
 				throw new ExceptionParseError("unknown path token: " + name);
 
-			result.add(new PathToken(base_token, StrToAttrList(params)));
+			result.add(new PathOperations.PathToken(base_token, StrToAttrList(params)));
 
 			last = matcher.end();
 		}
@@ -175,23 +173,23 @@ public final class PathParser
  * returns type of the last token if succeeded<br>
  * throws ExceptionParseError otherwise<br>
  * */
-	private static void TypeCheck(List<PathToken> tokens)
+	private static void TypeCheck(List<PathOperations.PathToken> tokens)
 		throws ExceptionParseError
 	{
 		if(tokens.isEmpty())
 			throw new ExceptionParseError("empty request");
 
-		CHAIN_TYPE type = CHAIN_TYPE.E_START;
+		PathOperations.CHAIN_TYPE type = PathOperations.CHAIN_TYPE.E_START;
 
-		for(PathToken token : tokens)
+		for(PathOperations.PathToken token : tokens)
 		{
-			if(token.GetIn() == CHAIN_TYPE.E_ANY)
+			if(token.GetIn() == PathOperations.CHAIN_TYPE.E_ANY)
 			{
 				type = token.GetOut();
 				continue;
 			}
 
-			else if(token.GetIn() == CHAIN_TYPE.E_MATCH)
+			else if(token.GetIn() == PathOperations.CHAIN_TYPE.E_MATCH)
 			{
 				continue;
 			}
@@ -216,7 +214,7 @@ public final class PathParser
 	{
 		try
 		{
-			List<PathToken> tokens = ParseTokens(path);
+			List<PathOperations.PathToken> tokens = ParseTokens(path);
 
 			TypeCheck(tokens);
 

@@ -7,9 +7,9 @@
 package ru.parallel.octotron.core.logic;
 
 import com.google.common.collect.ObjectArrays;
+import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.ELogicalType;
 import ru.parallel.octotron.core.primitive.IPresentable;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 

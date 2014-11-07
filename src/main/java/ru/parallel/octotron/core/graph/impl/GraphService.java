@@ -9,7 +9,6 @@ package ru.parallel.octotron.core.graph.impl;
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.primitive.ID;
-import ru.parallel.octotron.core.primitive.ID;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 

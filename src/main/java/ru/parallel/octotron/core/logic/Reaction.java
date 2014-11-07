@@ -6,10 +6,9 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.primitive.ELogicalType;
-import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.primitive.ELogicalType;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
 

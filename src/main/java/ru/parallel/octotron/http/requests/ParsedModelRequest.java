@@ -4,9 +4,10 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.http;
+package ru.parallel.octotron.http.requests;
 
-import ru.parallel.octotron.http.Operations.Operation;
+
+import ru.parallel.octotron.http.operations.Operation;
 
 import java.util.Map;
 

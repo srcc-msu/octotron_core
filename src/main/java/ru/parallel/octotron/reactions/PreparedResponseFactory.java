@@ -14,11 +14,14 @@ import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.http.ParsedPath;
-import ru.parallel.octotron.http.PathParser;
+import ru.parallel.octotron.http.path.ParsedPath;
+import ru.parallel.octotron.http.path.PathParser;
 import ru.parallel.utils.JavaUtils;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

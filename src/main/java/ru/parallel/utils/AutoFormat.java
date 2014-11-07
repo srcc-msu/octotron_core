@@ -6,9 +6,11 @@
 
 package ru.parallel.utils;
 
-import ru.parallel.octotron.core.primitive.IPresentable;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.utils.format.JsonpString;
+import ru.parallel.utils.format.JsonString;
+import ru.parallel.utils.format.TypedString;
 
 import java.util.*;
 
@@ -16,25 +18,29 @@ import static ru.parallel.utils.JavaUtils.Quotify;
 
 public class AutoFormat
 {
-	public static String PrintData(Object data, String callback)
+	public static JsonpString ToJsonp(TypedString data, String callback)
 	{
-		if(callback == null)
-			return PrintJson(data);
-		else
-			return PrintJsonp(data, callback);
+		return new JsonpString(FormatJsonp(data, callback));
 	}
 
-	public static String PrintJson(Object data)
+	public static JsonString PrintJson(Object data)
 	{
+		return new JsonString(FormatJson(data));
+	}
+
+	public static String FormatJson(Object data)
+	{
+		if(data instanceof JsonString)
+			return ((JsonString) data).string;
 		if(data instanceof Map)
-			return PrintJson((Map<String, Object>) data);
+			return FormatJson((Map<String, Object>) data);
 		if(data instanceof Collection)
-			return PrintJson((Collection<Object>) data);
+			return FormatJson((Collection<Object>) data);
 		else
 			return SimpleAttribute.ValueToStr(data);
 	}
 
-	public static String PrintJsonp(Object data, String callback)
+	public static String FormatJsonp(Object data, String callback)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -48,7 +54,7 @@ public class AutoFormat
 		result.append(Quotify("data")).append(':')
 			.append(System.lineSeparator());
 
-		result.append(PrintJson(data))
+		result.append(FormatJson(data))
 			.append(System.lineSeparator());
 
 		result.append("})");
@@ -56,7 +62,7 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintJson(Map<String, Object> data)
+	public static String FormatJson(Map<String, Object> data)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -68,7 +74,7 @@ public class AutoFormat
 		String inner_prefix = "";
 		for(String name : names)
 		{
-			String string_value = PrintJson(data.get(name));
+			String string_value = FormatJson(data.get(name));
 
 			result.append(inner_prefix)
 				.append(Quotify(name))
@@ -83,7 +89,7 @@ public class AutoFormat
 		return result.toString();
 	}
 
-	public static String PrintJson(Collection<Object> data)
+	public static String FormatJson(Collection<Object> data)
 	{
 		StringBuilder result = new StringBuilder();
 
@@ -93,7 +99,7 @@ public class AutoFormat
 
 		for(Object string : data)
 		{
-			result.append(prefix).append(PrintJson(string));
+			result.append(prefix).append(FormatJson(string));
 			prefix = ",";
 		}
 

@@ -4,11 +4,11 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.http;
+package ru.parallel.octotron.http.requests;
 
-import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.utils.format.ErrorString;
+import ru.parallel.utils.format.TypedString;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -38,27 +38,18 @@ public class ModelRequestExecutor implements Runnable
 		this(controller, request, null);
 	}
 
-	public RequestResult GetResult()
+	public TypedString GetResult()
 	{
 		try
 		{
-			ModelList<? extends ModelEntity, ?> entity_list = null;
-
-			String path = request.params.get("path");
-
-			if(path != null)
-				entity_list = PathParser.Parse(path)
-					.Execute(controller.GetContext().model_data);
-
-			return (RequestResult) request.operation
-				.Execute(controller, request.params, entity_list);
+			return request.operation.ExecuteOperation(controller, request.params);
 		}
 		catch(Exception e)
 		{
 			String msg = "could not execute request: "
-				+ request.GetQuery() + System.lineSeparator();
+				+ request.operation.GetName() + "?" + request.GetQuery() + System.lineSeparator();
 
-			msg += e + System.lineSeparator();
+			msg += e.getMessage() + System.lineSeparator();
 
 			for(StackTraceElement s : e.getStackTrace())
 				msg += System.lineSeparator() + s;
@@ -70,14 +61,14 @@ public class ModelRequestExecutor implements Runnable
 
 			LOGGER.log(Level.WARNING, msg);
 
-			return new RequestResult(RequestResult.EResultType.ERROR, msg);
+			return new ErrorString(e.getMessage());
 		}
 	}
 
 	@Override
 	public void run()
 	{
-		RequestResult result = GetResult();
+		TypedString result = GetResult();
 
 		if(exchange != null)
 		{

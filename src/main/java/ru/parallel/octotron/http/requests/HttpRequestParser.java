@@ -4,10 +4,13 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.http;
+package ru.parallel.octotron.http.requests;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.http.Operations.Operation;
+import ru.parallel.octotron.http.operations.Control;
+import ru.parallel.octotron.http.operations.Modify;
+import ru.parallel.octotron.http.operations.Operation;
+import ru.parallel.octotron.http.operations.View;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,12 +30,12 @@ public class HttpRequestParser
 	 * */
 	private static final Operation[] VIEW_OPERATIONS =
 	{
-		Operations.version
-		, Operations.count
-		, Operations.p
-		, Operations.p_react
-		, Operations.p_const, Operations.p_sensor, Operations.p_var
-		, Operations.show_suppressed, Operations.show_r
+		new View.version()
+		, new View.count()
+		, new View.p()
+		, new View.p_react()
+		, new View.p_const(), new View.p_sensor(), new View.p_var()
+		, new View.show_suppressed(), new View.show_r()
 	};
 
 	/**
@@ -41,9 +44,9 @@ public class HttpRequestParser
 	 * */
 	private static final Operation[] MODIFY_OPERATIONS =
 	{
-		Operations.import_token, Operations.unchecked_import_token
-		, Operations.set_valid, Operations.set_invalid
-		, Operations.suppress, Operations.unsuppress
+		new Modify.import_token(), new Modify.unchecked_import_token()
+		, new Modify.set_valid(), new Modify.set_invalid()
+		, new Modify.suppress(), new Modify.unsuppress()
 	};
 
 	/**
@@ -52,9 +55,9 @@ public class HttpRequestParser
 	 * */
 	private static final Operation[] CONTROL_OPERATIONS =
 	{
-		Operations.quit, Operations.mode
-		, Operations.snapshot, Operations.selftest
-		, Operations.stat, Operations.mod_time
+		new Control.quit(), new Control.mode()
+		, new Control.snapshot(), new Control.selftest()
+		, new Control.stat(), new Control.mod_time()
 	};
 
 	/**

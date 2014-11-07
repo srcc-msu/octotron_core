@@ -1,4 +1,4 @@
-package ru.parallel.octotron.http;
+package ru.parallel.octotron.http.requests;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -14,6 +14,9 @@ import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.http.DummyHTTPServer;
+import ru.parallel.utils.format.ErrorString;
+import ru.parallel.utils.format.TypedString;
 
 import static org.junit.Assert.fail;
 
@@ -87,12 +90,12 @@ public class RequestEmulationTest
 
 		ParsedModelRequest parsed_request = HttpRequestParser.ParseFromExchange(request);
 
-		RequestResult result = new ModelRequestExecutor(controller, parsed_request).GetResult();
+		TypedString result = new ModelRequestExecutor(controller, parsed_request).GetResult();
 
-		if(result.type.equals(RequestResult.EResultType.ERROR))
-			throw new ExceptionParseError(result.data);
+		if(result instanceof ErrorString)
+			throw new ExceptionParseError(result.string);
 
-		return result.data;
+		return result.string;
 	}
 
 	@Test

@@ -14,7 +14,6 @@ import org.neo4j.graphdb.index.ReadableIndex;
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IIndex;
 import ru.parallel.octotron.core.primitive.ID;
-import ru.parallel.octotron.core.primitive.ID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.LinkedList;

@@ -9,6 +9,7 @@ package ru.parallel.octotron.core.primitive;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.utils.JavaUtils;
+import ru.parallel.utils.format.JsonString;
 
 import java.text.DecimalFormat;
 

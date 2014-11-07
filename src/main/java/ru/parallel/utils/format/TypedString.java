@@ -4,13 +4,14 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.primitive;
+package ru.parallel.utils.format;
 
-public class JsonString
+public abstract class TypedString
 {
 	public final String string;
-	public JsonString(String string)
+	public TypedString(String string)
 	{
 		this.string = string;
 	}
+	public abstract String GetContentType();
 }

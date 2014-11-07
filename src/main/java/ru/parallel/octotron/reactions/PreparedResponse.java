@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.reactions;
 
+import ru.parallel.octotron.core.IPresentable;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -67,7 +68,7 @@ import java.util.logging.Logger;
  *         {...},
  *     ]
  * */
- public class PreparedResponse implements Runnable
+ public class PreparedResponse implements Runnable, IPresentable
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
@@ -97,7 +98,7 @@ import java.util.logging.Logger;
 	@Override
  	public void run()
 	{
-		String log_string = AutoFormat.PrintJson(GetFullInfo());
+		String log_string = AutoFormat.PrintJson(GetRepresentation());
 
 		if(!response.IsSuppress())
 		{
@@ -135,7 +136,7 @@ import java.util.logging.Logger;
 		}
 	}
 
-	public Map<String, Object> GetFullInfo()
+	public Map<String, Object> GetRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
 

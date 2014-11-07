@@ -81,30 +81,9 @@ public class PreparedResponseFactory
 			ModelEntity surround = it.next();
 			for(PreparedResponse surround_responses : surround.GetPreparedResponses())
 			{
-				Map<String, Object> map = new HashMap<>();
+				Map<String, Object> map = surround_responses.GetRepresentation();
 
-				map.put("entity.AID", surround.GetID());
-
-				map.put("attribute.AID", surround_responses.GetReaction().GetAttribute().GetID());
-				map.put("attribute.name", surround_responses.GetReaction().GetAttribute().GetName());
-				map.put("attribute.value", surround_responses.GetReaction().GetAttribute().GetValue());
-
-				map.put("reaction.AID", surround_responses.GetReaction().GetID());
-				map.put("reaction.status", surround_responses.GetReaction().GetTemplate().GetResponse().GetStatus());
-
-				String tag = (String)surround_responses.usr.get("tag");
-				String place = (String)surround_responses.usr.get("place");
-				String descr = (String)surround_responses.usr.get("descr");
-
-				// TODO, rework
-				if(tag != null)
-					map.put("reaction.tag", tag);
-
-				if(place != null)
-					map.put("reaction.place", place);
-
-				if(descr != null)
-					map.put("reaction.descr", descr);
+				map.remove("surround");
 
 				prepared_response.surround.add(map);
 			}

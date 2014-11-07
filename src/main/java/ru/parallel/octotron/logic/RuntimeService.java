@@ -67,7 +67,7 @@ public class RuntimeService
 		{
 			for(PreparedResponse response : entity.GetPreparedResponses())
 			{
-				result.add(response.GetFullInfo());
+				result.add(response.GetRepresentation());
 			}
 		}
 

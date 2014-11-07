@@ -15,7 +15,9 @@ import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 {
@@ -73,5 +75,16 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	public Collection<Reaction> GetReactions()
 	{
 		return new LinkedList<>();
+	}
+
+	@Override
+	public Map<String, Object> GetRepresentation()
+	{
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("name", GetName());
+		result.put("value", GetValue());
+
+		return result;
 	}
 }

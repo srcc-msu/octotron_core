@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core.logic;
 
+import ru.parallel.octotron.core.IPresentable;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.primitive.EEntityType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -14,7 +15,7 @@ import ru.parallel.octotron.core.primitive.UniqueID;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ReactionTemplate extends UniqueID<EEntityType>
+public abstract class ReactionTemplate extends UniqueID<EEntityType> implements IPresentable
 {
 	private final String check_name;
 	private final Object check_value;
@@ -105,7 +106,7 @@ public abstract class ReactionTemplate extends UniqueID<EEntityType>
 		return this;
 	}
 
-	public Map<String, Object> GetInfo()
+	public Map<String, Object> GetRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
 

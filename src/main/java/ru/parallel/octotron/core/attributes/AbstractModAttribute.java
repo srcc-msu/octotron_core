@@ -126,4 +126,17 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	{
 		return reactions.values();
 	}
+
+	@Override
+	public Map<String, Object> GetRepresentation()
+	{
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("name", GetName());
+		result.put("value", GetValue());
+		result.put("is_valid", GetIsValid());
+		result.put("ctime", GetCTime());
+
+		return result;
+	}
 }

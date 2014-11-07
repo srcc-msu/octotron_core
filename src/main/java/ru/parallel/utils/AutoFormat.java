@@ -6,6 +6,7 @@
 
 package ru.parallel.utils;
 
+import ru.parallel.octotron.core.IPresentable;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
@@ -105,6 +106,8 @@ public class AutoFormat
 
 	public static String PrintJson(Object data)
 	{
+		if(data instanceof IPresentable)
+			return PrintJson(((IPresentable)data).GetRepresentation());
 		if(data instanceof Map)
 			return PrintJson((Map<String, Object>) data);
 		if(data instanceof Collection)

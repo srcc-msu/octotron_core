@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.logic;
 
 import com.google.common.collect.ObjectArrays;
+import ru.parallel.octotron.core.IPresentable;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -16,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Response
+public class Response implements IPresentable
 {
 	private final EEventStatus status;
 
@@ -109,5 +110,17 @@ public class Response
 			throw new ExceptionParseError("tag not found: " + string);
 
 		return string.substring(pos + 1);
+	}
+
+	@Override
+	public Map<String, Object> GetRepresentation()
+	{
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("status", status.toString());
+
+		result.putAll(GetMessages());
+
+		return result;
 	}
 }

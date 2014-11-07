@@ -8,6 +8,7 @@ package ru.parallel.octotron.http;
 
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -19,6 +20,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.RequestResult.E_RESULT_TYPE;
 import ru.parallel.octotron.logic.RuntimeService;
+import ru.parallel.octotron.reactions.CommonReactions;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.AutoFormat.E_FORMAT_PARAM;
 
@@ -376,7 +378,7 @@ public abstract class Operations
 
 			for(Reaction reaction : entities.Only().GetAttribute(name).GetReactions())
 			{
-				data.add(reaction.GetInfo());
+				data.add(reaction.GetRepresentation());
 			}
 
 			return new RequestResult(format, AutoFormat.PrintData(data, format, callback));
@@ -404,7 +406,7 @@ public abstract class Operations
 			for(Reaction reaction : controller.GetContext().model_service
 				.GetSuppressedReactions())
 			{
-				result.add(reaction.GetInfo());
+				result.add(reaction.GetRepresentation());
 			}
 
 			return new RequestResult(E_RESULT_TYPE.TEXT, AutoFormat.PrintData(result, format, callback));
@@ -427,8 +429,14 @@ public abstract class Operations
 			String callback = params.get("callback");
 			CheckFormat(format, callback);
 
-// TODO
-			return new RequestResult(format, null);
+			List<Response> responses = CommonReactions.GetRegisteredResponses();
+
+			List<Map<String, Object>> result = new LinkedList<>();
+
+			for(Response response : responses)
+				result.add(response.GetRepresentation());
+
+			return new RequestResult(format, AutoFormat.PrintData(result, format, callback));
 		}
 	});
 

@@ -94,4 +94,13 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> GetRepresentation(boolean verbose)
+	{
+		if(verbose)
+			return GetLongRepresentation();
+		else
+			return GetShortRepresentation();
+	}
 }

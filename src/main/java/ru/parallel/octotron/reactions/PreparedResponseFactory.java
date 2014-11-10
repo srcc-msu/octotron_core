@@ -1,3 +1,9 @@
+/*******************************************************************************
+ * Copyright (c) 2014 SRCC MSU
+ *
+ * Distributed under the MIT License - see the accompanying file LICENSE.txt.
+ ******************************************************************************/
+
 package ru.parallel.octotron.reactions;
 
 import com.google.common.collect.Iterators;
@@ -98,7 +104,7 @@ public class PreparedResponseFactory
 
 			String actual_name = context.settings.GetScriptByKey(key);
 
-			if (actual_name == null)
+			if(actual_name == null)
 				throw new ExceptionModelFail("there is no script with key: " + key);
 
 			List<String> result = new LinkedList<>();

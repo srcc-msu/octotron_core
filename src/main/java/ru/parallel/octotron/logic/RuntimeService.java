@@ -103,7 +103,7 @@ public class RuntimeService
 		return result;
 	}
 
-	public static Map<String, String> GetVersion()
+	public static Map<String, Object> GetVersion()
 		throws ExceptionSystemError
 	{
 		InputStream stream = RuntimeService.class.getResourceAsStream("/VERSION");
@@ -113,7 +113,7 @@ public class RuntimeService
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-		Map<String, String> version = new HashMap<>();
+		Map<String, Object> version = new HashMap<>();
 
 		try
 		{

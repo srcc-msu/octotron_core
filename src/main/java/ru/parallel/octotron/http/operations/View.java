@@ -9,14 +9,12 @@ package ru.parallel.octotron.http.operations;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.model.IAttribute;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.http.operations.impl.FormattedOperation;
 import ru.parallel.octotron.http.operations.impl.ModelOperation;
 import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.octotron.reactions.CommonReactions;
@@ -25,11 +23,10 @@ import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TextString;
 import ru.parallel.utils.format.TypedString;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * implementation of all available http operations<br>
@@ -47,7 +44,8 @@ public abstract class View
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params
+			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
 			return new TextString(String.valueOf(entities.size()));
@@ -58,195 +56,82 @@ public abstract class View
 	 * prints properties of the given list entities<br>
 	 * properties and format are taken from params<br>
 	 * */
-	public static class p2 extends ModelOperation
+	public static class attribute extends ModelOperation
 	{
-		public p2()
+		public attribute()
 		{
-			super("p2", true);
+			super("attribute", true);
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params
+			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Operations.AllParams(params, "attributes");
+			Utils.RequiredParams(params, "names");
+			Utils.AllParams(params, "names", "format");
 
-			List<SimpleAttribute> attributes = Operations.GetAttributes(params);
+			List<SimpleAttribute> attributes = Utils.GetAttributes(params.get("names"));
+			String format = params.get("format");
 
-			if(entities.size() == 0)
-				return new ErrorString("empty entities lists - nothing to print");
+			if(format == null || format.equals("json") || format.equals("jsonp"))
+				return AutoFormat.PrintJson(Utils.GetAttributes(entities, attributes, verbose));
+			if(format.equals("csv"))
+				return new TextString(Utils.PrintCsvAttributes(entities, attributes));
 
-			Object data = Operations.GetAttributes(entities, attributes, null);
-
-			return AutoFormat.PrintJson(data);
+			else return new ErrorString("unsupported format: " + format);
 		}
 	}
 
-	public static class p extends ModelOperation
+	public static class entity extends ModelOperation
 	{
-
-		public p()
+		public entity()
 		{
-			super("p", true);
+			super("entity", true);
 		}
+
+		public static List<String> allowed_types = Arrays.asList("const", "var", "sensor");
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params
+			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Operations.AllParams(params);
+			Utils.AllParams(params, "type");
+			String type = params.get("type");
 
-			List<SimpleAttribute> attributes = Operations.GetAttributes(params);
-
-			if(entities.size() == 0)
-				return new ErrorString("empty entities lists - nothing to print");
-
-			Object data = Operations.GetAttributes(entities, attributes, null);
-
-			return AutoFormat.PrintJson(data);
-		}
-	}
-
-	public static class p_const extends ModelOperation
-	{
-
-		public p_const()
-		{
-			super("p_const", true);
-		}
-
-		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
-			throws ExceptionParseError
-		{
-			Operations.AllParams(params, "attributes");
-
-			List<SimpleAttribute> attributes = Operations.GetAttributes(params);
-
-
-			if(entities.size() == 0)
-				return new ErrorString("empty entities lists - nothing to print");
-
-			List<Map<String, Object>> data = new LinkedList<>();
-
-			for(ModelEntity entity : entities)
+			if(type != null)
 			{
-				Map<String, Object> map = new HashMap<>();
-
-				for(IAttribute attribute : Operations.GetAttributes(entity, attributes, EAttributeType.CONST))
-					map.put(attribute.GetName(), attribute.GetValue());
-
-				data.add(map);
+				if(allowed_types.contains(type))
+					return AutoFormat.PrintJson(Utils.GetAttributes(entities, verbose, type));
+				else
+					return new ErrorString("unknown type: " + type);
 			}
-
-			return AutoFormat.PrintJson(data);
+			else
+				return AutoFormat.PrintJson(Utils.GetAttributes(entities, verbose));
 		}
 	}
 
-	public static class p_sensor extends ModelOperation
+	public static class reaction extends ModelOperation
 	{
-
-		public p_sensor()
+		public reaction()
 		{
-			super("p_sensor", true);
+			super("reaction", true);
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params
+			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Operations.AllParams(params, "attributes");
-
-			List<SimpleAttribute> attributes = Operations.GetAttributes(params);
-
-
-			if(entities.size() == 0)
-				return new ErrorString("empty entities lists - nothing to print");
-
-			List<Map<String, Object>> data = new LinkedList<>();
-
-			for(ModelEntity entity : entities)
-			{
-				for(IModelAttribute attribute : Operations.GetAttributes(entity, attributes, EAttributeType.SENSOR))
-				{
-					Map<String, Object> map = new HashMap<>();
-					map.put("name", attribute.GetName());
-					map.put("value", attribute.GetValue());
-					map.put("valid", attribute.CheckValid());
-					data.add(map);
-				}
-			}
-
-			return AutoFormat.PrintJson(data);
-		}
-	}
-
-	public static class p_var extends ModelOperation
-	{
-
-		public p_var()
-		{
-			super("p_var", true);
-		}
-
-		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
-			throws ExceptionParseError
-		{
-			Operations.AllParams(params, "attributes");
-
-			List<SimpleAttribute> attributes = Operations.GetAttributes(params);
-
-
-			if(entities.size() == 0)
-				return new ErrorString("empty entities lists - nothing to print");
-
-			List<Map<String, Object>> data = new LinkedList<>();
-
-			for(ModelEntity entity : entities)
-			{
-				for(IModelAttribute attribute : Operations.GetAttributes(entity, attributes, EAttributeType.VAR))
-				{
-					Map<String, Object> map = new HashMap<>();
-					map.put("name", attribute.GetName());
-					map.put("value", attribute.GetValue());
-					map.put("valid", attribute.CheckValid());
-					data.add(map);
-				}
-			}
-
-			return AutoFormat.PrintJson(data);
-		}
-	}
-
-	public static class p_react extends ModelOperation
-	{
-
-		public p_react()
-		{
-			super("p_react", true);
-		}
-
-		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
-			throws ExceptionParseError
-		{
-			Operations.RequiredParams(params, "name");
-			Operations.AllParams(params, "name", "attributes");
-
-
+			Utils.StrictParams(params, "name");
 			String name = params.get("name");
-			if(entities.size() == 0)
-				return new ErrorString("empty entities lists - nothing to print");
-
-			if(entities.size() > 1)
-				return new ErrorString("too many entities to print");
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
 			for(Reaction reaction : entities.Only().GetAttribute(name).GetReactions())
 			{
-				data.add(reaction.GetShortRepresentation());
+				data.add(reaction.GetRepresentation(verbose));
 			}
 
 			return AutoFormat.PrintJson(data);
@@ -256,27 +141,26 @@ public abstract class View
 	/**
 	 * show all markers in model<br>
 	 * */
-	public static class show_suppressed extends ModelOperation
+	public static class suppressed extends FormattedOperation
 	{
 
-		public show_suppressed()
+		public suppressed()
 		{
-			super("show_suppressed",true);
+			super("suppressed",true);
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params
+			, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.AllParams(params);
-
+			Utils.AllParams(params);
 
 			List<Map<String, Object>> result = new LinkedList<>();
 
-			for(Reaction reaction : controller.GetContext().model_service
-				.GetSuppressedReactions())
+			for(Reaction reaction : controller.GetContext().model_service.GetSuppressedReactions())
 			{
-				result.add(reaction.GetShortRepresentation());
+				result.add(reaction.GetRepresentation(verbose));
 			}
 
 			return AutoFormat.PrintJson(result);
@@ -286,20 +170,20 @@ public abstract class View
 	/**
 	 * show all reactions in model<br>
 	 * */
-	public static class show_r extends ModelOperation
+	public static class all_response extends FormattedOperation
 	{
 
-		public show_r()
+		public all_response()
 		{
-			super("show_r",true);
+			super("all_response",true);
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params
+			, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.RequiredParams(params);
-			Operations.AllParams(params);
+			Utils.AllParams(params);
 
 			List<Response> responses = CommonReactions.GetRegisteredResponses();
 
@@ -315,7 +199,7 @@ public abstract class View
 	/**
 	 * collects and shows statistics<br>
 	 * */
-	public static class version extends ModelOperation
+	public static class version extends FormattedOperation
 	{
 
 		public version()
@@ -324,31 +208,21 @@ public abstract class View
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params
+			, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.RequiredParams(params);
-			Operations.AllParams(params);
-
-			List<Map<String, Object>> data = new LinkedList<>();
+			Utils.RequiredParams(params);
+			Utils.AllParams(params);
 
 			try
 			{
-				Map<String, String> versions = RuntimeService.GetVersion();
-
-				for(Entry<String, String> entry : versions.entrySet())
-				{
-					Map<String, Object> version_line = new HashMap<>();
-					version_line.put(entry.getKey(), entry.getValue());
-					data.add(version_line);
-				}
+				return AutoFormat.PrintJson( RuntimeService.GetVersion());
 			}
 			catch(ExceptionSystemError e)
 			{
-				throw new ExceptionParseError(e);
+				return new ErrorString("could not read Version: " + e.getMessage());
 			}
-
-			return AutoFormat.PrintJson(data);
 		}
 	}
 }

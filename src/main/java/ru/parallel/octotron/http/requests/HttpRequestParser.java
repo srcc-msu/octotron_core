@@ -8,8 +8,8 @@ package ru.parallel.octotron.http.requests;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.operations.Control;
+import ru.parallel.octotron.http.operations.IOperation;
 import ru.parallel.octotron.http.operations.Modify;
-import ru.parallel.octotron.http.operations.Operation;
 import ru.parallel.octotron.http.operations.View;
 
 import java.util.HashMap;
@@ -28,42 +28,49 @@ public class HttpRequestParser
 	 * tokens that are allowed in the view request<br>
 	 * this requests are used to retrieve current model state<br>
 	 * */
-	private static final Operation[] VIEW_OPERATIONS =
+	private static final IOperation[] VIEW_OPERATIONS =
 	{
-		new View.version()
-		, new View.count()
-		, new View.p()
-		, new View.p_react()
-		, new View.p_const(), new View.p_sensor(), new View.p_var()
-		, new View.show_suppressed(), new View.show_r()
+		new View.count()
+		, new View.attribute()
+		, new View.entity()
+		, new View.reaction()
+		, new View.suppressed()
+		, new View.all_response()
+		, new View.version()
 	};
 
 	/**
 	 * tokens that are allowed in the modify requests<br>
 	 * this requests are used for import and manual model manipulations<br>
 	 * */
-	private static final Operation[] MODIFY_OPERATIONS =
+	private static final IOperation[] MODIFY_OPERATIONS =
 	{
-		new Modify.import_token(), new Modify.unchecked_import_token()
-		, new Modify.set_valid(), new Modify.set_invalid()
-		, new Modify.suppress(), new Modify.unsuppress()
+		new Modify.import_op()
+		, new Modify.unchecked_import()
+		, new Modify.set_valid()
+		, new Modify.set_invalid()
+		, new Modify.suppress()
+		, new Modify.unsuppress()
 	};
 
 	/**
 	 * tokens that are allowed in the control request<br>
 	 * this requests are used for database administration operations<br>
 	 * */
-	private static final Operation[] CONTROL_OPERATIONS =
+	private static final IOperation[] CONTROL_OPERATIONS =
 	{
-		new Control.quit(), new Control.mode()
-		, new Control.snapshot(), new Control.selftest()
-		, new Control.stat(), new Control.mod_time()
+		new Control.quit()
+		, new Control.mode()
+		, new Control.snapshot()
+		, new Control.selftest()
+		, new Control.stat()
+		, new Control.mod_time()
 	};
 
 	/**
 	 * all available request types<br>
 	 * */
-	private static final Map<String, Operation[]> REQUEST_TYPES = new HashMap<>();
+	private static final Map<String, IOperation[]> REQUEST_TYPES = new HashMap<>();
 	static
 	{
 		HttpRequestParser.REQUEST_TYPES.put("view", HttpRequestParser.VIEW_OPERATIONS);
@@ -118,14 +125,14 @@ public class HttpRequestParser
 	{
 		try
 		{
-			Operation[] operations = HttpRequestParser.REQUEST_TYPES.get(request_type);
+			IOperation[] operations = HttpRequestParser.REQUEST_TYPES.get(request_type);
 
 			if(operations == null)
 				throw new ExceptionParseError("wrong request type: " + request_type);
 
-			Operation operation = null;
+			IOperation operation = null;
 
-			for(Operation op : operations)
+			for(IOperation op : operations)
 				if(op.GetName().equals(operation_name))
 				{
 					operation = op;

@@ -56,7 +56,7 @@ public final class ModelService
 
 		for(ModelEntity entity : model_data.GetAllObjects())
 			for(IModelAttribute attribute : entity.GetAttributes())
-				for (Reaction reaction : attribute.GetReactions())
+				for(Reaction reaction : attribute.GetReactions())
 				{
 					if(reaction.GetSuppress())
 						reactions.add(reaction);
@@ -64,7 +64,7 @@ public final class ModelService
 
 		for(ModelEntity entity : model_data.GetAllLinks())
 			for(IModelAttribute attribute : entity.GetAttributes())
-				for (Reaction reaction : attribute.GetReactions())
+				for(Reaction reaction : attribute.GetReactions())
 				{
 					if(reaction.GetSuppress())
 						reactions.add(reaction);

@@ -1,3 +1,9 @@
+/*******************************************************************************
+ * Copyright (c) 2014 SRCC MSU
+ *
+ * Distributed under the MIT License - see the accompanying file LICENSE.txt.
+ ******************************************************************************/
+
 package ru.parallel.octotron.http.operations;
 
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
@@ -7,8 +13,8 @@ import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.impl.FormattedOperation;
 import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.utils.AutoFormat;
-import ru.parallel.utils.format.JsonpString;
 import ru.parallel.utils.format.TextString;
+import ru.parallel.utils.format.TypedString;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,10 +30,11 @@ public class Control
 		public quit() {super("quit", true);}
 
 		@Override
-		public ru.parallel.utils.format.TypedString Execute(ExecutionController controller, Map<String, String> params)
+		public TypedString Execute(ExecutionController controller
+			, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.StrictParams(params);
+			Utils.StrictParams(params);
 
 			controller.SetExit(true);
 
@@ -43,10 +50,10 @@ public class Control
 		public selftest() {super("selftest", true);}
 
 		@Override
-		public ru.parallel.utils.format.TypedString Execute(ExecutionController controller, Map<String, String> params)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.StrictParams(params);
+			Utils.StrictParams(params);
 
 			Map<String, Object> result = RuntimeService.PerformSelfTest(controller);
 
@@ -64,10 +71,10 @@ public class Control
 		public mode() {super("mode", true);}
 
 		@Override
-		public ru.parallel.utils.format.TypedString Execute(ExecutionController controller, Map<String, String> params)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.StrictParams(params, "silent");
+			Utils.StrictParams(params, "silent");
 
 			String mode_str = params.get("silent");
 			boolean mode = (boolean) SimpleAttribute.ValueFromStr(mode_str);
@@ -89,10 +96,10 @@ public class Control
 		public snapshot() {super("snapshot", true);}
 
 		@Override
-		public ru.parallel.utils.format.TypedString Execute(ExecutionController controller, Map<String, String> params)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.StrictParams(params);
+			Utils.StrictParams(params);
 
 			List<Map<String, Object>> data = RuntimeService.MakeSnapshot(controller.GetContext().model_data);
 
@@ -108,10 +115,10 @@ public class Control
 		public stat() {super("stat", true);}
 
 		@Override
-		public ru.parallel.utils.format.TypedString Execute(ExecutionController controller, Map<String, String> params)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.AllParams(params);
+			Utils.AllParams(params);
 
 			return AutoFormat.PrintJson(controller.GetStat());
 		}
@@ -126,15 +133,14 @@ public class Control
 		public mod_time() {super("mod_time", true);}
 
 		@Override
-		public ru.parallel.utils.format.TypedString Execute(ExecutionController controller, Map<String, String> params)
+		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Operations.StrictParams(params, "interval");
+			Utils.StrictParams(params, "interval");
 
 			String value_str = params.get("interval");
 			long interval = (long)SimpleAttribute.ValueFromStr(value_str);
 
-			double time;
 			List<Map<String, Object>> result;
 
 			try

@@ -7,9 +7,8 @@
 package ru.parallel.utils;
 
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.utils.format.JsonpString;
 import ru.parallel.utils.format.JsonString;
+import ru.parallel.utils.format.JsonpString;
 import ru.parallel.utils.format.TypedString;
 
 import java.util.*;

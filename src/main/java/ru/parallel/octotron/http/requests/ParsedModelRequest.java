@@ -7,7 +7,7 @@
 package ru.parallel.octotron.http.requests;
 
 
-import ru.parallel.octotron.http.operations.Operation;
+import ru.parallel.octotron.http.operations.IOperation;
 
 import java.util.Map;
 
@@ -16,11 +16,11 @@ import java.util.Map;
  * */
 public class ParsedModelRequest
 {
-	final Operation operation;
+	final IOperation operation;
 	final Map<String, String> params;
 	private final String query;
 
-	public ParsedModelRequest(Operation operation, Map<String, String> params, String query)
+	public ParsedModelRequest(IOperation operation, Map<String, String> params, String query)
 	{
 		this.operation = operation;
 		this.params = params;

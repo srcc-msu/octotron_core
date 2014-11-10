@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.IPresentable;
@@ -56,6 +57,22 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 	{
 		return attributes_map.values();
 	}
+
+	public Collection<? extends IModelAttribute> GetAttributes(EAttributeType type)
+	{
+		switch(type)
+		{
+			case CONST:
+				return const_map.values();
+			case SENSOR:
+				return sensor_map.values();
+			case VAR:
+				return var_map.values();
+			default:
+				throw new ExceptionModelFail("unknown attribute type: " + type.toString());
+		}
+	}
+
 
 	public Map<String, Object> GetAttributesValues()
 	{
@@ -192,6 +209,15 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		result.put("var", var_list);
 
 		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetRepresentation(boolean verbose)
+	{
+		if(verbose)
+			return GetLongRepresentation();
+		else
+			return GetShortRepresentation();
 	}
 }
 

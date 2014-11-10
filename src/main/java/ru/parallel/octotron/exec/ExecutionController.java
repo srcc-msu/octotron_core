@@ -251,7 +251,8 @@ public class ExecutionController
 
 		try
 		{
-			FileUtils.ExecSilent(script, Long.toString(target.GetID()), attribute.GetName());
+			FileUtils.ExecSilent(script, Long.toString(target.GetID())
+				, attribute.GetName(), SimpleAttribute.ValueToStr(attribute.GetValue()));
 		}
 		catch (ExceptionSystemError e)
 		{

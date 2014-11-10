@@ -49,7 +49,7 @@ public class Statistics
 		{
 			Stat stat = stats.get(name);
 
-			if (stat == null)
+			if(stat == null)
 			{
 				stat = new Stat(name);
 				stats.put(name, stat);
@@ -103,9 +103,9 @@ public class Statistics
 	{
 		synchronized(lock)
 		{
-			if (timer_60.Get() > 60) /*secs in min..*/
+			if(timer_60.Get() > 60) /*secs in min..*/
 			{
-				for (Stat stat : stats.values())
+				for(Stat stat : stats.values())
 				{
 					stat.queue.Reset();
 					stat.total.Reset();

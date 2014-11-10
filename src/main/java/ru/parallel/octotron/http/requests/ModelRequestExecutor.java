@@ -42,7 +42,7 @@ public class ModelRequestExecutor implements Runnable
 	{
 		try
 		{
-			return request.operation.ExecuteOperation(controller, request.params);
+			return request.operation.Execute(controller, request.params);
 		}
 		catch(Exception e)
 		{

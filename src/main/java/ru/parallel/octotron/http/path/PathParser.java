@@ -147,7 +147,7 @@ public final class PathParser
 			PathOperations.PathToken base_token = null;
 
 			for(PathOperations.PathToken token : TOKENS)
-				if (token.GetName().equals(name))
+				if(token.GetName().equals(name))
 				{
 					base_token = token;
 					break;

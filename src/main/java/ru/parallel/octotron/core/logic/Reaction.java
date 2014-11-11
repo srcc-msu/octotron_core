@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.model.ModelID;
 import ru.parallel.octotron.core.primitive.ELogicalType;
 import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.reactions.PreparedResponse;
@@ -15,7 +16,7 @@ import ru.parallel.utils.JavaUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Reaction extends LogicID<ELogicalType> implements IPresentable
+public class Reaction extends ModelID<ELogicalType> implements IPresentable
 {
 	public enum State
 	{

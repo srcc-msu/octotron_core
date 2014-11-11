@@ -6,8 +6,10 @@
 
 package ru.parallel.utils;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
+import ru.parallel.utils.format.JsonString;
+import ru.parallel.utils.format.JsonpString;
+import ru.parallel.utils.format.TypedString;
 
 public abstract class JsonUtils
 {
@@ -21,5 +23,15 @@ public abstract class JsonUtils
 		if(base.get(name) == null)
 			throw new RuntimeException("wrong config file, missing: " + name);
 		return base.get(name);
+	}
+
+	public static JsonString Prettify(JsonString json_string)
+	{
+		JsonParser parser = new JsonParser();
+		JsonElement json = parser.parse(json_string.string);
+
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+		return new JsonString(gson.toJson(json));
 	}
 }

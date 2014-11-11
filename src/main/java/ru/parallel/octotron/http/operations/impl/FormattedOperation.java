@@ -9,6 +9,8 @@ package ru.parallel.octotron.http.operations.impl;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.IOperation;
+import ru.parallel.utils.JsonUtils;
+import ru.parallel.utils.format.JsonString;
 import ru.parallel.utils.format.TypedString;
 
 import java.util.Map;
@@ -55,6 +57,8 @@ public abstract class FormattedOperation implements IOperation
 
 		if(callback != null)
 			return ToJsonp(result, callback);
+		else if(result instanceof JsonString)
+			return JsonUtils.Prettify((JsonString) result);
 
 		return result;
 	}

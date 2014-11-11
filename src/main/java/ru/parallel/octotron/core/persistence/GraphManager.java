@@ -210,7 +210,6 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("AID", attribute.GetID());
 
-			graph_object.UpdateAttribute("is_valid", attribute.GetIsValid());
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 			graph_object.UpdateAttribute("value", attribute.GetValue());
 
@@ -228,29 +227,43 @@ public class GraphManager implements IPersistenceManager
 				.SetCTime((Long)graph_object.GetAttribute("ctime"));
 
 			attribute.GetBuilder(model_service)
-				.SetValid((Boolean) graph_object.GetAttribute("is_valid"));
-
-			attribute.GetBuilder(model_service)
 				.SetValue(graph_object.GetAttribute("value"));
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
 			GraphObject graph_object = GetObject(attribute);
 
-			graph_object.UpdateAttribute("is_valid", attribute.GetIsValid());
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 			graph_object.UpdateAttribute("value", attribute.GetValue());
 		}
 	}
 
-	@Override
-	public void RegisterVar(VarAttribute attribute)
+	public void RegisterSensor(SensorAttribute attribute)
 	{
 		RegisterMod(attribute);
+
+		if(model_service.GetMode() == ModelService.EMode.CREATION)
+		{
+			GraphObject graph_object = graph_service.AddObject();
+			graph_object.UpdateAttribute("is_valid", attribute.IsValid());
+		}
+		else if(model_service.GetMode() == ModelService.EMode.LOAD)
+		{
+			GraphObject graph_object = CheckObject(attribute, attribute.GetType().toString());
+
+			attribute.GetBuilder(model_service)
+				.SetValid((Boolean) graph_object.GetAttribute("is_valid"));
+		}
+		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
+		{
+			GraphObject graph_object = GetObject(attribute);
+
+			graph_object.UpdateAttribute("is_valid", attribute.IsValid());
+		}
 	}
 
 	@Override
-	public void RegisterSensor(SensorAttribute attribute)
+	public void RegisterVar(VarAttribute attribute)
 	{
 		RegisterMod(attribute);
 	}

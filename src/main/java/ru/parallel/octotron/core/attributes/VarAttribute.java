@@ -30,7 +30,7 @@ public class VarAttribute extends AbstractModAttribute
 	public VarAttribute(ModelEntity parent, String name, Rule rule)
 	{
 		super(EAttributeType.VAR, parent, name
-			, SimpleAttribute.ConformType(rule.GetDefaultValue()));
+			, rule.GetDefaultValue());
 
 		this.rule = rule;
 	}

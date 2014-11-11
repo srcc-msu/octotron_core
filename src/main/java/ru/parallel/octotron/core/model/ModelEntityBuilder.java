@@ -63,12 +63,17 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 			DeclareConst(attribute);
 	}
 
-	public void DeclareSensor(String name, Object value)
+	public void DeclareSensor(String name, Object default_value)
+	{
+		DeclareSensor(name, default_value, -1);
+	}
+
+	public void DeclareSensor(String name, Object default_value, long update_time)
 	{
 		if(entity.TestAttribute(name))
 			throw new ExceptionModelFail("attribute already declared: " + name);
 
-		SensorAttribute sensor = new SensorAttribute(entity, name, SimpleAttribute.ConformType(value));
+		SensorAttribute sensor = new SensorAttribute(entity, name, SimpleAttribute.ConformType(default_value), update_time);
 
 		entity.attributes_map.put(name, sensor);
 		entity.sensor_map.put(name, sensor);

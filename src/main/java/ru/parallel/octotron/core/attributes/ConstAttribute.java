@@ -43,17 +43,6 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	}
 
 	@Override
-	public boolean CheckValid()
-	{
-		return true;
-	}
-
-	@Override
-	public void SetValid() { throw new ExceptionModelFail(err_msg + "SetValid"); }
-	@Override
-	public void SetInvalid() { throw new ExceptionModelFail(err_msg + "SetInvalid"); }
-
-	@Override
 	public AttributeList<VarAttribute> GetDependant()
 	{
 		return new AttributeList<>();

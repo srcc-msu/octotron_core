@@ -381,8 +381,8 @@ public class ComputeTests
 		ToArgPct rule1 = new ToArgPct("l1", "l2");
 		ToPct rule2 = new ToPct("l2", 6);
 
-		assertEquals(66, rule1.Compute(object));
-		assertEquals(50, rule2.Compute(object));
+		assertEquals(66L, rule1.Compute(object));
+		assertEquals(50L, rule2.Compute(object));
 	}
 
 	@Test

@@ -109,7 +109,7 @@ public class Modify
 			String name = params.get("name");
 
 			for(ModelEntity entity : entities)
-				entity.GetAttribute(name).SetValid();
+				entity.GetSensor(name).SetValid();
 
 			return new TextString("set the attribute to valid for " + entities.size() + " entities");
 		}
@@ -133,7 +133,7 @@ public class Modify
 			String name = params.get("name");
 
 			for(ModelEntity entity : entities)
-				entity.GetAttribute(name).SetInvalid();
+				entity.GetSensor(name).SetInvalid();
 
 			return new TextString("set the attribute to invalid for " + entities.size() + " entities");
 		}

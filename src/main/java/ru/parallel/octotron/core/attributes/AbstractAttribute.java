@@ -32,6 +32,11 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 		this.value = value;
 	}
 
+	public boolean Check()
+	{
+		return true;
+	}
+
 	@Override
 	public final String GetName()
 	{
@@ -39,7 +44,7 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 	}
 
 	@Override
-	public final Object GetValue()
+	public Object GetValue()
 	{
 		return value;
 	}

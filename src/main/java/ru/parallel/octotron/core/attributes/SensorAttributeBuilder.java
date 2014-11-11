@@ -14,4 +14,9 @@ public class SensorAttributeBuilder extends AbstractModAttributeBuilder<SensorAt
 	{
 		super(service, attribute);
 	}
+
+	public void SetValid(Boolean is_valid)
+	{
+		attribute.SetValid(is_valid);
+	}
 }

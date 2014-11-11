@@ -22,7 +22,6 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 {
 	private final History history = new History();
 
-	private boolean is_valid = true;
 	private long ctime = 0;
 
 	protected final Map<Long, Reaction> reactions = new HashMap<>();
@@ -35,35 +34,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 
 	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder(ModelService service);
 
-	@Override
-	public boolean CheckValid()
-	{
-		return is_valid && GetCTime() != 0L;
-	}
-
-	@Override
-	public void SetValid()
-	{
-		is_valid = true;
-	}
-
-	@Override
-	public void SetInvalid()
-	{
-		is_valid = false;
-	}
-
-// ---------------
-
-	public void SetValid(boolean is_valid)
-	{
-		this.is_valid = is_valid;
-	}
-
-	public boolean GetIsValid()
-	{
-		return is_valid;
-	}
+// ------------------------------------------
 
 	public long GetCTime()
 	{
@@ -75,10 +46,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		ctime = new_ctime;
 	}
 
-	public Reaction GetReaction(long id)
-	{
-		return reactions.get(id);
-	}
+// ------------------------------------------
 
 	@Override
 	public double GetSpeed()
@@ -121,11 +89,18 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		return dependant;
 	}
 
+	public Reaction GetReaction(long id)
+	{
+		return reactions.get(id);
+	}
+
 	@Override
 	public Collection<Reaction> GetReactions()
 	{
 		return reactions.values();
 	}
+
+// ------------------------------------------------------------------------------------------------------
 
 	@Override
 	public Map<String, Object> GetShortRepresentation()
@@ -146,7 +121,6 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		result.put("parent", GetParent().GetID());
 		result.put("name", GetName());
 		result.put("value", GetValue());
-		result.put("is_valid", GetIsValid());
 		result.put("ctime", GetCTime());
 
 		return result;

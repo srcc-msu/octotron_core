@@ -18,9 +18,7 @@ import java.util.Collection;
 
 public interface IModelAttribute extends IUniqueID<EAttributeType>, IAttribute, IPresentable
 {
-	boolean CheckValid();
-	void SetValid();
-	void SetInvalid();
+	boolean Check();
 
 	Reaction GetReaction(long id);
 	Collection<Reaction> GetReactions();

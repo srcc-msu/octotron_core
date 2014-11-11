@@ -41,10 +41,5 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 		attribute.SetCTime(ctime);
 	}
 
-	public void SetValid(Boolean is_valid)
-	{
-		attribute.SetValid(is_valid);
-	}
-
 	public void SetValue(Object new_value) { attribute.SetValue(new_value); }
 }

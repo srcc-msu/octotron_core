@@ -14,9 +14,9 @@ import ru.parallel.octotron.core.model.ModelEntity;
 public class ToPct extends Rule
 {
 	private final String measured_attribute;
-	private final int max_value;
+	private final double max_value;
 
-	public ToPct(String measured_attribute, int max_value)
+	public ToPct(String measured_attribute, double max_value)
 	{
 		this.measured_attribute = measured_attribute;
 		this.max_value = max_value;
@@ -37,15 +37,12 @@ public class ToPct extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(measured_attribute);
 
-		if(!attr.CheckValid())
-			return null;
-
-		return (int)(attr.ToDouble() * 100.0 / (double) max_value);
+		return (long)(attr.ToDouble() * 100.0 / max_value);
 	}
 
 	@Override
 	public Object GetDefaultValue()
 	{
-		return 0;
+		return 0L;
 	}
 }

@@ -37,9 +37,6 @@ public class ContainsString extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(attribute);
 
-		if(!attr.CheckValid())
-			return null;
-
 		return attr.GetString().contains(match_str);
 	}
 

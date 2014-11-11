@@ -37,9 +37,6 @@ public class Match extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(check_attribute);
 
-		if(!attr.CheckValid())
-			return null;
-
 		return attr.eq(match_value);
 	}
 

@@ -37,12 +37,6 @@ public class LinkedVarArgMatch extends LinkRule
 		IModelAttribute target_attr = link.Target().GetAttribute(check_attribute);
 		IModelAttribute source_attr = link.Source().GetAttribute(check_attribute);
 
-		if(!target_attr.CheckValid())
-			return null;
-
-		if(!source_attr.CheckValid())
-			return null;
-
 		return target_attr.eq(source_attr.GetValue());
 	}
 

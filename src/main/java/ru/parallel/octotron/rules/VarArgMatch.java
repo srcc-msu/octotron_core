@@ -39,12 +39,6 @@ public class VarArgMatch extends Rule
 		IModelAttribute attr = entity.GetAttribute(check_attribute);
 		IModelAttribute match_attr = entity.GetAttribute(match_attribute);
 
-		if(!attr.CheckValid())
-			return null;
-
-		if(!match_attr.CheckValid())
-			return null;
-
 		return attr.eq(match_attr.GetValue());
 	}
 

@@ -42,9 +42,6 @@ public class LogicalOr extends Rule
 		{
 			IModelAttribute attr = entity.GetAttribute(attr_name);
 
-			if(!attr.CheckValid())
-				return null;
-
 			res = res | attr.GetBoolean();
 		}
 

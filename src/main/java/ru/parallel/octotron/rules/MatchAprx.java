@@ -39,9 +39,6 @@ public class MatchAprx extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(check_attribute);
 
-		if(!attr.CheckValid())
-			return null;
-
 		return attr.aeq(match_value, aprx);
 	}
 

@@ -37,9 +37,6 @@ public class UpperThreshold extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(param);
 
-		if(!attr.CheckValid())
-			return null;
-
 		return attr.lt(threshold);
 	}
 

@@ -39,15 +39,12 @@ public class ToArgPct extends Rule
 		IModelAttribute attr = entity.GetAttribute(measured_attribute);
 		IModelAttribute max_value = entity.GetAttribute(max_value_arg);
 
-		if(!attr.CheckValid())
-			return null;
-
-		return (int)(attr.ToDouble() * 100.0 / max_value.ToDouble());
+		return (long)(attr.ToDouble() * 100.0 / max_value.ToDouble());
 	}
 
 	@Override
 	public Object GetDefaultValue()
 	{
-		return 0;
+		return 0L;
 	}
 }

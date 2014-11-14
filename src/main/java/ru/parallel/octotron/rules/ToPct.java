@@ -39,10 +39,4 @@ public class ToPct extends Rule
 
 		return (long)(attr.ToDouble() * 100.0 / max_value);
 	}
-
-	@Override
-	public Object GetDefaultValue()
-	{
-		return 0L;
-	}
 }

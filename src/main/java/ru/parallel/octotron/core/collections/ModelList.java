@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.collections;
 
-import ru.parallel.octotron.core.model.IAttribute;
+import ru.parallel.octotron.core.attributes.IAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;

@@ -40,9 +40,4 @@ public class LowerThreshold extends Rule
 		return attr.gt(threshold);
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

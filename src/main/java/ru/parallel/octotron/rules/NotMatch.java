@@ -40,9 +40,4 @@ public class NotMatch extends Rule
 		return attr.ne(match_value);
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

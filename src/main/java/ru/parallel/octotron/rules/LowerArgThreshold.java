@@ -40,9 +40,4 @@ public class LowerArgThreshold extends Rule
 		return attr.gt(entity.GetAttribute(arg_threshold).GetValue());
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

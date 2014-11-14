@@ -100,4 +100,6 @@ public abstract class Aggregate extends ObjectRule
 	}
 
 	protected abstract Object Accumulate(Object res, IModelAttribute attribute);
+
+	protected abstract Object GetDefaultValue();
 }

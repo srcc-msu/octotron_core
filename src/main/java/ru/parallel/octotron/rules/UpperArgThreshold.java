@@ -40,9 +40,4 @@ public class UpperArgThreshold extends Rule
 		return attr.lt(entity.GetAttribute(arg_threshold).GetValue());
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

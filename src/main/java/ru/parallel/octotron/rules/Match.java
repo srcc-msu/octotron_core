@@ -40,9 +40,4 @@ public class Match extends Rule
 		return attr.eq(match_value);
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

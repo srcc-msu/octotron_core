@@ -40,9 +40,4 @@ public class LinkedVarArgMatch extends LinkRule
 		return target_attr.eq(source_attr.GetValue());
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

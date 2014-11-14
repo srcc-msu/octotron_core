@@ -91,7 +91,9 @@ public class SimpleAttribute
 	{
 		value = SimpleAttribute.ConformType(value);
 
-		if(value instanceof Boolean)
+		if(value == null)
+			return JavaUtils.Quotify("null");
+		else if(value instanceof Boolean)
 			return value.toString();
 		else if(value instanceof Long)
 			return value.toString();

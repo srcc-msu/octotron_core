@@ -42,9 +42,4 @@ public class VarArgMatch extends Rule
 		return attr.eq(match_attr.GetValue());
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

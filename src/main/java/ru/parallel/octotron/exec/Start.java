@@ -186,9 +186,6 @@ public class Start
 		try
 		{
 			controller = new ExecutionController(context);
-			RuntimeService.PerformSelfTest(controller);
-
-			context.model_service.Operate();
 
 			ProcessStart(context);
 		}

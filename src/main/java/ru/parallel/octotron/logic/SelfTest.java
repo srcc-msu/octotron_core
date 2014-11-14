@@ -32,6 +32,8 @@ public class SelfTest
 		obj2.GetBuilder(service).DeclareConst("type", "_selftest");
 		obj2.GetBuilder(service).DeclareVar("check", new AggregateLongSum(EDependencyType.ALL, "test_iteration"));
 
+		obj1.GetSensor("test_iteration").GetBuilder(service).AddDependant(obj2.GetVar("check"));
+
 		service.AddLink(obj1, obj2);
 	}
 

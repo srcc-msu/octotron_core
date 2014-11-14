@@ -14,7 +14,7 @@ import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
-public class VarAttribute extends AbstractModAttribute
+public final class VarAttribute extends AbstractModAttribute
 {
 	protected final Rule rule;
 	protected final AttributeList<IModelAttribute> dependency = new AttributeList<>();
@@ -29,8 +29,7 @@ public class VarAttribute extends AbstractModAttribute
 
 	public VarAttribute(ModelEntity parent, String name, Rule rule)
 	{
-		super(EAttributeType.VAR, parent, name
-			, rule.GetDefaultValue());
+		super(EAttributeType.VAR, parent, name, null);
 
 		this.rule = rule;
 	}
@@ -42,16 +41,29 @@ public class VarAttribute extends AbstractModAttribute
 
 	public boolean Update()
 	{
-		Object new_value = rule.Compute(GetParent());
-
-		if(new_value == null)
+		if(Check() == false)
 			return false;
 
-		return super.Update(new_value);
+		Object new_value = rule.Compute(GetParent());
+
+		super.Update(new_value);
+
+		return true;
 	}
 
 	public Iterable<IModelAttribute> GetDependency()
 	{
 		return dependency;
+	}
+
+	@Override
+	public boolean Check()
+	{
+		for(IModelAttribute dep_attribute : rule.GetDependency(GetParent()))
+		{
+			if(dep_attribute.GetCTime() == 0)
+				return false;
+		}
+		return true;
 	}
 }

@@ -19,7 +19,6 @@ public abstract class Rule
 	protected Rule(){}
 
 	public abstract Object Compute(ModelEntity entity);
-	public abstract Object GetDefaultValue();
 
 	public abstract AttributeList<IModelAttribute> GetDependency(ModelEntity entity);
 }

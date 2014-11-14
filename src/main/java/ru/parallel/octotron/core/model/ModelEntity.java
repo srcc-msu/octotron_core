@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.ConstAttribute;
+import ru.parallel.octotron.core.attributes.IAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
@@ -88,7 +89,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 	public boolean TestAttribute(String name)
 	{
-		IAttribute result = attributes_map.get(name);
+		IModelAttribute result = attributes_map.get(name);
 
 		return result != null;
 	}

@@ -4,9 +4,15 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.model;
+package ru.parallel.octotron.core.attributes;
 
-public interface IAttribute
+import ru.parallel.octotron.core.attributes.IAttributeBuilder;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.core.primitive.IPresentable;
+import ru.parallel.octotron.core.primitive.IUniqueID;
+
+public interface IAttribute extends IUniqueID<EAttributeType>, IPresentable
 {
 	String GetName();
 	Object GetValue();

@@ -49,8 +49,8 @@ public class Importer implements Runnable
 		{
 			for(VarAttribute dependant_varying : dependant_varyings)
 			{
-				dependant_varying.Update();
-				result.add(dependant_varying);
+				if(dependant_varying.Update())
+					result.add(dependant_varying);
 			}
 
 			dependant_varyings = GetDependant(dependant_varyings);

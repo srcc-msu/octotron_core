@@ -37,10 +37,4 @@ public class CalcSpeed extends Rule
 
 		return attr.GetSpeed();
 	}
-
-	@Override
-	public Object GetDefaultValue()
-	{
-		return 0.0;
-	}
 }

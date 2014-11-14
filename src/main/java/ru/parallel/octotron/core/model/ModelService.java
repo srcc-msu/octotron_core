@@ -94,9 +94,9 @@ public final class ModelService
 		else
 			mode = EMode.LOAD;
 
-		if(settings.IsDb())
+		/*if(settings.IsDb())
 			persistence_manager = new GraphManager(this, db_path);
-		else
+		else*/
 			persistence_manager = new GhostManager();
 	}
 

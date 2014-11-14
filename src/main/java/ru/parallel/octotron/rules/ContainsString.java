@@ -39,10 +39,4 @@ public class ContainsString extends Rule
 
 		return attr.GetString().contains(match_str);
 	}
-
-	@Override
-	public Object GetDefaultValue()
-	{
-		return false;
-	}
 }

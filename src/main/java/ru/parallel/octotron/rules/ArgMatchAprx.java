@@ -42,9 +42,4 @@ public class ArgMatchAprx extends Rule
 		return attr.aeq(entity.GetAttribute(match_attribute).GetValue(), aprx);
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

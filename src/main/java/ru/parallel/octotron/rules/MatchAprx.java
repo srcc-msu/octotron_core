@@ -42,9 +42,4 @@ public class MatchAprx extends Rule
 		return attr.aeq(match_value, aprx);
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

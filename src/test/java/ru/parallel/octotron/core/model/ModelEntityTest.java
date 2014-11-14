@@ -149,12 +149,6 @@ public class ModelEntityTest
 		}
 
 		@Override
-		public Object GetDefaultValue()
-		{
-			return 0L;
-		}
-
-		@Override
 		public AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 		{
 			return new AttributeList<>();

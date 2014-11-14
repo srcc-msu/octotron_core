@@ -3,7 +3,7 @@ package ru.parallel.octotron.core.collections;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.model.IAttribute;
+import ru.parallel.octotron.core.attributes.IAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.exec.Context;
 

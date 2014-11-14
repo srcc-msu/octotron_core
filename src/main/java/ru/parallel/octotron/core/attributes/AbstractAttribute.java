@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.model.IAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelID;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -32,9 +31,10 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 		this.value = value;
 	}
 
-	public boolean Check()
+	@Override
+	public final ModelEntity GetParent()
 	{
-		return true;
+		return parent;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 	}
 
 	@Override
-	public Object GetValue()
+	public final Object GetValue()
 	{
 		return value;
 	}
@@ -52,6 +52,12 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 	final void SetValue(Object new_value)
 	{
 		value = new_value;
+	}
+
+	@Override
+	public final String GetStringValue()
+	{
+		return SimpleAttribute.ValueToStr(GetValue());
 	}
 
 	private void CheckType(Object a_value)
@@ -74,12 +80,6 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 
 			throw new ExceptionModelFail(error);
 		}
-	}
-
-	@Override
-	public final ModelEntity GetParent()
-	{
-		return parent;
 	}
 
 	@Override
@@ -213,11 +213,5 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 	public final boolean le(Object val)
 	{
 		return !gt(val);
-	}
-
-	@Override
-	public final String GetStringValue()
-	{
-		return SimpleAttribute.ValueToStr(GetValue());
 	}
 }

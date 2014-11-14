@@ -49,10 +49,4 @@ public class Interval extends Rule
 
 		return result;
 	}
-
-	@Override
-	public Object GetDefaultValue()
-	{
-		return -1L;
-	}
 }

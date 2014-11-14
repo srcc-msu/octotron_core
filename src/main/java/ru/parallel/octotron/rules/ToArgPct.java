@@ -41,10 +41,4 @@ public class ToArgPct extends Rule
 
 		return (long)(attr.ToDouble() * 100.0 / max_value.ToDouble());
 	}
-
-	@Override
-	public Object GetDefaultValue()
-	{
-		return 0L;
-	}
 }

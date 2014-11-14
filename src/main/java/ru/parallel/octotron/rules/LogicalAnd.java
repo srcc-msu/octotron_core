@@ -48,9 +48,4 @@ public class LogicalAnd extends Rule
 		return res;
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

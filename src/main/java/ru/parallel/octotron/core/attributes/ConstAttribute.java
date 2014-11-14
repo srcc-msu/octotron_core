@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class ConstAttribute extends AbstractAttribute implements IModelAttribute
+public final class ConstAttribute extends AbstractAttribute implements IModelAttribute
 {
 	static final String err_msg = "unsupported operation on const attribute: ";
 
@@ -34,30 +34,6 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 	public ConstAttribute(ModelEntity parent, String name, Object value)
 	{
 		super(EAttributeType.CONST, parent, name, value);
-	}
-
-	@Override
-	public Reaction GetReaction(long id)
-	{
-		throw new ExceptionModelFail(err_msg + "GetReaction");
-	}
-
-	@Override
-	public AttributeList<VarAttribute> GetDependant()
-	{
-		return new AttributeList<>();
-	}
-
-	@Override
-	public double GetSpeed()
-	{
-		return 0.0;
-	}
-
-	@Override
-	public Collection<Reaction> GetReactions()
-	{
-		return new LinkedList<>();
 	}
 
 	@Override
@@ -91,5 +67,35 @@ public class ConstAttribute extends AbstractAttribute implements IModelAttribute
 			return GetLongRepresentation();
 		else
 			return GetShortRepresentation();
+	}
+
+	@Override
+	public boolean Check()
+	{
+		return true;
+	}
+
+	@Override
+	public Collection<Reaction> GetReactions()
+	{
+		return new LinkedList<>();
+	}
+
+	@Override
+	public double GetSpeed()
+	{
+		throw new ExceptionModelFail(err_msg + "GetSpeed");
+	}
+
+	@Override
+	public long GetCTime()
+	{
+		throw new ExceptionModelFail(err_msg + "GetCTime");
+	}
+
+	@Override
+	public AttributeList<VarAttribute> GetDependant()
+	{
+		return new AttributeList<>();
 	}
 }

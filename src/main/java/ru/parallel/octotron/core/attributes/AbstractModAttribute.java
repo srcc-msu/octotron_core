@@ -36,12 +36,13 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 
 // ------------------------------------------
 
-	public long GetCTime()
+	@Override
+	public final long GetCTime()
 	{
 		return ctime;
 	}
 
-	public void SetCTime(long new_ctime)
+	final void SetCTime(long new_ctime)
 	{
 		ctime = new_ctime;
 	}
@@ -49,7 +50,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 // ------------------------------------------
 
 	@Override
-	public double GetSpeed()
+	public final double GetSpeed()
 	{
 		History.Entry last = history.GetLast();
 
@@ -69,35 +70,33 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		return diff / (GetCTime() - last_ctime);
 	}
 
-	protected boolean Update(Object new_value)
+	protected void Update(Object new_value)
 	{
 		for(Reaction reaction : GetReactions())
 			reaction.Repeat(new_value);
 
-		boolean result = (GetValue() != new_value);
 		history.Add(GetValue(), GetCTime());
 
 		SetCTime(JavaUtils.GetTimestamp());
 		SetValue(new_value);
-
-		return result;
 	}
 
 	@Override
-	public AttributeList<VarAttribute> GetDependant()
+	public final AttributeList<VarAttribute> GetDependant()
 	{
 		return dependant;
 	}
 
-	public Reaction GetReaction(long id)
-	{
-		return reactions.get(id);
-	}
 
 	@Override
-	public Collection<Reaction> GetReactions()
+	public final Collection<Reaction> GetReactions()
 	{
 		return reactions.values();
+	}
+
+	public final Reaction GetReaction(long id)
+	{
+		return reactions.get(id);
 	}
 
 // ------------------------------------------------------------------------------------------------------

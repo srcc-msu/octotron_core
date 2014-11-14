@@ -40,9 +40,4 @@ public class UpperThreshold extends Rule
 		return attr.lt(threshold);
 	}
 
-	@Override
-	public Object GetDefaultValue()
-	{
-		return true;
-	}
 }

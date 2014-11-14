@@ -28,7 +28,7 @@ public class AggregateMatchCount extends Aggregate
 	}
 
 	@Override
-	public Object GetDefaultValue()
+	protected Object GetDefaultValue()
 	{
 		return 0L;
 	}

@@ -31,12 +31,6 @@ public final class SensorAttribute extends AbstractModAttribute
 	 * */
 	private boolean is_valid = true;
 
-	/**
-	 * tracks if the sensor got at least one value update:
-	 * initially or via Update()
-	 * */
-	private boolean got_initial_value = false;
-
 	public SensorAttribute(ModelEntity parent, String name
 		, Object value, long update_time)
 	{
@@ -44,18 +38,15 @@ public final class SensorAttribute extends AbstractModAttribute
 		this.update_time = update_time;
 
 		SetCTime(JavaUtils.GetTimestamp());
-		got_initial_value = true;
 	}
 
 	public SensorAttribute(ModelEntity parent, String name, long update_time)
 	{
-		super(EAttributeType.SENSOR, parent, name, null);
+		super(EAttributeType.SENSOR, parent, name);
 
 		if(update_time == -1)
 			throw new ExceptionModelFail("update time is set to never, default sensor value must be specified");
 		this.update_time = update_time;
-
-		got_initial_value = false;
 	}
 
 	@Override
@@ -74,7 +65,6 @@ public final class SensorAttribute extends AbstractModAttribute
 	@Override
 	public void Update(Object new_value)
 	{
-		got_initial_value = true;
 		SetIsMissing(false);
 
 		super.Update(new_value);
@@ -96,11 +86,6 @@ public final class SensorAttribute extends AbstractModAttribute
 	public boolean IsMissing()
 	{
 		return is_missing;
-	}
-
-	public boolean GotInitialValue()
-	{
-		return got_initial_value;
 	}
 
 	@Override
@@ -134,7 +119,6 @@ public final class SensorAttribute extends AbstractModAttribute
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
 
-		result.put("got_initial_value", GotInitialValue());
 		result.put("is_valid", IsValid());
 		result.put("is_missing", IsMissing());
 

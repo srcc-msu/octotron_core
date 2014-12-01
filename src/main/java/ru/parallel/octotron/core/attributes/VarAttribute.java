@@ -69,9 +69,8 @@ public final class VarAttribute extends AbstractModAttribute
 	{
 		for(IModelAttribute dep_attribute : rule.GetDependency(GetParent()))
 		{
-			if(dep_attribute.GetType() == EAttributeType.SENSOR)
-				if(((SensorAttribute)dep_attribute).GotInitialValue() == false)
-					return false;
+			if(!dep_attribute.HasValue())
+				return false;
 		}
 		return true;
 	}

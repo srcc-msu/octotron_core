@@ -10,6 +10,7 @@ import java.util.Collection;
 
 public interface IModelAttribute extends IAttribute
 {
+	boolean HasValue();
 	boolean Check();
 
 	double GetSpeed();
@@ -20,4 +21,5 @@ public interface IModelAttribute extends IAttribute
 	AttributeList<VarAttribute> GetDependant();
 
 	IAttributeBuilder GetBuilder(ModelService service);
+
 }

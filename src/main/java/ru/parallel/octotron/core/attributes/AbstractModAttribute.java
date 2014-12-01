@@ -27,9 +27,27 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	protected final Map<Long, Reaction> reactions = new HashMap<>();
 	protected final AttributeList<VarAttribute> dependant = new AttributeList<>();
 
+	/**
+	 * tracks if the sensor got at least one value update:
+	 * initially or via Update()
+	 * */
+	private boolean has_value = false;
+
 	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Object value)
 	{
 		super(type, parent, name, value);
+		has_value = true;
+	}
+
+	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name)
+	{
+		super(type, parent, name, null);
+		has_value = false;
+	}
+
+	public final boolean HasValue()
+	{
+		return has_value;
 	}
 
 	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder(ModelService service);
@@ -121,6 +139,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		result.put("name", GetName());
 		result.put("value", GetValue());
 		result.put("ctime", GetCTime());
+		result.put("has_value", HasValue());
 
 		return result;
 	}

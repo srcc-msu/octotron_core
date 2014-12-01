@@ -130,7 +130,7 @@ public class PreparedResponseFactory
 	private void FillInfo(PreparedResponse prepared_response, Response response)
 	{
 		prepared_response.info.put("time", JavaUtils.GetTimestamp());
-		prepared_response.info.put("status", response.GetStatus());
+		prepared_response.info.put("status", response.GetStatus().toString());
 	}
 
 	private void FillUsr(PreparedResponse prepared_response, ModelEntity entity, Response response)

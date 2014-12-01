@@ -70,6 +70,12 @@ public final class ConstAttribute extends AbstractAttribute implements IModelAtt
 	}
 
 	@Override
+	public boolean HasValue()
+	{
+		return true;
+	}
+
+	@Override
 	public boolean Check()
 	{
 		return true;

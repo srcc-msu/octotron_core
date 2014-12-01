@@ -19,6 +19,9 @@ public class AggregateDoubleSum extends Aggregate
 	@Override
 	protected Object Accumulate(Object res, IModelAttribute attribute)
 	{
+		if(!attribute.Check())
+			return res;
+
 		return (Double)res + attribute.GetDouble();
 	}
 

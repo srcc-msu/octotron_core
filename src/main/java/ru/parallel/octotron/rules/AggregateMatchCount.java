@@ -22,6 +22,9 @@ public class AggregateMatchCount extends Aggregate
 	@Override
 	protected Object Accumulate(Object res, IModelAttribute attribute)
 	{
+		if(!attribute.Check())
+			return res;
+
 		if(attribute.eq(value))
 			return (Long)res + 1;
 		return res;

@@ -39,6 +39,10 @@ public final class VarAttribute extends AbstractModAttribute
 		return rule;
 	}
 
+	/**
+	 * if sensor check fails, no update will be performed<br>
+	 * in any other case the rule will be computed
+	 * */
 	public boolean Update()
 	{
 		if(Check() == false)
@@ -56,13 +60,18 @@ public final class VarAttribute extends AbstractModAttribute
 		return dependency;
 	}
 
+	/**
+	 * checks for a special case - when the sensor value has not been updated<br>
+	 * will only fail on not updated sensors<br>
+	 * */
 	@Override
 	public boolean Check()
 	{
 		for(IModelAttribute dep_attribute : rule.GetDependency(GetParent()))
 		{
-			if(dep_attribute.GetCTime() == 0)
-				return false;
+			if(dep_attribute.GetType() == EAttributeType.SENSOR)
+				if(((SensorAttribute)dep_attribute).GotInitialValue() == false)
+					return false;
 		}
 		return true;
 	}

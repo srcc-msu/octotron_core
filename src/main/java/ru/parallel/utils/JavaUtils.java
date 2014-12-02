@@ -6,7 +6,7 @@
 
 package ru.parallel.utils;
 
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -35,23 +35,6 @@ public abstract class JavaUtils
 	public static String Quotify(String str)
 	{
 		return "\"" + str + "\"";
-	}
-
-
-	public static <T extends SimpleAttribute> List<T> SortSimpleList(List<T> list)
-	{
-		List<T> new_list = new LinkedList<>(list);
-
-		Collections.sort(new_list, new Comparator<T>()
-		{
-			@Override
-			public int compare(T o1, T o2)
-			{
-				return o1.GetName().compareTo(o2.GetName());
-			}
-		});
-
-		return new_list;
 	}
 
 	private static final long EXECUTOR_TIMEOUT = 2;

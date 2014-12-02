@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.http.operations;
 
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.ExecutionController;
@@ -77,7 +77,7 @@ public class Control
 			Utils.StrictParams(params, "silent");
 
 			String mode_str = params.get("silent");
-			boolean mode = (boolean) SimpleAttribute.ValueFromStr(mode_str);
+			boolean mode = Value.ValueFromStr(mode_str).GetBoolean();
 
 			controller.SetSilent(mode);
 
@@ -139,7 +139,7 @@ public class Control
 			Utils.StrictParams(params, "interval");
 
 			String value_str = params.get("interval");
-			long interval = (long)SimpleAttribute.ValueFromStr(value_str);
+			long interval = Value.ValueFromStr(value_str).GetLong();
 
 			List<Map<String, Object>> result;
 

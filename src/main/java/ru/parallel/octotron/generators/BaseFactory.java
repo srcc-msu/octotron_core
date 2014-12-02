@@ -6,9 +6,12 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.VarTemplate;
+import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -26,14 +29,14 @@ public abstract class BaseFactory<T>
  * attribute template that will be used for all created entities<br>
  * must be cloned<br>
  * */
-	protected final List<SimpleAttribute> constants;
-	protected final List<SimpleAttribute> sensors;
-	protected final List<SimpleAttribute> rules;
+	protected final List<ConstTemplate> constants;
+	protected final List<SensorTemplate> sensors;
+	protected final List<VarTemplate> rules;
 	protected final List<ReactionTemplate> reactions;
 
-	protected BaseFactory(ModelService service, List<SimpleAttribute> constants
-		, List<SimpleAttribute> sensors
-		, List<SimpleAttribute> rules
+	protected BaseFactory(ModelService service, List<ConstTemplate> constants
+		, List<SensorTemplate> sensors
+		, List<VarTemplate> rules
 		, List<ReactionTemplate> reactions)
 	{
 		this.service = service;
@@ -46,31 +49,31 @@ public abstract class BaseFactory<T>
 	protected BaseFactory(ModelService service)
 	{
 		this(service
-			, new LinkedList<SimpleAttribute>()
-			, new LinkedList<SimpleAttribute>()
-			, new LinkedList<SimpleAttribute>()
+			, new LinkedList<ConstTemplate>()
+			, new LinkedList<SensorTemplate>()
+			, new LinkedList<VarTemplate>()
 			, new LinkedList<ReactionTemplate>());
 	}
 
-	public T Constants(SimpleAttribute... addition)
+	public T Constants(ConstTemplate... addition)
 	{
-		List<SimpleAttribute> new_constants = new LinkedList<>(constants);
+		List<ConstTemplate> new_constants = new LinkedList<>(constants);
 		new_constants.addAll(Arrays.asList(addition));
 
 		return Clone(new_constants, sensors, rules, reactions);
 	}
 
-	public T Sensors(SimpleAttribute... addition)
+	public T Sensors(SensorTemplate... addition)
 	{
-		List<SimpleAttribute> new_sensors = new LinkedList<>(sensors);
+		List<SensorTemplate> new_sensors = new LinkedList<>(sensors);
 		new_sensors.addAll(Arrays.asList(addition));
 
 		return Clone(constants, new_sensors, rules, reactions);
 	}
 
-	public T Varyings(SimpleAttribute... addition)
+	public T Vars(VarTemplate... addition)
 	{
-		List<SimpleAttribute> new_rules = new LinkedList<>(rules);
+		List<VarTemplate> new_rules = new LinkedList<>(rules);
 		new_rules.addAll(Arrays.asList(addition));
 
 		return Clone(constants, sensors, new_rules, reactions);
@@ -85,8 +88,8 @@ public abstract class BaseFactory<T>
 	}
 
 	protected abstract T Clone(
-		List<SimpleAttribute> new_constants
-		, List<SimpleAttribute> new_sensors
-		, List<SimpleAttribute> new_rules
+		List<ConstTemplate> new_constants
+		, List<SensorTemplate> new_sensors
+		, List<VarTemplate> new_rules
 		, List<ReactionTemplate> new_reactions);
 }

@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IModelAttribute;
@@ -15,13 +16,13 @@ public class VarArgMatchAprx extends Rule
 {
 	private final String check_attribute;
 	private final String match_attribute;
-	private final Object aprx;
+	private final Value aprx;
 
 	public VarArgMatchAprx(String check_attribute, String match_attribute, Object aprx)
 	{
 		this.check_attribute = check_attribute;
 		this.match_attribute = match_attribute;
-		this.aprx = aprx;
+		this.aprx = Value.Construct(aprx);
 	}
 
 	@Override

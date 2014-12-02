@@ -9,7 +9,6 @@ package ru.parallel.octotron.core.graph.impl;
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.primitive.ID;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 /**
  * some entity, that resides in model_old<br>
@@ -45,18 +44,10 @@ public abstract class GraphEntity
 	{
 		return TestAttribute(name) && GetAttribute(name).equals(value);
 	}
-	public boolean TestAttribute(SimpleAttribute test)
-	{
-		return TestAttribute(test.GetName(), test.GetValue());
-	}
 
 // ---
 
 	public abstract void UpdateAttribute(String name, Object value);
-	public void UpdateAttribute(SimpleAttribute att)
-	{
-		UpdateAttribute(att.GetName(), att.GetValue());
-	}
 
 	public ID<EGraphType> GetID()
 	{

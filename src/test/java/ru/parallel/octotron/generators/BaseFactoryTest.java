@@ -2,15 +2,18 @@ package ru.parallel.octotron.generators;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.rules.Match;
 
 import static org.junit.Assert.assertEquals;
@@ -43,9 +46,9 @@ public class BaseFactoryTest
 	@Test
 	public void TestAttributes()
 	{
-		SimpleAttribute[] attributes = { new SimpleAttribute("test1", 0) };
-		SimpleAttribute attr2 = new SimpleAttribute("test2", 1);
-		SimpleAttribute attr3 = new SimpleAttribute("test3", 2);
+		ConstTemplate[] attributes = { new ConstTemplate("test1", 0) };
+		ConstTemplate attr2 = new ConstTemplate("test2", 1);
+		ConstTemplate attr3 = new ConstTemplate("test3", 2);
 
 		ObjectFactory f1 = object_factory
 			.Constants(attributes).Constants(attr2, attr3);
@@ -53,7 +56,7 @@ public class BaseFactoryTest
 			.Constants(attr2, attr3).Constants(attributes);
 
 		ModelObject obj = f1.Create();
-		ModelLink link = f2.Constants(new SimpleAttribute("type", "1"))
+		ModelLink link = f2.Constants(new ConstTemplate("type", "1"))
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertTrue(obj.TestAttribute("test1"));
@@ -68,13 +71,13 @@ public class BaseFactoryTest
 	@Test
 	public void TestVaryings()
 	{
-		SimpleAttribute[] rules = { new SimpleAttribute("test1", new Match("", "")) };
+		VarTemplate[] rules = { new VarTemplate("test1", new Match("", "")) };
 		Rule rule2 = new Match("", "");
 		Rule rule3 = new Match("", "");
 
 		ObjectFactory f1 = object_factory
-			.Varyings(rules)
-			.Varyings(new SimpleAttribute("test2", rule2), new SimpleAttribute("test3", rule3));
+			.Vars(rules)
+			.Vars(new VarTemplate("test2", rule2), new VarTemplate("test3", rule3));
 
 		ModelObject obj = f1.Create();
 
@@ -91,9 +94,9 @@ public class BaseFactoryTest
 		ReactionTemplate reaction3 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO));
 
 		ObjectFactory f1 = object_factory
-			.Sensors(new SimpleAttribute("test1", 0))
-			.Sensors(new SimpleAttribute("test2", 0))
-			.Sensors(new SimpleAttribute("test3", 0))
+			.Sensors(new SensorTemplate("test1", 0))
+			.Sensors(new SensorTemplate("test2", 0))
+			.Sensors(new SensorTemplate("test3", 0))
 			.Reactions(reactions).Reactions(reaction2, reaction3);
 
 		ModelObject obj = f1.Create();

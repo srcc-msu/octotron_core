@@ -7,7 +7,7 @@
 package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.attributes.IAttribute;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.attributes.Value;
 
 import java.util.*;
 
@@ -81,7 +81,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return new_list;
 	}
 
-	public AttributeList<T> ge(Object val)
+	public AttributeList<T> ge(Value val)
 	{
 		List<T> new_list = new LinkedList<>();
 
@@ -92,7 +92,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return new AttributeList<>(new_list);
 	}
 
-	public AttributeList<T> le(Object val)
+	public AttributeList<T> le(Value val)
 	{
 		List<T> new_list = new LinkedList<>();
 
@@ -103,7 +103,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return new AttributeList<>(new_list);
 	}
 
-	public AttributeList<T> gt(Object val)
+	public AttributeList<T> gt(Value val)
 	{
 		List<T> new_list = new LinkedList<>();
 
@@ -114,7 +114,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return new AttributeList<>(new_list);
 	}
 
-	public AttributeList<T> lt(Object val)
+	public AttributeList<T> lt(Value val)
 	{
 		List<T> new_list = new LinkedList<>();
 
@@ -125,7 +125,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return new AttributeList<>(new_list);
 	}
 
-	public AttributeList<T> eq(Object val)
+	public AttributeList<T> eq(Value val)
 	{
 		List<T> new_list = new LinkedList<>();
 
@@ -136,7 +136,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return new AttributeList<>(new_list);
 	}
 
-	public AttributeList<T> ne(Object val)
+	public AttributeList<T> ne(Value val)
 	{
 		List<T> new_list = new LinkedList<>();
 
@@ -152,7 +152,7 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return new AttributeList<>(InnerAlphabeticSort());
 	}
 
-	public List<SimpleAttribute> ToSimple()
+	/*public List<SimpleAttribute> ToSimple()
 	{
 		List<SimpleAttribute> result = new LinkedList<>();
 
@@ -160,5 +160,5 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 			result.add(new SimpleAttribute(attribute.GetName(), attribute.GetValue()));
 
 		return result;
-	}
+	}*/
 }

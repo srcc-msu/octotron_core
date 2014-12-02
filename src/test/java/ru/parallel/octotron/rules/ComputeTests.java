@@ -2,20 +2,22 @@ package ru.parallel.octotron.rules;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.attributes.AbstractAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.EDependencyType;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -37,55 +39,57 @@ public class ComputeTests
 		throws ExceptionSystemError
 	{
 		ObjectFactory in = new ObjectFactory(context.model_service)
-			.Sensors(new SimpleAttribute("in_d1", 10.0))
-			.Sensors(new SimpleAttribute("in_l1", 20))
-			.Sensors(new SimpleAttribute("in_b1", true))
-			.Sensors(new SimpleAttribute("in_str1", "yes"))
-			.Sensors(new SimpleAttribute("d1", 10.0))
-			.Sensors(new SimpleAttribute("d2", 11.0))
-			.Sensors(new SimpleAttribute("l1", 20L))
-			.Sensors(new SimpleAttribute("l2", 21L))
-			.Sensors(new SimpleAttribute("b1", true))
-			.Sensors(new SimpleAttribute("b2", true))
-			.Sensors(new SimpleAttribute("str1", "yes"))
-			.Sensors(new SimpleAttribute("str2", "yes"));
+			.Sensors(new SensorTemplate("in_d1", -1, 10.0))
+			.Sensors(new SensorTemplate("in_l1", -1, 20))
+			.Sensors(new SensorTemplate("in_b1", -1, true))
+			.Sensors(new SensorTemplate("in_str1", -1, "yes"))
+			.Sensors(new SensorTemplate("d1", -1, 10.0))
+			.Sensors(new SensorTemplate("d2", -1, 11.0))
+			.Sensors(new SensorTemplate("l1", -1, 20L))
+			.Sensors(new SensorTemplate("l2", -1, 21L))
+			.Sensors(new SensorTemplate("b1", -1, true))
+			.Sensors(new SensorTemplate("b2", -1, true))
+			.Sensors(new SensorTemplate("str1", -1, "yes"))
+			.Sensors(new SensorTemplate("str2", -1, "yes"));
 
 		ObjectFactory out = new ObjectFactory(context.model_service)
-			.Sensors(new SimpleAttribute("out_d1", 20.0))
-			.Sensors(new SimpleAttribute("out_l1", 10))
-			.Sensors(new SimpleAttribute("out_b1", false))
-			.Sensors(new SimpleAttribute("out_str1", "no"))
-			.Sensors(new SimpleAttribute("d1", 20.0))
-			.Sensors(new SimpleAttribute("d2", 21.0))
-			.Sensors(new SimpleAttribute("l1", 10L))
-			.Sensors(new SimpleAttribute("l2", 11L))
-			.Sensors(new SimpleAttribute("b1", false))
-			.Sensors(new SimpleAttribute("b2", false))
-			.Sensors(new SimpleAttribute("str1", "no"))
-			.Sensors(new SimpleAttribute("str2", "no"))
-			.Sensors(new SimpleAttribute("mismatch_num", 333L))
-			.Sensors(new SimpleAttribute("match_num", 444L));
+			.Sensors(new SensorTemplate("out_d1", -1, 20.0))
+			.Sensors(new SensorTemplate("out_l1", -1, 10))
+			.Sensors(new SensorTemplate("out_b1", -1, false))
+			.Sensors(new SensorTemplate("out_str1", -1, "no"))
+			.Sensors(new SensorTemplate("d1", -1, 20.0))
+			.Sensors(new SensorTemplate("d2", -1, 21.0))
+			.Sensors(new SensorTemplate("l1", -1, 10L))
+			.Sensors(new SensorTemplate("l2", -1, 11L))
+			.Sensors(new SensorTemplate("b1", -1, false))
+			.Sensors(new SensorTemplate("b2", -1, false))
+			.Sensors(new SensorTemplate("str1", -1, "no"))
+			.Sensors(new SensorTemplate("str2", -1, "no"))
+			.Sensors(new SensorTemplate("mismatch_num", -1, 333L))
+			.Sensors(new SensorTemplate("match_num", -1, 444L));
 
 		ObjectFactory self = new ObjectFactory(context.model_service)
-			.Sensors(new SimpleAttribute("d1", 0.0))
-			.Sensors(new SimpleAttribute("d2", 1.0))
-			.Sensors(new SimpleAttribute("l1", 2L))
-			.Sensors(new SimpleAttribute("l2", 3L))
-			.Sensors(new SimpleAttribute("b1", true))
-			.Sensors(new SimpleAttribute("b2", false))
-			.Sensors(new SimpleAttribute("str1", "maybe"))
-			.Sensors(new SimpleAttribute("str2", "maybe"))
-			.Sensors(new SimpleAttribute("bt1", true))
-			.Sensors(new SimpleAttribute("bt2", true))
-			.Sensors(new SimpleAttribute("bf1", false))
-			.Sensors(new SimpleAttribute("bf2", false))
-			.Sensors(new SimpleAttribute("mismatch_num", 222L))
-			.Sensors(new SimpleAttribute("match_num", 444L));
+			.Sensors(new SensorTemplate("mod_d1", -1, 0.0))
+			.Sensors(new SensorTemplate("mod_l1", -1, 2L))
+			.Sensors(new SensorTemplate("d1", -1, 0.0))
+			.Sensors(new SensorTemplate("d2", -1, 1.0))
+			.Sensors(new SensorTemplate("l1", -1, 2L))
+			.Sensors(new SensorTemplate("l2", -1, 3L))
+			.Sensors(new SensorTemplate("b1", -1, true))
+			.Sensors(new SensorTemplate("b2", -1, false))
+			.Sensors(new SensorTemplate("str1", -1, "maybe"))
+			.Sensors(new SensorTemplate("str2", -1, "maybe"))
+			.Sensors(new SensorTemplate("bt1", -1, true))
+			.Sensors(new SensorTemplate("bt2", -1, true))
+			.Sensors(new SensorTemplate("bf1", -1, false))
+			.Sensors(new SensorTemplate("bf2", -1, false))
+			.Sensors(new SensorTemplate("mismatch_num", -1, 222L))
+			.Sensors(new SensorTemplate("match_num", -1, 444L));
 
 		object = self.Create();
 
 		LinkFactory links = new LinkFactory(context.model_service)
-			.Constants(new SimpleAttribute("type", "test"));
+			.Constants(new ConstTemplate("type", "test"));
 
 		ModelObjectList ins = in.Create(3);
 		ModelObjectList outs = out.Create(4);
@@ -121,10 +125,10 @@ public class ComputeTests
 		AggregateDoubleSum all_rule
 			= new AggregateDoubleSum(EDependencyType.ALL, "d1", "d2");
 
-		assertEquals(  1.0, (Double)self_rule.Compute(object), AbstractAttribute.EPSILON);
-		assertEquals( 63.0, (Double)  in_rule.Compute(object), AbstractAttribute.EPSILON);
-		assertEquals(164.0, (Double) out_rule.Compute(object), AbstractAttribute.EPSILON);
-		assertEquals(228.0, (Double) all_rule.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals(  1.0, (Double)self_rule.Compute(object), Value.EPSILON);
+		assertEquals( 63.0, (Double)  in_rule.Compute(object), Value.EPSILON);
+		assertEquals(164.0, (Double) out_rule.Compute(object), Value.EPSILON);
+		assertEquals(228.0, (Double) all_rule.Compute(object), Value.EPSILON);
 	}
 
 	@Test
@@ -184,7 +188,7 @@ public class ComputeTests
 	@Test
 	public void TestArgMatchAprx()
 	{
-		ArgMatchAprx rule1 = new ArgMatchAprx("d1", "d2", AbstractAttribute.EPSILON);
+		ArgMatchAprx rule1 = new ArgMatchAprx("d1", "d2", Value.EPSILON);
 		ArgMatchAprx rule2 = new ArgMatchAprx("d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(object));
@@ -343,7 +347,7 @@ public class ComputeTests
 	@Test
 	public void TestVarArgMatchAprx()
 	{
-		VarArgMatchAprx rule1 = new VarArgMatchAprx("d1", "d2", AbstractAttribute.EPSILON);
+		VarArgMatchAprx rule1 = new VarArgMatchAprx("d1", "d2", Value.EPSILON);
 		VarArgMatchAprx rule2 = new VarArgMatchAprx("d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(object));
@@ -388,35 +392,28 @@ public class ComputeTests
 	@Test
 	public void TestCalcSpeed() throws Exception
 	{
-		CalcSpeed rule_l = new CalcSpeed("l1");
-		CalcSpeed rule_d = new CalcSpeed("d1");
+		CalcSpeed rule_l = new CalcSpeed("mod_l1");
+		CalcSpeed rule_d = new CalcSpeed("mod_d1");
 
-		Object l1 = object.GetAttribute("l1").GetValue();
-		Object d1 = object.GetAttribute("d1").GetValue();
+		object.GetSensor("mod_l1").Update(10L);
+		object.GetSensor("mod_d1").Update(10.0);
 
-		object.GetSensor("l1").Update(10L);
-		object.GetSensor("d1").Update(10.0);
-
-		assertEquals(0.0, (Double)rule_l.Compute(object), AbstractAttribute.EPSILON);
-		assertEquals(0.0, (Double)rule_d.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals(0.0, (Double)rule_l.Compute(object), Value.EPSILON);
+		assertEquals(0.0, (Double)rule_d.Compute(object), Value.EPSILON);
 
 		Thread.sleep(2000);
 
-		object.GetSensor("l1").Update(20L);
-		object.GetSensor("d1").Update(20.0);
+		object.GetSensor("mod_l1").Update(20L);
+		object.GetSensor("mod_d1").Update(20.0);
 
-		assertEquals(5.0, (double)rule_l.Compute(object), AbstractAttribute.EPSILON);
-		assertEquals(5.0, (double)rule_d.Compute(object), AbstractAttribute.EPSILON);
+		assertEquals(5.0, (double)rule_l.Compute(object), Value.EPSILON);
+		assertEquals(5.0, (double)rule_d.Compute(object), Value.EPSILON);
 
-		object.GetSensor("l1").Update(20L);
-		object.GetSensor("d1").Update(20.0);
+		object.GetSensor("mod_l1").Update(20L);
+		object.GetSensor("mod_d1").Update(20.0);
 
-		assertEquals(0.0, (Double)rule_l.Compute(object), AbstractAttribute.EPSILON);
-		assertEquals(0.0, (Double)rule_d.Compute(object), AbstractAttribute.EPSILON);
-
-		object.GetSensor("l1").Update(l1);
-		object.GetSensor("d1").Update(d1);
-
+		assertEquals(0.0, (Double)rule_l.Compute(object), Value.EPSILON);
+		assertEquals(0.0, (Double)rule_d.Compute(object), Value.EPSILON);
 	}
 
 	@Test

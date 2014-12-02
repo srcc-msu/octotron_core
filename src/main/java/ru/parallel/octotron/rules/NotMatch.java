@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IModelAttribute;
@@ -14,12 +15,12 @@ import ru.parallel.octotron.core.model.ModelEntity;
 public class NotMatch extends Rule
 {
 	private final String param;
-	private final Object match_value;
+	private final Value match_value;
 
 	public NotMatch(String param, Object match_value)
 	{
 		this.param = param;
-		this.match_value = match_value;
+		this.match_value = Value.Construct(match_value);
 	}
 
 	@Override

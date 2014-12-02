@@ -6,8 +6,9 @@
 
 package ru.parallel.octotron.http.path;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 import java.util.HashMap;
@@ -71,20 +72,20 @@ public final class PathParser
 		{
 			String name = matcher.group(1);
 			String op = matcher.group(2);
-			Object value = SimpleAttribute.ValueFromStr(matcher.group(3));
+			Value value = Value.ValueFromStr(matcher.group(3));
 
 			ModelList.EQueryType type = DELIMS.get(op);
 
 			if(type == null)
 				throw new ExceptionParseError("unsupported operation: " + op);
 
-			return new PathOperations.Query(new SimpleAttribute(name, value), type);
+			return new PathOperations.Query(name, value, type);
 		}
 
 		matcher = op_pattern_word.matcher(str);
 
 		if(matcher.find())
-			return new PathOperations.Query(new SimpleAttribute(str, null), ModelList.EQueryType.NONE);
+			return new PathOperations.Query(str, null, ModelList.EQueryType.NONE);
 
 		throw new ExceptionParseError("can not parse: " + str);
 	}

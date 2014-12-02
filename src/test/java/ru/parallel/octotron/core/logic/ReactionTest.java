@@ -11,6 +11,7 @@ import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

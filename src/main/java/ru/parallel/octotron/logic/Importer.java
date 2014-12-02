@@ -7,24 +7,29 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.exec.ExecutionController;
 
 public class Importer implements Runnable
 {
-	private final ModelEntity entity;
-	private final SimpleAttribute attribute;
 	private final ExecutionController controller;
+	private final ModelEntity entity;
 
-	public Importer(ExecutionController controller, ModelEntity entity, SimpleAttribute attribute)
+	private final String name;
+	private final Value value;
+
+	public Importer(ExecutionController controller, ModelEntity entity, String name, Value value)
 	{
 		this.controller = controller;
 		this.entity = entity;
-		this.attribute = attribute;
+
+		this.name = name;
+		this.value = value;
 	}
 
 	protected AttributeList<VarAttribute> GetDependant(AttributeList<? extends IModelAttribute> attributes)
@@ -39,7 +44,7 @@ public class Importer implements Runnable
 		return result;
 	}
 
-	public AttributeList<IModelAttribute> ProcessVaryings(SensorAttribute changed)
+	public AttributeList<IModelAttribute> ProcessVars(SensorAttribute changed)
 	{
 		AttributeList<IModelAttribute> result = new AttributeList<>();
 
@@ -63,10 +68,10 @@ public class Importer implements Runnable
 	@Override
 	public void run()
 	{
-		SensorAttribute sensor = entity.GetSensor(attribute.GetName());
-		sensor.Update(attribute.GetValue());
+		SensorAttribute sensor = entity.GetSensor(name);
+		sensor.Update(value);
 
-		AttributeList<IModelAttribute> result = ProcessVaryings(sensor);
+		AttributeList<IModelAttribute> result = ProcessVars(sensor);
 
 		result.add(sensor);
 

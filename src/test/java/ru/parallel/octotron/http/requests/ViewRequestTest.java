@@ -4,7 +4,9 @@ import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.impl.Equals;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
+import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.rules.CalcSpeed;
 
 import static org.junit.Assert.fail;
@@ -42,8 +44,8 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void EntityTest() throws Exception
 	{
-		ViewRequestTest.factory.Sensors(new SimpleAttribute("sensor", 1))
-			.Varyings(new SimpleAttribute("rule", new CalcSpeed("sensor"))).Create(10);
+		ViewRequestTest.factory.Sensors(new SensorTemplate("sensor", -1, 1))
+			.Vars(new VarTemplate("rule", new CalcSpeed("sensor"))).Create(10);
 
 		context.model_service.EnableObjectIndex("AID");
 
@@ -68,7 +70,7 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void ReactionTest() throws Exception
 	{
-		ViewRequestTest.factory.Sensors(new SimpleAttribute("test", 0))
+		ViewRequestTest.factory.Sensors(new SensorTemplate("test", -1, 0))
 			.Reactions(new Equals("test", 1)).Create(1);
 
 		context.model_service.EnableObjectIndex("AID");
@@ -85,7 +87,7 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void SuppressedTest() throws Exception
 	{
-		ModelObjectList obj = ViewRequestTest.factory.Sensors(new SimpleAttribute("test", 0))
+		ModelObjectList obj = ViewRequestTest.factory.Sensors(new SensorTemplate("test", -1, 0))
 			.Reactions(new Equals("test", 1)).Create(1);
 		context.model_service.EnableObjectIndex("AID");
 
@@ -112,7 +114,7 @@ public class ViewRequestTest extends RequestTest
 		String test = GetRequestResult("/view/all_response");
 
 		if(test == null)
-			fail("bad response: " + test);
+			fail("bad response: result is null");
 	}
 
 	@Test

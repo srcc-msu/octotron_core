@@ -76,8 +76,7 @@ public class GraphEntityTest
 		object1.UpdateAttribute("test_double", 1.0);
 		object1.UpdateAttribute("test_bool", true);
 
-		assertEquals(Long.valueOf(1L)
-			, object1.GetAttribute("test_long"));
+		assertEquals(1L, object1.GetAttribute("test_long"));
 
 		assertEquals("a", object1.GetAttribute("test_str"));
 
@@ -93,8 +92,7 @@ public class GraphEntityTest
 		link.UpdateAttribute("test_double", 1.0);
 		link.UpdateAttribute("test_bool", true);
 
-		assertEquals(Long.valueOf(1L)
-			,link.GetAttribute("test_long"));
+		assertEquals(1L, link.GetAttribute("test_long"));
 
 		assertEquals("a", link.GetAttribute("test_str"));
 
@@ -231,9 +229,9 @@ public class GraphEntityTest
 		GraphObject object2 = graph_service.AddObject();
 		GraphLink link = graph_service.AddLink(object1, object2, "test");
 
-		assertEquals(1, object1.GetAttributes().size());
-		assertEquals(1, object2.GetAttributes().size());
-		assertEquals(1, link.GetAttributes().size());
+		assertEquals(1, object1.GetNames().size());
+		assertEquals(1, object2.GetNames().size());
+		assertEquals(1, link.GetNames().size());
 
 		final int N = 10;
 
@@ -251,9 +249,9 @@ public class GraphEntityTest
 				, link.GetAttribute("test" + i).GetLong());
 		}
 
-		assertEquals(1 + N, object1.GetAttributes().size());
-		assertEquals(1 + 0, object2.GetAttributes().size());
-		assertEquals(1 + N, link.GetAttributes().size());
+		assertEquals(1 + N, object1.GetNames().size());
+		assertEquals(1 + 0, object2.GetNames().size());
+		assertEquals(1 + N, link.GetNames().size());
 	}*/
 
 }

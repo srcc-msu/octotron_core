@@ -6,10 +6,11 @@
 
 package ru.parallel.octotron.logic;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EDependencyType;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.rules.AggregateLongSum;
 
@@ -41,8 +42,8 @@ public class SelfTest
 	{
 		test_iteration++;
 
-		controller.ImmediateImport(obj1, new SimpleAttribute("test_iteration", test_iteration));
+		controller.ImmediateImport(obj1, "test_iteration", new Value(test_iteration));
 
-		return obj2.GetAttribute("check").eq(test_iteration);
+		return obj2.GetAttribute("check").eq(new Value(test_iteration));
 	}
 }

@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.impl.ObjectRule;
 import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -25,6 +26,19 @@ public abstract class Aggregate extends ObjectRule
 	{
 		this.dependency = dependency;
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
+	}
+
+	/**
+	 * this type of rules does not require any conditions
+	 * */
+	@Override
+	public boolean CanCompute(ModelEntity entity)
+	{
+		for(IModelAttribute attribute : GetDependency(entity))
+			if(attribute.IsInitialDelay())
+				return false;
+
+		return true;
 	}
 
 	// TODO: this is slow, add clone and caching or something

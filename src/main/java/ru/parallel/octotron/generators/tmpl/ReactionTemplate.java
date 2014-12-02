@@ -4,12 +4,14 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.core.logic;
+package ru.parallel.octotron.generators.tmpl;
 
+import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.logic.LogicID;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.primitive.ELogicalType;
 import ru.parallel.octotron.core.primitive.IPresentable;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +19,7 @@ import java.util.Map;
 public abstract class ReactionTemplate extends LogicID<ELogicalType> implements IPresentable
 {
 	private final String check_name;
-	private final Object check_value;
+	private final Value check_value;
 
 	private Response response = null;
 	private Response recover_response = null;
@@ -31,10 +33,10 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 		super(ELogicalType.REACTION_TEMPLATE);
 
 		this.check_name = check_name;
-		this.check_value = SimpleAttribute.ConformType(check_value);
+		this.check_value = Value.Construct(check_value);
 	}
 
-	public final Object GetCheckValue()
+	public final Value GetCheckValue()
 	{
 		return check_value;
 	}

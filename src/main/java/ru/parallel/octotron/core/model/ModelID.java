@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ModelID<T> extends ID<T>
 {
-	private static AtomicLong static_id = new AtomicLong(0);
+	private static final AtomicLong static_id = new AtomicLong(0);
 
 	public ModelID(T type)
 	{

@@ -15,10 +15,10 @@ public class History
 
 	public static class Entry
 	{
-		final Object value;
+		final Value value;
 		final long ctime;
 
-		public Entry(Object value, long ctime)
+		public Entry(Value value, long ctime)
 		{
 			this.value = value;
 			this.ctime = ctime;
@@ -40,7 +40,7 @@ public class History
 		return history;
 	}
 
-	public void Add(Object value, long ctime)
+	public void Add(Value value, long ctime)
 	{
 		history.addFirst(new Entry(value, ctime));
 

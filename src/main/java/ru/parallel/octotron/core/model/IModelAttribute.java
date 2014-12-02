@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public interface IModelAttribute extends IAttribute
 {
-	boolean HasValue();
+	boolean IsInitialDelay();
 	boolean Check();
 
 	double GetSpeed();

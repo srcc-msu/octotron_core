@@ -6,7 +6,8 @@
 
 package ru.parallel.utils;
 
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.utils.format.JsonString;
 import ru.parallel.utils.format.JsonpString;
 import ru.parallel.utils.format.TypedString;
@@ -29,14 +30,19 @@ public class AutoFormat
 
 	public static String FormatJson(Object data)
 	{
+		if(data == null)
+			return JavaUtils.Quotify("null");
+
 		if(data instanceof JsonString)
 			return ((JsonString) data).string;
 		if(data instanceof Map)
 			return FormatJson((Map<String, Object>) data);
 		if(data instanceof Collection)
 			return FormatJson((Collection<Object>) data);
+		if(data instanceof Value)
+			return ((Value)data).ValueToString();
 		else
-			return SimpleAttribute.ValueToStr(data);
+			return Value.Construct(data).ValueToString();
 	}
 
 	public static String FormatJsonp(Object data, String callback)

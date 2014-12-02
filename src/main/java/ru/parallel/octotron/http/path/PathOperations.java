@@ -6,12 +6,13 @@
 
 package ru.parallel.octotron.http.path;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
@@ -24,12 +25,14 @@ public abstract class PathOperations
 {
 	public static class Query
 	{
-		public final SimpleAttribute attribute;
+		public final String name;
+		public final Value operand;
 		public final ModelList.EQueryType type;
 
-		public Query(SimpleAttribute attribute, ModelList.EQueryType type)
+		public Query(String name, Value operand, ModelList.EQueryType type)
 		{
-			this.attribute = attribute;
+			this.name = name;
+			this.operand = operand;
 			this.type = type;
 		}
 	}
@@ -118,11 +121,6 @@ public abstract class PathOperations
 	}
 
 /**
- * next tokens describe all transformation, allowed in request<br>
- * all requests are described in redmine<br>
- * */
-
-/**
  * filter the list according to request params<br>
  * */
 	public static final PathToken q = new PathToken("q", CHAIN_TYPE.E_MATCH
@@ -137,13 +135,13 @@ public abstract class PathOperations
 
 			if(obj instanceof ModelObjectList)
 			{
-				ModelObjectList list = ToObjList(obj);
-				return list.Filter(params.get(0).attribute, params.get(0).type);
+				return ToObjList(obj)
+					.Filter(params.get(0).name, params.get(0).operand, params.get(0).type);
 			}
 			else if(obj instanceof ModelLinkList)
 			{
-				ModelLinkList list = ToLinkList(obj);
-				return list.Filter(params.get(0).attribute, params.get(0).type);
+				return ToLinkList(obj)
+					.Filter(params.get(0).name, params.get(0).operand, params.get(0).type);
 			}
 
 			throw new ExceptionParseError(
@@ -152,7 +150,7 @@ public abstract class PathOperations
 	});
 
 /**
- * Retrieve an object list from DBindex,<br>
+ * Retrieve an object list from DB index,<br>
  * basing on request params<br>
  * */
 	public static final PathToken obj = new PathToken("obj", CHAIN_TYPE.E_START
@@ -166,17 +164,15 @@ public abstract class PathOperations
 				throw new ExceptionParseError
 					("index operation must be querying a single indexed value");
 
-			SimpleAttribute attr = params.get(0).attribute;
-
-			if(attr.GetValue() != null)
-				return model_data.GetObjects(attr);
+			if(params.get(0).operand != null)
+				return model_data.GetObjects(params.get(0).name, params.get(0).operand);
 			else
-				return model_data.GetObjects(attr.GetName());
+				return model_data.GetObjects(params.get(0).name);
 		}
 	});
 
 /**
- * Retrieve a link list from DBindex,<br>
+ * Retrieve a link list from DB index,<br>
  * basing on request params<br>
  * */
 	public static final PathToken link = new PathToken("link", CHAIN_TYPE.E_START
@@ -190,12 +186,10 @@ public abstract class PathOperations
 				throw new ExceptionParseError
 					("index operation must be querying a single indexed value");
 
-			SimpleAttribute attr = params.get(0).attribute;
-
-			if(attr.GetValue() != null)
-				return model_data.GetLinks(attr);
+			if(params.get(0).operand != null)
+				return model_data.GetLinks(params.get(0).name, params.get(0).operand);
 			else
-				return model_data.GetLinks(attr.GetName());
+				return model_data.GetLinks(params.get(0).name);
 		}
 	});
 
@@ -233,7 +227,7 @@ public abstract class PathOperations
 				throw new ExceptionParseError("in_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ToObjList(obj).GetInNeighbors(params.get(0).attribute);
+				return ToObjList(obj).GetInNeighbors(params.get(0).name, params.get(0).operand);
 
 			return ToObjList(obj).GetInNeighbors();
 		}
@@ -253,7 +247,7 @@ public abstract class PathOperations
 				throw new ExceptionParseError("out_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ToObjList(obj).GetOutNeighbors(params.get(0).attribute);
+				return ToObjList(obj).GetOutNeighbors(params.get(0).name, params.get(0).operand);
 
 			return ToObjList(obj).GetOutNeighbors();
 		}
@@ -273,8 +267,10 @@ public abstract class PathOperations
 				throw new ExceptionParseError("all_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ToObjList(obj).GetOutNeighbors(params.get(0).attribute)
-					.append(ToObjList(obj).GetOutNeighbors(params.get(0).attribute));
+				return ToObjList(obj)
+					.GetInNeighbors(params.get(0).name, params.get(0).operand)
+					.append(ToObjList(obj)
+						.GetOutNeighbors(params.get(0).name, params.get(0).operand));
 
 			return ToObjList(obj).GetOutNeighbors()
 				.append(ToObjList(obj).GetOutNeighbors());

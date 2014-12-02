@@ -8,12 +8,15 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.logic.ReactionTemplate;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.generators.tmpl.VarTemplate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,16 +36,16 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		super(service);
 	}
 
-	private LinkFactory(ModelService service, List<SimpleAttribute> constants
-		, List<SimpleAttribute> sensors
-		, List<SimpleAttribute> rules
+	private LinkFactory(ModelService service, List<ConstTemplate> constants
+		, List<SensorTemplate> sensors
+		, List<VarTemplate> rules
 		, List<ReactionTemplate> reactions)
 	{
 		super(service, constants, sensors, rules, reactions);
 	}
 /*
 @Override
-	public LinkFactory Varyings(OctoRule... params)
+	public LinkFactory Vars(OctoRule... params)
 	{
 		throw new ExceptionModelFail("links do not have rules");
 	}
@@ -297,9 +300,9 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 
 	@Override
 	protected LinkFactory Clone(
-		List<SimpleAttribute> new_constants
-		, List<SimpleAttribute> new_sensors
-		, List<SimpleAttribute> new_rules
+		List<ConstTemplate> new_constants
+		, List<SensorTemplate> new_sensors
+		, List<VarTemplate> new_rules
 		, List<ReactionTemplate> new_reactions)
 	{
 		return new LinkFactory(service, new_constants, new_sensors, new_rules, new_reactions);

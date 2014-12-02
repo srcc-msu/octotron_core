@@ -17,7 +17,7 @@ public final class CommonReactions
 {
 	private CommonReactions() {}
 
-	private static List<Response> registered_responses = new LinkedList<>();
+	private static final List<Response> registered_responses = new LinkedList<>();
 
 	public static Response Critical(String tag, String message)
 		throws ExceptionParseError

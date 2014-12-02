@@ -31,7 +31,7 @@ public final class ConstAttribute extends AbstractAttribute implements IModelAtt
 		return new ConstAttributeBuilder(service, this);
 	}
 
-	public ConstAttribute(ModelEntity parent, String name, Object value)
+	public ConstAttribute(ModelEntity parent, String name, Value value)
 	{
 		super(EAttributeType.CONST, parent, name, value);
 	}
@@ -70,7 +70,7 @@ public final class ConstAttribute extends AbstractAttribute implements IModelAtt
 	}
 
 	@Override
-	public boolean HasValue()
+	public boolean IsInitialDelay()
 	{
 		return true;
 	}

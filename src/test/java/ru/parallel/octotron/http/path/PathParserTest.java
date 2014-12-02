@@ -23,33 +23,33 @@ public class PathParserTest
 		PathOperations.Query result;
 
 		result = PathParser.AttrFromString("test==\"val\"");
-		assertEquals("test", result.attribute.GetName());
-		assertEquals("val", result.attribute.GetValue());
+		assertEquals("test", result.name);
+		assertEquals("val", result.operand.GetString());
 		assertEquals(ModelList.EQueryType.EQ, result.type);
 
 		result = PathParser.AttrFromString("_test!=true");
-		assertEquals("_test", result.attribute.GetName());
-		assertEquals(true, result.attribute.GetValue());
+		assertEquals("_test", result.name);
+		assertEquals(true, result.operand.GetBoolean());
 		assertEquals(ModelList.EQueryType.NE, result.type);
 
 		result = PathParser.AttrFromString("test_1>=0.0");
-		assertEquals("test_1", result.attribute.GetName());
-		assertEquals(0.0, (Double)result.attribute.GetValue(), 0.1);
+		assertEquals("test_1", result.name);
+		assertEquals(0.0, result.operand.GetDouble(), 0.1);
 		assertEquals(ModelList.EQueryType.GE, result.type);
 
 		result = PathParser.AttrFromString("test_2<=0");
-		assertEquals("test_2", result.attribute.GetName());
-		assertEquals(0L, result.attribute.GetValue());
+		assertEquals("test_2", result.name);
+		assertEquals(0L, result.operand.GetLong().longValue());
 		assertEquals(ModelList.EQueryType.LE, result.type);
 
 		result = PathParser.AttrFromString("test-3<23.4");
-		assertEquals("test-3", result.attribute.GetName());
-		assertEquals(23.4, (Double)result.attribute.GetValue(), 0.1);
+		assertEquals("test-3", result.name);
+		assertEquals(23.4, result.operand.GetDouble(), 0.1);
 		assertEquals(ModelList.EQueryType.LT, result.type);
 
 		result = PathParser.AttrFromString("test-4>2423");
-		assertEquals("test-4", result.attribute.GetName());
-		assertEquals(2423L, result.attribute.GetValue());
+		assertEquals("test-4", result.name);
+		assertEquals(2423L, result.operand.GetLong().longValue());
 		assertEquals(ModelList.EQueryType.GT, result.type);
 	}
 }

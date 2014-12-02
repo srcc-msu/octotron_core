@@ -8,9 +8,9 @@ package ru.parallel.octotron.core.model;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.Collection;
 
@@ -39,9 +39,9 @@ public final class ModelData
 		return links;
 	}
 
-	public ModelObjectList GetObjects(SimpleAttribute attribute)
+	public ModelObjectList GetObjects(String name, Value value)
 	{
-		return cache.GetObjects(attribute);
+		return cache.GetObjects(name, value);
 	}
 
 	public ModelObjectList GetObjects(String name)
@@ -49,9 +49,9 @@ public final class ModelData
 		return cache.GetObjects(name);
 	}
 
-	public ModelLinkList GetLinks(SimpleAttribute attribute)
+	public ModelLinkList GetLinks(String name, Value value)
 	{
-		return cache.GetLinks(attribute);
+		return cache.GetLinks(name, value);
 	}
 
 	public ModelLinkList GetLinks(String name)

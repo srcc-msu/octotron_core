@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.core.logic;
 
-
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -21,4 +20,13 @@ public abstract class Rule
 	public abstract Object Compute(ModelEntity entity);
 
 	public abstract AttributeList<IModelAttribute> GetDependency(ModelEntity entity);
+
+	public boolean CanCompute(ModelEntity entity)
+	{
+		for(IModelAttribute attribute : GetDependency(entity))
+			if(!attribute.Check())
+				return false;
+
+		return true;
+	}
 }

@@ -6,17 +6,18 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AggregateNotMatchCount extends Aggregate
 {
-	private final Object value;
+	private final Value value;
 
 	public AggregateNotMatchCount(Object value, EDependencyType dependency, String... attributes)
 	{
 		super(dependency, attributes);
-		this.value = value;
+		this.value = Value.Construct(value);
 	}
 
 	@Override

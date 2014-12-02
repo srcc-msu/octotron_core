@@ -6,9 +6,10 @@
 
 package ru.parallel.octotron.http.operations;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -39,14 +40,14 @@ public class Modify
 			String name = params.get("name");
 			String value_str = params.get("value");
 
-			Object value = SimpleAttribute.ValueFromStr(value_str);
+			Value value = Value.ValueFromStr(value_str);
 
 			ModelEntity target = entities.Only();
 
 			if(target.GetSensor(name) == null)
 				return new ErrorString("sensor does not exist: " + name);
 
-			controller.Import(target, new SimpleAttribute(name, value));
+			controller.Import(target, name, value);
 
 			return new TextString("added to import queue");
 		}
@@ -69,7 +70,7 @@ public class Modify
 			String name = params.get("name");
 			String value_str = params.get("value");
 
-			Object value = SimpleAttribute.ValueFromStr(value_str);
+			Value value = Value.ValueFromStr(value_str);
 
 			ModelEntity target = entities.Only();
 
@@ -77,7 +78,7 @@ public class Modify
 			{
 				try
 				{
-					controller.UnknownImport(target, new SimpleAttribute(name, value));
+					controller.UnknownImport(target, name, value);
 				}
 				catch (ExceptionSystemError e)
 				{
@@ -87,7 +88,7 @@ public class Modify
 				return new TextString("attribute not found, but registered, import skipped");
 			}
 
-			controller.Import(target, new SimpleAttribute(name, value));
+			controller.Import(target, name, value);
 			return new TextString("added to unchecked import queue");
 		}
 	}
@@ -156,7 +157,7 @@ public class Modify
 			Utils.AllParams(params, "template_id", "description");
 
 			String template_id_str = params.get("template_id");
-			long template_id = (long)SimpleAttribute.ValueFromStr(template_id_str);
+			long template_id = Value.ValueFromStr(template_id_str).GetLong();
 
 			String description = params.get("description");
 			if(description == null)
@@ -206,7 +207,7 @@ public class Modify
 
 			String template_id_str = params.get("template_id");
 
-			long template_id = (long)SimpleAttribute.ValueFromStr(template_id_str);
+			long template_id = Value.ValueFromStr(template_id_str).GetLong();
 
 			String res = "";
 

@@ -82,7 +82,7 @@ import java.util.logging.Logger;
 	final List<Map<String, Object>> surround = new LinkedList<>();
 
 	final List<String[]> scripts = new LinkedList<>();
-	public List<String> specials = new LinkedList<>();
+	final List<String> specials = new LinkedList<>();
 
 	public PreparedResponse(Context context, Reaction reaction, Response response)
 	{

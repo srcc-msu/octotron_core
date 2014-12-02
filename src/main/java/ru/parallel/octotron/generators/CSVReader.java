@@ -6,10 +6,10 @@
 
 package ru.parallel.octotron.generators;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
@@ -65,7 +65,7 @@ public final class CSVReader
 				{
 					String str_val = next_line[i];
 
-					Object val = SimpleAttribute.ValueFromStr(str_val);
+					Object val = Value.ValueFromStr(str_val);
 
 					entity.GetBuilder(service).DeclareConst(fields[i], val);
 				}
@@ -73,7 +73,7 @@ public final class CSVReader
 				read++;
 			}
 
-			if((next_line = reader.readNext()) != null)
+			if(reader.readNext() != null)
 				LOGGER.log(Level.WARNING, "some data from csv " + file_name + " were not assigned, read: " + read);
 		}
 		finally

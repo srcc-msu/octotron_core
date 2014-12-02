@@ -12,7 +12,6 @@ import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 public final class VarAttribute extends AbstractModAttribute
 {
@@ -45,12 +44,10 @@ public final class VarAttribute extends AbstractModAttribute
 	 * */
 	public boolean Update()
 	{
-		if(Check() == false)
+		if(!Check())
 			return false;
 
-		Object new_value = rule.Compute(GetParent());
-
-		super.Update(new_value);
+		super.Update(Value.Construct(rule.Compute(GetParent())));
 
 		return true;
 	}
@@ -60,18 +57,9 @@ public final class VarAttribute extends AbstractModAttribute
 		return dependency;
 	}
 
-	/**
-	 * checks for a special case - when the sensor value has not been updated<br>
-	 * will only fail on not updated sensors<br>
-	 * */
 	@Override
 	public boolean Check()
 	{
-		for(IModelAttribute dep_attribute : rule.GetDependency(GetParent()))
-		{
-			if(!dep_attribute.HasValue())
-				return false;
-		}
-		return true;
+		return rule.CanCompute(GetParent());
 	}
 }

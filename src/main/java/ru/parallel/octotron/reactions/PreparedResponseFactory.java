@@ -151,8 +151,8 @@ public class PreparedResponseFactory
 
 	private static final String NOT_FOUND = "<%s:not_found>";
 
-	private static Pattern PATTERN_NAME_PATH = Pattern.compile("\\{([^:{}]+):([^:{}]+)\\}");
-	private static Pattern PATTERN_NAME = Pattern.compile("\\{([^{}]+)\\}");
+	private static final Pattern PATTERN_NAME_PATH = Pattern.compile("\\{([^:{}]+):([^:{}]+)\\}");
+	private static final Pattern PATTERN_NAME = Pattern.compile("\\{([^{}]+)\\}");
 
 	private static String ReplaceWithPath(String path, String name, ModelEntity entity, ModelData model_data)
 	{
@@ -163,8 +163,8 @@ public class PreparedResponseFactory
 		else
 			where = String.format("link(AID==%d).%s.uniq()", entity.GetID(), path);
 
-		ParsedPath parsed_path = null;
-		ModelList<? extends ModelEntity, ?> targets = null;
+		ParsedPath parsed_path;
+		ModelList<? extends ModelEntity, ?> targets;
 
 		try
 		{

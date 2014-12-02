@@ -9,19 +9,15 @@ package ru.parallel.octotron.core.attributes;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelID;
 import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 public abstract class AbstractAttribute extends ModelID<EAttributeType> implements IAttribute
 {
-	public static final double EPSILON = 0.00001;
-
 	private final ModelEntity parent;
-
 	private final String name;
-	private Object value;
 
-	AbstractAttribute(EAttributeType type, ModelEntity parent, String name, Object value)
+	private Value value;
+
+	AbstractAttribute(EAttributeType type, ModelEntity parent, String name, Value value)
 	{
 		super(type);
 
@@ -38,18 +34,90 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 	}
 
 	@Override
+	public String GetString()
+	{
+		return value.GetString();
+	}
+
+	@Override
+	public Long GetLong()
+	{
+		return value.GetLong();
+	}
+
+	@Override
+	public Double GetDouble()
+	{
+		return value.GetDouble();
+	}
+
+	@Override
+	public Boolean GetBoolean()
+	{
+		return value.GetBoolean();
+	}
+
+	@Override
+	public Double ToDouble()
+	{
+		return value.ToDouble();
+	}
+
+	@Override
+	public boolean eq(Value new_value)
+	{
+		return value.eq(new_value);
+	}
+
+	@Override
+	public boolean aeq(Value new_value, Value aprx)
+	{
+		return value.aeq(new_value, aprx);
+	}
+
+	@Override
+	public boolean ne(Value new_value)
+	{
+		return value.ne(new_value);
+	}
+
+	@Override
+	public boolean gt(Value new_value)
+	{
+		return value.gt(new_value);
+	}
+
+	@Override
+	public boolean lt(Value new_value)
+	{
+		return value.lt(new_value);
+	}
+
+	@Override
+	public boolean ge(Value new_value)
+	{
+		return value.ge(new_value);
+	}
+
+	@Override
+	public boolean le(Value new_value)
+	{
+		return value.le(new_value);
+	}
+
+	@Override
 	public final String GetName()
 	{
 		return name;
 	}
 
 	@Override
-	public final Object GetValue()
+	public final Value GetValue()
 	{
 		return value;
 	}
 
-	final void SetValue(Object new_value)
+	final void SetValue(Value new_value)
 	{
 		value = new_value;
 	}
@@ -57,161 +125,6 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 	@Override
 	public final String GetStringValue()
 	{
-		return SimpleAttribute.ValueToStr(GetValue());
-	}
-
-	private void CheckType(Object a_value)
-	{
-		if(!GetValue().getClass().equals(a_value.getClass()))
-		{
-			String error = String.format("mismatch types: %s=%s[%s] and %s[%s]"
-				, GetName(), GetValue(), GetValue().getClass().getName(), a_value, a_value.getClass().getName());
-
-			throw new ExceptionModelFail(error);
-		}
-	}
-
-	private void CheckType(Class<?> check_class)
-	{
-		if(!GetValue().getClass().equals(check_class))
-		{
-			String error = String.format("mismatch types: %s=%s[%s] and [%s]"
-				, GetName(), GetValue(), GetValue().getClass().getName(), check_class.getName());
-
-			throw new ExceptionModelFail(error);
-		}
-	}
-
-	@Override
-	public final String GetString()
-	{
-		CheckType(String.class);
-
-		return (String) GetValue();
-	}
-
-	@Override
-	public final Long GetLong()
-	{
-		CheckType(Long.class);
-
-		return (Long) GetValue();
-	}
-
-	@Override
-	public final Double GetDouble()
-	{
-		CheckType(Double.class);
-
-		return (Double) GetValue();
-	}
-
-	@Override
-	public final Boolean GetBoolean()
-	{
-		CheckType(Boolean.class);
-
-		return (Boolean) GetValue();
-	}
-
-	@Override
-	public final Double ToDouble()
-	{
-		Class<?> my_class = GetValue().getClass();
-
-		if(my_class.equals(Double.class))
-			return GetDouble();
-		else if(my_class.equals(Long.class))
-			return GetLong().doubleValue();
-		else
-			throw new ExceptionModelFail("bad value type for casting to Double");
-	}
-
-	// TODO?
-	public static final Double ToDouble(Object value)
-	{
-		if(value instanceof Double)
-			return (Double) value;
-		else if(value instanceof Long)
-			return ((Long)value).doubleValue();
-		else
-			throw new ExceptionModelFail("bad value type for casting to Double");
-	}
-
-	@Override
-	public final boolean eq(Object new_value)
-	{
-		new_value = SimpleAttribute.ConformType(new_value);
-		CheckType(new_value);
-
-		return GetValue().equals(new_value);
-	}
-
-	@Override
-	public final boolean aeq(Object new_value, Object aprx)
-	{
-		new_value = SimpleAttribute.ConformType(new_value);
-		CheckType(new_value);
-
-		Class<?> my_class = GetValue().getClass();
-
-		if(my_class.equals(Double.class))
-			return GetDouble() > (Double)new_value - (Double)aprx
-				&& GetDouble() < (Double)new_value + (Double)aprx;
-		else if(my_class.equals(Long.class))
-			return GetLong() > (Long)new_value - (Long)aprx
-				&& GetLong() < (Long)new_value + (Long)aprx;
-		else
-			throw new ExceptionModelFail("bad value type type for approximate comparison");
-	}
-
-	@Override
-	public final boolean ne(Object new_value)
-	{
-		return !eq(new_value);
-	}
-
-	@Override
-	public final boolean gt(Object new_value)
-	{
-		new_value = SimpleAttribute.ConformType(new_value);
-		CheckType(new_value);
-
-		Class<?> my_class = GetValue().getClass();
-
-		if(my_class.equals(Double.class))
-			return GetDouble() > (Double)new_value + EPSILON;
-		else if(my_class.equals(Long.class))
-			return GetLong() > (Long)new_value;
-		else
-			throw new ExceptionModelFail("bad value type type for comparison");
-	}
-
-	@Override
-	public final boolean lt(Object new_value)
-	{
-		new_value = SimpleAttribute.ConformType(new_value);
-		CheckType(new_value);
-
-		Class<?> my_class = GetValue().getClass();
-
-		if(my_class.equals(Double.class))
-			return GetDouble() < (Double)new_value - EPSILON;
-		else if(my_class.equals(Long.class))
-			return GetLong() < (Long)new_value;
-		else
-			throw new ExceptionModelFail("bad value type type for comparison");
-	}
-
-	@Override
-	public final boolean ge(Object val)
-	{
-		return !lt(val);
-	}
-
-	@Override
-	public final boolean le(Object val)
-	{
-		return !gt(val);
+		return value.ValueToString();
 	}
 }

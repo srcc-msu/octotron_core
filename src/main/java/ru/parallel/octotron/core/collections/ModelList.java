@@ -7,11 +7,11 @@
 package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.attributes.IAttribute;
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.*;
@@ -133,7 +133,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		return new_list;
 	}
 
-	protected boolean CheckOp(T obj, String name, Object value, EQueryType type)
+	protected boolean CheckOp(T obj, String name, Value value, EQueryType type)
 	{
 		if(!obj.TestAttribute(name))
 			return false;
@@ -164,9 +164,8 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 	 * the for loop is inlined here for speed, profiling shows that
 	 * CheckOp would be more convenient here, but there is no way to do it pretty and fast
 	 * */
-	protected List<T> InnerFilter(String name, Object value, EQueryType type)
+	protected List<T> InnerFilter(String name, Value value, EQueryType type)
 	{
-		value = SimpleAttribute.ConformType(value);
 		if(name == null)
 			return list;
 
@@ -318,22 +317,12 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		return Instance(InnerElems(position));
 	}
 
-	public final R Filter(SimpleAttribute att, EQueryType type)
-	{
-		return Instance(InnerFilter(att.GetName(), att.GetValue(), type));
-	}
-
-	public final R Filter(String name, Object value, EQueryType type)
+	public final R Filter(String name, Value value, EQueryType type)
 	{
 		return Instance(InnerFilter(name, value, type));
 	}
 
-	public final R Filter(SimpleAttribute att)
-	{
-		return Instance(InnerFilter(att.GetName(), att.GetValue(), EQueryType.EQ));
-	}
-
-	public final R Filter(String name, Object value)
+	public final R Filter(String name, Value value)
 	{
 		return Instance(InnerFilter(name, value, EQueryType.EQ));
 	}

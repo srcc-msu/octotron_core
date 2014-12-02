@@ -31,23 +31,27 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	 * tracks if the sensor got at least one value update:
 	 * initially or via Update()
 	 * */
-	private boolean has_value = false;
+	private boolean is_initial_delay = true;
 
-	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Object value)
+	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Value value)
 	{
 		super(type, parent, name, value);
-		has_value = true;
+		CancelInitialDelay();
 	}
 
 	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name)
 	{
 		super(type, parent, name, null);
-		has_value = false;
 	}
 
-	public final boolean HasValue()
+	public void CancelInitialDelay()
 	{
-		return has_value;
+		is_initial_delay = false;
+	}
+
+	public final boolean IsInitialDelay()
+	{
+		return is_initial_delay;
 	}
 
 	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder(ModelService service);
@@ -83,20 +87,22 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		if(last_ctime == 0) // last value was default
 			return 0.0;
 
-		double diff = ToDouble() - ToDouble(last.value);
+		double diff = GetValue().ToDouble() - last.value.ToDouble();
 
 		return diff / (GetCTime() - last_ctime);
 	}
 
-	protected void Update(Object new_value)
+	protected void Update(Value new_value)
 	{
-		for(Reaction reaction : GetReactions())
-			reaction.Repeat(new_value);
-
 		history.Add(GetValue(), GetCTime());
 
-		SetCTime(JavaUtils.GetTimestamp());
 		SetValue(new_value);
+		SetCTime(JavaUtils.GetTimestamp());
+
+		CancelInitialDelay();
+
+		for(Reaction reaction : GetReactions())
+			reaction.Repeat(new_value);
 	}
 
 	@Override
@@ -139,7 +145,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		result.put("name", GetName());
 		result.put("value", GetValue());
 		result.put("ctime", GetCTime());
-		result.put("has_value", HasValue());
+		result.put("has_value", IsInitialDelay());
 
 		return result;
 	}

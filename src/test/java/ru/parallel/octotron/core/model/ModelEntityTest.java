@@ -4,16 +4,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.logic.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.primitive.EEventStatus;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.generators.tmpl.VarTemplate;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,15 +39,15 @@ public class ModelEntityTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		SimpleAttribute[] obj_att = {
-			new SimpleAttribute("object", "ok")
+		ConstTemplate[] obj_att = {
+			new ConstTemplate("object", "ok")
 		};
 
 		ModelEntityTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
 
-		SimpleAttribute[] link_att = {
-			new SimpleAttribute("link", "ok"),
-			new SimpleAttribute("type", "contain"),
+		ConstTemplate[] link_att = {
+			new ConstTemplate("link", "ok"),
+			new ConstTemplate("type", "contain"),
 		};
 
 		ModelEntityTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);
@@ -89,13 +91,13 @@ public class ModelEntityTest
 	public void TestDeclareAttribute() throws Exception
 	{
 		ModelObject entity = context.model_service.AddObject();
-		entity.GetBuilder(context.model_service).DeclareSensor("test", "");
+		entity.GetBuilder(context.model_service).DeclareSensor("test", -1, "");
 
 		boolean catched = false;
 
 		try
 		{
-			entity.GetBuilder(context.model_service).DeclareSensor("test", "");
+			entity.GetBuilder(context.model_service).DeclareSensor("test", -1, "");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -170,10 +172,10 @@ public class ModelEntityTest
 
 		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
 
-		List<SimpleAttribute> rules = new LinkedList<>();
+		List<VarTemplate> rules = new LinkedList<>();
 
-		rules.add(new SimpleAttribute("test1", new DummyRule()));
-		rules.add(new SimpleAttribute("test2", new DummyRule()));
+		rules.add(new VarTemplate("test1", new DummyRule()));
+		rules.add(new VarTemplate("test2", new DummyRule()));
 
 		entity.GetBuilder(context.model_service).DeclareVar(rules);
 	}

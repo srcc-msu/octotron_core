@@ -8,8 +8,6 @@ package ru.parallel.utils;
 
 import com.google.gson.*;
 import ru.parallel.utils.format.JsonString;
-import ru.parallel.utils.format.JsonpString;
-import ru.parallel.utils.format.TypedString;
 
 public abstract class JsonUtils
 {

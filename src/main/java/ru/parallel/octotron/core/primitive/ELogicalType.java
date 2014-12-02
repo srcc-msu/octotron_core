@@ -8,5 +8,8 @@ package ru.parallel.octotron.core.primitive;
 
 public enum ELogicalType
 {
-	REACTION, REACTION_TEMPLATE, RESPONSE
+	REACTION, REACTION_TEMPLATE
+	, SENSOR_TEMPLATE
+	, RULE_TEMPLATE
+	, RESPONSE
 }

@@ -15,7 +15,6 @@ import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
@@ -103,7 +102,6 @@ public class Start
 	}
 
 	private static void CreateFromPython(Context context)
-		throws ExceptionSystemError
 	{
 		PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
 
@@ -180,6 +178,7 @@ public class Start
 	private static void Run(Context context)
 	{
 		LOGGER.log(Level.INFO, "Building rule dependencies and running the model");
+		context.model_service.Operate();
 
 		ExecutionController controller = null;
 // --- create
@@ -208,7 +207,7 @@ public class Start
 		}
 
 // --- shutdown
-		Exception shutdown_exception = Shutdown(context, controller);
+		Exception shutdown_exception = Shutdown(controller);
 
 		if(shutdown_exception != null)
 		{
@@ -244,7 +243,7 @@ public class Start
 /**
  * shutdown the graph and all execution processes<br>
  * */
-	public static Exception Shutdown(Context context, ExecutionController controller)
+	public static Exception Shutdown(ExecutionController controller)
 	{
 		try
 		{

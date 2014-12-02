@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.IModelAttribute;
@@ -14,12 +15,18 @@ import ru.parallel.octotron.core.model.ModelEntity;
 public class Interval extends Rule
 {
 	private final String param;
-	private final Object[] thresholds;
+	private final Value[] thresholds;
 
 	public Interval(String param, Object... thresholds)
 	{
 		this.param = param;
-		this.thresholds = thresholds;
+
+		this.thresholds = new Value[thresholds.length];
+
+		for(int i = 0; i < thresholds.length; i++)
+		{
+			this.thresholds[i] = Value.Construct(thresholds[i]);
+		}
 	}
 
 	@Override
@@ -39,7 +46,7 @@ public class Interval extends Rule
 
 		long result = 0;
 
-		for(Object threshold : thresholds)
+		for(Value threshold : thresholds)
 		{
 			if(attr.ge(threshold))
 				result++;

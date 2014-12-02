@@ -8,11 +8,15 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.logic.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.generators.tmpl.VarTemplate;
 
 import java.util.List;
 
@@ -44,7 +48,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		if(entity.TestAttribute(name))
 			throw new ExceptionModelFail("attribute already declared: " + name);
 
-		ConstAttribute attribute = new ConstAttribute(entity, name, SimpleAttribute.ConformType(value));
+		ConstAttribute attribute = new ConstAttribute(entity, name, Value.Construct(value));
 
 		entity.attributes_map.put(name, attribute);
 		entity.const_map.put(name, attribute);
@@ -52,28 +56,24 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		service.RegisterConst(attribute);
 	}
 
-	public void DeclareConst(SimpleAttribute attribute)
+	public void DeclareConst(ConstTemplate constant)
 	{
-		DeclareConst(attribute.GetName(), attribute.GetValue());
+		DeclareConst(constant.name, constant.value);
 	}
 
-	public void DeclareConst(Iterable<SimpleAttribute> attributes)
+	public void DeclareConst(Iterable<ConstTemplate> constants)
 	{
-		for(SimpleAttribute attribute : attributes)
-			DeclareConst(attribute);
+		for(ConstTemplate constant : constants)
+			DeclareConst(constant);
 	}
 
-	public void DeclareSensor(String name, Object default_value)
-	{
-		DeclareSensor(name, default_value, -1);
-	}
-
-	public void DeclareSensor(String name, Object default_value, long update_time)
+	public void DeclareSensor(String name, long update_time, Object default_value)
 	{
 		if(entity.TestAttribute(name))
 			throw new ExceptionModelFail("attribute already declared: " + name);
 
-		SensorAttribute sensor = new SensorAttribute(entity, name, SimpleAttribute.ConformType(default_value), update_time);
+		SensorAttribute sensor = new SensorAttribute(entity, name, update_time
+			, Value.Construct(default_value));
 
 		entity.attributes_map.put(name, sensor);
 		entity.sensor_map.put(name, sensor);
@@ -81,15 +81,31 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		service.RegisterSensor(sensor);
 	}
 
-	public void DeclareSensor(SimpleAttribute attribute)
+	public void DeclareSensor(String name, long update_time)
 	{
-		DeclareSensor(attribute.GetName(), attribute.GetValue());
+		if(entity.TestAttribute(name))
+			throw new ExceptionModelFail("attribute already declared: " + name);
+
+		SensorAttribute sensor = new SensorAttribute(entity, name, update_time);
+
+		entity.attributes_map.put(name, sensor);
+		entity.sensor_map.put(name, sensor);
+
+		service.RegisterSensor(sensor);
 	}
 
-	public void DeclareSensor(Iterable<SimpleAttribute> attributes)
+	public void DeclareSensor(SensorTemplate sensor)
 	{
-		for(SimpleAttribute attribute : attributes)
-			DeclareSensor(attribute);
+		if(sensor.value == null)
+			DeclareSensor(sensor.name, sensor.update_time);
+		else
+			DeclareSensor(sensor.name, sensor.update_time, sensor.value);
+	}
+
+	public void DeclareSensor(Iterable<SensorTemplate> sensors)
+	{
+		for(SensorTemplate sensor : sensors)
+			DeclareSensor(sensor);
 	}
 
 	public void DeclareVar(String name, Rule rule)
@@ -105,9 +121,9 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		service.RegisterVar(var);
 	}
 
-	public void DeclareVar(Iterable<SimpleAttribute> rules)
+	public void DeclareVar(Iterable<VarTemplate> vars)
 	{
-		for(SimpleAttribute pair : rules)
-			DeclareVar(pair.GetName(), (Rule)(pair.GetValue()));
+		for(VarTemplate var : vars)
+			DeclareVar(var.name, var.rule);
 	}
 }

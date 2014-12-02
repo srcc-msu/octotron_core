@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.attributes.IAttributeBuilder;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.IPresentable;
@@ -15,7 +14,7 @@ import ru.parallel.octotron.core.primitive.IUniqueID;
 public interface IAttribute extends IUniqueID<EAttributeType>, IPresentable
 {
 	String GetName();
-	Object GetValue();
+	Value GetValue();
 
 	ModelEntity GetParent();
 
@@ -25,13 +24,13 @@ public interface IAttribute extends IUniqueID<EAttributeType>, IPresentable
 	Boolean GetBoolean();
 	Double ToDouble();
 
-	boolean eq(Object new_value);
-	boolean aeq(Object new_value, Object aprx);
-	boolean ne(Object new_value);
-	boolean gt(Object new_value);
-	boolean lt(Object new_value);
-	boolean ge(Object val);
-	boolean le(Object val);
+	boolean eq(Value new_value);
+	boolean aeq(Value new_value, Value aprx);
+	boolean ne(Value new_value);
+	boolean gt(Value new_value);
+	boolean lt(Value new_value);
+	boolean ge(Value val);
+	boolean le(Value val);
 
 	public String GetStringValue();
 }

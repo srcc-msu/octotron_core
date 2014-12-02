@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.HashMap;
@@ -18,18 +18,18 @@ public class ModelCache
 {
 	private static class ObjectValueCache
 	{
-		private final String name;
-		private final Map<Object, ModelObjectList> value_cache = new HashMap<>();
+		private final String cache_name;
+		private final Map<Value, ModelObjectList> value_cache = new HashMap<>();
 		private final ModelObjectList cache;
 
-		public ObjectValueCache(String name, ModelObjectList objects)
+		public ObjectValueCache(String cache_name, ModelObjectList objects)
 		{
-			this.name = name;
-			cache = objects.Filter(name);
+			this.cache_name = cache_name;
+			cache = objects.Filter(cache_name);
 
 			for(ModelObject object : cache)
 			{
-				Object value = object.GetAttribute(name).GetValue();
+				Value value = object.GetAttribute(cache_name).GetValue();
 
 				ModelObjectList list = value_cache.get(value);
 
@@ -43,12 +43,12 @@ public class ModelCache
 			}
 		}
 
-		public ModelObjectList Get(SimpleAttribute attribute)
+		public ModelObjectList Get(String name, Value value)
 		{
-			if(!name.equals(attribute.GetName()))
-				throw new ExceptionModelFail("wrong cache: " + name + " does not contain " + attribute.GetName());
+			if(!cache_name.equals(name))
+				throw new ExceptionModelFail("wrong cache: " + cache_name + " does not contain " + name);
 
-			ModelObjectList result = value_cache.get(attribute.GetValue());
+			ModelObjectList result = value_cache.get(value);
 
 			if(result == null)
 				return new ModelObjectList();
@@ -64,18 +64,18 @@ public class ModelCache
 
 	private static class LinkValueCache
 	{
-		private final String name;
-		private final Map<Object, ModelLinkList> value_cache = new HashMap<>();
+		private final String cache_name;
+		private final Map<Value, ModelLinkList> value_cache = new HashMap<>();
 		private final ModelLinkList cache;
 
-		public LinkValueCache(String name, ModelLinkList objects)
+		public LinkValueCache(String cache_name, ModelLinkList objects)
 		{
-			this.name = name;
-			cache = objects.Filter(name);
+			this.cache_name = cache_name;
+			cache = objects.Filter(cache_name);
 
 			for(ModelLink object : cache)
 			{
-				Object value = object.GetAttribute(name).GetValue();
+				Value value = object.GetAttribute(cache_name).GetValue();
 
 				ModelLinkList list = value_cache.get(value);
 
@@ -89,12 +89,12 @@ public class ModelCache
 			}
 		}
 
-		public ModelLinkList Get(SimpleAttribute attribute)
+		public ModelLinkList Get(String name, Value value)
 		{
-			if(!name.equals(attribute.GetName()))
-				throw new ExceptionModelFail("wrong cache: " + name + " does not contain " + attribute.GetName());
+			if(!cache_name.equals(name))
+				throw new ExceptionModelFail("wrong cache: " + cache_name + " does not contain " + name);
 
-			ModelLinkList result = value_cache.get(attribute.GetValue());
+			ModelLinkList result = value_cache.get(value);
 
 			if(result == null)
 				return new ModelLinkList();
@@ -142,24 +142,24 @@ public class ModelCache
 		return cache.Get();
 	}
 
-	public ModelLinkList GetLinks(SimpleAttribute attribute)
+	public ModelLinkList GetLinks(String name, Value value)
 	{
-		LinkValueCache cache = link_cache.get(attribute.GetName());
+		LinkValueCache cache = link_cache.get(name);
 
 		if(cache == null)
 			return new ModelLinkList();
 
-		return cache.Get(attribute);
+		return cache.Get(name, value);
 	}
 
-	public ModelObjectList GetObjects(SimpleAttribute attribute)
+	public ModelObjectList GetObjects(String name, Value value)
 	{
-		ObjectValueCache cache = object_cache.get(attribute.GetName());
+		ObjectValueCache cache = object_cache.get(name);
 
 		if(cache == null)
 			return new ModelObjectList();
 
-		return cache.Get(attribute);
+		return cache.Get(name, value);
 	}
 
 	public void Clean()

@@ -10,7 +10,7 @@ import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.ExecutionController;
@@ -71,7 +71,7 @@ public abstract class View
 			Utils.RequiredParams(params, "names");
 			Utils.AllParams(params, "names", "format");
 
-			List<SimpleAttribute> attributes = Utils.GetAttributes(params.get("names"));
+			List<String> attributes = Utils.GetNames(params.get("names"));
 			String format = params.get("format");
 
 			if(format == null || format.equals("json") || format.equals("jsonp"))
@@ -90,7 +90,7 @@ public abstract class View
 			super("entity", true);
 		}
 
-		public static List<String> allowed_types = Arrays.asList("const", "var", "sensor");
+		public static final List<String> allowed_types = Arrays.asList("const", "var", "sensor");
 
 		@Override
 		public TypedString Execute(ExecutionController controller, Map<String, String> params

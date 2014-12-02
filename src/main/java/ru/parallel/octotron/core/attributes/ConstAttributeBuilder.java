@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.logic.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
@@ -34,7 +34,7 @@ public class ConstAttributeBuilder implements IAttributeBuilder
 		// throw new ExceptionModelFail(err_msg + "AddDependant");
 	}
 
-	public void ModifyValue(Object new_value)
+	public void ModifyValue(Value new_value)
 	{
 		attribute.SetValue(new_value);
 	}

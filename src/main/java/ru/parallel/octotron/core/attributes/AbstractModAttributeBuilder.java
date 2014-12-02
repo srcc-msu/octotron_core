@@ -7,7 +7,7 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.model.ModelService;
 
 public class AbstractModAttributeBuilder<T extends AbstractModAttribute> implements IAttributeBuilder
@@ -41,5 +41,5 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 		attribute.SetCTime(ctime);
 	}
 
-	public void SetValue(Object new_value) { attribute.SetValue(new_value); }
+	public void SetValue(Value new_value) { attribute.SetValue(new_value); }
 }

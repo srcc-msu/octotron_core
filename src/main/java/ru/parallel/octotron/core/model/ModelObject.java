@@ -6,10 +6,11 @@
 
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 
 public class ModelObject extends ModelEntity
 {
@@ -52,12 +53,12 @@ public class ModelObject extends ModelEntity
 		return out_neighbors;
 	}
 
-	public ModelObjectList GetInNeighbors(String link_name, Object link_value)
+	public ModelObjectList GetInNeighbors(String link_name, Value link_value)
 	{
 		return in_links.Filter(link_name, link_value).Source();
 	}
 
-	public ModelObjectList GetOutNeighbors(String link_name, Object link_value)
+	public ModelObjectList GetOutNeighbors(String link_name, Value link_value)
 	{
 		return out_links.Filter(link_name, link_value).Target();
 	}
@@ -70,15 +71,5 @@ public class ModelObject extends ModelEntity
 	public ModelObjectList GetOutNeighbors(String link_name)
 	{
 		return out_links.Filter(link_name).Target();
-	}
-
-	public ModelObjectList GetInNeighbors(SimpleAttribute link_attribute)
-	{
-		return GetInNeighbors(link_attribute.GetName(), link_attribute.GetValue());
-	}
-
-	public ModelObjectList GetOutNeighbors(SimpleAttribute link_attribute)
-	{
-		return GetOutNeighbors(link_attribute.GetName(), link_attribute.GetValue());
 	}
 }

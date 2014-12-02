@@ -6,13 +6,14 @@
 
 package ru.parallel.octotron.exec;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EEventStatus;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.HTTPServer;
 import ru.parallel.octotron.http.requests.HttpExchangeWrapper;
@@ -68,7 +69,7 @@ public class ExecutionController
 	private boolean silent = false;
 
 	private Statistics stat;
-	private ConcurrentLinkedQueue<AttributeList<IModelAttribute>> to_update = new ConcurrentLinkedQueue<>();
+	private final ConcurrentLinkedQueue<AttributeList<IModelAttribute>> to_update = new ConcurrentLinkedQueue<>();
 
 	public List<java.util.Map<String, Object>> GetStat()
 	{
@@ -108,14 +109,14 @@ public class ExecutionController
 		stat = new Statistics();
 	}
 
-	public void ImmediateImport(ModelEntity entity, SimpleAttribute attribute)
+	public void ImmediateImport(ModelEntity entity, String name, Value value)
 	{
-		new Importer(this, entity, attribute).run();
+		new Importer(this, entity, name, value).run();
 	}
 
-	public void Import(ModelEntity entity, SimpleAttribute attribute)
+	public void Import(ModelEntity entity, String name, Value value)
 	{
-		import_executor.execute(new Importer(this, entity, attribute));
+		import_executor.execute(new Importer(this, entity, name, value));
 		stat.Add("import_executor", 1, import_executor.getQueue().size());
 	}
 
@@ -244,7 +245,7 @@ public class ExecutionController
 		return context;
 	}
 
-	public void UnknownImport(ModelEntity target, SimpleAttribute attribute)
+	public void UnknownImport(ModelEntity target, String name, Value value)
 		throws ExceptionSystemError
 	{
 		String script = context.settings.GetScriptByKey("on_new_attribute");
@@ -252,7 +253,7 @@ public class ExecutionController
 		try
 		{
 			FileUtils.ExecSilent(script, Long.toString(target.GetID())
-				, attribute.GetName(), SimpleAttribute.ValueToStr(attribute.GetValue()));
+				, name, value.ValueToString());
 		}
 		catch (ExceptionSystemError e)
 		{

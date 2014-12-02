@@ -42,7 +42,6 @@ public class RuntimeService
 		boolean graph_test = tester.Test(controller);
 
 		long free_space = new File("/").getFreeSpace();
-		String free_space_res;
 
 		long free_space_mb = free_space / 1024 / 1024;
 

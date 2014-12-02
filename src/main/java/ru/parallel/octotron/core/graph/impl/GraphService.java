@@ -9,8 +9,6 @@ package ru.parallel.octotron.core.graph.impl;
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.primitive.ID;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -36,14 +34,6 @@ public final class GraphService
 	public GraphLink AddLink(GraphObject source, GraphObject target, String link_type)
 	{
 		return new GraphLink(graph, graph.AddLink(source.GetID(), target.GetID(), link_type));
-	}
-
-	public GraphLink AddLink(GraphObject source, GraphObject target, SimpleAttribute link_type)
-	{
-		if(!link_type.GetName().equals("type"))
-			throw new ExceptionModelFail("the only acceptable attribute for a new links is 'type'");
-
-		return AddLink(source, target, (String)link_type.GetValue());
 	}
 
 	public GraphObject AddObject()
@@ -80,20 +70,10 @@ public final class GraphService
 		return result;
 	}
 
-	public GraphLink GetLink(SimpleAttribute att)
-	{
-		return GetLink(att.GetName(), att.GetValue());
-	}
-
 	public GraphLink GetLink(String name, Object value)
 	{
 		ID<EGraphType> id = graph.GetIndex().GetLink(name, value);
 		return new GraphLink(graph, id);
-	}
-
-	public Collection<GraphLink> GetLinks(SimpleAttribute att)
-	{
-		return GetLinks(att.GetName(), att.GetValue());
 	}
 
 	public Collection<GraphLink> GetLinks(String name)
@@ -106,20 +86,10 @@ public final class GraphService
 		return LinksFromUid(graph, graph.GetIndex().GetLinks(name, value));
 	}
 
-	public GraphObject GetObject(SimpleAttribute att)
-	{
-		return GetObject(att.GetName(), att.GetValue());
-	}
-
 	public GraphObject GetObject(String name, Object value)
 	{
 		ID<EGraphType> id = graph.GetIndex().GetObject(name, value);
 		return new GraphObject(graph, id);
-	}
-
-	public Collection<GraphObject> GetObjects(SimpleAttribute att)
-	{
-		return GetObjects(att.GetName(), att.GetValue());
 	}
 
 	public Collection<GraphObject> GetObjects(String name)

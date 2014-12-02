@@ -7,10 +7,7 @@
 package ru.parallel.octotron.core.persistence;
 
 import com.google.common.collect.Iterables;
-import ru.parallel.octotron.core.attributes.AbstractModAttribute;
-import ru.parallel.octotron.core.attributes.ConstAttribute;
-import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.attributes.*;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
@@ -193,7 +190,7 @@ public class GraphManager implements IPersistenceManager
 
 			Object new_value = graph_entity.GetAttribute(attribute.GetName());
 
-			attribute.GetBuilder(model_service).ModifyValue(new_value);
+			attribute.GetBuilder(model_service).ModifyValue(Value.Construct(new_value));
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
@@ -211,7 +208,9 @@ public class GraphManager implements IPersistenceManager
 			graph_object.UpdateAttribute("AID", attribute.GetID());
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
-			graph_object.UpdateAttribute("value", attribute.GetValue());
+
+			if(attribute.GetValue() != null)
+				graph_object.UpdateAttribute("value", attribute.GetValue());
 
 // info
 			graph_object.UpdateAttribute("name", attribute.GetName());
@@ -226,15 +225,21 @@ public class GraphManager implements IPersistenceManager
 			attribute.GetBuilder(model_service)
 				.SetCTime((Long)graph_object.GetAttribute("ctime"));
 
-			attribute.GetBuilder(model_service)
-				.SetValue(graph_object.GetAttribute("value"));
+			if(graph_object.TestAttribute("value"))
+				attribute.GetBuilder(model_service)
+					.SetValue(Value.Construct(graph_object.GetAttribute("value")));
+			else
+				attribute.GetBuilder(model_service)
+					.SetValue(null);
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
 			GraphObject graph_object = GetObject(attribute);
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
-			graph_object.UpdateAttribute("value", attribute.GetValue());
+
+			if(attribute.GetValue() != null)
+				graph_object.UpdateAttribute("value", attribute.GetValue());
 		}
 	}
 

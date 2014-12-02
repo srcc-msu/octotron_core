@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.core.collections;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 		return new ModelObjectList(new_list);
 	}
 
-	public ModelObjectList GetInNeighbors(String link_name, Object link_value)
+	public ModelObjectList GetInNeighbors(String link_name, Value link_value)
 	{
 		ModelObjectList new_list = new ModelObjectList();
 
@@ -50,7 +50,7 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 		return new_list;
 	}
 
-	public ModelObjectList GetOutNeighbors(String link_name, Object link_value)
+	public ModelObjectList GetOutNeighbors(String link_name, Value link_value)
 	{
 		ModelObjectList new_list = new ModelObjectList();
 
@@ -58,16 +58,6 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 			new_list = new_list.append(obj.GetOutNeighbors(link_name, link_value));
 
 		return new_list;
-	}
-
-	public ModelObjectList GetInNeighbors(SimpleAttribute attr)
-	{
-		return GetInNeighbors(attr.GetName(), attr.GetValue());
-	}
-
-	public ModelObjectList GetOutNeighbors(SimpleAttribute attr)
-	{
-		return GetOutNeighbors(attr.GetName(), attr.GetValue());
 	}
 
 	public ModelObjectList GetInNeighbors(String link_name)

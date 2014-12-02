@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.ConstAttribute;
-import ru.parallel.octotron.core.attributes.IAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;

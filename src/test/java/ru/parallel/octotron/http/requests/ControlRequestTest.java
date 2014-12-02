@@ -15,7 +15,7 @@ public class ControlRequestTest extends RequestTest
 		String test = GetRequestResult("/control/stat");
 
 		if(test == null)
-			fail("bad response: " + test);
+			fail("bad response: result is null");
 	}
 
 	@Test
@@ -27,7 +27,7 @@ public class ControlRequestTest extends RequestTest
 		String test = GetRequestResult("/control/mode?silent=true");
 
 		if(test == null)
-			fail("bad response: " + test);
+			fail("bad response: result is null");
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class ControlRequestTest extends RequestTest
 		String test = GetRequestResult("/control/snapshot");
 
 		if(test == null)
-			fail("bad response: " + test);
+			fail("bad response: result is null");
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class ControlRequestTest extends RequestTest
 		String test = GetRequestResult("/control/mod_time?interval=1");
 
 		if(test == null)
-			fail("bad response: " + test);
+			fail("bad response: result is null");
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class ControlRequestTest extends RequestTest
 		String test = GetRequestResult("/control/selftest");
 
 		if(test == null)
-			fail("bad response: " + test);
+			fail("bad response: result is null");
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class ControlRequestTest extends RequestTest
 		String test = GetRequestResult("/control/quit");
 
 		if(test == null)
-			fail("bad response: " + test);
+			fail("bad response: result is null");
 	}
 }
 

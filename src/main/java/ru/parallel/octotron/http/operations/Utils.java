@@ -9,7 +9,7 @@ package ru.parallel.octotron.http.operations;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 import java.util.*;
@@ -19,15 +19,14 @@ import java.util.*;
  * */
 public abstract class Utils
 {
-	public static List<SimpleAttribute> GetAttributes(String names)
+	public static List<String> GetNames(String value)
 	{
-		List<SimpleAttribute> attributes = new LinkedList<>();
+		List<String> names = new LinkedList<>();
 
-		if(names != null)
-			for(String name : names.split(","))
-				attributes.add(new SimpleAttribute(name, null));
+		if(value != null)
+			Collections.addAll(names, value.split(","));
 
-		return attributes;
+		return names;
 	}
 
 	public static void RequiredParams(Map<String, String> params, String... names)
@@ -61,20 +60,20 @@ public abstract class Utils
 		Utils.AllParams(params, names);
 	}
 
-	public static List<IModelAttribute> GetAttributes(ModelEntity entity, List<SimpleAttribute> attributes)
+	public static List<IModelAttribute> GetAttributes(ModelEntity entity, List<String> names)
 	{
 		List<IModelAttribute> result = new LinkedList<>();
 
-		for(SimpleAttribute names : attributes)
+		for(String name : names)
 		{
-			result.add(entity.GetAttribute(names.GetName()));
+			result.add(entity.GetAttribute(name));
 		}
 
 		return result;
 	}
 
 	public static List<List<Map<String, Object>>> GetAttributes(ModelList<? extends ModelEntity, ?> entities
-		, List<SimpleAttribute> attributes, boolean verbose)
+		, List<String> names, boolean verbose)
 	{
 		List<List<Map<String, Object>>> data = new LinkedList<>();
 
@@ -82,7 +81,7 @@ public abstract class Utils
 		{
 			List<Map<String, Object>> list = new LinkedList<>();
 
-			for(IModelAttribute attribute : GetAttributes(entity, attributes))
+			for(IModelAttribute attribute : GetAttributes(entity, names))
 				list.add(attribute.GetRepresentation(verbose));
 
 			data.add(list);
@@ -118,15 +117,15 @@ public abstract class Utils
 	}
 
 	public static String PrintCsvAttributes(ModelList<? extends ModelEntity, ?> entities
-		, List<SimpleAttribute> attributes)
+		, List<String> names)
 	{
 		StringBuilder result = new StringBuilder();
 		String sep = ",";
 
 		String prefix = "";
-		for(SimpleAttribute attribute : attributes)
+		for(String name : names)
 		{
-			result.append(prefix).append(attribute.GetName());
+			result.append(prefix).append(name);
 			prefix = sep;
 		}
 		result.append(System.lineSeparator());
@@ -134,13 +133,12 @@ public abstract class Utils
 		for(ModelEntity entity : entities)
 		{
 			prefix = "";
-			for(SimpleAttribute attribute : attributes)
+			for(String name : names)
 			{
-
 				String string_value;
 
-				if(entity.TestAttribute(attribute.GetName()))
-					string_value = entity.GetAttribute(attribute.GetName()).GetStringValue();
+				if(entity.TestAttribute(name))
+					string_value = entity.GetAttribute(name).GetStringValue();
 				else
 					string_value = "<not found>";
 

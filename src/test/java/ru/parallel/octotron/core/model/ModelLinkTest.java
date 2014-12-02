@@ -2,10 +2,11 @@ package ru.parallel.octotron.core.model;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.core.primitive.SimpleAttribute;
+
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,15 +26,15 @@ public class ModelLinkTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		SimpleAttribute[] obj_att = {
-			new SimpleAttribute("object", "ok")
+		ConstTemplate[] obj_att = {
+			new ConstTemplate("object", "ok")
 		};
 
 		ModelLinkTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
 
-		SimpleAttribute[] link_att = {
-			new SimpleAttribute("link", "ok"),
-			new SimpleAttribute("type", "contain"),
+		ConstTemplate[] link_att = {
+			new ConstTemplate("link", "ok"),
+			new ConstTemplate("type", "contain"),
 		};
 
 		ModelLinkTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);

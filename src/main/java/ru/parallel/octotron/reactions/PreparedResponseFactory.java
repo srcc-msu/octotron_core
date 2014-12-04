@@ -42,13 +42,14 @@ public class PreparedResponseFactory
 
 	public PreparedResponse Construct(ModelEntity entity, Reaction reaction, Response response)
 	{
-		PreparedResponse prepared_response = new PreparedResponse(context, reaction, response);
+		PreparedResponse prepared_response = new PreparedResponse(context, response);
 
 		FillInfo(prepared_response, response);
-		FillModel(prepared_response, entity, reaction);
+		FillModel(prepared_response, entity);
 		FillUsr(prepared_response, entity, response);
+		FillReaction(prepared_response, reaction);
 
-		FillSurround(prepared_response, entity, reaction);
+		FillSurround(prepared_response, entity);
 
 		FillCommands(prepared_response, entity, response);
 		FillSpecial(prepared_response, entity, reaction);
@@ -56,7 +57,13 @@ public class PreparedResponseFactory
 		return prepared_response;
 	}
 
-	private void FillSurround(PreparedResponse prepared_response, ModelEntity entity, Reaction reaction)
+	private void FillReaction(PreparedResponse prepared_response, Reaction reaction)
+	{
+		prepared_response.reaction.putAll(reaction.GetLongRepresentation());
+	}
+
+	private void FillSurround(PreparedResponse prepared_response
+		, ModelEntity entity)
 	{
 		ModelLinkList links = new ModelLinkList();
 		ModelObjectList objects = new ModelObjectList();
@@ -96,7 +103,8 @@ public class PreparedResponseFactory
 		}
 	}
 
-	private void FillCommands(PreparedResponse prepared_response, ModelEntity entity, Response response)
+	private void FillCommands(PreparedResponse prepared_response
+		, ModelEntity entity, Response response)
 	{
 		for(String[] command : response.GetCommands())
 		{
@@ -122,7 +130,7 @@ public class PreparedResponseFactory
 		}
 	}
 
-	private void FillModel(PreparedResponse prepared_response, ModelEntity entity, Reaction reaction)
+	private void FillModel(PreparedResponse prepared_response, ModelEntity entity)
 	{
 		prepared_response.model.put("entity", entity.GetLongRepresentation());
 	}
@@ -141,7 +149,8 @@ public class PreparedResponseFactory
 			prepared_response.usr.put(tag, ComposeString(messages.get(tag), entity, context.model_data));
 	}
 
-	private void FillSpecial(PreparedResponse prepared_response, ModelEntity entity, Reaction reaction)
+	private void FillSpecial(PreparedResponse prepared_response
+		, ModelEntity entity, Reaction reaction)
 	{
 		String suppress = String.format("to suppress this reaction: http://%s:%d/modify/suppress?path=obj(AID==%d)&template_id=%d&description=spam"
 			, context.settings.GetHost(), context.settings.GetPort()
@@ -154,7 +163,8 @@ public class PreparedResponseFactory
 	private static final Pattern PATTERN_NAME_PATH = Pattern.compile("\\{([^:{}]+):([^:{}]+)\\}");
 	private static final Pattern PATTERN_NAME = Pattern.compile("\\{([^{}]+)\\}");
 
-	private static String ReplaceWithPath(String path, String name, ModelEntity entity, ModelData model_data)
+	private static String ReplaceWithPath(String path, String name
+		, ModelEntity entity, ModelData model_data)
 	{
 		String where;
 
@@ -204,7 +214,8 @@ public class PreparedResponseFactory
 			return String.format(NOT_FOUND, name);
 	}
 
-	public static String ComposeString(String string, ModelEntity entity, ModelData model_data)
+	public static String ComposeString(String string, ModelEntity entity
+		, ModelData model_data)
 	{
 		String result = string;
 
@@ -216,7 +227,8 @@ public class PreparedResponseFactory
 			String name = matcher.group(2);
 			String all = matcher.group(0);
 
-			result = result.replace(all, ReplaceWithPath(path, name, entity, model_data));
+			result = result.replace(all
+				, ReplaceWithPath(path, name, entity, model_data));
 		}
 
 		Matcher simple_matcher = PATTERN_NAME.matcher(result);

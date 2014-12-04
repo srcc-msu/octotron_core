@@ -76,4 +76,10 @@ public class GhostManager implements IPersistenceManager
 	{
 		// there is nothing here
 	}
+
+	@Override
+	public void Wipe()
+	{
+		// there is nothing here
+	}
 }

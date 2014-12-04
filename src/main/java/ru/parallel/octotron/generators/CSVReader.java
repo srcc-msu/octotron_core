@@ -65,9 +65,9 @@ public final class CSVReader
 				{
 					String str_val = next_line[i];
 
-					Object val = Value.ValueFromStr(str_val);
+					Value val = Value.ValueFromStr(str_val);
 
-					entity.GetBuilder(service).DeclareConst(fields[i], val);
+					entity.GetBuilder(service).DeclareConst(fields[i], val.GetRaw());
 				}
 
 				read++;

@@ -11,12 +11,18 @@ import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.logic.impl.Timeout;
 import ru.parallel.octotron.core.persistence.GhostManager;
 import ru.parallel.octotron.core.persistence.GraphManager;
 import ru.parallel.octotron.core.persistence.IPersistenceManager;
+import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.utils.FileUtils;
 
 import java.util.Collection;
@@ -144,7 +150,7 @@ public final class ModelService
 		source.GetBuilder(this).AddOutLink(link);
 		target.GetBuilder(this).AddInLink(link);
 
-		link.GetBuilder(this).DeclareConst("AID", link.GetID());
+		link.GetBuilder(this).DeclareConst(new ConstantTemplate("AID", link.GetID()));
 
 		return link;
 	}
@@ -158,7 +164,7 @@ public final class ModelService
 
 		model_data.objects.add(object);
 
-		object.GetBuilder(this).DeclareConst("AID", object.GetID());
+		object.GetBuilder(this).DeclareConst(new ConstantTemplate("AID", object.GetID()));
 
 		return object;
 	}
@@ -194,6 +200,23 @@ public final class ModelService
 	public void RegisterSensor(SensorAttribute attribute)
 	{
 		persistence_manager.RegisterSensor(attribute);
+
+		ReactionTemplate timeout_reaction = null;
+		try
+		{
+			timeout_reaction = new Timeout(attribute.GetName())
+				.Response(new Response(EEventStatus.INFO)
+					.Msg("tag", "TIMEOUT")
+					.Msg("descr", "sensor value has not been updated in required time")
+					.Msg("loc", "AID = {AID}")
+					.Msg("msg", "sensor(" + attribute.GetName() + ") value has not been updated in required time"));
+		}
+		catch (ExceptionParseError exceptionParseError)
+		{
+			throw new ExceptionModelFail("internal error in builtin reaction description");
+		}
+
+		attribute.GetBuilder(this).SetTimeoutReaction(timeout_reaction);
 	}
 
 	public void RegisterVar(VarAttribute attribute)
@@ -209,6 +232,12 @@ public final class ModelService
 	public void Finish()
 	{
 		persistence_manager.Finish();
+		persistence_manager = null;
+	}
+
+	public void Wipe()
+	{
+		persistence_manager.Wipe();
 		persistence_manager = null;
 	}
 }

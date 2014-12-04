@@ -25,9 +25,13 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
 
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GraphManager implements IPersistenceManager
 {
+	private final static Logger LOGGER = Logger.getLogger("octotron");
+
 	final ModelService model_service;
 
 	private Neo4jGraph graph;
@@ -182,7 +186,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			GraphEntity graph_entity = GetEntity(attribute.GetParent());
 
-			graph_entity.UpdateAttribute(attribute.GetName(), attribute.GetValue());
+			graph_entity.UpdateAttribute(attribute.GetName(), attribute.GetValue().GetRaw());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
@@ -210,7 +214,7 @@ public class GraphManager implements IPersistenceManager
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
 			if(attribute.GetValue() != null)
-				graph_object.UpdateAttribute("value", attribute.GetValue());
+				graph_object.UpdateAttribute("value", attribute.GetValue().GetRaw());
 
 // info
 			graph_object.UpdateAttribute("name", attribute.GetName());
@@ -239,7 +243,7 @@ public class GraphManager implements IPersistenceManager
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
 			if(attribute.GetValue() != null)
-				graph_object.UpdateAttribute("value", attribute.GetValue());
+				graph_object.UpdateAttribute("value", attribute.GetValue().GetRaw());
 		}
 	}
 
@@ -271,12 +275,6 @@ public class GraphManager implements IPersistenceManager
 	public void RegisterVar(VarAttribute attribute)
 	{
 		RegisterMod(attribute);
-	}
-
-	@Override
-	public void Finish()
-	{
-		graph.Shutdown();
 	}
 
 	private static final String DEPENDS = "DEPENDS";
@@ -319,5 +317,28 @@ public class GraphManager implements IPersistenceManager
 		}
 
 		graph.GetTransaction().ForceWrite();
+	}
+
+	@Override
+	public void Finish()
+	{
+		graph.Shutdown();
+	}
+
+	@Override
+	public void Wipe()
+	{
+		graph.Shutdown();
+
+		try
+		{
+			graph.Delete();
+		}
+		catch (ExceptionSystemError e)
+		{
+			LOGGER.log(Level.SEVERE, "could not wipe Neo4j folder", e);
+		}
+
+		LOGGER.log(Level.INFO, "Neo4j folder wiped");
 	}
 }

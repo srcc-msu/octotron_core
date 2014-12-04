@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.generators.tmpl;
 
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.logic.LogicID;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.IModelAttribute;
@@ -19,7 +18,6 @@ import java.util.Map;
 public abstract class ReactionTemplate extends LogicID<ELogicalType> implements IPresentable
 {
 	private final String check_name;
-	private final Value check_value;
 
 	private Response response = null;
 	private Response recover_response = null;
@@ -28,17 +26,11 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 	private long wait_repeat = 0;
 	private boolean repeatable = false;
 
-	public ReactionTemplate(String check_name, Object check_value)
+	public ReactionTemplate(String check_name)
 	{
 		super(ELogicalType.REACTION_TEMPLATE);
 
 		this.check_name = check_name;
-		this.check_value = Value.Construct(check_value);
-	}
-
-	public final Value GetCheckValue()
-	{
-		return check_value;
 	}
 
 	public final String GetCheckName()
@@ -112,8 +104,6 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 	{
 		Map<String, Object> result = new HashMap<>();
 		result.put("AID", GetID());
-
-		result.put("check_value", GetCheckValue());
 		result.put("check_name", GetCheckName());
 
 		return result;

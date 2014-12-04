@@ -17,9 +17,18 @@ public class Value
 		this.my_class = my_class;
 	}
 
+	/**
+	 * tries to convert unchecked Object to the checked Value
+	 * if it is a value already - makes a copy
+	 * */
 	public static Value Construct(Object value)
 	{
-		if(value instanceof Long)
+		if(value == null)
+			throw new ExceptionModelFail("Value can not be null");
+
+		if(value instanceof Value)
+			return new Value(((Value) value).value, ((Value) value).my_class); // so cute...
+		else if(value instanceof Long)
 			return new Value(value, Long.class);
 		else if(value instanceof Integer)
 			return new Value(((Integer)value).longValue(), Long.class);
@@ -262,7 +271,7 @@ public class Value
 		return !gt(val);
 	}
 
-	Object GetRaw()
+	public Object GetRaw()
 	{
 		return value;
 	}

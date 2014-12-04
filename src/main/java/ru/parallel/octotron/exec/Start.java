@@ -14,6 +14,7 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
@@ -95,6 +96,8 @@ public class Start
 		catch(Exception creation_exception)
 		{
 			LOGGER.log(Level.SEVERE, "could not create the model", creation_exception);
+
+			context.model_service.Wipe();
 			System.exit(1);
 		}
 

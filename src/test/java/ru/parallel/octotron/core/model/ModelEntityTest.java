@@ -4,7 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
@@ -39,15 +39,15 @@ public class ModelEntityTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ConstTemplate[] obj_att = {
-			new ConstTemplate("object", "ok")
+		ConstantTemplate[] obj_att = {
+			new ConstantTemplate("object", "ok")
 		};
 
 		ModelEntityTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
 
-		ConstTemplate[] link_att = {
-			new ConstTemplate("link", "ok"),
-			new ConstTemplate("type", "contain"),
+		ConstantTemplate[] link_att = {
+			new ConstantTemplate("link", "ok"),
+			new ConstantTemplate("type", "contain"),
 		};
 
 		ModelEntityTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);

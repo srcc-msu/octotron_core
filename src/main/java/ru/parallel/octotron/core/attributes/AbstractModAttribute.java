@@ -102,7 +102,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		CancelInitialDelay();
 
 		for(Reaction reaction : GetReactions())
-			reaction.Repeat(new_value);
+			reaction.Repeat();
 	}
 
 	@Override

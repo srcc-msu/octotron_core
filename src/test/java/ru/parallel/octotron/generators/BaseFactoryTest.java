@@ -10,7 +10,7 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
@@ -46,9 +46,9 @@ public class BaseFactoryTest
 	@Test
 	public void TestAttributes()
 	{
-		ConstTemplate[] attributes = { new ConstTemplate("test1", 0) };
-		ConstTemplate attr2 = new ConstTemplate("test2", 1);
-		ConstTemplate attr3 = new ConstTemplate("test3", 2);
+		ConstantTemplate[] attributes = { new ConstantTemplate("test1", 0) };
+		ConstantTemplate attr2 = new ConstantTemplate("test2", 1);
+		ConstantTemplate attr3 = new ConstantTemplate("test3", 2);
 
 		ObjectFactory f1 = object_factory
 			.Constants(attributes).Constants(attr2, attr3);
@@ -56,7 +56,7 @@ public class BaseFactoryTest
 			.Constants(attr2, attr3).Constants(attributes);
 
 		ModelObject obj = f1.Create();
-		ModelLink link = f2.Constants(new ConstTemplate("type", "1"))
+		ModelLink link = f2.Constants(new ConstantTemplate("type", "1"))
 			.OneToOne(f1.Create(), f1.Create());
 
 		assertTrue(obj.TestAttribute("test1"));

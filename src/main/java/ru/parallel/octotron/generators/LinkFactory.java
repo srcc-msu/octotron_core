@@ -13,7 +13,7 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
@@ -36,7 +36,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		super(service);
 	}
 
-	private LinkFactory(ModelService service, List<ConstTemplate> constants
+	private LinkFactory(ModelService service, List<ConstantTemplate> constants
 		, List<SensorTemplate> sensors
 		, List<VarTemplate> rules
 		, List<ReactionTemplate> reactions)
@@ -300,7 +300,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 
 	@Override
 	protected LinkFactory Clone(
-		List<ConstTemplate> new_constants
+		List<ConstantTemplate> new_constants
 		, List<SensorTemplate> new_sensors
 		, List<VarTemplate> new_rules
 		, List<ReactionTemplate> new_reactions)

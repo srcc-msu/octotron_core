@@ -217,9 +217,9 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 
 // -------------
 
-	public void Repeat(Object new_value)
+	public void Repeat()
 	{
-		if(new_value.equals(template.GetCheckValue()))
+		if(template.ReactionNeeded(attribute))
 			repeat++;
 		else
 			DropRepeat();

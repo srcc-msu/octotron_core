@@ -9,7 +9,7 @@ import ru.parallel.octotron.core.model.ModelObject;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,10 +32,10 @@ public class LinkFactoryTest
 	public static void Init() throws Exception
 	{
 		LinkFactoryTest.obj_factory = new ObjectFactory(context.model_service)
-			.Constants(new ConstTemplate("object", "ok"));
+			.Constants(new ConstantTemplate("object", "ok"));
 
 		LinkFactoryTest.link_factory = new LinkFactory(context.model_service)
-			.Constants(new ConstTemplate("type", "contain"));
+			.Constants(new ConstantTemplate("type", "contain"));
 	}
 
 /**

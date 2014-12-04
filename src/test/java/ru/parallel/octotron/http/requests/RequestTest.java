@@ -12,7 +12,7 @@ import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
 import ru.parallel.octotron.http.DummyHTTPServer;
 import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TypedString;
@@ -42,7 +42,7 @@ public class RequestTest
 
 		RequestTest.factory = new ObjectFactory(context.model_service);
 		RequestTest.links = new LinkFactory(context.model_service)
-			.Constants(new ConstTemplate("type", "a_link"));
+			.Constants(new ConstantTemplate("type", "a_link"));
 	}
 
 /**

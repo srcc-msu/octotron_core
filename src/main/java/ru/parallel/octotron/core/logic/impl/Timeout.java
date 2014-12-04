@@ -6,39 +6,41 @@
 
 package ru.parallel.octotron.core.logic.impl;
 
+import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 
 import java.util.Map;
 
-public class NotEquals extends ReactionTemplate
+public class Timeout extends ReactionTemplate
 {
-	private final Value check_value;
-
-	public NotEquals(String check_name, Object check_value)
+	public Timeout(String check_name)
 	{
 		super(check_name);
-
-		this.check_value = Value.Construct(check_value);
 	}
 
 	@Override
 	public boolean ReactionNeeded(IModelAttribute attribute)
 	{
-		if(!attribute.Check())
-			return false;
+		if(attribute.GetType() != EAttributeType.SENSOR)
+			throw new ExceptionModelFail("Timeout reaction on non-sensor attribute: " + attribute.GetName());
 
-		return attribute.ne(GetCheckValue());
+		return ReactionNeeded((SensorAttribute)attribute);
+	}
+
+	public boolean ReactionNeeded(SensorAttribute attribute)
+	{
+		return attribute.IsOutdated();
 	}
 
 	@Override
 	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
-		result.put("condition", "not_equals");
-		result.put("check_value", GetCheckValue());
-
+		result.put("condition", "timeout");
 		return result;
 	}
 
@@ -46,14 +48,7 @@ public class NotEquals extends ReactionTemplate
 	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = super.GetShortRepresentation();
-		result.put("condition", "not_equals");
-		result.put("check_value", GetCheckValue());
-
+		result.put("condition", "timeout");
 		return result;
-	}
-
-	public final Value GetCheckValue()
-	{
-		return check_value;
 	}
 }

@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.exec;
 
+import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
@@ -16,15 +17,20 @@ import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.HTTPServer;
+import ru.parallel.octotron.http.operations.View;
 import ru.parallel.octotron.http.requests.HttpExchangeWrapper;
 import ru.parallel.octotron.http.requests.ModelRequestExecutor;
 import ru.parallel.octotron.http.requests.ParsedModelRequest;
 import ru.parallel.octotron.logic.Importer;
+import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.octotron.logic.Statistics;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.octotron.reactions.PreparedResponseFactory;
 import ru.parallel.utils.FileUtils;
+import ru.parallel.utils.JavaUtils;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -76,10 +82,13 @@ public class ExecutionController
 		return stat.GetStat();
 	}
 
+	private PreparedResponseFactory response_factory = null;
+
 	public ExecutionController(Context context)
 		throws ExceptionSystemError
 	{
 		this.context = context;
+		response_factory = new PreparedResponseFactory(context);
 
 		Init();
 	}
@@ -135,10 +144,44 @@ public class ExecutionController
 		return exit;
 	}
 
+	private long tick = 0;
+	private final long OUTDATED_CHECK_INTERVAL = 5;
+
+	public void ProcessOutdatedSensors()
+	{
+		long cur_time = JavaUtils.GetTimestamp();
+
+		for(ModelEntity entity : context.model_data.GetAllEntities())
+		{
+			for(SensorAttribute sensor : entity.GetSensor())
+			{
+				sensor.UpdateIsOutdated(cur_time);
+
+				Response response = sensor.GetTimeoutReaction().Process();
+
+				if(response != null)
+				{
+					PreparedResponse prepared_response = response_factory
+						.Construct(sensor.GetParent(), sensor.GetTimeoutReaction(), response);
+
+					AddResponse(prepared_response);
+				}
+			}
+		}
+
+	}
+
 	// TODO executor?
 	public void Process()
 		throws InterruptedException
 	{
+		tick++;
+
+		if(tick % OUTDATED_CHECK_INTERVAL == 0) // TODO: scheduler?
+		{
+			ProcessOutdatedSensors();
+		}
+
 		AttributeList<IModelAttribute> list = to_update.poll();
 
 		if(list == null)
@@ -186,13 +229,8 @@ public class ExecutionController
 		LOGGER.log(Level.INFO, "all processing finished");
 	}
 
-	private PreparedResponseFactory response_factory = null;
-
 	public void CheckReactions(AttributeList<IModelAttribute> attributes)
 	{
-		if(response_factory == null)
-			response_factory = new PreparedResponseFactory(context);
-
 		for(IModelAttribute attribute : attributes)
 		{
 			for(Reaction reaction : attribute.GetReactions())
@@ -213,9 +251,6 @@ public class ExecutionController
 				if(prepared_response.GetResponse().GetStatus() != EEventStatus.RECOVER)
 					reaction.RegisterPreparedResponse(prepared_response);
 
-				if(IsSilent())
-					return;
-
 				AddResponse(prepared_response);
 			}
 		}
@@ -225,6 +260,9 @@ public class ExecutionController
 
 	public void AddResponse(PreparedResponse response)
 	{
+		if(IsSilent())
+			return;
+
 		stat.Add("reactions_executor", 1, reactions_executor.getQueue().size());
 
 		reactions_executor.execute(response);

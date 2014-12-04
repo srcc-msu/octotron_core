@@ -6,7 +6,7 @@ import org.junit.Test;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,15 +26,15 @@ public class ModelLinkTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ConstTemplate[] obj_att = {
-			new ConstTemplate("object", "ok")
+		ConstantTemplate[] obj_att = {
+			new ConstantTemplate("object", "ok")
 		};
 
 		ModelLinkTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
 
-		ConstTemplate[] link_att = {
-			new ConstTemplate("link", "ok"),
-			new ConstTemplate("type", "contain"),
+		ConstantTemplate[] link_att = {
+			new ConstantTemplate("link", "ok"),
+			new ConstantTemplate("type", "contain"),
 		};
 
 		ModelLinkTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);

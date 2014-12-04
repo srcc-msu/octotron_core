@@ -10,7 +10,7 @@ import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
 
@@ -43,12 +43,21 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 			AddReaction(reaction);
 	}
 
+//------------------------
+
 	public void DeclareConst(String name, Object value)
 	{
+		Value converted_value;
+
+		if(value instanceof Value)
+			converted_value = (Value)value;
+		else
+			converted_value = Value.Construct(value);
+
 		if(entity.TestAttribute(name))
 			throw new ExceptionModelFail("attribute already declared: " + name);
 
-		ConstAttribute attribute = new ConstAttribute(entity, name, Value.Construct(value));
+		ConstAttribute attribute = new ConstAttribute(entity, name, converted_value);
 
 		entity.attributes_map.put(name, attribute);
 		entity.const_map.put(name, attribute);
@@ -56,24 +65,20 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		service.RegisterConst(attribute);
 	}
 
-	public void DeclareConst(ConstTemplate constant)
-	{
-		DeclareConst(constant.name, constant.value);
-	}
-
-	public void DeclareConst(Iterable<ConstTemplate> constants)
-	{
-		for(ConstTemplate constant : constants)
-			DeclareConst(constant);
-	}
-
 	public void DeclareSensor(String name, long update_time, Object default_value)
 	{
+		Value converted_value;
+
+		if(default_value instanceof Value)
+			converted_value = (Value)default_value;
+		else
+			converted_value = Value.Construct(default_value);
+
 		if(entity.TestAttribute(name))
 			throw new ExceptionModelFail("attribute already declared: " + name);
 
 		SensorAttribute sensor = new SensorAttribute(entity, name, update_time
-			, Value.Construct(default_value));
+			, converted_value);
 
 		entity.attributes_map.put(name, sensor);
 		entity.sensor_map.put(name, sensor);
@@ -94,6 +99,30 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		service.RegisterSensor(sensor);
 	}
 
+	public void DeclareVar(String name, Rule rule)
+	{
+		if(entity.TestAttribute(name))
+			throw new ExceptionModelFail("attribute already declared: " + name);
+
+		VarAttribute var = new VarAttribute(entity, name, rule);
+
+		entity.attributes_map.put(name, var);
+		entity.var_map.put(name, var);
+
+		service.RegisterVar(var);
+	}
+
+	public void DeclareConst(ConstantTemplate constant)
+	{
+		DeclareConst(constant.name, constant.value);
+	}
+
+	public void DeclareConst(Iterable<ConstantTemplate> constants)
+	{
+		for(ConstantTemplate constant : constants)
+			DeclareConst(constant);
+	}
+
 	public void DeclareSensor(SensorTemplate sensor)
 	{
 		if(sensor.value == null)
@@ -108,22 +137,14 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 			DeclareSensor(sensor);
 	}
 
-	public void DeclareVar(String name, Rule rule)
-	{
-		if(entity.TestAttribute(name))
-			throw new ExceptionModelFail("attribute already declared: " + name);
-
-		VarAttribute var = new VarAttribute(entity, name, rule);
-
-		entity.attributes_map.put(name, var);
-		entity.var_map.put(name, var);
-
-		service.RegisterVar(var);
-	}
-
 	public void DeclareVar(Iterable<VarTemplate> vars)
 	{
 		for(VarTemplate var : vars)
 			DeclareVar(var.name, var.rule);
+	}
+
+	public void DeclareVar(VarTemplate var)
+	{
+		DeclareVar(var.name, var.rule);
 	}
 }

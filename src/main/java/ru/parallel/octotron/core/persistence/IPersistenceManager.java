@@ -31,4 +31,6 @@ public interface IPersistenceManager
 	void Operate();
 
 	void RegisterUpdate(AttributeList<IModelAttribute> attributes);
+
+	void Wipe();
 }

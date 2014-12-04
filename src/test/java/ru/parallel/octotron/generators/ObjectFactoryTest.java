@@ -5,7 +5,7 @@ import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,7 +25,7 @@ public class ObjectFactoryTest
 	public static void Init() throws Exception
 	{
 		ObjectFactoryTest.obj_factory = new ObjectFactory(context.model_service)
-			.Constants(new ConstTemplate("object", "ok"));
+			.Constants(new ConstantTemplate("object", "ok"));
 	}
 
 /**

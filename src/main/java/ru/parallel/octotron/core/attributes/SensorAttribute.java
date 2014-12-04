@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -31,6 +32,8 @@ public final class SensorAttribute extends AbstractModAttribute
 	 * */
 	private boolean is_valid = true;
 
+	Reaction timeout_reaction = null;
+
 	public SensorAttribute(ModelEntity parent, String name, long update_time
 		, Value value)
 	{
@@ -47,6 +50,8 @@ public final class SensorAttribute extends AbstractModAttribute
 		if(update_time == -1)
 			throw new ExceptionModelFail("update time is set to never, default sensor value must be specified");
 		this.update_time = update_time;
+
+		SetCTime(JavaUtils.GetTimestamp());
 	}
 
 	@Override
@@ -141,5 +146,10 @@ public final class SensorAttribute extends AbstractModAttribute
 		result.put("update_time", update_time);
 
 		return result;
+	}
+
+	public Reaction GetTimeoutReaction()
+	{
+		return timeout_reaction;
 	}
 }

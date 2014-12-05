@@ -61,13 +61,13 @@ public class ModelObjectTest
 			, node.GetInLinks().Filter("link").size(), N);
 
 		assertEquals("in links not match, exact type and value"
-			, node.GetInLinks().Filter("link", Value.Construct("ok")).size(), N);
+			, node.GetInLinks().Filter("link", "ok").size(), N);
 
 		assertEquals("in links not match, exact type, wrong value"
-			, node.GetInLinks().Filter("link", Value.Construct("fail")).size(), 0);
+			, node.GetInLinks().Filter("link", "fail").size(), 0);
 
 		assertEquals("in links not match, wrong type, wrong value"
-			, node.GetInLinks().Filter("fail", Value.Construct("fail")).size(), 0);
+			, node.GetInLinks().Filter("fail", "fail").size(), 0);
 	}
 
 	@Test
@@ -86,13 +86,13 @@ public class ModelObjectTest
 			, node.GetInNeighbors("link").size(), N);
 
 		assertEquals("in links not match, exact type and value"
-			, node.GetInNeighbors("link", Value.Construct("ok")).size(), N);
+			, node.GetInNeighbors("link", "ok").size(), N);
 
 		assertEquals("in links not match, exact type, wrong value"
-			, node.GetInNeighbors("link", Value.Construct("fail")).size(), 0);
+			, node.GetInNeighbors("link", "fail").size(), 0);
 
 		assertEquals("in links not match, wrong type, wrong value"
-			, node.GetInNeighbors("fail", Value.Construct("fail")).size(), 0);
+			, node.GetInNeighbors("fail", "fail").size(), 0);
 	}
 
 	@Test
@@ -111,13 +111,13 @@ public class ModelObjectTest
 			, node.GetOutNeighbors("link").size(), N);
 
 		assertEquals("in links not match, exact type and value"
-			, node.GetOutNeighbors("link", Value.Construct("ok")).size(), N);
+			, node.GetOutNeighbors("link", "ok").size(), N);
 
 		assertEquals("in links not match, exact type, wrong value"
-			, node.GetOutNeighbors("link", Value.Construct("fail")).size(), 0);
+			, node.GetOutNeighbors("link", "fail").size(), 0);
 
 		assertEquals("in links not match, wrong type, wrong value"
-			, node.GetOutNeighbors("fail", Value.Construct("fail")).size(), 0);
+			, node.GetOutNeighbors("fail", "fail").size(), 0);
 	}
 
 	@Test
@@ -136,13 +136,13 @@ public class ModelObjectTest
 			, node.GetOutLinks().Filter("link").size(), N);
 
 		assertEquals("out links not match, exact type and value"
-			, node.GetOutLinks().Filter("link", Value.Construct("ok")).size(), N);
+			, node.GetOutLinks().Filter("link", "ok").size(), N);
 
 		assertEquals("out links not match, exact type, wrong value"
-			, node.GetOutLinks().Filter("link", Value.Construct("fail")).size(), 0);
+			, node.GetOutLinks().Filter("link", "fail").size(), 0);
 
 		assertEquals("out links not match, wrong type, wrong value"
-			, node.GetOutLinks().Filter("fail", Value.Construct("fail")).size(), 0);
+			, node.GetOutLinks().Filter("fail", "fail").size(), 0);
 	}
 
 	/**
@@ -166,13 +166,13 @@ public class ModelObjectTest
 			, node.GetInNeighbors().Filter("object").size(), N);
 
 		assertEquals(N
-			, node.GetInNeighbors().Filter("object", Value.Construct("ok")).size());
+			, node.GetInNeighbors().Filter("object", "ok").size());
 
 		assertEquals(0
-			, node.GetInNeighbors().Filter("object", Value.Construct("fail")).size());
+			, node.GetInNeighbors().Filter("object", "fail").size());
 
 		assertEquals(0
-			, node.GetInNeighbors().Filter("fail", Value.Construct("fail")).size());
+			, node.GetInNeighbors().Filter("fail", "fail").size());
 	}
 
 	@Test
@@ -194,14 +194,14 @@ public class ModelObjectTest
 
 		assertEquals("in neighbors not match, exact type and value"
 			, node.GetOutNeighbors()
-				.Filter("object", Value.Construct("ok")).size(), N);
+				.Filter("object", "ok").size(), N);
 
 		assertEquals("in neighbors not match, exact type, wrong value"
 			, node.GetOutNeighbors()
-				.Filter("object", Value.Construct("fail")).size(), 0);
+				.Filter("object", "fail").size(), 0);
 
 		assertEquals("in neighbors not match, wrong type, wrong value"
 			, node.GetOutNeighbors()
-				.Filter("fail", Value.Construct("fail")).size(), 0);
+				.Filter("fail", "fail").size(), 0);
 	}
 }

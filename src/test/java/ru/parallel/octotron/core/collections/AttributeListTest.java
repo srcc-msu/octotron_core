@@ -39,7 +39,7 @@ public class AttributeListTest
 		assertEquals("list has no elements", list.size(), 1);
 
 		IAttribute elem = list.get(0);
-		assertEquals("add not worked correctly", elem.eq(Value.Construct(0)), true);
+		assertEquals("add not worked correctly", elem.eq((0)), true);
 	}
 
 	@Test
@@ -54,9 +54,9 @@ public class AttributeListTest
 		object.GetBuilder(context.model_service).DeclareConst("test3", "test");
 		list.add(AttributeListTest.object.GetAttribute("test3"));
 
-		assertEquals(list.get(0).eq(Value.Construct(0)), true);
-		assertEquals(list.get(1).eq(Value.Construct(1.0)), true);
-		assertEquals(list.get(2).eq(Value.Construct("test")), true);
+		assertEquals(list.get(0).eq(0), true);
+		assertEquals(list.get(1).eq(1.0), true);
+		assertEquals(list.get(2).eq("test"), true);
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class AttributeListTest
 		int i = 0;
 		for(IAttribute att : list)
 		{
-			assertEquals(att.eq(Value.Construct(i)), true);
+			assertEquals(att.eq(i), true);
 			i++;
 		}
 	}
@@ -108,12 +108,12 @@ public class AttributeListTest
 			list.add(AttributeListTest.object.GetAttribute("test" + i));
 		}
 
-		AttributeList<IAttribute> le = list.le(Value.Construct(5));
-		AttributeList<IAttribute> lt = list.lt(Value.Construct(5));
-		AttributeList<IAttribute> ge = list.ge(Value.Construct(5));
-		AttributeList<IAttribute> gt = list.gt(Value.Construct(5));
-		AttributeList<IAttribute> eq = list.eq(Value.Construct(5));
-		AttributeList<IAttribute> ne = list.ne(Value.Construct(5));
+		AttributeList<IAttribute> le = list.le(5);
+		AttributeList<IAttribute> lt = list.lt(5);
+		AttributeList<IAttribute> ge = list.ge(5);
+		AttributeList<IAttribute> gt = list.gt(5);
+		AttributeList<IAttribute> eq = list.eq(5);
+		AttributeList<IAttribute> ne = list.ne(5);
 
 		assertEquals("le size failed", le.size(), 6);
 		assertEquals("lt size failed", lt.size(), 5);
@@ -123,22 +123,22 @@ public class AttributeListTest
 		assertEquals("ne size failed", ne.size(), 9);
 
 		for(IAttribute att : le)
-			assertEquals("le failed", att.le(Value.Construct(5)), true);
+			assertEquals("le failed", att.le(5), true);
 
 		for(IAttribute att : lt)
-			assertEquals("lt failed", att.lt(Value.Construct(5)), true);
+			assertEquals("lt failed", att.lt(5), true);
 
 		for(IAttribute att : ge)
-			assertEquals("ge failed", att.ge(Value.Construct(5)), true);
+			assertEquals("ge failed", att.ge(5), true);
 
 		for(IAttribute att : gt)
-			assertEquals("gt failed", att.gt(Value.Construct(5)), true);
+			assertEquals("gt failed", att.gt(5), true);
 
 		for(IAttribute att : eq)
-			assertEquals("eq failed", att.eq(Value.Construct(5)), true);
+			assertEquals("eq failed", att.eq(5), true);
 
 		for(IAttribute att : ne)
-			assertEquals("ne failed", att.ne(Value.Construct(5)), true);
+			assertEquals("ne failed", att.ne(5), true);
 	}
 
 	@Test

@@ -327,6 +327,16 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		return Instance(InnerFilter(name, value, EQueryType.EQ));
 	}
 
+	public final R Filter(String name, Object value, EQueryType type)
+	{
+		return Filter(name, Value.Construct(value), type);
+	}
+
+	public final R Filter(String name, Object value)
+	{
+		return Filter(name, Value.Construct(value));
+	}
+
 	public final R Filter(String name)
 	{
 		return Instance(InnerFilter(name));

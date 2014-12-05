@@ -32,5 +32,13 @@ public interface IAttribute extends IUniqueID<EAttributeType>, IPresentable
 	boolean ge(Value val);
 	boolean le(Value val);
 
+	boolean eq(Object new_value);
+	boolean aeq(Object new_value, Object aprx);
+	boolean ne(Object new_value);
+	boolean gt(Object new_value);
+	boolean lt(Object new_value);
+	boolean ge(Object val);
+	boolean le(Object val);
+
 	public String GetStringValue();
 }

@@ -17,9 +17,15 @@ public class Value
 		this.my_class = my_class;
 	}
 
+	public Value(Value value)
+	{
+		this.value = value.value;
+		this.my_class = value.my_class;
+	}
+
 	/**
 	 * tries to convert unchecked Object to the checked Value
-	 * if it is a value already - makes a copy
+	 * if it is a value already - does nothing
 	 * */
 	public static Value Construct(Object value)
 	{
@@ -27,7 +33,7 @@ public class Value
 			throw new ExceptionModelFail("Value can not be null");
 
 		if(value instanceof Value)
-			return new Value(((Value) value).value, ((Value) value).my_class); // so cute...
+			return (Value) value;
 		else if(value instanceof Long)
 			return new Value(value, Long.class);
 		else if(value instanceof Integer)

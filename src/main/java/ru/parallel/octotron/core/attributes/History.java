@@ -11,7 +11,7 @@ import java.util.LinkedList;
 
 public class History
 {
-	private static final int HISTORY_SIZE = 3;
+	private static final int HISTORY_SIZE = 1;
 
 	public static class Entry
 	{

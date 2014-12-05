@@ -105,6 +105,47 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 		return value.le(new_value);
 	}
 
+// ---------
+
+	public boolean eq(Object new_value)
+	{
+		return eq(Value.Construct(new_value));
+	}
+
+	public boolean aeq(Object new_value, Object aprx)
+	{
+		return aeq(Value.Construct(new_value), Value.Construct(aprx));
+	}
+
+	public boolean ne(Object new_value)
+	{
+		return ne(Value.Construct(new_value));
+	}
+
+	public boolean gt(Object new_value)
+	{
+		return gt(Value.Construct(new_value));
+	}
+
+	public boolean lt(Object new_value)
+	{
+		return lt(Value.Construct(new_value));
+	}
+
+	public boolean ge(Object new_value)
+	{
+		return ge(Value.Construct(new_value));
+	}
+
+	public boolean le(Object new_value)
+	{
+		return le(Value.Construct(new_value));
+	}
+
+
+// ---------
+
+
 	@Override
 	public final String GetName()
 	{

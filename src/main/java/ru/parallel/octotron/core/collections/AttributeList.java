@@ -147,18 +147,39 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return new AttributeList<>(new_list);
 	}
 
+
+	public AttributeList<T> ge(Object value)
+	{
+		return ge(Value.Construct(value));
+	}
+
+	public AttributeList<T> le(Object value)
+	{
+		return le(Value.Construct(value));
+	}
+
+	public AttributeList<T> gt(Object value)
+	{
+		return gt(Value.Construct(value));
+	}
+
+	public AttributeList<T> lt(Object value)
+	{
+		return lt(Value.Construct(value));
+	}
+
+	public AttributeList<T> eq(Object value)
+	{
+		return eq(Value.Construct(value));
+	}
+
+	public AttributeList<T> ne(Object value)
+	{
+		return ne(Value.Construct(value));
+	}
+
 	public AttributeList<T> AlphabeticSort()
 	{
 		return new AttributeList<>(InnerAlphabeticSort());
 	}
-
-	/*public List<SimpleAttribute> ToSimple()
-	{
-		List<SimpleAttribute> result = new LinkedList<>();
-
-		for(T attribute : list)
-			result.add(new SimpleAttribute(attribute.GetName(), attribute.GetValue()));
-
-		return result;
-	}*/
 }

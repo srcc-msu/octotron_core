@@ -63,9 +63,9 @@ public class LinkFactoryTest
 		LinkFactoryTest.link_factory.OneToOne(obj.get(0), obj.get(1));
 
 		assertEquals("link does not exist"
-			, obj.get(0).GetOutLinks().Filter("type", Value.Construct("contain")).size(), 1);
+			, obj.get(0).GetOutLinks().Filter("type", "contain").size(), 1);
 		assertEquals("link does not exist"
-			, obj.get(1).GetInLinks().Filter("type", Value.Construct("contain")).size(), 1);
+			, obj.get(1).GetInLinks().Filter("type", "contain").size(), 1);
 	}
 
 	/**
@@ -80,11 +80,11 @@ public class LinkFactoryTest
 		LinkFactoryTest.link_factory.OneToEvery(obj, objects);
 
 		assertEquals("link does not exist"
-			, obj.GetOutLinks().Filter("type", Value.Construct("contain")).size(), LinkFactoryTest.N);
+			, obj.GetOutLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 			assertEquals("link does not exist"
-				, objects.get(i).GetInLinks().Filter("type", Value.Construct("contain")).size(), 1);
+				, objects.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 	}
 
 	/**
@@ -99,11 +99,11 @@ public class LinkFactoryTest
 		LinkFactoryTest.link_factory.EveryToOne(objects, obj);
 
 		assertEquals("link does not exist"
-			, obj.GetInLinks().Filter("type", Value.Construct("contain")).size(), LinkFactoryTest.N);
+			, obj.GetInLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 			assertEquals("link does not exist"
-				, objects.get(i).GetOutLinks().Filter("type", Value.Construct("contain")).size(), 1);
+				, objects.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 	}
 
 	/**
@@ -120,10 +120,10 @@ public class LinkFactoryTest
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 		{
 			assertEquals("link does not exist"
-				, objects1.get(i).GetOutLinks().Filter("type", Value.Construct("contain")).size(), 1);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 
 			assertEquals("link does not exist"
-				, objects2.get(i).GetInLinks().Filter("type", Value.Construct("contain")).size(), 1);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 		}
 	}
 
@@ -141,10 +141,10 @@ public class LinkFactoryTest
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 		{
 			assertEquals("link does not exist"
-				, objects1.get(i).GetOutLinks().Filter("type", Value.Construct("contain")).size(), LinkFactoryTest.N);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
 
 			assertEquals("link does not exist"
-				, objects2.get(i).GetInLinks().Filter("type", Value.Construct("contain")).size(), LinkFactoryTest.N);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), LinkFactoryTest.N);
 		}
 	}
 
@@ -162,13 +162,13 @@ public class LinkFactoryTest
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 		{
 			assertEquals("link does not exist"
-				, objects1.get(i).GetOutLinks().Filter("type", Value.Construct("contain")).size(), 2 * LinkFactoryTest.N);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
 		}
 
 		for(int i = 0; i < 2* LinkFactoryTest.N * LinkFactoryTest.N; i++)
 		{
 			assertEquals("link does not exist"
-				, objects2.get(i).GetInLinks().Filter("type", Value.Construct("contain")).size(), 1);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 		}
 	}
 
@@ -185,11 +185,11 @@ public class LinkFactoryTest
 
 		for(int i = 0; i < 2* LinkFactoryTest.N * LinkFactoryTest.N; i++)
 			assertEquals("out link does not exist"
-				, objects1.get(i).GetOutLinks().Filter("type", Value.Construct("contain")).size(), 1);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 
 		for(int i = 0; i < LinkFactoryTest.N; i++)
 			assertEquals("in link does not exist"
-				, objects2.get(i).GetInLinks().Filter("type", Value.Construct("contain")).size(), 2 * LinkFactoryTest.N);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
 	}
 
 	/**
@@ -207,14 +207,14 @@ public class LinkFactoryTest
 
 		for(int i = 0; i < 2* LinkFactoryTest.N * LinkFactoryTest.N -K; i++)
 			assertEquals("out link does not exist"
-				, objects1.get(i).GetOutLinks().Filter("type", Value.Construct("contain")).size(), 1);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 1);
 
 		for(int i = 0; i < LinkFactoryTest.N -1; i++)
 			assertEquals("in link does not exist"
-				, objects2.get(i).GetInLinks().Filter("type", Value.Construct("contain")).size(), 2 * LinkFactoryTest.N);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
 
 		assertEquals("in link does not exist"
-			, objects2.get(LinkFactoryTest.N - 1).GetInLinks().Filter("type", Value.Construct("contain")).size(), 2 * LinkFactoryTest.N - K);
+			, objects2.get(LinkFactoryTest.N - 1).GetInLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N - K);
 	}
 	/**
 	 * check that {@link ru.parallel.octotron.generators.LinkFactory#EveryToChunks_LastLess} creates correct link
@@ -231,14 +231,14 @@ public class LinkFactoryTest
 
 		for(int i = 0; i < LinkFactoryTest.N -1; i++)
 			assertEquals("link does not exist"
-				, objects1.get(i).GetOutLinks().Filter("type", Value.Construct("contain")).size(), 2 * LinkFactoryTest.N);
+				, objects1.get(i).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N);
 
 		assertEquals("link does not exist"
-			, objects1.get(LinkFactoryTest.N - 1).GetOutLinks().Filter("type", Value.Construct("contain")).size(), 2 * LinkFactoryTest.N - K);
+			, objects1.get(LinkFactoryTest.N - 1).GetOutLinks().Filter("type", "contain").size(), 2 * LinkFactoryTest.N - K);
 
 		for(int i = 0; i < 2* LinkFactoryTest.N * LinkFactoryTest.N - K; i++)
 			assertEquals("link does not exist"
-				, objects2.get(i).GetInLinks().Filter("type", Value.Construct("contain")).size(), 1);
+				, objects2.get(i).GetInLinks().Filter("type", "contain").size(), 1);
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class LinkFactoryTest
 
 		for(int i = 0; i < len; i++)
 			assertEquals("out link does not exist"
-				, objects_from1.get(i).GetOutLinks().Filter("type", Value.Construct("contain")).size(), arr[i]);
+				, objects_from1.get(i).GetOutLinks().Filter("type", "contain").size(), arr[i]);
 	}
 
 	/**
@@ -319,6 +319,6 @@ public class LinkFactoryTest
 
 		for(int i = 0; i < len; i++)
 			assertEquals("out link does not exist"
-				, objects_to1.get(i).GetInLinks().Filter("type", Value.Construct("contain")).size(), arr[i]);
+				, objects_to1.get(i).GetInLinks().Filter("type", "contain").size(), arr[i]);
 	}
 }

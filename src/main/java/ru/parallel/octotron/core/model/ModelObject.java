@@ -63,6 +63,16 @@ public class ModelObject extends ModelEntity
 		return out_links.Filter(link_name, link_value).Target();
 	}
 
+	public ModelObjectList GetInNeighbors(String link_name, Object link_value)
+	{
+		return GetInNeighbors(link_name, Value.Construct(link_value));
+	}
+
+	public ModelObjectList GetOutNeighbors(String link_name, Object link_value)
+	{
+		return GetOutNeighbors(link_name, Value.Construct(link_value));
+	}
+
 	public ModelObjectList GetInNeighbors(String link_name)
 	{
 		return in_links.Filter(link_name).Source();

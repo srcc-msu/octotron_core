@@ -224,7 +224,7 @@ public final class ModelService
 		persistence_manager.RegisterVar(attribute);
 	}
 
-	public void RegisterUpdate(AttributeList<IModelAttribute> attributes)
+	public void RegisterUpdate(Collection<? extends IModelAttribute> attributes)
 	{
 		persistence_manager.RegisterUpdate(attributes);
 	}

@@ -15,6 +15,8 @@ import ru.parallel.octotron.core.model.ModelEntity;
 
 import ru.parallel.octotron.exec.ExecutionController;
 
+import java.util.Collection;
+
 public class Importer implements Runnable
 {
 	private final ExecutionController controller;
@@ -32,35 +34,35 @@ public class Importer implements Runnable
 		this.value = value;
 	}
 
-	protected AttributeList<VarAttribute> GetDependant(AttributeList<? extends IModelAttribute> attributes)
+	protected Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
 	{
-		AttributeList<VarAttribute> result = new AttributeList<>();
+		Collection<VarAttribute> result = new AttributeList<>();
 
 		for(IModelAttribute attribute : attributes)
 		{
-			result.addAll(attribute.GetDependant());
+			result.addAll(attribute.GetDependFromMe());
 		}
 
 		return result;
 	}
 
-	public AttributeList<IModelAttribute> ProcessVars(SensorAttribute changed)
+	public Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
 	{
-		AttributeList<IModelAttribute> result = new AttributeList<>();
+		Collection<IModelAttribute> result = new AttributeList<>();
 
-		AttributeList<VarAttribute> dependant_varyings = changed.GetDependant();
+		Collection<VarAttribute> depend_from_changed = changed.GetDependFromMe();
 
 		do
 		{
-			for(VarAttribute dependant_varying : dependant_varyings)
+			for(VarAttribute var : depend_from_changed)
 			{
-				if(dependant_varying.Update())
-					result.add(dependant_varying);
+				if(var.Update())
+					result.add(var);
 			}
 
-			dependant_varyings = GetDependant(dependant_varyings);
+			depend_from_changed = GetDependFromList(depend_from_changed);
 		}
-		while(dependant_varyings.size() != 0);
+		while(depend_from_changed.size() != 0);
 
 		return result;
 	}
@@ -71,7 +73,7 @@ public class Importer implements Runnable
 		SensorAttribute sensor = entity.GetSensor(name);
 		sensor.Update(value);
 
-		AttributeList<IModelAttribute> result = ProcessVars(sensor);
+		Collection<IModelAttribute> result = ProcessVars(sensor);
 
 		result.add(sensor);
 

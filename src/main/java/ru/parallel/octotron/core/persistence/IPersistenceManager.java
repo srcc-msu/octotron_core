@@ -15,6 +15,8 @@ import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 
+import java.util.Collection;
+
 public interface IPersistenceManager
 {
 	public void RegisterObject(ModelObject object);
@@ -30,7 +32,7 @@ public interface IPersistenceManager
 
 	void Operate();
 
-	void RegisterUpdate(AttributeList<IModelAttribute> attributes);
+	void RegisterUpdate(Collection<? extends IModelAttribute> attributes);
 
 	void Wipe();
 }

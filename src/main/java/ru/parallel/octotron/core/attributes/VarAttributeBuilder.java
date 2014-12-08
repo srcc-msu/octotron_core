@@ -22,7 +22,7 @@ public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribut
 			: attribute.rule.GetDependency(attribute.GetParent()))
 		{
 			dependency.GetBuilder(service).AddDependant(attribute);
-			attribute.dependency.add(dependency);
+			attribute.i_depend_from.add(dependency);
 		}
 	}
 }

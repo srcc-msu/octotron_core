@@ -205,6 +205,12 @@ public class Value
 // -----------------------------
 
 	@Override
+	public int hashCode()
+	{
+		return value.hashCode();
+	}
+
+	@Override
 	public final boolean equals(Object object)
 	{
 		if(!(object instanceof Value))

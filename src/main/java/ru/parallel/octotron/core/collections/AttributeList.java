@@ -9,65 +9,42 @@ package ru.parallel.octotron.core.collections;
 import ru.parallel.octotron.core.attributes.IAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 
-import java.util.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 
-public final class AttributeList<T extends IAttribute> implements Iterable<T>
+@SuppressWarnings("serial")
+public final class AttributeList<T extends IAttribute> extends LinkedList<T>
 {
-	private final List<T> list;
-
-	public AttributeList()
-	{
-		list = new LinkedList<>();
-	}
-
-	private AttributeList(List<T> list)
-	{
-		this.list = list;
-	}
+	public AttributeList() {}
 
 	public AttributeList(AttributeList<T> list)
 	{
-		this.list = new LinkedList<>();
-		this.list.addAll(list.list);
+		this();
+		addAll(list);
 	}
 
-	public final void add(T t)
-	{
-		list.add(t);
-	}
-
+	/**
+	 * creates a new list, that contains all elements from this and /list2<br>
+	 * */
 	public final AttributeList<T> append(AttributeList<? extends T> list2)
 	{
-		List<T> new_list = new LinkedList<>(list);
+		AttributeList<T> new_list = new AttributeList<>();
 
-		new_list.addAll(list2.list);
-		return new AttributeList<>(new_list);
+		new_list.addAll(this);
+		new_list.addAll(list2);
+
+		return new_list;
 	}
 
-	public final void addAll(AttributeList<? extends T> list2)
+	/**
+	 * returns a new list, that has attributes sorted in alphabetic order by keys<br>
+	 * */
+	public final AttributeList<T> AlphabeticSort()
 	{
-		list.addAll(list2.list);
-	}
-
-	public final T get(int n)
-	{
-		return list.get(n);
-	}
-
-	public final int size()
-	{
-		return list.size();
-	}
-
-	@Override
-	public final Iterator<T> iterator()
-	{
-		return list.iterator();
-	}
-
-	final List<T> InnerAlphabeticSort()
-	{
-		List<T> new_list = new LinkedList<>(list);
+		AttributeList<T> new_list = new AttributeList<>(this);
 
 		Collections.sort(new_list, new Comparator<T>()
 		{
@@ -83,70 +60,69 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 
 	public AttributeList<T> ge(Value val)
 	{
-		List<T> new_list = new LinkedList<>();
+		AttributeList<T> new_list = new AttributeList<>();
 
-		for(T att : list)
+		for(T att : this)
 			if(att.ge(val))
 				new_list.add(att);
 
-		return new AttributeList<>(new_list);
+		return new_list;
 	}
 
 	public AttributeList<T> le(Value val)
 	{
-		List<T> new_list = new LinkedList<>();
+		AttributeList<T> new_list = new AttributeList<>();
 
-		for(T att : list)
+		for(T att : this)
 			if(att.le(val))
 				new_list.add(att);
 
-		return new AttributeList<>(new_list);
+		return new_list;
 	}
 
 	public AttributeList<T> gt(Value val)
 	{
-		List<T> new_list = new LinkedList<>();
+		AttributeList<T> new_list = new AttributeList<>();
 
-		for(T att : list)
+		for(T att : this)
 			if(att.gt(val))
 				new_list.add(att);
 
-		return new AttributeList<>(new_list);
+		return new_list;
 	}
 
 	public AttributeList<T> lt(Value val)
 	{
-		List<T> new_list = new LinkedList<>();
+		AttributeList<T> new_list = new AttributeList<>();
 
-		for(T att : list)
+		for(T att : this)
 			if(att.lt(val))
 				new_list.add(att);
 
-		return new AttributeList<>(new_list);
+		return new_list;
 	}
 
 	public AttributeList<T> eq(Value val)
 	{
-		List<T> new_list = new LinkedList<>();
+		AttributeList<T> new_list = new AttributeList<>();
 
-		for(T att : list)
+		for(T att : this)
 			if(att.eq(val))
 				new_list.add(att);
 
-		return new AttributeList<>(new_list);
+		return new_list;
 	}
 
 	public AttributeList<T> ne(Value val)
 	{
-		List<T> new_list = new LinkedList<>();
+		AttributeList<T> new_list = new AttributeList<>();
 
-		for(T att : list)
+		for(T att : this)
 			if(att.ne(val))
 				new_list.add(att);
 
-		return new AttributeList<>(new_list);
+		return new_list;
 	}
-
 
 	public AttributeList<T> ge(Object value)
 	{
@@ -178,8 +154,11 @@ public final class AttributeList<T extends IAttribute> implements Iterable<T>
 		return ne(Value.Construct(value));
 	}
 
-	public AttributeList<T> AlphabeticSort()
+// ---
+
+	private void writeObject(ObjectOutputStream stream)
+		throws IOException
 	{
-		return new AttributeList<>(InnerAlphabeticSort());
+		throw new IOException("NIY");
 	}
 }

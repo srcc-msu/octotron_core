@@ -100,7 +100,7 @@ public final class ConstAttribute extends AbstractAttribute implements IModelAtt
 	}
 
 	@Override
-	public AttributeList<VarAttribute> GetDependant()
+	public AttributeList<VarAttribute> GetDependFromMe()
 	{
 		return new AttributeList<>();
 	}

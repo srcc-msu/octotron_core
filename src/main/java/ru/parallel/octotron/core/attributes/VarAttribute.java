@@ -16,7 +16,7 @@ import ru.parallel.octotron.core.primitive.EAttributeType;
 public final class VarAttribute extends AbstractModAttribute
 {
 	protected final Rule rule;
-	protected final AttributeList<IModelAttribute> dependency = new AttributeList<>();
+	protected final AttributeList<IModelAttribute> i_depend_from = new AttributeList<>();
 
 	@Override
 	public VarAttributeBuilder GetBuilder(ModelService service)
@@ -52,9 +52,9 @@ public final class VarAttribute extends AbstractModAttribute
 		return true;
 	}
 
-	public Iterable<IModelAttribute> GetDependency()
+	public Iterable<IModelAttribute> GetIDependFrom()
 	{
-		return dependency;
+		return i_depend_from;
 	}
 
 	@Override

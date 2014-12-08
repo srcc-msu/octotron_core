@@ -25,7 +25,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	private long ctime = 0;
 
 	protected final Map<Long, Reaction> reactions = new HashMap<>();
-	protected final AttributeList<VarAttribute> dependant = new AttributeList<>();
+	protected final AttributeList<VarAttribute> depend_from_me = new AttributeList<>();
 
 	/**
 	 * tracks if the sensor got at least one value update:
@@ -106,9 +106,9 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	}
 
 	@Override
-	public final AttributeList<VarAttribute> GetDependant()
+	public final AttributeList<VarAttribute> GetDependFromMe()
 	{
-		return dependant;
+		return depend_from_me;
 	}
 
 

@@ -8,7 +8,6 @@ package ru.parallel.octotron.core.persistence;
 
 import com.google.common.collect.Iterables;
 import ru.parallel.octotron.core.attributes.*;
-import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.graph.impl.GraphEntity;
 import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
@@ -284,12 +283,12 @@ public class GraphManager implements IPersistenceManager
 	{
 		GraphObject object = GetObject(attribute);
 
-		for(IModelAttribute dependency : attribute.GetDependency())
+		for(IModelAttribute i_depend_from : attribute.GetIDependFrom())
 		{
-			if(dependency.GetType() == EAttributeType.CONST)
+			if(i_depend_from.GetType() == EAttributeType.CONST)
 				continue;
 
-			GraphObject dependency_object = GetObject(dependency);
+			GraphObject dependency_object = GetObject(i_depend_from);
 
 			graph_service.AddLink(object, dependency_object, DEPENDS);
 		}
@@ -303,7 +302,7 @@ public class GraphManager implements IPersistenceManager
 
 	// TODO: executor?
 	@Override
-	public void RegisterUpdate(AttributeList<IModelAttribute> attributes)
+	public void RegisterUpdate(Collection<? extends IModelAttribute> attributes)
 	{
 		for(IModelAttribute attribute : attributes)
 		{

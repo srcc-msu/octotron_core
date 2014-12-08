@@ -18,7 +18,7 @@ public interface IModelAttribute extends IAttribute
 
 	Collection<Reaction> GetReactions();
 
-	AttributeList<VarAttribute> GetDependant();
+	AttributeList<VarAttribute> GetDependFromMe();
 
 	IAttributeBuilder GetBuilder(ModelService service);
 

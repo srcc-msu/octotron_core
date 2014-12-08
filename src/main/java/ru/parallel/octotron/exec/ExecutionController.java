@@ -30,6 +30,7 @@ import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -75,7 +76,8 @@ public class ExecutionController
 	private boolean silent = false;
 
 	private Statistics stat;
-	private final ConcurrentLinkedQueue<AttributeList<IModelAttribute>> to_update = new ConcurrentLinkedQueue<>();
+	private final ConcurrentLinkedQueue<Collection<? extends IModelAttribute>> to_update
+		= new ConcurrentLinkedQueue<>();
 
 	public List<java.util.Map<String, Object>> GetStat()
 	{
@@ -129,6 +131,11 @@ public class ExecutionController
 		stat.Add("import_executor", 1, import_executor.getQueue().size());
 	}
 
+	public void StateChange(IModelAttribute attribute)
+	{
+		CheckReactions(Collections.singleton(attribute));
+	}
+
 	public void SetExit(boolean exit)
 	{
 		this.exit = exit;
@@ -145,10 +152,12 @@ public class ExecutionController
 	}
 
 	private long tick = 0;
-	private final long OUTDATED_CHECK_INTERVAL = 5;
+	private final long OUTDATED_CHECK_INTERVAL = 100;
 
-	public void ProcessOutdatedSensors()
+	public Collection<SensorAttribute> ProcessOutdatedSensors()
 	{
+		List<SensorAttribute> outdated_sensors = new LinkedList<>();
+
 		long cur_time = JavaUtils.GetTimestamp();
 
 		for(ModelEntity entity : context.model_data.GetAllEntities())
@@ -165,10 +174,13 @@ public class ExecutionController
 						.Construct(sensor.GetParent(), sensor.GetTimeoutReaction(), response);
 
 					AddResponse(prepared_response);
+
+					outdated_sensors.add(sensor);
 				}
 			}
 		}
 
+		return outdated_sensors;
 	}
 
 	// TODO executor?
@@ -179,10 +191,15 @@ public class ExecutionController
 
 		if(tick % OUTDATED_CHECK_INTERVAL == 0) // TODO: scheduler?
 		{
-			ProcessOutdatedSensors();
+			Collection<SensorAttribute> outdated_sensors = ProcessOutdatedSensors();
+
+			if(outdated_sensors.size() > 0)
+				LOGGER.log(Level.INFO, "outdated sensors: " + outdated_sensors.size());
+
+			CheckReactions(outdated_sensors);
 		}
 
-		AttributeList<IModelAttribute> list = to_update.poll();
+		Collection<? extends IModelAttribute> list = to_update.poll();
 
 		if(list == null)
 		{
@@ -229,7 +246,7 @@ public class ExecutionController
 		LOGGER.log(Level.INFO, "all processing finished");
 	}
 
-	public void CheckReactions(AttributeList<IModelAttribute> attributes)
+	public void CheckReactions(Collection<? extends IModelAttribute> attributes)
 	{
 		for(IModelAttribute attribute : attributes)
 		{

@@ -15,6 +15,8 @@ import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 
+import java.util.Collection;
+
 public class GhostManager implements IPersistenceManager
 {
 	@Override
@@ -72,7 +74,7 @@ public class GhostManager implements IPersistenceManager
 	}
 
 	@Override
-	public void RegisterUpdate(AttributeList<IModelAttribute> attributes)
+	public void RegisterUpdate(Collection<? extends IModelAttribute> attributes)
 	{
 		// there is nothing here
 	}

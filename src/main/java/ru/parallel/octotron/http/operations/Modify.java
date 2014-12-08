@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.http.operations;
 
+import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -110,7 +111,11 @@ public class Modify
 			String name = params.get("name");
 
 			for(ModelEntity entity : entities)
-				entity.GetSensor(name).SetValid();
+			{
+				SensorAttribute sensor = entity.GetSensor(name);
+				sensor.SetValid();
+				controller.StateChange(sensor);
+			}
 
 			return new TextString("set the attribute to valid for " + entities.size() + " entities");
 		}
@@ -134,7 +139,11 @@ public class Modify
 			String name = params.get("name");
 
 			for(ModelEntity entity : entities)
-				entity.GetSensor(name).SetInvalid();
+			{
+				SensorAttribute sensor = entity.GetSensor(name);
+				sensor.SetInvalid();
+				controller.StateChange(sensor);
+			}
 
 			return new TextString("set the attribute to invalid for " + entities.size() + " entities");
 		}

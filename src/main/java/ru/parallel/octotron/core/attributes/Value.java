@@ -114,7 +114,7 @@ public class Value
 		else if(my_class.equals(String.class))
 			return JavaUtils.Quotify((String)value);
 		else if(value instanceof Undefined)
-			return undefined.toString();
+			return value.toString();
 
 		else
 			throw new ExceptionModelFail("unexpected value: " + value + " : " + my_class);

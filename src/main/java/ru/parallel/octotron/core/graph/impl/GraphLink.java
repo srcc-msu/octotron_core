@@ -10,6 +10,8 @@ import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.primitive.ID;
 
+import java.util.List;
+
 /**
  * implementation of link, that resides in \graph<br>
  * */
@@ -41,6 +43,12 @@ public final class GraphLink extends GraphEntity
 	public boolean TestAttribute(String name)
 	{
 		return graph.TestLinkAttribute(id, name);
+	}
+
+	@Override
+	public List<String> GetAttributes()
+	{
+		return graph.GetLinkAttributes(id);
 	}
 
 	@Override

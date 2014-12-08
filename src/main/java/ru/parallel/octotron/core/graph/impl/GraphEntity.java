@@ -10,6 +10,8 @@ import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.graph.IGraph;
 import ru.parallel.octotron.core.primitive.ID;
 
+import java.util.List;
+
 /**
  * some entity, that resides in model_old<br>
  * all operations with it go through the \graph interface, no caching<br>
@@ -37,6 +39,7 @@ public abstract class GraphEntity
 //			ATTRIBUTES
 //---------------------------------
 
+	public abstract List<String> GetAttributes();
 	public abstract Object GetAttribute(String name);
 	public abstract boolean TestAttribute(String name);
 

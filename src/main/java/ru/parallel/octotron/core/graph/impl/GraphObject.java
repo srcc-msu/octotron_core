@@ -58,6 +58,12 @@ public final class GraphObject extends GraphEntity
 		graph.DeleteObject(id);
 	}
 
+	@Override
+	public List<String> GetAttributes()
+	{
+		return graph.GetObjectAttributes(id);
+	}
+
 // ----
 
 	public Collection<GraphLink> GetInLinks()

@@ -23,7 +23,7 @@ public class LogicalAnd extends Rule
 	}
 
 	@Override
-	public AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
+	protected AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 	{
 		AttributeList<IModelAttribute> result = new AttributeList<>();
 

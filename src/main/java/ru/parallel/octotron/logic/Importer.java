@@ -40,7 +40,7 @@ public class Importer implements Runnable
 
 		for(IModelAttribute attribute : attributes)
 		{
-			result.addAll(attribute.GetDependFromMe());
+			result.addAll(attribute.GetDependOnMe());
 		}
 
 		return result;
@@ -50,7 +50,7 @@ public class Importer implements Runnable
 	{
 		Collection<IModelAttribute> result = new AttributeList<>();
 
-		Collection<VarAttribute> depend_from_changed = changed.GetDependFromMe();
+		Collection<VarAttribute> depend_from_changed = changed.GetDependOnMe();
 
 		do
 		{

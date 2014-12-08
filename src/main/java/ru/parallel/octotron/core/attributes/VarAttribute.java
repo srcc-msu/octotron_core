@@ -13,10 +13,12 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 
+import java.util.Collection;
+
 public final class VarAttribute extends AbstractModAttribute
 {
 	protected final Rule rule;
-	protected final AttributeList<IModelAttribute> i_depend_from = new AttributeList<>();
+	protected final AttributeList<IModelAttribute> i_depend_on = new AttributeList<>();
 
 	@Override
 	public VarAttributeBuilder GetBuilder(ModelService service)
@@ -52,14 +54,14 @@ public final class VarAttribute extends AbstractModAttribute
 		return true;
 	}
 
-	public Iterable<IModelAttribute> GetIDependFrom()
+	public Collection<IModelAttribute> GetIDependOn()
 	{
-		return i_depend_from;
+		return i_depend_on;
 	}
 
 	@Override
 	public boolean Check()
 	{
-		return rule.CanCompute(GetParent());
+		return rule.CanCompute(this);
 	}
 }

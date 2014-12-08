@@ -25,10 +25,10 @@ public abstract class LinkRule extends Rule
 	public abstract Object Compute(ModelLink object);
 
 	@Override
-	public final AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
+	protected final AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 	{
 		return GetDependency((ModelLink) entity);
 	}
 
-	public abstract AttributeList<IModelAttribute> GetDependency(ModelLink object);
+	protected abstract AttributeList<IModelAttribute> GetDependency(ModelLink object);
 }

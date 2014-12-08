@@ -21,7 +21,7 @@ public class LinkedVarArgMatch extends LinkRule
 	}
 
 	@Override
-	public AttributeList<IModelAttribute> GetDependency(ModelLink link)
+	protected AttributeList<IModelAttribute> GetDependency(ModelLink link)
 	{
 		AttributeList<IModelAttribute> result = new AttributeList<>();
 

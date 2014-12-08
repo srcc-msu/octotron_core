@@ -26,10 +26,10 @@ public abstract class ObjectRule extends Rule
 	public abstract Object Compute(ModelObject object);
 
 	@Override
-	public final AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
+	protected final AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
 	{
 		return GetDependency((ModelObject) entity);
 	}
 
-	public abstract AttributeList<IModelAttribute> GetDependency(ModelObject object);
+	protected abstract AttributeList<IModelAttribute> GetDependency(ModelObject object);
 }

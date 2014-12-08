@@ -252,12 +252,12 @@ public class GraphManager implements IPersistenceManager
 
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
-			GraphObject graph_object = graph_service.AddObject();
+			GraphObject graph_object = GetObject(attribute);
 			graph_object.UpdateAttribute("is_valid", attribute.IsValid());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
-			GraphObject graph_object = CheckObject(attribute, attribute.GetType().toString());
+			GraphObject graph_object = GetObject(attribute);
 
 			attribute.GetBuilder(model_service)
 				.SetValid((Boolean) graph_object.GetAttribute("is_valid"));
@@ -283,7 +283,7 @@ public class GraphManager implements IPersistenceManager
 	{
 		GraphObject object = GetObject(attribute);
 
-		for(IModelAttribute i_depend_from : attribute.GetIDependFrom())
+		for(IModelAttribute i_depend_from : attribute.GetIDependOn())
 		{
 			if(i_depend_from.GetType() == EAttributeType.CONST)
 				continue;

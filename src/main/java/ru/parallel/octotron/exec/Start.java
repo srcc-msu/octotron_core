@@ -97,7 +97,8 @@ public class Start
 		{
 			LOGGER.log(Level.SEVERE, "could not create the model", creation_exception);
 
-//			context.model_service.Wipe(); // clean neo4j dir on unsuccessful creation // no
+			if(context != null && context.model_service.GetMode() == ModelService.EMode.CREATION)
+				context.model_service.Wipe(); // clean neo4j dir on unsuccessful creation
 			System.exit(1);
 		}
 
@@ -181,12 +182,12 @@ public class Start
 	private static void Run(Context context)
 	{
 		LOGGER.log(Level.INFO, "Building rule dependencies and running the model");
-		context.model_service.Operate();
 
 		ExecutionController controller = null;
 // --- create
 		try
 		{
+			context.model_service.Operate();
 			controller = new ExecutionController(context);
 
 			ProcessStart(context);

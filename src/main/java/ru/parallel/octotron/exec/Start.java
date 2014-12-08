@@ -97,7 +97,7 @@ public class Start
 		{
 			LOGGER.log(Level.SEVERE, "could not create the model", creation_exception);
 
-			context.model_service.Wipe();
+//			context.model_service.Wipe(); // clean neo4j dir on unsuccessful creation // no
 			System.exit(1);
 		}
 

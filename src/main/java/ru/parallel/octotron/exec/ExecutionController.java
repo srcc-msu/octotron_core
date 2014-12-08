@@ -151,7 +151,6 @@ public class ExecutionController
 		return exit;
 	}
 
-	private long tick = 0;
 	private final long OUTDATED_CHECK_INTERVAL = 100;
 
 	public Collection<SensorAttribute> ProcessOutdatedSensors()
@@ -187,9 +186,7 @@ public class ExecutionController
 	public void Process()
 		throws InterruptedException
 	{
-		tick++;
-
-		if(tick % OUTDATED_CHECK_INTERVAL == 0) // TODO: scheduler?
+		if(JavaUtils.GetTimestamp() % OUTDATED_CHECK_INTERVAL == 0) // TODO: scheduler?
 		{
 			Collection<SensorAttribute> outdated_sensors = ProcessOutdatedSensors();
 

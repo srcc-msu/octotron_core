@@ -30,7 +30,7 @@ public final class VarAttribute extends AbstractModAttribute
 
 	public VarAttribute(ModelEntity parent, String name, Rule rule)
 	{
-		super(EAttributeType.VAR, parent, name, null);
+		super(EAttributeType.VAR, parent, name, Value.undefined);
 
 		this.rule = rule;
 	}

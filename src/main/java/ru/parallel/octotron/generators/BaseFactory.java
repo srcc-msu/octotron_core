@@ -8,7 +8,7 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.model.ModelService;
 
-import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
@@ -29,12 +29,12 @@ public abstract class BaseFactory<T>
  * attribute template that will be used for all created entities<br>
  * must be cloned<br>
  * */
-	protected final List<ConstantTemplate> constants;
+	protected final List<ConstTemplate> constants;
 	protected final List<SensorTemplate> sensors;
 	protected final List<VarTemplate> rules;
 	protected final List<ReactionTemplate> reactions;
 
-	protected BaseFactory(ModelService service, List<ConstantTemplate> constants
+	protected BaseFactory(ModelService service, List<ConstTemplate> constants
 		, List<SensorTemplate> sensors
 		, List<VarTemplate> rules
 		, List<ReactionTemplate> reactions)
@@ -49,15 +49,15 @@ public abstract class BaseFactory<T>
 	protected BaseFactory(ModelService service)
 	{
 		this(service
-			, new LinkedList<ConstantTemplate>()
+			, new LinkedList<ConstTemplate>()
 			, new LinkedList<SensorTemplate>()
 			, new LinkedList<VarTemplate>()
 			, new LinkedList<ReactionTemplate>());
 	}
 
-	public T Constants(ConstantTemplate... addition)
+	public T Constants(ConstTemplate... addition)
 	{
-		List<ConstantTemplate> new_constants = new LinkedList<>(constants);
+		List<ConstTemplate> new_constants = new LinkedList<>(constants);
 		new_constants.addAll(Arrays.asList(addition));
 
 		return Clone(new_constants, sensors, rules, reactions);
@@ -88,7 +88,7 @@ public abstract class BaseFactory<T>
 	}
 
 	protected abstract T Clone(
-		List<ConstantTemplate> new_constants
+		List<ConstTemplate> new_constants
 		, List<SensorTemplate> new_sensors
 		, List<VarTemplate> new_rules
 		, List<ReactionTemplate> new_reactions);

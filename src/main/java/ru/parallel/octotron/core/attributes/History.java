@@ -32,7 +32,7 @@ public class History
 		if(history.size() > 0)
 			return history.getFirst();
 		else
-			return null;
+			return new Entry(Value.undefined, 0);
 	}
 
 	public Collection<Entry> Get()

@@ -169,7 +169,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		if(name == null)
 			return list;
 
-		if(value == null)
+		if(!value.IsDefined())
 			return InnerFilter(name);
 
 		List<T> new_list = new LinkedList<>();

@@ -9,7 +9,6 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.impl.Timeout;
@@ -21,8 +20,9 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.GlobalSettings;
-import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
+import ru.parallel.octotron.logic.Importer;
 import ru.parallel.utils.FileUtils;
 
 import java.util.Collection;
@@ -120,8 +120,23 @@ public final class ModelService
 	public void Operate()
 	{
 		MakeRuleDependency();
+
+		UpdateDefinedSensors();
+
 		mode = EMode.OPERATION;
 		persistence_manager.Operate();
+	}
+
+	private void UpdateDefinedSensors()
+	{
+		for(ModelObject object : model_data.GetAllObjects())
+		{
+			for(SensorAttribute sensor : object.GetSensor())
+			{
+				if(sensor.GetValue().IsDefined())
+					Importer.ProcessVars(sensor);
+			}
+		}
 	}
 
 	private void MakeRuleDependency()
@@ -150,7 +165,7 @@ public final class ModelService
 		source.GetBuilder(this).AddOutLink(link);
 		target.GetBuilder(this).AddInLink(link);
 
-		link.GetBuilder(this).DeclareConst(new ConstantTemplate("AID", link.GetID()));
+		link.GetBuilder(this).DeclareConst(new ConstTemplate("AID", link.GetID()));
 
 		return link;
 	}
@@ -164,7 +179,7 @@ public final class ModelService
 
 		model_data.objects.add(object);
 
-		object.GetBuilder(this).DeclareConst(new ConstantTemplate("AID", object.GetID()));
+		object.GetBuilder(this).DeclareConst(new ConstTemplate("AID", object.GetID()));
 
 		return object;
 	}

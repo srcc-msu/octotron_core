@@ -16,7 +16,7 @@ import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 
 import static org.junit.Assert.assertEquals;
@@ -89,7 +89,7 @@ public class ComputeTests
 		object = self.Create();
 
 		LinkFactory links = new LinkFactory(context.model_service)
-			.Constants(new ConstantTemplate("type", "test"));
+			.Constants(new ConstTemplate("type", "test"));
 
 		ModelObjectList ins = in.Create(3);
 		ModelObjectList outs = out.Create(4);

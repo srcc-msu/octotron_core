@@ -38,17 +38,10 @@ public final class SensorAttribute extends AbstractModAttribute
 		, Value value)
 	{
 		super(EAttributeType.SENSOR, parent, name, value);
-		this.update_time = update_time;
 
-		SetCTime(JavaUtils.GetTimestamp());
-	}
-
-	public SensorAttribute(ModelEntity parent, String name, long update_time)
-	{
-		super(EAttributeType.SENSOR, parent, name);
-
-		if(update_time == -1)
+		if(update_time == -1 && !value.IsDefined())
 			throw new ExceptionModelFail("update time is set to never, default sensor value must be specified");
+
 		this.update_time = update_time;
 
 		SetCTime(JavaUtils.GetTimestamp());

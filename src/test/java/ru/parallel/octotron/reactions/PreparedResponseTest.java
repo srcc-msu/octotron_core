@@ -13,7 +13,7 @@ import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.ObjectFactory;
-import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 
 import static org.junit.Assert.assertEquals;
@@ -39,8 +39,8 @@ public class PreparedResponseTest
 		throws Exception
 	{
 		PreparedResponseTest.obj_factory = new ObjectFactory(context.model_service)
-			.Constants(new ConstantTemplate("type", "test"))
-			.Constants(new ConstantTemplate("ggg", "7"))
+			.Constants(new ConstTemplate("type", "test"))
+			.Constants(new ConstTemplate("ggg", "7"))
 			.Sensors(new SensorTemplate("test", -1, 1));
 
 		PreparedResponseTest.factory = new PreparedResponseFactory(context);

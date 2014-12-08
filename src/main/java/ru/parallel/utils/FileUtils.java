@@ -9,6 +9,7 @@ package ru.parallel.utils;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -99,6 +100,7 @@ LOGGER.log(Level.FINE, command[0] + " finished, took: " + Timer.SGet());
 					}
 					catch(IOException | InterruptedException e)
 					{
+						System.out.println("command: " + Arrays.toString(command));
 						e.printStackTrace();
 					}
 				}

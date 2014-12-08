@@ -8,6 +8,19 @@ import java.text.DecimalFormat;
 
 public class Value
 {
+	private static class Undefined
+	{
+		private Undefined() {};
+
+		public static final Undefined value = new Undefined();
+
+		@Override
+		public final String toString()
+		{
+			return "undefined";
+		}
+	}
+
 	private final Object value;
 	private final Class<?> my_class;
 
@@ -21,6 +34,13 @@ public class Value
 	{
 		this.value = value.value;
 		this.my_class = value.my_class;
+	}
+
+	public static final Value undefined = new Value(Undefined.value, Undefined.class);
+
+	public boolean IsDefined()
+	{
+		return !equals(undefined);
 	}
 
 	/**
@@ -85,16 +105,16 @@ public class Value
 
 	public final String ValueToString()
 	{
-		if(my_class.equals(Boolean.class))
-			return value.toString();
-		else if(my_class.equals(Long.class))
+		if(my_class.equals(Long.class))
 			return value.toString();
 		else if(my_class.equals(Double.class))
-		{
 			return df.format(value);
-		}
+		if(my_class.equals(Boolean.class))
+			return value.toString();
 		else if(my_class.equals(String.class))
 			return JavaUtils.Quotify((String)value);
+		else if(value instanceof Undefined)
+			return undefined.toString();
 
 		else
 			throw new ExceptionModelFail("unexpected value: " + value + " : " + my_class);

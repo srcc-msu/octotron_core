@@ -36,12 +36,9 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Value value)
 	{
 		super(type, parent, name, value);
-		CancelInitialDelay();
-	}
 
-	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name)
-	{
-		super(type, parent, name, null);
+		if(value.IsDefined())
+			CancelInitialDelay();
 	}
 
 	public void CancelInitialDelay()
@@ -76,26 +73,23 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	{
 		History.Entry last = history.GetLast();
 
-		if(last == null)
+		if(!last.value.IsDefined())
 			return 0.0;
 
-		long last_ctime = last.ctime;
-
-		if(GetCTime() - last_ctime == 0) // speed is zero
+		if(last.ctime == 0) // last value was default
 			return 0.0;
 
-		if(last_ctime == 0) // last value was default
+		if(GetCTime() - last.ctime == 0) // speed is zero
 			return 0.0;
 
 		double diff = GetValue().ToDouble() - last.value.ToDouble();
 
-		return diff / (GetCTime() - last_ctime);
+		return diff / (GetCTime() - last.ctime);
 	}
 
 	protected void Update(Value new_value)
 	{
-		if(GetValue() != null)
-			history.Add(GetValue(), GetCTime());
+		history.Add(GetValue(), GetCTime());
 
 		SetValue(new_value);
 		SetCTime(JavaUtils.GetTimestamp());

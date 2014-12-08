@@ -10,7 +10,7 @@ import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.model.ModelService;
 
-import ru.parallel.octotron.generators.tmpl.ConstantTemplate;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
@@ -28,7 +28,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	}
 
 	private ObjectFactory(ModelService service
-		, List<ConstantTemplate> constants
+		, List<ConstTemplate> constants
 		, List<SensorTemplate> sensors
 		, List<VarTemplate> rules
 		, List<ReactionTemplate> reactions)
@@ -66,7 +66,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 
 	@Override
 	protected ObjectFactory Clone(
-		List<ConstantTemplate> new_constants
+		List<ConstTemplate> new_constants
 		, List<SensorTemplate> new_sensors
 		, List<VarTemplate> new_rules
 		, List<ReactionTemplate> new_reactions)

@@ -34,7 +34,7 @@ public class Importer implements Runnable
 		this.value = value;
 	}
 
-	protected Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
+	protected static Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
 	{
 		Collection<VarAttribute> result = new AttributeList<>();
 
@@ -46,7 +46,7 @@ public class Importer implements Runnable
 		return result;
 	}
 
-	public Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
+	public static Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
 	{
 		Collection<IModelAttribute> result = new AttributeList<>();
 

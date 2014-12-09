@@ -12,6 +12,8 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.impl.Timeout;
 import ru.parallel.octotron.core.model.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
@@ -31,13 +33,21 @@ public class RuntimeService
 
 	private static SelfTest tester = null;
 
-	public static Map<String, Object> PerformSelfTest(ExecutionController controller)
+	public static void InitSelfTest(ModelService model_service)
 	{
 		if(tester == null)
 		{
 			tester = new SelfTest();
-			tester.Init(controller);
+			tester.Init(model_service);
 		}
+		else
+			throw new ExceptionModelFail("internal error: self test has been initialized already");
+	}
+
+	public static Map<String, Object> PerformSelfTest(ExecutionController controller)
+	{
+		if(tester == null)
+			throw new ExceptionModelFail("internal error: self test is not initialized");
 
 		boolean graph_test = tester.Test(controller);
 

@@ -21,21 +21,19 @@ public class SelfTest
 	ModelObject obj1;
 	ModelObject obj2;
 
-	public void Init(ExecutionController controller)
+	public void Init(ModelService model_service)
 	{
-		ModelService service = controller.GetContext().model_service;
+		obj1 = model_service.AddObject();
+		obj1.GetBuilder(model_service).DeclareConst("type", "_selftest");
+		obj1.GetBuilder(model_service).DeclareSensor("test_iteration", 0L);
 
-		obj1 = service.AddObject();
-		obj1.GetBuilder(service).DeclareConst("type", "_selftest");
-		obj1.GetBuilder(service).DeclareSensor("test_iteration", 0L);
+		obj2 = model_service.AddObject();
+		obj2.GetBuilder(model_service).DeclareConst("type", "_selftest");
+		obj2.GetBuilder(model_service).DeclareVar("check", new AggregateLongSum(EDependencyType.ALL, "test_iteration"));
 
-		obj2 = service.AddObject();
-		obj2.GetBuilder(service).DeclareConst("type", "_selftest");
-		obj2.GetBuilder(service).DeclareVar("check", new AggregateLongSum(EDependencyType.ALL, "test_iteration"));
+		obj1.GetSensor("test_iteration").GetBuilder(model_service).AddDependant(obj2.GetVar("check"));
 
-		obj1.GetSensor("test_iteration").GetBuilder(service).AddDependant(obj2.GetVar("check"));
-
-		service.AddLink(obj1, obj2);
+		model_service.AddLink(obj1, obj2);
 	}
 
 	public boolean Test(ExecutionController controller)

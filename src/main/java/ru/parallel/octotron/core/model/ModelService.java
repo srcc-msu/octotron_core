@@ -23,6 +23,7 @@ import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.logic.Importer;
+import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.utils.FileUtils;
 
 import java.util.Collection;
@@ -122,6 +123,8 @@ public final class ModelService
 		MakeRuleDependency();
 
 		UpdateDefinedSensors();
+
+		RuntimeService.InitSelfTest(this);
 
 		mode = EMode.OPERATION;
 		persistence_manager.Operate();

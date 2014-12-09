@@ -13,7 +13,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
+// TODO rework
 public class FileLog
 {
 	private final String filename;

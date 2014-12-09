@@ -19,6 +19,7 @@ import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
+import ru.parallel.utils.format.TypedString;
 
 import java.io.*;
 import java.util.*;
@@ -151,5 +152,21 @@ public class RuntimeService
 		}
 
 		return version;
+	}
+
+	// TODO: unify? add some kind of json2csv conversion
+	public static String MakeCsvSnapshot(ModelData model_data)
+	{
+		String result = "";
+
+		for (ModelEntity entity : model_data.GetAllEntities())
+		{
+			for (PreparedResponse response : entity.GetPreparedResponses())
+			{
+				result += response.GetCsvString(",") + System.lineSeparator();
+			}
+		}
+
+		return result;
 	}
 }

@@ -12,6 +12,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.FileUtils;
+import ru.parallel.utils.JavaUtils;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -42,6 +43,8 @@ public class PreparedResponse implements Runnable, IPresentable
 		this.context = context;
 		this.response = response;
 	}
+
+	private static final Object lock = new Object();
 
 /**
  * add attributes to the command and replace the command key by actual file<br>
@@ -77,13 +80,17 @@ public class PreparedResponse implements Runnable, IPresentable
 		}
 		try
 		{
-			FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
-			short_log.Log(short_log_string);
-			short_log.Close();
+			// TODO rework
+			synchronized(lock) // this and file reopening is not efficient, but does not happen often
+			{
+				FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
+				short_log.Log(short_log_string);
+				short_log.Close();
 
-			FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
-			long_log.Log(long_log_string);
-			long_log.Close();
+				FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
+				long_log.Log(long_log_string);
+				long_log.Close();
+			}
 		}
 		catch(ExceptionSystemError e)
 		{
@@ -125,5 +132,17 @@ public class PreparedResponse implements Runnable, IPresentable
 		if(verbose)
 			return GetLongRepresentation();
 		return GetShortRepresentation();
+	}
+
+	public String GetCsvString(String sep)
+	{
+		String result = "";
+
+		result += JavaUtils.Quotify((String)info.get("status")) + sep;
+		result += info.get("time") + sep;
+		result += JavaUtils.Quotify((String)usr.get("loc")) + sep;
+		result += JavaUtils.Quotify((String)usr.get("msg"));
+
+		return result;
 	}
 }

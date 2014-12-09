@@ -32,7 +32,10 @@ import java.util.logging.SimpleFormatter;
 public class Start
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
-	private static final int SYS_LOG_SIZE = 10*1024*1024; // 10 MB
+
+	private final static int MB = 1024 * 1024;
+
+	private static final int SYS_LOG_SIZE = 10*MB; // 10 MB // orly?
 
 	private static void ConfigLogging(String log_dir)
 	{
@@ -308,7 +311,7 @@ public class Start
 		{
 			FileUtils.SaveToFile(error_fname, error);
 		}
-		catch (Exception e) // giving up now - exception during exception processing..
+		catch(Exception e) // giving up now - exception during exception processing..
 		{
 			LOGGER.log(Level.SEVERE, "error during crash notification", e);
 		}
@@ -320,7 +323,7 @@ public class Start
 			if(script != null)
 				FileUtils.ExecSilent(script, error_fname);
 		}
-		catch (ExceptionSystemError e) // giving up now - exception during exception processing..
+		catch(ExceptionSystemError e) // giving up now - exception during exception processing..
 		{
 			LOGGER.log(Level.SEVERE, "error during crash notification", e);
 		}

@@ -98,7 +98,6 @@ public class ExecutionController
 	public void Init()
 		throws ExceptionSystemError
 	{
-		//Executors
 		import_executor = new ThreadPoolExecutor(1, 1,
 			0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>());

@@ -16,14 +16,14 @@ import java.io.IOException;
 
 public class FileLog
 {
-	public static final String FILENAME = "octotron.events.log";
-
+	private final String filename;
 	private BufferedWriter out = null;
 
-	public FileLog(String dir)
+	public FileLog(String dir, String filename)
 		throws ExceptionSystemError
 	{
-		out = Open(dir + "/" + FILENAME);
+		this.filename = filename;
+		out = Open(dir + "/" + this.filename);
 	}
 
 	private BufferedWriter Open(String fname)

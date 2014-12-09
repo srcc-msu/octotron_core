@@ -94,7 +94,7 @@ public class PreparedResponseFactory
 			ModelEntity surround = it.next();
 			for(PreparedResponse surround_responses : surround.GetPreparedResponses())
 			{
-				Map<String, Object> map = surround_responses.GetRepresentation();
+				Map<String, Object> map = surround_responses.GetShortRepresentation();
 
 				map.remove("surround");
 

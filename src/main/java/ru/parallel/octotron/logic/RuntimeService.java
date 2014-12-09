@@ -58,7 +58,7 @@ public class RuntimeService
 	 * create snapshot of all reactions with failed conditions<br>
 	 * and get their description<br>
 	 * */
-	public static List<Map<String, Object>> MakeSnapshot(ModelData model_data)
+	public static List<Map<String, Object>> MakeSnapshot(ModelData model_data, boolean verbose)
 	{
 		List<Map<String, Object>> result = new LinkedList<>();
 
@@ -66,7 +66,7 @@ public class RuntimeService
 		{
 			for(PreparedResponse response : entity.GetPreparedResponses())
 			{
-				result.add(response.GetRepresentation());
+				result.add(response.GetRepresentation(verbose));
 			}
 		}
 

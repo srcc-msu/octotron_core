@@ -101,7 +101,7 @@ public class Control
 		{
 			Utils.StrictParams(params);
 
-			List<Map<String, Object>> data = RuntimeService.MakeSnapshot(controller.GetContext().model_data);
+			List<Map<String, Object>> data = RuntimeService.MakeSnapshot(controller.GetContext().model_data, verbose);
 
 			return AutoFormat.PrintJson(data);
 		}

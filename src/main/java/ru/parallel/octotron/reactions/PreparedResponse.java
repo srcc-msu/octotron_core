@@ -7,6 +7,7 @@
 package ru.parallel.octotron.reactions;
 
 import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.utils.AutoFormat;
@@ -16,9 +17,12 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PreparedResponse implements Runnable
+public class PreparedResponse implements Runnable, IPresentable
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
+
+	private static final String SHORT_LOG = "octotron.events.log";
+	private static final String LONG_LOG = "octotron.events.verbose.log";
 
 	private final Context context;
 
@@ -45,7 +49,8 @@ public class PreparedResponse implements Runnable
 	@Override
  	public void run()
 	{
-		String log_string = AutoFormat.FormatJson(GetRepresentation());
+		String short_log_string = AutoFormat.FormatJson(GetShortRepresentation());
+		String long_log_string = AutoFormat.FormatJson(GetLongRepresentation());
 
 		if(!response.IsSuppress())
 		{
@@ -53,7 +58,7 @@ public class PreparedResponse implements Runnable
 			{
 				List<String> report = new LinkedList<>(Arrays.asList(command));
 
-				report.add(log_string);
+				report.add(short_log_string);
 
 				for(String key : usr.keySet())
 					report.add(key + ": " + usr.get(key));
@@ -72,9 +77,13 @@ public class PreparedResponse implements Runnable
 		}
 		try
 		{
-			FileLog file = new FileLog(context.settings.GetLogDir());
-			file.Log(log_string);
-			file.Close();
+			FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
+			short_log.Log(short_log_string);
+			short_log.Close();
+
+			FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
+			long_log.Log(long_log_string);
+			long_log.Close();
 		}
 		catch(ExceptionSystemError e)
 		{
@@ -82,21 +91,39 @@ public class PreparedResponse implements Runnable
 		}
 	}
 
-	public Map<String, Object> GetRepresentation()
+	public Response GetResponse()
 	{
-		Map<String, Object> result = new HashMap<>();
+		return response;
+	}
 
-		result.put("info", info);
+	@Override
+	public Map<String, Object> GetLongRepresentation()
+	{
+		Map<String, Object> result = GetShortRepresentation();
+
 		result.put("model", model);
 		result.put("reaction", reaction);
-		result.put("usr", usr);
 		result.put("surround", surround);
 
 		return result;
 	}
 
-	public Response GetResponse()
+	@Override
+	public Map<String, Object> GetShortRepresentation()
 	{
-		return response;
+		Map<String, Object> result = new HashMap<>();
+
+		result.put("info", info);
+		result.put("usr", usr);
+
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetRepresentation(boolean verbose)
+	{
+		if(verbose)
+			return GetLongRepresentation();
+		return GetShortRepresentation();
 	}
 }

@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.impl.Equals;
@@ -19,18 +20,11 @@ import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import static org.junit.Assert.assertEquals;
 import static ru.parallel.octotron.reactions.PreparedResponseFactory.ComposeString;
 
-public class PreparedResponseTest
+public class PreparedResponseTest extends GeneralTest
 {
-	private static Context context;
 	private static ModelObject entity;
 	private static Reaction reaction;
 	private static PreparedResponseFactory factory;
-
-	@BeforeClass
-	public static void InitController() throws Exception
-	{
-		context = Context.CreateTestContext(0);
-	}
 
 	private static ObjectFactory obj_factory;
 
@@ -38,7 +32,7 @@ public class PreparedResponseTest
 	public static void Init()
 		throws Exception
 	{
-		PreparedResponseTest.obj_factory = new ObjectFactory(context.model_service)
+		PreparedResponseTest.obj_factory = new ObjectFactory(model_service)
 			.Constants(new ConstTemplate("type", "test"))
 			.Constants(new ConstTemplate("ggg", "7"))
 			.Sensors(new SensorTemplate("test", -1, 1));
@@ -47,7 +41,7 @@ public class PreparedResponseTest
 
 		entity = obj_factory.Create();
 
-		entity.GetSensor("test").GetBuilder(context.model_service).AddReaction(new Equals("test", 1));
+		entity.GetSensor("test").GetBuilder(model_service).AddReaction(new Equals("test", 1));
 		reaction = entity.GetSensor("test").GetReactions().iterator().next();
 	}
 

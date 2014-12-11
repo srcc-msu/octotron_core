@@ -48,7 +48,7 @@ public class Modify
 			if(target.GetSensor(name) == null)
 				return new ErrorString("sensor does not exist: " + name);
 
-			controller.Import(target, name, value);
+			controller.update_service.Import(target, name, value);
 
 			return new TextString("added to import queue");
 		}
@@ -79,7 +79,7 @@ public class Modify
 			{
 				try
 				{
-					controller.UnknownImport(target, name, value);
+					controller.update_service.UnknownImport(target, name, value);
 				}
 				catch (ExceptionSystemError e)
 				{
@@ -89,7 +89,7 @@ public class Modify
 				return new TextString("attribute not found, but registered, import skipped");
 			}
 
-			controller.Import(target, name, value);
+			controller.update_service.Import(target, name, value);
 			return new TextString("added to unchecked import queue");
 		}
 	}
@@ -114,7 +114,7 @@ public class Modify
 			{
 				SensorAttribute sensor = entity.GetSensor(name);
 				sensor.SetValid();
-				controller.StateChange(sensor);
+				controller.update_service.Update(sensor, true);
 			}
 
 			return new TextString("set the attribute to valid for " + entities.size() + " entities");
@@ -142,7 +142,7 @@ public class Modify
 			{
 				SensorAttribute sensor = entity.GetSensor(name);
 				sensor.SetInvalid();
-				controller.StateChange(sensor);
+				controller.update_service.Update(sensor, true);
 			}
 
 			return new TextString("set the attribute to invalid for " + entities.size() + " entities");
@@ -176,7 +176,7 @@ public class Modify
 
 			for(ModelEntity entity : entities)
 			{
-				long AID = controller.GetContext().model_service
+				long AID = controller.model_service
 					.SetSuppress(entity, template_id, true, description);
 
 				if(AID != -1)
@@ -222,7 +222,7 @@ public class Modify
 
 			for(ModelEntity entity : entities)
 			{
-				long AID = controller.GetContext().model_service
+				long AID = controller.model_service
 					.SetSuppress(entity, template_id, false, "");
 
 				if(AID != -1)

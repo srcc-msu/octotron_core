@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelService;
 
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;

@@ -3,23 +3,17 @@ package ru.parallel.octotron.core.model;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 
 import static org.junit.Assert.assertEquals;
 
-public class ModelObjectTest
+public class ModelObjectTest extends GeneralTest
 {
-	private static Context context;
-
-	@BeforeClass
-	public static void InitController() throws Exception
-	{
-		context = Context.CreateTestContext(0);
-	}
-
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
 
@@ -30,14 +24,14 @@ public class ModelObjectTest
 			new ConstTemplate("object", "ok")
 		};
 
-		ModelObjectTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
+		ModelObjectTest.obj_factory = new ObjectFactory(model_service).Constants(obj_att);
 
 		ConstTemplate[] link_att = {
 			new ConstTemplate("link", "ok"),
 			new ConstTemplate("type", "contain"),
 		};
 
-		ModelObjectTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);
+		ModelObjectTest.link_factory = new LinkFactory(model_service).Constants(link_att);
 	}
 
 	/**

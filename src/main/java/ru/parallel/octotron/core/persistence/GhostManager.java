@@ -68,12 +68,6 @@ public class GhostManager implements IPersistenceManager
 	}
 
 	@Override
-	public void Operate()
-	{
-		// there is nothing here
-	}
-
-	@Override
 	public void RegisterUpdate(Collection<? extends IModelAttribute> attributes)
 	{
 		// there is nothing here

@@ -15,6 +15,7 @@ import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.reactions.PreparedResponse;
 
 import java.util.*;

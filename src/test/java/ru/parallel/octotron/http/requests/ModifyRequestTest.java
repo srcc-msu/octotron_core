@@ -11,8 +11,8 @@ public class ModifyRequestTest extends RequestTest
 	@Test
 	public void ImportTest() throws Exception
 	{
-		ModifyRequestTest.factory.Sensors(new SensorTemplate("test", 0, -1)).Create(1);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Sensors(new SensorTemplate("test", 0, -1)).Create(1);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/modify/import?path=obj(AID)&name=test&value=test");
 
@@ -23,8 +23,8 @@ public class ModifyRequestTest extends RequestTest
 	@Test
 	public void UncheckedImportTest() throws Exception
 	{
-		ModifyRequestTest.factory.Sensors(new SensorTemplate("test", 0, -1)).Create(1);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Sensors(new SensorTemplate("test", 0, -1)).Create(1);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/modify/unchecked_import?path=obj(AID)&name=test&value=test");
 
@@ -35,8 +35,8 @@ public class ModifyRequestTest extends RequestTest
 	@Test
 	public void SetValidTest() throws Exception
 	{
-		ModifyRequestTest.factory.Sensors(new SensorTemplate("test", 0, -1)).Create(1);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Sensors(new SensorTemplate("test", 0, -1)).Create(1);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/modify/set_valid?path=obj(AID)&name=test");
 
@@ -47,8 +47,8 @@ public class ModifyRequestTest extends RequestTest
 	@Test
 	public void SetInvalidTest() throws Exception
 	{
-		ModifyRequestTest.factory.Sensors(new SensorTemplate("test", 0, -1)).Create(1);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Sensors(new SensorTemplate("test", 0, -1)).Create(1);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/modify/set_invalid?path=obj(AID)&name=test");
 
@@ -59,8 +59,8 @@ public class ModifyRequestTest extends RequestTest
 	@Test
 	public void SuppressTest() throws Exception
 	{
-		ModifyRequestTest.factory.Create(1);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(1);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/modify/suppress?path=obj(AID)&template_id=1&description=spam");
 
@@ -71,8 +71,8 @@ public class ModifyRequestTest extends RequestTest
 	@Test
 	public void UnsuppressTest() throws Exception
 	{
-		ModifyRequestTest.factory.Create(1);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(1);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/modify/unsuppress?path=obj(AID)&template_id=1");
 

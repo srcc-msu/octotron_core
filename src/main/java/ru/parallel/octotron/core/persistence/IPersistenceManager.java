@@ -30,8 +30,6 @@ public interface IPersistenceManager
 
 	void MakeRuleDependency(VarAttribute attribute);
 
-	void Operate();
-
 	void RegisterUpdate(Collection<? extends IModelAttribute> attributes);
 
 	void Wipe();

@@ -14,7 +14,7 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
@@ -85,30 +85,32 @@ public class Start
 		}
 
 		Context context = null;
+		ModelService model_service = null;
 
 		try
 		{
 			context = Context.CreateFromConfig(json_config);
+			model_service = new ModelService(context);
 
 			ConfigLogging(context.settings.GetLogDir());
 
-			CreateFromPython(context);
+			CreateFromPython(context, model_service);
 			PrintStat(context);
-			CreateCache(context);
+			CreateCache(context, model_service);
 		}
 		catch(Exception creation_exception)
 		{
 			LOGGER.log(Level.SEVERE, "could not create the model", creation_exception);
 
-			if(context != null && context.model_service.GetMode() == ModelService.EMode.CREATION)
-				context.model_service.Wipe(); // clean neo4j dir on unsuccessful creation
+			if(model_service != null && model_service.GetMode() == ModelService.EMode.CREATION)
+				model_service.GetUpdateService().Wipe(); // clean neo4j dir on unsuccessful creation
 			System.exit(1);
 		}
 
-		Run(context);
+		Run(context, model_service);
 	}
 
-	private static void CreateFromPython(Context context)
+	private static void CreateFromPython(Context context, ModelService model_service)
 	{
 		PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
 
@@ -123,8 +125,10 @@ public class Start
 
 // some magic to pass context to all python modules
 		interpreter.set("context", context);
+		interpreter.set("model_service", model_service);
 		interpreter.exec("import __builtin__");
 		interpreter.exec("__builtin__.context = context");
+		interpreter.exec("__builtin__.model_service = model_service");
 
 		interpreter.execfile(context.settings.GetModelPath() + '/' + context.settings.GetModelMain());
 
@@ -153,25 +157,25 @@ public class Start
 		LOGGER.log(Level.INFO, "Created model attributes: " + model_attributes_count);
 	}
 
-	private static void CreateCache(Context context)
+	private static void CreateCache(Context context, ModelService model_service)
 	{
 		LOGGER.log(Level.INFO, "Building cache...");
 
-		context.model_service.EnableObjectIndex("AID");
-		context.model_service.EnableLinkIndex("AID");
+		model_service.EnableObjectIndex("AID");
+		model_service.EnableLinkIndex("AID");
 
 		LOGGER.log(Level.INFO, "enabled object cache: AID");
 		LOGGER.log(Level.INFO, "enabled link cache: AID");
 
 		for(String attr : context.settings.GetObjectIndex())
 		{
-			context.model_service.EnableObjectIndex(attr);
+			model_service.EnableObjectIndex(attr);
 			LOGGER.log(Level.INFO, "enabled object cache: " + attr);
 		}
 
 		for(String attr : context.settings.GetLinkIndex())
 		{
-			context.model_service.EnableLinkIndex(attr);
+			model_service.EnableLinkIndex(attr);
 			LOGGER.log(Level.INFO, "enabled link cache: " + attr);
 		}
 
@@ -182,7 +186,7 @@ public class Start
  * created db, start main loop and shutdown, when finished<br>
  * all errors are printed and may be reported by special scripts<br>
  * */
-	private static void Run(Context context)
+	private static void Run(Context context, ModelService model_service)
 	{
 		LOGGER.log(Level.INFO, "Building rule dependencies and running the model");
 
@@ -190,8 +194,8 @@ public class Start
 // --- create
 		try
 		{
-			context.model_service.Operate();
-			controller = new ExecutionController(context);
+			model_service.Operate();
+			controller = new ExecutionController(context, model_service);
 
 			ProcessStart(context);
 		}

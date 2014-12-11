@@ -26,9 +26,6 @@ public class Equals extends ReactionTemplate
 	@Override
 	public boolean ReactionNeeded(IModelAttribute attribute)
 	{
-		if(!attribute.Check())
-			return false;
-
 		return attribute.eq(GetCheckValue());
 	}
 

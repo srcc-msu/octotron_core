@@ -10,7 +10,7 @@ import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.model.ModelData;
+import ru.parallel.octotron.exec.services.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;

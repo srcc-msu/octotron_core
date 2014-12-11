@@ -2,6 +2,7 @@ package ru.parallel.octotron.rules;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelObjectList;
@@ -22,23 +23,15 @@ import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import static org.junit.Assert.assertEquals;
 
 //they do not work because invalid or wrong ctime, need to fix somehow
-public class ComputeTests
+public class ComputeTests extends GeneralTest
 {
-	private static Context context;
-
-	@BeforeClass
-	public static void InitController() throws Exception
-	{
-		context = Context.CreateTestContext(0);
-	}
-
 	private static ModelObject object;
 
 	@BeforeClass
 	public static void Init()
 		throws ExceptionSystemError
 	{
-		ObjectFactory in = new ObjectFactory(context.model_service)
+		ObjectFactory in = new ObjectFactory(model_service)
 			.Sensors(new SensorTemplate("in_d1", -1, 10.0))
 			.Sensors(new SensorTemplate("in_l1", -1, 20))
 			.Sensors(new SensorTemplate("in_b1", -1, true))
@@ -52,7 +45,7 @@ public class ComputeTests
 			.Sensors(new SensorTemplate("str1", -1, "yes"))
 			.Sensors(new SensorTemplate("str2", -1, "yes"));
 
-		ObjectFactory out = new ObjectFactory(context.model_service)
+		ObjectFactory out = new ObjectFactory(model_service)
 			.Sensors(new SensorTemplate("out_d1", -1, 20.0))
 			.Sensors(new SensorTemplate("out_l1", -1, 10))
 			.Sensors(new SensorTemplate("out_b1", -1, false))
@@ -68,7 +61,7 @@ public class ComputeTests
 			.Sensors(new SensorTemplate("mismatch_num", -1, 333L))
 			.Sensors(new SensorTemplate("match_num", -1, 444L));
 
-		ObjectFactory self = new ObjectFactory(context.model_service)
+		ObjectFactory self = new ObjectFactory(model_service)
 			.Sensors(new SensorTemplate("mod_d1", -1, 0.0))
 			.Sensors(new SensorTemplate("mod_l1", -1, 2L))
 			.Sensors(new SensorTemplate("d1", -1, 0.0))
@@ -88,14 +81,14 @@ public class ComputeTests
 
 		object = self.Create();
 
-		LinkFactory links = new LinkFactory(context.model_service)
+		LinkFactory links = new LinkFactory(model_service)
 			.Constants(new ConstTemplate("type", "test"));
 
 		ModelObjectList ins = in.Create(3);
 		ModelObjectList outs = out.Create(4);
 
-		Enumerator.Sequence(context.model_service, ins, "in_lid");
-		Enumerator.Sequence(context.model_service, outs, "out_lid");
+		Enumerator.Sequence(model_service, ins, "in_lid");
+		Enumerator.Sequence(model_service, outs, "out_lid");
 
 		links.EveryToOne(ins, object);
 

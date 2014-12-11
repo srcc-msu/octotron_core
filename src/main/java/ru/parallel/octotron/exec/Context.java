@@ -6,22 +6,23 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.core.model.ModelData;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelData;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.logic.Statistics;
 
 public final class Context
 {
 	public final GlobalSettings settings;
 	public final ModelData model_data;
-	public final ModelService model_service;
 
-	private Context(GlobalSettings settings, ModelData model_data
-		, ModelService model_service)
+	public final Statistics stat = new Statistics();
+
+
+	private Context(GlobalSettings settings, ModelData model_data)
 	{
 		this.settings = settings;
 		this.model_data = model_data;
-		this.model_service = model_service;
 	}
 
 	public static Context CreateFromConfig(String json_config)
@@ -30,9 +31,8 @@ public final class Context
 		GlobalSettings settings = new GlobalSettings(json_config);
 		ModelData model_data = new ModelData();
 
-		ModelService model_service = new ModelService(model_data, settings);
 
-		return new Context(settings, model_data, model_service);
+		return new Context(settings, model_data);
 	}
 
 	public static Context CreateTestContext(int port)
@@ -40,8 +40,7 @@ public final class Context
 	{
 		GlobalSettings settings = new GlobalSettings(port);
 		ModelData model_data = new ModelData();
-		ModelService model_service = new ModelService(model_data, settings);
 
-		return new Context(settings, model_data, model_service);
+		return new Context(settings, model_data);
 	}
 }

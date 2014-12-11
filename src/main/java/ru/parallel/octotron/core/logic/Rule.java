@@ -10,7 +10,7 @@ import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelService;
 
 /**
  * currently Octopy supports only only one constructor for rules</br>

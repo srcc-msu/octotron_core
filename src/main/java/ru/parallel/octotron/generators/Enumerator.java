@@ -7,7 +7,7 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelService;
 
 public final class Enumerator
 {

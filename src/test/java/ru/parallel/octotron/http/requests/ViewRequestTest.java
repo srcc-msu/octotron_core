@@ -16,8 +16,8 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void CountTest() throws Exception
 	{
-		ViewRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/count?path=obj(AID)");
 
@@ -28,8 +28,8 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void AttributeTest() throws Exception
 	{
-		ViewRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/attribute?path=obj(AID)&names=AID");
 
@@ -44,10 +44,10 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void EntityTest() throws Exception
 	{
-		ViewRequestTest.factory.Sensors(new SensorTemplate("sensor", -1, 1))
+		object_factory.Sensors(new SensorTemplate("sensor", -1, 1))
 			.Vars(new VarTemplate("rule", new CalcSpeed("sensor"))).Create(10);
 
-		context.model_service.EnableObjectIndex("AID");
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=obj(AID)&v");
 		if(test == null || !test.contains("AID"))
@@ -70,10 +70,10 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void ReactionTest() throws Exception
 	{
-		ViewRequestTest.factory.Sensors(new SensorTemplate("test", -1, 0))
+		object_factory.Sensors(new SensorTemplate("test", -1, 0))
 			.Reactions(new Equals("test", 1)).Create(1);
 
-		context.model_service.EnableObjectIndex("AID");
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/reaction?path=obj(AID)&name=test");
 		if(test == null || !test.contains("AID"))
@@ -87,9 +87,9 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void SuppressedTest() throws Exception
 	{
-		ModelObjectList obj = ViewRequestTest.factory.Sensors(new SensorTemplate("test", -1, 0))
+		ModelObjectList obj = object_factory.Sensors(new SensorTemplate("test", -1, 0))
 			.Reactions(new Equals("test", 1)).Create(1);
-		context.model_service.EnableObjectIndex("AID");
+		model_service.EnableObjectIndex("AID");
 
 
 		Reaction reaction = obj.Only().GetAttribute("test").GetReactions().iterator().next();
@@ -108,8 +108,8 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void AllResponseTest() throws Exception
 	{
-		ViewRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/all_response");
 
@@ -120,8 +120,8 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void VersionTest() throws Exception
 	{
-		ViewRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/version");
 

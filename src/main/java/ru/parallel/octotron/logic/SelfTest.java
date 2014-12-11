@@ -8,7 +8,7 @@ package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
 import ru.parallel.octotron.exec.ExecutionController;
@@ -25,7 +25,7 @@ public class SelfTest
 	{
 		obj1 = model_service.AddObject();
 		obj1.GetBuilder(model_service).DeclareConst("type", "_selftest");
-		obj1.GetBuilder(model_service).DeclareSensor("test_iteration", 0L);
+		obj1.GetBuilder(model_service).DeclareSensor("test_iteration", -1, 0L);
 
 		obj2 = model_service.AddObject();
 		obj2.GetBuilder(model_service).DeclareConst("type", "_selftest");
@@ -40,7 +40,7 @@ public class SelfTest
 	{
 		test_iteration++;
 
-		controller.ImmediateImport(obj1, "test_iteration", new Value(test_iteration));
+		controller.update_service.ImmediateImport(obj1, "test_iteration", new Value(test_iteration));
 
 		return obj2.GetAttribute("check").eq(new Value(test_iteration));
 	}

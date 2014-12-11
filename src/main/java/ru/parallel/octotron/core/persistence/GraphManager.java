@@ -16,7 +16,7 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -292,11 +292,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_service.AddLink(object, dependency_object, DEPENDS);
 		}
-	}
 
-	@Override
-	public void Operate()
-	{
 		graph.GetTransaction().ForceWrite();
 	}
 

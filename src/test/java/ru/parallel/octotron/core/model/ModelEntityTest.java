@@ -3,7 +3,9 @@ package ru.parallel.octotron.core.model;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
@@ -23,16 +25,8 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ModelEntityTest
+public class ModelEntityTest extends GeneralTest
 {
-	private static Context context;
-
-	@BeforeClass
-	public static void InitController() throws Exception
-	{
-		context = Context.CreateTestContext(0);
-	}
-
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
 
@@ -43,14 +37,14 @@ public class ModelEntityTest
 			new ConstTemplate("object", "ok")
 		};
 
-		ModelEntityTest.obj_factory = new ObjectFactory(context.model_service).Constants(obj_att);
+		ModelEntityTest.obj_factory = new ObjectFactory(model_service).Constants(obj_att);
 
 		ConstTemplate[] link_att = {
 			new ConstTemplate("link", "ok"),
 			new ConstTemplate("type", "contain"),
 		};
 
-		ModelEntityTest.link_factory = new LinkFactory(context.model_service).Constants(link_att);
+		ModelEntityTest.link_factory = new LinkFactory(model_service).Constants(link_att);
 	}
 
 	@org.junit.Rule
@@ -90,14 +84,14 @@ public class ModelEntityTest
 	@Test
 	public void TestDeclareAttribute() throws Exception
 	{
-		ModelObject entity = context.model_service.AddObject();
-		entity.GetBuilder(context.model_service).DeclareSensor("test", -1, "");
+		ModelObject entity = model_service.AddObject();
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, "");
 
 		boolean catched = false;
 
 		try
 		{
-			entity.GetBuilder(context.model_service).DeclareSensor("test", -1, "");
+			entity.GetBuilder(model_service).DeclareSensor("test", -1, "");
 		}
 		catch(ExceptionModelFail ignore)
 		{
@@ -111,11 +105,11 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 		ReactionTemplate reaction = new Equals("test", 1)
 			.Response(new Response(EEventStatus.INFO, "tst#test"));
 
-		entity.GetBuilder(context.model_service).AddReaction(reaction);
+		entity.GetBuilder(model_service).AddReaction(reaction);
 	}
 
 	@Test
@@ -123,7 +117,7 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
 		List<ReactionTemplate> reactions = new LinkedList<>();
 
@@ -132,7 +126,7 @@ public class ModelEntityTest
 		reactions.add(new Equals("test", 2)
 			.Response(new Response(EEventStatus.INFO, "tst#test")));
 
-		entity.GetBuilder(context.model_service).AddReaction(reactions);
+		entity.GetBuilder(model_service).AddReaction(reactions);
 	}
 
 	private class DummyRule extends Rule
@@ -162,7 +156,7 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareVar("test1", new DummyRule());
+		entity.GetBuilder(model_service).DeclareVar("test1", new DummyRule());
 	}
 
 	@Test
@@ -170,13 +164,13 @@ public class ModelEntityTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
 		List<VarTemplate> rules = new LinkedList<>();
 
 		rules.add(new VarTemplate("test1", new DummyRule()));
 		rules.add(new VarTemplate("test2", new DummyRule()));
 
-		entity.GetBuilder(context.model_service).DeclareVar(rules);
+		entity.GetBuilder(model_service).DeclareVar(rules);
 	}
 }

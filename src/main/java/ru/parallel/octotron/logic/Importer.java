@@ -14,57 +14,26 @@ import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.exec.services.ReactionService;
 
 import java.util.Collection;
 
 public class Importer implements Runnable
 {
-	private final ExecutionController controller;
+	private final ReactionService reaction_service;
+
 	private final ModelEntity entity;
 
 	private final String name;
 	private final Value value;
 
-	public Importer(ExecutionController controller, ModelEntity entity, String name, Value value)
+	public Importer(ReactionService reaction_service, ModelEntity entity, String name, Value value)
 	{
-		this.controller = controller;
+		this.reaction_service = reaction_service;
 		this.entity = entity;
 
 		this.name = name;
 		this.value = value;
-	}
-
-	protected static Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
-	{
-		Collection<VarAttribute> result = new AttributeList<>();
-
-		for(IModelAttribute attribute : attributes)
-		{
-			result.addAll(attribute.GetDependOnMe());
-		}
-
-		return result;
-	}
-
-	public static Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
-	{
-		Collection<IModelAttribute> result = new AttributeList<>();
-
-		Collection<VarAttribute> depend_from_changed = changed.GetDependOnMe();
-
-		do
-		{
-			for(VarAttribute var : depend_from_changed)
-			{
-				if(var.Update())
-					result.add(var);
-			}
-
-			depend_from_changed = GetDependFromList(depend_from_changed);
-		}
-		while(depend_from_changed.size() != 0);
-
-		return result;
 	}
 
 	@Override
@@ -73,10 +42,6 @@ public class Importer implements Runnable
 		SensorAttribute sensor = entity.GetSensor(name);
 		sensor.Update(value);
 
-		Collection<IModelAttribute> result = ProcessVars(sensor);
-
-		result.add(sensor);
-
-		controller.CheckReactions(result);
+		new Updater(reaction_service, sensor, true).run();
 	}
 }

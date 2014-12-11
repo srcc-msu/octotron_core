@@ -2,6 +2,7 @@ package ru.parallel.octotron.generators;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
@@ -10,6 +11,7 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
@@ -19,24 +21,16 @@ import ru.parallel.octotron.rules.Match;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class BaseFactoryTest
+public class BaseFactoryTest extends GeneralTest
 {
-	private static Context context;
-
-	@BeforeClass
-	public static void InitController() throws Exception
-	{
-		context = Context.CreateTestContext(0);
-	}
-
 	private static ObjectFactory object_factory;
 	private static LinkFactory link_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		object_factory = new ObjectFactory(context.model_service);
-		link_factory = new LinkFactory(context.model_service);
+		object_factory = new ObjectFactory(model_service);
+		link_factory = new LinkFactory(model_service);
 	}
 
 /**

@@ -3,29 +3,23 @@ package ru.parallel.octotron.core.collections;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.attributes.IAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.services.ModelService;
 
 import static org.junit.Assert.assertEquals;
 
-public class AttributeListTest
+public class AttributeListTest extends GeneralTest
 {
-	private static Context context;
-
-	@BeforeClass
-	public static void InitController() throws Exception
-	{
-		context = Context.CreateTestContext(0);
-	}
-
 	private static ModelObject object;
 
 	@Before
 	public void Create()
 	{
-		AttributeListTest.object = context.model_service.AddObject();
+		AttributeListTest.object = model_service.AddObject();
 	}
 
 	@Test
@@ -34,7 +28,7 @@ public class AttributeListTest
 		AttributeList<IAttribute> list = new AttributeList<>();
 
 		assertEquals("list is no empty", list.size(), 0);
-		object.GetBuilder(context.model_service).DeclareConst("test", 0);
+		object.GetBuilder(model_service).DeclareConst("test", 0);
 		list.add(AttributeListTest.object.GetAttribute("test"));
 		assertEquals("list has no elements", list.size(), 1);
 
@@ -47,11 +41,11 @@ public class AttributeListTest
 	{
 		AttributeList<IAttribute> list = new AttributeList<>();
 
-		object.GetBuilder(context.model_service).DeclareConst("test1", 0);
+		object.GetBuilder(model_service).DeclareConst("test1", 0);
 		list.add(AttributeListTest.object.GetAttribute("test1"));
-		object.GetBuilder(context.model_service).DeclareConst("test2", 1.0);
+		object.GetBuilder(model_service).DeclareConst("test2", 1.0);
 		list.add(AttributeListTest.object.GetAttribute("test2"));
-		object.GetBuilder(context.model_service).DeclareConst("test3", "test");
+		object.GetBuilder(model_service).DeclareConst("test3", "test");
 		list.add(AttributeListTest.object.GetAttribute("test3"));
 
 		assertEquals(list.get(0).eq(0), true);
@@ -68,7 +62,7 @@ public class AttributeListTest
 
 		for(int i = 0; i < N; i++)
 		{
-			object.GetBuilder(context.model_service).DeclareConst("test" + i, i);
+			object.GetBuilder(model_service).DeclareConst("test" + i, i);
 			list.add(AttributeListTest.object.GetAttribute("test" + i));
 		}
 
@@ -89,7 +83,7 @@ public class AttributeListTest
 
 		for(int i = 0; i < N; i++)
 		{
-			object.GetBuilder(context.model_service).DeclareConst("test" + i, i);
+			object.GetBuilder(model_service).DeclareConst("test" + i, i);
 			list.add(AttributeListTest.object.GetAttribute("test" + i));
 			assertEquals(list.size(), i + 1);
 		}
@@ -104,7 +98,7 @@ public class AttributeListTest
 
 		for(int i = 0; i < N; i++)
 		{
-			object.GetBuilder(context.model_service).DeclareConst("test" + i, i);
+			object.GetBuilder(model_service).DeclareConst("test" + i, i);
 			list.add(AttributeListTest.object.GetAttribute("test" + i));
 		}
 
@@ -146,11 +140,11 @@ public class AttributeListTest
 	{
 		AttributeList<IAttribute> list = new AttributeList<>();
 
-		object.GetBuilder(context.model_service).DeclareConst("b", "");
+		object.GetBuilder(model_service).DeclareConst("b", "");
 		list.add(AttributeListTest.object.GetAttribute("b"));
-		object.GetBuilder(context.model_service).DeclareConst("c", "");
+		object.GetBuilder(model_service).DeclareConst("c", "");
 		list.add(AttributeListTest.object.GetAttribute("c"));
-		object.GetBuilder(context.model_service).DeclareConst("a", "");
+		object.GetBuilder(model_service).DeclareConst("a", "");
 		list.add(AttributeListTest.object.GetAttribute("a"));
 
 		list = list.AlphabeticSort();

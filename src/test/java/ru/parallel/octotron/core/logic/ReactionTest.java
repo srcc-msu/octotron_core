@@ -9,6 +9,7 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
@@ -19,11 +20,13 @@ import static org.junit.Assert.assertNull;
 public class ReactionTest
 {
 	private static Context context;
+	private static ModelService model_service;
 
 	@BeforeClass
 	public static void InitController() throws Exception
 	{
 		context = Context.CreateTestContext(0);
+		model_service = new ModelService(context);
 	}
 
 	private static ObjectFactory obj_factory;
@@ -32,8 +35,8 @@ public class ReactionTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ReactionTest.obj_factory = new ObjectFactory(context.model_service);
-		ReactionTest.link_factory = new LinkFactory(context.model_service);
+		ReactionTest.obj_factory = new ObjectFactory(model_service);
+		ReactionTest.link_factory = new LinkFactory(model_service);
 	}
 
 	@Test
@@ -41,11 +44,11 @@ public class ReactionTest
 	{
 		ModelEntity entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
 		ReactionTemplate reaction_template = new Equals("test", 1);
 
-		entity.GetBuilder(context.model_service).AddReaction(reaction_template);
+		entity.GetBuilder(model_service).AddReaction(reaction_template);
 
 		Reaction reaction
 			= Iterables.get(entity.GetAttribute("test").GetReactions(), 0);
@@ -59,13 +62,13 @@ public class ReactionTest
 	{
 		ModelEntity entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
 		ReactionTemplate reaction_template1 = new Equals("test", 1);
 		ReactionTemplate reaction_template2 = new Equals("test", 1);
 
-		entity.GetBuilder(context.model_service).AddReaction(reaction_template1);
-		entity.GetBuilder(context.model_service).AddReaction(reaction_template2);
+		entity.GetBuilder(model_service).AddReaction(reaction_template1);
+		entity.GetBuilder(model_service).AddReaction(reaction_template2);
 
 		Reaction reaction1
 			= Iterables.get(entity.GetAttribute("test").GetReactions(), 0);
@@ -91,9 +94,9 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
-		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1)
+		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1)
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
@@ -121,9 +124,9 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
-		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Repeatable()
+		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeatable()
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
@@ -150,9 +153,9 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
-		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Repeat(2)
+		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeat(2)
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
@@ -182,9 +185,9 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
-		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Repeat(2).Repeatable()
+		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeat(2).Repeatable()
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
@@ -214,9 +217,9 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
-		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Delay(1)
+		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1)
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
@@ -246,9 +249,9 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
-		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Delay(1).Repeatable()
+		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1).Repeatable()
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
@@ -278,9 +281,9 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
-		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2)
+		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2)
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
@@ -313,9 +316,9 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(context.model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", 0);
 
-		entity.GetBuilder(context.model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2).Repeatable()
+		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2).Repeatable()
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");

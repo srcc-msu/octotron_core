@@ -2,6 +2,7 @@ package ru.parallel.octotron.generators;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 
 import ru.parallel.octotron.exec.Context;
@@ -9,22 +10,14 @@ import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 
 import static org.junit.Assert.assertEquals;
 
-public class ObjectFactoryTest
+public class ObjectFactoryTest extends GeneralTest
 {
-	private static Context context;
-
-	@BeforeClass
-	public static void InitController() throws Exception
-	{
-		context = Context.CreateTestContext(0);
-	}
-
 	private static ObjectFactory obj_factory;
 
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ObjectFactoryTest.obj_factory = new ObjectFactory(context.model_service)
+		ObjectFactoryTest.obj_factory = new ObjectFactory(model_service)
 			.Constants(new ConstTemplate("object", "ok"));
 	}
 
@@ -54,12 +47,12 @@ public class ObjectFactoryTest
 
 		ModelObjectList objects = ObjectFactoryTest.obj_factory.Create(N);
 
-		Enumerator.Sequence(context.model_service, objects, "test1");
+		Enumerator.Sequence(model_service, objects, "test1");
 
 		for(int i = 0; i < N; i++)
 			assertEquals(i, (long)objects.get(i).GetAttribute("test1").GetLong());
 
-		Enumerator.Sequence(context.model_service, objects, "test2", K);
+		Enumerator.Sequence(model_service, objects, "test2", K);
 
 		for(int i = 0; i < N; i++)
 			assertEquals(i % K, (long)objects.get(i).GetAttribute("test2").GetLong());

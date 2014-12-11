@@ -7,16 +7,14 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.junit.Before;
 
-import ru.parallel.octotron.core.model.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.http.DummyHTTPServer;
-import ru.parallel.octotron.logic.RuntimeService;
-import ru.parallel.octotron.logic.SelfTest;
 import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TypedString;
 
@@ -25,27 +23,27 @@ import static org.junit.Assert.fail;
 public class RequestTest
 {
 	private static final long SLEEP = 100;
-	protected static Context context;
-	protected static LinkFactory links;
-	protected static ObjectFactory factory;
-	private static DummyHTTPServer http;
+
+	protected Context context;
+	protected ModelService model_service;
+
 	private ExecutionController controller;
+	private DummyHTTPServer http;
+
+	protected LinkFactory link_factory;
+	protected ObjectFactory object_factory;
 
 	@Before
-	public void InitController() throws Exception
+	public void InitCommon() throws Exception
 	{
 		context = Context.CreateTestContext(0);
-		RuntimeService.InitSelfTest(context.model_service);
-		controller = new ExecutionController(context);
-	}
+		model_service = new ModelService(context);
 
-	@Before
-	public void Init() throws Exception
-	{
-		RequestTest.http = new DummyHTTPServer(0);
+		controller = new ExecutionController(context, model_service);
+		http = new DummyHTTPServer(0);
 
-		RequestTest.factory = new ObjectFactory(context.model_service);
-		RequestTest.links = new LinkFactory(context.model_service)
+		object_factory = new ObjectFactory(model_service);
+		link_factory = new LinkFactory(model_service)
 			.Constants(new ConstTemplate("type", "a_link"));
 	}
 

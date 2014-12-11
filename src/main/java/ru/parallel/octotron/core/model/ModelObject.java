@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EModelType;
+import ru.parallel.octotron.exec.services.ModelService;
 
 
 public class ModelObject extends ModelEntity

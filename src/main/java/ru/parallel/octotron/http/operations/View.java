@@ -158,7 +158,7 @@ public abstract class View
 
 			List<Map<String, Object>> result = new LinkedList<>();
 
-			for(Reaction reaction : controller.GetContext().model_service.GetSuppressedReactions())
+			for(Reaction reaction : controller.model_service.GetSuppressedReactions())
 			{
 				result.add(reaction.GetRepresentation(verbose));
 			}

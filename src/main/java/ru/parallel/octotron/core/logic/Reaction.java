@@ -114,8 +114,15 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 
 // -------------
 
+	/**
+	 * updates reaction state and returns the response required for now
+	 * next call may have different response
+	 * */
 	public Response Process()
 	{
+		if(!attribute.Check())
+			return null;
+
 		boolean needed = template.ReactionNeeded(attribute);
 
 		Response result = null;

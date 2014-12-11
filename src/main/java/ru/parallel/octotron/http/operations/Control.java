@@ -57,7 +57,7 @@ public class Control
 		{
 			Utils.StrictParams(params);
 
-			Map<String, Object> result = RuntimeService.PerformSelfTest(controller);
+			Map<String, Object> result = controller.model_service.PerformSelfTest(controller);
 
 			return AutoFormat.PrintJson(Collections.singleton(result));
 		}
@@ -81,7 +81,7 @@ public class Control
 			String mode_str = params.get("silent");
 			boolean mode = Value.ValueFromStr(mode_str).GetBoolean();
 
-			controller.SetSilent(mode);
+			controller.reaction_service.SetSilent(mode);
 
 			if(mode)
 				return new TextString("silent mode activated - no reactions will be invoked");
@@ -128,7 +128,7 @@ public class Control
 		{
 			Utils.AllParams(params);
 
-			return AutoFormat.PrintJson(controller.GetStat());
+			return AutoFormat.PrintJson(controller.context.stat.GetStat());
 		}
 	}
 

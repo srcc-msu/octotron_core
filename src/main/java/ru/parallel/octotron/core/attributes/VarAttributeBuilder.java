@@ -7,7 +7,7 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.model.IModelAttribute;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelService;
 
 public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribute>
 {

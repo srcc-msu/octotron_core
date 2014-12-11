@@ -9,8 +9,10 @@ package ru.parallel.octotron.http;
 import com.sun.net.httpserver.*;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.GlobalSettings;
+import ru.parallel.octotron.exec.services.HttpService;
+import ru.parallel.octotron.exec.services.RequestService;
 import ru.parallel.octotron.http.requests.HttpExchangeWrapper;
 import ru.parallel.octotron.http.requests.HttpRequestParser;
 import ru.parallel.octotron.http.requests.ParsedModelRequest;
@@ -28,8 +30,9 @@ public class HTTPServer
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	private HttpServer server;
-	private final ExecutionController controller;
+	private final HttpServer server;
+	private final RequestService request_service;
+	private final HttpService http_service;
 
 	/**
  * parse request to tokens and add parsed_request to message queue
@@ -41,7 +44,8 @@ public class HTTPServer
 		public void handle(HttpExchange http_exchange)
 			throws IOException
 		{
-			controller.HttpRequestInform();
+			http_service.RequestInform();
+
 			HttpExchangeWrapper http_exchange_wrapper = new HttpExchangeWrapper(http_exchange);
 
 			ParsedModelRequest request;
@@ -63,10 +67,10 @@ public class HTTPServer
 			if(!request.IsBlocking())
 			{
 				http_exchange_wrapper.FinishString("request queued");
-				controller.AddRequest(request);
+				request_service.AddRequest(request);
 			}
 			else
-				controller.AddBlockingRequest(request, http_exchange_wrapper);
+				request_service.AddBlockingRequest(request, http_exchange_wrapper);
 		}
 	}
 
@@ -113,10 +117,11 @@ public class HTTPServer
  * create and start the server, listening on /port<br>
  * messages are not guaranteed to come in fixed order<br>
  * */
-	public HTTPServer(ExecutionController controller, ExecutorService executor)
+	public HTTPServer(Context context, ExecutorService executor, HttpService http_service, RequestService request_service)
 		throws ExceptionSystemError
 	{
-		this.controller = controller;
+		this.http_service = http_service;
+		this.request_service = request_service;
 
 		// why is it turned off by default >.<
 		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
@@ -124,7 +129,7 @@ public class HTTPServer
 
 		try
 		{
-			server = HttpServer.create(new InetSocketAddress(controller.GetContext().settings.GetPort()), 0);
+			server = HttpServer.create(new InetSocketAddress(context.settings.GetPort()), 0);
 		}
 		catch (IOException e)
 		{
@@ -139,13 +144,13 @@ public class HTTPServer
 
 		server.createContext("/", new DefaultHandler());
 
-		HTTPServer.SetAuth(view, "view", controller.GetContext().settings.GetViewCredentials());
-		HTTPServer.SetAuth(modify, "modify", controller.GetContext().settings.GetModifyCredentials());
-		HTTPServer.SetAuth(control, "control", controller.GetContext().settings.GetControlCredentials());
+		HTTPServer.SetAuth(view, "view", context.settings.GetViewCredentials());
+		HTTPServer.SetAuth(modify, "modify", context.settings.GetModifyCredentials());
+		HTTPServer.SetAuth(control, "control", context.settings.GetControlCredentials());
 
 		server.start();
 
-		LOGGER.log(Level.INFO, "request server listening on port: " + controller.GetContext().settings.GetPort());
+		LOGGER.log(Level.INFO, "request server listening on port: " + context.settings.GetPort());
 	}
 
 	/**

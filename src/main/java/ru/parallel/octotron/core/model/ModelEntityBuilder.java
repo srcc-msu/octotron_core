@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Rule;
@@ -57,7 +58,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		entity.attributes_map.put(name, attribute);
 		entity.const_map.put(name, attribute);
 
-		service.RegisterConst(attribute);
+		service.GetUpdateService().RegisterConst(attribute);
 	}
 
 	public void DeclareConst(ConstTemplate constant)
@@ -95,7 +96,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		entity.attributes_map.put(name, sensor);
 		entity.sensor_map.put(name, sensor);
 
-		service.RegisterSensor(sensor);
+		service.GetUpdateService().RegisterSensor(sensor);
 	}
 
 	public void DeclareSensor(SensorTemplate sensor)
@@ -121,7 +122,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		entity.attributes_map.put(name, var);
 		entity.var_map.put(name, var);
 
-		service.RegisterVar(var);
+		service.GetUpdateService().RegisterVar(var);
 	}
 
 	public void DeclareVar(Iterable<VarTemplate> vars)

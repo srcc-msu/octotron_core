@@ -15,8 +15,8 @@ public class PathTest extends RequestTest
 	@Test
 	public void HttpRequest() throws Exception
 	{
-		RequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=obj(AID)");
 
@@ -27,8 +27,8 @@ public class PathTest extends RequestTest
 	@Test
 	public void HttpObjRequest() throws Exception
 	{
-		RequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=obj(AID)");
 
@@ -39,8 +39,8 @@ public class PathTest extends RequestTest
 	@Test
 	public void HttpQueryRequest() throws Exception
 	{
-		ModelObjectList l = RequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		ModelObjectList l = object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		long AID = l.get(0).GetAttribute("AID").GetLong();
 
@@ -53,8 +53,8 @@ public class PathTest extends RequestTest
 	@Test
 	public void HttpUniqRequest() throws Exception
 	{
-		RequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=obj(AID).uniq()");
 
@@ -65,11 +65,11 @@ public class PathTest extends RequestTest
 	@Test
 	public void HttpNeighbourRequest() throws Exception
 	{
-		ModelObjectList objects = RequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		ModelObjectList objects = object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
-		RequestTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
-		context.model_service.EnableLinkIndex("AID");
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		model_service.EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=obj(AID).in_n()");
 		if(test == null || !test.contains("AID"))
@@ -87,11 +87,11 @@ public class PathTest extends RequestTest
 	@Test
 	public void HttpObjLinkRequest() throws Exception
 	{
-		ModelObjectList objects = RequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		ModelObjectList objects = object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
-		RequestTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
-		context.model_service.EnableLinkIndex("AID");
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		model_service.EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=obj(AID).in_l()");
 		if(test == null || !test.contains("AID"))
@@ -109,11 +109,11 @@ public class PathTest extends RequestTest
 	@Test
 	public void HttpLinkRequest() throws Exception
 	{
-		ModelObjectList objects = RequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		ModelObjectList objects = object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
-		RequestTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
-		context.model_service.EnableLinkIndex("AID");
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		model_service.EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=link(AID)");
 		if(test == null || !test.contains("AID"))
@@ -123,10 +123,10 @@ public class PathTest extends RequestTest
 	@Test
 	public void HttpLinkPropRequest() throws Exception
 	{
-		ModelObjectList objects = RequestTest.factory.Create(10);
+		ModelObjectList objects = object_factory.Create(10);
 
-		RequestTest.links.AllToAll(objects.range(0, 5), objects.range(0, 10));
-		context.model_service.EnableLinkIndex("AID");
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		model_service.EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=link(AID).source()");
 		if(test == null || !test.contains("AID"))

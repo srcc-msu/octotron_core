@@ -9,8 +9,8 @@ public class ControlRequestTest extends RequestTest
 	@Test
 	public void StatTest() throws Exception
 	{
-		ControlRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/control/stat");
 
@@ -21,8 +21,8 @@ public class ControlRequestTest extends RequestTest
 	@Test
 	public void ModeTest() throws Exception
 	{
-		ControlRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/control/mode?silent=true");
 
@@ -33,8 +33,8 @@ public class ControlRequestTest extends RequestTest
 	@Test
 	public void SnapshotTest() throws Exception
 	{
-		ControlRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/control/snapshot");
 
@@ -45,8 +45,8 @@ public class ControlRequestTest extends RequestTest
 	@Test
 	public void ModTimeTest() throws Exception
 	{
-		ControlRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/control/mod_time?interval=1");
 
@@ -57,8 +57,10 @@ public class ControlRequestTest extends RequestTest
 	@Test
 	public void SelftestTest() throws Exception
 	{
-		ControlRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
+
+		model_service.Operate();
 
 		String test = GetRequestResult("/control/selftest");
 
@@ -69,8 +71,8 @@ public class ControlRequestTest extends RequestTest
 	@Test
 	public void QuitTest() throws Exception
 	{
-		ControlRequestTest.factory.Create(10);
-		context.model_service.EnableObjectIndex("AID");
+		object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
 
 		String test = GetRequestResult("/control/quit");
 

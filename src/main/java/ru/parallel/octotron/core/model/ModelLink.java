@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.primitive.EModelType;
+import ru.parallel.octotron.exec.services.ModelService;
 
 public class ModelLink extends ModelEntity
 {

@@ -7,19 +7,15 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.impl.Timeout;
-import ru.parallel.octotron.core.model.ModelData;
+import ru.parallel.octotron.exec.services.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelService;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.JavaUtils;
-import ru.parallel.utils.format.TypedString;
 
 import java.io.*;
 import java.util.*;
@@ -29,41 +25,6 @@ import java.util.logging.Logger;
 public class RuntimeService
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
-
-	private static final double free_space_mb_thr = 1024; // 1GB in MB
-
-	private static SelfTest tester = null;
-
-	public static void InitSelfTest(ModelService model_service)
-	{
-		if(tester == null)
-		{
-			tester = new SelfTest();
-			tester.Init(model_service);
-		}
-		else
-			throw new ExceptionModelFail("internal error: self test has been initialized already");
-	}
-
-	public static Map<String, Object> PerformSelfTest(ExecutionController controller)
-	{
-		if(tester == null)
-			throw new ExceptionModelFail("internal error: self test is not initialized");
-
-		boolean graph_test = tester.Test(controller);
-
-		long free_space = new File("/").getFreeSpace();
-
-		long free_space_mb = free_space / 1024 / 1024;
-
-		Map<String, Object> map = new HashMap<>();
-
-		map.put("graph_test", graph_test);
-		map.put("disk_space_MB", free_space_mb);
-		map.put("disk_test", free_space_mb > free_space_mb_thr);
-
-		return map;
-	}
 
 	/**
 	 * create snapshot of all reactions with failed conditions<br>

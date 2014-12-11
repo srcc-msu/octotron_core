@@ -7,7 +7,7 @@
 package ru.parallel.octotron.http.path;
 
 import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.model.ModelData;
+import ru.parallel.octotron.exec.services.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.path.PathOperations.PathToken;

@@ -2,6 +2,7 @@ package ru.parallel.octotron.generators;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -12,16 +13,8 @@ import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 
 import static org.junit.Assert.assertEquals;
 
-public class LinkFactoryTest
+public class LinkFactoryTest extends GeneralTest
 {
-	private static Context context;
-
-	@BeforeClass
-	public static void InitController() throws Exception
-	{
-		context = Context.CreateTestContext(0);
-	}
-
 	private static ObjectFactory obj_factory;
 	private static LinkFactory link_factory;
 
@@ -30,10 +23,10 @@ public class LinkFactoryTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		LinkFactoryTest.obj_factory = new ObjectFactory(context.model_service)
+		LinkFactoryTest.obj_factory = new ObjectFactory(model_service)
 			.Constants(new ConstTemplate("object", "ok"));
 
-		LinkFactoryTest.link_factory = new LinkFactory(context.model_service)
+		LinkFactoryTest.link_factory = new LinkFactory(model_service)
 			.Constants(new ConstTemplate("type", "contain"));
 	}
 

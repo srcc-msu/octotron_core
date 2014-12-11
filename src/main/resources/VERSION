@@ -1,4 +1,4 @@
 version=3.3.0
-request=3.2.0
-dsl=3.1.0
+request=3.2.1
+dsl=3.1.1
 neo4j=2.1.5

@@ -21,9 +21,4 @@ public class SensorAttributeBuilder extends AbstractModAttributeBuilder<SensorAt
 	{
 		attribute.SetIsValid(is_valid);
 	}
-
-	public void SetTimeoutReaction(ReactionTemplate timeout_reaction)
-	{
-		attribute.timeout_reaction = new Reaction(timeout_reaction, attribute);
-	}
 }

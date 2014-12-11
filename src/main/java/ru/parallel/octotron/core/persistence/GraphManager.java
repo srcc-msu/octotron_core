@@ -292,8 +292,6 @@ public class GraphManager implements IPersistenceManager
 
 			graph_service.AddLink(object, dependency_object, DEPENDS);
 		}
-
-		graph.GetTransaction().ForceWrite();
 	}
 
 	// TODO: executor?
@@ -310,13 +308,13 @@ public class GraphManager implements IPersistenceManager
 			for(Reaction reaction : attribute.GetReactions())
 				RegisterReaction(reaction);
 		}
-
-		graph.GetTransaction().ForceWrite();
 	}
 
 	@Override
 	public void Finish()
 	{
+		graph.GetTransaction().ForceWrite(); // TODO: not needed?
+
 		graph.Shutdown();
 	}
 

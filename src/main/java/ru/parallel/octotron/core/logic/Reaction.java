@@ -120,7 +120,7 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 	 * */
 	public Response Process()
 	{
-		if(!attribute.Check())
+		if(!template.IsInvalidAllowed() && !attribute.Check())
 			return null;
 
 		boolean needed = template.ReactionNeeded(attribute);

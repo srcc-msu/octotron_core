@@ -20,6 +20,7 @@ public class Timeout extends ReactionTemplate
 	public Timeout(String check_name)
 	{
 		super(check_name);
+		InvalidAllowed();
 	}
 
 	@Override

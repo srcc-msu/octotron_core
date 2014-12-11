@@ -7,15 +7,12 @@
 package ru.parallel.octotron.exec;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.services.*;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,7 +43,21 @@ public class ExecutionController
 		http_service = new HttpService(context, request_service);
 		reaction_service = new ReactionService(context);
 		update_service = new UpdateService(context, reaction_service);
-		checker_service = new OutdatedCheckerService(context, reaction_service);
+		checker_service = new OutdatedCheckerService(context, update_service);
+
+		UpdateDefinedSensors();
+	}
+
+	private void UpdateDefinedSensors()
+	{
+		for(ModelObject object : context.model_data.GetAllObjects())
+		{
+			for(SensorAttribute sensor : object.GetSensor())
+			{
+				if(sensor.GetValue().IsDefined())
+					update_service.Update(sensor, false);
+			}
+		}
 	}
 
 	public void SetExit(boolean exit)

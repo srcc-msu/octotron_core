@@ -22,7 +22,7 @@ public class Updater implements Runnable
 		this.check_reactions = check_reactions;
 	}
 
-	protected static Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
+	private static Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
 	{
 		Collection<VarAttribute> result = new AttributeList<>();
 
@@ -34,7 +34,7 @@ public class Updater implements Runnable
 		return result;
 	}
 
-	public static Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
+	private static Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
 	{
 		Collection<IModelAttribute> result = new AttributeList<>();
 
@@ -46,7 +46,7 @@ public class Updater implements Runnable
 
 			for(VarAttribute var : depend_from_changed)
 			{
-				if(var.Update())
+				if(!var.IsInitialDelay() && var.Update())
 					new_changed.add(var);
 			}
 

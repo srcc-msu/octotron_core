@@ -17,7 +17,7 @@ public class OutdatedCheckerService extends Service
 
 	static Object lock = new Object();
 
-	private final ReactionService reaction_service;
+	private final UpdateService update_service;
 
 	class Checker implements Runnable
 	{
@@ -41,8 +41,8 @@ public class OutdatedCheckerService extends Service
 
 					Collection<SensorAttribute> outdated_sensors = ProcessOutdatedSensors(context);
 
-					for (SensorAttribute sensor : outdated_sensors)
-						reaction_service.CheckReaction(sensor.GetTimeoutReaction());
+					for(SensorAttribute sensor : outdated_sensors)
+						update_service.Update(sensor, true);
 
 					if(outdated_sensors.size() > 0)
 						LOGGER.log(Level.INFO, "outdated sensors: " + outdated_sensors.size());
@@ -53,10 +53,10 @@ public class OutdatedCheckerService extends Service
 
 	private final Thread checker = new Thread(new Checker());
 
-	public OutdatedCheckerService(Context context, ReactionService reaction_service)
+	public OutdatedCheckerService(Context context, UpdateService update_service)
 	{
 		super(context);
-		this.reaction_service = reaction_service;
+		this.update_service = update_service;
 
 		checker.setName("outdated_checker");
 		checker.start();

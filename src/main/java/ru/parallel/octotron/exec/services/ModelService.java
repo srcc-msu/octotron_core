@@ -17,10 +17,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
-import ru.parallel.octotron.logic.Importer;
-import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.octotron.logic.SelfTest;
-import ru.parallel.octotron.logic.Updater;
 import ru.parallel.utils.FileUtils;
 
 import java.io.File;
@@ -28,7 +25,7 @@ import java.util.*;
 
 public final class ModelService extends Service
 {
-	private final PersistenceService update_service;
+	private final PersistenceService persistence_service;
 
 	public static enum EMode
 	{
@@ -54,9 +51,9 @@ public final class ModelService extends Service
 			mode = EMode.LOAD;
 
 		if(context.settings.IsDb())
-			update_service = new PersistenceService(new GraphManager(this, db_path));
+			persistence_service = new PersistenceService(new GraphManager(this, db_path));
 		else
-			update_service = new PersistenceService(new GhostManager());
+			persistence_service = new PersistenceService(new GhostManager());
 	}
 
 	public EMode GetMode()
@@ -74,23 +71,9 @@ public final class ModelService extends Service
 	{
 		MakeRuleDependency();
 
-		UpdateDefinedSensors();
-
 		InitSelfTest(this);
 
 		mode = EMode.OPERATION;
-	}
-
-	private void UpdateDefinedSensors()
-	{
-		for(ModelObject object : context.model_data.GetAllObjects())
-		{
-			for(SensorAttribute sensor : object.GetSensor())
-			{
-				if(sensor.GetValue().IsDefined())
-					Updater.ProcessVars(sensor);
-			}
-		}
 	}
 
 	private void MakeRuleDependency()
@@ -100,7 +83,7 @@ public final class ModelService extends Service
 			for(VarAttribute attribute : object.GetVar())
 			{
 				attribute.GetBuilder(this).ConnectDependency();
-				update_service.persistence_manager.MakeRuleDependency(attribute);
+				persistence_service.persistence_manager.MakeRuleDependency(attribute);
 			}
 		}
 	}
@@ -112,7 +95,7 @@ public final class ModelService extends Service
 		CheckModification();
 
 		ModelLink link = new ModelLink(source, target);
-		update_service.persistence_manager.RegisterLink(link);
+		persistence_service.persistence_manager.RegisterLink(link);
 
 		context.model_data.links.add(link);
 
@@ -129,7 +112,7 @@ public final class ModelService extends Service
 		CheckModification();
 
 		ModelObject object = new ModelObject();
-		update_service.persistence_manager.RegisterObject(object);
+		persistence_service.persistence_manager.RegisterObject(object);
 
 		context.model_data.objects.add(object);
 
@@ -138,27 +121,6 @@ public final class ModelService extends Service
 		return object;
 	}
 
-	public ModelObject AddServiceObject()
-	{
-		CheckModification();
-
-		ModelObject object = new ModelObject();
-
-		return object;
-	}
-
-
-	public ModelLink AddServiceLink(ModelObject source, ModelObject target)
-	{
-		CheckModification();
-
-		ModelLink link = new ModelLink(source, target);
-
-		source.GetBuilder(this).AddOutLink(link);
-		target.GetBuilder(this).AddInLink(link);
-
-		return link;
-	}
 // ---------------------
 
 	public void EnableLinkIndex(String name)
@@ -225,13 +187,13 @@ public final class ModelService extends Service
 
 	public PersistenceService GetUpdateService()
 	{
-		return update_service;
+		return persistence_service;
 	}
 
 	@Override
 	public void Finish()
 	{
-		update_service.Finish();
+		persistence_service.Finish();
 	}
 
 

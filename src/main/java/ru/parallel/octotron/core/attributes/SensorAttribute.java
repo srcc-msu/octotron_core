@@ -58,7 +58,8 @@ public final class SensorAttribute extends AbstractModAttribute
 						.Msg("tag", "TIMEOUT")
 						.Msg("descr", "sensor value has not been updated in required time")
 						.Msg("loc", "AID = {AID}")
-						.Msg("msg", "sensor(" + GetName() + ") value has not been updated in required time"))
+						.Msg("msg", "sensor(" + GetName() + ") value has not been updated in required time")
+						.Exec("on_info"))
 				, this);
 		}
 		catch (ExceptionParseError exceptionParseError)

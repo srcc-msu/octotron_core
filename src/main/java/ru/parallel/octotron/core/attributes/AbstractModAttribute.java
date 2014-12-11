@@ -31,7 +31,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	 * tracks if the sensor got at least one value update:
 	 * initially or via Update()
 	 * */
-	private boolean is_initial_delay = true;
+	protected boolean is_initial_delay = true;
 
 	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Value value)
 	{
@@ -46,7 +46,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		is_initial_delay = false;
 	}
 
-	public final boolean IsInitialDelay()
+	public boolean IsInitialDelay()
 	{
 		return is_initial_delay;
 	}
@@ -139,7 +139,7 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		result.put("name", GetName());
 		result.put("value", GetValue());
 		result.put("ctime", GetCTime());
-		result.put("has_value", IsInitialDelay());
+		result.put("is_initial_delay", IsInitialDelay());
 
 		return result;
 	}

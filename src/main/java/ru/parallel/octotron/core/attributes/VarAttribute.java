@@ -40,6 +40,23 @@ public final class VarAttribute extends AbstractModAttribute
 		return rule;
 	}
 
+	@Override
+	public final boolean IsInitialDelay()
+	{
+		if(!is_initial_delay)
+			return false;
+
+		for(IModelAttribute attribute : GetIDependOn())
+		{
+			if(attribute.IsInitialDelay())
+				return true;
+		}
+
+		// we've got positive for all, cache it for future - it will not change back
+		CancelInitialDelay();
+		return false;
+	}
+
 	/**
 	 * if sensor check fails, no update will be performed<br>
 	 * in any other case the rule will be computed
@@ -62,6 +79,6 @@ public final class VarAttribute extends AbstractModAttribute
 	@Override
 	public boolean Check()
 	{
-		return rule.CanCompute(this);
+		return rule.CanCompute(this) && !IsInitialDelay();
 	}
 }

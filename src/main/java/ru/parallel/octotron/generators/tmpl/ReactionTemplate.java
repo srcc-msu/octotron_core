@@ -25,6 +25,7 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 	private long wait_delay = 0;
 	private long wait_repeat = 0;
 	private boolean repeatable = false;
+	private boolean invalid_allowed = false;
 
 	public ReactionTemplate(String check_name)
 	{
@@ -69,6 +70,11 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 		return repeatable;
 	}
 
+	public boolean IsInvalidAllowed()
+	{
+		return invalid_allowed;
+	}
+
 	public ReactionTemplate Response(Response response)
 	{
 		this.response = response;
@@ -96,6 +102,12 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 	public ReactionTemplate Repeatable()
 	{
 		this.repeatable = true;
+		return this;
+	}
+
+	public ReactionTemplate InvalidAllowed()
+	{
+		this.invalid_allowed = true;
 		return this;
 	}
 

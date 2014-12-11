@@ -34,10 +34,6 @@ public abstract class Aggregate extends ObjectRule
 	@Override
 	public boolean CanCompute(VarAttribute var)
 	{
-		for(IModelAttribute attribute : var.GetIDependOn())
-			if(attribute.IsInitialDelay())
-				return false;
-
 		return true;
 	}
 

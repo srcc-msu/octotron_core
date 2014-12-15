@@ -6,9 +6,7 @@
 
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.exec.services.ModelService;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 
 public class SensorAttributeBuilder extends AbstractModAttributeBuilder<SensorAttribute>
 {
@@ -19,6 +17,6 @@ public class SensorAttributeBuilder extends AbstractModAttributeBuilder<SensorAt
 
 	public void SetValid(Boolean is_valid)
 	{
-		attribute.SetIsValid(is_valid);
+		attribute.SetIsUserValid(is_valid);
 	}
 }

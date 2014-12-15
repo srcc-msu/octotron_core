@@ -21,6 +21,21 @@ public class Value
 		}
 	}
 
+	private static class Invalid
+	{
+		private Invalid() {};
+
+		public static final Invalid value = new Invalid();
+
+		@Override
+		public final String toString()
+		{
+			return "invalid";
+		}
+	}
+
+// ----------------
+
 	private final Object value;
 	private final Class<?> my_class;
 
@@ -37,10 +52,16 @@ public class Value
 	}
 
 	public static final Value undefined = new Value(Undefined.value, Undefined.class);
+	public static final Value invalid = new Value(Invalid.value, Invalid.class);
 
 	public boolean IsDefined()
 	{
 		return !equals(undefined);
+	}
+
+	public boolean IsValid()
+	{
+		return !equals(invalid);
 	}
 
 	/**
@@ -113,7 +134,9 @@ public class Value
 			return value.toString();
 		else if(my_class.equals(String.class))
 			return JavaUtils.Quotify((String)value);
-		else if(value instanceof Undefined)
+		else if(my_class.equals(Undefined.class))
+			return JavaUtils.Quotify(value.toString());
+		else if(my_class.equals(Invalid.class))
 			return JavaUtils.Quotify(value.toString());
 
 		else

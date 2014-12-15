@@ -34,7 +34,7 @@ public final class SensorAttribute extends AbstractModAttribute
 	/**
 	 * user defined
 	 * */
-	private boolean is_valid = true;
+	private boolean is_user_valid = true;
 
 	Reaction timeout_reaction = null;
 
@@ -99,7 +99,7 @@ public final class SensorAttribute extends AbstractModAttribute
 		SetIsOutdated(cur_time - GetCTime() > update_time + TOLERANCE);
 
 		if(IsOutdated()) // if timeout - turns to simply invalid
-			CancelInitialDelay();
+			SetValue(Value.invalid);
 
 		return IsOutdated();
 	}
@@ -120,31 +120,34 @@ public final class SensorAttribute extends AbstractModAttribute
 	}
 
 	@Override
-	public boolean Check()
+	public Value GetValue()
 	{
-		return IsValid() && !IsOutdated() && !IsInitialDelay();
+		if(IsUserValid() && !IsOutdated())
+			return super.GetValue();
+
+		return Value.invalid;
 	}
 
 // ---------------------------
 
-	public void SetValid()
+	public void SetUserValid()
 	{
-		is_valid = true;
+		is_user_valid = true;
 	}
 
-	public void SetInvalid()
+	public void SetUserInvalid()
 	{
-		is_valid = false;
+		is_user_valid = false;
 	}
 
-	public void SetIsValid(boolean is_valid)
+	public void SetIsUserValid(boolean is_valid)
 	{
-		this.is_valid = is_valid;
+		this.is_user_valid = is_valid;
 	}
 
-	public boolean IsValid()
+	public boolean IsUserValid()
 	{
-		return is_valid;
+		return is_user_valid;
 	}
 
 // ---------------------------
@@ -154,7 +157,7 @@ public final class SensorAttribute extends AbstractModAttribute
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
 
-		result.put("is_valid", IsValid());
+		result.put("is_user_valid", IsUserValid());
 		result.put("is_missing", IsOutdated());
 
 		result.put("update_time", update_time);

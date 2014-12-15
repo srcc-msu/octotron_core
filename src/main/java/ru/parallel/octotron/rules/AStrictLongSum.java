@@ -6,12 +6,12 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
-public class AggregateValidCount extends Aggregate
+public class AStrictLongSum extends AStrict
 {
-	public AggregateValidCount(EDependencyType dependency, String... attributes)
+	public AStrictLongSum(EDependencyType dependency, String... attributes)
 	{
 		super(dependency, attributes);
 	}
@@ -19,9 +19,7 @@ public class AggregateValidCount extends Aggregate
 	@Override
 	protected Object Accumulate(Object res, IModelAttribute attribute)
 	{
-		if(attribute.Check())
-			return (Long)res + 1;
-		return res;
+		return (Long)res + attribute.GetLong();
 	}
 
 	@Override

@@ -6,23 +6,26 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
-public class AggregateLongSum extends Aggregate
+public class AStrictMatchCount extends AStrict
 {
-	public AggregateLongSum(EDependencyType dependency, String... attributes)
+	private final Value value;
+
+	public AStrictMatchCount(Object value, EDependencyType dependency, String... attributes)
 	{
 		super(dependency, attributes);
+		this.value = Value.Construct(value);
 	}
 
 	@Override
 	protected Object Accumulate(Object res, IModelAttribute attribute)
 	{
-		if(!attribute.Check())
-			return res;
-
-		return (Long)res + attribute.GetLong();
+		if(attribute.eq(value))
+			return (Long)res + 1;
+		return res;
 	}
 
 	@Override

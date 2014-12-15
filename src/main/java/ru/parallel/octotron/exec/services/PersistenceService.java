@@ -4,7 +4,7 @@ import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.persistence.IPersistenceManager;
 
 import java.util.Collection;

@@ -6,14 +6,13 @@ import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
@@ -42,6 +41,12 @@ public class ComputeTests extends GeneralTest
 			.Sensors(new SensorTemplate("l2", -1, 21L))
 			.Sensors(new SensorTemplate("b1", -1, true))
 			.Sensors(new SensorTemplate("b2", -1, true))
+			.Sensors(new SensorTemplate("d1_inv", -1, 10.0))
+			.Sensors(new SensorTemplate("d2_inv", -1, 11.0))
+			.Sensors(new SensorTemplate("l1_inv", -1, 20L))
+			.Sensors(new SensorTemplate("l2_inv", -1, 21L))
+			.Sensors(new SensorTemplate("b1_inv", -1, true))
+			.Sensors(new SensorTemplate("b2_inv", -1, true))
 			.Sensors(new SensorTemplate("str1", -1, "yes"))
 			.Sensors(new SensorTemplate("str2", -1, "yes"));
 
@@ -56,6 +61,12 @@ public class ComputeTests extends GeneralTest
 			.Sensors(new SensorTemplate("l2", -1, 11L))
 			.Sensors(new SensorTemplate("b1", -1, false))
 			.Sensors(new SensorTemplate("b2", -1, false))
+			.Sensors(new SensorTemplate("d1_inv", -1, 20.0))
+			.Sensors(new SensorTemplate("d2_inv", -1, 21.0))
+			.Sensors(new SensorTemplate("l1_inv", -1, 10L))
+			.Sensors(new SensorTemplate("l2_inv", -1, 11L))
+			.Sensors(new SensorTemplate("b1_inv", -1, false))
+			.Sensors(new SensorTemplate("b2_inv", -1, false))
 			.Sensors(new SensorTemplate("str1", -1, "no"))
 			.Sensors(new SensorTemplate("str2", -1, "no"))
 			.Sensors(new SensorTemplate("mismatch_num", -1, 333L))
@@ -70,6 +81,12 @@ public class ComputeTests extends GeneralTest
 			.Sensors(new SensorTemplate("l2", -1, 3L))
 			.Sensors(new SensorTemplate("b1", -1, true))
 			.Sensors(new SensorTemplate("b2", -1, false))
+			.Sensors(new SensorTemplate("d1_inv", -1, 0.0))
+			.Sensors(new SensorTemplate("d2_inv", -1, 1.0))
+			.Sensors(new SensorTemplate("l1_inv", -1, 2L))
+			.Sensors(new SensorTemplate("l2_inv", -1, 3L))
+			.Sensors(new SensorTemplate("b1_inv", -1, true))
+			.Sensors(new SensorTemplate("b2_inv", -1, false))
 			.Sensors(new SensorTemplate("str1", -1, "maybe"))
 			.Sensors(new SensorTemplate("str2", -1, "maybe"))
 			.Sensors(new SensorTemplate("bt1", -1, true))
@@ -104,78 +121,198 @@ public class ComputeTests extends GeneralTest
 			for(IModelAttribute attr : entity.GetAttributes())
 				if(attr.GetType() == EAttributeType.SENSOR)
 					((SensorAttribute)attr).Update(attr.GetValue());
+
+		// --------------
+
+		for(ModelEntity entity : objects)
+		{
+			entity.GetSensor("d1_inv").SetUserInvalid();
+			entity.GetSensor("d2_inv").SetUserInvalid();
+			entity.GetSensor("l1_inv").SetUserInvalid();
+			entity.GetSensor("l2_inv").SetUserInvalid();
+			entity.GetSensor("b1_inv").SetUserInvalid();
+			entity.GetSensor("b2_inv").SetUserInvalid();
+		}
 	}
 
 	@Test
-	public void TestAggregateDoubleSum() throws Exception
+	public void TestAStrictDoubleSum() throws Exception
 	{
-		AggregateDoubleSum self_rule
-			= new AggregateDoubleSum(EDependencyType.SELF, "d1", "d2");
-		AggregateDoubleSum in_rule
-			= new AggregateDoubleSum(EDependencyType.IN, "d1", "d2");
-		AggregateDoubleSum out_rule
-			= new AggregateDoubleSum(EDependencyType.OUT, "d1", "d2");
-		AggregateDoubleSum all_rule
-			= new AggregateDoubleSum(EDependencyType.ALL, "d1", "d2");
+		AStrictDoubleSum self_rule
+			= new AStrictDoubleSum(EDependencyType.SELF, "d1", "d2");
+		AStrictDoubleSum in_rule
+			= new AStrictDoubleSum(EDependencyType.IN, "d1", "d2");
+		AStrictDoubleSum out_rule
+			= new AStrictDoubleSum(EDependencyType.OUT, "d1", "d2");
+		AStrictDoubleSum all_rule
+			= new AStrictDoubleSum(EDependencyType.ALL, "d1", "d2");
+		AStrictDoubleSum self_wrong_rule
+			= new AStrictDoubleSum(EDependencyType.SELF, "d1", "d2", "d1_inv");
 
 		assertEquals(  1.0, (Double)self_rule.Compute(object), Value.EPSILON);
 		assertEquals( 63.0, (Double)  in_rule.Compute(object), Value.EPSILON);
 		assertEquals(164.0, (Double) out_rule.Compute(object), Value.EPSILON);
 		assertEquals(228.0, (Double) all_rule.Compute(object), Value.EPSILON);
+		assertEquals(Value.invalid,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
-	public void TestAggregateLongSum() throws Exception
+	public void TestAStrictLongSum() throws Exception
 	{
-		AggregateLongSum self_rule
-			= new AggregateLongSum(EDependencyType.SELF, "l1", "l2");
-		AggregateLongSum in_rule
-			= new AggregateLongSum(EDependencyType.IN, "l1", "l2");
-		AggregateLongSum out_rule
-			= new AggregateLongSum(EDependencyType.OUT, "l1", "l2");
-		AggregateLongSum all_rule
-			= new AggregateLongSum(EDependencyType.ALL, "l1", "l2");
+		AStrictLongSum self_rule
+			= new AStrictLongSum(EDependencyType.SELF, "l1", "l2");
+		AStrictLongSum in_rule
+			= new AStrictLongSum(EDependencyType.IN, "l1", "l2");
+		AStrictLongSum out_rule
+			= new AStrictLongSum(EDependencyType.OUT, "l1", "l2");
+		AStrictLongSum all_rule
+			= new AStrictLongSum(EDependencyType.ALL, "l1", "l2");
+		AStrictLongSum self_wrong_rule
+			= new AStrictLongSum(EDependencyType.SELF, "l1", "l2", "l1_inv");
 
 		assertEquals(  5L, self_rule.Compute(object));
 		assertEquals(123L,   in_rule.Compute(object));
 		assertEquals( 84L,  out_rule.Compute(object));
 		assertEquals(212L, all_rule.Compute(object));
+		assertEquals(Value.invalid,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
-	public void TestAggregateMatchCount()
+	public void TestAStrictMatchCount()
 	{
-		AggregateMatchCount self_rule
-			= new AggregateMatchCount(true, EDependencyType.SELF, "b1", "b2");
-		AggregateMatchCount in_rule
-			= new AggregateMatchCount(true, EDependencyType.IN, "b1", "b2");
-		AggregateMatchCount out_rule
-			= new AggregateMatchCount(true, EDependencyType.OUT, "b1", "b2");
-		AggregateMatchCount all_rule
-			= new AggregateMatchCount(true, EDependencyType.ALL, "b1", "b2");
+		AStrictMatchCount self_rule
+			= new AStrictMatchCount(true, EDependencyType.SELF, "b1", "b2");
+		AStrictMatchCount in_rule
+			= new AStrictMatchCount(true, EDependencyType.IN, "b1", "b2");
+		AStrictMatchCount out_rule
+			= new AStrictMatchCount(true, EDependencyType.OUT, "b1", "b2");
+		AStrictMatchCount all_rule
+			= new AStrictMatchCount(true, EDependencyType.ALL, "b1", "b2");
+		AStrictMatchCount self_wrong_rule
+			= new AStrictMatchCount(true, EDependencyType.SELF, "b1", "b2", "b1_inv");
 
 		assertEquals(1L, self_rule.Compute(object));
 		assertEquals(6L,   in_rule.Compute(object));
 		assertEquals(0L,  out_rule.Compute(object));
 		assertEquals(7L,  all_rule.Compute(object));
+		assertEquals(Value.invalid,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
-	public void TestAggregateNotMatchCount()
+	public void TestAStrictNotMatchCount()
 	{
-		AggregateNotMatchCount self_rule
-			= new AggregateNotMatchCount(true, EDependencyType.SELF, "b1", "b2");
-		AggregateNotMatchCount in_rule
-			= new AggregateNotMatchCount(true, EDependencyType.IN, "b1", "b2");
-		AggregateNotMatchCount out_rule
-			= new AggregateNotMatchCount(true, EDependencyType.OUT, "b1", "b2");
-		AggregateNotMatchCount all_rule
-			= new AggregateNotMatchCount(true, EDependencyType.ALL, "b1", "b2");
+		AStrictNotMatchCount self_rule
+			= new AStrictNotMatchCount(true, EDependencyType.SELF, "b1", "b2");
+		AStrictNotMatchCount in_rule
+			= new AStrictNotMatchCount(true, EDependencyType.IN, "b1", "b2");
+		AStrictNotMatchCount out_rule
+			= new AStrictNotMatchCount(true, EDependencyType.OUT, "b1", "b2");
+		AStrictNotMatchCount all_rule
+			= new AStrictNotMatchCount(true, EDependencyType.ALL, "b1", "b2");
+		AStrictNotMatchCount self_wrong_rule
+			= new AStrictNotMatchCount(true, EDependencyType.SELF, "b1", "b2", "b1_inv");
 
 		assertEquals(1L, self_rule.Compute(object));
 		assertEquals(0L,   in_rule.Compute(object));
 		assertEquals(8L,  out_rule.Compute(object));
 		assertEquals(9L,  all_rule.Compute(object));
+		assertEquals(Value.invalid,  self_wrong_rule.Compute(object));
+	}
+
+	@Test
+	public void TestASoftDoubleSum() throws Exception
+	{
+		ASoftDoubleSum self_rule
+			= new ASoftDoubleSum(EDependencyType.SELF, "d1", "d2");
+		ASoftDoubleSum in_rule
+			= new ASoftDoubleSum(EDependencyType.IN, "d1", "d2");
+		ASoftDoubleSum out_rule
+			= new ASoftDoubleSum(EDependencyType.OUT, "d1", "d2");
+		ASoftDoubleSum all_rule
+			= new ASoftDoubleSum(EDependencyType.ALL, "d1", "d2");
+		ASoftDoubleSum self_wrong_rule
+			= new ASoftDoubleSum(EDependencyType.SELF, "d1", "d2_inv");
+
+		assertEquals(  1.0, (Double)self_rule.Compute(object), Value.EPSILON);
+		assertEquals( 63.0, (Double)  in_rule.Compute(object), Value.EPSILON);
+		assertEquals(164.0, (Double) out_rule.Compute(object), Value.EPSILON);
+		assertEquals(228.0, (Double) all_rule.Compute(object), Value.EPSILON);
+		assertEquals(  1.0,  self_wrong_rule.Compute(object));
+	}
+
+	@Test
+	public void TestASoftLongSum() throws Exception
+	{
+		ASoftLongSum self_rule
+			= new ASoftLongSum(EDependencyType.SELF, "l1", "l2");
+		ASoftLongSum in_rule
+			= new ASoftLongSum(EDependencyType.IN, "l1", "l2");
+		ASoftLongSum out_rule
+			= new ASoftLongSum(EDependencyType.OUT, "l1", "l2");
+		ASoftLongSum all_rule
+			= new ASoftLongSum(EDependencyType.ALL, "l1", "l2");
+		ASoftLongSum self_wrong_rule
+			= new ASoftLongSum(EDependencyType.SELF, "l1", "l2_inv");
+
+		assertEquals(  5L, self_rule.Compute(object));
+		assertEquals(123L,   in_rule.Compute(object));
+		assertEquals( 84L,  out_rule.Compute(object));
+		assertEquals(212L, all_rule.Compute(object));
+		assertEquals(  5L,  self_wrong_rule.Compute(object));
+	}
+
+	@Test
+	public void TestASoftMatchCount()
+	{
+		ASoftMatchCount self_rule
+			= new ASoftMatchCount(true, EDependencyType.SELF, "b1", "b2");
+		ASoftMatchCount in_rule
+			= new ASoftMatchCount(true, EDependencyType.IN, "b1", "b2");
+		ASoftMatchCount out_rule
+			= new ASoftMatchCount(true, EDependencyType.OUT, "b1", "b2");
+		ASoftMatchCount all_rule
+			= new ASoftMatchCount(true, EDependencyType.ALL, "b1", "b2");
+		ASoftMatchCount self_wrong_rule
+			= new ASoftMatchCount(true, EDependencyType.SELF, "b1", "b2_inv");
+
+		assertEquals(1L, self_rule.Compute(object));
+		assertEquals(6L,   in_rule.Compute(object));
+		assertEquals(0L,  out_rule.Compute(object));
+		assertEquals(7L,  all_rule.Compute(object));
+		assertEquals(1L,  self_wrong_rule.Compute(object));
+	}
+
+	@Test
+	public void TestASoftNotMatchCount()
+	{
+		ASoftNotMatchCount self_rule
+			= new ASoftNotMatchCount(true, EDependencyType.SELF, "b1", "b2");
+		ASoftNotMatchCount in_rule
+			= new ASoftNotMatchCount(true, EDependencyType.IN, "b1", "b2");
+		ASoftNotMatchCount out_rule
+			= new ASoftNotMatchCount(true, EDependencyType.OUT, "b1", "b2");
+		ASoftNotMatchCount all_rule
+			= new ASoftNotMatchCount(true, EDependencyType.ALL, "b1", "b2");
+		ASoftNotMatchCount self_wrong_rule
+			= new ASoftNotMatchCount(true, EDependencyType.SELF, "b1", "b2_inv");
+
+		assertEquals(1L, self_rule.Compute(object));
+		assertEquals(0L,   in_rule.Compute(object));
+		assertEquals(8L,  out_rule.Compute(object));
+		assertEquals(9L,  all_rule.Compute(object));
+		assertEquals(1L,  self_wrong_rule.Compute(object));
+	}
+
+	@Test
+	public void TestRequireValid()
+	{
+		RequireValid rule1 = new RequireValid(1, 11, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
+		RequireValid rule2 = new RequireValid(2, 12, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
+		RequireValid rule3 = new RequireValid(3, 13, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
+
+		assertEquals(11, rule1.Compute(object));
+		assertEquals(12, rule2.Compute(object));
+		assertEquals(Value.invalid, rule3.Compute(object));
 	}
 
 	@Test

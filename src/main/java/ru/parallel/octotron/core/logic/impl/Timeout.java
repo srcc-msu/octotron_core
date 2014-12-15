@@ -7,8 +7,7 @@
 package ru.parallel.octotron.core.logic.impl;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.attributes.Value;
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;

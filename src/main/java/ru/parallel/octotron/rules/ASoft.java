@@ -6,35 +6,25 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.impl.ObjectRule;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.Arrays;
 
-public abstract class Aggregate extends ObjectRule
+public abstract class ASoft extends ObjectRule
 {
 	private final String[] attributes;
 	private final EDependencyType dependency;
 
-	Aggregate(EDependencyType dependency, String... attributes)
+	ASoft(EDependencyType dependency, String... attributes)
 	{
 		this.dependency = dependency;
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
-	}
-
-	/**
-	 * this type of rules does not require any conditions
-	 * */
-	@Override
-	public boolean CanCompute(VarAttribute var)
-	{
-		return true;
 	}
 
 	// TODO: this is slow, add clone and caching or something
@@ -89,7 +79,7 @@ public abstract class Aggregate extends ObjectRule
 	}
 
 	@Override
-	public final Object Compute(ModelObject object)
+	public Object Compute(ModelObject object)
 	{
 		Object res = GetDefaultValue();
 

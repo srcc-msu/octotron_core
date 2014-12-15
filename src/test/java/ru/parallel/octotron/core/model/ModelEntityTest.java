@@ -4,8 +4,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.GeneralTest;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
@@ -14,7 +14,6 @@ import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
@@ -105,7 +104,7 @@ public class ModelEntityTest extends GeneralTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 		ReactionTemplate reaction = new Equals("test", 1)
 			.Response(new Response(EEventStatus.INFO, "tst#test"));
 
@@ -117,7 +116,7 @@ public class ModelEntityTest extends GeneralTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		List<ReactionTemplate> reactions = new LinkedList<>();
 
@@ -164,7 +163,7 @@ public class ModelEntityTest extends GeneralTest
 	{
 		ModelEntity entity = ModelEntityTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		List<VarTemplate> rules = new LinkedList<>();
 

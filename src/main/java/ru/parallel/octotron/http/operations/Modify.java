@@ -113,7 +113,7 @@ public class Modify
 			for(ModelEntity entity : entities)
 			{
 				SensorAttribute sensor = entity.GetSensor(name);
-				sensor.SetValid();
+				sensor.SetUserValid();
 				controller.update_service.Update(sensor, true);
 			}
 
@@ -141,7 +141,7 @@ public class Modify
 			for(ModelEntity entity : entities)
 			{
 				SensorAttribute sensor = entity.GetSensor(name);
-				sensor.SetInvalid();
+				sensor.SetUserInvalid();
 				controller.update_service.Update(sensor, true);
 			}
 

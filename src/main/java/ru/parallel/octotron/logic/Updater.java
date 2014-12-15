@@ -3,7 +3,7 @@ package ru.parallel.octotron.logic;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.exec.services.ReactionService;
 
 import java.util.Collection;
@@ -46,8 +46,11 @@ public class Updater implements Runnable
 
 			for(VarAttribute var : depend_from_changed)
 			{
-				if(!var.IsInitialDelay() && var.Update())
-					new_changed.add(var);
+				if(!var.IsAllSensorsDefined())
+					continue;
+
+				var.Update();
+				new_changed.add(var);
 			}
 
 			result.addAll(new_changed);
@@ -68,6 +71,7 @@ public class Updater implements Runnable
 			result.add(sensor);
 
 			reaction_service.CheckReactions(result);
+			reaction_service.CheckReaction(sensor.GetTimeoutReaction());
 		}
 	}
 }

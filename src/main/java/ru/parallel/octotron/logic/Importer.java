@@ -8,15 +8,9 @@ package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
-import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.exec.services.ReactionService;
-
-import java.util.Collection;
 
 public class Importer implements Runnable
 {

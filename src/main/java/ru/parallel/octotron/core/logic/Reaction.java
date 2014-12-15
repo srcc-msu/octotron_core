@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelID;
 import ru.parallel.octotron.core.primitive.ELogicalType;
 import ru.parallel.octotron.core.primitive.IPresentable;
@@ -120,7 +120,7 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 	 * */
 	public Response Process()
 	{
-		if(!template.IsInvalidAllowed() && !attribute.Check())
+		if(!template.IsInvalidAllowed() && !attribute.GetValue().IsValid())
 			return null;
 
 		boolean needed = template.ReactionNeeded(attribute);

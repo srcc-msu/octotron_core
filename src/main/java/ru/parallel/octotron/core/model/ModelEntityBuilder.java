@@ -58,7 +58,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		entity.attributes_map.put(name, attribute);
 		entity.const_map.put(name, attribute);
 
-		service.GetUpdateService().RegisterConst(attribute);
+		service.GetPersistenceService().RegisterConst(attribute);
 	}
 
 	public void DeclareConst(ConstTemplate constant)
@@ -74,10 +74,10 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 //------------------------
 
-	public void DeclareSensor(String name, long update_time)
+/*	public void DeclareSensor(String name, long update_time)
 	{
 		DeclareSensor(name, update_time, Value.undefined);
-	}
+	}*/
 
 	public void DeclareSensor(String name, long update_time, Object default_value)
 	{
@@ -96,7 +96,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		entity.attributes_map.put(name, sensor);
 		entity.sensor_map.put(name, sensor);
 
-		service.GetUpdateService().RegisterSensor(sensor);
+		service.GetPersistenceService().RegisterSensor(sensor);
 	}
 
 	public void DeclareSensor(SensorTemplate sensor)
@@ -122,7 +122,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		entity.attributes_map.put(name, var);
 		entity.var_map.put(name, var);
 
-		service.GetUpdateService().RegisterVar(var);
+		service.GetPersistenceService().RegisterVar(var);
 	}
 
 	public void DeclareVar(Iterable<VarTemplate> vars)

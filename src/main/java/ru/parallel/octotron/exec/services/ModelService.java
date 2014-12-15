@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.exec.services;
 
-import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.*;
@@ -84,6 +84,14 @@ public final class ModelService extends Service
 			{
 				attribute.GetBuilder(this).ConnectDependency();
 				persistence_service.persistence_manager.MakeRuleDependency(attribute);
+			}
+		}
+
+		for(ModelObject object : context.model_data.GetAllObjects())
+		{
+			for(VarAttribute attribute : object.GetVar())
+			{
+				attribute.GetBuilder(this).BuildBaseSensorList();
 			}
 		}
 	}
@@ -185,7 +193,7 @@ public final class ModelService extends Service
 		return reactions;
 	}
 
-	public PersistenceService GetUpdateService()
+	public PersistenceService GetPersistenceService()
 	{
 		return persistence_service;
 	}

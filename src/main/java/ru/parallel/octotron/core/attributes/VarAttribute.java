@@ -8,7 +8,6 @@ package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -19,6 +18,9 @@ public final class VarAttribute extends AbstractModAttribute
 {
 	protected final Rule rule;
 	protected final AttributeList<IModelAttribute> i_depend_on = new AttributeList<>();
+
+	protected AttributeList<SensorAttribute> my_base_sensors = new AttributeList<>();
+	protected boolean all_sensors_defined = false;
 
 	@Override
 	public VarAttributeBuilder GetBuilder(ModelService service)
@@ -40,35 +42,33 @@ public final class VarAttribute extends AbstractModAttribute
 		return rule;
 	}
 
-	@Override
-	public final boolean IsInitialDelay()
+	public final boolean IsAllSensorsDefined()
 	{
-		if(!is_initial_delay)
-			return false;
+		if(all_sensors_defined)
+			return true;
 
-		for(IModelAttribute attribute : GetIDependOn())
+		for(IModelAttribute attribute : my_base_sensors)
 		{
-			if(attribute.IsInitialDelay())
-				return true;
+			if(!attribute.GetValue().IsDefined())
+			{
+				all_sensors_defined = false;
+				return false;
+			}
 		}
 
 		// we've got positive for all, cache it for future - it will not change back
-		CancelInitialDelay();
-		return false;
+		all_sensors_defined = true;
+		my_base_sensors.clear();
+		return true;
 	}
 
 	/**
 	 * if sensor check fails, no update will be performed<br>
 	 * in any other case the rule will be computed
 	 * */
-	public boolean Update()
+	public void Update()
 	{
-		if(!Check())
-			return false;
-
 		super.Update(Value.Construct(rule.Compute(GetParent())));
-
-		return true;
 	}
 
 	public Collection<IModelAttribute> GetIDependOn()
@@ -77,8 +77,10 @@ public final class VarAttribute extends AbstractModAttribute
 	}
 
 	@Override
-	public boolean Check()
+	public Value GetValue()
 	{
-		return rule.CanCompute(this) && !IsInitialDelay();
+		if(IsAllSensorsDefined())
+			return super.GetValue();
+		return Value.invalid;
 	}
 }

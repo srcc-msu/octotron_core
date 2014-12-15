@@ -6,15 +6,15 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.Value;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
-public class AggregateNotMatchCount extends Aggregate
+public class ASoftMatchCount extends ASoft
 {
 	private final Value value;
 
-	public AggregateNotMatchCount(Object value, EDependencyType dependency, String... attributes)
+	public ASoftMatchCount(Object value, EDependencyType dependency, String... attributes)
 	{
 		super(dependency, attributes);
 		this.value = Value.Construct(value);
@@ -23,10 +23,7 @@ public class AggregateNotMatchCount extends Aggregate
 	@Override
 	protected Object Accumulate(Object res, IModelAttribute attribute)
 	{
-		if(!attribute.Check())
-			return res;
-
-		if(attribute.ne(value))
+		if(attribute.eq(value))
 			return (Long)res + 1;
 		return res;
 	}
@@ -37,4 +34,3 @@ public class AggregateNotMatchCount extends Aggregate
 		return 0L;
 	}
 }
-

@@ -153,7 +153,7 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 	}
 
 	@Override
-	public final Value GetValue()
+	public Value GetValue()
 	{
 		return value;
 	}

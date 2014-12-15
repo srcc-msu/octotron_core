@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.model;
+package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.attributes.IAttribute;
 import ru.parallel.octotron.core.attributes.IAttributeBuilder;
@@ -11,9 +11,6 @@ import java.util.Collection;
 
 public interface IModelAttribute extends IAttribute
 {
-	boolean IsInitialDelay();
-	boolean Check();
-
 	double GetSpeed();
 	long GetCTime();
 

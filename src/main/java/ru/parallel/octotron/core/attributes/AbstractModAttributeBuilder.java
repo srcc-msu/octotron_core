@@ -27,7 +27,7 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 		Reaction reaction = new Reaction(reaction_template, attribute);
 		attribute.reactions.put(reaction.GetID(), reaction);
 
-		service.GetUpdateService().RegisterReaction(reaction);
+		service.GetPersistenceService().RegisterReaction(reaction);
 	}
 
 	@Override

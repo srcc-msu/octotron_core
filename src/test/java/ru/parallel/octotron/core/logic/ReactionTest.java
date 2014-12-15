@@ -44,7 +44,7 @@ public class ReactionTest
 	{
 		ModelEntity entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		ReactionTemplate reaction_template = new Equals("test", 1);
 
@@ -62,7 +62,7 @@ public class ReactionTest
 	{
 		ModelEntity entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		ReactionTemplate reaction_template1 = new Equals("test", 1);
 		ReactionTemplate reaction_template2 = new Equals("test", 1);
@@ -94,7 +94,7 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1)
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
@@ -124,7 +124,7 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeatable()
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
@@ -153,7 +153,7 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeat(2)
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
@@ -185,7 +185,7 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeat(2).Repeatable()
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
@@ -217,7 +217,7 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1)
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
@@ -249,7 +249,7 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1).Repeatable()
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
@@ -281,7 +281,7 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2)
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));
@@ -316,7 +316,7 @@ public class ReactionTest
 	{
 		ModelObject entity = ReactionTest.obj_factory.Create();
 
-		entity.GetBuilder(model_service).DeclareSensor("test", 0);
+		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
 		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2).Repeatable()
 			.Response(new Response(EEventStatus.INFO, "tst#descr")));

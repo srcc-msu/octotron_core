@@ -80,7 +80,7 @@ public class ExecutionController
 			checker_service.PerformCheck();
 		}
 
-		if(!model_service.GetUpdateService().Update())
+		if(!model_service.GetPersistenceService().Update())
 		{
 			Thread.sleep(1);
 			return;

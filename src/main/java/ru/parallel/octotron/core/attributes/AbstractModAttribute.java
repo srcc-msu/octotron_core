@@ -8,7 +8,6 @@ package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -27,28 +26,9 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 	protected final Map<Long, Reaction> reactions = new HashMap<>();
 	protected final AttributeList<VarAttribute> depend_on_me = new AttributeList<>();
 
-	/**
-	 * tracks if the sensor got at least one value update:
-	 * initially or via Update()
-	 * */
-	protected boolean is_initial_delay = true;
-
 	AbstractModAttribute(EAttributeType type, ModelEntity parent, String name, Value value)
 	{
 		super(type, parent, name, value);
-
-		if(value.IsDefined())
-			CancelInitialDelay();
-	}
-
-	public void CancelInitialDelay()
-	{
-		is_initial_delay = false;
-	}
-
-	public boolean IsInitialDelay()
-	{
-		return is_initial_delay;
 	}
 
 	public abstract AbstractModAttributeBuilder<? extends AbstractModAttribute> GetBuilder(ModelService service);
@@ -94,8 +74,6 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		SetValue(new_value);
 		SetCTime(JavaUtils.GetTimestamp());
 
-		CancelInitialDelay();
-
 		for(Reaction reaction : GetReactions())
 			reaction.Repeat();
 	}
@@ -139,7 +117,6 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 		result.put("name", GetName());
 		result.put("value", GetValue());
 		result.put("ctime", GetCTime());
-		result.put("is_initial_delay", IsInitialDelay());
 
 		return result;
 	}

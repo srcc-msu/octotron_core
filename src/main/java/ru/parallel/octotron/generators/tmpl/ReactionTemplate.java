@@ -8,7 +8,7 @@ package ru.parallel.octotron.generators.tmpl;
 
 import ru.parallel.octotron.core.logic.LogicID;
 import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.primitive.ELogicalType;
 import ru.parallel.octotron.core.primitive.IPresentable;
 

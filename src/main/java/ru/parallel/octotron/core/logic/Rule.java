@@ -8,7 +8,7 @@ package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.services.ModelService;
 
@@ -29,13 +29,4 @@ public abstract class Rule
 	}
 
 	protected abstract AttributeList<IModelAttribute> GetDependency(ModelEntity entity);
-
-	public boolean CanCompute(VarAttribute var)
-	{
-		for(IModelAttribute attribute : var.GetIDependOn())
-			if(!attribute.Check())
-				return false;
-
-		return true;
-	}
 }

@@ -6,7 +6,8 @@
 
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.exec.services.ModelService;
 
 public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribute>
@@ -16,7 +17,7 @@ public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribut
 		super(service, attribute);
 	}
 
-	public void ConnectDependency()
+	public final void ConnectDependency()
 	{
 		for(IModelAttribute dependency
 			: attribute.rule.GetDependency(service, attribute.GetParent()))
@@ -24,5 +25,25 @@ public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribut
 			dependency.GetBuilder(service).AddDependant(attribute);
 			attribute.i_depend_on.add(dependency);
 		}
+	}
+
+	private static final AttributeList<SensorAttribute> GetBaseSensorsList(VarAttribute attribute)
+	{
+		AttributeList<SensorAttribute> result = new AttributeList<>();
+
+		for(IModelAttribute dependency : attribute.i_depend_on)
+		{
+			if(dependency.GetType() == EAttributeType.SENSOR)
+				result.add((SensorAttribute)dependency);
+			else if(dependency.GetType() == EAttributeType.VAR)
+				result.addAll(GetBaseSensorsList((VarAttribute)dependency));
+		}
+
+		return result;
+	}
+
+	public void BuildBaseSensorList()
+	{
+		attribute.my_base_sensors = GetBaseSensorsList(attribute);
 	}
 }

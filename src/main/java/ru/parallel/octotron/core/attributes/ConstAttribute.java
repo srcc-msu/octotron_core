@@ -8,7 +8,6 @@ package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.model.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -67,18 +66,6 @@ public final class ConstAttribute extends AbstractAttribute implements IModelAtt
 			return GetLongRepresentation();
 		else
 			return GetShortRepresentation();
-	}
-
-	@Override
-	public boolean IsInitialDelay()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean Check()
-	{
-		return true;
 	}
 
 	@Override

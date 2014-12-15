@@ -13,7 +13,7 @@ import ru.parallel.octotron.core.graph.impl.GraphLink;
 import ru.parallel.octotron.core.graph.impl.GraphObject;
 import ru.parallel.octotron.core.graph.impl.GraphService;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.model.IModelAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.exec.services.ModelService;
@@ -253,7 +253,7 @@ public class GraphManager implements IPersistenceManager
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = GetObject(attribute);
-			graph_object.UpdateAttribute("is_valid", attribute.IsValid());
+			graph_object.UpdateAttribute("is_valid", attribute.IsUserValid());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
@@ -266,7 +266,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			GraphObject graph_object = GetObject(attribute);
 
-			graph_object.UpdateAttribute("is_valid", attribute.IsValid());
+			graph_object.UpdateAttribute("is_valid", attribute.IsUserValid());
 		}
 	}
 

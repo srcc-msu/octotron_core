@@ -103,7 +103,7 @@ public class Start
 			LOGGER.log(Level.SEVERE, "could not create the model", creation_exception);
 
 			if(model_service != null && model_service.GetMode() == ModelService.EMode.CREATION)
-				model_service.GetUpdateService().Wipe(); // clean neo4j dir on unsuccessful creation
+				model_service.GetPersistenceService().Wipe(); // clean neo4j dir on unsuccessful creation
 			System.exit(1);
 		}
 

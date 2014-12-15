@@ -45,29 +45,19 @@ public class RuntimeService
 		return result;
 	}
 
-	public static List<Map<String, Object>> CheckModTime(Context context, long interval)
+	public static List<Map<String, Object>> CheckModTime(Context context)
 	{
 		List<Map<String, Object>> result = new LinkedList<>();
-
-		long cur_time = JavaUtils.GetTimestamp();
 
 		for(ModelEntity entity : context.model_data.GetAllEntities())
 		{
 			for(SensorAttribute sensor : entity.GetSensor())
 			{
-				long diff = cur_time - sensor.GetCTime();
+				PreparedResponse prepared_response
+					= sensor.GetTimeoutReaction().GetPreparedResponse();
 
-				if(diff > interval)
-				{
-					Map<String, Object> map = new HashMap<>();
-
-					map.put("parent AID", entity.GetID());
-					map.put("sensor name", sensor.GetName());
-					map.put("sensor AID", sensor.GetID());
-					map.put("not changed", diff);
-
-					result.add(map);
-				}
+				if(prepared_response != null)
+					result.add(prepared_response.GetShortRepresentation());
 			}
 		}
 

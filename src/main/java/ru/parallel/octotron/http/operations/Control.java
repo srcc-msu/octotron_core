@@ -52,7 +52,8 @@ public class Control
 		public selftest() {super("selftest", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
+		public TypedString Execute(ExecutionController controller
+			, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.StrictParams(params);
@@ -73,7 +74,8 @@ public class Control
 		public mode() {super("mode", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
+		public TypedString Execute(ExecutionController controller
+			, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.StrictParams(params, "silent");
@@ -98,7 +100,8 @@ public class Control
 		public snapshot() {super("snapshot", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
+		public TypedString Execute(ExecutionController controller
+			, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.AllParams(params, "format");
@@ -106,10 +109,12 @@ public class Control
 
 			if(format == null || format.equals("json") || format.equals("jsonp"))
 			{
-				return AutoFormat.PrintJson(RuntimeService.MakeSnapshot(controller.GetContext().model_data, verbose));
+				return AutoFormat.PrintJson(RuntimeService.MakeSnapshot(
+					controller.GetContext().model_data, verbose));
 			}
 			else if(format.equals("csv"))
-				return new CsvString(RuntimeService.MakeCsvSnapshot(controller.GetContext().model_data));
+				return new CsvString(RuntimeService.MakeCsvSnapshot(
+					controller.GetContext().model_data));
 			else
 				return new ErrorString("unsupported format: " + format);
 		}
@@ -123,7 +128,8 @@ public class Control
 		public stat() {super("stat", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
+		public TypedString Execute(ExecutionController controller
+			, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.AllParams(params);
@@ -141,24 +147,14 @@ public class Control
 		public mod_time() {super("mod_time", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
+		public TypedString Execute(ExecutionController controller
+			, Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Utils.StrictParams(params, "interval");
+			Utils.AllParams(params);
 
-			String value_str = params.get("interval");
-			long interval = Value.ValueFromStr(value_str).GetLong();
-
-			List<Map<String, Object>> result;
-
-			try
-			{
-				result = RuntimeService.CheckModTime(controller.GetContext(), interval);
-			}
-			catch (ExceptionModelFail e)
-			{
-				throw new ExceptionParseError(e);
-			}
+			List<Map<String, Object>> result
+				= RuntimeService.CheckModTime(controller.GetContext());
 
 			return AutoFormat.PrintJson(result);
 		}

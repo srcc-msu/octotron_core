@@ -6,35 +6,31 @@
 
 package ru.parallel.octotron.core.logic.impl;
 
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
 
 import java.util.Map;
 
-public class NotEquals extends ReactionTemplate
+public class Invalid extends ReactionTemplate
 {
-	private final Value check_value;
-
-	public NotEquals(String check_name, Object check_value)
+	public Invalid(String check_name)
 	{
 		super(check_name);
-
-		this.check_value = Value.Construct(check_value);
+		InvalidAllowed();
 	}
 
 	@Override
 	public boolean ReactionNeeded(IModelAttribute attribute)
 	{
-		return attribute.GetValue().IsValid() && attribute.ne(GetCheckValue());
+		return !attribute.GetValue().IsValid();
 	}
 
 	@Override
 	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
-		result.put("condition", "not_equals");
-		result.put("check_value", GetCheckValue());
+		result.put("condition", "invalid");
 
 		return result;
 	}
@@ -43,14 +39,8 @@ public class NotEquals extends ReactionTemplate
 	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = super.GetShortRepresentation();
-		result.put("condition", "not_equals");
-		result.put("check_value", GetCheckValue());
+		result.put("condition", "invalid");
 
 		return result;
-	}
-
-	public final Value GetCheckValue()
-	{
-		return check_value;
 	}
 }

@@ -25,6 +25,7 @@ public class AStrictNotMatchCount extends AStrict
 	{
 		if(attribute.ne(value))
 			return (Long)res + 1;
+
 		return res;
 	}
 

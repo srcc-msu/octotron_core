@@ -19,6 +19,9 @@ public class ASoftDoubleSum extends ASoft
 	@Override
 	protected Object Accumulate(Object res, IModelAttribute attribute)
 	{
+		if(!attribute.GetValue().IsValid())
+			return res;
+
 		return (Double)res + attribute.GetDouble();
 	}
 

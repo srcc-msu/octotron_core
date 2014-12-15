@@ -231,7 +231,7 @@ public class ComputeTests extends GeneralTest
 		ASoftDoubleSum all_rule
 			= new ASoftDoubleSum(EDependencyType.ALL, "d1", "d2");
 		ASoftDoubleSum self_wrong_rule
-			= new ASoftDoubleSum(EDependencyType.SELF, "d1", "d2_inv");
+			= new ASoftDoubleSum(EDependencyType.SELF, "d1_inv", "d2");
 
 		assertEquals(  1.0, (Double)self_rule.Compute(object), Value.EPSILON);
 		assertEquals( 63.0, (Double)  in_rule.Compute(object), Value.EPSILON);
@@ -258,7 +258,7 @@ public class ComputeTests extends GeneralTest
 		assertEquals(123L,   in_rule.Compute(object));
 		assertEquals( 84L,  out_rule.Compute(object));
 		assertEquals(212L, all_rule.Compute(object));
-		assertEquals(  5L,  self_wrong_rule.Compute(object));
+		assertEquals(  2L,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
@@ -300,18 +300,18 @@ public class ComputeTests extends GeneralTest
 		assertEquals(0L,   in_rule.Compute(object));
 		assertEquals(8L,  out_rule.Compute(object));
 		assertEquals(9L,  all_rule.Compute(object));
-		assertEquals(1L,  self_wrong_rule.Compute(object));
+		assertEquals(0L,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
 	public void TestRequireValid()
 	{
-		RequireValid rule1 = new RequireValid(1, 11, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
-		RequireValid rule2 = new RequireValid(2, 12, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
-		RequireValid rule3 = new RequireValid(3, 13, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
+		RequireSomeValid rule1 = new RequireSomeValid(1, 11, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
+		RequireSomeValid rule2 = new RequireSomeValid(2, true, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
+		RequireSomeValid rule3 = new RequireSomeValid(3, "ok", EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
 
 		assertEquals(11, rule1.Compute(object));
-		assertEquals(12, rule2.Compute(object));
+		assertEquals(true, rule2.Compute(object));
 		assertEquals(Value.invalid, rule3.Compute(object));
 	}
 
@@ -348,10 +348,10 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestLogicalAnd()
 	{
-		LogicalAnd rule1 = new LogicalAnd("bt1", "bt2");
-		LogicalAnd rule2 = new LogicalAnd("bt1", "bt2", "bf1");
-		LogicalAnd rule3 = new LogicalAnd("bf2");
-		LogicalAnd rule4 = new LogicalAnd("bf1", "bf2");
+		SoftLogicalAnd rule1 = new SoftLogicalAnd("bt1", "bt2");
+		SoftLogicalAnd rule2 = new SoftLogicalAnd("bt1", "bt2", "bf1");
+		SoftLogicalAnd rule3 = new SoftLogicalAnd("bf2");
+		SoftLogicalAnd rule4 = new SoftLogicalAnd("bf1", "bf2");
 
 		assertEquals(true , rule1.Compute(object));
 		assertEquals(false, rule2.Compute(object));
@@ -362,10 +362,10 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestLogicalOr()
 	{
-		LogicalOr rule1 = new LogicalOr("bt1", "bt2");
-		LogicalOr rule2 = new LogicalOr("bt1", "bt2", "bf1");
-		LogicalOr rule3 = new LogicalOr("bt1");
-		LogicalOr rule4 = new LogicalOr("bf1", "bf2");
+		SoftLogicalOr rule1 = new SoftLogicalOr("bt1", "bt2");
+		SoftLogicalOr rule2 = new SoftLogicalOr("bt1", "bt2", "bf1");
+		SoftLogicalOr rule3 = new SoftLogicalOr("bt1");
+		SoftLogicalOr rule4 = new SoftLogicalOr("bf1", "bf2");
 
 		assertEquals(true , rule1.Compute(object));
 		assertEquals(true , rule2.Compute(object));

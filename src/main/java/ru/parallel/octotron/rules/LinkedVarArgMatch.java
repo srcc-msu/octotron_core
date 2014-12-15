@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.impl.LinkRule;
 import ru.parallel.octotron.core.attributes.IModelAttribute;
@@ -36,6 +37,9 @@ public class LinkedVarArgMatch extends LinkRule
 	{
 		IModelAttribute target_attr = link.Target().GetAttribute(check_attribute);
 		IModelAttribute source_attr = link.Source().GetAttribute(check_attribute);
+
+		if(!target_attr.GetValue().IsValid() || !source_attr.GetValue().IsValid())
+			return Value.invalid;
 
 		return target_attr.eq(source_attr.GetValue());
 	}

@@ -25,6 +25,7 @@ public class AStrictMatchCount extends AStrict
 	{
 		if(attribute.eq(value))
 			return (Long)res + 1;
+
 		return res;
 	}
 

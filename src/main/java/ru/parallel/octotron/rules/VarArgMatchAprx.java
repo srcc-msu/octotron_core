@@ -42,6 +42,9 @@ public class VarArgMatchAprx extends Rule
 		IModelAttribute attr = entity.GetAttribute(check_attribute);
 		IModelAttribute match_attr = entity.GetAttribute(match_attribute);
 
+		if(!attr.GetValue().IsValid() || !match_attr.GetValue().IsValid())
+			return Value.invalid;
+
 		return attr.aeq(match_attr.GetValue(), aprx);
 	}
 

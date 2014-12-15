@@ -38,6 +38,9 @@ public class NotMatch extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(param);
 
+		if(!attr.GetValue().IsValid())
+			return Value.invalid;
+
 		return attr.ne(match_value);
 	}
 

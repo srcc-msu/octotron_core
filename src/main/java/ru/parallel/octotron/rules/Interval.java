@@ -44,6 +44,9 @@ public class Interval extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(param);
 
+		if(!attr.GetValue().IsValid())
+			return Value.invalid;
+
 		long result = 0;
 
 		for(Value threshold : thresholds)

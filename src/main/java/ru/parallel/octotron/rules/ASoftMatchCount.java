@@ -23,8 +23,12 @@ public class ASoftMatchCount extends ASoft
 	@Override
 	protected Object Accumulate(Object res, IModelAttribute attribute)
 	{
+		if(!attribute.GetValue().IsValid())
+			return res;
+
 		if(attribute.eq(value))
 			return (Long)res + 1;
+
 		return res;
 	}
 

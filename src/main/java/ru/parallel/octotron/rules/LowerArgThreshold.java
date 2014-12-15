@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.attributes.IModelAttribute;
@@ -36,8 +37,12 @@ public class LowerArgThreshold extends Rule
 	public Object Compute(ModelEntity entity)
 	{
 		IModelAttribute attr = entity.GetAttribute(param);
+		IModelAttribute cmp = entity.GetAttribute(arg_threshold);
 
-		return attr.gt(entity.GetAttribute(arg_threshold).GetValue());
+		if(!attr.GetValue().IsValid() || !cmp.GetValue().IsValid())
+			return Value.invalid;
+
+		return attr.gt(cmp.GetValue());
 	}
 
 }

@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.attributes.IModelAttribute;
@@ -36,6 +37,9 @@ public class ToPct extends Rule
 	public Object Compute(ModelEntity entity)
 	{
 		IModelAttribute attr = entity.GetAttribute(measured_attribute);
+
+		if(!attr.GetValue().IsValid())
+			return Value.invalid;
 
 		return (long)(attr.ToDouble() * 100.0 / max_value);
 	}

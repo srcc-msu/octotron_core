@@ -6,23 +6,21 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class MatchAprx extends Rule
-{
-	private final String check_attribute;
-	private final Value match_value;
-	private final Value aprx;
+import java.util.Arrays;
 
-	public MatchAprx(String check_attribute, Object match_value, Object aprx)
+public class StrictLogicalAnd extends Rule
+{
+	private final String[] attributes;
+
+	public StrictLogicalAnd(String... attributes)
 	{
-		this.check_attribute = check_attribute;
-		this.match_value = Value.Construct(match_value);
-		this.aprx = Value.Construct(aprx);
+		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
 	@Override
@@ -30,7 +28,8 @@ public class MatchAprx extends Rule
 	{
 		AttributeList<IModelAttribute> result = new AttributeList<>();
 
-		result.add(entity.GetAttribute(check_attribute));
+		for(String attr_name : attributes)
+			result.add(entity.GetAttribute(attr_name));
 
 		return result;
 	}
@@ -38,12 +37,19 @@ public class MatchAprx extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		IModelAttribute attr = entity.GetAttribute(check_attribute);
+		boolean res = true;
 
-		if(!attr.GetValue().IsValid())
-			return Value.invalid;
+		for(String attr_name : attributes)
+		{
+			IModelAttribute attr = entity.GetAttribute(attr_name);
 
-		return attr.aeq(match_value, aprx);
+			if(!attr.GetValue().IsValid())
+				return Value.invalid;
+
+			res = res & attr.GetBoolean();
+		}
+
+		return res;
 	}
 
 }

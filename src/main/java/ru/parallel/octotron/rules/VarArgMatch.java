@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.attributes.IModelAttribute;
@@ -38,6 +39,9 @@ public class VarArgMatch extends Rule
 	{
 		IModelAttribute attr = entity.GetAttribute(check_attribute);
 		IModelAttribute match_attr = entity.GetAttribute(match_attribute);
+
+		if(!attr.GetValue().IsValid() || !match_attr.GetValue().IsValid())
+			return Value.invalid;
 
 		return attr.eq(match_attr.GetValue());
 	}

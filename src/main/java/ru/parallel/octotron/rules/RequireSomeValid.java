@@ -4,12 +4,12 @@ import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
-public class RequireValid extends ASoftValidCount
+public class RequireSomeValid extends AValidCount
 {
 	private final long count;
 	private final Object return_value;
 
-	public RequireValid(long count, Object return_value, EDependencyType dependency, String... attributes)
+	public RequireSomeValid(long count, Object return_value, EDependencyType dependency, String... attributes)
 	{
 		super(dependency, attributes);
 		this.count = count;

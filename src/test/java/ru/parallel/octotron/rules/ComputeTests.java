@@ -304,7 +304,7 @@ public class ComputeTests extends GeneralTest
 	}
 
 	@Test
-	public void TestRequireValid()
+	public void TestRequireSomeValid()
 	{
 		RequireSomeValid rule1 = new RequireSomeValid(1, 11, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
 		RequireSomeValid rule2 = new RequireSomeValid(2, true, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");

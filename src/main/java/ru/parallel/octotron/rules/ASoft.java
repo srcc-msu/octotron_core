@@ -60,7 +60,7 @@ public abstract class ASoft extends ObjectRule
 	}
 
 	@Override
-	public final AttributeList<IModelAttribute> GetDependency(ModelObject object)
+	public AttributeList<IModelAttribute> GetDependency(ModelObject object)
 	{
 		AttributeList<IModelAttribute> result = new AttributeList<>();
 

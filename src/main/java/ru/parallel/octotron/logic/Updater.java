@@ -46,7 +46,7 @@ public class Updater implements Runnable
 
 			for(VarAttribute var : depend_from_changed)
 			{
-				if(!var.IsAllSensorsDefined())
+				if(!var.AreDepsDefined())
 					continue;
 
 				var.Update();

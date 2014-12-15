@@ -57,7 +57,7 @@ public final class SensorAttribute extends AbstractModAttribute
 					.Response(new Response(EEventStatus.INFO)
 						.Msg("tag", "TIMEOUT")
 						.Msg("descr", "sensor value has not been updated in required time")
-						.Msg("loc", "AID = {AID}")
+						.Msg("loc", "AID : {AID}")
 						.Msg("msg", "sensor(" + GetName() + ") value has not been updated in required time")
 						.Exec("on_info"))
 				, this);

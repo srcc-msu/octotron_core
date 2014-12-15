@@ -86,14 +86,6 @@ public final class ModelService extends Service
 				persistence_service.persistence_manager.MakeRuleDependency(attribute);
 			}
 		}
-
-		for(ModelObject object : context.model_data.GetAllObjects())
-		{
-			for(VarAttribute attribute : object.GetVar())
-			{
-				attribute.GetBuilder(this).BuildBaseSensorList();
-			}
-		}
 	}
 
 // ---------------------

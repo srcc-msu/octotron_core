@@ -19,8 +19,7 @@ public final class VarAttribute extends AbstractModAttribute
 	protected final Rule rule;
 	protected final AttributeList<IModelAttribute> i_depend_on = new AttributeList<>();
 
-	protected AttributeList<SensorAttribute> my_base_sensors = new AttributeList<>();
-	protected boolean all_sensors_defined = false;
+	protected boolean deps_defined = false;
 
 	@Override
 	public VarAttributeBuilder GetBuilder(ModelService service)
@@ -42,23 +41,22 @@ public final class VarAttribute extends AbstractModAttribute
 		return rule;
 	}
 
-	public final boolean IsAllSensorsDefined()
+	public final boolean AreDepsDefined()
 	{
-		if(all_sensors_defined)
+		if(deps_defined)
 			return true;
 
-		for(IModelAttribute attribute : my_base_sensors)
+		for(IModelAttribute attribute : i_depend_on)
 		{
 			if(!attribute.GetValue().IsDefined())
 			{
-				all_sensors_defined = false;
+				deps_defined = false;
 				return false;
 			}
 		}
 
 		// we've got positive for all, cache it for future - it will not change back
-		all_sensors_defined = true;
-		my_base_sensors.clear();
+		deps_defined = true;
 		return true;
 	}
 
@@ -74,13 +72,5 @@ public final class VarAttribute extends AbstractModAttribute
 	public Collection<IModelAttribute> GetIDependOn()
 	{
 		return i_depend_on;
-	}
-
-	@Override
-	public Value GetValue()
-	{
-		if(IsAllSensorsDefined())
-			return super.GetValue();
-		return Value.invalid;
 	}
 }

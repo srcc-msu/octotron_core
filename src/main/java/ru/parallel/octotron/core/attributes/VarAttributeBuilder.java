@@ -41,9 +41,4 @@ public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribut
 
 		return result;
 	}
-
-	public void BuildBaseSensorList()
-	{
-		attribute.my_base_sensors = GetBaseSensorsList(attribute);
-	}
 }

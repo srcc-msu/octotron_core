@@ -230,7 +230,7 @@ public class GlobalSettings
 		return threads;
 	}
 
-	public String GetScriptByKey(String key)
+	public String GetScriptByKeyOrNull(String key)
 	{
 		return script_map.get(key);
 	}

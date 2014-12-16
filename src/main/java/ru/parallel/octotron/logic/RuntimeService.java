@@ -7,18 +7,20 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.exec.services.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.exec.services.ModelService;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.exec.services.ModelData;
 import ru.parallel.octotron.reactions.PreparedResponse;
-import ru.parallel.utils.JavaUtils;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,7 +56,7 @@ public class RuntimeService
 			for(SensorAttribute sensor : entity.GetSensor())
 			{
 				PreparedResponse prepared_response
-					= sensor.GetTimeoutReaction().GetPreparedResponse();
+					= sensor.GetTimeoutReaction().GetPreparedResponseOrNull();
 
 				if(prepared_response != null)
 					result.add(prepared_response.GetShortRepresentation());

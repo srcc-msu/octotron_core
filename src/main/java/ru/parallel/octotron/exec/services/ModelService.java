@@ -9,7 +9,9 @@ package ru.parallel.octotron.exec.services;
 import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.model.*;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.persistence.GhostManager;
 import ru.parallel.octotron.core.persistence.GraphManager;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -69,9 +71,9 @@ public final class ModelService extends Service
 
 	public void Operate()
 	{
-		MakeRuleDependency();
-
 		InitSelfTest(this);
+
+		MakeRuleDependency();
 
 		mode = EMode.OPERATION;
 	}

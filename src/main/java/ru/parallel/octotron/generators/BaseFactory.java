@@ -7,11 +7,10 @@
 package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.exec.services.ModelService;
-
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.generators.tmpl.VarTemplate;
 
 import java.util.Arrays;
 import java.util.LinkedList;

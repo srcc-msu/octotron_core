@@ -4,7 +4,6 @@ import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.impl.Equals;
-
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.rules.CalcSpeed;

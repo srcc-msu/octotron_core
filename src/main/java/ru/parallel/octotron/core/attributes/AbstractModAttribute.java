@@ -9,8 +9,8 @@ package ru.parallel.octotron.core.attributes;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Collection;

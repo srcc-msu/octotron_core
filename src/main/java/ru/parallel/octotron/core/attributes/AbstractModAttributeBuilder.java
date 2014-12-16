@@ -7,8 +7,8 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.exec.services.ModelService;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 
 public class AbstractModAttributeBuilder<T extends AbstractModAttribute> implements IAttributeBuilder
 {

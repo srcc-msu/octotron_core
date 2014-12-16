@@ -2,10 +2,7 @@ package ru.parallel.octotron.core.model;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import ru.parallel.octotron.GeneralTest;
-import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;

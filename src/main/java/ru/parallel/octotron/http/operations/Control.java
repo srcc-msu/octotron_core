@@ -7,7 +7,6 @@
 package ru.parallel.octotron.http.operations;
 
 import ru.parallel.octotron.core.attributes.Value;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.impl.FormattedOperation;

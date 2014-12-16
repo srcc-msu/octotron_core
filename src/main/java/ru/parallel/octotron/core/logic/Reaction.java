@@ -118,7 +118,7 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 	 * updates reaction state and returns the response required for now
 	 * next call may have different response
 	 * */
-	public Response Process()
+	public Response ProcessOrNull()
 	{
 		if(!template.IsInvalidAllowed() && !attribute.GetValue().IsValid())
 			return null;
@@ -139,7 +139,7 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 					IncGlobalStat();
 					SetState(State.EXECUTED);
 
-					result = template.GetResponse();
+					result = template.GetResponseOrNull();
 				}
 				else
 				{
@@ -155,7 +155,7 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 					IncGlobalStat();
 					SetState(State.EXECUTED);
 
-					result =  template.GetResponse();
+					result =  template.GetResponseOrNull();
 				}
 				else
 				{
@@ -167,7 +167,7 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 				if(template.IsRepeatable())
 				{
 					IncGlobalStat();
-					result = template.GetResponse();
+					result = template.GetResponseOrNull();
 				}
 				else
 				{
@@ -193,8 +193,8 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 				DropDelay();
 				DropRepeat();
 
-				if(template.GetRecoverResponse() != null)
-					result = template.GetRecoverResponse();
+				if(template.GetRecoverResponseOrNull() != null)
+					result = template.GetRecoverResponseOrNull();
 			}
 		}
 
@@ -247,7 +247,7 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 		prepared_response = new_prepared_response;
 	}
 
-	public PreparedResponse GetPreparedResponse()
+	public PreparedResponse GetPreparedResponseOrNull()
 	{
 		return prepared_response;
 	}

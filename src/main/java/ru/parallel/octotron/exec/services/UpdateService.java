@@ -71,7 +71,7 @@ public class UpdateService extends Service
 	public void UnknownImport(ModelEntity target, String name, Value value)
 		throws ExceptionSystemError
 	{
-		String script = context.settings.GetScriptByKey("on_new_attribute");
+		String script = context.settings.GetScriptByKeyOrNull("on_new_attribute");
 
 		try
 		{

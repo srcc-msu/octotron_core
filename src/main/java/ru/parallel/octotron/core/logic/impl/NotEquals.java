@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.core.logic.impl;
 
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
 
 import java.util.Map;
 

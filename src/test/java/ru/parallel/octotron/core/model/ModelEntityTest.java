@@ -6,16 +6,15 @@ import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.primitive.EEventStatus;
-
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
+import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
 
 import java.util.LinkedList;

@@ -14,8 +14,8 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
@@ -274,7 +274,7 @@ public class Start
 	private static void ProcessStart(Context context)
 		throws ExceptionSystemError
 	{
-		String script = context.settings.GetScriptByKey("on_start");
+		String script = context.settings.GetScriptByKeyOrNull("on_start");
 
 		if(script != null)
 			FileUtils.ExecSilent(script);
@@ -286,7 +286,7 @@ public class Start
 	private static void ProcessFinish(Context context)
 		throws ExceptionSystemError
 	{
-		String script = context.settings.GetScriptByKey("on_finish");
+		String script = context.settings.GetScriptByKeyOrNull("on_finish");
 
 		if(script != null)
 			FileUtils.ExecSilent(script);
@@ -322,7 +322,7 @@ public class Start
 
 		try
 		{
-			String script = context.settings.GetScriptByKey("on_crash");
+			String script = context.settings.GetScriptByKeyOrNull("on_crash");
 
 			if(script != null)
 				FileUtils.ExecSilent(script, error_fname);

@@ -12,7 +12,6 @@ import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.exec.services.ModelData;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -20,6 +19,7 @@ import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.exec.services.ModelData;
 import ru.parallel.octotron.http.path.ParsedPath;
 import ru.parallel.octotron.http.path.PathParser;
 import ru.parallel.utils.JavaUtils;
@@ -110,7 +110,7 @@ public class PreparedResponseFactory
 		{
 			String key = command[0];
 
-			String actual_name = context.settings.GetScriptByKey(key);
+			String actual_name = context.settings.GetScriptByKeyOrNull(key);
 
 			if(actual_name == null)
 				throw new ExceptionModelFail("there is no script with key: " + key);

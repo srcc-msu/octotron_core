@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exec.services.ModelService;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 
 public class ConstAttributeBuilder implements IAttributeBuilder
 {

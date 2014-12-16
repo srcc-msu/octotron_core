@@ -9,7 +9,6 @@ package ru.parallel.octotron.logic;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
-
 import ru.parallel.octotron.exec.services.ReactionService;
 
 public class Importer implements Runnable
@@ -34,6 +33,7 @@ public class Importer implements Runnable
 	public void run()
 	{
 		SensorAttribute sensor = entity.GetSensor(name);
+
 		sensor.Update(value);
 
 		new Updater(reaction_service, sensor, true).run();

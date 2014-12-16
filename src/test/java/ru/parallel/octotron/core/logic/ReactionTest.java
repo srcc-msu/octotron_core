@@ -104,18 +104,18 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(sensor.GetReactions(), 0);
 
-		reaction.Process();
+		reaction.ProcessOrNull();
 
-		assertNull(reaction.Process());
-
-		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
+
+		sensor.Update(1L);
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(2L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 	}
 
 
@@ -134,18 +134,18 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(sensor.GetReactions(), 0);
 
-		reaction.Process();
+		reaction.ProcessOrNull();
 
-		assertNull(reaction.Process());
-
-		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
+
+		sensor.Update(1L);
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
 
 		sensor.Update(2L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 	}
 
 	@Test
@@ -163,21 +163,21 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(sensor.GetReactions(), 0);
 
-		reaction.Process();
+		reaction.ProcessOrNull();
 
-		assertNull(reaction.Process());
-
-		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
+
+		sensor.Update(1L);
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(2L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 	}
 
 	@Test
@@ -195,21 +195,21 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(sensor.GetReactions(), 0);
 
-		reaction.Process();
+		reaction.ProcessOrNull();
 
-		assertNull(reaction.Process());
-
-		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
+
+		sensor.Update(1L);
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
 
 		sensor.Update(2L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 	}
 
 	@Test
@@ -227,21 +227,21 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(sensor.GetReactions(), 0);
 
-		reaction.Process();
+		reaction.ProcessOrNull();
 
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		Thread.sleep(1500);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
 
 		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(2L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 	}
 
 	@Test
@@ -259,21 +259,21 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(sensor.GetReactions(), 0);
 
-		reaction.Process();
+		reaction.ProcessOrNull();
 
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		Thread.sleep(1500);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
 
 		sensor.Update(2L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 	}
 
 	@Test
@@ -291,24 +291,24 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(sensor.GetReactions(), 0);
 
-		reaction.Process();
+		reaction.ProcessOrNull();
 
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		Thread.sleep(1500);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
 
 		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(2L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 	}
 
 	@Test
@@ -326,23 +326,23 @@ public class ReactionTest
 		Reaction reaction
 			= Iterables.get(sensor.GetReactions(), 0);
 
-		reaction.Process();
+		reaction.ProcessOrNull();
 
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		Thread.sleep(1500);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
 
 		sensor.Update(1L);
-		assertEquals("descr", reaction.Process().GetMessages().get("tst"));
+		assertEquals("descr", reaction.ProcessOrNull().GetMessages().get("tst"));
 
 		sensor.Update(2L);
-		assertNull(reaction.Process());
+		assertNull(reaction.ProcessOrNull());
 	}
 }

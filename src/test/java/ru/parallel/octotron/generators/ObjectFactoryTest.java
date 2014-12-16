@@ -4,8 +4,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-
-import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 
 import static org.junit.Assert.assertEquals;

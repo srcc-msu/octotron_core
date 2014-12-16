@@ -10,13 +10,11 @@ import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
-
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.impl.ModelOperation;
-import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TextString;
 import ru.parallel.utils.format.TypedString;
 
@@ -45,9 +43,6 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			if(target.GetSensor(name) == null)
-				return new ErrorString("sensor does not exist: " + name);
-
 			controller.update_service.Import(target, name, value);
 
 			return new TextString("added to import queue");
@@ -75,7 +70,7 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			if(target.GetSensor(name) == null)
+			if(target.GetSensorOrNull(name) == null)
 			{
 				try
 				{

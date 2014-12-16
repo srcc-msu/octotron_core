@@ -8,10 +8,9 @@ package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.core.primitive.EDependencyType;
-
 import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.rules.AStrictLongSum;
 
 public class SelfTest
@@ -31,7 +30,7 @@ public class SelfTest
 		obj2.GetBuilder(model_service).DeclareConst("type", "_selftest");
 		obj2.GetBuilder(model_service).DeclareVar("check", new AStrictLongSum(EDependencyType.ALL, "test_iteration"));
 
-		obj1.GetSensor("test_iteration").GetBuilder(model_service).AddDependant(obj2.GetVar("check"));
+		obj1.GetSensor("test_iteration").GetBuilder(model_service).AddDependant(obj2.GetVarOrNull("check"));
 
 		model_service.AddLink(obj1, obj2);
 	}

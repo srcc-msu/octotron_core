@@ -8,7 +8,6 @@ package ru.parallel.octotron.http.path;
 
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelList;
-
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 import java.util.HashMap;
@@ -60,7 +59,7 @@ public final class PathParser
 /**
  * parse SimpleAttribute from string "<name><op><value>"<br>
  * */
-	public static PathOperations.Query AttrFromString(String str)
+	public static PathOperations.Query AttrFromStringOrNull(String str)
 		throws ExceptionParseError
 	{
 		if(str.length() == 0)
@@ -108,7 +107,7 @@ public final class PathParser
 
 		for(String attr : attrs)
 		{
-			result.add(AttrFromString(attr.replaceAll("\\s", ""))); // whitespace characters
+			result.add(AttrFromStringOrNull(attr.replaceAll("\\s", ""))); // whitespace characters
 		}
 
 		return result;

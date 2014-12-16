@@ -6,9 +6,8 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.services.ModelService;
 

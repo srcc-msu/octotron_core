@@ -6,10 +6,9 @@
 
 package ru.parallel.octotron.http.operations;
 
-import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
-
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 import java.util.*;

@@ -1,9 +1,9 @@
 package ru.parallel.octotron.logic;
 
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.exec.services.ReactionService;
 
 import java.util.Collection;

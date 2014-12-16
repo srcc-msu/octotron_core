@@ -97,9 +97,19 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 // ----------------
 
-	public ConstAttribute GetConst(String name)
+	public ConstAttribute GetConstOrNull(String name)
 	{
 		return const_map.get(name);
+	}
+
+	public ConstAttribute GetConst(String name)
+	{
+		ConstAttribute attribute = GetConstOrNull(name);
+
+		if(attribute == null)
+			throw new ExceptionModelFail("const not found: " + name);
+
+		return attribute;
 	}
 
 	public Collection<ConstAttribute> GetConst()
@@ -109,10 +119,21 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 // ----------------
 
-	public SensorAttribute GetSensor(String name)
+	public SensorAttribute GetSensorOrNull(String name)
 	{
 		return sensor_map.get(name);
 	}
+
+	public SensorAttribute GetSensor(String name)
+	{
+		SensorAttribute attribute = GetSensorOrNull(name);
+
+		if(attribute == null)
+			throw new ExceptionModelFail("sensor not found: " + name);
+
+		return attribute;
+	}
+
 
 	public Collection<SensorAttribute> GetSensor()
 	{
@@ -121,9 +142,19 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 // ----------------
 
-	public VarAttribute GetVar(String name)
+	public VarAttribute GetVarOrNull(String name)
 	{
 		return var_map.get(name);
+	}
+
+	public VarAttribute GetVar(String name)
+	{
+		VarAttribute attribute = GetVarOrNull(name);
+
+		if(attribute == null)
+			throw new ExceptionModelFail("var not found: " + name);
+
+		return attribute;
 	}
 
 	public Collection<VarAttribute> GetVar()
@@ -139,7 +170,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		{
 			for(Reaction reaction : attribute.GetReactions())
 			{
-				PreparedResponse prepared_response = reaction.GetPreparedResponse();
+				PreparedResponse prepared_response = reaction.GetPreparedResponseOrNull();
 
 				if(prepared_response != null && prepared_response.GetResponse().GetStatus() != EEventStatus.RECOVER)
 					result.add(prepared_response);

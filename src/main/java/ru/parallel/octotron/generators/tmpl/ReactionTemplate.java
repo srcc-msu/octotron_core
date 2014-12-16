@@ -6,9 +6,9 @@
 
 package ru.parallel.octotron.generators.tmpl;
 
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.logic.LogicID;
 import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.primitive.ELogicalType;
 import ru.parallel.octotron.core.primitive.IPresentable;
 
@@ -45,12 +45,12 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 
 //----------------
 
-	public final Response GetResponse()
+	public final Response GetResponseOrNull()
 	{
 		return response;
 	}
 
-	public final Response GetRecoverResponse()
+	public final Response GetRecoverResponseOrNull()
 	{
 		return recover_response;
 	}

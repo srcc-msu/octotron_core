@@ -12,8 +12,6 @@ import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
 
-import static org.junit.Assert.assertEquals;
-
 //they do not work because invalid or wrong ctime, need to fix somehow
 public class ComplexComputeTest extends GeneralTest
 {

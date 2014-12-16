@@ -1,8 +1,5 @@
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.attributes.IAttribute;
-import ru.parallel.octotron.core.attributes.IAttributeBuilder;
-import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.exec.services.ModelService;

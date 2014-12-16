@@ -1,7 +1,6 @@
 package ru.parallel.octotron.http.requests;
 
 import org.junit.Test;
-
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 
 import static org.junit.Assert.fail;

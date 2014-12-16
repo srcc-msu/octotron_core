@@ -22,11 +22,16 @@ public class CheckedInterval extends Interval // does it smell?
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		long result = (long) super.Compute(entity);
+		Object result = super.Compute(entity);
 
-		if(result == 0 || result >= thresholds.length)
+		if(result.equals(Value.invalid))
 			return Value.invalid;
 
-		return result;
+		long interval = (Long)result;
+
+		if(interval == 0 || interval >= thresholds.length)
+			return Value.invalid;
+
+		return interval;
 	}
 }

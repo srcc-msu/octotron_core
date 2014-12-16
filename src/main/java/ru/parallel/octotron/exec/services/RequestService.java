@@ -17,7 +17,7 @@ public class RequestService extends Service
 	/**
 	 * processes all non-import operations
 	 * */
-	private ThreadPoolExecutor request_executor;
+	private final ThreadPoolExecutor request_executor;
 	private final ExecutionController execution_controller;
 
 	public RequestService(Context context, ExecutionController execution_controller)

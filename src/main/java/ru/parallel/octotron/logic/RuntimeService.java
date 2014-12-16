@@ -88,7 +88,7 @@ public class RuntimeService
 				version.put(pair[0], pair[1]);
 			}
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}
@@ -98,7 +98,7 @@ public class RuntimeService
 			{
 				reader.close();
 			}
-			catch (IOException e)
+			catch(IOException e)
 			{
 				LOGGER.log(Level.WARNING, "failed to close the version file");
 			}

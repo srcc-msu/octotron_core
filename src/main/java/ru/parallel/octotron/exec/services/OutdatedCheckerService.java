@@ -15,7 +15,7 @@ public class OutdatedCheckerService extends Service
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	static Object lock = new Object();
+	static private final Object lock = new Object();
 
 	private final UpdateService update_service;
 

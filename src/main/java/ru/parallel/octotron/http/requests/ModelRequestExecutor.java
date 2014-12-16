@@ -76,7 +76,7 @@ public class ModelRequestExecutor implements Runnable
 			{
 				exchange.Finish(result);
 			}
-			catch (IOException error)
+			catch(IOException error)
 			{
 				LOGGER.log(Level.WARNING, "could not finish request: ", error);
 			}

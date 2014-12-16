@@ -26,19 +26,4 @@ public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribut
 			attribute.i_depend_on.add(dependency);
 		}
 	}
-
-	private static final AttributeList<SensorAttribute> GetBaseSensorsList(VarAttribute attribute)
-	{
-		AttributeList<SensorAttribute> result = new AttributeList<>();
-
-		for(IModelAttribute dependency : attribute.i_depend_on)
-		{
-			if(dependency.GetType() == EAttributeType.SENSOR)
-				result.add((SensorAttribute)dependency);
-			else if(dependency.GetType() == EAttributeType.VAR)
-				result.addAll(GetBaseSensorsList((VarAttribute)dependency));
-		}
-
-		return result;
-	}
 }

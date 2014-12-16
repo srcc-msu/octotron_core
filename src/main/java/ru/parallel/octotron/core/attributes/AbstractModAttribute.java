@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public abstract class AbstractModAttribute extends AbstractAttribute implements IModelAttribute
 {
 	private final History history = new History();

@@ -326,7 +326,7 @@ public class GraphManager implements IPersistenceManager
 		{
 			graph.Delete();
 		}
-		catch (ExceptionSystemError e)
+		catch(ExceptionSystemError e)
 		{
 			LOGGER.log(Level.SEVERE, "could not wipe Neo4j folder", e);
 		}

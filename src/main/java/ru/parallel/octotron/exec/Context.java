@@ -25,7 +25,6 @@ public final class Context
 	}
 
 	public static Context CreateFromConfig(String json_config)
-		throws ExceptionSystemError
 	{
 		GlobalSettings settings = new GlobalSettings(json_config);
 		ModelData model_data = new ModelData();
@@ -35,7 +34,6 @@ public final class Context
 	}
 
 	public static Context CreateTestContext(int port)
-		throws ExceptionSystemError
 	{
 		GlobalSettings settings = new GlobalSettings(port);
 		ModelData model_data = new ModelData();

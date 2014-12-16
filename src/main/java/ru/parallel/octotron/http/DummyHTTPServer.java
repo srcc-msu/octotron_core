@@ -81,7 +81,7 @@ public class DummyHTTPServer
 		{
 			server = HttpServer.create(new InetSocketAddress(port), 0);
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}

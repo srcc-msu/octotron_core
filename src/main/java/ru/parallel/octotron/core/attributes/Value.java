@@ -10,7 +10,7 @@ public class Value
 {
 	private static class Undefined
 	{
-		private Undefined() {};
+		private Undefined() {}
 
 		public static final Undefined value = new Undefined();
 
@@ -23,7 +23,7 @@ public class Value
 
 	private static class Invalid
 	{
-		private Invalid() {};
+		private Invalid() {}
 
 		public static final Invalid value = new Invalid();
 

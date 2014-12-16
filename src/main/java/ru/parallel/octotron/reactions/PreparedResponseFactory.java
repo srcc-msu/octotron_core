@@ -181,7 +181,7 @@ public class PreparedResponseFactory
 			parsed_path = PathParser.Parse(where);
 			targets = parsed_path.Execute(ModelList.Single(entity), model_data);
 		}
-		catch (ExceptionParseError exceptionParseError)
+		catch(ExceptionParseError exceptionParseError)
 		{
 			return String.format(NOT_FOUND, name);
 		}

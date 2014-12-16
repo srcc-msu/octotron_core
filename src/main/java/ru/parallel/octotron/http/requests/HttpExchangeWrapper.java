@@ -97,7 +97,7 @@ public class HttpExchangeWrapper
 		{
 			IOUtils.readLines(http_request_reader);
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			LOGGER.log(Level.WARNING, "could not read from a request", e);
 		}
@@ -107,7 +107,7 @@ public class HttpExchangeWrapper
 			{
 				http_request_reader.close();
 			}
-			catch (IOException e)
+			catch(IOException e)
 			{
 				LOGGER.log(Level.WARNING, "could not read close a request", e);
 			}
@@ -123,7 +123,7 @@ public class HttpExchangeWrapper
 			http_request.sendResponseHeaders(return_code, raw_data.length);
 			http_request_writer.write(raw_data);
 		}
-		catch (IOException e) // most likely a client closed without reading
+		catch(IOException e) // most likely a client closed without reading
 		{
 			LOGGER.log(Level.WARNING, "could not write all data", e);
 		}

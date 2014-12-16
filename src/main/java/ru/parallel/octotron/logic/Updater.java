@@ -10,9 +10,9 @@ import java.util.Collection;
 
 public class Updater implements Runnable
 {
-	private ReactionService reaction_service;
-	private SensorAttribute sensor;
-	private boolean check_reactions;
+	private final ReactionService reaction_service;
+	private final SensorAttribute sensor;
+	private final boolean check_reactions;
 
 	public Updater(ReactionService reaction_service, SensorAttribute sensor
 		, boolean check_reactions)

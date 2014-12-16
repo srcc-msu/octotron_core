@@ -62,7 +62,7 @@ public final class SensorAttribute extends AbstractModAttribute
 						.Exec("on_info"))
 				, this);
 		}
-		catch (ExceptionParseError exceptionParseError)
+		catch(ExceptionParseError ignore)
 		{
 			throw new ExceptionModelFail("internal error in builtin reaction description");
 		}

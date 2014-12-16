@@ -33,7 +33,7 @@ public abstract class FileUtils
 		{
 			process = new ProcessBuilder(command).start();
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}

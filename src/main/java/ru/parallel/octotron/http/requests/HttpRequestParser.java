@@ -172,12 +172,10 @@ public class HttpRequestParser
 			String request_type = matcher.group(1);
 			String operation_name = matcher.group(2);
 
-			ParsedModelRequest parsed_model_request = HttpRequestParser.ParseModelRequest(
+			return HttpRequestParser.ParseModelRequest(
 				request_type, operation_name, http_request.GetQuery());
-
-			return parsed_model_request;
 		}
 		else
-			throw new ExceptionParseError("URI is not in format /request_type/operation");
+			throw new ExceptionParseError("URI is not in format /request_type/operation?param1&param2");
 	}
 }

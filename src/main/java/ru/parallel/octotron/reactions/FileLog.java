@@ -16,45 +16,48 @@ import java.io.IOException;
 // TODO rework
 public class FileLog
 {
-	private final String filename;
-	private BufferedWriter out = null;
+	private final String path;
+	private BufferedWriter out;
 
-	public FileLog(String dir, String filename)
+	public FileLog(String dir, String fname)
 		throws ExceptionSystemError
 	{
-		this.filename = filename;
-		out = Open(dir + "/" + this.filename);
+		this.path = dir + "/" + fname;
+		this.out = Open();
 	}
 
-	private BufferedWriter Open(String fname)
+	private BufferedWriter Open()
 		throws ExceptionSystemError
 	{
 		String suffix = JavaUtils.GetDate();
 
 		try
 		{
-			out = new BufferedWriter(new FileWriter(fname + "." + suffix, true));
+			return new BufferedWriter(new FileWriter(path + "." + suffix, true));
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}
+	}
 
-		return out;
+	private void NotClosed()
+		throws ExceptionSystemError
+	{
+		if(out == null)
+			throw new ExceptionSystemError("files has been closed already");
 	}
 
 	public void Log(String str)
 		throws ExceptionSystemError
 	{
-		if(out == null)
-			throw new ExceptionSystemError("files has been closed already");
-
+		NotClosed();
 		try
 		{
 			out.write(str + System.lineSeparator());
 			out.flush();
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}
@@ -63,14 +66,14 @@ public class FileLog
 	public void Close()
 		throws ExceptionSystemError
 	{
+		NotClosed();
+
 		try
 		{
-			if(out != null)
-				out.close();
-
+			out.close();
 			out = null;
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}

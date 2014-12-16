@@ -54,7 +54,7 @@ public class HTTPServer
 			{
 				request = HttpRequestParser.ParseFromExchange(http_exchange_wrapper);
 			}
-			catch (ExceptionParseError e)
+			catch(ExceptionParseError e)
 			{
 				http_exchange_wrapper.FinishError(e.getMessage());
 
@@ -131,7 +131,7 @@ public class HTTPServer
 		{
 			server = HttpServer.create(new InetSocketAddress(context.settings.GetPort()), 0);
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionSystemError(e);
 		}

@@ -324,11 +324,11 @@ public final class Neo4jGraph implements IGraph
 			Node node = graph_db.getNodeById(uid.GetID());
 			node.setProperty(name, value);
 		}
-		catch (NotFoundException e)
+		catch(NotFoundException e)
 		{
 			throw new ExceptionModelFail(e);
 		}
-		catch (IllegalArgumentException e)
+		catch(IllegalArgumentException e)
 		{
 			// this exception can be thrown by setProperty method if value has incorrect type
 			throw new ExceptionDBError(e);
@@ -360,7 +360,7 @@ public final class Neo4jGraph implements IGraph
 				throw new ExceptionModelFail("attribute not found: " + name + System.lineSeparator() + rep);
 			}
 		}
-		catch (NotFoundException e)
+		catch(NotFoundException e)
 		{
 			throw new ExceptionModelFail(e);
 		}
@@ -377,7 +377,7 @@ public final class Neo4jGraph implements IGraph
 			Relationship rel = graph_db.getRelationshipById(uid.GetID());
 			rel.setProperty(name, value);
 		}
-		catch (NotFoundException e)
+		catch(NotFoundException e)
 		{
 			throw new ExceptionModelFail(e);
 		}
@@ -409,7 +409,7 @@ public final class Neo4jGraph implements IGraph
 				throw new ExceptionModelFail("attribute not found: " + name + System.lineSeparator() + rep);
 			}
 		}
-		catch (NotFoundException e)
+		catch(NotFoundException e)
 		{
 			throw new ExceptionModelFail(e);
 		}
@@ -456,7 +456,7 @@ public final class Neo4jGraph implements IGraph
 			return FromRelIter
 				(node.getRelationships(Direction.OUTGOING).iterator());
 		}
-		catch (NotFoundException e)
+		catch(NotFoundException e)
 		{
 			throw new ExceptionModelFail(e);
 		}
@@ -475,7 +475,7 @@ public final class Neo4jGraph implements IGraph
 			return FromRelIter
 				(node.getRelationships(Direction.INCOMING).iterator());
 		}
-		catch (NotFoundException e)
+		catch(NotFoundException e)
 		{
 			throw new ExceptionModelFail(e);
 		}
@@ -522,7 +522,7 @@ public final class Neo4jGraph implements IGraph
 		{
 			rel = graph_db.getRelationshipById(uid.GetID());
 		}
-		catch (NotFoundException e)
+		catch(NotFoundException e)
 		{
 			throw new ExceptionModelFail(e);
 		}
@@ -542,7 +542,7 @@ public final class Neo4jGraph implements IGraph
 		{
 			rel = graph_db.getRelationshipById(uid.GetID());
 		}
-		catch (NotFoundException e)
+		catch(NotFoundException e)
 		{
 			throw new ExceptionModelFail(e);
 		}
@@ -673,7 +673,7 @@ public final class Neo4jGraph implements IGraph
 			writer.emit(out, Walker.crosscut(nodes
 				, Iterables.toArray(types, RelationshipType.class)));
 		}
-		catch (IOException e)
+		catch(IOException e)
 		{
 			throw new ExceptionModelFail
 				("Traverse during export to .dot file failed: "

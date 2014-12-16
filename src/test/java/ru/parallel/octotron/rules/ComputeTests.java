@@ -566,4 +566,25 @@ public class ComputeTests extends GeneralTest
 		assertEquals(2L, new Interval("l1", 1, 2, 4).Compute(object));
 		assertEquals(2L, new Interval("l1", 1, 2).Compute(object));
 	}
+
+	@Test
+	public void TestCheckedInterval()
+	{
+		// d1 = 0.0
+		// l1 = 2
+
+		assertEquals(Value.invalid, new CheckedInterval("d1", 0.5, 2.0).Compute(object));
+		assertEquals(Value.invalid, new CheckedInterval("d1", -1.5).Compute(object));
+		assertEquals(1L, new CheckedInterval("d1", -0.5, 2.0).Compute(object));
+		assertEquals(1L, new CheckedInterval("d1", 0.0, 2.0).Compute(object));
+		assertEquals(2L, new CheckedInterval("d1", -0.5, 0.0, 2.0).Compute(object));
+		assertEquals(2L, new CheckedInterval("d1", -1.5, -0.5, 2.0).Compute(object));
+
+		assertEquals(Value.invalid, new CheckedInterval("l1", 4).Compute(object));
+		assertEquals(Value.invalid, new CheckedInterval("l1", 4, 5).Compute(object));
+		assertEquals(Value.invalid, new CheckedInterval("l1", 2).Compute(object));
+		assertEquals(1L, new CheckedInterval("l1", 2, 4).Compute(object));
+		assertEquals(2L, new CheckedInterval("l1", 1, 2, 4).Compute(object));
+		assertEquals(Value.invalid, new CheckedInterval("l1", 1, 2).Compute(object));
+	}
 }

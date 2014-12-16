@@ -14,8 +14,8 @@ import ru.parallel.octotron.core.model.ModelEntity;
 
 public class Interval extends Rule
 {
-	private final String param;
-	private final Value[] thresholds;
+	protected final String param;
+	protected final Value[] thresholds;
 
 	public Interval(String param, Object... thresholds)
 	{

@@ -22,6 +22,9 @@ public class PersistenceService
 		this.persistence_manager = persistence_manager;
 	}
 
+	/**
+	 * returns true if had something to update
+	 * */
 	public boolean Update()
 	{
 		Collection<? extends IModelAttribute> list = to_update.poll();

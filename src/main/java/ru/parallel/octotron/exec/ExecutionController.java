@@ -71,18 +71,23 @@ public class ExecutionController
 	}
 
 	private final long OUTDATED_CHECK_INTERVAL = 100;
+	private long last_outdated_check = JavaUtils.GetTimestamp(); // do not run at start
 
 	public void Process()
 		throws InterruptedException
 	{
-		if(JavaUtils.GetTimestamp() % OUTDATED_CHECK_INTERVAL == 0) // TODO: scheduler?
+		long current_time = JavaUtils.GetTimestamp();
+
+		if(current_time - last_outdated_check > OUTDATED_CHECK_INTERVAL) // TODO: scheduler?
 		{
+			last_outdated_check = current_time;
 			checker_service.PerformCheck();
 		}
 
-		if(!model_service.GetPersistenceService().Update())
+		// this processing must be in the same thread, that created neo4j... TODO
+		if(!model_service.GetPersistenceService().Update()) // false = nothing to do
 		{
-			Thread.sleep(1);
+			Thread.sleep(1); // TODO move to notify/wait or something
 			return;
 		}
 

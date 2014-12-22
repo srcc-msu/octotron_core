@@ -216,7 +216,12 @@ public class Value
 		else if(my_class.equals(Long.class))
 			return GetLong().doubleValue();
 		else
-			throw new ExceptionModelFail("bad value type for casting to Double: ");
+		{
+			String error = String.format("bad value type for casting to Double: %s[%s]"
+				, ValueToString(), my_class.toString());
+
+			throw new ExceptionModelFail(error);
+		}
 	}
 
 // ---------------------
@@ -282,7 +287,11 @@ public class Value
 			return GetLong() > new_value.GetLong() - aprx.GetLong()
 				&& GetLong() < new_value.GetLong() + aprx.GetLong();
 		else
-			throw new ExceptionModelFail("bad value type type for approximate comparison");
+		{
+			String error = String.format("bad value type type for approximate comparison: %s[%s]"
+				, ValueToString(), my_class.toString());
+			throw new ExceptionModelFail(error);
+		}
 	}
 
 	public final boolean ne(Value new_value)
@@ -301,7 +310,11 @@ public class Value
 		else if(my_class.equals(Long.class))
 			return GetLong() > new_value.GetLong();
 		else
-			throw new ExceptionModelFail("bad value type type for comparison");
+		{
+			String error = String.format("bad value type type for comparison: %s[%s]"
+				, ValueToString(), my_class.toString());
+			throw new ExceptionModelFail(error);
+		}
 	}
 
 	public final boolean lt(Value new_value)
@@ -313,7 +326,11 @@ public class Value
 		else if(my_class.equals(Long.class))
 			return GetLong() < new_value.GetLong();
 		else
-			throw new ExceptionModelFail("bad value type type for comparison");
+		{
+			String error = String.format("bad value type type for comparison: %s[%s]"
+				, ValueToString(), my_class.toString());
+			throw new ExceptionModelFail(error);
+		}
 	}
 
 	public final boolean ge(Value val)

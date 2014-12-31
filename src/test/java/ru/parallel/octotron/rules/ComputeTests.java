@@ -521,8 +521,8 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestCalcSpeed() throws Exception
 	{
-		CalcSpeed rule_l = new CalcSpeed("mod_l1");
-		CalcSpeed rule_d = new CalcSpeed("mod_d1");
+		Speed rule_l = new Speed("mod_l1");
+		Speed rule_d = new Speed("mod_d1");
 
 		object.GetSensor("mod_l1").Update(10L);
 		object.GetSensor("mod_d1").Update(10.0);

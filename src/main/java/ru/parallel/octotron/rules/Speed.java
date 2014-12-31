@@ -12,11 +12,11 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class CalcSpeed extends Rule
+public class Speed extends Rule
 {
 	private final String measured_attribute;
 
-	public CalcSpeed(String measured_attribute)
+	public Speed(String measured_attribute)
 	{
 		this.measured_attribute = measured_attribute;
 	}

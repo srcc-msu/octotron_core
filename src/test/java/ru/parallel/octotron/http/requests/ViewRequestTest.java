@@ -6,7 +6,7 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
-import ru.parallel.octotron.rules.CalcSpeed;
+import ru.parallel.octotron.rules.Speed;
 
 import static org.junit.Assert.fail;
 
@@ -44,7 +44,7 @@ public class ViewRequestTest extends RequestTest
 	public void EntityTest() throws Exception
 	{
 		object_factory.Sensors(new SensorTemplate("sensor", -1, 1))
-			.Vars(new VarTemplate("rule", new CalcSpeed("sensor"))).Create(10);
+			.Vars(new VarTemplate("rule", new Speed("sensor"))).Create(10);
 
 		model_service.EnableObjectIndex("AID");
 

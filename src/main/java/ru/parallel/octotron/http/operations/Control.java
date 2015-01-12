@@ -82,7 +82,7 @@ public class Control
 			String mode_str = params.get("silent");
 			boolean mode = Value.ValueFromStr(mode_str).GetBoolean();
 
-			controller.reaction_service.SetSilent(mode);
+			controller.SetSilent(mode);
 
 			if(mode)
 				return new TextString("silent mode activated - no reactions will be invoked");

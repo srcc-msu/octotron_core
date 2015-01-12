@@ -43,7 +43,7 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			controller.update_service.Import(target, name, value);
+			controller.GetImportService().Import(target, name, value);
 
 			return new TextString("added to import queue");
 		}
@@ -72,7 +72,7 @@ public class Modify
 
 			try
 			{
-				if(controller.update_service.Import(target, name, value, false))
+				if(controller.GetImportService().Import(target, name, value, false))
 					return new TextString("added to import queue");
 				else
 					return new TextString("attribute not found, but registered, import skipped");
@@ -104,7 +104,7 @@ public class Modify
 			{
 				SensorAttribute sensor = entity.GetSensor(name);
 				sensor.SetUserValid();
-				controller.update_service.Update(sensor, true);
+				controller.GetUpdateService().Update(sensor, true);
 			}
 
 			return new TextString("set the attribute to valid for " + entities.size() + " entities");
@@ -132,7 +132,7 @@ public class Modify
 			{
 				SensorAttribute sensor = entity.GetSensor(name);
 				sensor.SetUserInvalid();
-				controller.update_service.Update(sensor, true);
+				controller.GetUpdateService().Update(sensor, true);
 			}
 
 			return new TextString("set the attribute to invalid for " + entities.size() + " entities");

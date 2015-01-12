@@ -18,10 +18,10 @@ import java.util.Collection;
 
 public interface IPersistenceManager
 {
-	public void RegisterObject(ModelObject object);
-	public void RegisterLink(ModelLink link);
-	public void RegisterReaction(Reaction reaction);
-	public void RegisterConst(ConstAttribute attribute);
+	void RegisterObject(ModelObject object);
+	void RegisterLink(ModelLink link);
+	void RegisterReaction(Reaction reaction);
+	void RegisterConst(ConstAttribute attribute);
 	void RegisterSensor(SensorAttribute attribute);
 	void RegisterVar(VarAttribute attribute);
 

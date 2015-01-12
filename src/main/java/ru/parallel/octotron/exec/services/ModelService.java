@@ -99,7 +99,7 @@ public final class ModelService extends Service
 		ModelLink link = new ModelLink(source, target);
 		persistence_service.persistence_manager.RegisterLink(link);
 
-		context.model_data.links.add(link);
+		context.model_data.Add(link);
 
 		source.GetBuilder(this).AddOutLink(link);
 		target.GetBuilder(this).AddInLink(link);
@@ -116,7 +116,7 @@ public final class ModelService extends Service
 		ModelObject object = new ModelObject();
 		persistence_service.persistence_manager.RegisterObject(object);
 
-		context.model_data.objects.add(object);
+		context.model_data.Add(object);
 
 		object.GetBuilder(this).DeclareConst(new ConstTemplate("AID", object.GetID()));
 
@@ -129,14 +129,14 @@ public final class ModelService extends Service
 	{
 		CheckModification();
 
-		context.model_data.cache.EnableLinkIndex(name, context.model_data.links);
+		context.model_data.GetCache().EnableLinkIndex(name, context.model_data.GetAllLinks());
 	}
 
 	public void EnableObjectIndex(String name)
 	{
 		CheckModification();
 
-		context.model_data.cache.EnableObjectIndex(name, context.model_data.objects);
+		context.model_data.GetCache().EnableObjectIndex(name, context.model_data.GetAllObjects());
 	}
 
 	public long SetSuppress(ModelEntity entity, long template_id, boolean value, String description)

@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.exec;
 
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;

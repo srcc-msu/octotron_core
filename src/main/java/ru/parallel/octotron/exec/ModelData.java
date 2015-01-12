@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.exec;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
@@ -12,6 +12,8 @@ import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 
 import java.util.Collection;
 
@@ -63,5 +65,20 @@ public final class ModelData
 	public Collection<ModelEntity> GetAllEntities()
 	{
 		return Lists.newArrayList(Iterators.concat(GetAllLinks().iterator(), GetAllObjects().iterator()));
+	}
+
+	public void Add(ModelLink link)
+	{
+		links.add(link);
+	}
+
+	public void Add(ModelObject object)
+	{
+		objects.add(object);
+	}
+
+	public ModelCache GetCache()
+	{
+		return cache;
 	}
 }

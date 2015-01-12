@@ -50,7 +50,6 @@ public class PersistenceService
 	public void RegisterSensor(SensorAttribute attribute)
 	{
 		persistence_manager.RegisterSensor(attribute);
-
 	}
 
 	public void RegisterVar(VarAttribute attribute)

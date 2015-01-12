@@ -39,7 +39,7 @@ public class SelfTest
 	{
 		test_iteration++;
 
-		controller.update_service.ImmediateImport(obj1, "test_iteration", new Value(test_iteration));
+		controller.GetImportService().ImmediateImport(obj1, "test_iteration", new Value(test_iteration));
 
 		return obj2.GetAttribute("check").eq(new Value(test_iteration));
 	}

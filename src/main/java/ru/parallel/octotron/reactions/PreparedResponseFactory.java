@@ -19,7 +19,7 @@ import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.services.ModelData;
+import ru.parallel.octotron.exec.ModelData;
 import ru.parallel.octotron.http.path.ParsedPath;
 import ru.parallel.octotron.http.path.PathParser;
 import ru.parallel.utils.JavaUtils;

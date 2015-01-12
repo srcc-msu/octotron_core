@@ -24,12 +24,14 @@ public class ExecutionController
 
 	public final ModelService model_service;
 
-	public final RequestService request_service;
-	public final HttpService http_service;
-	public final UpdateService update_service;
-	public final ReactionService reaction_service;
+	private final RequestService request_service;
+	private final HttpService http_service;
 
-	public final OutdatedCheckerService checker_service;
+	private final ReactionService reaction_service;
+	private final UpdateService update_service;
+	private final ImportService import_service;
+
+	private final OutdatedCheckerService checker_service;
 
 	private boolean exit = false;
 
@@ -41,11 +43,19 @@ public class ExecutionController
 
 		request_service = new RequestService(context, this);
 		http_service = new HttpService(context, request_service);
+
 		reaction_service = new ReactionService(context);
 		update_service = new UpdateService(context, reaction_service);
+		import_service = new ImportService(context, update_service);
+
 		checker_service = new OutdatedCheckerService(context, update_service);
 
 		UpdateDefinedSensors();
+	}
+
+	public UpdateService GetUpdateService()
+	{
+		return update_service;
 	}
 
 	private void UpdateDefinedSensors()
@@ -88,6 +98,7 @@ public class ExecutionController
 		if(!model_service.GetPersistenceService().Update()) // false = nothing to do
 		{
 			Thread.sleep(1); // TODO move to notify/wait or something
+			context.stat.Process();
 			return;
 		}
 
@@ -100,10 +111,12 @@ public class ExecutionController
 
 		model_service.Finish();
 
-		request_service.Finish();
 		http_service.Finish();
-		reaction_service.Finish();
+		request_service.Finish();
+
+		import_service.Finish();
 		update_service.Finish();
+		reaction_service.Finish();
 
 		checker_service.Finish();
 
@@ -116,5 +129,15 @@ public class ExecutionController
 	public Context GetContext()
 	{
 		return context;
+	}
+
+	public void SetSilent(boolean mode)
+	{
+		reaction_service.SetSilent(mode);
+	}
+
+	public ImportService GetImportService()
+	{
+		return import_service;
 	}
 }

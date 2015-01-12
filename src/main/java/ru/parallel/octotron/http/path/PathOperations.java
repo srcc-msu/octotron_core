@@ -13,7 +13,7 @@ import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.exec.services.ModelData;
+import ru.parallel.octotron.exec.ModelData;
 
 import java.util.List;
 

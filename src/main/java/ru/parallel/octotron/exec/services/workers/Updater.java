@@ -1,4 +1,4 @@
-package ru.parallel.octotron.logic;
+package ru.parallel.octotron.exec.services.workers;
 
 import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;

@@ -4,25 +4,25 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.logic;
+package ru.parallel.octotron.exec.services.workers;
 
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.exec.services.ReactionService;
+import ru.parallel.octotron.exec.services.UpdateService;
 
 public class Importer implements Runnable
 {
-	private final ReactionService reaction_service;
+	private final UpdateService update_service;
 
 	private final ModelEntity entity;
 
 	private final String name;
 	private final Value value;
 
-	public Importer(ReactionService reaction_service, ModelEntity entity, String name, Value value)
+	public Importer(UpdateService update_service, ModelEntity entity, String name, Value value)
 	{
-		this.reaction_service = reaction_service;
+		this.update_service = update_service;
 		this.entity = entity;
 
 		this.name = name;
@@ -36,6 +36,6 @@ public class Importer implements Runnable
 
 		sensor.Update(value);
 
-		new Updater(reaction_service, sensor, true).run();
+		update_service.Update(sensor, true);
 	}
 }

@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.services.ModelData;
 import ru.parallel.octotron.logic.Statistics;
 
 public final class Context

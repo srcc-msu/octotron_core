@@ -10,7 +10,7 @@ import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.services.ModelData;
+import ru.parallel.octotron.exec.ModelData;
 import ru.parallel.octotron.reactions.PreparedResponse;
 
 import java.io.BufferedReader;

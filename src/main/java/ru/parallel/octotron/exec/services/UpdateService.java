@@ -51,15 +51,21 @@ public class UpdateService extends Service
 		context.stat.Add("update_executor", 1, update_executor.getQueue().size());
 	}
 
-	public void Import(ModelEntity entity, String name, Value value, boolean strict)
+	public boolean Import(ModelEntity entity, String name, Value value, boolean strict)
 		throws ExceptionSystemError
 	{
 		if(entity.TestAttribute(name))
+		{
 			Import(entity, name, value);
+			return true;
+		}
 		else if(strict)
 			throw new ExceptionModelFail("sensor does not exist: " + name);
 		else
+		{
 			UnknownImport(entity, name, value);
+			return false;
+		}
 	}
 
 	public void Import(ModelEntity entity, String name, Value value)

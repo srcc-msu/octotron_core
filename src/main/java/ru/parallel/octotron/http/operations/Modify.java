@@ -70,22 +70,17 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			if(target.GetSensorOrNull(name) == null)
+			try
 			{
-				try
-				{
-					controller.update_service.UnknownImport(target, name, value);
-				}
-				catch(ExceptionSystemError e)
-				{
-					throw new ExceptionModelFail(e);
-				}
-
-				return new TextString("attribute not found, but registered, import skipped");
+				if(controller.update_service.Import(target, name, value, false))
+					return new TextString("added to import queue");
+				else
+					return new TextString("attribute not found, but registered, import skipped");
 			}
-
-			controller.update_service.Import(target, name, value);
-			return new TextString("added to unchecked import queue");
+			catch(ExceptionSystemError e)
+			{
+				throw new ExceptionModelFail(e);
+			}
 		}
 	}
 

@@ -55,6 +55,25 @@ public class PreparedResponse implements Runnable, IPresentable
 		String short_log_string = AutoFormat.FormatJson(GetShortRepresentation());
 		String long_log_string = AutoFormat.FormatJson(GetLongRepresentation());
 
+		try
+		{
+			// TODO rework
+			synchronized(lock) // this and file reopening is not efficient, but does not happen often
+			{
+				FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
+				short_log.Log(short_log_string);
+				short_log.Close();
+
+				FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
+				long_log.Log(long_log_string);
+				long_log.Close();
+			}
+		}
+		catch(ExceptionSystemError e)
+		{
+			LOGGER.log(Level.WARNING, "could not create a log entry", e);
+		}
+
 		if(!response.IsSuppress())
 		{
 			for(String[] command : scripts)
@@ -77,24 +96,6 @@ public class PreparedResponse implements Runnable, IPresentable
 					LOGGER.log(Level.SEVERE, "could not invoke reaction script: " + Arrays.toString(command), e);
 				}
 			}
-		}
-		try
-		{
-			// TODO rework
-			synchronized(lock) // this and file reopening is not efficient, but does not happen often
-			{
-				FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
-				short_log.Log(short_log_string);
-				short_log.Close();
-
-				FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
-				long_log.Log(long_log_string);
-				long_log.Close();
-			}
-		}
-		catch(ExceptionSystemError e)
-		{
-			LOGGER.log(Level.WARNING, "could not create a log entry", e);
 		}
 	}
 

@@ -16,10 +16,9 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 
 import java.util.Collection;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
-
-import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
 
 public class PersistenceService extends BGService implements IPersistenceManager // WTF?
 {
@@ -31,60 +30,36 @@ public class PersistenceService extends BGService implements IPersistenceManager
 
 	public PersistenceService(String prefix, Context context)
 	{
-		super(prefix, context, 1, 1, 0L, new ArrayBlockingQueue<Runnable>(UPDATE_QUEUE_LIMIT));
+		super(context
+			, new BGExecutorService(prefix
+			, 1, 1
+			, 0L, new ArrayBlockingQueue<Runnable>(UPDATE_QUEUE_LIMIT)));
 
-		executor.setThreadFactory(
-			new ThreadFactory()
-			{
-				private long created = 0;
-				@Override
-				public Thread newThread(Runnable r)
-				{
-					if(created == 2)
-						throw new ExceptionModelFail("db thread failed");
-
-					created ++;
-
-					return new Thread(r);
-				}
-			});
-	}
-
-	public void WaitAll()
-	{
-		while(GetWaitingCount() > 0)
-		{
-			try { Thread.sleep(1); }
-			catch (InterruptedException ignore) {} // NOBODY DARES TO INTERRUPT ME
-		}
+		executor.LockOnThread();
 	}
 
 	public void InitGraph(final ModelService model_service, final String db_path)
 	{
-		Future<?> future = executor.submit(
-			new Callable<Object>()
+		executor.execute(
+			new Runnable()
 			{
 				@Override
-				public Object call() throws ExceptionSystemError
+				public void run()
 				{
-					persistence_manager = new GraphManager(model_service, db_path);
-					return true;
+					try
+					{
+						persistence_manager = new GraphManager(model_service, db_path);
+					}
+					catch (ExceptionSystemError e)
+					{
+						LOGGER.log(Level.SEVERE, "could not init database", e);
+
+						throw new ExceptionModelFail(e);
+					}
 				}
 			});
 
-		try
-		{
-			future.get();
-		}
-		catch(InterruptedException e)
-		{
-			LOGGER.log(Level.SEVERE, "database initialization has been interrupted o_O", e);
-		}
-		catch(ExecutionException e)
-		{
-			LOGGER.log(Level.SEVERE, "could not init database", e);
-			throw new ExceptionModelFail(e);
-		}
+		executor.WaitAll();
 	}
 
 	public void InitDummy()
@@ -154,7 +129,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				}
 			});
 
-		ShutdownExecutor(executor);
+		super.Finish();
 	}
 
 	@Override
@@ -315,5 +290,10 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					}
 				}
 			});
+	}
+
+	public void WaitAll()
+	{
+		executor.WaitAll();
 	}
 }

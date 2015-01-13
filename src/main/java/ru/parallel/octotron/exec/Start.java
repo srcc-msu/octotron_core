@@ -90,10 +90,10 @@ public class Start
 		try
 		{
 			context = Context.CreateFromConfig(json_config);
+			context.stat.RegisterService(FileUtils.executor);
 
 			model_service = new ModelService(context);
-			context.stat.RegisterService(model_service.GetPersistenceService());
-
+			context.stat.RegisterService(model_service.GetPersistenceService().GetExecutor());
 
 			ConfigLogging(context.settings.GetLogDir());
 

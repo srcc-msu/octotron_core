@@ -50,11 +50,11 @@ public class ExecutionController
 
 		checker_service = new OutdatedCheckerService(context, update_service);
 
-		context.stat.RegisterService(request_service);
-		context.stat.RegisterService(http_service);
-		context.stat.RegisterService(reaction_service);
-		context.stat.RegisterService(update_service);
-		context.stat.RegisterService(import_service);
+		context.stat.RegisterService(request_service.GetExecutor());
+		context.stat.RegisterService(http_service.GetExecutor());
+		context.stat.RegisterService(reaction_service.GetExecutor());
+		context.stat.RegisterService(update_service.GetExecutor());
+		context.stat.RegisterService(import_service.GetExecutor());
 
 		UpdateDefinedSensors();
 	}

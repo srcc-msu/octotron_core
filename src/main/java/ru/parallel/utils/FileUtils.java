@@ -7,6 +7,7 @@
 package ru.parallel.utils;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.services.BGExecutorService;
 
 import java.io.*;
 import java.util.Arrays;
@@ -14,10 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
 
 // TODO move to executors
 public abstract class FileUtils
@@ -45,14 +45,14 @@ public abstract class FileUtils
 		return new BufferedReader(isr);
 	}
 
-	private static final ExecutorService executor
-		= Executors.newFixedThreadPool(4);
+	public static BGExecutorService executor = new BGExecutorService("scripts"
+		, 4, 4, 0L, new LinkedBlockingQueue<Runnable>());
 
 	public static void Finish()
 	{
 		LOGGER.log(Level.WARNING, "Exec: waiting for all exec scripts to finish");
 
-		ShutdownExecutor(executor);
+		executor.Finish();
 
 		LOGGER.log(Level.WARNING, "Exec: finished");
 	}

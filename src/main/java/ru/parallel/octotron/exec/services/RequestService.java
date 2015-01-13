@@ -8,8 +8,6 @@ import ru.parallel.octotron.http.requests.ParsedModelRequest;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
-
 public class RequestService extends BGService
 {
 	/**
@@ -19,15 +17,12 @@ public class RequestService extends BGService
 
 	public RequestService(String prefix, Context context, ExecutionController execution_controller)
 	{
-		super(prefix, context, context.settings.GetNumThreads(), context.settings.GetNumThreads(),
-			0L, new LinkedBlockingQueue<Runnable>());
-		this.execution_controller = execution_controller;
-	}
+		super(context
+			, new BGExecutorService(prefix
+			, context.settings.GetNumThreads(), context.settings.GetNumThreads()
+			, 0L, new LinkedBlockingQueue<Runnable>()));
 
-	@Override
-	public void Finish()
-	{
-		ShutdownExecutor(executor);
+		this.execution_controller = execution_controller;
 	}
 
 	public void AddRequest(ParsedModelRequest request)

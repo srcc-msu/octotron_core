@@ -11,8 +11,6 @@ import ru.parallel.octotron.reactions.PreparedResponseFactory;
 import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
-
 // TODO: executor?
 public class ReactionService extends BGService
 {
@@ -26,8 +24,11 @@ public class ReactionService extends BGService
 
 	public ReactionService(String prefix, Context context, PersistenceService persistence_service)
 	{
-		super(prefix, context, context.settings.GetNumThreads(), context.settings.GetNumThreads()
-			, 0, new LinkedBlockingQueue<Runnable>());
+		super(context
+			, new BGExecutorService(prefix
+			, context.settings.GetNumThreads(), context.settings.GetNumThreads()
+			, 0L, new LinkedBlockingQueue<Runnable>()));
+
 
 		this.persistence_service = persistence_service;
 		this.response_factory = new PreparedResponseFactory(context);
@@ -84,6 +85,7 @@ public class ReactionService extends BGService
 		{
 			CheckSingleReaction(reaction);
 		}
+
 		persistence_service.UpdateReactions(attribute.GetReactions()); // batch updating
 	}
 
@@ -93,10 +95,5 @@ public class ReactionService extends BGService
 		{
 			CheckReactions(attribute);
 		}
-	}
-
-	public void Finish()
-	{
-		ShutdownExecutor(executor);
 	}
 }

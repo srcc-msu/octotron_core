@@ -15,7 +15,6 @@ public final class Context
 
 	public final Statistics stat = new Statistics();
 
-
 	private Context(GlobalSettings settings, ModelData model_data)
 	{
 		this.settings = settings;
@@ -26,7 +25,6 @@ public final class Context
 	{
 		GlobalSettings settings = new GlobalSettings(json_config);
 		ModelData model_data = new ModelData();
-
 
 		return new Context(settings, model_data);
 	}

@@ -17,7 +17,11 @@ public class ImportService extends BGService
 
 	public ImportService(String prefix, Context context, UpdateService update_service)
 	{
-		super(prefix, context, 1, 1, 0, new LinkedBlockingQueue<Runnable>());
+		super(context
+			, new BGExecutorService(prefix
+			, 1, 1
+			, 0L, new LinkedBlockingQueue<Runnable>()));
+
 		this.update_service = update_service;
 	}
 

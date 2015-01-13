@@ -19,6 +19,7 @@ import ru.parallel.octotron.http.requests.ParsedModelRequest;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -115,7 +116,7 @@ public class HTTPServer
  * create and start the server, listening on /port<br>
  * messages are not guaranteed to come in fixed order<br>
  * */
-	public HTTPServer(Context context, ExecutorService executor, HttpService http_service, RequestService request_service)
+	public HTTPServer(Context context, Executor executor, HttpService http_service, RequestService request_service)
 		throws ExceptionSystemError
 	{
 		this.http_service = http_service;

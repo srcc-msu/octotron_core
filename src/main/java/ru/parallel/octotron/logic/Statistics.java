@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.logic;
 
+import ru.parallel.octotron.exec.services.BGExecutorService;
 import ru.parallel.octotron.exec.services.BGService;
 import ru.parallel.utils.Timer;
 
@@ -20,7 +21,7 @@ import java.util.Map;
  * */
 public class Statistics
 {
-	private List<BGService> registered_services = new LinkedList<>();
+	private List<BGExecutorService> registered_services = new LinkedList<>();
 
 	public static class Stat
 	{
@@ -39,7 +40,7 @@ public class Statistics
 
 	private final Timer timer_60 = new Timer();
 
-	public void RegisterService(BGService service)
+	public void RegisterService(BGExecutorService service)
 	{
 		registered_services.add(service);
 	}
@@ -107,7 +108,7 @@ public class Statistics
 
 	public void Process()
 	{
-		for(BGService service : registered_services)
+		for(BGExecutorService service : registered_services)
 			Add(service.GetName(), service.GetRecentCompletedCount(), service.GetWaitingCount());
 
 		if(timer_60.Get() > 60) /*secs in min..*/

@@ -90,6 +90,7 @@ public class Start
 		try
 		{
 			context = Context.CreateFromConfig(json_config);
+
 			model_service = new ModelService(context);
 
 			ConfigLogging(context.settings.GetLogDir());
@@ -104,6 +105,9 @@ public class Start
 
 			if(model_service != null && model_service.GetMode() == ModelService.EMode.CREATION)
 				model_service.GetPersistenceService().Wipe(); // clean neo4j dir on unsuccessful creation
+
+			model_service.Finish();
+
 			System.exit(1);
 		}
 
@@ -218,7 +222,7 @@ public class Start
 		}
 
 // --- shutdown
-		Exception shutdown_exception = Shutdown(controller);
+		Exception shutdown_exception = Shutdown(controller, model_service);
 
 		if(shutdown_exception != null)
 		{
@@ -254,11 +258,13 @@ public class Start
 /**
  * shutdown the graph and all execution processes<br>
  * */
-	public static Exception Shutdown(ExecutionController controller)
+	public static Exception Shutdown(ExecutionController controller
+		, ModelService model_service)
 	{
 		try
 		{
 			controller.Finish();
+			model_service.Finish();
 		}
 		catch(Exception e)
 		{

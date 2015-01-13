@@ -12,8 +12,6 @@ import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.persistence.GhostManager;
-import ru.parallel.octotron.core.persistence.GraphManager;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
@@ -52,10 +50,17 @@ public final class ModelService extends Service
 		else
 			mode = EMode.LOAD;
 
+		persistence_service = new PersistenceService(context);
+
 		if(context.settings.IsDb())
-			persistence_service = new PersistenceService(new GraphManager(this, db_path));
+			persistence_service.InitGraph(this, db_path);
 		else
-			persistence_service = new PersistenceService(new GhostManager());
+			persistence_service.InitDummy();
+	}
+
+	public PersistenceService GetPersistenceService()
+	{
+		return persistence_service;
 	}
 
 	public EMode GetMode()
@@ -71,6 +76,8 @@ public final class ModelService extends Service
 
 	public void Operate()
 	{
+		persistence_service.WaitAll();
+
 		InitSelfTest(this);
 
 		MakeRuleDependency();
@@ -85,7 +92,7 @@ public final class ModelService extends Service
 			for(VarAttribute attribute : object.GetVar())
 			{
 				attribute.GetBuilder(this).ConnectDependency();
-				persistence_service.persistence_manager.MakeRuleDependency(attribute);
+				persistence_service.MakeRuleDependency(attribute);
 			}
 		}
 	}
@@ -97,7 +104,7 @@ public final class ModelService extends Service
 		CheckModification();
 
 		ModelLink link = new ModelLink(source, target);
-		persistence_service.persistence_manager.RegisterLink(link);
+		persistence_service.RegisterLink(link);
 
 		context.model_data.Add(link);
 
@@ -114,7 +121,7 @@ public final class ModelService extends Service
 		CheckModification();
 
 		ModelObject object = new ModelObject();
-		persistence_service.persistence_manager.RegisterObject(object);
+		persistence_service.RegisterObject(object);
 
 		context.model_data.Add(object);
 
@@ -187,17 +194,11 @@ public final class ModelService extends Service
 		return reactions;
 	}
 
-	public PersistenceService GetPersistenceService()
-	{
-		return persistence_service;
-	}
-
 	@Override
 	public void Finish()
 	{
 		persistence_service.Finish();
 	}
-
 
 	public void InitSelfTest(ModelService model_service)
 	{

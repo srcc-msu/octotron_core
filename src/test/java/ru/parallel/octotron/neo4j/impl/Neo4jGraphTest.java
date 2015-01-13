@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.core.graph.EGraphType;
 import ru.parallel.octotron.core.primitive.ID;
+import ru.parallel.octotron.neo4j.Neo4jGraph;
 
 import java.util.LinkedList;
 import java.util.List;

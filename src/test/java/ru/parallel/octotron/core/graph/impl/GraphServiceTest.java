@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.neo4j.Neo4jGraph;
 
 import java.util.LinkedList;
 import java.util.List;

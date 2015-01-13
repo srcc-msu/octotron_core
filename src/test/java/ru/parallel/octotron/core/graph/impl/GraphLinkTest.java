@@ -3,7 +3,7 @@ package ru.parallel.octotron.core.graph.impl;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.neo4j.Neo4jGraph;
 
 public class GraphLinkTest
 {

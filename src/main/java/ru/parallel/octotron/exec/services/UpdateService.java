@@ -19,11 +19,13 @@ public class UpdateService extends Service
 	 * */
 	private final ThreadPoolExecutor update_executor;
 	private final ReactionService reaction_service;
+	private final PersistenceService persistence_service;
 
-	public UpdateService(Context context, ReactionService reaction_service)
+	public UpdateService(Context context, ReactionService reaction_service, PersistenceService persistence_service)
 	{
 		super(context);
 		this.reaction_service = reaction_service;
+		this.persistence_service = persistence_service;
 
 		update_executor = new ThreadPoolExecutor(1, 1,
 			0L, TimeUnit.MILLISECONDS,
@@ -32,7 +34,7 @@ public class UpdateService extends Service
 
 	public void Update(SensorAttribute sensor, boolean check_reactions)
 	{
-		update_executor.execute(new Updater(reaction_service, sensor, check_reactions));
+		update_executor.execute(new Updater(reaction_service, persistence_service, sensor, check_reactions));
 		context.stat.Add("update_executor", 1, update_executor.getQueue().size());
 	}
 

@@ -44,8 +44,8 @@ public class ExecutionController
 		request_service = new RequestService(context, this);
 		http_service = new HttpService(context, request_service);
 
-		reaction_service = new ReactionService(context);
-		update_service = new UpdateService(context, reaction_service);
+		reaction_service = new ReactionService(context, model_service.GetPersistenceService());
+		update_service = new UpdateService(context, reaction_service, model_service.GetPersistenceService());
 		import_service = new ImportService(context, update_service);
 
 		checker_service = new OutdatedCheckerService(context, update_service);
@@ -94,13 +94,7 @@ public class ExecutionController
 			checker_service.PerformCheck();
 		}
 
-		// this processing must be in the same thread, that created neo4j... TODO
-		if(!model_service.GetPersistenceService().Update()) // false = nothing to do
-		{
-			Thread.sleep(1); // TODO move to notify/wait or something
-			context.stat.Process();
-			return;
-		}
+		Thread.sleep(1); // TODO move to notify/wait or something
 
 		context.stat.Process();
 	}
@@ -108,8 +102,6 @@ public class ExecutionController
 	public void Finish()
 	{
 		LOGGER.log(Level.INFO, "waiting for all tasks to finish");
-
-		model_service.Finish();
 
 		http_service.Finish();
 		request_service.Finish();

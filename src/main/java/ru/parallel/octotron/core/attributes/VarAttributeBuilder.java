@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.core.attributes;
 
-import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.exec.services.ModelService;
 
 public class VarAttributeBuilder extends AbstractModAttributeBuilder<VarAttribute>

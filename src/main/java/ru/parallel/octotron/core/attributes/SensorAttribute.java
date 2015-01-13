@@ -7,13 +7,9 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.logic.impl.Timeout;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.utils.JavaUtils;
 
@@ -49,23 +45,6 @@ public final class SensorAttribute extends AbstractModAttribute
 		this.update_time = update_time;
 
 		SetCTime(JavaUtils.GetTimestamp());
-
-		try
-		{
-			timeout_reaction = new Reaction(
-				new Timeout(GetName())
-					.Response(new Response(EEventStatus.INFO)
-						.Msg("tag", "TIMEOUT")
-						.Msg("descr", "sensor value has not been updated in required time")
-						.Msg("loc", "AID : {AID}")
-						.Msg("msg", "sensor(" + GetName() + ") value has not been updated in required time")
-						.Exec("on_info"))
-				, this);
-		}
-		catch(ExceptionParseError ignore)
-		{
-			throw new ExceptionModelFail("internal error in builtin reaction description");
-		}
 	}
 
 	@Override

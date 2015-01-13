@@ -15,12 +15,11 @@ import java.util.concurrent.TimeUnit;
 
 import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
 
-
+// TODO: executor?
 public class ReactionService extends Service
 {
-	/**
-	 * processes all responses
-	 * */
+	private final PersistenceService persistence_service;
+
 	private final ThreadPoolExecutor reactions_executor;
 
 	private final PreparedResponseFactory response_factory;
@@ -30,14 +29,16 @@ public class ReactionService extends Service
 	 * */
 	private boolean silent = false;
 
-	public ReactionService(Context context)
+	public ReactionService(Context context, PersistenceService persistence_service)
 	{
 		super(context);
-		this.response_factory = new PreparedResponseFactory(context);
+		this.persistence_service = persistence_service;
 
 		reactions_executor = new ThreadPoolExecutor(context.settings.GetNumThreads(), context.settings.GetNumThreads(),
 			0L, TimeUnit.MILLISECONDS,
 			new LinkedBlockingQueue<Runnable>());
+
+		this.response_factory = new PreparedResponseFactory(context);
 	}
 
 	public boolean IsSilent()
@@ -62,7 +63,7 @@ public class ReactionService extends Service
 		reactions_executor.execute(response);
 	}
 
-	public void CheckReaction(Reaction reaction)
+	private void CheckSingleReaction(Reaction reaction)
 	{
 		Response response = reaction.ProcessOrNull();
 
@@ -81,12 +82,19 @@ public class ReactionService extends Service
 		AddResponse(prepared_response);
 	}
 
+	public void CheckReaction(Reaction reaction)
+	{
+		CheckSingleReaction(reaction);
+		persistence_service.RegisterReaction(reaction);
+	}
+
 	public void CheckReactions(IModelAttribute attribute)
 	{
 		for(Reaction reaction : attribute.GetReactions())
 		{
-			CheckReaction(reaction);
+			CheckSingleReaction(reaction);
 		}
+		persistence_service.UpdateReactions(attribute.GetReactions()); // batch updating
 	}
 
 	public void CheckReactions(Collection<? extends IModelAttribute> attributes)

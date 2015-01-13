@@ -6,10 +6,11 @@
 
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 
 public interface IAttributeBuilder
 {
-	void AddReaction(ReactionTemplate reaction);
+	Reaction AddReaction(ReactionTemplate reaction);
 	void AddDependant(VarAttribute attribute);
 }

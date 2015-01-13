@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.neo4j.impl;
+package ru.parallel.octotron.neo4j;
 
 import com.google.common.collect.Iterables;
 import org.neo4j.graphdb.*;
@@ -126,7 +126,8 @@ public final class Neo4jGraph implements IGraph
 	}
 
 	/**
-	 * private function for bootstrap configuration<br>
+	 * use this in web browser:
+	 * :config maxNeighbours: 200
 	 * */
 	@SuppressWarnings("deprecation")
 	private void DoBootstrap()

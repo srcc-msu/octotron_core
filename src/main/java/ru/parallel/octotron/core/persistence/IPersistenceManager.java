@@ -7,14 +7,11 @@
 package ru.parallel.octotron.core.persistence;
 
 import ru.parallel.octotron.core.attributes.ConstAttribute;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-
-import java.util.Collection;
 
 public interface IPersistenceManager
 {
@@ -28,8 +25,6 @@ public interface IPersistenceManager
 	void Finish();
 
 	void MakeRuleDependency(VarAttribute attribute);
-
-	void RegisterUpdate(Collection<? extends IModelAttribute> attributes);
 
 	void Wipe();
 }

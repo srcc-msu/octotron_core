@@ -6,6 +6,7 @@ import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exec.services.PersistenceService;
 import ru.parallel.octotron.exec.services.ReactionService;
 import ru.parallel.octotron.exec.services.UpdateService;
 import ru.parallel.octotron.generators.ObjectFactory;
@@ -16,6 +17,13 @@ import ru.parallel.octotron.generators.tmpl.VarTemplate;
 public class ComplexComputeTest extends GeneralTest
 {
 	private static ModelObject object;
+	private final PersistenceService persistence_service;
+
+	public ComplexComputeTest()
+	{
+		persistence_service = new PersistenceService(context);
+		persistence_service.InitDummy();
+	}
 
 	@BeforeClass
 	public static void Init()
@@ -35,8 +43,8 @@ public class ComplexComputeTest extends GeneralTest
 	@Test
 	public void TestUndefined() throws Exception
 	{
-		ReactionService reaction_service = new ReactionService(context);
-		new UpdateService(context, reaction_service)
+		ReactionService reaction_service = new ReactionService(context, persistence_service);
+		new UpdateService(context, reaction_service, persistence_service)
 			.Update(object.GetSensor("val1"), false);
 	}
 }

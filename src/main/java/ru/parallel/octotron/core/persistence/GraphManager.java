@@ -20,7 +20,7 @@ import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.services.ModelService;
-import ru.parallel.octotron.neo4j.impl.Neo4jGraph;
+import ru.parallel.octotron.neo4j.Neo4jGraph;
 
 import java.util.Collection;
 import java.util.logging.Level;
@@ -211,7 +211,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
-			if(attribute.GetValue().IsDefined())
+			if(attribute.GetValue().IsDefined() && attribute.GetValue().IsValid())
 				graph_object.UpdateAttribute("value", attribute.GetValue().GetRaw());
 
 // info
@@ -240,7 +240,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
-			if(attribute.GetValue().IsDefined())
+			if(attribute.GetValue().IsDefined() && attribute.GetValue().IsValid())
 				graph_object.UpdateAttribute("value", attribute.GetValue().GetRaw());
 		}
 	}
@@ -290,22 +290,6 @@ public class GraphManager implements IPersistenceManager
 			GraphObject dependency_object = GetObject(i_depend_from);
 
 			graph_service.AddLink(object, dependency_object, DEPENDS);
-		}
-	}
-
-	// TODO: executor?
-	@Override
-	public void RegisterUpdate(Collection<? extends IModelAttribute> attributes)
-	{
-		for(IModelAttribute attribute : attributes)
-		{
-			if(attribute.GetType() == EAttributeType.SENSOR)
-				RegisterSensor((SensorAttribute)attribute);
-			else if(attribute.GetType() == EAttributeType.VAR)
-				RegisterVar((VarAttribute)attribute);
-
-			for(Reaction reaction : attribute.GetReactions())
-				RegisterReaction(reaction);
 		}
 	}
 

@@ -7,14 +7,11 @@
 package ru.parallel.octotron.core.persistence;
 
 import ru.parallel.octotron.core.attributes.ConstAttribute;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-
-import java.util.Collection;
 
 public class GhostManager implements IPersistenceManager
 {
@@ -62,12 +59,6 @@ public class GhostManager implements IPersistenceManager
 
 	@Override
 	public void MakeRuleDependency(VarAttribute attribute)
-	{
-		// there is nothing here
-	}
-
-	@Override
-	public void RegisterUpdate(Collection<? extends IModelAttribute> attributes)
 	{
 		// there is nothing here
 	}

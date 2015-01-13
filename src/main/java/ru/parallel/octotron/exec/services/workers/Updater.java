@@ -4,6 +4,7 @@ import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.VarAttribute;
 import ru.parallel.octotron.core.collections.AttributeList;
+import ru.parallel.octotron.exec.services.PersistenceService;
 import ru.parallel.octotron.exec.services.ReactionService;
 
 import java.util.Collection;
@@ -11,13 +12,16 @@ import java.util.Collection;
 public class Updater implements Runnable
 {
 	private final ReactionService reaction_service;
+	private final PersistenceService persistence_service;
+
 	private final SensorAttribute sensor;
 	private final boolean check_reactions;
 
-	public Updater(ReactionService reaction_service, SensorAttribute sensor
+	public Updater(ReactionService reaction_service, PersistenceService persistence_service, SensorAttribute sensor
 		, boolean check_reactions)
 	{
 		this.reaction_service = reaction_service;
+		this.persistence_service = persistence_service;
 		this.sensor = sensor;
 		this.check_reactions = check_reactions;
 	}
@@ -66,12 +70,15 @@ public class Updater implements Runnable
 	{
 		Collection<IModelAttribute> result = ProcessVars(sensor);
 
+		result.add(sensor);
+
 		if(check_reactions)
 		{
-			result.add(sensor);
 
 			reaction_service.CheckReactions(result);
 			reaction_service.CheckReaction(sensor.GetTimeoutReaction());
 		}
+
+		persistence_service.UpdateAttributes(result);
 	}
 }

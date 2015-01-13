@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
@@ -22,7 +23,7 @@ public class ConstAttributeBuilder implements IAttributeBuilder
 	}
 
 	@Override
-	public void AddReaction(ReactionTemplate reaction_template)
+	public Reaction AddReaction(ReactionTemplate reaction_template)
 	{
 		throw new ExceptionModelFail(ConstAttribute.err_msg + "AddReaction");
 	}

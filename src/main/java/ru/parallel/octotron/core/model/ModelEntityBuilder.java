@@ -10,8 +10,12 @@ import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
+import ru.parallel.octotron.core.logic.impl.Timeout;
+import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
@@ -96,6 +100,22 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		entity.sensor_map.put(name, sensor);
 
 		service.GetPersistenceService().RegisterSensor(sensor);
+
+		try
+		{
+			sensor.GetBuilder(service).SetTimeoutReaction(
+				new Timeout(name)
+					.Response(new Response(EEventStatus.INFO)
+						.Msg("tag", "TIMEOUT")
+						.Msg("descr", "sensor value has not been updated in required time")
+						.Msg("loc", "AID : {AID}")
+						.Msg("msg", "sensor(" + name + ") value has not been updated in required time")
+						.Exec("on_info")));
+		}
+		catch(ExceptionParseError ignore)
+		{
+			throw new ExceptionModelFail("internal error in builtin reaction description");
+		}
 	}
 
 	public void DeclareSensor(SensorTemplate sensor)

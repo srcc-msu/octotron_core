@@ -22,12 +22,13 @@ public class AbstractModAttributeBuilder<T extends AbstractModAttribute> impleme
 	}
 
 	@Override
-	public void AddReaction(ReactionTemplate reaction_template)
+	public Reaction AddReaction(ReactionTemplate reaction_template)
 	{
 		Reaction reaction = new Reaction(reaction_template, attribute);
 		attribute.reactions.put(reaction.GetID(), reaction);
 
 		service.GetPersistenceService().RegisterReaction(reaction);
+		return reaction;
 	}
 
 	@Override

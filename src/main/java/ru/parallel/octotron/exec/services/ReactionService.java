@@ -10,18 +10,13 @@ import ru.parallel.octotron.reactions.PreparedResponseFactory;
 
 import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
 
 // TODO: executor?
-public class ReactionService extends Service
+public class ReactionService extends BGService
 {
 	private final PersistenceService persistence_service;
-
-	private final ThreadPoolExecutor reactions_executor;
-
 	private final PreparedResponseFactory response_factory;
 
 	/**
@@ -29,15 +24,12 @@ public class ReactionService extends Service
 	 * */
 	private boolean silent = false;
 
-	public ReactionService(Context context, PersistenceService persistence_service)
+	public ReactionService(String prefix, Context context, PersistenceService persistence_service)
 	{
-		super(context);
+		super(prefix, context, context.settings.GetNumThreads(), context.settings.GetNumThreads()
+			, 0, new LinkedBlockingQueue<Runnable>());
+
 		this.persistence_service = persistence_service;
-
-		reactions_executor = new ThreadPoolExecutor(context.settings.GetNumThreads(), context.settings.GetNumThreads(),
-			0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());
-
 		this.response_factory = new PreparedResponseFactory(context);
 	}
 
@@ -58,9 +50,7 @@ public class ReactionService extends Service
 		if(IsSilent())
 			return;
 
-		context.stat.Add("reactions_executor", 1, reactions_executor.getQueue().size());
-
-		reactions_executor.execute(response);
+		executor.execute(response);
 	}
 
 	private void CheckSingleReaction(Reaction reaction)
@@ -107,6 +97,6 @@ public class ReactionService extends Service
 
 	public void Finish()
 	{
-		ShutdownExecutor(reactions_executor);
+		ShutdownExecutor(executor);
 	}
 }

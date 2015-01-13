@@ -1,39 +1,29 @@
 package ru.parallel.octotron.exec.services;
 
+import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.services.workers.Importer;
 import ru.parallel.utils.FileUtils;
 
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
-
-public class ImportService extends Service
+public class ImportService extends BGService
 {
-	private final ThreadPoolExecutor import_executor;
-
 	private final UpdateService update_service;
 
-	public ImportService(Context context, UpdateService update_service)
+	public ImportService(String prefix, Context context, UpdateService update_service)
 	{
-		super(context);
+		super(prefix, context, 1, 1, 0, new LinkedBlockingQueue<Runnable>());
 		this.update_service = update_service;
-
-		import_executor = new ThreadPoolExecutor(1, 1,
-			0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());
 	}
 
-	public void ImmediateImport(ModelEntity entity, String name, Value value)
+	public void ImmediateImport(ModelEntity entity, String attribute_name, Value value)
 	{
-		new Importer(update_service, entity, name, value).run();
+		new Importer(entity, attribute_name, value).run();
 	}
 
 	public boolean Import(ModelEntity entity, String name, Value value, boolean strict)
@@ -55,8 +45,7 @@ public class ImportService extends Service
 
 	public void Import(ModelEntity entity, String name, Value value)
 	{
-		import_executor.execute(new Importer(update_service, entity, name, value));
-		context.stat.Add("import_executor", 1, import_executor.getQueue().size());
+		executor.execute(new Importer(entity, name, value));
 	}
 
 	public void UnknownImport(ModelEntity target, String name, Value value)
@@ -76,9 +65,29 @@ public class ImportService extends Service
 		}
 	}
 
-	@Override
-	public void Finish()
+	public class Importer implements Runnable
 	{
-		ShutdownExecutor(import_executor);
+		private final ModelEntity entity;
+
+		private final String name;
+		private final Value value;
+
+		public Importer(ModelEntity entity, String name, Value value)
+		{
+			this.entity = entity;
+
+			this.name = name;
+			this.value = value;
+		}
+
+		@Override
+		public void run()
+		{
+			SensorAttribute sensor = entity.GetSensor(name);
+
+			sensor.Update(value);
+
+			update_service.Update(sensor, true);
+		}
 	}
 }

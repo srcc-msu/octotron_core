@@ -21,7 +21,7 @@ public class ComplexComputeTest extends GeneralTest
 
 	public ComplexComputeTest()
 	{
-		persistence_service = new PersistenceService(context);
+		persistence_service = new PersistenceService("test_persistence", context);
 		persistence_service.InitDummy();
 	}
 
@@ -43,8 +43,8 @@ public class ComplexComputeTest extends GeneralTest
 	@Test
 	public void TestUndefined() throws Exception
 	{
-		ReactionService reaction_service = new ReactionService(context, persistence_service);
-		new UpdateService(context, reaction_service, persistence_service)
+		ReactionService reaction_service = new ReactionService("test_reactions", context, persistence_service);
+		new UpdateService("test_updates", context, reaction_service, persistence_service)
 			.Update(object.GetSensor("val1"), false);
 	}
 }

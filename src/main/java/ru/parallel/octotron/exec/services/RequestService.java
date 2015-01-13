@@ -7,47 +7,36 @@ import ru.parallel.octotron.http.requests.ModelRequestExecutor;
 import ru.parallel.octotron.http.requests.ParsedModelRequest;
 
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
 
-public class RequestService extends Service
+public class RequestService extends BGService
 {
 	/**
 	 * processes all non-import operations
 	 * */
-	private final ThreadPoolExecutor request_executor;
 	private final ExecutionController execution_controller;
 
-	public RequestService(Context context, ExecutionController execution_controller)
+	public RequestService(String prefix, Context context, ExecutionController execution_controller)
 	{
-		super(context);
+		super(prefix, context, context.settings.GetNumThreads(), context.settings.GetNumThreads(),
+			0L, new LinkedBlockingQueue<Runnable>());
 		this.execution_controller = execution_controller;
-
-		request_executor = new ThreadPoolExecutor(context.settings.GetNumThreads(), context.settings.GetNumThreads(),
-			0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());
-
 	}
 
 	@Override
 	public void Finish()
 	{
-		ShutdownExecutor(request_executor);
+		ShutdownExecutor(executor);
 	}
 
 	public void AddRequest(ParsedModelRequest request)
 	{
-		context.stat.Add("request_executor", 1, request_executor.getQueue().size());
-
-		request_executor.execute(new ModelRequestExecutor(execution_controller, request));
+		executor.execute(new ModelRequestExecutor(execution_controller, request));
 	}
 
 	public void AddBlockingRequest(ParsedModelRequest request, HttpExchangeWrapper http_exchange_wrapper)
 	{
-		context.stat.Add("request_executor", 1, request_executor.getQueue().size());
-
-		request_executor.execute(new ModelRequestExecutor(execution_controller, request, http_exchange_wrapper));
+		executor.execute(new ModelRequestExecutor(execution_controller, request, http_exchange_wrapper));
 	}
 }

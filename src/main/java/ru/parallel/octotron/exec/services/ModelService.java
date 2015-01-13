@@ -45,12 +45,12 @@ public final class ModelService extends Service
 
 		String db_path = context.settings.GetDbPath() + "/" + context.settings.GetModelName();
 
+		persistence_service = new PersistenceService("persistence", context);
+
 		if(FileUtils.IsDirEmpty(db_path))
 			mode = EMode.CREATION;
 		else
 			mode = EMode.LOAD;
-
-		persistence_service = new PersistenceService(context);
 
 		if(context.settings.IsDb())
 			persistence_service.InitGraph(this, db_path);
@@ -76,11 +76,11 @@ public final class ModelService extends Service
 
 	public void Operate()
 	{
-		persistence_service.WaitAll();
-
 		InitSelfTest(this);
 
 		MakeRuleDependency();
+
+		persistence_service.WaitAll();
 
 		mode = EMode.OPERATION;
 	}

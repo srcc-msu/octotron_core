@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.logic;
 
+import ru.parallel.octotron.exec.services.BGService;
 import ru.parallel.utils.Timer;
 
 import java.util.HashMap;
@@ -19,12 +20,14 @@ import java.util.Map;
  * */
 public class Statistics
 {
+	private List<BGService> registered_services = new LinkedList<>();
+
 	public static class Stat
 	{
 		public final String name;
 
-		public final Metric queue = new Metric();
-		public final Metric total = new Metric();
+		public final Metric queue_size_metric = new Metric();
+		public final Metric total_metric = new Metric();
 
 		public Stat(String name)
 		{
@@ -36,28 +39,28 @@ public class Statistics
 
 	private final Timer timer_60 = new Timer();
 
+	public void RegisterService(BGService service)
+	{
+		registered_services.add(service);
+	}
+
 	public Statistics()
 	{
 		timer_60.Start();
 	}
 
-	private final Object lock = new Object();
-
-	public void Add(String name, int add, int queue)
+	private void Add(String name, long added_count, long queue_size)
 	{
-		synchronized(lock)
+		Stat stat = stats.get(name);
+
+		if(stat == null)
 		{
-			Stat stat = stats.get(name);
-
-			if(stat == null)
-			{
-				stat = new Stat(name);
-				stats.put(name, stat);
-			}
-
-			stat.total.Collect(add);
-			stat.queue.Collect(queue);
+			stat = new Stat(name);
+			stats.put(name, stat);
 		}
+
+		stat.total_metric.Collect(added_count);
+		stat.queue_size_metric.Collect(queue_size);
 	}
 
 	private static Map<String, Object> GetAvgs(Metric metric, String name)
@@ -76,12 +79,15 @@ public class Statistics
 	{
 		Map<String, Object> res = new HashMap<>();
 
+		res.put(name + " total"
+			, String.valueOf(metric.GetTotal()));
+
 		res.put(name + " for " + seconds + " secs"
-			, String.valueOf(metric.GetValue()));
+			, String.valueOf(metric.GetSum()));
 
 		if(seconds > 0)
 			res.put(name + " per sec"
-				, String.format("%.2f", 1.0 * metric.GetValue() / seconds));
+				, String.format("%.2f", 1.0 * metric.GetSum() / seconds));
 
 		return res;
 	}
@@ -91,28 +97,28 @@ public class Statistics
 		List<Map<String, Object>> res = new LinkedList<>();
 
 		for(Stat stat : stats.values())
-			res.add(Statistics.GetAvgs(stat.queue, stat.name + " queue"));
+			res.add(Statistics.GetAvgs(stat.queue_size_metric, stat.name + " queue"));
 
 		for(Stat stat : stats.values())
-			res.add(Statistics.GetChange(stat.total, (int)timer_60.Get(), stat.name + " total"));
+			res.add(Statistics.GetChange(stat.total_metric, (int)timer_60.Get(), stat.name + " total"));
 
 		return res;
 	}
 
 	public void Process()
 	{
-		synchronized(lock)
-		{
-			if(timer_60.Get() > 60) /*secs in min..*/
-			{
-				for(Stat stat : stats.values())
-				{
-					stat.queue.Reset();
-					stat.total.Reset();
-				}
+		for(BGService service : registered_services)
+			Add(service.GetName(), service.GetRecentCompletedCount(), service.GetWaitingCount());
 
-				timer_60.Start();
+		if(timer_60.Get() > 60) /*secs in min..*/
+		{
+			for(Stat stat : stats.values())
+			{
+				stat.queue_size_metric.Reset();
+				stat.total_metric.Reset();
 			}
+
+			timer_60.Start();
 		}
 	}
 }

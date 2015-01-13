@@ -92,6 +92,8 @@ public class Start
 			context = Context.CreateFromConfig(json_config);
 
 			model_service = new ModelService(context);
+			context.stat.RegisterService(model_service.GetPersistenceService());
+
 
 			ConfigLogging(context.settings.GetLogDir());
 

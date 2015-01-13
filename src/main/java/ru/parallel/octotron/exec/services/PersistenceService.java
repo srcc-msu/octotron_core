@@ -21,24 +21,19 @@ import java.util.logging.Level;
 
 import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
 
-public class PersistenceService extends Service implements IPersistenceManager // WTF?
+public class PersistenceService extends BGService implements IPersistenceManager // WTF?
 {
+	private static final int UPDATE_QUEUE_LIMIT = 10000;
 	private final ConcurrentLinkedQueue<Collection<? extends IModelAttribute>> to_update
 		= new ConcurrentLinkedQueue<>();
 
-	private final ThreadPoolExecutor persistence_executor;
-
 	private IPersistenceManager persistence_manager;
 
-	public PersistenceService(Context context)
+	public PersistenceService(String prefix, Context context)
 	{
-		super(context);
+		super(prefix, context, 1, 1, 0L, new ArrayBlockingQueue<Runnable>(UPDATE_QUEUE_LIMIT));
 
-		persistence_executor = new ThreadPoolExecutor(1, 1,
-			0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());
-
-		persistence_executor.setThreadFactory(
+		executor.setThreadFactory(
 			new ThreadFactory()
 			{
 				private long created = 0;
@@ -57,19 +52,16 @@ public class PersistenceService extends Service implements IPersistenceManager /
 
 	public void WaitAll()
 	{
-		while(persistence_executor.getQueue().size() > 0)
+		while(GetWaitingCount() > 0)
 		{
-			try
-			{
-				Thread.sleep(1);
-			}
-			catch (InterruptedException ignore) {}
+			try { Thread.sleep(1); }
+			catch (InterruptedException ignore) {} // NOBODY DARES TO INTERRUPT ME
 		}
 	}
 
 	public void InitGraph(final ModelService model_service, final String db_path)
 	{
-		Future<?> future = persistence_executor.submit(
+		Future<?> future = executor.submit(
 			new Callable<Object>()
 			{
 				@Override
@@ -102,7 +94,7 @@ public class PersistenceService extends Service implements IPersistenceManager /
 
 	public void UpdateAttributes(final Collection<? extends IModelAttribute> attributes)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
@@ -110,20 +102,22 @@ public class PersistenceService extends Service implements IPersistenceManager /
 				{
 					try
 					{
-						for(IModelAttribute attribute : attributes)
-							if(attribute.GetType() == EAttributeType.SENSOR)
-								persistence_manager.RegisterSensor((SensorAttribute)attribute);
-							else if(attribute.GetType() == EAttributeType.VAR)
-								persistence_manager.RegisterVar((VarAttribute)attribute);
+						for (IModelAttribute attribute : attributes)
+							if (attribute.GetType() == EAttributeType.SENSOR)
+								persistence_manager.RegisterSensor((SensorAttribute) attribute);
+							else if (attribute.GetType() == EAttributeType.VAR)
+								persistence_manager.RegisterVar((VarAttribute) attribute);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
 					}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
 				}
 			});
 	}
 
 	public void UpdateReactions(final Collection<Reaction> reactions)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
@@ -131,10 +125,12 @@ public class PersistenceService extends Service implements IPersistenceManager /
 				{
 					try
 					{
-						for(Reaction reaction : reactions)
-						persistence_manager.RegisterReaction(reaction);
+						for (Reaction reaction : reactions)
+							persistence_manager.RegisterReaction(reaction);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
 					}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
 				}
 			});
 	}
@@ -142,33 +138,41 @@ public class PersistenceService extends Service implements IPersistenceManager /
 	@Override
 	public void Finish()
 	{
-		WaitAll();
-
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.Finish();}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.Finish();
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 
-		ShutdownExecutor(persistence_executor);
+		ShutdownExecutor(executor);
 	}
 
 	@Override
 	public void MakeRuleDependency(final VarAttribute attribute)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.MakeRuleDependency(attribute);}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.MakeRuleDependency(attribute);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 	}
@@ -176,14 +180,19 @@ public class PersistenceService extends Service implements IPersistenceManager /
 	@Override
 	public void RegisterLink(final ModelLink link)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.RegisterLink(link);}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.RegisterLink(link);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 	}
@@ -191,14 +200,19 @@ public class PersistenceService extends Service implements IPersistenceManager /
 	@Override
 	public void RegisterReaction(final Reaction reaction)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.RegisterReaction(reaction);}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.RegisterReaction(reaction);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 	}
@@ -206,14 +220,19 @@ public class PersistenceService extends Service implements IPersistenceManager /
 	@Override
 	public void RegisterConst(final ConstAttribute attribute)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.RegisterConst(attribute);}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.RegisterConst(attribute);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 	}
@@ -221,14 +240,19 @@ public class PersistenceService extends Service implements IPersistenceManager /
 	@Override
 	public void RegisterSensor(final SensorAttribute attribute)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.RegisterSensor(attribute);}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.RegisterSensor(attribute);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 	}
@@ -236,14 +260,19 @@ public class PersistenceService extends Service implements IPersistenceManager /
 	@Override
 	public void RegisterVar(final VarAttribute attribute)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.RegisterVar(attribute);}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.RegisterVar(attribute);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 	}
@@ -251,14 +280,19 @@ public class PersistenceService extends Service implements IPersistenceManager /
 	@Override
 	public void RegisterObject(final ModelObject object)
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.RegisterObject(object);}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.RegisterObject(object);
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 	}
@@ -266,14 +300,19 @@ public class PersistenceService extends Service implements IPersistenceManager /
 	@Override
 	public void Wipe()
 	{
-		persistence_executor.execute(
+		executor.execute(
 			new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					try { persistence_manager.Wipe();}
-					catch(Exception e) {LOGGER.log(Level.WARNING, "", e);}
+					try
+					{
+						persistence_manager.Wipe();
+					} catch (Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
 				}
 			});
 	}

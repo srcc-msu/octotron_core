@@ -44,8 +44,6 @@ public class HTTPServer
 		public void handle(HttpExchange http_exchange)
 			throws IOException
 		{
-			http_service.RequestInform();
-
 			HttpExchangeWrapper http_exchange_wrapper = new HttpExchangeWrapper(http_exchange);
 
 			ParsedModelRequest request;

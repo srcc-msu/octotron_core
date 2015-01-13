@@ -41,14 +41,20 @@ public class ExecutionController
 		this.context = context;
 		this.model_service = model_service;
 
-		request_service = new RequestService(context, this);
-		http_service = new HttpService(context, request_service);
+		request_service = new RequestService("requests", context, this);
+		http_service = new HttpService("http_requests", context, request_service);
 
-		reaction_service = new ReactionService(context, model_service.GetPersistenceService());
-		update_service = new UpdateService(context, reaction_service, model_service.GetPersistenceService());
-		import_service = new ImportService(context, update_service);
+		reaction_service = new ReactionService("reactions", context, model_service.GetPersistenceService());
+		update_service = new UpdateService("updates", context, reaction_service, model_service.GetPersistenceService());
+		import_service = new ImportService("imports", context, update_service);
 
 		checker_service = new OutdatedCheckerService(context, update_service);
+
+		context.stat.RegisterService(request_service);
+		context.stat.RegisterService(http_service);
+		context.stat.RegisterService(reaction_service);
+		context.stat.RegisterService(update_service);
+		context.stat.RegisterService(import_service);
 
 		UpdateDefinedSensors();
 	}

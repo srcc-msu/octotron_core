@@ -1,47 +1,100 @@
 package ru.parallel.octotron.exec.services;
 
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.services.workers.Updater;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.Collection;
 
-import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
-
-public class UpdateService extends Service
+/**
+ * it processes sensors import, varyings modification and, reactions processing
+ * the only service, that modifies the model
+ * */
+public class UpdateService extends BGService
 {
-	/**
-	 * single threaded pool
-	 * it processes sensors import, varyings modification and, reactions processing
-	 * the only pool, that modifies the model
-	 * */
-	private final ThreadPoolExecutor update_executor;
 	private final ReactionService reaction_service;
 	private final PersistenceService persistence_service;
 
-	public UpdateService(Context context, ReactionService reaction_service, PersistenceService persistence_service)
+	public UpdateService(String prefix, Context context, ReactionService reaction_service, PersistenceService persistence_service)
 	{
-		super(context);
+		super(prefix, context);
 		this.reaction_service = reaction_service;
 		this.persistence_service = persistence_service;
-
-		update_executor = new ThreadPoolExecutor(1, 1,
-			0L, TimeUnit.MILLISECONDS,
-			new LinkedBlockingQueue<Runnable>());
 	}
 
 	public void Update(SensorAttribute sensor, boolean check_reactions)
 	{
-		update_executor.execute(new Updater(reaction_service, persistence_service, sensor, check_reactions));
-		context.stat.Add("update_executor", 1, update_executor.getQueue().size());
+		executor.execute(new Updater(sensor, check_reactions));
 	}
 
-
-	@Override
-	public void Finish()
+	class Updater implements Runnable
 	{
-		ShutdownExecutor(update_executor);
+		private final SensorAttribute sensor;
+		private final boolean check_reactions;
+
+		public Updater(SensorAttribute sensor
+			, boolean check_reactions)
+		{
+			this.sensor = sensor;
+			this.check_reactions = check_reactions;
+		}
+
+		private Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
+		{
+			Collection<VarAttribute> result = new AttributeList<>();
+
+			for(IModelAttribute attribute : attributes)
+			{
+				result.addAll(attribute.GetDependOnMe());
+			}
+
+			return result;
+		}
+
+		private Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
+		{
+			Collection<IModelAttribute> result = new AttributeList<>();
+
+			Collection<VarAttribute> depend_from_changed = changed.GetDependOnMe();
+
+			do
+			{
+				Collection<VarAttribute> new_changed = new AttributeList<>();
+
+				for(VarAttribute var : depend_from_changed)
+				{
+					if(!var.AreDepsDefined())
+						continue;
+
+					var.Update();
+					new_changed.add(var);
+				}
+
+				result.addAll(new_changed);
+				depend_from_changed = GetDependFromList(new_changed);
+			}
+			while(depend_from_changed.size() != 0);
+
+			return result;
+		}
+
+		@Override
+		public void run()
+		{
+			Collection<IModelAttribute> result = ProcessVars(sensor);
+
+			result.add(sensor);
+
+			if(check_reactions)
+			{
+
+				reaction_service.CheckReactions(result);
+				reaction_service.CheckReaction(sensor.GetTimeoutReaction());
+			}
+
+			persistence_service.UpdateAttributes(result);
+		}
 	}
 }

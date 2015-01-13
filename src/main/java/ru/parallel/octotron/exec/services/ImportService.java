@@ -27,7 +27,7 @@ public class ImportService extends BGService
 
 	public void ImmediateImport(ModelEntity entity, String attribute_name, Value value)
 	{
-		new Importer(entity, attribute_name, value).run();
+		new ImmediateImporter(entity, attribute_name, value).run();
 	}
 
 	public boolean Import(ModelEntity entity, String name, Value value, boolean strict)
@@ -71,10 +71,9 @@ public class ImportService extends BGService
 
 	public class Importer implements Runnable
 	{
-		private final ModelEntity entity;
-
-		private final String name;
-		private final Value value;
+		protected final ModelEntity entity;
+		protected final String name;
+		protected final Value value;
 
 		public Importer(ModelEntity entity, String name, Value value)
 		{
@@ -92,6 +91,24 @@ public class ImportService extends BGService
 			sensor.Update(value);
 
 			update_service.Update(sensor, true);
+		}
+	}
+
+	public class ImmediateImporter extends Importer
+	{
+		public ImmediateImporter(ModelEntity entity, String name, Value value)
+		{
+			super(entity, name, value);
+		}
+
+		@Override
+		public void run()
+		{
+			SensorAttribute sensor = entity.GetSensor(name);
+
+			sensor.Update(value);
+
+			update_service.ImmediateUpdate(sensor, true);
 		}
 	}
 }

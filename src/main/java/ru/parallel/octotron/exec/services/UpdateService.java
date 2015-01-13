@@ -30,10 +30,15 @@ public class UpdateService extends BGService
 		executor.execute(new Updater(sensor, check_reactions));
 	}
 
+	public void ImmediateUpdate(SensorAttribute sensor, boolean check_reactions)
+	{
+		new ImmediateUpdater(sensor, check_reactions).run();
+	}
+
 	class Updater implements Runnable
 	{
-		private final SensorAttribute sensor;
-		private final boolean check_reactions;
+		protected final SensorAttribute sensor;
+		protected final boolean check_reactions;
 
 		public Updater(SensorAttribute sensor
 			, boolean check_reactions)
@@ -42,7 +47,7 @@ public class UpdateService extends BGService
 			this.check_reactions = check_reactions;
 		}
 
-		private Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
+		protected Collection<VarAttribute> GetDependFromList(Collection<? extends IModelAttribute> attributes)
 		{
 			Collection<VarAttribute> result = new AttributeList<>();
 
@@ -54,7 +59,7 @@ public class UpdateService extends BGService
 			return result;
 		}
 
-		private Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
+		protected Collection<IModelAttribute> ProcessVars(SensorAttribute changed)
 		{
 			Collection<IModelAttribute> result = new AttributeList<>();
 
@@ -79,6 +84,34 @@ public class UpdateService extends BGService
 			while(depend_from_changed.size() != 0);
 
 			return result;
+		}
+
+		@Override
+		public void run()
+		{
+			Collection<IModelAttribute> result = ProcessVars(sensor);
+
+			result.add(sensor);
+
+			if(check_reactions)
+			{
+
+				reaction_service.CheckReactions(result);
+				reaction_service.CheckReaction(sensor.GetTimeoutReaction());
+			}
+
+			persistence_service.UpdateAttributes(result);
+		}
+	}
+
+	/**
+	 * this one is not very immediate - db and scripts are still called in background
+	 * */
+	public class ImmediateUpdater extends Updater
+	{
+		public ImmediateUpdater(SensorAttribute sensor, boolean check_reactions)
+		{
+			super(sensor, check_reactions);
 		}
 
 		@Override

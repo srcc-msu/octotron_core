@@ -238,6 +238,9 @@ public class ReactionTest
 		assertNull(reaction.ProcessOrNull());
 	}
 
+	/**
+	 * sometimes fails.. probably because of multithreaded processing
+	 * */
 	@Test
 	public void TestProcess6() throws Exception
 	{

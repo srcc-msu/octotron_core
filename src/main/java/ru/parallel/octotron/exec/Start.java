@@ -16,15 +16,13 @@ import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.services.ModelService;
+import ru.parallel.utils.AntiDuplicateLoggingFilter;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.util.logging.*;
 
 /**
  * main executable function<br>
@@ -36,6 +34,8 @@ public class Start
 	private final static int MB = 1024 * 1024;
 
 	private static final int SYS_LOG_SIZE = 10*MB; // 10 MB // orly?
+
+	private static final int DUPLICATES_LOGGING_THRESHOLD = 10000; // 10 seconds in ms
 
 	private static void ConfigLogging(String log_dir)
 	{
@@ -52,6 +52,8 @@ public class Start
 		{
 			LOGGER.log(Level.CONFIG, "could not create log file in: " + log_dir, e);
 		}
+
+		LOGGER.setFilter(new AntiDuplicateLoggingFilter(DUPLICATES_LOGGING_THRESHOLD));
 	}
 
 /**

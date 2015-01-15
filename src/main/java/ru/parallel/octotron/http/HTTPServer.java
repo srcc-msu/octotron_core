@@ -33,7 +33,6 @@ public class HTTPServer
 
 	private final HttpServer server;
 	private final RequestService request_service;
-	private final HttpService http_service;
 
 	/**
  * parse request to tokens and add parsed_request to message queue
@@ -116,10 +115,9 @@ public class HTTPServer
  * create and start the server, listening on /port<br>
  * messages are not guaranteed to come in fixed order<br>
  * */
-	public HTTPServer(Context context, Executor executor, HttpService http_service, RequestService request_service)
+	public HTTPServer(Context context, HttpService http_service, RequestService request_service)
 		throws ExceptionSystemError
 	{
-		this.http_service = http_service;
 		this.request_service = request_service;
 
 		// why is it turned off by default >.<
@@ -135,7 +133,7 @@ public class HTTPServer
 			throw new ExceptionSystemError(e);
 		}
 
-		server.setExecutor(executor);
+		server.setExecutor(http_service.GetExecutor());
 
 		HttpContext view = server.createContext("/view", new StandardHandler());
 		HttpContext modify  = server.createContext("/modify", new StandardHandler());

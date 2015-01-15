@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.concurrent.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static ru.parallel.utils.JavaUtils.ShutdownExecutor;
@@ -15,14 +16,20 @@ public class BGExecutorService implements Executor
 	private final String prefix;
 	private final ThreadPoolExecutor executor;
 
+	// blocks the submitting thread if the queue reaches the limit
+	// 0 - no blocking
+	private long max_waiting = 0l;
+
 	public BGExecutorService(String prefix, int core_pool_size, int maximum_pool_size
-		, long keep_alive_ms, BlockingQueue<Runnable> queue)
+		, long keep_alive_ms, BlockingQueue<Runnable> queue, long max_waiting)
 	{
 		this.prefix = prefix;
 		executor = new ThreadPoolExecutor(core_pool_size, maximum_pool_size
 			, keep_alive_ms, TimeUnit.MILLISECONDS, queue);
 
 		executor.setThreadFactory(new ThreadFactoryBuilder().setNameFormat("bg_service_" + prefix + "_%d").build());
+
+		this.max_waiting = max_waiting;
 	}
 
 	public final String GetName()
@@ -32,15 +39,26 @@ public class BGExecutorService implements Executor
 
 	public void execute(Runnable command)
 	{
+		if(max_waiting > 0)
+		{
+			LOGGER.log(Level.INFO, prefix + " executor is full, blocking the calling thread");
+			WaitQueueSize(max_waiting);
+		}
+
 		executor.execute(command);
+	}
+
+	public void SetMaxWaiting(int max_waiting)
+	{
+		this.max_waiting = max_waiting;
 	}
 
 	/**
 	 * simple single threaded
 	 * */
-	public BGExecutorService(String prefix)
+	public BGExecutorService(String prefix, long max_waiting)
 	{
-		this(prefix, 1, 1, 0L, new LinkedBlockingQueue<Runnable>());
+		this(prefix, 1, 1, 0L, new LinkedBlockingQueue<Runnable>(), max_waiting);
 	}
 
 	public final int GetWaitingCount()
@@ -67,7 +85,12 @@ public class BGExecutorService implements Executor
 
 	public void WaitAll()
 	{
-		while(GetWaitingCount() > 0)
+		WaitQueueSize(0);
+	}
+
+	public void WaitQueueSize(long size)
+	{
+		while(GetWaitingCount() > size)
 		{
 			try { Thread.sleep(1); }
 			catch (InterruptedException ignore) {} // NOBODY DARES TO INTERRUPT ME
@@ -93,7 +116,6 @@ public class BGExecutorService implements Executor
 		executor.setThreadFactory(
 			new ThreadFactory()
 			{
-				private long created = 0;
 				@Override
 				public Thread newThread(Runnable r)
 				{

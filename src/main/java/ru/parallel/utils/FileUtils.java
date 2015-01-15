@@ -45,8 +45,13 @@ public abstract class FileUtils
 		return new BufferedReader(isr);
 	}
 
+	private static final int SCRIPTS_THREADS = 4;
+	private static final long MAX_THREADS_QUEUE = 100L;
+
 	public static BGExecutorService executor = new BGExecutorService("scripts"
-		, 4, 4, 0L, new LinkedBlockingQueue<Runnable>());
+		, SCRIPTS_THREADS, SCRIPTS_THREADS
+		, 0L, new LinkedBlockingQueue<Runnable>()
+		, MAX_THREADS_QUEUE);
 
 	public static void Finish()
 	{

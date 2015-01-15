@@ -19,8 +19,9 @@ public class ImportService extends BGService
 	{
 		super(context
 			, new BGExecutorService(prefix
-			, 1, 1
-			, 0L, new LinkedBlockingQueue<Runnable>()));
+				, 1, 1
+				, 0L
+				, new LinkedBlockingQueue<Runnable>(), DEFAULT_QUEUE_LIMIT));
 
 		this.update_service = update_service;
 	}

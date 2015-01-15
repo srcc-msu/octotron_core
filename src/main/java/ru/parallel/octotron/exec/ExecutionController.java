@@ -57,6 +57,8 @@ public class ExecutionController
 		context.stat.RegisterService(import_service.GetExecutor());
 
 		UpdateDefinedSensors();
+
+		model_service.GetPersistenceService().GetExecutor().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
 	}
 
 	public UpdateService GetUpdateService()

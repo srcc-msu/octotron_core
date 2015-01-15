@@ -15,10 +15,11 @@ public class HttpService extends BGService
 	{
 		super(context
 			, new BGExecutorService(prefix
-			, context.settings.GetNumThreads(), context.settings.GetNumThreads()
-			, 0L, new LinkedBlockingQueue<Runnable>()));
+				, context.settings.GetNumThreads(), context.settings.GetNumThreads()
+				, 0L
+				, new LinkedBlockingQueue<Runnable>(), 0L)); // unlimited - will keep all requests
 
-		http = new HTTPServer(context, executor, this, request_service);
+		http = new HTTPServer(context, this, request_service);
 	}
 
 	@Override

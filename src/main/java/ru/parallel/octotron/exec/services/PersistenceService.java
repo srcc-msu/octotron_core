@@ -18,22 +18,20 @@ import ru.parallel.octotron.exec.Context;
 import java.util.Collection;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 
 public class PersistenceService extends BGService implements IPersistenceManager // WTF?
 {
-	private static final int UPDATE_QUEUE_LIMIT = 10000;
-	private final ConcurrentLinkedQueue<Collection<? extends IModelAttribute>> to_update
-		= new ConcurrentLinkedQueue<>();
-
 	private IPersistenceManager persistence_manager;
 
 	public PersistenceService(String prefix, Context context)
 	{
 		super(context
 			, new BGExecutorService(prefix
-			, 1, 1
-			, 0L, new ArrayBlockingQueue<Runnable>(UPDATE_QUEUE_LIMIT)));
+				, 1, 1
+				, 0L
+				, new LinkedBlockingQueue<Runnable>(), 0L)); // unlimited for the start, will be limited in Operate()
 
 		executor.LockOnThread();
 	}

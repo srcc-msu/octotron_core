@@ -19,7 +19,7 @@ public class UpdateService extends BGService
 
 	public UpdateService(String prefix, Context context, ReactionService reaction_service, PersistenceService persistence_service)
 	{
-		super(context, new BGExecutorService(prefix));
+		super(context, new BGExecutorService(prefix, DEFAULT_QUEUE_LIMIT));
 
 		this.reaction_service = reaction_service;
 		this.persistence_service = persistence_service;

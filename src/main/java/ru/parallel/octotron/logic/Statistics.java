@@ -7,7 +7,6 @@
 package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.exec.services.BGExecutorService;
-import ru.parallel.octotron.exec.services.BGService;
 import ru.parallel.utils.Timer;
 
 import java.util.HashMap;

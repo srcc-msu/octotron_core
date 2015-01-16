@@ -10,7 +10,6 @@ import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.services.*;
-import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.logging.Level;

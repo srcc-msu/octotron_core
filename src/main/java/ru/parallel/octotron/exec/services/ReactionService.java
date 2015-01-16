@@ -9,7 +9,6 @@ import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.octotron.reactions.PreparedResponseFactory;
 
 import java.util.Collection;
-import java.util.concurrent.LinkedBlockingQueue;
 
 // TODO: executor?
 public class ReactionService extends BGService

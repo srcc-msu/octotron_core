@@ -4,8 +4,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.http.HTTPServer;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 public class HttpService extends BGService
 {
 	private final HTTPServer http;

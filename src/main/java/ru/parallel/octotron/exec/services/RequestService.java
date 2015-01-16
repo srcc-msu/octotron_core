@@ -6,8 +6,6 @@ import ru.parallel.octotron.http.requests.HttpExchangeWrapper;
 import ru.parallel.octotron.http.requests.ModelRequestExecutor;
 import ru.parallel.octotron.http.requests.ParsedModelRequest;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 public class RequestService extends BGService
 {
 	/**

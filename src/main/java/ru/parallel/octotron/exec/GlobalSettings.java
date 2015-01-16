@@ -97,7 +97,7 @@ public class GlobalSettings
 		sys_path = "";
 		log_dir = "";
 
-		threads = 2;
+		threads = 4;
 
 // --- db config
 

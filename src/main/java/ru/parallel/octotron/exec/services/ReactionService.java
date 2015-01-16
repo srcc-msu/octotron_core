@@ -24,12 +24,8 @@ public class ReactionService extends BGService
 
 	public ReactionService(String prefix, Context context, PersistenceService persistence_service)
 	{
-		super(context
-			, new BGExecutorService(prefix
-				, context.settings.GetNumThreads(), context.settings.GetNumThreads()
-				, 0L
-				, new LinkedBlockingQueue<Runnable>(), DEFAULT_QUEUE_LIMIT));
-
+		super(context, new BGExecutorService(prefix, context.settings.GetNumThreads()
+			, DEFAULT_QUEUE_LIMIT));
 
 		this.persistence_service = persistence_service;
 		this.response_factory = new PreparedResponseFactory(context);

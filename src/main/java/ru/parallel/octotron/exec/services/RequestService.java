@@ -17,11 +17,8 @@ public class RequestService extends BGService
 
 	public RequestService(String prefix, Context context, ExecutionController execution_controller)
 	{
-		super(context
-			, new BGExecutorService(prefix
-				, context.settings.GetNumThreads(), context.settings.GetNumThreads()
-				, 0L
-				, new LinkedBlockingQueue<Runnable>(), DEFAULT_QUEUE_LIMIT));
+		super(context, new BGExecutorService(prefix, context.settings.GetNumThreads()
+			, DEFAULT_QUEUE_LIMIT));
 
 		this.execution_controller = execution_controller;
 	}

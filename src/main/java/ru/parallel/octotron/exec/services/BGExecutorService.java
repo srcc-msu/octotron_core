@@ -32,6 +32,19 @@ public class BGExecutorService implements Executor
 		this.max_waiting = max_waiting;
 	}
 
+	/**
+	 * simple single threaded
+	 * */
+	public BGExecutorService(String prefix, long max_waiting)
+	{
+		this(prefix, 1, 1, 0L, new LinkedBlockingQueue<Runnable>(), max_waiting);
+	}
+
+	public BGExecutorService(String prefix, int threads, long max_waiting)
+	{
+		this(prefix, threads, threads, 0L, new LinkedBlockingQueue<Runnable>(), max_waiting);
+	}
+
 	public final String GetName()
 	{
 		return prefix;
@@ -51,14 +64,6 @@ public class BGExecutorService implements Executor
 	public void SetMaxWaiting(int max_waiting)
 	{
 		this.max_waiting = max_waiting;
-	}
-
-	/**
-	 * simple single threaded
-	 * */
-	public BGExecutorService(String prefix, long max_waiting)
-	{
-		this(prefix, 1, 1, 0L, new LinkedBlockingQueue<Runnable>(), max_waiting);
 	}
 
 	public final int GetWaitingCount()

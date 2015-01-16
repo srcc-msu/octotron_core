@@ -6,9 +6,7 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.utils.FileUtils;
 
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 
 public class ImportService extends BGService
@@ -17,11 +15,7 @@ public class ImportService extends BGService
 
 	public ImportService(String prefix, Context context, UpdateService update_service)
 	{
-		super(context
-			, new BGExecutorService(prefix
-				, 1, 1
-				, 0L
-				, new LinkedBlockingQueue<Runnable>(), DEFAULT_QUEUE_LIMIT));
+		super(context, new BGExecutorService(prefix, DEFAULT_QUEUE_LIMIT));
 
 		this.update_service = update_service;
 	}
@@ -60,7 +54,7 @@ public class ImportService extends BGService
 
 		try
 		{
-			FileUtils.ExecSilent(script, Long.toString(target.GetID())
+			ScriptService.std.ExecSilent(script, Long.toString(target.GetID())
 				, name, value.ValueToString());
 		}
 		catch(ExceptionSystemError e)

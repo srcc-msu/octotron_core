@@ -13,11 +13,8 @@ public class HttpService extends BGService
 	public HttpService(String prefix, Context context, RequestService request_service)
 			throws ExceptionSystemError
 	{
-		super(context
-			, new BGExecutorService(prefix
-				, context.settings.GetNumThreads(), context.settings.GetNumThreads()
-				, 0L
-				, new LinkedBlockingQueue<Runnable>(), 0L)); // unlimited - will keep all requests
+		// unlimited - will keep all requests
+		super(context, new BGExecutorService(prefix, context.settings.GetNumThreads(), 0L));
 
 		http = new HTTPServer(context, this, request_service);
 	}

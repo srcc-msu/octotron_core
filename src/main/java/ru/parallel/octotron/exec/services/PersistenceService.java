@@ -27,11 +27,8 @@ public class PersistenceService extends BGService implements IPersistenceManager
 
 	public PersistenceService(String prefix, Context context)
 	{
-		super(context
-			, new BGExecutorService(prefix
-				, 1, 1
-				, 0L
-				, new LinkedBlockingQueue<Runnable>(), 0L)); // unlimited for the start, will be limited in Operate()
+		// unlimited for the start, will be limited in when db loading is done
+		super(context, new BGExecutorService(prefix, 0L));
 
 		executor.LockOnThread();
 	}

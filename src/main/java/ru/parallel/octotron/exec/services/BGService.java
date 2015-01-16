@@ -12,6 +12,7 @@ public abstract class BGService extends Service
 	{
 		super(context);
 		this.executor = executor;
+		context.stat.RegisterService(executor);
 	}
 
 	public void Finish()

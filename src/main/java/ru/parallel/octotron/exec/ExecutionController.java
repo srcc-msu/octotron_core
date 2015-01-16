@@ -50,12 +50,6 @@ public class ExecutionController
 
 		checker_service = new OutdatedCheckerService(context, update_service);
 
-		context.stat.RegisterService(request_service.GetExecutor());
-		context.stat.RegisterService(http_service.GetExecutor());
-		context.stat.RegisterService(reaction_service.GetExecutor());
-		context.stat.RegisterService(update_service.GetExecutor());
-		context.stat.RegisterService(import_service.GetExecutor());
-
 		UpdateDefinedSensors();
 
 		model_service.GetPersistenceService().GetExecutor().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
@@ -119,8 +113,6 @@ public class ExecutionController
 		reaction_service.Finish();
 
 		checker_service.Finish();
-
-		FileUtils.Finish();
 
 		LOGGER.log(Level.INFO, "all processing finished");
 	}

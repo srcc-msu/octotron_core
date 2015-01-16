@@ -19,6 +19,7 @@ import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.utils.AntiDuplicateLoggingFilter;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
+import ru.parallel.octotron.exec.services.ScriptService;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,10 +93,9 @@ public class Start
 		try
 		{
 			context = Context.CreateFromConfig(json_config);
-			context.stat.RegisterService(FileUtils.executor);
+			ScriptService.Init(context);
 
 			model_service = new ModelService(context);
-			context.stat.RegisterService(model_service.GetPersistenceService().GetExecutor());
 
 			ConfigLogging(context.settings.GetLogDir());
 
@@ -214,6 +214,8 @@ public class Start
 			if(controller != null)
 				controller.Finish();
 
+			ScriptService.std.Finish();
+
 			System.exit(1);
 		}
 
@@ -269,6 +271,7 @@ public class Start
 		{
 			controller.Finish();
 			model_service.Finish();
+			ScriptService.std.Finish();
 		}
 		catch(Exception e)
 		{
@@ -287,7 +290,7 @@ public class Start
 		String script = context.settings.GetScriptByKeyOrNull("on_start");
 
 		if(script != null)
-			FileUtils.ExecSilent(script);
+			ScriptService.std.ExecSilent(script);
 	}
 
 /**
@@ -299,7 +302,7 @@ public class Start
 		String script = context.settings.GetScriptByKeyOrNull("on_finish");
 
 		if(script != null)
-			FileUtils.ExecSilent(script);
+			ScriptService.std.ExecSilent(script);
 	}
 
 /**
@@ -335,7 +338,7 @@ public class Start
 			String script = context.settings.GetScriptByKeyOrNull("on_crash");
 
 			if(script != null)
-				FileUtils.ExecSilent(script, error_fname);
+				ScriptService.std.ExecSilent(script, error_fname);
 		}
 		catch(ExceptionSystemError e) // giving up now - exception during exception processing..
 		{

@@ -52,7 +52,7 @@ public class BGExecutorService implements Executor
 
 	public void execute(Runnable command)
 	{
-		if(max_waiting > 0)
+		if(max_waiting > 0 && GetWaitingCount() > max_waiting)
 		{
 			LOGGER.log(Level.INFO, prefix + " executor is full, blocking the calling thread");
 			WaitQueueSize(max_waiting);

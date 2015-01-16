@@ -98,10 +98,13 @@ public class Statistics
 		List<Map<String, Object>> res = new LinkedList<>();
 
 		for(Stat stat : stats.values())
-			res.add(Statistics.GetAvgs(stat.queue_size_metric, stat.name + " queue"));
+		{
+			Map<String, Object> to_add = Statistics.GetAvgs(stat.queue_size_metric, stat.name + " queue");
 
-		for(Stat stat : stats.values())
-			res.add(Statistics.GetChange(stat.total_metric, (int)timer_60.Get(), stat.name + " total"));
+			to_add.putAll(Statistics.GetChange(stat.total_metric, (int) timer_60.Get(), stat.name));
+
+			res.add(to_add);
+		}
 
 		return res;
 	}

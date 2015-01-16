@@ -96,9 +96,9 @@ public class ExecutionController
 			checker_service.PerformCheck();
 		}
 
-		Thread.sleep(1); // TODO move to notify/wait or something
-
 		context.stat.Process();
+
+		Thread.sleep(1);
 	}
 
 	public void Finish()

@@ -95,12 +95,11 @@ public class ReactionTest
 
 		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
-		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1)
-			.Response(new Response(EEventStatus.INFO, "tst#descr")));
+		Reaction reaction = entity.GetBuilder(model_service)
+			.AddReaction(new Equals("test", 1)
+				.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
-
-		Reaction reaction = Iterables.get(sensor.GetReactions(), 0);
 
 		reaction.ProcessOrNull();
 
@@ -124,12 +123,11 @@ public class ReactionTest
 
 		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
-		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeatable()
-			.Response(new Response(EEventStatus.INFO, "tst#descr")));
+		Reaction reaction = entity.GetBuilder(model_service)
+			.AddReaction(new Equals("test", 1).Repeatable()
+				.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
-
-		Reaction reaction = Iterables.get(sensor.GetReactions(), 0);
 
 		reaction.ProcessOrNull();
 
@@ -152,12 +150,11 @@ public class ReactionTest
 
 		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
-		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeat(2)
-			.Response(new Response(EEventStatus.INFO, "tst#descr")));
+		Reaction reaction = entity.GetBuilder(model_service)
+			.AddReaction(new Equals("test", 1).Repeat(2)
+				.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
-
-		Reaction reaction = Iterables.get(sensor.GetReactions(), 1);
 
 		reaction.ProcessOrNull();
 
@@ -183,12 +180,11 @@ public class ReactionTest
 
 		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
-		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Repeat(2).Repeatable()
-			.Response(new Response(EEventStatus.INFO, "tst#descr")));
+		Reaction reaction = entity.GetBuilder(model_service)
+			.AddReaction(new Equals("test", 1).Repeat(2).Repeatable()
+				.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
-
-		Reaction reaction = Iterables.get(sensor.GetReactions(), 1);
 
 		reaction.ProcessOrNull();
 
@@ -214,12 +210,11 @@ public class ReactionTest
 
 		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
-		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1)
-			.Response(new Response(EEventStatus.INFO, "tst#descr")));
+		Reaction reaction = entity.GetBuilder(model_service)
+			.AddReaction(new Equals("test", 1).Delay(1)
+				.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
-
-		Reaction reaction = Iterables.get(sensor.GetReactions(), 1);
 
 		reaction.ProcessOrNull();
 
@@ -238,9 +233,6 @@ public class ReactionTest
 		assertNull(reaction.ProcessOrNull());
 	}
 
-	/**
-	 * sometimes fails.. probably because of multithreaded processing
-	 * */
 	@Test
 	public void TestProcess6() throws Exception
 	{
@@ -248,12 +240,11 @@ public class ReactionTest
 
 		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
-		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1).Repeatable()
-			.Response(new Response(EEventStatus.INFO, "tst#descr")));
+		Reaction reaction = entity.GetBuilder(model_service)
+			.AddReaction(new Equals("test", 1).Delay(1).Repeatable()
+				.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
-
-		Reaction reaction = Iterables.get(sensor.GetReactions(), 1);
 
 		reaction.ProcessOrNull();
 
@@ -279,12 +270,11 @@ public class ReactionTest
 
 		entity.GetBuilder(model_service).DeclareSensor("test", -1, 0);
 
-		entity.GetBuilder(model_service).AddReaction(new Equals("test", 1).Delay(1).Repeat(2)
-			.Response(new Response(EEventStatus.INFO, "tst#descr")));
+		Reaction reaction = entity.GetBuilder(model_service)
+			.AddReaction(new Equals("test", 1).Delay(1).Repeat(2)
+				.Response(new Response(EEventStatus.INFO, "tst#descr")));
 
 		SensorAttribute sensor = entity.GetSensor("test");
-
-		Reaction reaction = Iterables.get(sensor.GetReactions(), 0);
 
 		reaction.ProcessOrNull();
 

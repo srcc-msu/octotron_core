@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.attributes.ConstAttribute;
 import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.VarAttribute;
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.logic.impl.Timeout;
@@ -35,9 +36,9 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		this.entity = entity;
 	}
 
-	public void AddReaction(ReactionTemplate reaction_template)
+	public Reaction AddReaction(ReactionTemplate reaction_template)
 	{
-		entity.GetAttribute(reaction_template.GetCheckName())
+		return entity.GetAttribute(reaction_template.GetCheckName())
 			.GetBuilder(service).AddReaction(reaction_template);
 	}
 

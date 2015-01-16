@@ -113,7 +113,8 @@ public class Start
 			if(model_service != null && model_service.GetMode() == ModelService.EMode.CREATION)
 				model_service.GetPersistenceService().Wipe(); // clean neo4j dir on unsuccessful creation
 
-			model_service.Finish();
+			if(model_service != null)
+				model_service.Finish();
 
 			System.exit(1);
 		}

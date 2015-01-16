@@ -11,7 +11,7 @@ import java.util.logging.LogRecord;
 public class AntiDuplicateLoggingFilter implements Filter
 {
 	private static final int LOOKBACK_COUNT = 5;
-	private Queue<LogRecord> records = new LinkedList<>();
+	private final Queue<LogRecord> records = new LinkedList<>();
 	private final long ms_threshold;
 
 	public AntiDuplicateLoggingFilter(long ms_threshold)

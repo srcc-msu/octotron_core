@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-// TODO move to executors
 public abstract class FileUtils
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");

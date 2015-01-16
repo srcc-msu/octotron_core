@@ -10,7 +10,6 @@ import ru.parallel.octotron.reactions.PreparedResponseFactory;
 
 import java.util.Collection;
 
-// TODO: executor?
 public class ReactionService extends BGService
 {
 	private final PersistenceService persistence_service;

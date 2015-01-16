@@ -129,8 +129,8 @@ public class Reaction extends ModelID<ELogicalType> implements IPresentable
 
 		if(needed)
 		{
-			boolean ready = (delay >= template.GetDelay())
-				&& (repeat >= template.GetRepeat());
+			boolean ready = (GetDelay() >= template.GetDelay())
+				&& (GetRepeat() >= template.GetRepeat());
 
 			if(state == State.NONE)
 			{

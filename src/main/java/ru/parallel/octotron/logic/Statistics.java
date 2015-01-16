@@ -20,7 +20,7 @@ import java.util.Map;
  * */
 public class Statistics
 {
-	private List<BGExecutorService> registered_services = new LinkedList<>();
+	private final List<BGExecutorService> registered_services = new LinkedList<>();
 
 	public static class Stat
 	{

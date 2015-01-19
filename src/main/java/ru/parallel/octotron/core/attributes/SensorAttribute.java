@@ -88,9 +88,9 @@ public final class SensorAttribute extends AbstractModAttribute
 	@Override
 	public void Update(Value new_value)
 	{
-		SetIsOutdated(false);
-
 		super.Update(new_value);
+
+		SetIsOutdated(false);
 	}
 
 	public void Update(Object new_value)

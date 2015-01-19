@@ -64,6 +64,8 @@ public class Value
 		return !equals(invalid);
 	}
 
+	public boolean IsComputable() { return IsDefined() && IsValid(); }
+
 	/**
 	 * tries to convert unchecked Object to the checked Value
 	 * if it is a value already - does nothing

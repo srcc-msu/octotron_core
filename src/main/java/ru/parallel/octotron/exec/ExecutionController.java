@@ -65,7 +65,7 @@ public class ExecutionController
 		{
 			for(SensorAttribute sensor : object.GetSensor())
 			{
-				if(sensor.GetValue().IsDefined())
+				if(sensor.GetValue().IsComputable())
 					update_service.Update(sensor, false);
 			}
 		}

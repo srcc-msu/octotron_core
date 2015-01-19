@@ -211,7 +211,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
-			if(attribute.GetValue().IsDefined() && attribute.GetValue().IsValid())
+			if(attribute.GetValue().IsComputable())
 				graph_object.UpdateAttribute("value", attribute.GetValue().GetRaw());
 
 // info
@@ -240,7 +240,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
-			if(attribute.GetValue().IsDefined() && attribute.GetValue().IsValid())
+			if(attribute.GetValue().IsComputable())
 				graph_object.UpdateAttribute("value", attribute.GetValue().GetRaw());
 		}
 	}

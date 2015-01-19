@@ -160,6 +160,9 @@ public abstract class AbstractAttribute extends ModelID<EAttributeType> implemen
 
 	final void SetValue(Value new_value)
 	{
+		if(value.IsComputable() && new_value.IsComputable())
+			value.CheckType(new_value);
+
 		value = new_value;
 	}
 

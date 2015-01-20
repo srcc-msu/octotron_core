@@ -94,11 +94,7 @@ public class UpdateService extends BGService
 			result.add(sensor);
 
 			if(check_reactions)
-			{
-
 				reaction_service.CheckReactions(result);
-				reaction_service.CheckReaction(sensor.GetTimeoutReaction());
-			}
 
 			persistence_service.UpdateAttributes(result);
 		}
@@ -122,11 +118,7 @@ public class UpdateService extends BGService
 			result.add(sensor);
 
 			if(check_reactions)
-			{
-
 				reaction_service.CheckReactions(result);
-				reaction_service.CheckReaction(sensor.GetTimeoutReaction());
-			}
 
 			persistence_service.UpdateAttributes(result);
 		}

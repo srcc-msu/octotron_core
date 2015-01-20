@@ -42,7 +42,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					{
 						persistence_manager = new GraphManager(model_service, db_path);
 					}
-					catch (ExceptionSystemError e)
+					catch(ExceptionSystemError e)
 					{
 						LOGGER.log(Level.SEVERE, "could not init database", e);
 
@@ -69,12 +69,12 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				{
 					try
 					{
-						for (IModelAttribute attribute : attributes)
-							if (attribute.GetType() == EAttributeType.SENSOR)
+						for(IModelAttribute attribute : attributes)
+							if(attribute.GetType() == EAttributeType.SENSOR)
 								persistence_manager.RegisterSensor((SensorAttribute) attribute);
-							else if (attribute.GetType() == EAttributeType.VAR)
+							else if(attribute.GetType() == EAttributeType.VAR)
 								persistence_manager.RegisterVar((VarAttribute) attribute);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -92,9 +92,9 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				{
 					try
 					{
-						for (Reaction reaction : reactions)
+						for(Reaction reaction : reactions)
 							persistence_manager.RegisterReaction(reaction);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -114,7 +114,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.Finish();
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -136,7 +136,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.MakeRuleDependency(attribute);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -156,7 +156,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.RegisterLink(link);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -176,7 +176,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.RegisterReaction(reaction);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -196,7 +196,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.RegisterConst(attribute);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -216,7 +216,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.RegisterSensor(attribute);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -236,7 +236,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.RegisterVar(attribute);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -256,7 +256,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.RegisterObject(object);
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -276,7 +276,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.Wipe();
-					} catch (Exception e)
+					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}

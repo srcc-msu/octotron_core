@@ -98,7 +98,7 @@ public class BGExecutorService implements Executor
 		while(GetWaitingCount() > size)
 		{
 			try { Thread.sleep(1); }
-			catch (InterruptedException ignore) {} // NOBODY DARES TO INTERRUPT ME
+			catch(InterruptedException ignore) {} // NOBODY DARES TO INTERRUPT ME
 		}
 	}
 

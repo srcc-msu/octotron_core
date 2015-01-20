@@ -64,7 +64,7 @@ public class HttpRequestParser
 		, new Control.snapshot()
 		, new Control.selftest()
 		, new Control.stat()
-		, new Control.mod_time()
+		, new Control.timeout()
 	};
 
 	/**

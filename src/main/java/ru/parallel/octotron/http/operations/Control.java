@@ -141,9 +141,9 @@ public class Control
 	 * collects and shows attributes, which were modified long ago<br>
 	 * param - for how long (in seconds)<br>
 	 * */
-	public static class mod_time extends FormattedOperation
+	public static class timeout extends FormattedOperation
 	{
-		public mod_time() {super("mod_time", true);}
+		public timeout() {super("timeout", true);}
 
 		@Override
 		public TypedString Execute(ExecutionController controller
@@ -153,7 +153,7 @@ public class Control
 			Utils.AllParams(params);
 
 			List<Map<String, Object>> result
-				= RuntimeService.CheckModTime(controller.GetContext());
+				= RuntimeService.CheckTimeout(controller.GetContext());
 
 			return AutoFormat.PrintJson(result);
 		}

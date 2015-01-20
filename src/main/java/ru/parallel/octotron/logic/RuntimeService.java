@@ -47,7 +47,7 @@ public class RuntimeService
 		return result;
 	}
 
-	public static List<Map<String, Object>> CheckModTime(Context context)
+	public static List<Map<String, Object>> CheckTimeout(Context context)
 	{
 		List<Map<String, Object>> result = new LinkedList<>();
 
@@ -112,9 +112,9 @@ public class RuntimeService
 	{
 		String result = "";
 
-		for (ModelEntity entity : model_data.GetAllEntities())
+		for(ModelEntity entity : model_data.GetAllEntities())
 		{
-			for (PreparedResponse response : entity.GetPreparedResponses())
+			for(PreparedResponse response : entity.GetPreparedResponses())
 			{
 				result += response.GetCsvString(",") + System.lineSeparator();
 			}

@@ -52,6 +52,9 @@ public class ImportService extends BGService
 	{
 		String script = context.settings.GetScriptByKeyOrNull("on_new_attribute");
 
+		if(script == null) // processing is disabled
+			return;
+
 		try
 		{
 			ScriptService.std.ExecSilent(script, Long.toString(target.GetID())

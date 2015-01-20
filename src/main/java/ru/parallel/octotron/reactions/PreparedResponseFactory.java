@@ -28,11 +28,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PreparedResponseFactory
 {
+	private final static Logger LOGGER = Logger.getLogger("octotron");
+
 	private final Context context;
 
 	public PreparedResponseFactory(Context context)
@@ -112,8 +116,11 @@ public class PreparedResponseFactory
 
 			String actual_name = context.settings.GetScriptByKeyOrNull(key);
 
-			if(actual_name == null)
-				throw new ExceptionModelFail("there is no script with key: " + key);
+			if(actual_name == null) // processing is disabled
+			{
+				LOGGER.log(Level.INFO, "script is not set for: " + key);
+				continue;
+			}
 
 			List<String> result = new LinkedList<>();
 			result.add(actual_name);

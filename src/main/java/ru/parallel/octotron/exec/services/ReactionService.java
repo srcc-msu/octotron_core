@@ -1,8 +1,10 @@
 package ru.parallel.octotron.exec.services;
 
 import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.reactions.PreparedResponse;
@@ -80,6 +82,9 @@ public class ReactionService extends BGService
 		{
 			CheckSingleReaction(reaction);
 		}
+
+		if(attribute.GetType() == EAttributeType.SENSOR)
+			CheckSingleReaction(((SensorAttribute)attribute).GetTimeoutReaction());
 
 		persistence_service.UpdateReactions(attribute.GetReactions()); // batch updating
 	}

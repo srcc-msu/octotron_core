@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
@@ -27,6 +28,6 @@ public class SensorAttributeBuilder extends AbstractModAttributeBuilder<SensorAt
 		if(attribute.timeout_reaction != null)
 			throw new ExceptionModelFail("timeout reaction for attribute " + attribute.GetName() + " is already set");
 
-		attribute.timeout_reaction = super.AddReaction(response);
+		attribute.timeout_reaction = new Reaction(response, attribute);
 	}
 }

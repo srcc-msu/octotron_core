@@ -73,4 +73,15 @@ public final class CommonReactions
 		RegisterResponse(response);
 		return response;
 	}
+
+	public static Response Timeout(String name)
+		throws ExceptionParseError
+	{
+		return new Response(EEventStatus.TIMEOUT)
+			.Msg("tag", "TIMEOUT")
+			.Msg("descr", "sensor value has not been updated in required time")
+			.Msg("loc", "AID : {AID}")
+			.Msg("msg", "sensor(" + name + ") value has not been updated in required time")
+			.Exec("on_timeout");
+	}
 }

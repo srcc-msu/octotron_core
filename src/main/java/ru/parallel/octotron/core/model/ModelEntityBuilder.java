@@ -22,6 +22,7 @@ import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
+import ru.parallel.octotron.reactions.CommonReactions;
 
 import java.util.List;
 
@@ -78,11 +79,6 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 //------------------------
 
-/*	public void DeclareSensor(String name, long update_time)
-	{
-		DeclareSensor(name, update_time, Value.undefined);
-	}*/
-
 	public void DeclareSensor(String name, long update_time, Object default_value)
 	{
 		Value converted_value = Value.Construct(default_value);
@@ -105,13 +101,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		try
 		{
 			sensor.GetBuilder(service).SetTimeoutReaction(
-				new Timeout(name)
-					.Response(new Response(EEventStatus.INFO)
-						.Msg("tag", "TIMEOUT")
-						.Msg("descr", "sensor value has not been updated in required time")
-						.Msg("loc", "AID : {AID}")
-						.Msg("msg", "sensor(" + name + ") value has not been updated in required time")
-						.Exec("on_info")));
+				new Timeout(name).Response(CommonReactions.Timeout(name)));
 		}
 		catch(ExceptionParseError ignore)
 		{

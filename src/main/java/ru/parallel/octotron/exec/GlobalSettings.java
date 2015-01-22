@@ -45,6 +45,7 @@ public class GlobalSettings
 	private int threads;
 
 	private boolean db = false;
+	private boolean start_silent = false;
 
 	private final Map<String, String> script_map = new HashMap<>();
 
@@ -143,6 +144,11 @@ public class GlobalSettings
 		else
 			threads = DEFAULT_THREADS;
 
+		if(JsonUtils.IsPresent(sys_conf, "start_silent"))
+		{
+			start_silent = JsonUtils.MustPresent(sys_conf, "start_silent").getAsBoolean();
+		}
+
 // --- db config
 
 		if(JsonUtils.IsPresent(root, "db"))
@@ -216,6 +222,8 @@ public class GlobalSettings
 	{
 		return db_path;
 	}
+
+	public boolean GetStartSilent() { return start_silent; };
 
 	public String GetSysPath()
 	{

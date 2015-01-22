@@ -7,6 +7,7 @@
 package ru.parallel.octotron.reactions;
 
 import ru.parallel.octotron.core.logic.Response;
+import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
@@ -24,6 +25,7 @@ public class PreparedResponse implements Runnable, IPresentable
 
 	private static final String SHORT_LOG = "octotron.events.log";
 	private static final String LONG_LOG = "octotron.events.verbose.log";
+	private static final String TIMEOUT_LOG = "octotron.timeout.log";
 
 	private final Context context;
 
@@ -60,13 +62,22 @@ public class PreparedResponse implements Runnable, IPresentable
 			// TODO rework
 			synchronized(lock) // this and file reopening is not efficient, but does not happen often
 			{
-				FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
-				short_log.Log(short_log_string);
-				short_log.Close();
+				if(response.GetStatus() == EEventStatus.TIMEOUT)
+				{
+					FileLog short_log = new FileLog(context.settings.GetLogDir(), TIMEOUT_LOG);
+					short_log.Log(short_log_string);
+					short_log.Close();
+				}
+				else
+				{
+					FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
+					short_log.Log(short_log_string);
+					short_log.Close();
 
-				FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
-				long_log.Log(long_log_string);
-				long_log.Close();
+					FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
+					long_log.Log(long_log_string);
+					long_log.Close();
+				}
 			}
 		}
 		catch(ExceptionSystemError e)

@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.attributes.IAttribute;
+import ru.parallel.octotron.core.attributes.IModelAttribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
@@ -182,7 +183,13 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 				{
 					if(!obj.TestAttribute(name))
 						continue;
-					if(obj.GetAttribute(name).eq(value))
+
+					IModelAttribute attribute = obj.GetAttribute(name);
+
+					if(!attribute.GetValue().IsComputable())
+						continue;
+
+					if(attribute.eq(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -193,7 +200,13 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 				{
 					if(!obj.TestAttribute(name))
 						continue;
-					if(obj.GetAttribute(name).ne(value))
+
+					IModelAttribute attribute = obj.GetAttribute(name);
+
+					if(!attribute.GetValue().IsComputable())
+						continue;
+
+					if(attribute.ne(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -204,7 +217,13 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 				{
 					if(!obj.TestAttribute(name))
 						continue;
-					if(obj.GetAttribute(name).ge(value))
+
+					IModelAttribute attribute = obj.GetAttribute(name);
+
+					if(!attribute.GetValue().IsComputable())
+						continue;
+
+					if(attribute.ge(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -215,7 +234,13 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 				{
 					if(!obj.TestAttribute(name))
 						continue;
-					if(obj.GetAttribute(name).gt(value))
+
+					IModelAttribute attribute = obj.GetAttribute(name);
+
+					if(!attribute.GetValue().IsComputable())
+						continue;
+
+					if(attribute.gt(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -226,7 +251,13 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 				{
 					if(!obj.TestAttribute(name))
 						continue;
-					if(obj.GetAttribute(name).le(value))
+
+					IModelAttribute attribute = obj.GetAttribute(name);
+
+					if(!attribute.GetValue().IsComputable())
+						continue;
+
+					if(attribute.le(value))
 						new_list.add(obj);
 				}
 				return new_list;
@@ -237,7 +268,13 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 				{
 					if(!obj.TestAttribute(name))
 						continue;
-					if(obj.GetAttribute(name).lt(value))
+
+					IModelAttribute attribute = obj.GetAttribute(name);
+
+					if(!attribute.GetValue().IsComputable())
+						continue;
+
+					if(attribute.lt(value))
 						new_list.add(obj);
 				}
 				return new_list;

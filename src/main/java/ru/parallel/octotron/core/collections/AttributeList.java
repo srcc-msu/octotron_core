@@ -63,7 +63,7 @@ public final class AttributeList<T extends IAttribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.ge(val))
+			if(att.GetValue().IsComputable() && att.ge(val))
 				new_list.add(att);
 
 		return new_list;
@@ -74,7 +74,7 @@ public final class AttributeList<T extends IAttribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.le(val))
+			if(att.GetValue().IsComputable() && att.le(val))
 				new_list.add(att);
 
 		return new_list;
@@ -85,7 +85,7 @@ public final class AttributeList<T extends IAttribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.gt(val))
+			if(att.GetValue().IsComputable() && att.gt(val))
 				new_list.add(att);
 
 		return new_list;
@@ -96,7 +96,7 @@ public final class AttributeList<T extends IAttribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.lt(val))
+			if(att.GetValue().IsComputable() && att.lt(val))
 				new_list.add(att);
 
 		return new_list;
@@ -107,7 +107,7 @@ public final class AttributeList<T extends IAttribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.eq(val))
+			if(att.GetValue().IsComputable() && att.eq(val))
 				new_list.add(att);
 
 		return new_list;
@@ -118,7 +118,7 @@ public final class AttributeList<T extends IAttribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.ne(val))
+			if(att.GetValue().IsComputable() && att.ne(val))
 				new_list.add(att);
 
 		return new_list;

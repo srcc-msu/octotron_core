@@ -48,7 +48,7 @@ public class ControlRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/control/mod_time");
+		String test = GetRequestResult("/control/timeout");
 
 		if(test == null)
 			fail("bad response: result is null");

@@ -92,8 +92,8 @@ public class BaseFactoryTest extends GeneralTest
 
 		ModelObject obj = f1.Create();
 
-		assertEquals(1, obj.GetAttribute("test1").GetReactions().size());
-		assertEquals(2, obj.GetAttribute("test2").GetReactions().size());
-		assertEquals(3, obj.GetAttribute("test3").GetReactions().size());
+		assertEquals(0, obj.GetAttribute("test1").GetReactions().size());
+		assertEquals(1, obj.GetAttribute("test2").GetReactions().size());
+		assertEquals(2, obj.GetAttribute("test3").GetReactions().size());
 	}
 }

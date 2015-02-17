@@ -308,7 +308,7 @@ public class ReactionTest
 
 		SensorAttribute sensor = entity.GetSensor("test");
 
-		Reaction reaction = Iterables.get(sensor.GetReactions(), 1);
+		Reaction reaction = Iterables.get(sensor.GetReactions(), 0);
 
 		reaction.ProcessOrNull();
 

@@ -527,22 +527,22 @@ public class ComputeTests extends GeneralTest
 		object.GetSensor("mod_l1").Update(10L);
 		object.GetSensor("mod_d1").Update(10.0);
 
-		assertEquals(0.0, (Double)rule_l.Compute(object), Value.EPSILON);
-		assertEquals(0.0, (Double)rule_d.Compute(object), Value.EPSILON);
+		assertEquals(0.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
+		assertEquals(0.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);
 
 		Thread.sleep(2000);
 
 		object.GetSensor("mod_l1").Update(20L);
 		object.GetSensor("mod_d1").Update(20.0);
 
-		assertEquals(5.0, (double)rule_l.Compute(object), Value.EPSILON);
-		assertEquals(5.0, (double)rule_d.Compute(object), Value.EPSILON);
+		assertEquals(5.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
+		assertEquals(5.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);
 
 		object.GetSensor("mod_l1").Update(20L);
 		object.GetSensor("mod_d1").Update(20.0);
 
-		assertEquals(0.0, (Double)rule_l.Compute(object), Value.EPSILON);
-		assertEquals(0.0, (Double)rule_d.Compute(object), Value.EPSILON);
+		assertEquals(0.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
+		assertEquals(0.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);
 	}
 
 	@Test

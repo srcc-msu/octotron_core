@@ -8,6 +8,7 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -86,5 +87,48 @@ public final class CSVReader
 		throws ExceptionParseError, IOException
 	{
 		Declare(service, ModelList.Single(object), file_name);
+	}
+
+	public static ModelObjectList OrderByColumn(ModelService service, ModelObjectList input, String file_name, int column)
+		throws ExceptionParseError, IOException
+	{
+		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name));
+
+		try
+		{
+			String[] fields = reader.readNext();
+
+			if(fields == null)
+			{
+				throw new ExceptionModelFail("csv file has no data");
+			}
+
+			if(column >= fields.length)
+			{
+				throw new ExceptionModelFail("csv file has not enough columns: " + Arrays.toString(fields));
+			}
+
+			String column_name = fields[column];
+
+			ModelObjectList result = new ModelObjectList();
+
+			String[] next_line = reader.readNext();
+
+			while(next_line != null)
+			{
+				if(next_line.length != fields.length)
+					throw new ExceptionModelFail("some fields are missing: "
+						+ Arrays.toString(next_line));
+
+				result.add(input.Filter(column_name, Value.ValueFromStr(next_line[column])).Only());
+				next_line = reader.readNext();
+			}
+
+			return result;
+		}
+		finally
+		{
+			reader.close();
+		}
 	}
 }

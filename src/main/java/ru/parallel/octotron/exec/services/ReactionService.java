@@ -30,7 +30,7 @@ public class ReactionService extends BGService
 		this.persistence_service = persistence_service;
 		this.response_factory = new PreparedResponseFactory(context);
 
-		SetSilent(context.settings.GetStartSilent());
+		SetSilent(context.settings.IsStartSilent());
 	}
 
 	public boolean IsSilent()

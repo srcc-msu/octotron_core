@@ -46,6 +46,7 @@ public class GlobalSettings
 
 	private boolean db = false;
 	private boolean start_silent = false;
+	private boolean notify_timeout = false;
 
 	private final Map<String, String> script_map = new HashMap<>();
 
@@ -72,11 +73,6 @@ public class GlobalSettings
 		DummySettings(port);
 	}
 
-	public boolean IsDb()
-	{
-		return db;
-	}
-
 	private static Credential GetCredential(JsonObject http_conf, String request)
 	{
 		JsonObject cfg = JsonUtils.MustPresent(http_conf, request).getAsJsonObject();
@@ -94,21 +90,10 @@ public class GlobalSettings
 		model_main = "";
 
 // --- sys config
-
 		sys_path = "";
 		log_dir = "";
 
 		threads = 4;
-
-// --- db config
-
-		db = false;
-
-// --- logging config
-
-// --- scripts config
-
-// --- graph settings
 
 // --- http config
 		http_port = port;
@@ -125,7 +110,6 @@ public class GlobalSettings
 		JsonObject root = new JsonParser().parse(json_config).getAsJsonObject();
 
 // --- model config
-
 		JsonObject model_conf = JsonUtils.MustPresent(root, "model").getAsJsonObject();
 
 		model_name = JsonUtils.MustPresent(model_conf, "name").getAsString();
@@ -133,7 +117,6 @@ public class GlobalSettings
 		model_main = JsonUtils.MustPresent(model_conf, "main").getAsString();
 
 // --- sys config
-
 		JsonObject sys_conf = JsonUtils.MustPresent(root, "system").getAsJsonObject();
 
 		log_dir = JsonUtils.MustPresent(sys_conf, "log_dir").getAsString();
@@ -149,8 +132,12 @@ public class GlobalSettings
 			start_silent = JsonUtils.MustPresent(sys_conf, "start_silent").getAsBoolean();
 		}
 
-// --- db config
+		if(JsonUtils.IsPresent(sys_conf, "notify_timeout"))
+		{
+			notify_timeout = JsonUtils.MustPresent(sys_conf, "notify_timeout").getAsBoolean();
+		}
 
+// --- db config
 		if(JsonUtils.IsPresent(root, "db"))
 		{
 			JsonObject db_conf = JsonUtils.MustPresent(root, "db").getAsJsonObject();
@@ -176,7 +163,6 @@ public class GlobalSettings
 		if(graph_conf.get("link_index") != null)
 			for(JsonElement elem : JsonUtils.MustPresent(graph_conf, "link_index").getAsJsonArray())
 				link_index.add(elem.getAsString());
-
 
 // --- http config
 		JsonObject http_conf = JsonUtils.MustPresent(root, "http").getAsJsonObject();
@@ -204,7 +190,6 @@ public class GlobalSettings
 		return host;
 	}
 
-
 	public String GetModelName()
 	{
 		return model_name;
@@ -223,7 +208,11 @@ public class GlobalSettings
 		return db_path;
 	}
 
-	public boolean GetStartSilent() { return start_silent; };
+	public boolean IsStartSilent() { return start_silent; }
+
+	public boolean IsNotifyTimeout() { return notify_timeout; }
+
+	public boolean IsDb() { return db; }
 
 	public String GetSysPath()
 	{

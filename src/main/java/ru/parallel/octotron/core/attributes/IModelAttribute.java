@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public interface IModelAttribute extends IAttribute
 {
-	double GetSpeed();
+	Value GetSpeed();
 	long GetCTime();
 
 	Collection<Reaction> GetReactions();

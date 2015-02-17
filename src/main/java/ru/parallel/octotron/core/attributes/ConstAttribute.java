@@ -75,7 +75,7 @@ public final class ConstAttribute extends AbstractAttribute implements IModelAtt
 	}
 
 	@Override
-	public double GetSpeed()
+	public Value GetSpeed()
 	{
 		throw new ExceptionModelFail(err_msg + "GetSpeed");
 	}

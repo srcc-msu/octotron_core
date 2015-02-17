@@ -50,22 +50,25 @@ public abstract class AbstractModAttribute extends AbstractAttribute implements 
 // ------------------------------------------
 
 	@Override
-	public final double GetSpeed()
+	public final Value GetSpeed()
 	{
+		if(!GetValue().IsComputable())
+			return Value.invalid;
+
 		History.Entry last = history.GetLast();
 
-		if(!last.value.IsDefined())
-			return 0.0;
+		if(!last.value.IsComputable())
+			return Value.invalid;
 
 		if(last.ctime == 0) // last value was default
-			return 0.0;
+			return new Value(0.0);
 
 		if(GetCTime() - last.ctime == 0) // speed is zero
-			return 0.0;
+			return new Value(0.0);
 
 		double diff = GetValue().ToDouble() - last.value.ToDouble();
 
-		return diff / (GetCTime() - last.ctime);
+		return new Value(diff / (GetCTime() - last.ctime));
 	}
 
 	protected void Update(Value new_value)

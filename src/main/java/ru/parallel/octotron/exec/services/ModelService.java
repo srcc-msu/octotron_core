@@ -53,7 +53,7 @@ public final class ModelService extends Service
 			mode = EMode.LOAD;
 
 		if(context.settings.IsDb())
-			persistence_service.InitGraph(this, db_path);
+			persistence_service.InitGraph(this, db_path, context.settings.GetDbPort());
 		else
 			persistence_service.InitDummy();
 	}

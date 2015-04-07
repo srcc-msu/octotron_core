@@ -38,6 +38,7 @@ public class GlobalSettings
 	private String model_main;
 
 	private String db_path;
+	private int db_port = 7474;
 
 	private String sys_path;
 	private String log_dir;
@@ -143,6 +144,9 @@ public class GlobalSettings
 			JsonObject db_conf = JsonUtils.MustPresent(root, "db").getAsJsonObject();
 
 			db_path = JsonUtils.MustPresent(db_conf, "path").getAsString();
+
+			if(JsonUtils.IsPresent(db_conf, "port"))
+				db_port = JsonUtils.MustPresent(db_conf, "port").getAsInt();
 
 			db = true;
 		}
@@ -256,4 +260,10 @@ public class GlobalSettings
 	{
 		return link_index;
 	}
+
+	public int GetDbPort()
+	{
+		return db_port;
+	}
+
 }

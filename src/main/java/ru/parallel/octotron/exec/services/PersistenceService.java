@@ -30,7 +30,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 		executor.LockOnThread();
 	}
 
-	public void InitGraph(final ModelService model_service, final String db_path)
+	public void InitGraph(final ModelService model_service, final String db_path, final int port)
 	{
 		executor.execute(
 			new Runnable()
@@ -40,7 +40,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				{
 					try
 					{
-						persistence_manager = new GraphManager(model_service, db_path);
+						persistence_manager = new GraphManager(model_service, db_path, port);
 					}
 					catch(ExceptionSystemError e)
 					{

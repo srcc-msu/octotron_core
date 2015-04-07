@@ -53,6 +53,7 @@ public final class Neo4jGraph implements IGraph
 	private static final int COUNT_THRESHOLD = 10000; // write counts to commit new transaction
 
 	private boolean bootstrap = false;
+	private int webserver_port = 0;
 	private WrappingNeoServerBootstrapper webserver;
 
 	/**
@@ -83,17 +84,18 @@ public final class Neo4jGraph implements IGraph
 	public Neo4jGraph(String name, Op op)
 		throws ExceptionSystemError
 	{
-		this(name, op, false);
+		this(name, op, false, 0);
 	}
 
 	/**
 	 * load graph with \\name name<br>
 	 * */
-	public Neo4jGraph(String name, Op op, boolean bootstrap)
+	public Neo4jGraph(String name, Op op, boolean bootstrap, int webserver_port)
 		throws ExceptionSystemError
 	{
 		this.db_name = name;
 		this.bootstrap = bootstrap;
+		this.webserver_port = webserver_port;
 
 		if(op == Op.LOAD)
 			Load();
@@ -137,6 +139,9 @@ public final class Neo4jGraph implements IGraph
 
 		config.configuration()
 			.setProperty(Configurator.WEBSERVER_ADDRESS_PROPERTY_KEY, "0.0.0.0");
+
+		config.configuration()
+			.setProperty(Configurator.WEBSERVER_PORT_PROPERTY_KEY, webserver_port);
 
 		webserver = new WrappingNeoServerBootstrapper((GraphDatabaseAPI) graph_db, config);
 		webserver.start();

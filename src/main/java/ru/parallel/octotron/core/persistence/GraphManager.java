@@ -35,15 +35,15 @@ public class GraphManager implements IPersistenceManager
 	private Neo4jGraph graph;
 	private GraphService graph_service;
 
-	public GraphManager(ModelService model_service, String path)
+	public GraphManager(ModelService model_service, String path, int port)
 		throws ExceptionSystemError
 	{
 		this.model_service = model_service;
 
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
-			graph = new Neo4jGraph(path, Neo4jGraph.Op.RECREATE, true);
+			graph = new Neo4jGraph(path, Neo4jGraph.Op.RECREATE, true, port);
 		else
-			graph = new Neo4jGraph(path, Neo4jGraph.Op.LOAD, true);
+			graph = new Neo4jGraph(path, Neo4jGraph.Op.LOAD, true, port);
 
 		graph.GetIndex().EnableLinkIndex("AID");
 		graph.GetIndex().EnableObjectIndex("AID");

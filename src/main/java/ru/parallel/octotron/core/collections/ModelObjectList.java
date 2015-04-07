@@ -60,6 +60,26 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 		return new_list;
 	}
 
+	public ModelObjectList GetInNeighbors(String link_name, Object link_value)
+	{
+		ModelObjectList new_list = new ModelObjectList();
+
+		for(ModelObject obj : list)
+			new_list = new_list.append(obj.GetInNeighbors(link_name, Value.Construct(link_value)));
+
+		return new_list;
+	}
+
+	public ModelObjectList GetOutNeighbors(String link_name, Object link_value)
+	{
+		ModelObjectList new_list = new ModelObjectList();
+
+		for(ModelObject obj : list)
+			new_list = new_list.append(obj.GetOutNeighbors(link_name, Value.Construct(link_value)));
+
+		return new_list;
+	}
+
 	public ModelObjectList GetInNeighbors(String link_name)
 	{
 		ModelObjectList new_list = new ModelObjectList();

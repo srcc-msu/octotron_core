@@ -34,7 +34,7 @@ public final class CSVReader
 	public static void Declare(ModelService service, Iterable<? extends ModelEntity> list, String file_name)
 		throws ExceptionParseError, IOException
 	{
-		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name));
+		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name), ',', '\'');
 
 		try
 		{
@@ -89,10 +89,10 @@ public final class CSVReader
 		Declare(service, ModelList.Single(object), file_name);
 	}
 
-	public static ModelObjectList OrderByColumn(ModelService service, ModelObjectList input, String file_name, int column)
+	public static ModelObjectList OrderByColumn(ModelService service, ModelObjectList input, String file_name, int... column)
 		throws ExceptionParseError, IOException
 	{
-		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name));
+		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name), ',', '\'');
 
 		try
 		{
@@ -102,13 +102,6 @@ public final class CSVReader
 			{
 				throw new ExceptionModelFail("csv file has no data");
 			}
-
-			if(column >= fields.length)
-			{
-				throw new ExceptionModelFail("csv file has not enough columns: " + Arrays.toString(fields));
-			}
-
-			String column_name = fields[column];
 
 			ModelObjectList result = new ModelObjectList();
 
@@ -120,7 +113,21 @@ public final class CSVReader
 					throw new ExceptionModelFail("some fields are missing: "
 						+ Arrays.toString(next_line));
 
-				result.add(input.Filter(column_name, Value.ValueFromStr(next_line[column])).Only());
+				ModelObjectList tmp = input;
+
+				for(int i = 0; i < column.length; i++)
+				{
+					if(column[i] >= fields.length)
+					{
+						throw new ExceptionModelFail("csv file has not enough columns: " + Arrays.toString(fields));
+					}
+
+					String column_name = fields[column[i]];
+
+					tmp = tmp.Filter(column_name, Value.ValueFromStr(next_line[column[i]]));
+				}
+
+				result.add(tmp.Only());
 				next_line = reader.readNext();
 			}
 

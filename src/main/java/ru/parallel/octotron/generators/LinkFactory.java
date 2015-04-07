@@ -114,7 +114,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	{
 		if(from.size() != to.size())
 			throw new ExceptionModelFail
-				("all-to-all connector, sizes do not match: from="
+				("every-to-every connector, sizes do not match: from="
 					+ from.size() + " to=" + to.size());
 
 		ModelLinkList links = new ModelLinkList();

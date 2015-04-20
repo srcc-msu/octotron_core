@@ -37,8 +37,8 @@ public class ModelLinkTest extends GeneralTest
 		ModelObject object1 = obj_factory.Create();
 		ModelObject object2 = obj_factory.Create();
 
-		ModelLink link1 = link_factory.OneToOne(object1, object2);
-		ModelLink link2 = link_factory.OneToOne(object2, object1);
+		ModelLink link1 = link_factory.OneToOne(object1, object2, true);
+		ModelLink link2 = link_factory.OneToOne(object2, object1, true);
 
 		assertEquals(object1, link1.Source());
 		assertEquals(object2, link2.Source());
@@ -50,8 +50,8 @@ public class ModelLinkTest extends GeneralTest
 		ModelObject object1 = obj_factory.Create();
 		ModelObject object2 = obj_factory.Create();
 
-		ModelLink link1 = link_factory.OneToOne(object1, object2);
-		ModelLink link2 = link_factory.OneToOne(object2, object1);
+		ModelLink link1 = link_factory.OneToOne(object1, object2, true);
+		ModelLink link2 = link_factory.OneToOne(object2, object1, true);
 
 		assertEquals(object2, link1.Target());
 		assertEquals(object1, link2.Target());

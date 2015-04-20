@@ -85,7 +85,7 @@ public class ReactionService extends BGService
 			CheckSingleReaction(reaction);
 		}
 
-		if(attribute.GetType() == EAttributeType.SENSOR)
+		if(attribute.GetType() == EAttributeType.SENSOR && context.settings.IsNotifyTimeout())
 			CheckSingleReaction(((SensorAttribute)attribute).GetTimeoutReaction());
 
 		persistence_service.UpdateReactions(attribute.GetReactions()); // batch updating

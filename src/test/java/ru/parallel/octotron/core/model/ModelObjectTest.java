@@ -42,7 +42,7 @@ public class ModelObjectTest extends GeneralTest
 
 		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node);
+		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node, true);
 
 		assertEquals("in links not match, any type"
 			, node.GetInLinks().size(), N);
@@ -67,7 +67,7 @@ public class ModelObjectTest extends GeneralTest
 
 		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node);
+		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node, true);
 
 		assertEquals("in links not match, any type"
 			, node.GetInNeighbors().size(), N);
@@ -92,7 +92,7 @@ public class ModelObjectTest extends GeneralTest
 
 		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N));
+		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N), true);
 
 		assertEquals("in links not match, any type"
 			, node.GetOutNeighbors().size(), N);
@@ -117,7 +117,7 @@ public class ModelObjectTest extends GeneralTest
 
 		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N));
+		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N), true);
 
 		assertEquals("out links not match, any type"
 			, node.GetOutLinks().size(), N);
@@ -147,7 +147,7 @@ public class ModelObjectTest extends GeneralTest
 
 		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node);
+		ModelObjectTest.link_factory.EveryToOne(ModelObjectTest.obj_factory.Create(N), node, true);
 
 		assertEquals(N
 			, node.GetInNeighbors().size(), N);
@@ -172,7 +172,7 @@ public class ModelObjectTest extends GeneralTest
 
 		ModelObject node = ModelObjectTest.obj_factory.Create();
 
-		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N));
+		ModelObjectTest.link_factory.OneToEvery(node, ModelObjectTest.obj_factory.Create(N), true);
 
 		assertEquals("in neighbors not match, any type"
 			, node.GetOutNeighbors()

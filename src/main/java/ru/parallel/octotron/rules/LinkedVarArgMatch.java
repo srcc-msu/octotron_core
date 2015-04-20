@@ -26,8 +26,8 @@ public class LinkedVarArgMatch extends LinkRule
 	{
 		AttributeList<IModelAttribute> result = new AttributeList<>();
 
-		result.add(link.Target().GetAttribute(check_attribute));
-		result.add(link.Source().GetAttribute(check_attribute));
+		result.add(link.GetObjects().get(0).GetAttribute(check_attribute));
+		result.add(link.GetObjects().get(1).GetAttribute(check_attribute));
 
 		return result;
 	}
@@ -35,13 +35,13 @@ public class LinkedVarArgMatch extends LinkRule
 	@Override
 	public Object Compute(ModelLink link)
 	{
-		IModelAttribute target_attr = link.Target().GetAttribute(check_attribute);
-		IModelAttribute source_attr = link.Source().GetAttribute(check_attribute);
+		IModelAttribute attr1 = link.GetObjects().get(0).GetAttribute(check_attribute);
+		IModelAttribute attr2 = link.GetObjects().get(1).GetAttribute(check_attribute);
 
-		if(!target_attr.GetValue().IsValid() || !source_attr.GetValue().IsValid())
+		if(!attr1.GetValue().IsValid() || !attr2.GetValue().IsValid())
 			return Value.invalid;
 
-		return target_attr.eq(source_attr.GetValue());
+		return attr1.eq(attr2.GetValue());
 	}
 
 }

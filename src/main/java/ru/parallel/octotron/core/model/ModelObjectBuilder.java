@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.exec.services.ModelService;
 
 public class ModelObjectBuilder extends ModelEntityBuilder<ModelObject>
@@ -25,5 +26,11 @@ public class ModelObjectBuilder extends ModelEntityBuilder<ModelObject>
 	{
 		entity.in_links.add(link);
 		entity.in_neighbors.add(link.Source());
+	}
+
+	public void AddUndirectedLink(ModelLink link)
+	{
+		entity.undirected_links.add(link);
+		entity.undirected_neighbors.add(link.Other(entity));
 	}
 }

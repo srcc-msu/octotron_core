@@ -47,10 +47,13 @@ public abstract class AStrict extends ObjectRule
 				candidates = object.GetInNeighbors();
 				break;
 
+			case UNDIRECTED:
+				candidates = object.GetUndirectedNeighbors();
+				break;
+
 			case ALL:
 				candidates.add(object);
-				candidates = candidates.append(object.GetInNeighbors());
-				candidates = candidates.append(object.GetOutNeighbors());
+				candidates = candidates.append(object.GetAllNeighbors());
 				break;
 
 			default:

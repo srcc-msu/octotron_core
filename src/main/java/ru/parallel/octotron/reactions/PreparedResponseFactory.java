@@ -76,18 +76,14 @@ public class PreparedResponseFactory
 			ModelLink link = (ModelLink) entity;
 
 			links.add(link);
-			objects.add(link.Source());
-			objects.add(link.Target());
+			objects.append(link.GetObjects());
 		}
 		else if(entity.GetType() == EModelType.OBJECT)
 		{
 			ModelObject object = (ModelObject) entity;
 
-			links = links.append(object.GetInLinks());
-			links = links.append(object.GetOutLinks());
-
-			objects = objects.append(object.GetInNeighbors()).Uniq();
-			objects = objects.append(object.GetOutNeighbors()).Uniq();
+			links = links.append(object.GetAllLinks());
+			objects = objects.append(object.GetAllNeighbors()).Uniq();
 		}
 
 		Iterator<ModelEntity> it = Iterators.concat(links.iterator(), objects.iterator());

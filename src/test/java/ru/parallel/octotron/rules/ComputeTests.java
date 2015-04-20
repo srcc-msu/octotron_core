@@ -106,9 +106,9 @@ public class ComputeTests extends GeneralTest
 		Enumerator.Sequence(model_service, ins, "in_lid");
 		Enumerator.Sequence(model_service, outs, "out_lid");
 
-		links.EveryToOne(ins, object);
+		links.EveryToOne(ins, object, true);
 
-		links.OneToEvery(object, outs);
+		links.OneToEvery(object, outs, true);
 
 		ModelObjectList objects = new ModelObjectList();
 

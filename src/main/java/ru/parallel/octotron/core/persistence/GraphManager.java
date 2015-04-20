@@ -119,7 +119,8 @@ public class GraphManager implements IPersistenceManager
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphLink graph_object = graph_service.AddLink(
-				GetObject(link.Source()), GetObject(link.Target())
+				GetObject(link.GetObjects().get(0))
+				, GetObject(link.GetObjects().get(1))
 				, link.GetType().name());
 
 			graph_object.UpdateAttribute("AID", link.GetID());

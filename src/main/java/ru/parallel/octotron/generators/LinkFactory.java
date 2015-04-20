@@ -42,27 +42,15 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	{
 		super(service, constants, sensors, rules, reactions);
 	}
-/*
-@Override
-	public LinkFactory Vars(OctoRule... params)
-	{
-		throw new ExceptionModelFail("links do not have rules");
-	}
-
-@Override
-	public LinkFactory Reactions(OctoReaction... params)
-	{
-		throw new ExceptionModelFail("links do not have reactions");
-	}*/
 
 /**
  * connect one \from object with one \to objects<br>
  * set correct type, if "type" attribute is set correctly
  * */
-	public ModelLink OneToOne(ModelObject from, ModelObject to)
+	public ModelLink OneToOne(ModelObject from, ModelObject to, boolean directed)
 	{
 // create edge
-		ModelLink link = service.AddLink(from, to);
+		ModelLink link = service.AddLink(from, to, directed);
 
 // set all attributes
 		link.GetBuilder(service).DeclareConst(constants);
@@ -70,8 +58,18 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		link.GetBuilder(service).DeclareVar(rules);
 		link.GetBuilder(service).AddReaction(reactions);
 
-		link.GetBuilder(service).DeclareConst("source", from.GetID());
-		link.GetBuilder(service).DeclareConst("target", to.GetID());
+		link.GetBuilder(service).DeclareConst("directed", link.IsDirected());
+
+		if(link.IsDirected())
+		{
+			link.GetBuilder(service).DeclareConst("source", from.GetID());
+			link.GetBuilder(service).DeclareConst("target", to.GetID());
+		}
+		else
+		{
+			link.GetBuilder(service).DeclareConst("left", from.GetID());
+			link.GetBuilder(service).DeclareConst("right", to.GetID());
+		}
 
 		return link;
 	}
@@ -81,12 +79,12 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * adds new attributes
  * create \from.length edges<br>
  * */
-	public ModelLinkList EveryToOne(ModelObjectList from, ModelObject to)
+	public ModelLinkList EveryToOne(ModelObjectList from, ModelObject to, boolean directed)
 	{
 		ModelLinkList links = new ModelLinkList();
 
 		for(int i = 0; i < from.size(); i++)
-			links.add(OneToOne(from.get(i), to));
+			links.add(OneToOne(from.get(i), to, directed));
 
 		return links;
 	}
@@ -95,12 +93,12 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * connect one \from object with all \to objects<br>
  * create \to.length edges<br>
  * */
-	public ModelLinkList OneToEvery(ModelObject from, ModelObjectList to)
+	public ModelLinkList OneToEvery(ModelObject from, ModelObjectList to, boolean directed)
 	{
 		ModelLinkList links = new ModelLinkList();
 
 		for(int i = 0; i < to.size(); i++)
-			links.add(OneToOne(from, to.get(i)));
+			links.add(OneToOne(from, to.get(i), directed));
 
 		return links;
 	}
@@ -110,7 +108,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * create N edges, N == \from.length ==\to.length<br>
  * if \from.length != \to.length - error<br>
  * */
-	public ModelLinkList EveryToEvery(ModelObjectList from, ModelObjectList to)
+	public ModelLinkList EveryToEvery(ModelObjectList from, ModelObjectList to, boolean directed)
 	{
 		if(from.size() != to.size())
 			throw new ExceptionModelFail
@@ -120,7 +118,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		ModelLinkList links = new ModelLinkList();
 
 		for(int i = 0; i < from.size(); i++)
-			links.add(OneToOne(from.get(i), to.get(i)));
+			links.add(OneToOne(from.get(i), to.get(i), directed));
 
 		return links;
 	}
@@ -129,12 +127,12 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * connect every object from \from list with every object from \to list<br>
  * create M*N edges, M == \from.length, N = \to.length<br>
  * */
-	public ModelLinkList AllToAll(ModelObjectList from, ModelObjectList to)
+	public ModelLinkList AllToAll(ModelObjectList from, ModelObjectList to, boolean directed)
 	{
 		ModelLinkList res_links = new ModelLinkList();
 
 		for(int i = 0; i < from.size(); i++)
-			res_links = res_links.append(OneToEvery(from.get(i), to));
+			res_links = res_links.append(OneToEvery(from.get(i), to, directed));
 
 		return res_links;
 	}
@@ -144,7 +142,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * create L edges, L = \to.length<br>
  * \to.length must be divisible by \from.length<br>
  * */
-	public ModelLinkList EveryToChunks(ModelObjectList from, ModelObjectList to)
+	public ModelLinkList EveryToChunks(ModelObjectList from, ModelObjectList to, boolean directed)
 	{
 		if(to.size() % from.size() != 0 || to.size() < from.size())
 			throw new ExceptionModelFail
@@ -154,7 +152,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		ModelLinkList links = new ModelLinkList();
 
 		for(int i = 0; i < to.size(); i++)
-			links.add(OneToOne(from.get(i / (to.size() / from.size())), to.get(i)));
+			links.add(OneToOne(from.get(i / (to.size() / from.size())), to.get(i), directed));
 
 		return links;
 	}
@@ -164,7 +162,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * create L edges, L = \to.length<br>
  * for last object M can be less than usual
  * */
-	public ModelLinkList EveryToChunks_LastLess(ModelObjectList from, ModelObjectList to)
+	public ModelLinkList EveryToChunks_LastLess(ModelObjectList from, ModelObjectList to, boolean directed)
 	{
 		int chunk = (to.size() / from.size() + 1);
 		int diff = to.size() - chunk * from.size();
@@ -177,7 +175,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		ModelLinkList links = new ModelLinkList();
 
 		for(int i = 0; i < to.size(); i++)
-			links.add(OneToOne(from.get(i / chunk), to.get(i)));
+			links.add(OneToOne(from.get(i / chunk), to.get(i), directed));
 
 		return links;
 	}
@@ -187,7 +185,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * create L edges, L = \to.length<br>
 	 * M comes from \size arrays
 	 * */
-	public ModelLinkList ChunksToEvery_Guided(ModelObjectList from, ModelObjectList to
+	public ModelLinkList ChunksToEvery_Guided(ModelObjectList from, ModelObjectList to, boolean directed
 		, int[] sizes)
 	{
 		if(to.size() != sizes.length)
@@ -207,7 +205,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 						+ "to: " + to.size() + " from: " + from.size() + " sizes: " + Arrays.toString(sizes));
 
 			links = links.append(EveryToOne(
-				from.range(counter, counter + sizes[i]), to.get(i)));
+				from.range(counter, counter + sizes[i]), to.get(i), directed));
 
 			counter += sizes[i];
 		}
@@ -223,7 +221,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * create L edges, L = \to.length<br>
  * \to.length must be divisible by \from.length<br>
  * */
-	public ModelLinkList ChunksToEvery(ModelObjectList from, ModelObjectList to)
+	public ModelLinkList ChunksToEvery(ModelObjectList from, ModelObjectList to, boolean directed)
 	{
 		if(from.size() % to.size() != 0 || from.size() < to.size())
 			throw new ExceptionModelFail
@@ -233,7 +231,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		ModelLinkList links = new ModelLinkList();
 
 		for(int i = 0; i < from.size(); i++)
-			links.add(OneToOne(from.get(i), to.get(i / (from.size() / to.size()))));
+			links.add(OneToOne(from.get(i), to.get(i / (from.size() / to.size())), directed));
 
 		return links;
 	}
@@ -243,7 +241,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * create L edges, L = \to.length<br>
 	 * \to.length must be divisible by \from.length<br>
 	 * */
-	public ModelLinkList ChunksToEvery_LastLess(ModelObjectList from, ModelObjectList to)
+	public ModelLinkList ChunksToEvery_LastLess(ModelObjectList from, ModelObjectList to, boolean directed)
 	{
 		int chunk = (from.size() / to.size() + 1);
 		int diff = from.size() - chunk * to.size();
@@ -256,7 +254,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		ModelLinkList links = new ModelLinkList();
 
 		for(int i = 0; i < from.size(); i++)
-			links.add(OneToOne(from.get(i), to.get(i / chunk)));
+			links.add(OneToOne(from.get(i), to.get(i / chunk), directed));
 
 		return links;
 	}
@@ -266,7 +264,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	 * create L edges, L = \to.length<br>
 	 * M comes from \size arrays
 	 * */
-	public ModelLinkList EveryToChunks_Guided(ModelObjectList from, ModelObjectList to
+	public ModelLinkList EveryToChunks_Guided(ModelObjectList from, ModelObjectList to, boolean directed
 		, int[] sizes)
 	{
 		if(from.size() != sizes.length)
@@ -286,7 +284,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 						+ "to: " + to.size() + " from: " + from.size() + " sizes: " + Arrays.toString(sizes));
 
 			links = links.append(OneToEvery(
-				from.get(i), to.range(counter, counter + sizes[i])));
+				from.get(i), to.range(counter, counter + sizes[i]), directed));
 
 			counter += sizes[i];
 		}

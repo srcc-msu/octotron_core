@@ -99,17 +99,25 @@ public final class ModelService extends Service
 
 // ---------------------
 
-	public ModelLink AddLink(ModelObject source, ModelObject target)
+	public ModelLink AddLink(ModelObject source, ModelObject target, boolean directed)
 	{
 		CheckModification();
 
-		ModelLink link = new ModelLink(source, target);
+		ModelLink link = new ModelLink(source, target, directed);
 		persistence_service.RegisterLink(link);
 
 		context.model_data.Add(link);
 
-		source.GetBuilder(this).AddOutLink(link);
-		target.GetBuilder(this).AddInLink(link);
+		if(directed)
+		{
+			source.GetBuilder(this).AddOutLink(link);
+			target.GetBuilder(this).AddInLink(link);
+		}
+		else
+		{
+			source.GetBuilder(this).AddUndirectedLink(link);
+			target.GetBuilder(this).AddUndirectedLink(link);
+		}
 
 		link.GetBuilder(this).DeclareConst(new ConstTemplate("AID", link.GetID()));
 

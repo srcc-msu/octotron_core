@@ -89,8 +89,7 @@ public class ExecutionController
 	{
 		long current_time = JavaUtils.GetTimestamp();
 
-		if(context.settings.IsNotifyTimeout()
-			&& current_time - last_outdated_check > OUTDATED_CHECK_INTERVAL) // TODO: scheduler?
+		if(current_time - last_outdated_check > OUTDATED_CHECK_INTERVAL) // TODO: scheduler?
 		{
 			last_outdated_check = current_time;
 			checker_service.PerformCheck();

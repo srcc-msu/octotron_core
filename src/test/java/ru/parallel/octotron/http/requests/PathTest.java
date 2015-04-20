@@ -68,7 +68,7 @@ public class PathTest extends RequestTest
 		ModelObjectList objects = object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), true);
 		model_service.EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=obj(AID).in_n()");
@@ -90,7 +90,7 @@ public class PathTest extends RequestTest
 		ModelObjectList objects = object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), true);
 		model_service.EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=obj(AID).in_l()");
@@ -112,7 +112,7 @@ public class PathTest extends RequestTest
 		ModelObjectList objects = object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), true);
 		model_service.EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=link(AID)");
@@ -125,7 +125,7 @@ public class PathTest extends RequestTest
 	{
 		ModelObjectList objects = object_factory.Create(10);
 
-		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10));
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), true);
 		model_service.EnableLinkIndex("AID");
 
 		String test = GetRequestResult("/view/entity?path=link(AID).source()");

@@ -48,7 +48,7 @@ public class BaseFactoryTest extends GeneralTest
 
 		ModelObject obj = f1.Create();
 		ModelLink link = f2.Constants(new ConstTemplate("type", "1"))
-			.OneToOne(f1.Create(), f1.Create());
+			.OneToOne(f1.Create(), f1.Create(), true);
 
 		assertTrue(obj.TestAttribute("test1"));
 		assertTrue(obj.TestAttribute("test2"));

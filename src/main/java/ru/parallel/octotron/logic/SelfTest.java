@@ -30,9 +30,9 @@ public class SelfTest
 		obj2.GetBuilder(model_service).DeclareConst("type", "_selftest");
 		obj2.GetBuilder(model_service).DeclareVar("check", new AStrictLongSum(EDependencyType.ALL, "test_iteration"));
 
-		obj1.GetSensor("test_iteration").GetBuilder(model_service).AddDependant(obj2.GetVarOrNull("check"));
+		obj1.GetSensor("test_iteration").GetBuilder(model_service).AddDependant(obj2.GetVar("check"));
 
-		model_service.AddLink(obj1, obj2);
+		model_service.AddLink(obj1, obj2, false);
 	}
 
 	public boolean Test(ExecutionController controller)

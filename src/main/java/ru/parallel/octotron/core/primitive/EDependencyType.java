@@ -11,5 +11,5 @@ package ru.parallel.octotron.core.primitive;
  * */
 public enum EDependencyType
 {
-	SELF, IN, OUT, ALL
+	SELF, IN, OUT, UNDIRECTED, ALL
 }

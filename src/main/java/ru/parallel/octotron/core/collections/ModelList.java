@@ -27,20 +27,20 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 	}
 
 	/**
-	 * list reuse
-	 * */
-	protected ModelList(List<T> list)
-	{
-		this.list = list;
-	}
-
-	/**
 	 * list copy
 	 * */
 	protected ModelList(R list)
 	{
 		this.list = new LinkedList<>();
 		this.list.addAll(list.list);
+	}
+
+	/**
+	 * list reuse
+	 * */
+	protected ModelList(List<T> list)
+	{
+		this.list = list;
 	}
 
 	public static ModelList<?, ?> Single(ModelEntity entity)

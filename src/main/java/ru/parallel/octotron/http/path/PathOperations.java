@@ -253,6 +253,26 @@ public abstract class PathOperations
 	});
 
 /**
+ * returns a list of all neighbors with out link to current objects<br>
+ * */
+	public static final PathToken u_n = new PathToken("u_n", CHAIN_TYPE.E_OBJ_LIST
+		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
+	{
+		@Override
+		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+			throws ExceptionParseError
+		{
+			if(params.size() > 1)
+				throw new ExceptionParseError("u_n accepts only one or zero params");
+
+			if(params.size() == 1)
+				return ToObjList(obj).GetUndirectedNeighbors(params.get(0).name, params.get(0).operand);
+
+			return ToObjList(obj).GetUndirectedNeighbors();
+		}
+	});
+
+/**
  * returns a list of all neighbors to current objects<br>
  * */
 	public static final PathToken all_n = new PathToken("all_n", CHAIN_TYPE.E_OBJ_LIST
@@ -266,13 +286,10 @@ public abstract class PathOperations
 				throw new ExceptionParseError("all_n accepts only one or zero params");
 
 			if(params.size() == 1)
-				return ToObjList(obj)
-					.GetInNeighbors(params.get(0).name, params.get(0).operand)
-					.append(ToObjList(obj)
-						.GetOutNeighbors(params.get(0).name, params.get(0).operand));
+				return ToObjList(obj).GetAllNeighbors(params.get(0).name, params.get(0).operand);
 
 			return ToObjList(obj).GetOutNeighbors()
-				.append(ToObjList(obj).GetOutNeighbors());
+				.append(ToObjList(obj).GetAllNeighbors());
 		}
 	});
 
@@ -305,13 +322,26 @@ public abstract class PathOperations
 /**
  * return all links for the given objects<br>
  * */
+	public static final PathToken u_l = new PathToken("u_l", CHAIN_TYPE.E_OBJ_LIST, CHAIN_TYPE.E_LINK_LIST
+		, new ITransform()
+	{
+		@Override
+		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		{
+			return ToObjList(obj).GetUndirectedLinks();
+		}
+	});
+
+/**
+ * return all links for the given objects<br>
+ * */
 	public static final PathToken all_l = new PathToken("all_l", CHAIN_TYPE.E_OBJ_LIST, CHAIN_TYPE.E_LINK_LIST
 		, new ITransform()
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
 		{
-			return ToObjList(obj).GetInLinks().append(ToObjList(obj).GetOutLinks());
+			return ToObjList(obj).GetAllLinks();
 		}
 	});
 

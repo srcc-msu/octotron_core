@@ -6,20 +6,29 @@
 
 package ru.parallel.octotron.core.model;
 
+import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EModelType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.services.ModelService;
 
 public class ModelLink extends ModelEntity
 {
-	private final ModelObject source;
-	private final ModelObject target;
+	private final ModelObjectList objects = new ModelObjectList();
+	private final boolean directed;
 
-	public ModelLink(ModelObject source, ModelObject target)
+	public ModelLink(ModelObject o1, ModelObject o2, boolean directed)
 	{
 		super(EModelType.LINK);
 
-		this.target = target;
-		this.source = source;
+		this.objects.add(o1);
+		this.objects.add(o2);
+
+		this.directed = directed;
+	}
+
+	public boolean IsDirected()
+	{
+		return directed;
 	}
 
 	@Override
@@ -30,13 +39,35 @@ public class ModelLink extends ModelEntity
 		return new ModelLinkBuilder(service, this);
 	}
 
-	public ModelObject Target()
+	private void DirectedOnly()
 	{
-		return target;
+		if(!directed)
+			throw new ExceptionModelFail("the link has no direction");
 	}
 
 	public ModelObject Source()
 	{
-		return source;
+		DirectedOnly();
+
+		return objects.get(0);
+	}
+
+	public ModelObject Target()
+	{
+		DirectedOnly();
+
+		return objects.get(1);
+	}
+
+	public ModelObject Other(ModelObject that)
+	{
+		if(objects.get(0).equals(that)) return objects.get(1);
+		else if(objects.get(1).equals(that)) return objects.get(0);
+		else throw new ExceptionModelFail("object does not belong to this link");
+	}
+
+	public ModelObjectList GetObjects()
+	{
+		return new ModelObjectList(objects);
 	}
 }

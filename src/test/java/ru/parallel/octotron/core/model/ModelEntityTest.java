@@ -54,8 +54,15 @@ public class ModelEntityTest extends GeneralTest
 		ModelEntity entity1 = ModelEntityTest.obj_factory.Create();
 		ModelEntity entity2 = ModelEntityTest.obj_factory.Create();
 
-		ModelEntity entity3 = ModelEntityTest.link_factory.OneToOne(ModelEntityTest.obj_factory.Create(), ModelEntityTest.obj_factory.Create());
-		ModelEntity entity4 = ModelEntityTest.link_factory.OneToOne(ModelEntityTest.obj_factory.Create(), ModelEntityTest.obj_factory.Create());
+		ModelEntity entity3 = ModelEntityTest.link_factory.OneToOne(
+			ModelEntityTest.obj_factory.Create()
+			, ModelEntityTest.obj_factory.Create()
+			, true);
+
+		ModelEntity entity4 = ModelEntityTest.link_factory.OneToOne(
+			ModelEntityTest.obj_factory.Create()
+			, ModelEntityTest.obj_factory.Create()
+			, true);
 
 		assertTrue (entity1.equals(entity1)); // !
 		assertFalse(entity1.equals(entity2));

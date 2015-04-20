@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.core.model.ModelObject;
 
 import java.util.List;
 
@@ -55,6 +56,16 @@ public class ModelLinkList extends ModelList<ModelLink, ModelLinkList>
 
 		for(ModelLink link : list)
 			new_list.add(link.Source());
+
+		return new_list;
+	}
+
+	public ModelObjectList Other(ModelObject object)
+	{
+		ModelObjectList new_list = new ModelObjectList();
+
+		for(ModelLink link : list)
+			new_list.add(link.Other(object));
 
 		return new_list;
 	}

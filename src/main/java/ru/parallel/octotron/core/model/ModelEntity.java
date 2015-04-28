@@ -18,6 +18,7 @@ import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.reactions.PreparedResponse;
+import ru.parallel.utils.AutoFormat;
 
 import java.util.*;
 
@@ -52,7 +53,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		if(result != null)
 			return result;
 
-		throw new ExceptionModelFail("attribute not found: " + name);
+		throw new ExceptionModelFail("attribute not found: " + name + " all: " + AutoFormat.FormatJson(GetShortRepresentation()));
 	}
 
 	public Collection<IModelAttribute> GetAttributes()

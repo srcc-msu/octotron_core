@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.services.ModelService;
@@ -17,6 +18,8 @@ import ru.parallel.octotron.exec.services.ModelService;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -105,6 +108,22 @@ public final class CSVReader
 
 			ModelObjectList result = new ModelObjectList();
 
+			Map<Value, ModelObjectList> cache = new HashMap<>();
+
+			for(ModelObject object : input)
+			{
+				Value value = object.GetAttribute(fields[column[0]]).GetValue();
+
+				ModelObjectList tmp = cache.get(value);
+
+				if(tmp == null)
+					tmp = new ModelObjectList();
+
+				tmp.add(object);
+
+				cache.put(value, tmp);
+			}
+
 			String[] next_line = reader.readNext();
 
 			while(next_line != null)
@@ -113,9 +132,9 @@ public final class CSVReader
 					throw new ExceptionModelFail("some fields are missing: "
 						+ Arrays.toString(next_line));
 
-				ModelObjectList tmp = input;
+				ModelObjectList tmp = cache.get(Value.ValueFromStr(next_line[column[0]]));
 
-				for(int i = 0; i < column.length; i++)
+				for(int i = 1; i < column.length; i++)
 				{
 					if(column[i] >= fields.length)
 					{

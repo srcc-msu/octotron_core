@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -23,9 +23,9 @@ public class SoftLogicalAnd extends Rule
 	}
 
 	@Override
-	protected AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<Attribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<IModelAttribute> result = new AttributeList<>();
+		AttributeList<Attribute> result = new AttributeList<>();
 
 		for(String attr_name : attributes)
 			result.add(entity.GetAttribute(attr_name));
@@ -40,7 +40,7 @@ public class SoftLogicalAnd extends Rule
 
 		for(String attr_name : attributes)
 		{
-			IModelAttribute attr = entity.GetAttribute(attr_name);
+			Attribute attr = entity.GetAttribute(attr_name);
 
 			if(!attr.GetValue().IsValid())
 				continue;

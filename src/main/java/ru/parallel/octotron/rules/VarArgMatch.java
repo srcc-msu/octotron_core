@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
@@ -24,9 +24,9 @@ public class VarArgMatch extends Rule
 	}
 
 	@Override
-	protected AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<Attribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<IModelAttribute> result = new AttributeList<>();
+		AttributeList<Attribute> result = new AttributeList<>();
 
 		result.add(entity.GetAttribute(check_attribute));
 		result.add(entity.GetAttribute(match_attribute));
@@ -37,8 +37,8 @@ public class VarArgMatch extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		IModelAttribute attr = entity.GetAttribute(check_attribute);
-		IModelAttribute match_attr = entity.GetAttribute(match_attribute);
+		Attribute attr = entity.GetAttribute(check_attribute);
+		Attribute match_attr = entity.GetAttribute(match_attribute);
 
 		if(!attr.GetValue().IsValid() || !match_attr.GetValue().IsValid())
 			return Value.invalid;

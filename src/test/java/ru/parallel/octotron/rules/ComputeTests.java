@@ -3,8 +3,8 @@ package ru.parallel.octotron.rules;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
-import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
+import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -117,9 +117,9 @@ public class ComputeTests extends GeneralTest
 		objects = objects.append(outs);
 
 		for(ModelEntity entity : objects)
-			for(IModelAttribute attr : entity.GetAttributes())
+			for(Attribute attr : entity.GetAttributes())
 				if(attr.GetType() == EAttributeType.SENSOR)
-					((SensorAttribute)attr).Update(attr.GetValue());
+					attr.UpdateDependant();
 
 		// --------------
 
@@ -524,22 +524,22 @@ public class ComputeTests extends GeneralTest
 		Speed rule_l = new Speed("mod_l1");
 		Speed rule_d = new Speed("mod_d1");
 
-		object.GetSensor("mod_l1").Update(10L);
-		object.GetSensor("mod_d1").Update(10.0);
+		object.GetSensor("mod_l1").Import(10L);
+		object.GetSensor("mod_d1").Import(10.0);
 
 		assertEquals(0.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
 		assertEquals(0.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);
 
 		Thread.sleep(2000);
 
-		object.GetSensor("mod_l1").Update(20L);
-		object.GetSensor("mod_d1").Update(20.0);
+		object.GetSensor("mod_l1").Import(20L);
+		object.GetSensor("mod_d1").Import(20.0);
 
 		assertEquals(5.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
 		assertEquals(5.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);
 
-		object.GetSensor("mod_l1").Update(20L);
-		object.GetSensor("mod_d1").Update(20.0);
+		object.GetSensor("mod_l1").Import(20L);
+		object.GetSensor("mod_d1").Import(20.0);
 
 		assertEquals(0.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
 		assertEquals(0.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);

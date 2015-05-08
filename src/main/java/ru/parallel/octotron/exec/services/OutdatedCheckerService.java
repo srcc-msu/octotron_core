@@ -1,9 +1,8 @@
 package ru.parallel.octotron.exec.services;
 
-import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.utils.JavaUtils;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -13,8 +12,6 @@ import java.util.logging.Level;
 public class OutdatedCheckerService extends Service
 {
 	static private final Object lock = new Object();
-
-	private final UpdateService update_service;
 
 	class Checker implements Runnable
 	{
@@ -36,10 +33,7 @@ public class OutdatedCheckerService extends Service
 						return;
 					}
 
-					Collection<SensorAttribute> outdated_sensors = ProcessOutdatedSensors(context);
-
-					for(SensorAttribute sensor : outdated_sensors)
-						update_service.Update(sensor, true);
+					Collection<Sensor> outdated_sensors = ProcessOutdatedSensors(context);
 
 					if(outdated_sensors.size() > 0)
 						LOGGER.log(Level.INFO, "outdated sensors: " + outdated_sensors.size());
@@ -50,30 +44,27 @@ public class OutdatedCheckerService extends Service
 
 	private final Thread checker = new Thread(new Checker());
 
-	public OutdatedCheckerService(Context context, UpdateService update_service)
+	public OutdatedCheckerService(Context context)
 	{
 		super(context);
-		this.update_service = update_service;
 
 		checker.setName("outdated_checker");
 		checker.start();
 	}
 
-	public static Collection<SensorAttribute> ProcessOutdatedSensors(Context context)
+	public static Collection<Sensor> ProcessOutdatedSensors(Context context)
 	{
-		List<SensorAttribute> outdated_sensors = new LinkedList<>();
-
-		long cur_time = JavaUtils.GetTimestamp();
+		List<Sensor> outdated_sensors = new LinkedList<>();
 
 		for(ModelEntity entity : context.model_data.GetAllEntities())
 		{
-			for(SensorAttribute sensor : entity.GetSensor())
+			for(Sensor sensor : entity.GetSensor())
 			{
 				boolean last_state = sensor.IsOutdated();
 
-				boolean new_state = sensor.UpdateIsOutdated(cur_time);
+				sensor.AutoUpdate(false);
 
-				if(new_state && !last_state) // was not outdated, but now is
+				if(sensor.IsOutdated() && !last_state) // was not outdated, but now is
 					outdated_sensors.add(sensor);
 			}
 		}

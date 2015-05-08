@@ -6,23 +6,18 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.attributes.ConstAttribute;
-import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
-import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.logic.impl.Timeout;
+import ru.parallel.octotron.core.logic.TriggerCondition;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.services.ModelService;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.generators.tmpl.SensorTemplate;
-import ru.parallel.octotron.generators.tmpl.VarTemplate;
-import ru.parallel.octotron.reactions.CommonReactions;
+import ru.parallel.octotron.generators.tmpl.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class ModelEntityBuilder<T extends ModelEntity>
 {
@@ -35,10 +30,43 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		this.entity = entity;
 	}
 
-	public Reaction AddReaction(ReactionTemplate reaction_template)
+//--------
+
+	public void MakeDependencies()
 	{
-		return entity.GetAttribute(reaction_template.GetCheckName())
-			.GetBuilder(service).AddReaction(reaction_template);
+		for(Reaction reaction : entity.GetReactions())
+			for(String trigger_name : reaction.GetTemplate().GetTriggerNames())
+			{
+				Trigger trigger = entity.GetTrigger(trigger_name);
+
+				trigger.AddDependOnMe(reaction);
+				reaction.AddIDependOn(trigger);
+			}
+
+		for(Var var : entity.GetVar())
+			for(Attribute dependant : var.GetRule().GetDependency(entity))
+			{
+				dependant.AddDependOnMe(var);
+				var.AddIDependOn(dependant);
+			}
+	}
+
+//--------
+
+	private void CheckAddAttribute(Attribute attribute)
+	{
+		if(entity.TestAttribute(attribute.GetName()))
+			throw new ExceptionModelFail("attribute already declared: " + attribute.GetName());
+
+		entity.attributes_map.put(attribute.GetName(), attribute);
+	}
+
+	public void AddReaction(ReactionTemplate reaction_template)
+	{
+		Reaction reaction = new Reaction(entity, reaction_template);
+
+		CheckAddAttribute(reaction);
+		entity.reactions.add(reaction);
 	}
 
 	public void AddReaction(List<ReactionTemplate> reactions)
@@ -47,18 +75,15 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 			AddReaction(reaction);
 	}
 
-//------------------------
+//--------
 
 	public void DeclareConst(String name, Object value)
 	{
 		Value converted_value = Value.Construct(value);
 
-		if(entity.TestAttribute(name))
-			throw new ExceptionModelFail("attribute already declared: " + name);
+		Const attribute = new Const(entity, name, converted_value);
 
-		ConstAttribute attribute = new ConstAttribute(entity, name, converted_value);
-
-		entity.attributes_map.put(name, attribute);
+		CheckAddAttribute(attribute);
 		entity.const_map.put(name, attribute);
 
 		service.GetPersistenceService().RegisterConst(attribute);
@@ -75,7 +100,33 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 			DeclareConst(constant);
 	}
 
-//------------------------
+//--------
+
+	Map<ConstTemplate, Const> static_cache = new HashMap<>();
+
+	public void DeclareStatic(ConstTemplate constant)
+	{
+		Const cached = static_cache.get(constant);
+
+		if(cached == null)
+		{
+			cached = new Const(entity, constant.name, Value.Construct(constant.value));
+			static_cache.put(constant, cached);
+		}
+
+		CheckAddAttribute(cached);
+		entity.const_map.put(constant.name, cached);
+
+		service.GetPersistenceService().RegisterConst(cached);
+	}
+
+	public void DeclareStatic(Iterable<ConstTemplate> constants)
+	{
+		for(ConstTemplate constant : constants)
+			DeclareStatic(constant);
+	}
+
+//--------
 
 	public void DeclareSensor(String name, long update_time, Object default_value)
 	{
@@ -86,25 +137,12 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 	public void DeclareSensor(String name, long update_time, Value value)
 	{
-		if(entity.TestAttribute(name))
-			throw new ExceptionModelFail("attribute already declared: " + name);
+		Sensor sensor = new Sensor(entity, name, update_time, value);
 
-		SensorAttribute sensor = new SensorAttribute(entity, name, update_time, value);
-
-		entity.attributes_map.put(name, sensor);
+		CheckAddAttribute(sensor);
 		entity.sensor_map.put(name, sensor);
 
 		service.GetPersistenceService().RegisterSensor(sensor);
-
-		try
-		{
-			sensor.GetBuilder(service).SetTimeoutReaction(
-				new Timeout(name).Response(CommonReactions.Timeout(name)));
-		}
-		catch(ExceptionParseError ignore)
-		{
-			throw new ExceptionModelFail("internal error in builtin reaction description");
-		}
 	}
 
 	public void DeclareSensor(SensorTemplate sensor)
@@ -118,16 +156,13 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 			DeclareSensor(sensor);
 	}
 
-//------------------------
+//--------
 
 	public void DeclareVar(String name, Rule rule)
 	{
-		if(entity.TestAttribute(name))
-			throw new ExceptionModelFail("attribute already declared: " + name);
+		Var var = new Var(entity, name, rule);
 
-		VarAttribute var = new VarAttribute(entity, name, rule);
-
-		entity.attributes_map.put(name, var);
+		CheckAddAttribute(var);
 		entity.var_map.put(name, var);
 
 		service.GetPersistenceService().RegisterVar(var);
@@ -142,5 +177,28 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 	public void DeclareVar(VarTemplate var)
 	{
 		DeclareVar(var.name, var.rule);
+	}
+
+//--------
+
+	public void DeclareTrigger(String name, TriggerCondition condition)
+	{
+		Trigger var = new Trigger(entity, name, condition);
+
+		CheckAddAttribute(var);
+		entity.trigger_map.put(name, var);
+
+		service.GetPersistenceService().RegisterTrigger(var);
+	}
+
+	public void DeclareTrigger(Iterable<TriggerTemplate> triggers)
+	{
+		for(TriggerTemplate trigger : triggers)
+			DeclareTrigger(trigger.name, trigger.condition);
+	}
+
+	public void DeclareTrigger(TriggerTemplate trigger)
+	{
+		DeclareTrigger(trigger.name, trigger.condition);
 	}
 }

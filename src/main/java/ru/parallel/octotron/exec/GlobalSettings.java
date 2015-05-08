@@ -90,17 +90,17 @@ public class GlobalSettings
 		model_path = "";
 		model_main = "";
 
-// --- sys config
+//-------- sys config
 		sys_path = "";
 		log_dir = "";
 
 		threads = 4;
 
-// --- http config
+//-------- http config
 		http_port = port;
 		host = "127.0.0.1";
 
-// --- credentials config
+//-------- credentials config
 		view_credentials = new Credential("", "");
 		modify_credentials = new Credential("", "");
 		control_credentials = new Credential("", "");
@@ -110,14 +110,14 @@ public class GlobalSettings
 	{
 		JsonObject root = new JsonParser().parse(json_config).getAsJsonObject();
 
-// --- model config
+//-------- model config
 		JsonObject model_conf = JsonUtils.MustPresent(root, "model").getAsJsonObject();
 
 		model_name = JsonUtils.MustPresent(model_conf, "name").getAsString();
 		model_path = JsonUtils.MustPresent(model_conf, "path").getAsString();
 		model_main = JsonUtils.MustPresent(model_conf, "main").getAsString();
 
-// --- sys config
+//-------- sys config
 		JsonObject sys_conf = JsonUtils.MustPresent(root, "system").getAsJsonObject();
 
 		log_dir = JsonUtils.MustPresent(sys_conf, "log_dir").getAsString();
@@ -138,7 +138,7 @@ public class GlobalSettings
 			notify_timeout = JsonUtils.MustPresent(sys_conf, "notify_timeout").getAsBoolean();
 		}
 
-// --- db config
+//-------- db config
 		if(JsonUtils.IsPresent(root, "db"))
 		{
 			JsonObject db_conf = JsonUtils.MustPresent(root, "db").getAsJsonObject();
@@ -151,13 +151,13 @@ public class GlobalSettings
 			db = true;
 		}
 
-// --- scripts config
+//-------- scripts config
 		JsonObject scripts_conf = JsonUtils.MustPresent(root, "scripts").getAsJsonObject();
 
 		for(Entry<String, JsonElement> pair : scripts_conf.entrySet())
 			script_map.put(pair.getKey(), pair.getValue().getAsString());
 
-// --- graph settings
+//-------- graph settings
 		JsonObject graph_conf = JsonUtils.MustPresent(root, "graph").getAsJsonObject();
 
 		if(graph_conf.get("object_index") != null)
@@ -168,7 +168,7 @@ public class GlobalSettings
 			for(JsonElement elem : JsonUtils.MustPresent(graph_conf, "link_index").getAsJsonArray())
 				link_index.add(elem.getAsString());
 
-// --- http config
+//-------- http config
 		JsonObject http_conf = JsonUtils.MustPresent(root, "http").getAsJsonObject();
 
 		http_port = JsonUtils.MustPresent(http_conf, "port").getAsInt();
@@ -178,7 +178,7 @@ public class GlobalSettings
 		else
 			host = "127.0.0.1";
 
-// --- credentials config
+//-------- credentials config
 		view_credentials = GlobalSettings.GetCredential(http_conf, "view");
 		modify_credentials = GlobalSettings.GetCredential(http_conf, "modify");
 		control_credentials = GlobalSettings.GetCredential(http_conf, "control");

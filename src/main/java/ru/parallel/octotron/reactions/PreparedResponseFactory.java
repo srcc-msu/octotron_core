@@ -7,10 +7,10 @@
 package ru.parallel.octotron.reactions;
 
 import com.google.common.collect.Iterators;
+import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
@@ -154,9 +154,9 @@ public class PreparedResponseFactory
 	private void FillSpecial(PreparedResponse prepared_response
 		, ModelEntity entity, Reaction reaction)
 	{
-		String suppress = String.format("to suppress this reaction: http://%s:%d/modify/suppress?path=obj(AID==%d)&template_id=%d&description=spam"
+		String suppress = String.format("to suppress this reaction: http://%s:%d/modify/suppress?path=obj(AID==%d)&name=%s&description=spam"
 			, context.settings.GetHost(), context.settings.GetPort()
-			, entity.GetID(), reaction.GetTemplate().GetID());
+			, entity.GetID(), reaction.GetTemplate().name);
 		prepared_response.specials.add(suppress);
 	}
 

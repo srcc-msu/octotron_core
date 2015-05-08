@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.services.*;
@@ -27,7 +27,6 @@ public class ExecutionController
 	private final HttpService http_service;
 
 	private final ReactionService reaction_service;
-	private final UpdateService update_service;
 	private final ImportService import_service;
 
 	private final OutdatedCheckerService checker_service;
@@ -44,29 +43,23 @@ public class ExecutionController
 		http_service = new HttpService("http_requests", context, request_service);
 
 		reaction_service = new ReactionService("reactions", context, model_service.GetPersistenceService());
-		update_service = new UpdateService("updates", context, reaction_service, model_service.GetPersistenceService());
-		import_service = new ImportService("imports", context, update_service);
+		import_service = new ImportService("imports", context);
 
-		checker_service = new OutdatedCheckerService(context, update_service);
+		checker_service = new OutdatedCheckerService(context);
 
 		UpdateDefinedSensors();
 
 		model_service.GetPersistenceService().GetExecutor().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
 	}
 
-	public UpdateService GetUpdateService()
-	{
-		return update_service;
-	}
-
 	private void UpdateDefinedSensors()
 	{
 		for(ModelObject object : context.model_data.GetAllObjects())
 		{
-			for(SensorAttribute sensor : object.GetSensor())
+			for(Sensor sensor : object.GetSensor())
 			{
 				if(sensor.GetValue().IsComputable())
-					update_service.Update(sensor, false);
+					sensor.UpdateDependant(true);
 			}
 		}
 	}
@@ -108,7 +101,6 @@ public class ExecutionController
 		request_service.Finish();
 
 		import_service.Finish();
-		update_service.Finish();
 		reaction_service.Finish();
 
 		checker_service.Finish();

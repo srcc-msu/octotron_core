@@ -1,10 +1,12 @@
 package ru.parallel.octotron.http.requests;
 
 import org.junit.Test;
-import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.logic.Reaction;
-import ru.parallel.octotron.core.logic.impl.Equals;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
+import ru.parallel.octotron.core.attributes.impl.Reaction;
+import ru.parallel.octotron.triggers.Equals;
+import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.generators.tmpl.TriggerTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.rules.Speed;
 
@@ -69,16 +71,17 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void ReactionTest() throws Exception
 	{
-		object_factory.Sensors(new SensorTemplate("test", -1, 0))
-			.Reactions(new Equals("test", 1)).Create(1);
+		object_factory.Sensors(new SensorTemplate("test_sensor", -1, 0))
+			.Triggers(new TriggerTemplate("test_trigger", new Equals("test_sensor", 1)))
+			.Reactions(new ReactionTemplate("test_reaction").On("test_trigger")).Create(1);
 
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/reaction?path=obj(AID)&name=test");
+		String test = GetRequestResult("/view/reaction?path=obj(AID)&name=test_reaction");
 		if(test == null || !test.contains("AID"))
 			fail("bad response: " + test);
 
-		test = GetRequestResult("/view/reaction?path=obj(AID)&name=test&v");
+		test = GetRequestResult("/view/reaction?path=obj(AID)&name=test_reaction&v");
 		if(test == null || !test.contains("AID"))
 			fail("bad response: " + test);
 	}
@@ -86,12 +89,11 @@ public class ViewRequestTest extends RequestTest
 	@Test
 	public void SuppressedTest() throws Exception
 	{
-		ModelObjectList obj = object_factory.Sensors(new SensorTemplate("test", -1, 0))
-			.Reactions(new Equals("test", 1)).Create(1);
+		ModelObject obj = object_factory
+			.Reactions(new ReactionTemplate("test_reaction")).Create();
 		model_service.EnableObjectIndex("AID");
 
-
-		Reaction reaction = obj.Only().GetAttribute("test").GetReactions().iterator().next();
+		Reaction reaction = obj.GetReactions().iterator().next();
 
 		String test = GetRequestResult("/view/suppressed");
 		if(test == null || test.contains("AID"))
@@ -100,7 +102,7 @@ public class ViewRequestTest extends RequestTest
 		reaction.SetSuppress(true);
 
 		test = GetRequestResult("/view/suppressed");
-		if(test == null || !test.contains("AID"))
+		if(test == null || !test.contains("suppress"))
 			fail("bad response: " + test);
 	}
 

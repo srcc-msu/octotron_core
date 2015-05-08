@@ -9,10 +9,7 @@ package ru.parallel.octotron.generators;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.exec.services.ModelService;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.generators.tmpl.SensorTemplate;
-import ru.parallel.octotron.generators.tmpl.VarTemplate;
+import ru.parallel.octotron.generators.tmpl.*;
 
 import java.util.List;
 
@@ -28,11 +25,13 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 
 	private ObjectFactory(ModelService service
 		, List<ConstTemplate> constants
+		, List<ConstTemplate> statics
 		, List<SensorTemplate> sensors
 		, List<VarTemplate> rules
+		, List<TriggerTemplate> triggers
 		, List<ReactionTemplate> reactions)
 	{
-		super(service, constants, sensors, rules, reactions);
+		super(service, constants, statics, sensors, rules, triggers, reactions);
 	}
 
 	/**
@@ -43,8 +42,10 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 		ModelObject object = service.AddObject();
 
 		object.GetBuilder(service).DeclareConst(constants);
+		object.GetBuilder(service).DeclareStatic(statics);
 		object.GetBuilder(service).DeclareSensor(sensors);
 		object.GetBuilder(service).DeclareVar(rules);
+		object.GetBuilder(service).DeclareTrigger(triggers);
 		object.GetBuilder(service).AddReaction(reactions);
 
 		return object;
@@ -66,10 +67,12 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	@Override
 	protected ObjectFactory Clone(
 		List<ConstTemplate> new_constants
+		, List<ConstTemplate> new_statics
 		, List<SensorTemplate> new_sensors
 		, List<VarTemplate> new_rules
+		, List<TriggerTemplate> new_triggers
 		, List<ReactionTemplate> new_reactions)
 	{
-		return new ObjectFactory(service, new_constants, new_sensors, new_rules, new_reactions);
+		return new ObjectFactory(service, new_constants, new_statics, new_sensors, new_rules, new_triggers, new_reactions);
 	}
 }

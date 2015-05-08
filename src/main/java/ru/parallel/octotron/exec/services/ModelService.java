@@ -6,9 +6,7 @@
 
 package ru.parallel.octotron.exec.services;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
-import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -34,7 +32,7 @@ public final class ModelService extends Service
 
 	private EMode mode;
 
-	private final double free_space_mb_thr = 1024; // 1GB in MB
+	private final double free_space_mb_threshold = 1024; // 1GB in MB
 
 	private SelfTest tester = null;
 
@@ -68,12 +66,6 @@ public final class ModelService extends Service
 		return mode;
 	}
 
-	public void CheckModification()
-	{
-		if(GetMode() == ModelService.EMode.OPERATION)
-			throw new ExceptionModelFail("model modification is not allowed in operational mode");
-	}
-
 	public void Operate()
 	{
 		InitSelfTest(this);
@@ -87,22 +79,18 @@ public final class ModelService extends Service
 
 	private void MakeRuleDependency()
 	{
-		for(ModelObject object : context.model_data.GetAllObjects())
+		for(ModelEntity entity : context.model_data.GetAllEntities())
 		{
-			for(VarAttribute attribute : object.GetVar())
-			{
-				attribute.GetBuilder(this).ConnectDependency();
-				persistence_service.MakeRuleDependency(attribute);
-			}
+			entity.GetBuilder(this).MakeDependencies();
+
+			persistence_service.MakeRuleDependency(entity);
 		}
 	}
 
-// ---------------------
+//--------
 
 	public ModelLink AddLink(ModelObject source, ModelObject target, boolean directed)
 	{
-		CheckModification();
-
 		ModelLink link = new ModelLink(source, target, directed);
 		persistence_service.RegisterLink(link);
 
@@ -126,8 +114,6 @@ public final class ModelService extends Service
 
 	public ModelObject AddObject()
 	{
-		CheckModification();
-
 		ModelObject object = new ModelObject();
 		persistence_service.RegisterObject(object);
 
@@ -138,38 +124,31 @@ public final class ModelService extends Service
 		return object;
 	}
 
-// ---------------------
+//--------
 
 	public void EnableLinkIndex(String name)
 	{
-		CheckModification();
-
 		context.model_data.GetCache().EnableLinkIndex(name, context.model_data.GetAllLinks());
 	}
 
 	public void EnableObjectIndex(String name)
 	{
-		CheckModification();
-
 		context.model_data.GetCache().EnableObjectIndex(name, context.model_data.GetAllObjects());
 	}
 
-	public long SetSuppress(ModelEntity entity, long template_id, boolean value, String description)
+	public long SetSuppress(ModelEntity entity, String name, boolean value, String description)
 	{
 		long suppressed = 0;
 		long AID = -1;
 
-		for(IModelAttribute attribute : entity.GetAttributes())
+		for(Reaction reaction : entity.GetReactions())
 		{
-			for(Reaction reaction : attribute.GetReactions())
+			if(reaction.GetTemplate().name.equals(name))
 			{
-				if(reaction.GetTemplate().GetID() == template_id)
-				{
-					reaction.SetSuppress(value);
-					reaction.SetDescription(description);
-					suppressed++;
-					AID = reaction.GetID();
-				}
+				reaction.SetSuppress(value);
+				reaction.SetDescription(description);
+				suppressed++;
+				AID = reaction.GetID();
 			}
 		}
 
@@ -184,20 +163,18 @@ public final class ModelService extends Service
 		List<Reaction> reactions = new LinkedList<>();
 
 		for(ModelEntity entity : context.model_data.GetAllObjects())
-			for(IModelAttribute attribute : entity.GetAttributes())
-				for(Reaction reaction : attribute.GetReactions())
-				{
-					if(reaction.GetSuppress())
-						reactions.add(reaction);
-				}
+			for(Reaction reaction : entity.GetReactions())
+			{
+				if(reaction.GetSuppress())
+					reactions.add(reaction);
+			}
 
 		for(ModelEntity entity : context.model_data.GetAllLinks())
-			for(IModelAttribute attribute : entity.GetAttributes())
-				for(Reaction reaction : attribute.GetReactions())
-				{
-					if(reaction.GetSuppress())
-						reactions.add(reaction);
-				}
+			for(Reaction reaction : entity.GetReactions())
+			{
+				if(reaction.GetSuppress())
+					reactions.add(reaction);
+			}
 
 		return reactions;
 	}
@@ -234,7 +211,7 @@ public final class ModelService extends Service
 
 		map.put("graph_test", graph_test);
 		map.put("disk_space_MB", free_space_mb);
-		map.put("disk_test", free_space_mb > free_space_mb_thr);
+		map.put("disk_test", free_space_mb > free_space_mb_threshold);
 
 		return map;
 	}

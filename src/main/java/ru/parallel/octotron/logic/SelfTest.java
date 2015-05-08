@@ -30,8 +30,6 @@ public class SelfTest
 		obj2.GetBuilder(model_service).DeclareConst("type", "_selftest");
 		obj2.GetBuilder(model_service).DeclareVar("check", new AStrictLongSum(EDependencyType.ALL, "test_iteration"));
 
-		obj1.GetSensor("test_iteration").GetBuilder(model_service).AddDependant(obj2.GetVar("check"));
-
 		model_service.AddLink(obj1, obj2, false);
 	}
 
@@ -39,7 +37,7 @@ public class SelfTest
 	{
 		test_iteration++;
 
-		controller.GetImportService().ImmediateImport(obj1, "test_iteration", new Value(test_iteration));
+		obj1.GetSensor("test_iteration").Import(test_iteration);
 
 		return obj2.GetAttribute("check").eq(new Value(test_iteration));
 	}

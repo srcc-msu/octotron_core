@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AStrictLongSum extends AStrict
@@ -17,7 +17,7 @@ public class AStrictLongSum extends AStrict
 	}
 
 	@Override
-	protected Object Accumulate(Object res, IModelAttribute attribute)
+	protected Object Accumulate(Object res, Attribute attribute)
 	{
 		return (Long)res + attribute.GetLong();
 	}

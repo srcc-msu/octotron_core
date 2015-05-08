@@ -1,20 +1,15 @@
 package ru.parallel.octotron.exec.services;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
-import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.attributes.impl.Reaction;
+
 import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.octotron.reactions.PreparedResponseFactory;
 
-import java.util.Collection;
-
 public class ReactionService extends BGService
 {
-	private final PersistenceService persistence_service;
 	private final PreparedResponseFactory response_factory;
 
 	/**
@@ -27,7 +22,6 @@ public class ReactionService extends BGService
 		super(context, new BGExecutorService(prefix, context.settings.GetNumThreads()
 			, DEFAULT_QUEUE_LIMIT));
 
-		this.persistence_service = persistence_service;
 		this.response_factory = new PreparedResponseFactory(context);
 
 		SetSilent(context.settings.IsStartSilent());
@@ -43,59 +37,35 @@ public class ReactionService extends BGService
 		this.silent = silent;
 	}
 
-// --------------
+//--------
 
-	private void AddResponse(PreparedResponse response)
+	public void AddResponse(Reaction reaction, Response response)
 	{
-		if(IsSilent())
-			return;
-
-		executor.execute(response);
+		executor.execute(new Responder(reaction, response));
 	}
 
-	private void CheckSingleReaction(Reaction reaction)
+	public class Responder implements Runnable
 	{
-		Response response = reaction.ProcessOrNull();
+		private final Reaction reaction;
+		private final Response response;
 
-		if(reaction.GetState() == Reaction.State.NONE)
-			reaction.RegisterPreparedResponse(null);
-
-		if(response == null)
-			return;
-
-		PreparedResponse prepared_response = response_factory
-			.Construct(reaction.GetAttribute().GetParent(), reaction, response);
-
-		if(response.GetStatus() != EEventStatus.RECOVER)
-			reaction.RegisterPreparedResponse(prepared_response);
-
-		AddResponse(prepared_response);
-	}
-
-	public void CheckReaction(Reaction reaction)
-	{
-		CheckSingleReaction(reaction);
-		persistence_service.RegisterReaction(reaction);
-	}
-
-	public void CheckReactions(IModelAttribute attribute)
-	{
-		for(Reaction reaction : attribute.GetReactions())
+		public Responder(Reaction reaction, Response response)
 		{
-			CheckSingleReaction(reaction);
+			this.reaction = reaction;
+			this.response = response;
 		}
 
-		if(attribute.GetType() == EAttributeType.SENSOR && context.settings.IsNotifyTimeout())
-			CheckSingleReaction(((SensorAttribute)attribute).GetTimeoutReaction());
-
-		persistence_service.UpdateReactions(attribute.GetReactions()); // batch updating
-	}
-
-	public void CheckReactions(Collection<? extends IModelAttribute> attributes)
-	{
-		for(IModelAttribute attribute : attributes)
+		@Override
+		public void run()
 		{
-			CheckReactions(attribute);
+			PreparedResponse prepared_response = response_factory
+				.Construct(reaction.GetParent(), reaction, response);
+
+			if(response.GetStatus() != EEventStatus.RECOVER)
+				reaction.RegisterPreparedResponse(prepared_response);
+
+			if(!IsSilent())
+				prepared_response.run();
 		}
 	}
 }

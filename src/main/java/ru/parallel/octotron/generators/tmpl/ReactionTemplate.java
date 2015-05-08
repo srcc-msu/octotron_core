@@ -6,96 +6,47 @@
 
 package ru.parallel.octotron.generators.tmpl;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
-import ru.parallel.octotron.core.logic.LogicID;
 import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.primitive.ELogicalType;
 import ru.parallel.octotron.core.primitive.IPresentable;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-public abstract class ReactionTemplate extends LogicID<ELogicalType> implements IPresentable
+public final class ReactionTemplate implements IPresentable
 {
-	private final String check_name;
+	public final String name;
 
-	private Response response = null;
-	private Response recover_response = null;
+	public final List<ReactionCase> required_triggers = new LinkedList<>();
+	public final List<ReactionCase> prohibited_triggers = new LinkedList<>();
 
-	private long wait_delay = 0;
-	private long wait_repeat = 0;
-	private boolean repeatable = false;
-	private boolean invalid_allowed = false;
+	public Response response = null;
+	public Response recover_response = null;
 
-	public ReactionTemplate(String check_name)
+	public boolean repeatable = false;
+
+	public ReactionTemplate(String name)
 	{
-		super(ELogicalType.REACTION_TEMPLATE);
-
-		this.check_name = check_name;
+		this.name = name;
 	}
 
-	public final String GetCheckName()
-	{
-		return check_name;
-	}
-
-//----------------
-
-	public abstract boolean ReactionNeeded(IModelAttribute attribute);
-
-//----------------
-
-	public final Response GetResponseOrNull()
-	{
-		return response;
-	}
-
-	public final Response GetRecoverResponseOrNull()
-	{
-		return recover_response;
-	}
-
-	public long GetDelay()
-	{
-		return wait_delay;
-	}
-
-	public long GetRepeat()
-	{
-		return wait_repeat;
-	}
+//--------
 
 	public boolean IsRepeatable()
 	{
 		return repeatable;
 	}
 
-	public boolean IsInvalidAllowed()
-	{
-		return invalid_allowed;
-	}
-
-	public ReactionTemplate Response(Response response)
+	public ReactionTemplate Begin(Response response)
 	{
 		this.response = response;
 		return this;
 	}
 
-	public ReactionTemplate RecoverResponse(Response recover_response)
+	public ReactionTemplate End(Response recover_response)
 	{
 		this.recover_response = recover_response;
-		return this;
-	}
-
-	public ReactionTemplate Delay(long wait_delay)
-	{
-		this.wait_delay = wait_delay;
-		return this;
-	}
-
-	public ReactionTemplate Repeat(long wait_repeat)
-	{
-		this.wait_repeat = wait_repeat;
 		return this;
 	}
 
@@ -105,18 +56,29 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 		return this;
 	}
 
-	public ReactionTemplate InvalidAllowed()
+	public ReactionTemplate On(String trigger_name, long repeat, long delay)
 	{
-		this.invalid_allowed = true;
+		this.required_triggers.add(new ReactionCase(trigger_name, repeat, delay));
 		return this;
 	}
 
+	public ReactionTemplate On(String trigger_name)
+	{
+		return On(trigger_name, 0, 0);
+	}
+
+	public ReactionTemplate Off(String trigger_name)
+	{
+		this.prohibited_triggers.add(new ReactionCase(trigger_name));
+		return this;
+	}
+
+/*
 	@Override
 	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
 		result.put("AID", GetID());
-		result.put("check_name", GetCheckName());
 
 		return result;
 	}
@@ -138,6 +100,18 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 			result.put("recover_response", -1);
 
 		return result;
+	}*/
+
+	@Override
+	public Map<String, Object> GetLongRepresentation()
+	{
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> GetShortRepresentation()
+	{
+		return null;
 	}
 
 	@Override
@@ -147,5 +121,23 @@ public abstract class ReactionTemplate extends LogicID<ELogicalType> implements 
 			return GetLongRepresentation();
 		else
 			return GetShortRepresentation();
+	}
+
+	private static List<String> triggers_names_cache = null;
+
+	public Collection<String> GetTriggerNames()
+	{
+		if(triggers_names_cache == null)
+		{
+			triggers_names_cache = new LinkedList<>();
+
+			for (ReactionCase reaction_case : required_triggers)
+				triggers_names_cache.add(reaction_case.trigger_name);
+
+			for (ReactionCase reaction_case : prohibited_triggers)
+				triggers_names_cache.add(reaction_case.trigger_name);
+		}
+
+		return triggers_names_cache;
 	}
 }

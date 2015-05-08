@@ -203,7 +203,7 @@ public class Start
 		LOGGER.log(Level.INFO, "Building rule dependencies and running the model");
 
 		ExecutionController controller = null;
-// --- create
+//-------- create
 		try
 		{
 			model_service.Operate();
@@ -223,7 +223,7 @@ public class Start
 			System.exit(1);
 		}
 
-// --- main loop
+//-------- main loop
 		Exception loop_exception = MainLoop(context, controller);
 
 		if(loop_exception != null)
@@ -231,7 +231,7 @@ public class Start
 			ProcessCrash(context, loop_exception, "mainloop");
 		}
 
-// --- shutdown
+//-------- shutdown
 		Exception shutdown_exception = Shutdown(controller, model_service);
 
 		if(shutdown_exception != null)

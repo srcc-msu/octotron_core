@@ -33,7 +33,7 @@ public class HttpRequestParser
 		new View.count()
 		, new View.attribute()
 		, new View.entity()
-		, new View.reaction()
+//		, new View.reaction() // TODO
 		, new View.suppressed()
 		, new View.all_response()
 		, new View.version()

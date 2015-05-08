@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.http.operations;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -59,9 +59,9 @@ public abstract class Utils
 		Utils.AllParams(params, names);
 	}
 
-	public static List<IModelAttribute> GetAttributes(ModelEntity entity, List<String> names)
+	public static List<Attribute> GetAttributes(ModelEntity entity, List<String> names)
 	{
-		List<IModelAttribute> result = new LinkedList<>();
+		List<Attribute> result = new LinkedList<>();
 
 		for(String name : names)
 		{
@@ -80,7 +80,7 @@ public abstract class Utils
 		{
 			List<Map<String, Object>> list = new LinkedList<>();
 
-			for(IModelAttribute attribute : GetAttributes(entity, names))
+			for(Attribute attribute : GetAttributes(entity, names))
 				list.add(attribute.GetRepresentation(verbose));
 
 			data.add(list);

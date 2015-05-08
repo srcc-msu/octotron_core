@@ -31,12 +31,10 @@ public class ModelObject extends ModelEntity
 	@Override
 	public ModelObjectBuilder GetBuilder(ModelService service)
 	{
-		service.CheckModification();
-
 		return new ModelObjectBuilder(service, this);
 	}
 
-// ----------------
+//--------
 
 	public ModelLinkList GetInLinks()
 	{
@@ -61,7 +59,7 @@ public class ModelObject extends ModelEntity
 			.append(undirected_links);
 	}
 
-// ----------------
+//--------
 
 	public ModelObjectList GetInNeighbors()
 	{
@@ -85,7 +83,7 @@ public class ModelObject extends ModelEntity
 			.append(out_neighbors)
 			.append(undirected_neighbors);
 	}
-// ----------------
+//--------
 
 	public ModelObjectList GetInNeighbors(String link_name, Value link_value)
 	{
@@ -107,7 +105,7 @@ public class ModelObject extends ModelEntity
 		return GetAllLinks().Filter(link_name, link_value).Other(this);
 	}
 
-// ----------------
+//--------
 
 	public ModelObjectList GetInNeighbors(String link_name, Object link_value)
 	{
@@ -129,7 +127,7 @@ public class ModelObject extends ModelEntity
 		return GetAllNeighbors(link_name, Value.Construct(link_value));
 	}
 
-// ----------------
+//--------
 
 	public ModelObjectList GetInNeighbors(String link_name)
 	{

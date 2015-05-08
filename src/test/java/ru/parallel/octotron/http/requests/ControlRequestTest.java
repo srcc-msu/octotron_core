@@ -57,7 +57,6 @@ public class ControlRequestTest extends RequestTest
 	@Test
 	public void SelftestTest() throws Exception
 	{
-		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
 		model_service.Operate();

@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.http.operations;
 
-import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -102,9 +102,9 @@ public class Modify
 
 			for(ModelEntity entity : entities)
 			{
-				SensorAttribute sensor = entity.GetSensor(name);
+				Sensor sensor = entity.GetSensor(name);
 				sensor.SetUserValid();
-				controller.GetUpdateService().Update(sensor, true);
+				sensor.UpdateDependant();
 			}
 
 			return new TextString("set the attribute to valid for " + entities.size() + " entities");
@@ -130,9 +130,9 @@ public class Modify
 
 			for(ModelEntity entity : entities)
 			{
-				SensorAttribute sensor = entity.GetSensor(name);
+				Sensor sensor = entity.GetSensor(name);
 				sensor.SetUserInvalid();
-				controller.GetUpdateService().Update(sensor, true);
+				sensor.UpdateDependant();
 			}
 
 			return new TextString("set the attribute to invalid for " + entities.size() + " entities");
@@ -155,8 +155,7 @@ public class Modify
 			Utils.RequiredParams(params, "template_id");
 			Utils.AllParams(params, "template_id", "description");
 
-			String template_id_str = params.get("template_id");
-			long template_id = Value.ValueFromStr(template_id_str).GetLong();
+			String name = params.get("name");
 
 			String description = params.get("description");
 			if(description == null)
@@ -167,17 +166,17 @@ public class Modify
 			for(ModelEntity entity : entities)
 			{
 				long AID = controller.model_service
-					.SetSuppress(entity, template_id, true, description);
+					.SetSuppress(entity, name, true, description);
 
 				if(AID != -1)
 				{
 					res += "suppressed reaction: " + AID
-						+ " with template: " + template_id
+						+ " with template: " + name
 						+ System.lineSeparator();
 				}
 				else
 				{
-					res += "reaction with template: " + template_id
+					res += "reaction with template: " + name
 						+ " not found on object: " + entity.GetID()
 						+ System.lineSeparator();
 				}
@@ -204,26 +203,24 @@ public class Modify
 			Utils.RequiredParams(params, "template_id");
 			Utils.AllParams(params, "template_id");
 
-			String template_id_str = params.get("template_id");
-
-			long template_id = Value.ValueFromStr(template_id_str).GetLong();
+			String name = params.get("template_id");
 
 			String res = "";
 
 			for(ModelEntity entity : entities)
 			{
 				long AID = controller.model_service
-					.SetSuppress(entity, template_id, false, "");
+					.SetSuppress(entity, name, false, "");
 
 				if(AID != -1)
 				{
 					res += "unsuppressed reaction: " + AID
-						+ " with template: " + template_id
+						+ " with template: " + name
 						+ System.lineSeparator();
 				}
 				else
 				{
-					res += "reaction with template: " + template_id
+					res += "reaction with template: " + name
 						+ " not found on object: " + entity.GetID()
 						+ System.lineSeparator();
 				}

@@ -12,10 +12,7 @@ import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.services.ModelService;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.generators.tmpl.SensorTemplate;
-import ru.parallel.octotron.generators.tmpl.VarTemplate;
+import ru.parallel.octotron.generators.tmpl.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,12 +32,15 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		super(service);
 	}
 
-	private LinkFactory(ModelService service, List<ConstTemplate> constants
+	private LinkFactory(ModelService service
+		, List<ConstTemplate> constants
+		, List<ConstTemplate> statics
 		, List<SensorTemplate> sensors
 		, List<VarTemplate> rules
+		, List<TriggerTemplate> triggers
 		, List<ReactionTemplate> reactions)
 	{
-		super(service, constants, sensors, rules, reactions);
+		super(service, constants, statics, sensors, rules, triggers, reactions);
 	}
 
 /**
@@ -54,8 +54,10 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 
 // set all attributes
 		link.GetBuilder(service).DeclareConst(constants);
+		link.GetBuilder(service).DeclareStatic(statics);
 		link.GetBuilder(service).DeclareSensor(sensors);
 		link.GetBuilder(service).DeclareVar(rules);
+		link.GetBuilder(service).DeclareTrigger(triggers);
 		link.GetBuilder(service).AddReaction(reactions);
 
 		link.GetBuilder(service).DeclareConst("directed", link.IsDirected());
@@ -298,10 +300,12 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 	@Override
 	protected LinkFactory Clone(
 		List<ConstTemplate> new_constants
+		, List<ConstTemplate> new_statics
 		, List<SensorTemplate> new_sensors
 		, List<VarTemplate> new_rules
+		, List<TriggerTemplate> triggers
 		, List<ReactionTemplate> new_reactions)
 	{
-		return new LinkFactory(service, new_constants, new_sensors, new_rules, new_reactions);
+		return new LinkFactory(service, new_constants, new_statics, new_sensors, new_rules, triggers, new_reactions);
 	}
 }

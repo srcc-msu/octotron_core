@@ -6,11 +6,10 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.logic.impl.ObjectRule;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -64,9 +63,9 @@ public abstract class AStrict extends ObjectRule
 	}
 
 	@Override
-	public final AttributeList<IModelAttribute> GetDependency(ModelObject object)
+	public final AttributeList<Attribute> GetDependency(ModelObject object)
 	{
-		AttributeList<IModelAttribute> result = new AttributeList<>();
+		AttributeList<Attribute> result = new AttributeList<>();
 
 		ModelObjectList candidates = GetCandidates(object);
 
@@ -95,7 +94,7 @@ public abstract class AStrict extends ObjectRule
 				if(!obj.TestAttribute(tmp))
 					continue;
 
-				IModelAttribute attribute = obj.GetAttribute(tmp);
+				Attribute attribute = obj.GetAttribute(tmp);
 
 				if(!attribute.GetValue().IsValid())
 					return Value.invalid;
@@ -106,7 +105,7 @@ public abstract class AStrict extends ObjectRule
 		return res;
 	}
 
-	protected abstract Object Accumulate(Object res, IModelAttribute attribute);
+	protected abstract Object Accumulate(Object res, Attribute attribute);
 
 	protected abstract Object GetDefaultValue();
 }

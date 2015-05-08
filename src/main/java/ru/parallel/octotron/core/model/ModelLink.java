@@ -34,8 +34,6 @@ public class ModelLink extends ModelEntity
 	@Override
 	public ModelLinkBuilder GetBuilder(ModelService service)
 	{
-		service.CheckModification();
-
 		return new ModelLinkBuilder(service, this);
 	}
 

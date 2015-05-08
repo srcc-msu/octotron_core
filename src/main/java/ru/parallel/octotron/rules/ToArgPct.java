@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
@@ -24,9 +24,9 @@ public class ToArgPct extends Rule
 	}
 
 	@Override
-	protected AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<Attribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<IModelAttribute> result = new AttributeList<>();
+		AttributeList<Attribute> result = new AttributeList<>();
 
 		result.add(entity.GetAttribute(measured_attribute));
 		result.add(entity.GetAttribute(max_value_arg));
@@ -37,8 +37,8 @@ public class ToArgPct extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		IModelAttribute attr = entity.GetAttribute(measured_attribute);
-		IModelAttribute max_value = entity.GetAttribute(max_value_arg);
+		Attribute attr = entity.GetAttribute(measured_attribute);
+		Attribute max_value = entity.GetAttribute(max_value_arg);
 
 		if(!attr.GetValue().IsValid() || !max_value.GetValue().IsValid())
 			return Value.invalid;

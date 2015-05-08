@@ -34,7 +34,7 @@ public class Value
 		}
 	}
 
-// ----------------
+//--------
 
 	private final Object value;
 	private final Class<?> my_class;
@@ -124,14 +124,14 @@ public class Value
 		this(value.doubleValue(), Double.class);
 	}
 
-	private static final DecimalFormat df = new DecimalFormat("0.00"); // TODO: is it ok?
+	private static final DecimalFormat decimal_format = new DecimalFormat("0.00"); // TODO: is it ok?
 
 	public final String ValueToString()
 	{
 		if(my_class.equals(Long.class))
 			return value.toString();
 		else if(my_class.equals(Double.class))
-			return df.format(value);
+			return decimal_format.format(value);
 		if(my_class.equals(Boolean.class))
 			return value.toString();
 		else if(my_class.equals(String.class))
@@ -181,7 +181,7 @@ public class Value
 		return my_class;
 	}
 
-// ------------------------
+//--------
 
 	public final String GetString()
 	{
@@ -226,7 +226,7 @@ public class Value
 		}
 	}
 
-// ---------------------
+//--------
 
 	public void CheckType(Value check_value)
 	{
@@ -252,7 +252,7 @@ public class Value
 		}
 	}
 
-// -----------------------------
+//--------
 
 	@Override
 	public int hashCode()

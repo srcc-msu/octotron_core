@@ -40,7 +40,7 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 		return new ModelObjectList(new_list);
 	}
 
-// --------------------
+//--------
 
 	public ModelObjectList GetInNeighbors(String link_name, Value link_value)
 	{
@@ -62,7 +62,7 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 		return new_list;
 	}
 
-// --------------------
+//--------
 
 	public ModelObjectList GetInNeighbors(String link_name, Object link_value)
 	{
@@ -104,7 +104,7 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 		return new_list;
 	}
 
-// --------------------
+//--------
 
 	public ModelObjectList GetInNeighbors(String link_name)
 	{
@@ -146,7 +146,7 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 		return new_list;
 	}
 
-// --------------------
+//--------
 
 	public ModelObjectList GetInNeighbors()
 	{
@@ -188,7 +188,7 @@ public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 		return new_list;
 	}
 
-// --------------------
+//--------
 
 	public ModelLinkList GetInLinks()
 	{

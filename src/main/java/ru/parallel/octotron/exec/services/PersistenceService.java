@@ -1,19 +1,17 @@
 package ru.parallel.octotron.exec.services;
 
-import ru.parallel.octotron.core.attributes.ConstAttribute;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
-import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.attributes.Attribute;
+import ru.parallel.octotron.core.attributes.impl.*;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.persistence.GhostManager;
-import ru.parallel.octotron.core.persistence.GraphManager;
-import ru.parallel.octotron.core.persistence.IPersistenceManager;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.persistence.GhostManager;
+import ru.parallel.octotron.persistence.GraphManager;
+import ru.parallel.octotron.persistence.IPersistenceManager;
 
 import java.util.Collection;
 import java.util.logging.Level;
@@ -41,8 +39,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager = new GraphManager(model_service, db_path, port);
-					}
-					catch(ExceptionSystemError e)
+					} catch (ExceptionSystemError e)
 					{
 						LOGGER.log(Level.SEVERE, "could not init database", e);
 
@@ -59,7 +56,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 		this.persistence_manager = new GhostManager();
 	}
 
-	public void UpdateAttributes(final Collection<? extends IModelAttribute> attributes)
+	public void UpdateAttributes(final Collection<? extends Attribute> attributes)
 	{
 		executor.execute(
 			new Runnable()
@@ -69,12 +66,15 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				{
 					try
 					{
-						for(IModelAttribute attribute : attributes)
+						for(Attribute attribute : attributes)
 							if(attribute.GetType() == EAttributeType.SENSOR)
-								persistence_manager.RegisterSensor((SensorAttribute) attribute);
+								persistence_manager.RegisterSensor((Sensor) attribute);
 							else if(attribute.GetType() == EAttributeType.VAR)
-								persistence_manager.RegisterVar((VarAttribute) attribute);
-					} catch(Exception e)
+								persistence_manager.RegisterVar((Var) attribute);
+							else
+								throw new ExceptionModelFail("unsupported attribute: " + attribute.GetType());
+					}
+					catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -125,7 +125,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 	}
 
 	@Override
-	public void MakeRuleDependency(final VarAttribute attribute)
+	public void MakeRuleDependency(final ModelEntity entity)
 	{
 		executor.execute(
 			new Runnable()
@@ -135,8 +135,8 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				{
 					try
 					{
-						persistence_manager.MakeRuleDependency(attribute);
-					} catch(Exception e)
+						persistence_manager.MakeRuleDependency(entity);
+					} catch (Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}
@@ -185,7 +185,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 	}
 
 	@Override
-	public void RegisterConst(final ConstAttribute attribute)
+	public void RegisterConst(final Const attribute)
 	{
 		executor.execute(
 			new Runnable()
@@ -205,7 +205,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 	}
 
 	@Override
-	public void RegisterSensor(final SensorAttribute attribute)
+	public void RegisterSensor(final Sensor attribute)
 	{
 		executor.execute(
 			new Runnable()
@@ -225,7 +225,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 	}
 
 	@Override
-	public void RegisterVar(final VarAttribute attribute)
+	public void RegisterVar(final Var attribute)
 	{
 		executor.execute(
 			new Runnable()
@@ -236,6 +236,26 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.RegisterVar(attribute);
+					} catch(Exception e)
+					{
+						LOGGER.log(Level.WARNING, "", e);
+					}
+				}
+			});
+
+}
+	@Override
+	public void RegisterTrigger(final Trigger attribute)
+	{
+		executor.execute(
+			new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					try
+					{
+						persistence_manager.RegisterTrigger(attribute);
 					} catch(Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);

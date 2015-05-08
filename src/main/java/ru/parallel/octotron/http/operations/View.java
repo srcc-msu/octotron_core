@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.http.operations;
 
+import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.logic.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -111,7 +111,7 @@ public abstract class View
 		}
 	}
 
-	public static class reaction extends ModelOperation
+	/*public static class reaction extends ModelOperation
 	{
 		public reaction()
 		{
@@ -135,7 +135,7 @@ public abstract class View
 
 			return AutoFormat.PrintJson(data);
 		}
-	}
+	}*/
 
 	/**
 	 * show all markers in model<br>

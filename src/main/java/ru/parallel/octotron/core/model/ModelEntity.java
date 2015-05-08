@@ -6,11 +6,8 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.attributes.ConstAttribute;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
-import ru.parallel.octotron.core.attributes.SensorAttribute;
-import ru.parallel.octotron.core.attributes.VarAttribute;
-import ru.parallel.octotron.core.logic.Reaction;
+import ru.parallel.octotron.core.attributes.Attribute;
+import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.EModelType;
@@ -24,11 +21,14 @@ import java.util.*;
 
 public abstract class ModelEntity extends ModelID<EModelType> implements IPresentable
 {
-	final Map<String, IModelAttribute> attributes_map = new HashMap<>();
+	final Map<String, Attribute> attributes_map = new HashMap<>();
 
-	final Map<String, ConstAttribute> const_map = new HashMap<>();
-	final Map<String, SensorAttribute> sensor_map = new HashMap<>();
-	final Map<String, VarAttribute> var_map = new HashMap<>();
+	final Map<String, Const> const_map = new HashMap<>();
+	final Map<String, Sensor> sensor_map = new HashMap<>();
+	final Map<String, Var> var_map = new HashMap<>();
+	final Map<String, Trigger> trigger_map = new HashMap<>();
+
+	final List<Reaction> reactions = new LinkedList<>();
 
 	public ModelEntity(EModelType type)
 	{
@@ -37,31 +37,22 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 	public abstract ModelEntityBuilder<?> GetBuilder(ModelService service);
 
-	public IModelAttribute GetAttribute(String name)
+	public Attribute GetAttribute(String name)
 	{
-		IModelAttribute result;
+		Attribute result = attributes_map.get(name);
 
-		result = const_map.get(name);
-		if(result != null)
-			return result;
-
-		result = sensor_map.get(name);
-		if(result != null)
-			return result;
-
-		result = var_map.get(name);
 		if(result != null)
 			return result;
 
 		throw new ExceptionModelFail("attribute not found: " + name + " all: " + AutoFormat.FormatJson(GetShortRepresentation()));
 	}
 
-	public Collection<IModelAttribute> GetAttributes()
+	public Collection<Attribute> GetAttributes()
 	{
 		return attributes_map.values();
 	}
 
-	public Collection<? extends IModelAttribute> GetAttributes(EAttributeType type)
+	public Collection<? extends Attribute> GetAttributes(EAttributeType type)
 	{
 		switch(type)
 		{
@@ -71,17 +62,18 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 				return sensor_map.values();
 			case VAR:
 				return var_map.values();
+			case TRIGGER:
+				return var_map.values();
 			default:
 				throw new ExceptionModelFail("unknown attribute type: " + type.toString());
 		}
 	}
 
-
 	public Map<String, Object> GetAttributesValues()
 	{
 		Map<String, Object> result = new HashMap<>();
 
-		for(IModelAttribute attribute : GetAttributes())
+		for(Attribute attribute : GetAttributes())
 		{
 			result.put(attribute.GetName(), attribute.GetValue());
 		}
@@ -91,21 +83,21 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 	public boolean TestAttribute(String name)
 	{
-		IModelAttribute result = attributes_map.get(name);
+		Attribute result = attributes_map.get(name);
 
 		return result != null;
 	}
 
-// ----------------
+//--------
 
-	public ConstAttribute GetConstOrNull(String name)
+	public Const GetConstOrNull(String name)
 	{
 		return const_map.get(name);
 	}
 
-	public ConstAttribute GetConst(String name)
+	public Const GetConst(String name)
 	{
-		ConstAttribute attribute = GetConstOrNull(name);
+		Const attribute = GetConstOrNull(name);
 
 		if(attribute == null)
 			throw new ExceptionModelFail("const not found: " + name);
@@ -113,21 +105,21 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		return attribute;
 	}
 
-	public Collection<ConstAttribute> GetConst()
+	public Collection<Const> GetConst()
 	{
 		return const_map.values();
 	}
 
-// ----------------
+//--------
 
-	public SensorAttribute GetSensorOrNull(String name)
+	public Sensor GetSensorOrNull(String name)
 	{
 		return sensor_map.get(name);
 	}
 
-	public SensorAttribute GetSensor(String name)
+	public Sensor GetSensor(String name)
 	{
-		SensorAttribute attribute = GetSensorOrNull(name);
+		Sensor attribute = GetSensorOrNull(name);
 
 		if(attribute == null)
 			throw new ExceptionModelFail("sensor not found: " + name);
@@ -136,21 +128,44 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 	}
 
 
-	public Collection<SensorAttribute> GetSensor()
+	public Collection<Sensor> GetSensor()
 	{
 		return sensor_map.values();
 	}
 
-// ----------------
+//--------
 
-	public VarAttribute GetVarOrNull(String name)
+	public Trigger GetTriggerOrNull(String name)
+	{
+		return trigger_map.get(name);
+	}
+
+	public Trigger GetTrigger(String name)
+	{
+		Trigger attribute = GetTriggerOrNull(name);
+
+		if(attribute == null)
+			throw new ExceptionModelFail("trigger not found: " + name);
+
+		return attribute;
+	}
+
+
+	public Collection<Trigger> GetTrigger()
+	{
+		return trigger_map.values();
+	}
+
+//--------
+
+	public Var GetVarOrNull(String name)
 	{
 		return var_map.get(name);
 	}
 
-	public VarAttribute GetVar(String name)
+	public Var GetVar(String name)
 	{
-		VarAttribute attribute = GetVarOrNull(name);
+		Var attribute = GetVarOrNull(name);
 
 		if(attribute == null)
 			throw new ExceptionModelFail("var not found: " + name);
@@ -158,7 +173,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		return attribute;
 	}
 
-	public Collection<VarAttribute> GetVar()
+	public Collection<Var> GetVar()
 	{
 		return var_map.values();
 	}
@@ -167,18 +182,20 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 	{
 		List<PreparedResponse> result = new LinkedList<>();
 
-		for(IModelAttribute attribute : GetAttributes())
+		for(Reaction reaction : reactions)
 		{
-			for(Reaction reaction : attribute.GetReactions())
-			{
-				PreparedResponse prepared_response = reaction.GetPreparedResponseOrNull();
+			PreparedResponse prepared_response = reaction.GetPreparedResponseOrNull();
 
-				if(prepared_response != null && prepared_response.GetResponse().GetStatus() != EEventStatus.RECOVER)
-					result.add(prepared_response);
-			}
+			if(prepared_response != null && prepared_response.GetResponse().GetStatus() != EEventStatus.RECOVER)
+				result.add(prepared_response);
 		}
 
 		return result;
+	}
+
+	public Collection<Reaction> GetReactions()
+	{
+		return reactions;
 	}
 
 	@Override
@@ -189,26 +206,33 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 		List<Map<String, Object>> const_list = new LinkedList<>();
 
-		for(ConstAttribute attribute : GetConst())
+		for(Const attribute : GetConst())
 		{
 			const_list.add(attribute.GetShortRepresentation());
 		}
 
 		List<Map<String, Object>> sensor_list = new LinkedList<>();
-		for(SensorAttribute attribute : GetSensor())
+		for(Sensor attribute : GetSensor())
 		{
 			sensor_list.add(attribute.GetShortRepresentation());
 		}
 
 		List<Map<String, Object>> var_list = new LinkedList<>();
-		for(VarAttribute attribute : GetVar())
+		for(Var attribute : GetVar())
 		{
 			var_list.add(attribute.GetShortRepresentation());
+		}
+
+		List<Map<String, Object>> trigger_list = new LinkedList<>();
+		for(Trigger attribute : GetTrigger())
+		{
+			trigger_list.add(attribute.GetShortRepresentation());
 		}
 
 		result.put("const", const_list);
 		result.put("sensor", sensor_list);
 		result.put("var", var_list);
+		result.put("trigger", trigger_list);
 
 		return result;
 	}
@@ -221,26 +245,33 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 		List<Map<String, Object>> const_list = new LinkedList<>();
 
-		for(ConstAttribute attribute : GetConst())
+		for(Const attribute : GetConst())
 		{
 			const_list.add(attribute.GetLongRepresentation());
 		}
 
 		List<Map<String, Object>> sensor_list = new LinkedList<>();
-		for(SensorAttribute attribute : GetSensor())
+		for(Sensor attribute : GetSensor())
 		{
 			sensor_list.add(attribute.GetLongRepresentation());
 		}
 
 		List<Map<String, Object>> var_list = new LinkedList<>();
-		for(VarAttribute attribute : GetVar())
+		for(Var attribute : GetVar())
 		{
 			var_list.add(attribute.GetLongRepresentation());
+		}
+
+		List<Map<String, Object>> trigger_list = new LinkedList<>();
+		for(Trigger attribute : GetTrigger())
+		{
+			trigger_list.add(attribute.GetLongRepresentation());
 		}
 
 		result.put("const", const_list);
 		result.put("sensor", sensor_list);
 		result.put("var", var_list);
+		result.put("trigger", trigger_list);
 
 		return result;
 	}

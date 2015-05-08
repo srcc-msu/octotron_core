@@ -3,7 +3,7 @@ package ru.parallel.octotron.core.collections;
 import org.junit.Before;
 import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
-import ru.parallel.octotron.core.attributes.IAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.model.ModelObject;
 
 import static org.junit.Assert.assertEquals;
@@ -21,21 +21,21 @@ public class AttributeListTest extends GeneralTest
 	@Test
 	public void TestAdd()
 	{
-		AttributeList<IAttribute> list = new AttributeList<>();
+		AttributeList<Attribute> list = new AttributeList<>();
 
 		assertEquals("list is no empty", list.size(), 0);
 		object.GetBuilder(model_service).DeclareConst("test", 0);
 		list.add(AttributeListTest.object.GetAttribute("test"));
 		assertEquals("list has no elements", list.size(), 1);
 
-		IAttribute elem = list.get(0);
+		Attribute elem = list.get(0);
 		assertEquals("add not worked correctly", elem.eq((0)), true);
 	}
 
 	@Test
 	public void TestGet()
 	{
-		AttributeList<IAttribute> list = new AttributeList<>();
+		AttributeList<Attribute> list = new AttributeList<>();
 
 		object.GetBuilder(model_service).DeclareConst("test1", 0);
 		list.add(AttributeListTest.object.GetAttribute("test1"));
@@ -52,7 +52,7 @@ public class AttributeListTest extends GeneralTest
 	@Test
 	public void TestIterate()
 	{
-		AttributeList<IAttribute> list = new AttributeList<>();
+		AttributeList<Attribute> list = new AttributeList<>();
 
 		int N = 10;
 
@@ -63,7 +63,7 @@ public class AttributeListTest extends GeneralTest
 		}
 
 		int i = 0;
-		for(IAttribute att : list)
+		for(Attribute att : list)
 		{
 			assertEquals(att.eq(i), true);
 			i++;
@@ -73,7 +73,7 @@ public class AttributeListTest extends GeneralTest
 	@Test
 	public void TestSize()
 	{
-		AttributeList<IAttribute> list = new AttributeList<>();
+		AttributeList<Attribute> list = new AttributeList<>();
 
 		int N = 10;
 
@@ -88,7 +88,7 @@ public class AttributeListTest extends GeneralTest
 	@Test
 	public void TestOps()
 	{
-		AttributeList<IAttribute> list = new AttributeList<>();
+		AttributeList<Attribute> list = new AttributeList<>();
 
 		int N = 10;
 
@@ -98,12 +98,12 @@ public class AttributeListTest extends GeneralTest
 			list.add(AttributeListTest.object.GetAttribute("test" + i));
 		}
 
-		AttributeList<IAttribute> le = list.le(5);
-		AttributeList<IAttribute> lt = list.lt(5);
-		AttributeList<IAttribute> ge = list.ge(5);
-		AttributeList<IAttribute> gt = list.gt(5);
-		AttributeList<IAttribute> eq = list.eq(5);
-		AttributeList<IAttribute> ne = list.ne(5);
+		AttributeList<Attribute> le = list.le(5);
+		AttributeList<Attribute> lt = list.lt(5);
+		AttributeList<Attribute> ge = list.ge(5);
+		AttributeList<Attribute> gt = list.gt(5);
+		AttributeList<Attribute> eq = list.eq(5);
+		AttributeList<Attribute> ne = list.ne(5);
 
 		assertEquals("le size failed", le.size(), 6);
 		assertEquals("lt size failed", lt.size(), 5);
@@ -112,29 +112,29 @@ public class AttributeListTest extends GeneralTest
 		assertEquals("eq size failed", eq.size(), 1);
 		assertEquals("ne size failed", ne.size(), 9);
 
-		for(IAttribute att : le)
+		for(Attribute att : le)
 			assertEquals("le failed", att.le(5), true);
 
-		for(IAttribute att : lt)
+		for(Attribute att : lt)
 			assertEquals("lt failed", att.lt(5), true);
 
-		for(IAttribute att : ge)
+		for(Attribute att : ge)
 			assertEquals("ge failed", att.ge(5), true);
 
-		for(IAttribute att : gt)
+		for(Attribute att : gt)
 			assertEquals("gt failed", att.gt(5), true);
 
-		for(IAttribute att : eq)
+		for(Attribute att : eq)
 			assertEquals("eq failed", att.eq(5), true);
 
-		for(IAttribute att : ne)
+		for(Attribute att : ne)
 			assertEquals("ne failed", att.ne(5), true);
 	}
 
 	@Test
 	public void TestSort()
 	{
-		AttributeList<IAttribute> list = new AttributeList<>();
+		AttributeList<Attribute> list = new AttributeList<>();
 
 		object.GetBuilder(model_service).DeclareConst("b", "");
 		list.add(AttributeListTest.object.GetAttribute("b"));

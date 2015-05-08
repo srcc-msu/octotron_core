@@ -1,7 +1,8 @@
 package ru.parallel.octotron.exec.services;
 
-import ru.parallel.octotron.core.attributes.SensorAttribute;
 import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Sensor;
+import ru.parallel.octotron.core.attributes.impl.Trigger;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -11,18 +12,9 @@ import java.util.logging.Level;
 
 public class ImportService extends BGService
 {
-	private final UpdateService update_service;
-
-	public ImportService(String prefix, Context context, UpdateService update_service)
+	public ImportService(String prefix, Context context)
 	{
 		super(context, new BGExecutorService(prefix, DEFAULT_QUEUE_LIMIT));
-
-		this.update_service = update_service;
-	}
-
-	public void ImmediateImport(ModelEntity entity, String attribute_name, Value value)
-	{
-		new ImmediateImporter(entity, attribute_name, value).run();
 	}
 
 	public boolean Import(ModelEntity entity, String name, Value value, boolean strict)
@@ -67,6 +59,12 @@ public class ImportService extends BGService
 		}
 	}
 
+	public void Trigger(ModelEntity entity, String name)
+		throws ExceptionSystemError
+	{
+		executor.execute(new Triggerer(entity, name));
+	}
+
 	public class Importer implements Runnable
 	{
 		protected final ModelEntity entity;
@@ -84,29 +82,30 @@ public class ImportService extends BGService
 		@Override
 		public void run()
 		{
-			SensorAttribute sensor = entity.GetSensor(name);
+			Sensor sensor = entity.GetSensor(name);
 
-			sensor.Update(value);
-
-			update_service.Update(sensor, true);
+			sensor.Import(value);
 		}
 	}
 
-	public class ImmediateImporter extends Importer
+	public class Triggerer implements Runnable
 	{
-		public ImmediateImporter(ModelEntity entity, String name, Value value)
+		protected final ModelEntity entity;
+		protected final String name;
+
+		public Triggerer(ModelEntity entity, String name)
 		{
-			super(entity, name, value);
+			this.entity = entity;
+
+			this.name = name;
 		}
 
 		@Override
 		public void run()
 		{
-			SensorAttribute sensor = entity.GetSensor(name);
+			Trigger trigger = entity.GetTrigger(name);
 
-			sensor.Update(value);
-
-			update_service.ImmediateUpdate(sensor, true);
+			trigger.ForceTrigger();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -17,9 +17,9 @@ public class ValueIfAllValid extends AInvalidCount // WTF?
 	}
 
 	@Override
-	public final AttributeList<IModelAttribute> GetDependency(ModelObject object)
+	public final AttributeList<Attribute> GetDependency(ModelObject object)
 	{
-		AttributeList<IModelAttribute> tmp = super.GetDependency(object);
+		AttributeList<Attribute> tmp = super.GetDependency(object);
 		tmp.add(object.GetAttribute(attribute));
 		return tmp;
 	}

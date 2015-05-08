@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.core.attributes.SensorAttribute;
+import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
@@ -53,7 +53,7 @@ public class RuntimeService
 
 		for(ModelEntity entity : context.model_data.GetAllEntities())
 		{
-			for(SensorAttribute sensor : entity.GetSensor())
+			for(Sensor sensor : entity.GetSensor())
 			{
 				PreparedResponse prepared_response
 					= sensor.GetTimeoutReaction().GetPreparedResponseOrNull();

@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
@@ -24,9 +24,9 @@ public class UpperArgThreshold extends Rule
 	}
 
 	@Override
-	protected AttributeList<IModelAttribute> GetDependency(ModelEntity entity)
+	public AttributeList<Attribute> GetDependency(ModelEntity entity)
 	{
-		AttributeList<IModelAttribute> result = new AttributeList<>();
+		AttributeList<Attribute> result = new AttributeList<>();
 
 		result.add(entity.GetAttribute(param));
 
@@ -36,8 +36,8 @@ public class UpperArgThreshold extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		IModelAttribute attr = entity.GetAttribute(param);
-		IModelAttribute cmp = entity.GetAttribute(arg_threshold);
+		Attribute attr = entity.GetAttribute(param);
+		Attribute cmp = entity.GetAttribute(arg_threshold);
 
 		if(!attr.GetValue().IsValid() || !cmp.GetValue().IsValid())
 			return Value.invalid;

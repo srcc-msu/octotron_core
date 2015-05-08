@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.collections;
 
-import ru.parallel.octotron.core.attributes.IAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 
 @SuppressWarnings("serial")
-public final class AttributeList<T extends IAttribute> extends LinkedList<T>
+public final class AttributeList<T extends Attribute> extends LinkedList<T>
 {
 	public AttributeList() {}
 
@@ -154,7 +154,7 @@ public final class AttributeList<T extends IAttribute> extends LinkedList<T>
 		return ne(Value.Construct(value));
 	}
 
-// ---
+//--------
 
 	private void writeObject(ObjectOutputStream stream)
 		throws IOException

@@ -120,5 +120,5 @@
 			<version>1.18.1</version>
 		</dependency>
 	</dependencies>
-	<version>3.5.0</version>
+	<version>4.0.0</version>
 </project>

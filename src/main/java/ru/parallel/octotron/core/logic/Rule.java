@@ -6,10 +6,9 @@
 
 package ru.parallel.octotron.core.logic;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.exec.services.ModelService;
 
 /**
  * currently Octopy supports only only one constructor for rules</br>
@@ -20,12 +19,5 @@ public abstract class Rule
 
 	public abstract Object Compute(ModelEntity entity);
 
-	public AttributeList<IModelAttribute> GetDependency(ModelService service, ModelEntity entity)
-	{
-		service.CheckModification();
-
-		return GetDependency(entity);
-	}
-
-	protected abstract AttributeList<IModelAttribute> GetDependency(ModelEntity entity);
+	public abstract AttributeList<Attribute> GetDependency(ModelEntity entity);
 }

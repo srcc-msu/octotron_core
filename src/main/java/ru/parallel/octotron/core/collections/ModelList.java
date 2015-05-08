@@ -6,8 +6,8 @@
 
 package ru.parallel.octotron.core.collections;
 
-import ru.parallel.octotron.core.attributes.IAttribute;
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
@@ -139,7 +139,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		if(!obj.TestAttribute(name))
 			return false;
 
-		IAttribute attr = obj.GetAttribute(name);
+		Attribute attr = obj.GetAttribute(name);
 
 		switch(type)
 		{
@@ -184,7 +184,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 					if(!obj.TestAttribute(name))
 						continue;
 
-					IModelAttribute attribute = obj.GetAttribute(name);
+					Attribute attribute = obj.GetAttribute(name);
 
 					if(!attribute.GetValue().IsComputable())
 						continue;
@@ -201,7 +201,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 					if(!obj.TestAttribute(name))
 						continue;
 
-					IModelAttribute attribute = obj.GetAttribute(name);
+					Attribute attribute = obj.GetAttribute(name);
 
 					if(!attribute.GetValue().IsComputable())
 						continue;
@@ -218,7 +218,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 					if(!obj.TestAttribute(name))
 						continue;
 
-					IModelAttribute attribute = obj.GetAttribute(name);
+					Attribute attribute = obj.GetAttribute(name);
 
 					if(!attribute.GetValue().IsComputable())
 						continue;
@@ -235,7 +235,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 					if(!obj.TestAttribute(name))
 						continue;
 
-					IModelAttribute attribute = obj.GetAttribute(name);
+					Attribute attribute = obj.GetAttribute(name);
 
 					if(!attribute.GetValue().IsComputable())
 						continue;
@@ -252,7 +252,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 					if(!obj.TestAttribute(name))
 						continue;
 
-					IModelAttribute attribute = obj.GetAttribute(name);
+					Attribute attribute = obj.GetAttribute(name);
 
 					if(!attribute.GetValue().IsComputable())
 						continue;
@@ -269,7 +269,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 					if(!obj.TestAttribute(name))
 						continue;
 
-					IModelAttribute attribute = obj.GetAttribute(name);
+					Attribute attribute = obj.GetAttribute(name);
 
 					if(!attribute.GetValue().IsComputable())
 						continue;
@@ -328,9 +328,9 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 	public static enum EQueryType { EQ, NE, LE, GE, LT, GT, NONE }
 
-// -----------
+//--------
 //
-// -----------
+//--------
 
 	public R append(R list)
 	{

@@ -5,13 +5,11 @@ import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.logic.impl.Equals;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.rules.Match;
 
@@ -80,20 +78,15 @@ public class BaseFactoryTest extends GeneralTest
 	@Test
 	public void TestReactions() throws Exception
 	{
-		ReactionTemplate[] reactions = { new Equals("test2", 0).Response(new Response(EEventStatus.INFO))};
-		ReactionTemplate reaction2 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO));
-		ReactionTemplate reaction3 = new Equals("test3", 0).Response(new Response(EEventStatus.INFO));
+		ReactionTemplate[] reactions = { new ReactionTemplate("r_test1").Begin(new Response(EEventStatus.INFO))};
+		ReactionTemplate reaction2 = new ReactionTemplate("r_test2").Begin(new Response(EEventStatus.INFO));
+		ReactionTemplate reaction3 = new ReactionTemplate("r_test3").Begin(new Response(EEventStatus.INFO));
 
 		ObjectFactory f1 = object_factory
-			.Sensors(new SensorTemplate("test1", 0))
-			.Sensors(new SensorTemplate("test2", 0))
-			.Sensors(new SensorTemplate("test3", 0))
 			.Reactions(reactions).Reactions(reaction2, reaction3);
 
 		ModelObject obj = f1.Create();
 
-		assertEquals(0, obj.GetAttribute("test1").GetReactions().size());
-		assertEquals(1, obj.GetAttribute("test2").GetReactions().size());
-		assertEquals(2, obj.GetAttribute("test3").GetReactions().size());
+		assertEquals(3, obj.GetReactions().size());
 	}
 }

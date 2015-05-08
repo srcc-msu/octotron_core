@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
@@ -21,7 +21,7 @@ public class AStrictMatchCount extends AStrict
 	}
 
 	@Override
-	protected Object Accumulate(Object res, IModelAttribute attribute)
+	protected Object Accumulate(Object res, Attribute attribute)
 	{
 		if(attribute.eq(value))
 			return (Long)res + 1;

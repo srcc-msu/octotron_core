@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
-import ru.parallel.octotron.core.attributes.IModelAttribute;
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class AInvalidCount extends ASoft
@@ -17,7 +17,7 @@ public class AInvalidCount extends ASoft
 	}
 
 	@Override
-	protected Object Accumulate(Object res, IModelAttribute attribute)
+	protected Object Accumulate(Object res, Attribute attribute)
 	{
 		if(!attribute.GetValue().IsValid())
 			return (Long)res + 1;

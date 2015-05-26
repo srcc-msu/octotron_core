@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.rules;
+package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
@@ -12,17 +12,15 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class MatchAprx extends Rule
+public class GTArg extends Rule
 {
-	private final String check_attribute;
-	private final Value match_value;
-	private final Value aprx;
+	private final String param;
+	private final String arg_threshold;
 
-	public MatchAprx(String check_attribute, Object match_value, Object aprx)
+	public GTArg(String param, String arg_threshold)
 	{
-		this.check_attribute = check_attribute;
-		this.match_value = Value.Construct(match_value);
-		this.aprx = Value.Construct(aprx);
+		this.param = param;
+		this.arg_threshold = arg_threshold;
 	}
 
 	@Override
@@ -30,7 +28,7 @@ public class MatchAprx extends Rule
 	{
 		AttributeList<Attribute> result = new AttributeList<>();
 
-		result.add(entity.GetAttribute(check_attribute));
+		result.add(entity.GetAttribute(param));
 
 		return result;
 	}
@@ -38,12 +36,13 @@ public class MatchAprx extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		Attribute attr = entity.GetAttribute(check_attribute);
+		Attribute attr = entity.GetAttribute(param);
+		Attribute cmp = entity.GetAttribute(arg_threshold);
 
-		if(!attr.GetValue().IsValid())
+		if(!attr.GetValue().IsValid() || !cmp.GetValue().IsValid())
 			return Value.invalid;
 
-		return attr.aeq(match_value, aprx);
+		return attr.gt(cmp.GetValue());
 	}
 
 }

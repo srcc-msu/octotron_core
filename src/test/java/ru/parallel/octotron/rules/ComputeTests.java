@@ -4,7 +4,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -17,6 +16,7 @@ import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.rules.plain.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -317,8 +317,8 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestArgMatchAprx()
 	{
-		ArgMatchAprx rule1 = new ArgMatchAprx("d1", "d2", Value.EPSILON);
-		ArgMatchAprx rule2 = new ArgMatchAprx("d1", "d2", 2.0);
+		MatchArgAprx rule1 = new MatchArgAprx("d1", "d2", Value.EPSILON);
+		MatchArgAprx rule2 = new MatchArgAprx("d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(object));
 		assertEquals(true , rule2.Compute(object));
@@ -327,8 +327,8 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestArgMatch()
 	{
-		ArgMatch rule1 = new ArgMatch("l1", "l2");
-		ArgMatch rule2 = new ArgMatch("str1", "str2");
+		MatchArg rule1 = new MatchArg("l1", "l2");
+		MatchArg rule2 = new MatchArg("str1", "str2");
 
 		assertEquals(false, rule1.Compute(object));
 		assertEquals(true , rule2.Compute(object));
@@ -375,10 +375,10 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestLowerArgThreshold()
 	{
-		LowerArgThreshold rule1 = new LowerArgThreshold("l1", "l2");
-		LowerArgThreshold rule2 = new LowerArgThreshold("l2", "l1");
-		LowerArgThreshold rule3 = new LowerArgThreshold("d1", "d2");
-		LowerArgThreshold rule4 = new LowerArgThreshold("d2", "d1");
+		GTArg rule1 = new GTArg("l1", "l2");
+		GTArg rule2 = new GTArg("l2", "l1");
+		GTArg rule3 = new GTArg("d1", "d2");
+		GTArg rule4 = new GTArg("d2", "d1");
 
 		assertEquals(false, rule1.Compute(object));
 		assertEquals(true , rule2.Compute(object));
@@ -389,10 +389,10 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestLowerThreshold()
 	{
-		LowerThreshold rule1 = new LowerThreshold("l1", 10);
-		LowerThreshold rule2 = new LowerThreshold("l2", 0);
-		LowerThreshold rule3 = new LowerThreshold("d1", 10.0);
-		LowerThreshold rule4 = new LowerThreshold("d2", 0.0);
+		GT rule1 = new GT("l1", 10);
+		GT rule2 = new GT("l2", 0);
+		GT rule3 = new GT("d1", 10.0);
+		GT rule4 = new GT("d2", 0.0);
 
 		assertEquals(false, rule1.Compute(object));
 		assertEquals(true , rule2.Compute(object));
@@ -448,10 +448,10 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestUpperArgThreshold()
 	{
-		UpperArgThreshold rule1 = new UpperArgThreshold("l1", "l2");
-		UpperArgThreshold rule2 = new UpperArgThreshold("l2", "l1");
-		UpperArgThreshold rule3 = new UpperArgThreshold("d1", "d2");
-		UpperArgThreshold rule4 = new UpperArgThreshold("d2", "d1");
+		LTArg rule1 = new LTArg("l1", "l2");
+		LTArg rule2 = new LTArg("l2", "l1");
+		LTArg rule3 = new LTArg("d1", "d2");
+		LTArg rule4 = new LTArg("d2", "d1");
 
 		assertEquals(true, rule1.Compute(object));
 		assertEquals(false, rule2.Compute(object));
@@ -462,10 +462,10 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestUpperThreshold()
 	{
-		UpperThreshold rule1 = new UpperThreshold("l1", 10);
-		UpperThreshold rule2 = new UpperThreshold("l2", 0);
-		UpperThreshold rule3 = new UpperThreshold("d1", 10.0);
-		UpperThreshold rule4 = new UpperThreshold("d2", 0.0);
+		LT rule1 = new LT("l1", 10);
+		LT rule2 = new LT("l2", 0);
+		LT rule3 = new LT("d1", 10.0);
+		LT rule4 = new LT("d2", 0.0);
 
 		assertEquals(true, rule1.Compute(object));
 		assertEquals(false, rule2.Compute(object));
@@ -496,10 +496,10 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestLinkedVarArgMatch()
 	{
-		LinkedVarArgMatch rule1 = new LinkedVarArgMatch("b1");
-		LinkedVarArgMatch rule2 = new LinkedVarArgMatch("b2");
-		LinkedVarArgMatch rule3 = new LinkedVarArgMatch("match_num");
-		LinkedVarArgMatch rule4 = new LinkedVarArgMatch("mismatch_num");
+		LinkedMatch rule1 = new LinkedMatch("b1");
+		LinkedMatch rule2 = new LinkedMatch("b2");
+		LinkedMatch rule3 = new LinkedMatch("match_num");
+		LinkedMatch rule4 = new LinkedMatch("mismatch_num");
 
 		assertEquals(false, rule1.Compute(object.GetOutLinks().get(0)));
 		assertEquals(true , rule2.Compute(object.GetOutLinks().get(0)));

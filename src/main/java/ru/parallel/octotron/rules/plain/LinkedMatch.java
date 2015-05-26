@@ -4,18 +4,19 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.rules;
+package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelLink;
+import ru.parallel.octotron.rules.LinkRule;
 
-public class LinkedVarArgMatch extends LinkRule
+public class LinkedMatch extends LinkRule
 {
 	private final String check_attribute;
 
-	public LinkedVarArgMatch(String check_attribute)
+	public LinkedMatch(String check_attribute)
 	{
 		this.check_attribute = check_attribute;
 	}

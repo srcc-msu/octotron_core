@@ -70,6 +70,8 @@ public final class ModelService extends Service
 	{
 		InitSelfTest(this);
 
+		persistence_service.WaitAll();
+
 		MakeRuleDependency();
 
 		persistence_service.WaitAll();
@@ -143,7 +145,7 @@ public final class ModelService extends Service
 
 		for(Reaction reaction : entity.GetReactions())
 		{
-			if(reaction.GetTemplate().name.equals(name))
+			if(reaction.GetName().equals(name))
 			{
 				reaction.SetSuppress(value);
 				reaction.SetDescription(description);

@@ -1,7 +1,6 @@
 package ru.parallel.octotron.exec.services;
 
 import ru.parallel.octotron.core.attributes.impl.Reaction;
-
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.exec.Context;

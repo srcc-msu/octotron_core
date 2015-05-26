@@ -31,6 +31,9 @@ public final class Var extends Attribute
 	@Override
  	public synchronized void AutoUpdate(boolean silent)
 	{
+		if(!DependenciesDefined())
+			return;
+
 		super.Update(Value.Construct(rule.Compute(GetParent())));
 	}
 }

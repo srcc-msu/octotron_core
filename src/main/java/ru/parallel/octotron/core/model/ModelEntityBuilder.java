@@ -10,7 +10,6 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.logic.Rule;
-import ru.parallel.octotron.core.logic.TriggerCondition;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.*;
@@ -63,7 +62,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 	public void AddReaction(ReactionTemplate reaction_template)
 	{
-		Reaction reaction = new Reaction(entity, reaction_template);
+		Reaction reaction = new Reaction(entity, reaction_template.name, reaction_template.reaction);
 
 		CheckAddAttribute(reaction);
 		entity.reactions.add(reaction);
@@ -181,7 +180,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 //--------
 
-	public void DeclareTrigger(String name, TriggerCondition condition)
+	public void DeclareTrigger(String name, Rule condition)
 	{
 		Trigger var = new Trigger(entity, name, condition);
 

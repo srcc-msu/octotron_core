@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.rules;
+package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
@@ -12,15 +12,15 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class UpperArgThreshold extends Rule
+public class LT extends Rule
 {
 	private final String param;
-	private final String arg_threshold;
+	private final Value threshold;
 
-	public UpperArgThreshold(String param, String arg_threshold)
+	public LT(String param, Object threshold)
 	{
 		this.param = param;
-		this.arg_threshold = arg_threshold;
+		this.threshold = Value.Construct(threshold);
 	}
 
 	@Override
@@ -37,12 +37,11 @@ public class UpperArgThreshold extends Rule
 	public Object Compute(ModelEntity entity)
 	{
 		Attribute attr = entity.GetAttribute(param);
-		Attribute cmp = entity.GetAttribute(arg_threshold);
 
-		if(!attr.GetValue().IsValid() || !cmp.GetValue().IsValid())
+		if(!attr.GetValue().IsValid())
 			return Value.invalid;
 
-		return attr.lt(cmp.GetValue());
+		return attr.lt(threshold);
 	}
 
 }

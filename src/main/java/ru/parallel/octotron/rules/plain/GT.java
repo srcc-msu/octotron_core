@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.rules;
+package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
@@ -12,15 +12,15 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class ArgMatch extends Rule
+public class GT extends Rule
 {
-	private final String check_attribute;
-	private final String match_attribute;
+	private final String param;
+	private final Value threshold;
 
-	public ArgMatch(String check_attribute, String match_attribute)
+	public GT(String param, Object threshold)
 	{
-		this.check_attribute = check_attribute;
-		this.match_attribute = match_attribute;
+		this.param = param;
+		this.threshold = Value.Construct(threshold);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class ArgMatch extends Rule
 	{
 		AttributeList<Attribute> result = new AttributeList<>();
 
-		result.add(entity.GetAttribute(check_attribute));
+		result.add(entity.GetAttribute(param));
 
 		return result;
 	}
@@ -36,11 +36,12 @@ public class ArgMatch extends Rule
 	@Override
 	public Object Compute(ModelEntity entity)
 	{
-		Attribute attr = entity.GetAttribute(check_attribute);
+		Attribute attr = entity.GetAttribute(param);
 
 		if(!attr.GetValue().IsValid())
 			return Value.invalid;
 
-		return attr.eq(entity.GetAttribute(match_attribute).GetValue());
+		return attr.gt(threshold);
 	}
+
 }

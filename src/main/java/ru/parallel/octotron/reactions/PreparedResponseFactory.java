@@ -156,7 +156,7 @@ public class PreparedResponseFactory
 	{
 		String suppress = String.format("to suppress this reaction: http://%s:%d/modify/suppress?path=obj(AID==%d)&name=%s&description=spam"
 			, context.settings.GetHost(), context.settings.GetPort()
-			, entity.GetID(), reaction.GetTemplate().name);
+			, entity.GetID(), reaction.GetName());
 		prepared_response.specials.add(suppress);
 	}
 

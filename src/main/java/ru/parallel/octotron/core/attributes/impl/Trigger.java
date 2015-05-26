@@ -2,19 +2,19 @@ package ru.parallel.octotron.core.attributes.impl;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.Value;
-import ru.parallel.octotron.core.logic.TriggerCondition;
+import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.utils.JavaUtils;
 
 public class Trigger extends Attribute
 {
-	private final TriggerCondition condition;
+	private final Rule condition;
 
 	private long repeat = 0;
 	private long started = 0;
 
-	public Trigger(ModelEntity parent, String name, TriggerCondition condition)
+	public Trigger(ModelEntity parent, String name, Rule condition)
 	{
 		super(EAttributeType.TRIGGER, parent, name, new Value(false));
 		this.condition = condition;
@@ -31,7 +31,7 @@ public class Trigger extends Attribute
 	{
 		boolean state = IsTriggered();
 
-		boolean condition_met = condition.Check(GetParent());
+		boolean condition_met = Value.Construct(condition.Compute(GetParent())).GetBoolean();
 
 		if(!state && condition_met) // first match
 		{

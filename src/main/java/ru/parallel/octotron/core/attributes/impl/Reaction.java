@@ -11,15 +11,15 @@ import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.generators.tmpl.ReactionCase;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.reactions.PreparedResponse;
 
 import java.util.Map;
 
 public class Reaction extends Attribute
 {
-	private final ReactionTemplate template;
+	private final ReactionAction template;
 
 	private long global_stat = 0;
 
@@ -28,14 +28,14 @@ public class Reaction extends Attribute
 
 	private PreparedResponse prepared_response = null;
 
-	public Reaction(ModelEntity parent, ReactionTemplate template)
+	public Reaction(ModelEntity parent, String name, ReactionAction template)
 	{
-		super(EAttributeType.REACTION, parent, template.name, new Value(false));
+		super(EAttributeType.REACTION, parent, name, new Value(false));
 
 		this.template = template;
 	}
 
-	public ReactionTemplate GetTemplate()
+	public ReactionAction GetTemplate()
 	{
 		return template;
 	}
@@ -161,7 +161,7 @@ public class Reaction extends Attribute
 	{
 		Map<String, Object> result = super.GetShortRepresentation();
 
-		result.put("name", template.name);
+		result.put("name", GetName());
 		result.put("suppress", suppress);
 
 		return result;
@@ -172,7 +172,7 @@ public class Reaction extends Attribute
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
 
-		result.put("name", template.name);
+		result.put("name", GetName());
 		result.put("suppress", suppress);
 		result.put("descr", descr);
 		result.put("global_stat", GetGlobalStat());

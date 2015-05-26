@@ -73,7 +73,14 @@ public class BGExecutorService implements Executor
 
 	public final long GetCompletedCount()
 	{
-		return executor.getCompletedTaskCount();
+		long c =  executor.getCompletedTaskCount();
+		return c;
+	}
+
+	public final long GetTaskCount()
+	{
+		long c =  executor.getTaskCount();
+		return c;
 	}
 
 	private long completed_last = 0;
@@ -95,7 +102,7 @@ public class BGExecutorService implements Executor
 
 	public void WaitQueueSize(long size)
 	{
-		while(GetWaitingCount() > size)
+		while(GetTaskCount() - GetCompletedCount() > size)
 		{
 			try { Thread.sleep(1); }
 			catch(InterruptedException ignore) {} // NOBODY DARES TO INTERRUPT ME

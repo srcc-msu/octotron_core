@@ -13,6 +13,7 @@ import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
@@ -143,7 +144,7 @@ public class GraphManager implements IPersistenceManager
 
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
-			GraphObject graph_object = graph_service.AddObject();
+			GraphObject graph_object = GetObject(reaction);
 			graph_object.AddLabel(reaction.GetType().toString());
 
 			graph_object.UpdateAttribute("stat", reaction.GetGlobalStat());
@@ -279,6 +280,9 @@ public class GraphManager implements IPersistenceManager
 	{
 		for(Attribute attribute : entity.GetAttributes())
 		{
+			if(attribute.GetType() == EAttributeType.CONST)
+				continue;
+
 			GraphObject object = GetObject(attribute);
 
 			for(Attribute i_depend_on : attribute.GetIDependOn())

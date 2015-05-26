@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.attributes.impl.Reaction;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -39,7 +39,7 @@ public class PreparedResponseTest extends GeneralTest
 
 		entity = obj_factory.Create();
 
-		entity.GetBuilder(model_service).AddReaction(new ReactionTemplate("test_r"));
+		entity.GetBuilder(model_service).AddReaction(new ReactionAction("test_r"));
 		reaction = entity.GetReactions().iterator().next();
 	}
 

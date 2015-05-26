@@ -104,9 +104,6 @@ public abstract class Attribute extends BaseAttribute
 
 	public final void UpdateDependant(boolean silent)
 	{
-		if(!DependenciesDefined())
-			return;
-
 		for(Attribute attribute : depend_on_me)
 		{
 			attribute.AutoUpdate(silent);
@@ -116,7 +113,7 @@ public abstract class Attribute extends BaseAttribute
 
 	private boolean dependencies_defined = false;
 
-	private boolean DependenciesDefined()
+	protected boolean DependenciesDefined()
 	{
 		if(dependencies_defined)
 			return true;

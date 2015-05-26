@@ -1,14 +1,11 @@
 package ru.parallel.octotron.http.requests;
 
 import org.junit.Test;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.*;
 import ru.parallel.octotron.core.attributes.impl.Reaction;
-import ru.parallel.octotron.triggers.Equals;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.generators.tmpl.SensorTemplate;
-import ru.parallel.octotron.generators.tmpl.TriggerTemplate;
-import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.rules.Speed;
+import ru.parallel.octotron.rules.plain.Match;
 
 import static org.junit.Assert.fail;
 
@@ -72,8 +69,8 @@ public class ViewRequestTest extends RequestTest
 	public void ReactionTest() throws Exception
 	{
 		object_factory.Sensors(new SensorTemplate("test_sensor", -1, 0))
-			.Triggers(new TriggerTemplate("test_trigger", new Equals("test_sensor", 1)))
-			.Reactions(new ReactionTemplate("test_reaction").On("test_trigger")).Create(1);
+			.Triggers(new TriggerTemplate("test_trigger", new Match("test_sensor", 1)))
+			.Reactions(new ReactionTemplate("test_reaction", new ReactionAction().On("test_trigger"))).Create(1);
 
 		model_service.EnableObjectIndex("AID");
 
@@ -90,7 +87,7 @@ public class ViewRequestTest extends RequestTest
 	public void SuppressedTest() throws Exception
 	{
 		ModelObject obj = object_factory
-			.Reactions(new ReactionTemplate("test_reaction")).Create();
+			.Reactions(new ReactionTemplate("test_reaction", new ReactionAction())).Create();
 		model_service.EnableObjectIndex("AID");
 
 		Reaction reaction = obj.GetReactions().iterator().next();

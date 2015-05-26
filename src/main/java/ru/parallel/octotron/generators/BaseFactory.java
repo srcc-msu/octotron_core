@@ -70,7 +70,7 @@ public abstract class BaseFactory<T>
 
 	public T Statics(ConstTemplate... addition)
 	{
-		List<ConstTemplate> new_statics = new LinkedList<>(constants);
+		List<ConstTemplate> new_statics = new LinkedList<>(statics);
 		new_statics.addAll(Arrays.asList(addition));
 
 		return Clone(constants, new_statics, sensors, rules, triggers, reactions);

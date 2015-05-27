@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.http.path;
 
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 

@@ -1,8 +1,10 @@
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services.impl;
 
 import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.services.Service;
+import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -56,13 +58,13 @@ public class OutdatedCheckerService extends Service
 	{
 		List<Sensor> outdated_sensors = new LinkedList<>();
 
-		for(ModelEntity entity : context.model_data.GetAllEntities())
+		for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
 		{
 			for(Sensor sensor : entity.GetSensor())
 			{
 				boolean last_state = sensor.IsOutdated();
 
-				sensor.AutoUpdate(false);
+				sensor.UpdateSelf();
 
 				if(sensor.IsOutdated() && !last_state) // was not outdated, but now is
 					outdated_sensors.add(sensor);

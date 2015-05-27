@@ -1,4 +1,4 @@
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services.impl;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.*;
@@ -12,6 +12,9 @@ import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.persistence.GhostManager;
 import ru.parallel.octotron.persistence.GraphManager;
 import ru.parallel.octotron.persistence.IPersistenceManager;
+import ru.parallel.octotron.services.BGExecutorService;
+import ru.parallel.octotron.services.BGService;
+import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.Collection;
 import java.util.logging.Level;
@@ -20,15 +23,15 @@ public class PersistenceService extends BGService implements IPersistenceManager
 {
 	private IPersistenceManager persistence_manager;
 
-	public PersistenceService(String prefix, Context context)
+	public PersistenceService(Context context)
 	{
 		// unlimited for the start, will be limited in when db loading is done
-		super(context, new BGExecutorService(prefix, 0L));
+		super(context, new BGExecutorService("persistance", 0L));
 
 		executor.LockOnThread();
 	}
 
-	public void InitGraph(final ModelService model_service, final String db_path, final int port)
+	public void InitGraph(final String db_path, final int port)
 	{
 		executor.execute(
 			new Runnable()
@@ -38,7 +41,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				{
 					try
 					{
-						persistence_manager = new GraphManager(model_service, db_path, port);
+						persistence_manager = new GraphManager(ServiceLocator.INSTANCE.GetModelService(), db_path, port);
 					} catch (ExceptionSystemError e)
 					{
 						LOGGER.log(Level.SEVERE, "could not init database", e);

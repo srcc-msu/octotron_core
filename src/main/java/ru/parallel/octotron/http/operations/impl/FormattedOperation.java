@@ -7,7 +7,6 @@
 package ru.parallel.octotron.http.operations.impl;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.IOperation;
 import ru.parallel.utils.JsonUtils;
 import ru.parallel.utils.format.JsonString;
@@ -39,7 +38,7 @@ public abstract class FormattedOperation implements IOperation
 	}
 
 	@Override
-	public final TypedString Execute(ExecutionController controller, Map<String, String> params)
+	public final TypedString Execute(Map<String, String> params)
 		throws ExceptionParseError
 	{
 		String callback = params.get("callback");
@@ -53,7 +52,7 @@ public abstract class FormattedOperation implements IOperation
 			verbose = true;
 		}
 
-		TypedString result = Execute(controller, params, verbose);
+		TypedString result = Execute(params, verbose);
 
 		if(callback != null)
 			return ToJsonp(result, callback);
@@ -66,6 +65,6 @@ public abstract class FormattedOperation implements IOperation
 	/**
 	 * entity is not empty
 	 * */
-	protected abstract TypedString Execute(ExecutionController controller, Map<String, String> params, boolean verbose)
+	protected abstract TypedString Execute(Map<String, String> params, boolean verbose)
 		throws ExceptionParseError;
 }

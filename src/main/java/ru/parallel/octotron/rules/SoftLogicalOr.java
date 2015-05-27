@@ -42,7 +42,7 @@ public class SoftLogicalOr extends Rule
 		{
 			Attribute attr = entity.GetAttribute(attr_name);
 
-			if(!attr.GetValue().IsValid())
+			if(!attr.IsValid())
 				continue;
 
 			res = res | attr.GetBoolean();

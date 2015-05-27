@@ -8,8 +8,9 @@ package ru.parallel.octotron.generators;
 
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.*;
+import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.services.impl.ModelService;
 
 import java.util.List;
 
@@ -18,20 +19,16 @@ import java.util.List;
  * */
 public class ObjectFactory extends BaseFactory<ObjectFactory>
 {
-	public ObjectFactory(ModelService service)
-	{
-		super(service);
-	}
+	public ObjectFactory() {}
 
-	private ObjectFactory(ModelService service
-		, List<ConstTemplate> constants
+	private ObjectFactory(List<ConstTemplate> constants
 		, List<ConstTemplate> statics
 		, List<SensorTemplate> sensors
 		, List<VarTemplate> rules
 		, List<TriggerTemplate> triggers
 		, List<ReactionTemplate> reactions)
 	{
-		super(service, constants, statics, sensors, rules, triggers, reactions);
+		super(constants, statics, sensors, rules, triggers, reactions);
 	}
 
 	/**
@@ -39,14 +36,15 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 	 * */
 	public ModelObject Create()
 	{
+		ModelService service = ServiceLocator.INSTANCE.GetModelService();
 		ModelObject object = service.AddObject();
 
-		object.GetBuilder(service).DeclareConst(constants);
-		object.GetBuilder(service).DeclareStatic(statics);
-		object.GetBuilder(service).DeclareSensor(sensors);
-		object.GetBuilder(service).DeclareVar(rules);
-		object.GetBuilder(service).DeclareTrigger(triggers);
-		object.GetBuilder(service).AddReaction(reactions);
+		object.GetBuilder().DeclareConst(constants);
+		object.GetBuilder().DeclareStatic(statics);
+		object.GetBuilder().DeclareSensor(sensors);
+		object.GetBuilder().DeclareVar(rules);
+		object.GetBuilder().DeclareTrigger(triggers);
+		object.GetBuilder().AddReaction(reactions);
 
 		return object;
 	}
@@ -73,6 +71,6 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 		, List<TriggerTemplate> new_triggers
 		, List<ReactionTemplate> new_reactions)
 	{
-		return new ObjectFactory(service, new_constants, new_statics, new_sensors, new_rules, new_triggers, new_reactions);
+		return new ObjectFactory(new_constants, new_statics, new_sensors, new_rules, new_triggers, new_reactions);
 	}
 }

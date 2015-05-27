@@ -7,7 +7,7 @@
 package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -39,10 +39,10 @@ public class GTArg extends Rule
 		Attribute attr = entity.GetAttribute(param);
 		Attribute cmp = entity.GetAttribute(arg_threshold);
 
-		if(!attr.GetValue().IsValid() || !cmp.GetValue().IsValid())
+		if(!attr.IsValid() || !cmp.IsValid())
 			return Value.invalid;
 
-		return attr.gt(cmp.GetValue());
+		return attr.gt(cmp);
 	}
 
 }

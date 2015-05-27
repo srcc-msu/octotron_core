@@ -9,7 +9,6 @@ package ru.parallel.octotron.http.operations.impl;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.Utils;
 import ru.parallel.octotron.http.path.PathParser;
 import ru.parallel.utils.format.ErrorString;
@@ -25,25 +24,22 @@ public abstract class ModelOperation extends FormattedOperation
 	}
 
 	@Override
-	public final TypedString Execute(ExecutionController controller
-		, Map<String, String> params, boolean verbose) throws ExceptionParseError
+	public final TypedString Execute(Map<String, String> params, boolean verbose) throws ExceptionParseError
 	{
 		Utils.RequiredParams(params, "path");
 
 		String path = params.get("path");
 		params.remove("path");
 
-		ModelList<? extends ModelEntity, ?> entities = PathParser.Parse(path)
-			.Execute(controller.GetContext().model_data);
+		ModelList<? extends ModelEntity, ?> entities = PathParser.Parse(path).Execute();
 
 		if(entities.size() == 0)
 			return new ErrorString("no entities found on path: " + path);
 
-		return Execute(controller, params, verbose, entities);
+		return Execute(params, verbose, entities);
 	}
 
-	public abstract TypedString Execute(ExecutionController controller
-		, Map<String, String> params
+	public abstract TypedString Execute(Map<String, String> params
 		, boolean verbose
 		, ModelList<? extends ModelEntity, ?> entities)
 		throws ExceptionParseError;

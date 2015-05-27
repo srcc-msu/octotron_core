@@ -1,4 +1,4 @@
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services;
 
 import ru.parallel.octotron.exec.Context;
 

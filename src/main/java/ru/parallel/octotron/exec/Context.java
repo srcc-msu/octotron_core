@@ -6,27 +6,20 @@
 
 package ru.parallel.octotron.exec;
 
-import ru.parallel.octotron.logic.Statistics;
-
 public final class Context
 {
 	public final GlobalSettings settings;
-	public final ModelData model_data;
 
-	public final Statistics stat = new Statistics();
-
-	private Context(GlobalSettings settings, ModelData model_data)
+	private Context(GlobalSettings settings)
 	{
 		this.settings = settings;
-		this.model_data = model_data;
 	}
 
 	public static Context CreateFromConfig(String json_config)
 	{
 		GlobalSettings settings = new GlobalSettings(json_config);
-		ModelData model_data = new ModelData();
 
-		return new Context(settings, model_data);
+		return new Context(settings);
 	}
 
 	public static Context CreateTestContext(int port)
@@ -34,6 +27,6 @@ public final class Context
 		GlobalSettings settings = new GlobalSettings(port);
 		ModelData model_data = new ModelData();
 
-		return new Context(settings, model_data);
+		return new Context(settings);
 	}
 }

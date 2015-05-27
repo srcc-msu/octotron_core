@@ -7,7 +7,7 @@
 package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.rules.LinkRule;
@@ -38,10 +38,10 @@ public class LinkedMatch extends LinkRule
 		Attribute attr1 = link.GetObjects().get(0).GetAttribute(check_attribute);
 		Attribute attr2 = link.GetObjects().get(1).GetAttribute(check_attribute);
 
-		if(!attr1.GetValue().IsValid() || !attr2.GetValue().IsValid())
+		if(!attr1.IsValid() || !attr2.IsValid())
 			return Value.invalid;
 
-		return attr1.eq(attr2.GetValue());
+		return attr1.eq(attr2);
 	}
 
 }

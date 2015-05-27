@@ -9,7 +9,6 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.exec.services.ModelService;
 
 public class ModelLink extends ModelEntity
 {
@@ -32,9 +31,9 @@ public class ModelLink extends ModelEntity
 	}
 
 	@Override
-	public ModelLinkBuilder GetBuilder(ModelService service)
+	public ModelLinkBuilder GetBuilder()
 	{
-		return new ModelLinkBuilder(service, this);
+		return new ModelLinkBuilder(this);
 	}
 
 	private void DirectedOnly()

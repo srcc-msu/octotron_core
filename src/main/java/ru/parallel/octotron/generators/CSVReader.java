@@ -6,14 +6,13 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.exec.services.ModelService;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -34,7 +33,7 @@ public final class CSVReader
 
 	private CSVReader() {}
 
-	public static void Declare(ModelService service, Iterable<? extends ModelEntity> list, String file_name)
+	public static void Declare(Iterable<? extends ModelEntity> list, String file_name)
 		throws ExceptionParseError, IOException
 	{
 		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name), ',', '\'');
@@ -71,7 +70,7 @@ public final class CSVReader
 
 					Value val = Value.ValueFromStr(str_val);
 
-					entity.GetBuilder(service).DeclareConst(fields[i], val.GetRaw());
+					entity.GetBuilder().DeclareConst(fields[i], val.GetRaw());
 				}
 
 				read++;
@@ -86,13 +85,13 @@ public final class CSVReader
 		}
 	}
 
-	public static <T extends ModelEntity> void Declare(ModelService service, T object, String file_name)
+	public static <T extends ModelEntity> void Declare(T object, String file_name)
 		throws ExceptionParseError, IOException
 	{
-		Declare(service, ModelList.Single(object), file_name);
+		Declare(ModelList.Single(object), file_name);
 	}
 
-	public static ModelObjectList OrderByColumn(ModelService service, ModelObjectList input, String file_name, int... column)
+	public static ModelObjectList OrderByColumn(ModelObjectList input, String file_name, int... column)
 		throws ExceptionParseError, IOException
 	{
 		au.com.bytecode.opencsv.CSVReader reader = new au.com.bytecode.opencsv.CSVReader(new FileReader(file_name), ',', '\'');

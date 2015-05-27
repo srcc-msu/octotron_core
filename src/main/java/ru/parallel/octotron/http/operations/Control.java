@@ -6,11 +6,10 @@
 
 package ru.parallel.octotron.http.operations;
 
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.impl.FormattedOperation;
-import ru.parallel.octotron.logic.RuntimeService;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.format.CsvString;
 import ru.parallel.utils.format.ErrorString;
@@ -31,13 +30,12 @@ public class Control
 		public quit() {super("quit", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller
-			, Map<String, String> params, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.StrictParams(params);
 
-			controller.SetExit(true);
+			ServiceLocator.INSTANCE.GetRuntimeService().SetExit(true);
 
 			return new TextString("quiting now");
 		}
@@ -51,13 +49,12 @@ public class Control
 		public selftest() {super("selftest", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller
-			, Map<String, String> params, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.StrictParams(params);
 
-			Map<String, Object> result = controller.model_service.PerformSelfTest(controller);
+			Map<String, Object> result = ServiceLocator.INSTANCE.GetRuntimeService().PerformSelfTest();
 
 			return AutoFormat.PrintJson(Collections.singleton(result));
 		}
@@ -73,8 +70,7 @@ public class Control
 		public mode() {super("mode", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller
-			, Map<String, String> params, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.StrictParams(params, "silent");
@@ -82,7 +78,7 @@ public class Control
 			String mode_str = params.get("silent");
 			boolean mode = Value.ValueFromStr(mode_str).GetBoolean();
 
-			controller.SetSilent(mode);
+			ServiceLocator.INSTANCE.GetReactionService().SetSilent(mode);
 
 			if(mode)
 				return new TextString("silent mode activated - no reactions will be invoked");
@@ -99,8 +95,7 @@ public class Control
 		public snapshot() {super("snapshot", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller
-			, Map<String, String> params, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.AllParams(params, "format");
@@ -108,12 +103,10 @@ public class Control
 
 			if(format == null || format.equals("json") || format.equals("jsonp"))
 			{
-				return AutoFormat.PrintJson(RuntimeService.MakeSnapshot(
-					controller.GetContext().model_data, verbose));
+				return AutoFormat.PrintJson(ServiceLocator.INSTANCE.GetRuntimeService().MakeSnapshot(verbose));
 			}
 			else if(format.equals("csv"))
-				return new CsvString(RuntimeService.MakeCsvSnapshot(
-					controller.GetContext().model_data));
+				return new CsvString(ServiceLocator.INSTANCE.GetRuntimeService().MakeCsvSnapshot());
 			else
 				return new ErrorString("unsupported format: " + format);
 		}
@@ -127,13 +120,12 @@ public class Control
 		public stat() {super("stat", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller
-			, Map<String, String> params, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.AllParams(params);
 
-			return AutoFormat.PrintJson(controller.context.stat.GetStat());
+			return AutoFormat.PrintJson(ServiceLocator.INSTANCE.GetRuntimeService().GetStat().GetRepresentation());
 		}
 	}
 
@@ -146,14 +138,13 @@ public class Control
 		public timeout() {super("timeout", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller
-			, Map<String, String> params, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.AllParams(params);
 
 			List<Map<String, Object>> result
-				= RuntimeService.CheckTimeout(controller.GetContext());
+				= ServiceLocator.INSTANCE.GetRuntimeService().CheckTimeout();
 
 			return AutoFormat.PrintJson(result);
 		}

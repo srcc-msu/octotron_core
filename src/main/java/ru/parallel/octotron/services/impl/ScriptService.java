@@ -1,7 +1,9 @@
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services.impl;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.services.BGExecutorService;
+import ru.parallel.octotron.services.BGService;
 import ru.parallel.utils.Timer;
 
 import java.io.BufferedReader;
@@ -12,17 +14,10 @@ import java.util.logging.Level;
 
 public class ScriptService extends BGService
 {
-	private ScriptService(Context context)
+	public ScriptService(Context context)
 	{
 		super(context, new BGExecutorService("scripts", context.settings.GetNumThreads()
 			, DEFAULT_QUEUE_LIMIT));
-	}
-
-	public static ScriptService std = null;
-
-	public static void Init(Context context)
-	{
-		std = new ScriptService(context);
 	}
 
 	public void ExecSilent(final String... command)

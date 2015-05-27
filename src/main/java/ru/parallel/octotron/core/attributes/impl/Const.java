@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.attributes.impl;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 
@@ -19,7 +18,7 @@ public final class Const extends Attribute
 	}
 
 	@Override
-	protected void AutoUpdate(boolean silent)
+	protected void UpdateSelf()
 	{
 		// nothing to see here
 	}

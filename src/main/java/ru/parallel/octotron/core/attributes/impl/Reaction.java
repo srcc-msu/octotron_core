@@ -7,13 +7,13 @@
 package ru.parallel.octotron.core.attributes.impl;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.generators.tmpl.ReactionCase;
 import ru.parallel.octotron.reactions.PreparedResponse;
+import ru.parallel.octotron.services.impl.ReactionService;
 
 import java.util.Map;
 
@@ -27,6 +27,7 @@ public class Reaction extends Attribute
 	private boolean suppress = false;
 
 	private PreparedResponse prepared_response = null;
+	private ReactionService reaction_service;
 
 	public Reaction(ModelEntity parent, String name, ReactionAction template)
 	{
@@ -48,7 +49,7 @@ public class Reaction extends Attribute
 	}
 
 	@Override
-	protected synchronized void AutoUpdate(boolean silent)
+	protected synchronized void UpdateSelf()
 	{
 		boolean state = IsExecuted();
 
@@ -56,20 +57,19 @@ public class Reaction extends Attribute
 		{
 			IncGlobalStat();
 
-			if(!silent && template.response != null)
+			if(template.response != null)
 				RegisterResponse(template.response);
 
-			Update(new Value(true));
+			UpdateValue(new Value(true));
 		}
 		else
 		{
 			if(state && template.recover_response != null) // was true, now false -> recover
 			{
-				if(!silent)
-					RegisterResponse(template.recover_response);
+				RegisterResponse(template.recover_response);
 			}
 
-			Update(new Value(false));
+			UpdateValue(new Value(false));
 		}
 	}
 
@@ -143,7 +143,7 @@ public class Reaction extends Attribute
 
 	public void RegisterResponse(Response response)
 	{
-		return; // TODO
+		reaction_service.AddResponse(this, response);
 	}
 
 	public void RegisterPreparedResponse(PreparedResponse new_prepared_response)

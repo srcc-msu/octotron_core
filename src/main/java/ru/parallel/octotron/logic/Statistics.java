@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.logic;
 
-import ru.parallel.octotron.exec.services.BGExecutorService;
+import ru.parallel.octotron.services.BGExecutorService;
 import ru.parallel.utils.Timer;
 
 import java.util.HashMap;
@@ -92,7 +92,7 @@ public class Statistics
 		return res;
 	}
 
-	public List<Map<String, Object>> GetStat()
+	public List<Map<String, Object>> GetRepresentation()
 	{
 		List<Map<String, Object>> res = new LinkedList<>();
 

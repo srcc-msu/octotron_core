@@ -18,7 +18,6 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ModelData;
 import ru.parallel.octotron.http.path.ParsedPath;
 import ru.parallel.octotron.http.path.PathParser;
 import ru.parallel.utils.JavaUtils;
@@ -123,7 +122,7 @@ public class PreparedResponseFactory
 			// skip 1st
 			for(int i = 1; i < command.length; i++)
 			{
-				result.add(ComposeString(command[i], entity, context.model_data));
+				result.add(ComposeString(command[i], entity));
 			}
 
 			result.add(response.GetStatus().toString());
@@ -148,7 +147,7 @@ public class PreparedResponseFactory
 		Map<String, String> messages = response.GetMessages();
 
 		for(String tag : messages.keySet())
-			prepared_response.usr.put(tag, ComposeString(messages.get(tag), entity, context.model_data));
+			prepared_response.usr.put(tag, ComposeString(messages.get(tag), entity));
 	}
 
 	private void FillSpecial(PreparedResponse prepared_response
@@ -166,7 +165,7 @@ public class PreparedResponseFactory
 	private static final Pattern PATTERN_NAME = Pattern.compile("\\{([^{}]+)\\}");
 
 	private static String ReplaceWithPath(String path, String name
-		, ModelEntity entity, ModelData model_data)
+		, ModelEntity entity)
 	{
 		String where;
 
@@ -181,7 +180,7 @@ public class PreparedResponseFactory
 		try
 		{
 			parsed_path = PathParser.Parse(where);
-			targets = parsed_path.Execute(ModelList.Single(entity), model_data);
+			targets = parsed_path.Execute(ModelList.Single(entity));
 		}
 		catch(ExceptionParseError exceptionParseError)
 		{
@@ -198,7 +197,7 @@ public class PreparedResponseFactory
 				if(!target.TestAttribute(name))
 					continue;
 
-				result += prefix + target.GetAttribute(name).GetStringValue();
+				result += prefix + target.GetAttribute(name).ValueToString();
 				prefix = ",";
 			}
 
@@ -211,13 +210,12 @@ public class PreparedResponseFactory
 	private static String ReplaceSimple(String name, ModelEntity entity)
 	{
 		if(entity.TestAttribute(name))
-			return entity.GetAttribute(name).GetStringValue().replaceAll("\"", "");
+			return entity.GetAttribute(name).ValueToString().replaceAll("\"", "");
 		else
 			return String.format(NOT_FOUND, name);
 	}
 
-	public static String ComposeString(String string, ModelEntity entity
-		, ModelData model_data)
+	public static String ComposeString(String string, ModelEntity entity)
 	{
 		String result = string;
 
@@ -230,7 +228,7 @@ public class PreparedResponseFactory
 			String all = matcher.group(0);
 
 			result = result.replace(all
-				, ReplaceWithPath(path, name, entity, model_data));
+				, ReplaceWithPath(path, name, entity));
 		}
 
 		Matcher simple_matcher = PATTERN_NAME.matcher(result);

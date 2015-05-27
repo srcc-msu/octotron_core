@@ -1,20 +1,23 @@
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services.impl;
 
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.attributes.impl.Trigger;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.services.BGExecutorService;
+import ru.parallel.octotron.services.BGService;
+import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.logging.Level;
 
 public class ImportService extends BGService
 {
-	public ImportService(String prefix, Context context)
+	public ImportService(Context context)
 	{
-		super(context, new BGExecutorService(prefix, DEFAULT_QUEUE_LIMIT));
+		super(context, new BGExecutorService("import", DEFAULT_QUEUE_LIMIT));
 	}
 
 	public boolean Import(ModelEntity entity, String name, Value value, boolean strict)
@@ -49,8 +52,8 @@ public class ImportService extends BGService
 
 		try
 		{
-			ScriptService.std.ExecSilent(script, Long.toString(target.GetID())
-				, name, value.ValueToString());
+			ServiceLocator.INSTANCE.GetScriptService().ExecSilent(script, Long.toString(target.GetID())
+				, name, value.toString());
 		}
 		catch(ExceptionSystemError e)
 		{
@@ -84,7 +87,7 @@ public class ImportService extends BGService
 		{
 			Sensor sensor = entity.GetSensor(name);
 
-			sensor.Import(value);
+			sensor.UpdateValue(value);
 		}
 	}
 

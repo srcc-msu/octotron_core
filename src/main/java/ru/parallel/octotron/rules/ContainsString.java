@@ -7,7 +7,7 @@
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -38,7 +38,7 @@ public class ContainsString extends Rule
 	{
 		Attribute attr = entity.GetAttribute(attribute);
 
-		if(!attr.GetValue().IsValid())
+		if(!attr.IsValid())
 			return Value.invalid;
 
 		return attr.GetString().contains(match_str);

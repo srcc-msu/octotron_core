@@ -1,4 +1,4 @@
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services.impl;
 
 import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.logic.Response;
@@ -6,6 +6,8 @@ import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.octotron.reactions.PreparedResponseFactory;
+import ru.parallel.octotron.services.BGExecutorService;
+import ru.parallel.octotron.services.BGService;
 
 public class ReactionService extends BGService
 {
@@ -16,9 +18,9 @@ public class ReactionService extends BGService
 	 * */
 	private boolean silent;
 
-	public ReactionService(String prefix, Context context, PersistenceService persistence_service)
+	public ReactionService(Context context)
 	{
-		super(context, new BGExecutorService(prefix, context.settings.GetNumThreads()
+		super(context, new BGExecutorService("reactions", context.settings.GetNumThreads()
 			, DEFAULT_QUEUE_LIMIT));
 
 		this.response_factory = new PreparedResponseFactory(context);

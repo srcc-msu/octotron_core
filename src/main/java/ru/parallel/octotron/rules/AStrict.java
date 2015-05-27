@@ -7,7 +7,7 @@
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -96,7 +96,7 @@ public abstract class AStrict extends ObjectRule
 
 				Attribute attribute = obj.GetAttribute(tmp);
 
-				if(!attribute.GetValue().IsValid())
+				if(!attribute.IsValid())
 					return Value.invalid;
 
 				res = Accumulate(res, attribute);

@@ -1,42 +1,55 @@
-/*******************************************************************************
- * Copyright (c) 2014 SRCC MSU
- *
- * Distributed under the MIT License - see the accompanying file LICENSE.txt.
- ******************************************************************************/
-
-package ru.parallel.octotron.logic;
+package ru.parallel.octotron.services.impl;
 
 import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ModelData;
+import ru.parallel.octotron.logic.Statistics;
 import ru.parallel.octotron.reactions.PreparedResponse;
+import ru.parallel.octotron.services.Service;
+import ru.parallel.octotron.services.ServiceLocator;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class RuntimeService
+public class RuntimeService extends Service
 {
-	private final static Logger LOGGER = Logger.getLogger("octotron");
+	public final Statistics stat = new Statistics();
+	private boolean exit;
+
+	public RuntimeService(Context context)
+	{
+		super(context);
+	}
+
+	public void SetExit(boolean exit)
+	{
+		this.exit = exit;
+	}
+
+	public boolean ShouldExit()
+	{
+		return exit;
+	}
+
+	public Statistics GetStat()
+	{
+		return stat;
+	}
 
 	/**
 	 * create snapshot of all reactions with failed conditions<br>
 	 * and get their description<br>
 	 * */
-	public static List<Map<String, Object>> MakeSnapshot(ModelData model_data, boolean verbose)
+	public static List<Map<String, Object>> MakeSnapshot(boolean verbose)
 	{
 		List<Map<String, Object>> result = new LinkedList<>();
 
-		for(ModelEntity entity : model_data.GetAllEntities())
+		for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
 		{
 			for(PreparedResponse response : entity.GetPreparedResponses())
 			{
@@ -47,11 +60,11 @@ public class RuntimeService
 		return result;
 	}
 
-	public static List<Map<String, Object>> CheckTimeout(Context context)
+	public static List<Map<String, Object>> CheckTimeout()
 	{
 		List<Map<String, Object>> result = new LinkedList<>();
 
-		for(ModelEntity entity : context.model_data.GetAllEntities())
+		for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
 		{
 			for(Sensor sensor : entity.GetSensor())
 			{
@@ -108,11 +121,11 @@ public class RuntimeService
 	}
 
 	// TODO: unify? add some kind of json2csv conversion
-	public static String MakeCsvSnapshot(ModelData model_data)
+	public static String MakeCsvSnapshot()
 	{
 		String result = "";
 
-		for(ModelEntity entity : model_data.GetAllEntities())
+		for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
 		{
 			for(PreparedResponse response : entity.GetPreparedResponses())
 			{
@@ -121,5 +134,30 @@ public class RuntimeService
 		}
 
 		return result;
+	}
+
+	private final double free_space_mb_threshold = 1024; // 1GB in MB
+
+	public Map<String, Object> PerformSelfTest()
+	{
+		boolean graph_test = ServiceLocator.INSTANCE.GetModelService().PerformGraphTest();
+
+		long free_space = new File("/").getFreeSpace();
+
+		long free_space_mb = free_space / 1024 / 1024;
+
+		Map<String, Object> map = new HashMap<>();
+
+		map.put("graph_test", graph_test);
+		map.put("disk_space_MB", free_space_mb);
+		map.put("disk_test", free_space_mb > free_space_mb_threshold);
+
+		return map;
+	}
+
+	@Override
+	public void Finish()
+	{
+
 	}
 }

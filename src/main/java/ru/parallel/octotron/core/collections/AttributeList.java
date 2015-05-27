@@ -7,7 +7,7 @@
 package ru.parallel.octotron.core.collections;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -63,7 +63,7 @@ public final class AttributeList<T extends Attribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.GetValue().IsComputable() && att.ge(val))
+			if(att.IsComputable() && att.ge(val))
 				new_list.add(att);
 
 		return new_list;
@@ -74,7 +74,7 @@ public final class AttributeList<T extends Attribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.GetValue().IsComputable() && att.le(val))
+			if(att.IsComputable() && att.le(val))
 				new_list.add(att);
 
 		return new_list;
@@ -85,7 +85,7 @@ public final class AttributeList<T extends Attribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.GetValue().IsComputable() && att.gt(val))
+			if(att.IsComputable() && att.gt(val))
 				new_list.add(att);
 
 		return new_list;
@@ -96,7 +96,7 @@ public final class AttributeList<T extends Attribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.GetValue().IsComputable() && att.lt(val))
+			if(att.IsComputable() && att.lt(val))
 				new_list.add(att);
 
 		return new_list;
@@ -107,7 +107,7 @@ public final class AttributeList<T extends Attribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.GetValue().IsComputable() && att.eq(val))
+			if(att.IsComputable() && att.eq(val))
 				new_list.add(att);
 
 		return new_list;
@@ -118,7 +118,7 @@ public final class AttributeList<T extends Attribute> extends LinkedList<T>
 		AttributeList<T> new_list = new AttributeList<>();
 
 		for(T att : this)
-			if(att.GetValue().IsComputable() && att.ne(val))
+			if(att.IsComputable() && att.ne(val))
 				new_list.add(att);
 
 		return new_list;

@@ -11,7 +11,7 @@ import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.services.ScriptService;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.JavaUtils;
 
@@ -100,7 +100,7 @@ public class PreparedResponse implements Runnable, IPresentable
 
 				try
 				{
-					ScriptService.std.ExecSilent(report.toArray(new String[0]));
+					ServiceLocator.INSTANCE.GetScriptService().ExecSilent(report.toArray(new String[0]));
 				}
 				catch(ExceptionSystemError e)
 				{

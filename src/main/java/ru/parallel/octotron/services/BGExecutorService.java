@@ -1,4 +1,4 @@
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;

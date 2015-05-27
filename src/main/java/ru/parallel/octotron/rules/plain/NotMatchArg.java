@@ -7,7 +7,7 @@
 package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -39,9 +39,9 @@ public class NotMatchArg extends Rule
 		Attribute attr = entity.GetAttribute(check_attribute);
 		Attribute match_attr = entity.GetAttribute(match_attribute);
 
-		if(!attr.GetValue().IsValid() || !attr.GetValue().IsValid())
+		if(!attr.IsValid() || !attr.IsValid())
 			return Value.invalid;
 
-		return attr.ne(match_attr.GetValue());
+		return attr.ne(match_attr);
 	}
 }

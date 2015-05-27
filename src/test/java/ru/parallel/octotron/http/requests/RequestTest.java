@@ -9,7 +9,7 @@ import org.junit.Before;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
-import ru.parallel.octotron.exec.services.ModelService;
+import ru.parallel.octotron.services.impl.ModelService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
@@ -36,7 +36,7 @@ public class RequestTest
 	public void InitCommon() throws Exception
 	{
 		context = Context.CreateTestContext(0);
-		model_service = new ModelService(context);
+		model_service = new ModelService(context, model_data);
 
 		controller = new ExecutionController(context, model_service);
 		http = new DummyHTTPServer(0);

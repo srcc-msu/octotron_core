@@ -8,7 +8,6 @@ package ru.parallel.octotron.persistence;
 
 import com.google.common.collect.Iterables;
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
@@ -17,12 +16,12 @@ import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.persistence.graph.impl.GraphEntity;
 import ru.parallel.octotron.persistence.graph.impl.GraphLink;
 import ru.parallel.octotron.persistence.graph.impl.GraphObject;
 import ru.parallel.octotron.persistence.graph.impl.GraphService;
 import ru.parallel.octotron.persistence.neo4j.Neo4jGraph;
+import ru.parallel.octotron.services.impl.ModelService;
 
 import java.util.Collection;
 import java.util.logging.Level;
@@ -209,7 +208,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
-			if(attribute.GetValue().IsComputable())
+			if(attribute.IsComputable())
 				graph_object.UpdateAttribute("value", attribute.GetValue().GetRaw());
 
 // info
@@ -235,7 +234,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
-			if(attribute.GetValue().IsComputable())
+			if(attribute.IsComputable())
 				graph_object.UpdateAttribute("value", attribute.GetValue().GetRaw());
 		}
 	}

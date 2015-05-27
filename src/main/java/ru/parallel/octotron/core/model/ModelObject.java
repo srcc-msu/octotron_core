@@ -6,11 +6,10 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.exec.services.ModelService;
 
 
 public class ModelObject extends ModelEntity
@@ -29,9 +28,9 @@ public class ModelObject extends ModelEntity
 	}
 
 	@Override
-	public ModelObjectBuilder GetBuilder(ModelService service)
+	public ModelObjectBuilder GetBuilder()
 	{
-		return new ModelObjectBuilder(service, this);
+		return new ModelObjectBuilder(this);
 	}
 
 //--------

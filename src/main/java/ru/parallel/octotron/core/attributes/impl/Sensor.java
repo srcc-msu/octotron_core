@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.attributes.impl;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -53,7 +52,7 @@ public final class Sensor extends Attribute
 	private static final long TOLERANCE = 30; // 30 seconds tolerance for sensor update
 
 	@Override
-	public void AutoUpdate(boolean silent)
+	public void UpdateSelf()
 	{
 		if(update_interval == -1)
 			return;
@@ -61,7 +60,7 @@ public final class Sensor extends Attribute
 		SetIsOutdated(JavaUtils.GetTimestamp() - GetCTime() > update_interval + TOLERANCE);
 
 		if(IsOutdated()) // if timeout - turns to simply invalid
-			Update(Value.invalid);
+			UpdateValue(Value.invalid);
 
 		UpdateDependant();
 
@@ -80,20 +79,6 @@ public final class Sensor extends Attribute
 
 //--------
 
-	public synchronized void Import(Value new_value)
-	{
-		super.Update(new_value);
-
-		SetIsOutdated(false);
-
-		UpdateDependant();
-	}
-
-	public void Import(Object new_value)
-	{
-		Import(Value.Construct(new_value));
-	}
-
 	@Override
 	public Value GetValue()
 	{
@@ -101,6 +86,19 @@ public final class Sensor extends Attribute
 			return super.GetValue();
 
 		return Value.invalid;
+	}
+
+	@Override
+	public synchronized void UpdateValue(Value new_value)
+	{
+		SetIsOutdated(false);
+
+		super.UpdateValue(new_value);
+	}
+
+	public void UpdateValue(Object new_value)
+	{
+		UpdateValue(Value.Construct(new_value));
 	}
 
 //--------

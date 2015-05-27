@@ -6,14 +6,14 @@
 
 package ru.parallel.octotron.http.path;
 
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.exec.ModelData;
+import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public abstract class PathOperations
 
 	private interface ITransform
 	{
-		ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 				throws ExceptionParseError;
 	}
 
@@ -76,10 +76,10 @@ public abstract class PathOperations
 			return out;
 		}
 
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj)
 				throws ExceptionParseError
 		{
-			return transform.Transform(model_data, obj, params);
+			return transform.Transform(obj, params);
 		}
 
 		private PathToken(String name, CHAIN_TYPE in, CHAIN_TYPE out
@@ -126,7 +126,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1) // TODO
@@ -156,7 +156,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1)
@@ -164,9 +164,11 @@ public abstract class PathOperations
 					("index operation must be querying a single indexed value");
 
 			if(params.get(0).operand != null)
-				return model_data.GetObjects(params.get(0).name, params.get(0).operand);
+				return ServiceLocator.INSTANCE.GetModelService().GetModelData()
+					.GetObjects(params.get(0).name, params.get(0).operand);
 			else
-				return model_data.GetObjects(params.get(0).name);
+				return ServiceLocator.INSTANCE.GetModelService().GetModelData()
+					.GetObjects(params.get(0).name);
 		}
 	});
 
@@ -178,7 +180,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 				throws ExceptionParseError
 		{
 			if(params.size() != 1)
@@ -186,9 +188,11 @@ public abstract class PathOperations
 					("index operation must be querying a single indexed value");
 
 			if(params.get(0).operand != null)
-				return model_data.GetLinks(params.get(0).name, params.get(0).operand);
+				return ServiceLocator.INSTANCE.GetModelService().GetModelData()
+					.GetLinks(params.get(0).name, params.get(0).operand);
 			else
-				return model_data.GetLinks(params.get(0).name);
+				return ServiceLocator.INSTANCE.GetModelService().GetModelData()
+					.GetLinks(params.get(0).name);
 		}
 	});
 
@@ -199,7 +203,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(obj instanceof ModelObjectList)
@@ -219,7 +223,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
@@ -239,7 +243,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
@@ -259,7 +263,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
@@ -279,7 +283,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_OBJ_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 			throws ExceptionParseError
 		{
 			if(params.size() > 1)
@@ -300,7 +304,7 @@ public abstract class PathOperations
 		, CHAIN_TYPE.E_LINK_LIST, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetInLinks();
 		}
@@ -313,7 +317,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetOutLinks();
 		}
@@ -326,7 +330,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetUndirectedLinks();
 		}
@@ -339,7 +343,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToObjList(obj).GetAllLinks();
 		}
@@ -352,7 +356,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToLinkList(obj).Source();
 		}
@@ -365,7 +369,7 @@ public abstract class PathOperations
 		, new ITransform()
 	{
 		@Override
-		public ModelList<? extends ModelEntity, ?> Transform(ModelData model_data, Object obj, List<Query> params)
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
 		{
 			return ToLinkList(obj).Target();
 		}

@@ -1,6 +1,6 @@
 package ru.parallel.octotron.generators.tmpl;
 
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 
 public class SensorTemplate
 {

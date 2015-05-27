@@ -11,11 +11,11 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.GlobalSettings;
-import ru.parallel.octotron.exec.services.HttpService;
-import ru.parallel.octotron.exec.services.RequestService;
 import ru.parallel.octotron.http.requests.HttpExchangeWrapper;
 import ru.parallel.octotron.http.requests.HttpRequestParser;
 import ru.parallel.octotron.http.requests.ParsedModelRequest;
+import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.services.impl.HttpService;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -30,7 +30,6 @@ public class HTTPServer
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	private final HttpServer server;
-	private final RequestService request_service;
 
 	/**
  * parse request to tokens and add parsed_request to message queue
@@ -63,10 +62,10 @@ public class HTTPServer
 			if(!request.IsBlocking())
 			{
 				http_exchange_wrapper.FinishString("request queued");
-				request_service.AddRequest(request);
+				ServiceLocator.INSTANCE.GetRequestService().AddRequest(request);
 			}
 			else
-				request_service.AddBlockingRequest(request, http_exchange_wrapper);
+				ServiceLocator.INSTANCE.GetRequestService().AddBlockingRequest(request, http_exchange_wrapper);
 		}
 	}
 
@@ -113,11 +112,9 @@ public class HTTPServer
  * create and start the server, listening on /port<br>
  * messages are not guaranteed to come in fixed order<br>
  * */
-	public HTTPServer(Context context, HttpService http_service, RequestService request_service)
+	public HTTPServer(Context context, HttpService http_service)
 		throws ExceptionSystemError
 	{
-		this.request_service = request_service;
-
 		// why is it turned off by default >.<
 		if(!Boolean.getBoolean("sun.net.httpserver.nodelay"))
 			LOGGER.log(Level.CONFIG, "nodelay is not set to true, import will be slow. Add '-Dsun.net.httpserver.nodelay=true' as argument to java command.");

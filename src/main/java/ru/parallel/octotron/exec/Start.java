@@ -6,17 +6,12 @@
 
 package ru.parallel.octotron.exec;
 
-import org.python.core.Py;
-import org.python.core.PyString;
-import org.python.core.PySystemState;
-import org.python.util.PythonInterpreter;
 import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.services.ModelService;
-import ru.parallel.octotron.exec.services.ScriptService;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.AntiDuplicateLoggingFilter;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
@@ -40,6 +35,7 @@ public class Start
 	private static final int SYS_LOG_SIZE = 10*MB; // 10 MB // orly?
 
 	private static final int DUPLICATES_LOGGING_THRESHOLD = 10000; // 10 seconds in ms
+	private static final String SEPARATOR =  System.lineSeparator() + "------------------------------------------------------------" + System.lineSeparator();
 
 	private static void ConfigLogging(String log_dir)
 	{
@@ -79,7 +75,17 @@ public class Start
 
 		LOGGER.log(Level.INFO, "starting Octotron using config file: " + config_fname);
 
+		Context context = CreateContext(config_fname);
+		ConfigLogging(context.settings.GetLogDir());
+
+		ExecutionController controller = Create(context);
+		Run(controller, context);
+	}
+
+	private static Context CreateContext(String config_fname)
+	{
 		String json_config = null;
+
 		try
 		{
 			json_config = FileUtils.FileToString(config_fname);
@@ -90,69 +96,50 @@ public class Start
 			System.exit(1);
 		}
 
-		Context context = null;
-		ModelService model_service = null;
+		return Context.CreateFromConfig(json_config);
+	}
+
+	private static ExecutionController Create(Context context)
+	{
+		ExecutionController controller = null;
 
 		try
 		{
-			context = Context.CreateFromConfig(json_config);
-			ScriptService.Init(context);
+			controller = new ExecutionController(context);
 
-			model_service = new ModelService(context);
+			LOGGER.log(Level.INFO, "creating model...");
 
-			ConfigLogging(context.settings.GetLogDir());
+			controller.CreateFromPython();
 
-			CreateFromPython(context, model_service);
-			PrintStat(context);
-			CreateCache(context, model_service);
+			LOGGER.log(Level.INFO, "model statistics:");
+
+			PrintStat();
+
+			LOGGER.log(Level.INFO, "building cache...");
+
+			ServiceLocator.INSTANCE.GetModelService().CreateCache();
 		}
 		catch(Exception creation_exception)
 		{
 			LOGGER.log(Level.SEVERE, "could not create the model", creation_exception);
 
-			if(model_service != null && model_service.GetMode() == ModelService.EMode.CREATION)
-				model_service.GetPersistenceService().Wipe(); // clean neo4j dir on unsuccessful creation
+			ServiceLocator.INSTANCE.GetPersistenceService().Wipe(); // clean neo4j dir on unsuccessful creation
 
-			if(model_service != null)
-				model_service.Finish();
+			if(controller != null)
+				controller.Finish();
 
 			System.exit(1);
 		}
 
-		Run(context, model_service);
+		return controller;
 	}
 
-	private static void CreateFromPython(Context context, ModelService model_service)
-	{
-		PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
-
-		PySystemState sys = Py.getSystemState();
-
-		sys.path.append(new PyString(context.settings.GetModelPath()));
-
-		if(context.settings.GetSysPath() != null)
-			sys.path.append(new PyString(context.settings.GetSysPath()));
-
-		LOGGER.log(Level.INFO, "Creating model...");
-
-// some magic to pass context to all python modules
-		interpreter.set("context", context);
-		interpreter.set("model_service", model_service);
-		interpreter.exec("import __builtin__");
-		interpreter.exec("__builtin__.context = context");
-		interpreter.exec("__builtin__.model_service = model_service");
-
-		interpreter.execfile(context.settings.GetModelPath() + '/' + context.settings.GetModelMain());
-
-		LOGGER.log(Level.INFO, "done");
-	}
-
-	private static void PrintStat(Context context)
+	private static void PrintStat()
 	{
 		int model_attributes_count = 0;
 
-		ModelObjectList model_objects = context.model_data.GetAllObjects();
-		ModelLinkList model_links = context.model_data.GetAllLinks();
+		ModelObjectList model_objects = ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllObjects();
+		ModelLinkList model_links = ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllLinks();
 
 		for(ModelObject obj : model_objects)
 		{
@@ -164,50 +151,23 @@ public class Start
 			model_attributes_count += link.GetAttributes().size();
 		}
 
-		LOGGER.log(Level.INFO, "Created model objects: " + model_objects.size());
-		LOGGER.log(Level.INFO, "Created model links: " + model_links.size());
-		LOGGER.log(Level.INFO, "Created model attributes: " + model_attributes_count);
-	}
-
-	private static void CreateCache(Context context, ModelService model_service)
-	{
-		LOGGER.log(Level.INFO, "Building cache...");
-
-		model_service.EnableObjectIndex("AID");
-		model_service.EnableLinkIndex("AID");
-
-		LOGGER.log(Level.INFO, "enabled object cache: AID");
-		LOGGER.log(Level.INFO, "enabled link cache: AID");
-
-		for(String attr : context.settings.GetObjectIndex())
-		{
-			model_service.EnableObjectIndex(attr);
-			LOGGER.log(Level.INFO, "enabled object cache: " + attr);
-		}
-
-		for(String attr : context.settings.GetLinkIndex())
-		{
-			model_service.EnableLinkIndex(attr);
-			LOGGER.log(Level.INFO, "enabled link cache: " + attr);
-		}
-
-		LOGGER.log(Level.INFO, "done");
+		LOGGER.log(Level.INFO, "created model objects: " + model_objects.size());
+		LOGGER.log(Level.INFO, "created model links: " + model_links.size());
+		LOGGER.log(Level.INFO, "created model attributes: " + model_attributes_count);
 	}
 
 /**
  * created db, start main loop and shutdown, when finished<br>
  * all errors are printed and may be reported by special scripts<br>
  * */
-	private static void Run(Context context, ModelService model_service)
+	private static void Run(ExecutionController controller, Context context)
 	{
-		LOGGER.log(Level.INFO, "Building rule dependencies and running the model");
-
-		ExecutionController controller = null;
-//-------- create
 		try
 		{
-			model_service.Operate();
-			controller = new ExecutionController(context, model_service);
+			LOGGER.log(Level.INFO, "building rule dependencies and running the model");
+
+			ServiceLocator.INSTANCE.GetModelService().Operate();
+			ServiceLocator.INSTANCE.GetHttpService();
 
 			ProcessStart(context);
 		}
@@ -217,8 +177,6 @@ public class Start
 
 			if(controller != null)
 				controller.Finish();
-
-			ScriptService.std.Finish();
 
 			System.exit(1);
 		}
@@ -232,7 +190,7 @@ public class Start
 		}
 
 //-------- shutdown
-		Exception shutdown_exception = Shutdown(controller, model_service);
+		Exception shutdown_exception = Shutdown(controller);
 
 		if(shutdown_exception != null)
 		{
@@ -250,7 +208,7 @@ public class Start
 
 		try
 		{
-			while(!controller.ShouldExit())
+			while(!ServiceLocator.INSTANCE.GetRuntimeService().ShouldExit())
 			{
 				controller.Process();
 			}
@@ -268,14 +226,11 @@ public class Start
 /**
  * shutdown the graph and all execution processes<br>
  * */
-	public static Exception Shutdown(ExecutionController controller
-		, ModelService model_service)
+	public static Exception Shutdown(ExecutionController controller)
 	{
 		try
 		{
 			controller.Finish();
-			model_service.Finish();
-			ScriptService.std.Finish();
 		}
 		catch(Exception e)
 		{
@@ -294,7 +249,7 @@ public class Start
 		String script = context.settings.GetScriptByKeyOrNull("on_start");
 
 		if(script != null)
-			ScriptService.std.ExecSilent(script);
+			ServiceLocator.INSTANCE.GetScriptService().ExecSilent(script);
 	}
 
 /**
@@ -306,7 +261,7 @@ public class Start
 		String script = context.settings.GetScriptByKeyOrNull("on_finish");
 
 		if(script != null)
-			ScriptService.std.ExecSilent(script);
+			ServiceLocator.INSTANCE.GetScriptService().ExecSilent(script);
 	}
 
 /**
@@ -342,7 +297,7 @@ public class Start
 			String script = context.settings.GetScriptByKeyOrNull("on_crash");
 
 			if(script != null)
-				ScriptService.std.ExecSilent(script, error_fname);
+				ServiceLocator.INSTANCE.GetScriptService().ExecSilent(script, error_fname);
 		}
 		catch(ExceptionSystemError e) // giving up now - exception during exception processing..
 		{

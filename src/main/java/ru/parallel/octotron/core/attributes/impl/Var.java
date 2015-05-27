@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.attributes.impl;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -29,11 +28,8 @@ public final class Var extends Attribute
 	}
 
 	@Override
- 	public synchronized void AutoUpdate(boolean silent)
+ 	public synchronized void UpdateSelf()
 	{
-		if(!DependenciesDefined())
-			return;
-
-		super.Update(Value.Construct(rule.Compute(GetParent())));
+		super.UpdateValue(Value.Construct(rule.Compute(GetParent())));
 	}
 }

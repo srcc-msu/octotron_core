@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services.impl;
 
 import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -13,17 +13,26 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.exec.ModelData;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.logic.SelfTest;
+import ru.parallel.octotron.services.Service;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.FileUtils;
 
-import java.io.File;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
 
 public final class ModelService extends Service
 {
-	private final PersistenceService persistence_service;
+	private final ModelData model_data = new ModelData();
+
+	public ModelData GetModelData()
+	{
+		return model_data;
+	}
 
 	public static enum EMode
 	{
@@ -32,10 +41,6 @@ public final class ModelService extends Service
 
 	private EMode mode;
 
-	private final double free_space_mb_threshold = 1024; // 1GB in MB
-
-	private SelfTest tester = null;
-
 	public ModelService(Context context)
 		throws ExceptionSystemError
 	{
@@ -43,22 +48,10 @@ public final class ModelService extends Service
 
 		String db_path = context.settings.GetDbPath() + "/" + context.settings.GetModelName();
 
-		persistence_service = new PersistenceService("persistence", context);
-
 		if(FileUtils.IsDirEmpty(db_path))
 			mode = EMode.CREATION;
 		else
 			mode = EMode.LOAD;
-
-		if(context.settings.IsDb())
-			persistence_service.InitGraph(this, db_path, context.settings.GetDbPort());
-		else
-			persistence_service.InitDummy();
-	}
-
-	public PersistenceService GetPersistenceService()
-	{
-		return persistence_service;
 	}
 
 	public EMode GetMode()
@@ -66,26 +59,44 @@ public final class ModelService extends Service
 		return mode;
 	}
 
+	private SelfTest tester = null;
+
+	public void InitSelfTest()
+	{
+		if(tester == null)
+		{
+			tester = new SelfTest();
+			tester.Init();
+		}
+		else
+			throw new ExceptionModelFail("internal error: self test has been initialized already");
+	}
+
+	public boolean PerformGraphTest()
+	{
+		return tester.Test();
+	}
+
 	public void Operate()
 	{
-		InitSelfTest(this);
+		InitSelfTest();
 
-		persistence_service.WaitAll();
+		ServiceLocator.INSTANCE.GetPersistenceService().WaitAll();
 
 		MakeRuleDependency();
 
-		persistence_service.WaitAll();
+		ServiceLocator.INSTANCE.GetPersistenceService().WaitAll();
 
 		mode = EMode.OPERATION;
 	}
 
 	private void MakeRuleDependency()
 	{
-		for(ModelEntity entity : context.model_data.GetAllEntities())
+		for(ModelEntity entity : model_data.GetAllEntities())
 		{
-			entity.GetBuilder(this).MakeDependencies();
+			entity.GetBuilder().MakeDependencies();
 
-			persistence_service.MakeRuleDependency(entity);
+			ServiceLocator.INSTANCE.GetPersistenceService().MakeRuleDependency(entity);
 		}
 	}
 
@@ -94,22 +105,22 @@ public final class ModelService extends Service
 	public ModelLink AddLink(ModelObject source, ModelObject target, boolean directed)
 	{
 		ModelLink link = new ModelLink(source, target, directed);
-		persistence_service.RegisterLink(link);
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterLink(link);
 
-		context.model_data.Add(link);
+		model_data.Add(link);
 
 		if(directed)
 		{
-			source.GetBuilder(this).AddOutLink(link);
-			target.GetBuilder(this).AddInLink(link);
+			source.GetBuilder().AddOutLink(link);
+			target.GetBuilder().AddInLink(link);
 		}
 		else
 		{
-			source.GetBuilder(this).AddUndirectedLink(link);
-			target.GetBuilder(this).AddUndirectedLink(link);
+			source.GetBuilder().AddUndirectedLink(link);
+			target.GetBuilder().AddUndirectedLink(link);
 		}
 
-		link.GetBuilder(this).DeclareConst(new ConstTemplate("AID", link.GetID()));
+		link.GetBuilder().DeclareConst(new ConstTemplate("AID", link.GetID()));
 
 		return link;
 	}
@@ -117,11 +128,11 @@ public final class ModelService extends Service
 	public ModelObject AddObject()
 	{
 		ModelObject object = new ModelObject();
-		persistence_service.RegisterObject(object);
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterObject(object);
 
-		context.model_data.Add(object);
+		model_data.Add(object);
 
-		object.GetBuilder(this).DeclareConst(new ConstTemplate("AID", object.GetID()));
+		object.GetBuilder().DeclareConst(new ConstTemplate("AID", object.GetID()));
 
 		return object;
 	}
@@ -130,12 +141,12 @@ public final class ModelService extends Service
 
 	public void EnableLinkIndex(String name)
 	{
-		context.model_data.GetCache().EnableLinkIndex(name, context.model_data.GetAllLinks());
+		model_data.GetCache().EnableLinkIndex(name, model_data.GetAllLinks());
 	}
 
 	public void EnableObjectIndex(String name)
 	{
-		context.model_data.GetCache().EnableObjectIndex(name, context.model_data.GetAllObjects());
+		model_data.GetCache().EnableObjectIndex(name, model_data.GetAllObjects());
 	}
 
 	public long SetSuppress(ModelEntity entity, String name, boolean value, String description)
@@ -164,14 +175,14 @@ public final class ModelService extends Service
 	{
 		List<Reaction> reactions = new LinkedList<>();
 
-		for(ModelEntity entity : context.model_data.GetAllObjects())
+		for(ModelEntity entity : model_data.GetAllObjects())
 			for(Reaction reaction : entity.GetReactions())
 			{
 				if(reaction.GetSuppress())
 					reactions.add(reaction);
 			}
 
-		for(ModelEntity entity : context.model_data.GetAllLinks())
+		for(ModelEntity entity : model_data.GetAllLinks())
 			for(Reaction reaction : entity.GetReactions())
 			{
 				if(reaction.GetSuppress())
@@ -181,40 +192,29 @@ public final class ModelService extends Service
 		return reactions;
 	}
 
-	@Override
-	public void Finish()
+	public void CreateCache()
 	{
-		persistence_service.Finish();
-	}
+		EnableObjectIndex("AID");
+		EnableLinkIndex("AID");
 
-	public void InitSelfTest(ModelService model_service)
-	{
-		if(tester == null)
+		LOGGER.log(Level.INFO, "enabled object cache: AID");
+		LOGGER.log(Level.INFO, "enabled link cache: AID");
+
+		for(String attr : context.settings.GetObjectIndex())
 		{
-			tester = new SelfTest();
-			tester.Init(model_service);
+			EnableObjectIndex(attr);
+			LOGGER.log(Level.INFO, "enabled object cache: " + attr);
 		}
-		else
-			throw new ExceptionModelFail("internal error: self test has been initialized already");
+
+		for(String attr : context.settings.GetLinkIndex())
+		{
+			EnableLinkIndex(attr);
+			LOGGER.log(Level.INFO, "enabled link cache: " + attr);
+		}
+
+		LOGGER.log(Level.INFO, "done");
 	}
 
-	public Map<String, Object> PerformSelfTest(ExecutionController controller)
-	{
-		if(tester == null)
-			throw new ExceptionModelFail("internal error: self test is not initialized");
-
-		boolean graph_test = tester.Test(controller);
-
-		long free_space = new File("/").getFreeSpace();
-
-		long free_space_mb = free_space / 1024 / 1024;
-
-		Map<String, Object> map = new HashMap<>();
-
-		map.put("graph_test", graph_test);
-		map.put("disk_space_MB", free_space_mb);
-		map.put("disk_test", free_space_mb > free_space_mb_threshold);
-
-		return map;
-	}
+	@Override
+	public void Finish() {}
 }

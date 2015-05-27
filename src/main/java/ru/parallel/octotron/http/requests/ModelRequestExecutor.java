@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.http.requests;
 
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TypedString;
 
@@ -22,27 +21,22 @@ public class ModelRequestExecutor implements Runnable
 	private final HttpExchangeWrapper exchange;
 	private final ParsedModelRequest request;
 
-	private final ExecutionController controller;
-
-	public ModelRequestExecutor(ExecutionController controller
-		, ParsedModelRequest request, HttpExchangeWrapper exchange)
+	public ModelRequestExecutor(ParsedModelRequest request, HttpExchangeWrapper exchange)
 	{
-		this.controller = controller;
 		this.request = request;
 		this.exchange = exchange;
 	}
 
-	public ModelRequestExecutor(ExecutionController controller
-		, ParsedModelRequest request)
+	public ModelRequestExecutor(ParsedModelRequest request)
 	{
-		this(controller, request, null);
+		this(request, null);
 	}
 
 	public TypedString GetResult()
 	{
 		try
 		{
-			return request.operation.Execute(controller, request.params);
+			return request.operation.Execute(request.params);
 		}
 		catch(Exception e)
 		{

@@ -1,7 +1,6 @@
 package ru.parallel.octotron.core.attributes.impl;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -20,14 +19,18 @@ public class Trigger extends Attribute
 		this.condition = condition;
 	}
 
+	public Rule GetCondition()
+	{
+		return condition;
+	}
+
 	public synchronized void ForceTrigger()
 	{
-		Update(new Value(true));
-		UpdateDependant();
+		UpdateValue(new Value(true));
 	}
 
 	@Override
-	public synchronized void AutoUpdate(boolean silent)
+	public synchronized void UpdateSelf()
 	{
 		boolean state = IsTriggered();
 
@@ -38,7 +41,7 @@ public class Trigger extends Attribute
 			repeat = 1;
 			started = JavaUtils.GetTimestamp();
 
-			Update(new Value(true));
+			UpdateValue(new Value(true));
 		}
 		else if(state && condition_met) // next match
 		{
@@ -49,7 +52,7 @@ public class Trigger extends Attribute
 			repeat = 0;
 			started = 0;
 
-			Update(new Value(false));
+			UpdateValue(new Value(false));
 		}
 	}
 

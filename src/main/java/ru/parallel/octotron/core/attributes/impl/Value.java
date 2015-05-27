@@ -1,12 +1,13 @@
-package ru.parallel.octotron.core.attributes;
+package ru.parallel.octotron.core.attributes.impl;
 
+import ru.parallel.octotron.core.attributes.IValue;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.utils.JavaUtils;
 
 import java.text.DecimalFormat;
 
-public class Value
+public class Value implements IValue
 {
 	private static class Undefined
 	{
@@ -54,16 +55,19 @@ public class Value
 	public static final Value undefined = new Value(Undefined.value, Undefined.class);
 	public static final Value invalid = new Value(Invalid.value, Invalid.class);
 
+	@Override
 	public boolean IsDefined()
 	{
 		return !equals(undefined);
 	}
 
+	@Override
 	public boolean IsValid()
 	{
 		return !equals(invalid);
 	}
 
+	@Override
 	public boolean IsComputable() { return IsDefined() && IsValid(); }
 
 	/**
@@ -126,19 +130,25 @@ public class Value
 
 	private static final DecimalFormat decimal_format = new DecimalFormat("0.00"); // TODO: is it ok?
 
+	@Override
 	public final String ValueToString()
 	{
 		if(my_class.equals(Long.class))
 			return value.toString();
-		else if(my_class.equals(Double.class))
+
+		if(my_class.equals(Double.class))
 			return decimal_format.format(value);
+
 		if(my_class.equals(Boolean.class))
 			return value.toString();
-		else if(my_class.equals(String.class))
+
+		if(my_class.equals(String.class))
 			return JavaUtils.Quotify((String)value);
-		else if(my_class.equals(Undefined.class))
+
+		if(my_class.equals(Undefined.class))
 			return JavaUtils.Quotify(value.toString());
-		else if(my_class.equals(Invalid.class))
+
+		if(my_class.equals(Invalid.class))
 			return JavaUtils.Quotify(value.toString());
 
 		else
@@ -183,6 +193,7 @@ public class Value
 
 //--------
 
+	@Override
 	public final String GetString()
 	{
 		CheckType(String.class);
@@ -190,6 +201,7 @@ public class Value
 		return (String) value;
 	}
 
+	@Override
 	public final Long GetLong()
 	{
 		CheckType(Long.class);
@@ -197,6 +209,7 @@ public class Value
 		return (Long) value;
 	}
 
+	@Override
 	public final Double GetDouble()
 	{
 		CheckType(Double.class);
@@ -204,6 +217,7 @@ public class Value
 		return (Double) value;
 	}
 
+	@Override
 	public final Boolean GetBoolean()
 	{
 		CheckType(Boolean.class);
@@ -211,6 +225,7 @@ public class Value
 		return (Boolean) value;
 	}
 
+	@Override
 	public final Double ToDouble()
 	{
 		if(my_class.equals(Double.class))
@@ -271,6 +286,7 @@ public class Value
 		return value.equals(cmp.value);
 	}
 
+	@Override
 	public final boolean eq(Value new_value)
 	{
 		CheckType(new_value);
@@ -278,6 +294,7 @@ public class Value
 		return equals(new_value);
 	}
 
+	@Override
 	public final boolean aeq(Value new_value, Value aprx)
 	{
 		CheckType(new_value);
@@ -296,6 +313,7 @@ public class Value
 		}
 	}
 
+	@Override
 	public final boolean ne(Value new_value)
 	{
 		return !eq(new_value);
@@ -303,6 +321,7 @@ public class Value
 
 	public static final double EPSILON = 0.00001;
 
+	@Override
 	public final boolean gt(Value new_value)
 	{
 		CheckType(new_value);
@@ -319,6 +338,7 @@ public class Value
 		}
 	}
 
+	@Override
 	public final boolean lt(Value new_value)
 	{
 		CheckType(new_value);
@@ -335,11 +355,13 @@ public class Value
 		}
 	}
 
+	@Override
 	public final boolean ge(Value val)
 	{
 		return !lt(val);
 	}
 
+	@Override
 	public final boolean le(Value val)
 	{
 		return !gt(val);

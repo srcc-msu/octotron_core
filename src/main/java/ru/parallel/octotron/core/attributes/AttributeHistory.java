@@ -6,6 +6,8 @@
 
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.attributes.impl.Value;
+
 import java.util.Collection;
 import java.util.LinkedList;
 

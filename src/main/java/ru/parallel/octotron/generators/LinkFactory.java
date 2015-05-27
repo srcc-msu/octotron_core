@@ -11,8 +11,9 @@ import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.*;
+import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.services.impl.ModelService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,20 +28,16 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	public LinkFactory(ModelService service)
-	{
-		super(service);
-	}
+	public LinkFactory() {}
 
-	private LinkFactory(ModelService service
-		, List<ConstTemplate> constants
+	private LinkFactory(List<ConstTemplate> constants
 		, List<ConstTemplate> statics
 		, List<SensorTemplate> sensors
 		, List<VarTemplate> rules
 		, List<TriggerTemplate> triggers
 		, List<ReactionTemplate> reactions)
 	{
-		super(service, constants, statics, sensors, rules, triggers, reactions);
+		super(constants, statics, sensors, rules, triggers, reactions);
 	}
 
 /**
@@ -49,28 +46,30 @@ public class LinkFactory extends BaseFactory<LinkFactory>
  * */
 	public ModelLink OneToOne(ModelObject from, ModelObject to, boolean directed)
 	{
+		ModelService service = ServiceLocator.INSTANCE.GetModelService();
+
 // create edge
 		ModelLink link = service.AddLink(from, to, directed);
 
 // set all attributes
-		link.GetBuilder(service).DeclareConst(constants);
-		link.GetBuilder(service).DeclareStatic(statics);
-		link.GetBuilder(service).DeclareSensor(sensors);
-		link.GetBuilder(service).DeclareVar(rules);
-		link.GetBuilder(service).DeclareTrigger(triggers);
-		link.GetBuilder(service).AddReaction(reactions);
+		link.GetBuilder().DeclareConst(constants);
+		link.GetBuilder().DeclareStatic(statics);
+		link.GetBuilder().DeclareSensor(sensors);
+		link.GetBuilder().DeclareVar(rules);
+		link.GetBuilder().DeclareTrigger(triggers);
+		link.GetBuilder().AddReaction(reactions);
 
-		link.GetBuilder(service).DeclareConst("directed", link.IsDirected());
+		link.GetBuilder().DeclareConst("directed", link.IsDirected());
 
 		if(link.IsDirected())
 		{
-			link.GetBuilder(service).DeclareConst("source", from.GetID());
-			link.GetBuilder(service).DeclareConst("target", to.GetID());
+			link.GetBuilder().DeclareConst("source", from.GetID());
+			link.GetBuilder().DeclareConst("target", to.GetID());
 		}
 		else
 		{
-			link.GetBuilder(service).DeclareConst("left", from.GetID());
-			link.GetBuilder(service).DeclareConst("right", to.GetID());
+			link.GetBuilder().DeclareConst("left", from.GetID());
+			link.GetBuilder().DeclareConst("right", to.GetID());
 		}
 
 		return link;
@@ -306,6 +305,6 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		, List<TriggerTemplate> triggers
 		, List<ReactionTemplate> new_reactions)
 	{
-		return new LinkFactory(service, new_constants, new_statics, new_sensors, new_rules, triggers, new_reactions);
+		return new LinkFactory(new_constants, new_statics, new_sensors, new_rules, triggers, new_reactions);
 	}
 }

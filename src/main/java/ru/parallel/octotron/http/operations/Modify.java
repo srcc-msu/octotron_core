@@ -6,15 +6,15 @@
 
 package ru.parallel.octotron.http.operations;
 
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.impl.Sensor;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.impl.ModelOperation;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.format.TextString;
 import ru.parallel.utils.format.TypedString;
 
@@ -30,7 +30,7 @@ public class Modify
 		public import_op() {super("import", false);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
+		public TypedString Execute(Map<String, String> params
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
@@ -43,7 +43,7 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			controller.GetImportService().Import(target, name, value);
+			ServiceLocator.INSTANCE.GetImportService().Import(target, name, value);
 
 			return new TextString("added to import queue");
 		}
@@ -57,7 +57,7 @@ public class Modify
 		public unchecked_import() {super("unchecked_import", false);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
+		public TypedString Execute(Map<String, String> params
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
@@ -72,7 +72,7 @@ public class Modify
 
 			try
 			{
-				if(controller.GetImportService().Import(target, name, value, false))
+				if(ServiceLocator.INSTANCE.GetImportService().Import(target, name, value, false))
 					return new TextString("added to import queue");
 				else
 					return new TextString("attribute not found, but registered, import skipped");
@@ -92,7 +92,7 @@ public class Modify
 		public set_valid() {super("set_valid", true);}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
+		public TypedString Execute(Map<String, String> params
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
@@ -120,7 +120,7 @@ public class Modify
 
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
+		public TypedString Execute(Map<String, String> params
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
@@ -148,7 +148,7 @@ public class Modify
 
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
+		public TypedString Execute(Map<String, String> params
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
@@ -165,7 +165,7 @@ public class Modify
 
 			for(ModelEntity entity : entities)
 			{
-				long AID = controller.model_service
+				long AID = ServiceLocator.INSTANCE.GetModelService()
 					.SetSuppress(entity, name, true, description);
 
 				if(AID != -1)
@@ -196,7 +196,7 @@ public class Modify
 
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
+		public TypedString Execute(Map<String, String> params
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
@@ -209,7 +209,7 @@ public class Modify
 
 			for(ModelEntity entity : entities)
 			{
-				long AID = controller.model_service
+				long AID = ServiceLocator.INSTANCE.GetModelService()
 					.SetSuppress(entity, name, false, "");
 
 				if(AID != -1)

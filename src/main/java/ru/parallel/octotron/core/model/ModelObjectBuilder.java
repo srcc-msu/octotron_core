@@ -6,13 +6,11 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.exec.services.ModelService;
-
 public class ModelObjectBuilder extends ModelEntityBuilder<ModelObject>
 {
-	ModelObjectBuilder(ModelService service, ModelObject object)
+	ModelObjectBuilder(ModelObject object)
 	{
-		super(service, object);
+		super(object);
 	}
 
 	public void AddOutLink(ModelLink link)

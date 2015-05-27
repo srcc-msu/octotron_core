@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.core.collections;
 
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.model.ModelObject;
 
 import java.util.List;

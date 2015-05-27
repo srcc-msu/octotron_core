@@ -13,7 +13,6 @@ import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.AutoFormat;
 
@@ -35,7 +34,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		super(type);
 	}
 
-	public abstract ModelEntityBuilder<?> GetBuilder(ModelService service);
+	public abstract ModelEntityBuilder<?> GetBuilder();
 
 	public Attribute GetAttribute(String name)
 	{
@@ -44,7 +43,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		if(result != null)
 			return result;
 
-		throw new ExceptionModelFail("attribute not found: " + name + " all: " + AutoFormat.FormatJson(GetShortRepresentation()));
+		throw new ExceptionModelFail("attribute not found: " + name + " ; all: " + AutoFormat.FormatJson(GetShortRepresentation()));
 	}
 
 	public Collection<Attribute> GetAttributes()

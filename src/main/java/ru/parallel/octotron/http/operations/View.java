@@ -12,11 +12,10 @@ import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.ExecutionController;
 import ru.parallel.octotron.http.operations.impl.FormattedOperation;
 import ru.parallel.octotron.http.operations.impl.ModelOperation;
-import ru.parallel.octotron.logic.RuntimeService;
 import ru.parallel.octotron.reactions.CommonReactions;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TextString;
@@ -43,8 +42,8 @@ public abstract class View
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
-			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(Map<String, String> params, boolean verbose
+			, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
 			return new TextString(String.valueOf(entities.size()));
@@ -63,8 +62,8 @@ public abstract class View
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
-			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(Map<String, String> params, boolean verbose
+			, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
 			Utils.RequiredParams(params, "names");
@@ -92,8 +91,8 @@ public abstract class View
 		public static final List<String> allowed_types = Arrays.asList("const", "var", "sensor");
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
-			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(Map<String, String> params, boolean verbose
+			, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
 			Utils.AllParams(params, "type");
@@ -119,8 +118,8 @@ public abstract class View
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
-			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
+		public TypedString Execute(Map<String, String> params, boolean verbose
+			, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
 			Utils.StrictParams(params, "name");
@@ -149,15 +148,14 @@ public abstract class View
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
-			, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.AllParams(params);
 
 			List<Map<String, Object>> result = new LinkedList<>();
 
-			for(Reaction reaction : controller.model_service.GetSuppressedReactions())
+			for(Reaction reaction : ServiceLocator.INSTANCE.GetModelService().GetSuppressedReactions())
 			{
 				result.add(reaction.GetRepresentation(verbose));
 			}
@@ -178,8 +176,7 @@ public abstract class View
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
-			, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.AllParams(params);
@@ -207,8 +204,7 @@ public abstract class View
 		}
 
 		@Override
-		public TypedString Execute(ExecutionController controller, Map<String, String> params
-			, boolean verbose)
+		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
 			Utils.RequiredParams(params);
@@ -216,7 +212,7 @@ public abstract class View
 
 			try
 			{
-				return AutoFormat.PrintJson( RuntimeService.GetVersion());
+				return AutoFormat.PrintJson(ServiceLocator.INSTANCE.GetRuntimeService().GetVersion());
 			}
 			catch(ExceptionSystemError e)
 			{

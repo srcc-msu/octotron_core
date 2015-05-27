@@ -7,7 +7,7 @@
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 
 public class ASoftNotMatchCount extends ASoft
@@ -23,7 +23,7 @@ public class ASoftNotMatchCount extends ASoft
 	@Override
 	protected Object Accumulate(Object res, Attribute attribute)
 	{
-		if(!attribute.GetValue().IsValid())
+		if(!attribute.IsValid())
 			return res;
 
 		if(attribute.ne(value))

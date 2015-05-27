@@ -19,7 +19,7 @@ public class AInvalidCount extends ASoft
 	@Override
 	protected Object Accumulate(Object res, Attribute attribute)
 	{
-		if(!attribute.GetValue().IsValid())
+		if(!attribute.IsValid())
 			return (Long)res + 1;
 
 		return res;

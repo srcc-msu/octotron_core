@@ -6,10 +6,15 @@
 
 package ru.parallel.octotron.exec;
 
+import org.python.core.Py;
+import org.python.core.PyString;
+import org.python.core.PySystemState;
+import org.python.util.PythonInterpreter;
 import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.services.*;
+import ru.parallel.octotron.services.BGService;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.logging.Level;
@@ -21,58 +26,61 @@ public class ExecutionController
 
 	public final Context context;
 
-	public final ModelService model_service;
-
-	private final RequestService request_service;
-	private final HttpService http_service;
-
-	private final ReactionService reaction_service;
-	private final ImportService import_service;
-
-	private final OutdatedCheckerService checker_service;
-
 	private boolean exit = false;
 
-	public ExecutionController(Context context, ModelService model_service)
+	public ExecutionController(Context context)
 		throws ExceptionSystemError
 	{
 		this.context = context;
-		this.model_service = model_service;
 
-		request_service = new RequestService("requests", context, this);
-		http_service = new HttpService("http_requests", context, request_service);
-
-		reaction_service = new ReactionService("reactions", context, model_service.GetPersistenceService());
-		import_service = new ImportService("imports", context);
-
-		checker_service = new OutdatedCheckerService(context);
-
-		UpdateDefinedSensors();
-
-		model_service.GetPersistenceService().GetExecutor().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
+		ServiceLocator.INSTANCE = new ServiceLocator(context);
 	}
 
 	private void UpdateDefinedSensors()
 	{
-		for(ModelObject object : context.model_data.GetAllObjects())
+		boolean old_mode = ServiceLocator.INSTANCE.GetReactionService().IsSilent();
+
+		ServiceLocator.INSTANCE.GetReactionService().SetSilent(true);
+
+		for(ModelObject object : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllObjects())
 		{
 			for(Sensor sensor : object.GetSensor())
 			{
-				if(sensor.GetValue().IsComputable())
-					sensor.UpdateDependant(true);
+				if(sensor.IsComputable())
+					sensor.UpdateDependant();
 			}
 		}
+
+		ServiceLocator.INSTANCE.GetReactionService().SetSilent(old_mode);
 	}
 
-	public void SetExit(boolean exit)
+	public void CreateFromPython()
 	{
-		this.exit = exit;
+		PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
+
+		PySystemState sys = Py.getSystemState();
+
+		sys.path.append(new PyString(context.settings.GetModelPath()));
+
+		if(context.settings.GetSysPath() != null)
+			sys.path.append(new PyString(context.settings.GetSysPath()));
+
+		/*
+// some magic to pass context to all python modules
+		interpreter.set("context", context);
+		interpreter.set("model_service", model_service);
+		interpreter.exec("import __builtin__");
+		interpreter.exec("__builtin__.context = context");
+		interpreter.exec("__builtin__.model_service = model_service");*/
+
+		interpreter.execfile(context.settings.GetModelPath() + '/' + context.settings.GetModelMain());
+
+		UpdateDefinedSensors();
+
+		// was unlimited for creation - limit it now
+		ServiceLocator.INSTANCE.GetPersistenceService().GetExecutor().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
 	}
 
-	public boolean ShouldExit()
-	{
-		return exit;
-	}
 
 	private final long OUTDATED_CHECK_INTERVAL = 100;
 	private long last_outdated_check = JavaUtils.GetTimestamp(); // do not run at start
@@ -85,10 +93,10 @@ public class ExecutionController
 		if(current_time - last_outdated_check > OUTDATED_CHECK_INTERVAL) // TODO: scheduler?
 		{
 			last_outdated_check = current_time;
-			checker_service.PerformCheck();
+			ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck();
 		}
 
-		context.stat.Process();
+		ServiceLocator.INSTANCE.GetRuntimeService().GetStat().Process();
 
 		Thread.sleep(1);
 	}
@@ -97,30 +105,10 @@ public class ExecutionController
 	{
 		LOGGER.log(Level.INFO, "waiting for all tasks to finish");
 
-		http_service.Finish();
-		request_service.Finish();
+		ServiceLocator.INSTANCE.Finish();
 
-		import_service.Finish();
-		reaction_service.Finish();
-
-		checker_service.Finish();
+		ServiceLocator.INSTANCE = null;
 
 		LOGGER.log(Level.INFO, "all processing finished");
-	}
-
-
-	public Context GetContext()
-	{
-		return context;
-	}
-
-	public void SetSilent(boolean mode)
-	{
-		reaction_service.SetSilent(mode);
-	}
-
-	public ImportService GetImportService()
-	{
-		return import_service;
 	}
 }

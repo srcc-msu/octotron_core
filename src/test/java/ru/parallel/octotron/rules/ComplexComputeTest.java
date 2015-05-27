@@ -1,12 +1,11 @@
 package ru.parallel.octotron.rules;
 
 import org.junit.BeforeClass;
-import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EDependencyType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.exec.services.PersistenceService;
+import ru.parallel.octotron.services.impl.PersistenceService;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;

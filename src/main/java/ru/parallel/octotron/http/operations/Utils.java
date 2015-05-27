@@ -137,7 +137,7 @@ public abstract class Utils
 				String string_value;
 
 				if(entity.TestAttribute(name))
-					string_value = entity.GetAttribute(name).GetStringValue();
+					string_value = entity.GetAttribute(name).ValueToString();
 				else
 					string_value = "<not found>";
 

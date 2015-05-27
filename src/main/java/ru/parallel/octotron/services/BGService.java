@@ -1,4 +1,4 @@
-package ru.parallel.octotron.exec.services;
+package ru.parallel.octotron.services;
 
 import ru.parallel.octotron.exec.Context;
 
@@ -12,7 +12,7 @@ public abstract class BGService extends Service
 	{
 		super(context);
 		this.executor = executor;
-		context.stat.RegisterService(executor);
+		ServiceLocator.INSTANCE.GetRuntimeService().GetStat().RegisterService(executor);
 	}
 
 	public void Finish()

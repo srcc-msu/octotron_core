@@ -6,12 +6,10 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.exec.services.ModelService;
-
 public class ModelLinkBuilder extends ModelEntityBuilder<ModelLink>
 {
-	ModelLinkBuilder(ModelService service, ModelLink entity)
+	ModelLinkBuilder(ModelLink entity)
 	{
-		super(service, entity);
+		super(entity);
 	}
 }

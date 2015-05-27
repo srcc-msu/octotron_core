@@ -8,7 +8,7 @@ package ru.parallel.octotron.core.collections;
 
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -186,7 +186,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 					Attribute attribute = obj.GetAttribute(name);
 
-					if(!attribute.GetValue().IsComputable())
+					if(!attribute.IsComputable())
 						continue;
 
 					if(attribute.eq(value))
@@ -203,7 +203,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 					Attribute attribute = obj.GetAttribute(name);
 
-					if(!attribute.GetValue().IsComputable())
+					if(!attribute.IsComputable())
 						continue;
 
 					if(attribute.ne(value))
@@ -220,7 +220,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 					Attribute attribute = obj.GetAttribute(name);
 
-					if(!attribute.GetValue().IsComputable())
+					if(!attribute.IsComputable())
 						continue;
 
 					if(attribute.ge(value))
@@ -237,7 +237,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 					Attribute attribute = obj.GetAttribute(name);
 
-					if(!attribute.GetValue().IsComputable())
+					if(!attribute.IsComputable())
 						continue;
 
 					if(attribute.gt(value))
@@ -254,7 +254,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 					Attribute attribute = obj.GetAttribute(name);
 
-					if(!attribute.GetValue().IsComputable())
+					if(!attribute.IsComputable())
 						continue;
 
 					if(attribute.le(value))
@@ -271,7 +271,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 					Attribute attribute = obj.GetAttribute(name);
 
-					if(!attribute.GetValue().IsComputable())
+					if(!attribute.IsComputable())
 						continue;
 
 					if(attribute.lt(value))

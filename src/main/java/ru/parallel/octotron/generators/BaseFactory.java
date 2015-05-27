@@ -6,7 +6,6 @@
 
 package ru.parallel.octotron.generators;
 
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.*;
 
 import java.util.Arrays;
@@ -20,7 +19,6 @@ import java.util.List;
  * */
 public abstract class BaseFactory<T>
 {
-	protected final ModelService service;
 /**
  * attribute template that will be used for all created entities<br>
  * must be cloned<br>
@@ -32,15 +30,13 @@ public abstract class BaseFactory<T>
 	protected final List<TriggerTemplate> triggers;
 	protected final List<ReactionTemplate> reactions;
 
-	protected BaseFactory(ModelService service
-		, List<ConstTemplate> constants
+	protected BaseFactory(List<ConstTemplate> constants
 		, List<ConstTemplate> statics
 		, List<SensorTemplate> sensors
 		, List<VarTemplate> rules
 		, List<TriggerTemplate> triggers
 		, List<ReactionTemplate> reactions)
 	{
-		this.service = service;
 		this.constants = constants;
 		this.statics = statics;
 		this.sensors = sensors;
@@ -49,10 +45,9 @@ public abstract class BaseFactory<T>
 		this.reactions = reactions;
 	}
 
-	protected BaseFactory(ModelService service)
+	public BaseFactory()
 	{
-		this(service
-			, new LinkedList<ConstTemplate>()
+		this(new LinkedList<ConstTemplate>()
 			, new LinkedList<ConstTemplate>()
 			, new LinkedList<SensorTemplate>()
 			, new LinkedList<VarTemplate>()

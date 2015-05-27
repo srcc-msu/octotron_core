@@ -7,12 +7,11 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
 import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.exec.services.ModelService;
 import ru.parallel.octotron.generators.tmpl.*;
+import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,11 +20,9 @@ import java.util.Map;
 public abstract class ModelEntityBuilder<T extends ModelEntity>
 {
 	protected final T entity;
-	protected final ModelService service;
 
-	ModelEntityBuilder(ModelService service, T entity)
+	ModelEntityBuilder(T entity)
 	{
-		this.service = service;
 		this.entity = entity;
 	}
 
@@ -47,6 +44,13 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 			{
 				dependant.AddDependOnMe(var);
 				var.AddIDependOn(dependant);
+			}
+
+		for(Trigger trigger : entity.GetTrigger())
+			for(Attribute dependant : trigger.GetCondition().GetDependency(entity))
+			{
+				dependant.AddDependOnMe(trigger);
+				trigger.AddIDependOn(dependant);
 			}
 	}
 
@@ -85,7 +89,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		CheckAddAttribute(attribute);
 		entity.const_map.put(name, attribute);
 
-		service.GetPersistenceService().RegisterConst(attribute);
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterConst(attribute);
 	}
 
 	public void DeclareConst(ConstTemplate constant)
@@ -116,7 +120,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		CheckAddAttribute(cached);
 		entity.const_map.put(constant.name, cached);
 
-		service.GetPersistenceService().RegisterConst(cached);
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterConst(cached);
 	}
 
 	public void DeclareStatic(Iterable<ConstTemplate> constants)
@@ -141,7 +145,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		CheckAddAttribute(sensor);
 		entity.sensor_map.put(name, sensor);
 
-		service.GetPersistenceService().RegisterSensor(sensor);
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterSensor(sensor);
 	}
 
 	public void DeclareSensor(SensorTemplate sensor)
@@ -164,7 +168,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		CheckAddAttribute(var);
 		entity.var_map.put(name, var);
 
-		service.GetPersistenceService().RegisterVar(var);
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterVar(var);
 	}
 
 	public void DeclareVar(Iterable<VarTemplate> vars)
@@ -187,7 +191,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		CheckAddAttribute(var);
 		entity.trigger_map.put(name, var);
 
-		service.GetPersistenceService().RegisterTrigger(var);
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterTrigger(var);
 	}
 
 	public void DeclareTrigger(Iterable<TriggerTemplate> triggers)

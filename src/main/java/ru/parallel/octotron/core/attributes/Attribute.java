@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.core.attributes;
 
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
@@ -32,6 +33,23 @@ public abstract class Attribute extends BaseAttribute
 
 //--------
 
+	public final ModelEntity GetParent()
+	{
+		return parent;
+	}
+
+	public final long GetCTime()
+	{
+		return ctime;
+	}
+
+	public final void SetCTime(long new_ctime)
+	{
+		ctime = new_ctime;
+	}
+
+//--------
+
 	public void AddDependOnMe(Attribute dependant)
 	{
 		depend_on_me.add(dependant);
@@ -54,21 +72,9 @@ public abstract class Attribute extends BaseAttribute
 
 //--------
 
-	public final long GetCTime()
-	{
-		return ctime;
-	}
-
-	public final void SetCTime(long new_ctime)
-	{
-		ctime = new_ctime;
-	}
-
-//--------
-
 	public final Value GetSpeed()
 	{
-		if(!GetValue().IsComputable())
+		if(!IsComputable())
 			return Value.invalid;
 
 		AttributeHistory.Entry last = history.GetLast();
@@ -82,45 +88,46 @@ public abstract class Attribute extends BaseAttribute
 		if(GetCTime() - last.ctime == 0) // speed is zero
 			return new Value(0.0);
 
-		double diff = GetValue().ToDouble() - last.value.ToDouble();
+		double diff = ToDouble() - last.value.ToDouble();
 
 		return new Value(diff / (GetCTime() - last.ctime));
 	}
 
-	protected void Update(Value new_value)
+	@Override
+	public void UpdateValue(Value new_value)
 	{
 		history.Add(GetValue(), GetCTime());
 
-		SetValue(new_value);
+		super.UpdateValue(new_value);
 		SetCTime(JavaUtils.GetTimestamp());
+
+		UpdateDependant();
 	}
 
-	protected abstract void AutoUpdate(boolean silent);
+	protected abstract void UpdateSelf();
 
 	public final void UpdateDependant()
 	{
-		UpdateDependant(false);
-	}
-
-	public final void UpdateDependant(boolean silent)
-	{
 		for(Attribute attribute : depend_on_me)
 		{
-			attribute.AutoUpdate(silent);
-			attribute.UpdateDependant(silent);
+			if(!attribute.DependenciesDefined())
+				continue;
+
+			attribute.UpdateSelf();
+			attribute.UpdateDependant();
 		}
 	}
 
 	private boolean dependencies_defined = false;
 
-	protected boolean DependenciesDefined()
+	private boolean DependenciesDefined()
 	{
 		if(dependencies_defined)
 			return true;
 
 		for(Attribute attribute : i_depend_on)
 		{
-			if(!attribute.GetValue().IsDefined())
+			if(!attribute.IsDefined())
 			{
 				dependencies_defined = false;
 				return false;
@@ -140,10 +147,5 @@ public abstract class Attribute extends BaseAttribute
 		result.put("ctime", ctime);
 
 		return result;
-	}
-
-	public final ModelEntity GetParent()
-	{
-		return parent;
 	}
 }

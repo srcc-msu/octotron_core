@@ -19,7 +19,7 @@ public class ASoftLongSum extends ASoft
 	@Override
 	protected Object Accumulate(Object res, Attribute attribute)
 	{
-		if(!attribute.GetValue().IsValid())
+		if(!attribute.IsValid())
 			return res;
 
 		return (Long)res + attribute.GetLong();

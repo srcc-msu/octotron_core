@@ -73,14 +73,12 @@ public class BGExecutorService implements Executor
 
 	public final long GetCompletedCount()
 	{
-		long c =  executor.getCompletedTaskCount();
-		return c;
+		return executor.getCompletedTaskCount();
 	}
 
 	public final long GetTaskCount()
 	{
-		long c =  executor.getTaskCount();
-		return c;
+		return executor.getTaskCount();
 	}
 
 	private long completed_last = 0;

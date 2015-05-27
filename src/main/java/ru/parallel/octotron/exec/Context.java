@@ -25,7 +25,6 @@ public final class Context
 	public static Context CreateTestContext(int port)
 	{
 		GlobalSettings settings = new GlobalSettings(port);
-		ModelData model_data = new ModelData();
 
 		return new Context(settings);
 	}

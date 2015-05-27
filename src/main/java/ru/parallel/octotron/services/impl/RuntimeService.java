@@ -45,7 +45,7 @@ public class RuntimeService extends Service
 	 * create snapshot of all reactions with failed conditions<br>
 	 * and get their description<br>
 	 * */
-	public static List<Map<String, Object>> MakeSnapshot(boolean verbose)
+	public List<Map<String, Object>> MakeSnapshot(boolean verbose)
 	{
 		List<Map<String, Object>> result = new LinkedList<>();
 
@@ -60,7 +60,7 @@ public class RuntimeService extends Service
 		return result;
 	}
 
-	public static List<Map<String, Object>> CheckTimeout()
+	public List<Map<String, Object>> CheckTimeout()
 	{
 		List<Map<String, Object>> result = new LinkedList<>();
 
@@ -79,7 +79,7 @@ public class RuntimeService extends Service
 		return result;
 	}
 
-	public static Map<String, Object> GetVersion()
+	public Map<String, Object> GetVersion()
 		throws ExceptionSystemError
 	{
 		InputStream stream = RuntimeService.class.getResourceAsStream("/VERSION");
@@ -121,7 +121,7 @@ public class RuntimeService extends Service
 	}
 
 	// TODO: unify? add some kind of json2csv conversion
-	public static String MakeCsvSnapshot()
+	public String MakeCsvSnapshot()
 	{
 		String result = "";
 

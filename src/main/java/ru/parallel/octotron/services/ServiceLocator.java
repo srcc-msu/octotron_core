@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 public class ServiceLocator
 {
+	// TODO: remove singleton
 	public static ServiceLocator INSTANCE;
 
 	private final static Logger LOGGER = Logger.getLogger("octotron");

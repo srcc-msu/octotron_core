@@ -34,7 +34,9 @@ public class Trigger extends Attribute
 	{
 		boolean state = IsTriggered();
 
-		boolean condition_met = Value.Construct(condition.Compute(GetParent())).GetBoolean();
+		Value value = Value.Construct(condition.Compute(GetParent()));
+
+		boolean condition_met = value.IsValid() && value.GetBoolean();
 
 		if(!state && condition_met) // first match
 		{

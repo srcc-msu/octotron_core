@@ -2,6 +2,7 @@ package ru.parallel.octotron;
 
 import org.junit.BeforeClass;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.octotron.services.impl.ModelService;
 
 public class GeneralTest
@@ -13,6 +14,8 @@ public class GeneralTest
 	public static void InitCommon() throws Exception
 	{
 		context = Context.CreateTestContext(0);
-		model_service = new ModelService(context, model_data);
+		ServiceLocator.INSTANCE = new ServiceLocator(context);
+
+		model_service = ServiceLocator.INSTANCE.GetModelService();
 	}
 }

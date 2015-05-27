@@ -15,7 +15,7 @@ public class ObjectFactoryTest extends GeneralTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		ObjectFactoryTest.obj_factory = new ObjectFactory(model_service)
+		ObjectFactoryTest.obj_factory = new ObjectFactory()
 			.Constants(new ConstTemplate("object", "ok"));
 	}
 
@@ -45,12 +45,12 @@ public class ObjectFactoryTest extends GeneralTest
 
 		ModelObjectList objects = ObjectFactoryTest.obj_factory.Create(N);
 
-		Enumerator.Sequence(model_service, objects, "test1");
+		Enumerator.Sequence(objects, "test1");
 
 		for(int i = 0; i < N; i++)
 			assertEquals(i, (long)objects.get(i).GetAttribute("test1").GetLong());
 
-		Enumerator.Sequence(model_service, objects, "test2", K);
+		Enumerator.Sequence(objects, "test2", K);
 
 		for(int i = 0; i < N; i++)
 			assertEquals(i % K, (long)objects.get(i).GetAttribute("test2").GetLong());

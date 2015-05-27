@@ -24,7 +24,7 @@ public class AttributeListTest extends GeneralTest
 		AttributeList<Attribute> list = new AttributeList<>();
 
 		assertEquals("list is no empty", list.size(), 0);
-		object.GetBuilder(model_service).DeclareConst("test", 0);
+		object.GetBuilder().DeclareConst("test", 0);
 		list.add(AttributeListTest.object.GetAttribute("test"));
 		assertEquals("list has no elements", list.size(), 1);
 
@@ -37,11 +37,11 @@ public class AttributeListTest extends GeneralTest
 	{
 		AttributeList<Attribute> list = new AttributeList<>();
 
-		object.GetBuilder(model_service).DeclareConst("test1", 0);
+		object.GetBuilder().DeclareConst("test1", 0);
 		list.add(AttributeListTest.object.GetAttribute("test1"));
-		object.GetBuilder(model_service).DeclareConst("test2", 1.0);
+		object.GetBuilder().DeclareConst("test2", 1.0);
 		list.add(AttributeListTest.object.GetAttribute("test2"));
-		object.GetBuilder(model_service).DeclareConst("test3", "test");
+		object.GetBuilder().DeclareConst("test3", "test");
 		list.add(AttributeListTest.object.GetAttribute("test3"));
 
 		assertEquals(list.get(0).eq(0), true);
@@ -58,7 +58,7 @@ public class AttributeListTest extends GeneralTest
 
 		for(int i = 0; i < N; i++)
 		{
-			object.GetBuilder(model_service).DeclareConst("test" + i, i);
+			object.GetBuilder().DeclareConst("test" + i, i);
 			list.add(AttributeListTest.object.GetAttribute("test" + i));
 		}
 
@@ -79,7 +79,7 @@ public class AttributeListTest extends GeneralTest
 
 		for(int i = 0; i < N; i++)
 		{
-			object.GetBuilder(model_service).DeclareConst("test" + i, i);
+			object.GetBuilder().DeclareConst("test" + i, i);
 			list.add(AttributeListTest.object.GetAttribute("test" + i));
 			assertEquals(list.size(), i + 1);
 		}
@@ -94,7 +94,7 @@ public class AttributeListTest extends GeneralTest
 
 		for(int i = 0; i < N; i++)
 		{
-			object.GetBuilder(model_service).DeclareConst("test" + i, i);
+			object.GetBuilder().DeclareConst("test" + i, i);
 			list.add(AttributeListTest.object.GetAttribute("test" + i));
 		}
 
@@ -136,11 +136,11 @@ public class AttributeListTest extends GeneralTest
 	{
 		AttributeList<Attribute> list = new AttributeList<>();
 
-		object.GetBuilder(model_service).DeclareConst("b", "");
+		object.GetBuilder().DeclareConst("b", "");
 		list.add(AttributeListTest.object.GetAttribute("b"));
-		object.GetBuilder(model_service).DeclareConst("c", "");
+		object.GetBuilder().DeclareConst("c", "");
 		list.add(AttributeListTest.object.GetAttribute("c"));
-		object.GetBuilder(model_service).DeclareConst("a", "");
+		object.GetBuilder().DeclareConst("a", "");
 		list.add(AttributeListTest.object.GetAttribute("a"));
 
 		list = list.AlphabeticSort();

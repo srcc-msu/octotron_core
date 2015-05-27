@@ -21,10 +21,10 @@ public class LinkFactoryTest extends GeneralTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		LinkFactoryTest.obj_factory = new ObjectFactory(model_service)
+		LinkFactoryTest.obj_factory = new ObjectFactory()
 			.Constants(new ConstTemplate("object", "ok"));
 
-		LinkFactoryTest.link_factory = new LinkFactory(model_service)
+		LinkFactoryTest.link_factory = new LinkFactory()
 			.Constants(new ConstTemplate("type", "contain"));
 	}
 

@@ -13,6 +13,7 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 
 import static org.junit.Assert.assertEquals;
@@ -30,7 +31,7 @@ public class PreparedResponseTest extends GeneralTest
 	public static void Init()
 		throws Exception
 	{
-		PreparedResponseTest.obj_factory = new ObjectFactory(model_service)
+		PreparedResponseTest.obj_factory = new ObjectFactory()
 			.Constants(new ConstTemplate("type", "test"))
 			.Constants(new ConstTemplate("ggg", "7"))
 			.Sensors(new SensorTemplate("test", -1, 1));
@@ -39,7 +40,7 @@ public class PreparedResponseTest extends GeneralTest
 
 		entity = obj_factory.Create();
 
-		entity.GetBuilder(model_service).AddReaction(new ReactionAction("test_r"));
+		entity.GetBuilder().AddReaction(new ReactionTemplate("test_r", new ReactionAction()));
 		reaction = entity.GetReactions().iterator().next();
 	}
 
@@ -49,16 +50,16 @@ public class PreparedResponseTest extends GeneralTest
 	@Test
 	public void TestReplace() throws Exception
 	{
-		assertEquals("1 gg", ComposeString("{test} gg", entity, context.model_data));
+		assertEquals("1 gg", ComposeString("{test} gg", entity));
 
-		assertEquals("!1", ComposeString("!{test}", entity, context.model_data));
+		assertEquals("!1", ComposeString("!{test}", entity));
 
-		assertEquals("{test gg", ComposeString("{test gg", entity, context.model_data));
-		assertEquals("test gg}", ComposeString("test gg}", entity, context.model_data));
+		assertEquals("{test gg", ComposeString("{test gg", entity));
+		assertEquals("test gg}", ComposeString("test gg}", entity));
 
-		assertEquals("<test gg:not_found>{", ComposeString("{test gg}{", entity, context.model_data));
+		assertEquals("<test gg:not_found>{", ComposeString("{test gg}{", entity));
 
-		assertEquals("<st gg:not_found>{", ComposeString("{te:st gg}{", entity, context.model_data));
+		assertEquals("<st gg:not_found>{", ComposeString("{te:st gg}{", entity));
 	}
 
 	@Test

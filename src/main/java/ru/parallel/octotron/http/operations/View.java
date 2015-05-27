@@ -66,6 +66,30 @@ public abstract class View
 			, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
+			Utils.RequiredParams(params, "name");
+			Utils.AllParams(params, "name");
+
+			List<String> attributes = Utils.GetNames(params.get("name"));
+
+			return AutoFormat.PrintJson(Utils.GetAttributes(entities, attributes, verbose));
+		}
+	}
+	/**
+	 * prints properties of the given list entities<br>
+	 * properties and format are taken from params<br>
+	 * */
+	public static class attributes extends ModelOperation
+	{
+		public attributes()
+		{
+			super("attributes", true);
+		}
+
+		@Override
+		public TypedString Execute(Map<String, String> params, boolean verbose
+			, ModelList<? extends ModelEntity, ?> entities)
+			throws ExceptionParseError
+		{
 			Utils.RequiredParams(params, "names");
 			Utils.AllParams(params, "names", "format");
 

@@ -4,7 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.Value;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -17,6 +17,7 @@ import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.rules.plain.*;
+import ru.parallel.octotron.rules.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +30,7 @@ public class ComputeTests extends GeneralTest
 	public static void Init()
 		throws ExceptionSystemError
 	{
-		ObjectFactory in = new ObjectFactory(model_service)
+		ObjectFactory in = new ObjectFactory()
 			.Sensors(new SensorTemplate("in_d1", -1, 10.0))
 			.Sensors(new SensorTemplate("in_l1", -1, 20))
 			.Sensors(new SensorTemplate("in_b1", -1, true))
@@ -49,7 +50,7 @@ public class ComputeTests extends GeneralTest
 			.Sensors(new SensorTemplate("str1", -1, "yes"))
 			.Sensors(new SensorTemplate("str2", -1, "yes"));
 
-		ObjectFactory out = new ObjectFactory(model_service)
+		ObjectFactory out = new ObjectFactory()
 			.Sensors(new SensorTemplate("out_d1", -1, 20.0))
 			.Sensors(new SensorTemplate("out_l1", -1, 10))
 			.Sensors(new SensorTemplate("out_b1", -1, false))
@@ -71,7 +72,7 @@ public class ComputeTests extends GeneralTest
 			.Sensors(new SensorTemplate("mismatch_num", -1, 333L))
 			.Sensors(new SensorTemplate("match_num", -1, 444L));
 
-		ObjectFactory self = new ObjectFactory(model_service)
+		ObjectFactory self = new ObjectFactory()
 			.Sensors(new SensorTemplate("mod_d1", -1, 0.0))
 			.Sensors(new SensorTemplate("mod_l1", -1, 2L))
 			.Sensors(new SensorTemplate("d1", -1, 0.0))
@@ -97,14 +98,14 @@ public class ComputeTests extends GeneralTest
 
 		object = self.Create();
 
-		LinkFactory links = new LinkFactory(model_service)
+		LinkFactory links = new LinkFactory()
 			.Constants(new ConstTemplate("type", "test"));
 
 		ModelObjectList ins = in.Create(3);
 		ModelObjectList outs = out.Create(4);
 
-		Enumerator.Sequence(model_service, ins, "in_lid");
-		Enumerator.Sequence(model_service, outs, "out_lid");
+		Enumerator.Sequence(ins, "in_lid");
+		Enumerator.Sequence(outs, "out_lid");
 
 		links.EveryToOne(ins, object, true);
 
@@ -474,27 +475,27 @@ public class ComputeTests extends GeneralTest
 	}
 
 	@Test
-	public void TestVarArgMatchAprx()
+	public void TestMatchArgAprx()
 	{
-		VarArgMatchAprx rule1 = new VarArgMatchAprx("d1", "d2", Value.EPSILON);
-		VarArgMatchAprx rule2 = new VarArgMatchAprx("d1", "d2", 2.0);
+		MatchArgAprx rule1 = new MatchArgAprx("d1", "d2", Value.EPSILON);
+		MatchArgAprx rule2 = new MatchArgAprx("d1", "d2", 2.0);
 
 		assertEquals(false, rule1.Compute(object));
 		assertEquals(true, rule2.Compute(object));
 	}
 
 	@Test
-	public void TestVarArgMatch()
+	public void TestMatchArg()
 	{
-		VarArgMatch rule1 = new VarArgMatch("l1", "l2");
-		VarArgMatch rule2 = new VarArgMatch("str1", "str2");
+		MatchArg rule1 = new MatchArg("l1", "l2");
+		MatchArg rule2 = new MatchArg("str1", "str2");
 
 		assertEquals(false, rule1.Compute(object));
 		assertEquals(true, rule2.Compute(object));
 	}
 
 	@Test
-	public void TestLinkedVarArgMatch()
+	public void TestLinkedMatchArg()
 	{
 		LinkedMatch rule1 = new LinkedMatch("b1");
 		LinkedMatch rule2 = new LinkedMatch("b2");
@@ -524,22 +525,22 @@ public class ComputeTests extends GeneralTest
 		Speed rule_l = new Speed("mod_l1");
 		Speed rule_d = new Speed("mod_d1");
 
-		object.GetSensor("mod_l1").Import(10L);
-		object.GetSensor("mod_d1").Import(10.0);
+		object.GetSensor("mod_l1").UpdateValue(10L);
+		object.GetSensor("mod_d1").UpdateValue(10.0);
 
 		assertEquals(0.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
 		assertEquals(0.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);
 
 		Thread.sleep(2000);
 
-		object.GetSensor("mod_l1").Import(20L);
-		object.GetSensor("mod_d1").Import(20.0);
+		object.GetSensor("mod_l1").UpdateValue(20L);
+		object.GetSensor("mod_d1").UpdateValue(20.0);
 
 		assertEquals(5.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
 		assertEquals(5.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);
 
-		object.GetSensor("mod_l1").Import(20L);
-		object.GetSensor("mod_d1").Import(20.0);
+		object.GetSensor("mod_l1").UpdateValue(20L);
+		object.GetSensor("mod_d1").UpdateValue(20.0);
 
 		assertEquals(0.0, Value.Construct(rule_l.Compute(object)).GetDouble(), Value.EPSILON);
 		assertEquals(0.0, Value.Construct(rule_d.Compute(object)).GetDouble(), Value.EPSILON);

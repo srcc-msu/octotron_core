@@ -9,6 +9,7 @@ import org.junit.Before;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.octotron.services.impl.ModelService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
@@ -26,7 +27,6 @@ public class RequestTest
 	protected Context context;
 	protected ModelService model_service;
 
-	private ExecutionController controller;
 	private DummyHTTPServer http;
 
 	protected LinkFactory link_factory;
@@ -36,13 +36,14 @@ public class RequestTest
 	public void InitCommon() throws Exception
 	{
 		context = Context.CreateTestContext(0);
-		model_service = new ModelService(context, model_data);
+		ServiceLocator.INSTANCE = new ServiceLocator(context);
 
-		controller = new ExecutionController(context, model_service);
+		model_service = ServiceLocator.INSTANCE.GetModelService();
+
 		http = new DummyHTTPServer(0);
 
-		object_factory = new ObjectFactory(model_service);
-		link_factory = new LinkFactory(model_service)
+		object_factory = new ObjectFactory();
+		link_factory = new LinkFactory()
 			.Constants(new ConstTemplate("type", "a_link"));
 	}
 
@@ -83,7 +84,7 @@ public class RequestTest
 
 		ParsedModelRequest parsed_request = HttpRequestParser.ParseFromExchange(request);
 
-		TypedString result = new ModelRequestExecutor(controller, parsed_request).GetResult();
+		TypedString result = new ModelRequestExecutor(parsed_request).GetResult();
 
 		if(result instanceof ErrorString)
 			throw new ExceptionParseError(result.string);

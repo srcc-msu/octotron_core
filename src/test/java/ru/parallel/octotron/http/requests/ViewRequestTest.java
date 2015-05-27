@@ -74,12 +74,12 @@ public class ViewRequestTest extends RequestTest
 
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/reaction?path=obj(AID)&name=test_reaction");
-		if(test == null || !test.contains("AID"))
+		String test = GetRequestResult("/view/attribute?path=obj(AID)&name=test_reaction");
+		if(test == null || !test.contains("suppress"))
 			fail("bad response: " + test);
 
-		test = GetRequestResult("/view/reaction?path=obj(AID)&name=test_reaction&v");
-		if(test == null || !test.contains("AID"))
+		test = GetRequestResult("/view/attribute?path=obj(AID)&name=test_reaction&v");
+		if(test == null || !test.contains("suppress"))
 			fail("bad response: " + test);
 	}
 

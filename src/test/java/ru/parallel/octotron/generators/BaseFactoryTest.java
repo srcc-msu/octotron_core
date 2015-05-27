@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.rules.plain.Match;
 
@@ -24,8 +25,8 @@ public class BaseFactoryTest extends GeneralTest
 	@BeforeClass
 	public static void Init() throws Exception
 	{
-		object_factory = new ObjectFactory(model_service);
-		link_factory = new LinkFactory(model_service);
+		object_factory = new ObjectFactory();
+		link_factory = new LinkFactory();
 	}
 
 /**
@@ -78,12 +79,13 @@ public class BaseFactoryTest extends GeneralTest
 	@Test
 	public void TestReactions() throws Exception
 	{
-		ReactionAction[] reactions = { new ReactionAction("r_test1").Begin(new Response(EEventStatus.INFO))};
-		ReactionAction reaction2 = new ReactionAction("r_test2").Begin(new Response(EEventStatus.INFO));
-		ReactionAction reaction3 = new ReactionAction("r_test3").Begin(new Response(EEventStatus.INFO));
+		ReactionTemplate[] reactions = { new ReactionTemplate("r1", new ReactionAction().Begin(new Response(EEventStatus.INFO))) };
+		ReactionTemplate reaction2 = new ReactionTemplate("r2", new ReactionAction().Begin(new Response(EEventStatus.INFO)));
+		ReactionTemplate reaction3 = new ReactionTemplate("r3", new ReactionAction().Begin(new Response(EEventStatus.INFO)));
 
 		ObjectFactory f1 = object_factory
-			.Reactions(reactions).Reactions(reaction2, reaction3);
+			.Reactions(reactions)
+			.Reactions(reaction2, reaction3);
 
 		ModelObject obj = f1.Create();
 

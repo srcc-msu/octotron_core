@@ -1,4 +1,4 @@
-package ru.parallel.octotron.core.attributes;
+package ru.parallel.octotron.core.attributes.impl;
 
 import org.junit.Rule;
 import org.junit.Test;

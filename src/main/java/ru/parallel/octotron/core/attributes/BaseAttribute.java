@@ -172,7 +172,7 @@ public abstract class BaseAttribute extends ModelID<EAttributeType> implements I
 	@Override
 	public boolean IsComputable()
 	{
-		return value.IsComputable();
+		return IsDefined() && IsValid();
 	}
 
 	@Override

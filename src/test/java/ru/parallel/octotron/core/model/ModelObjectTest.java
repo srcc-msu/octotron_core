@@ -21,14 +21,14 @@ public class ModelObjectTest extends GeneralTest
 			new ConstTemplate("object", "ok")
 		};
 
-		ModelObjectTest.obj_factory = new ObjectFactory(model_service).Constants(obj_att);
+		ModelObjectTest.obj_factory = new ObjectFactory().Constants(obj_att);
 
 		ConstTemplate[] link_att = {
 			new ConstTemplate("link", "ok"),
 			new ConstTemplate("type", "contain"),
 		};
 
-		ModelObjectTest.link_factory = new LinkFactory(model_service).Constants(link_att);
+		ModelObjectTest.link_factory = new LinkFactory().Constants(link_att);
 	}
 
 	/**

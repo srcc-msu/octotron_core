@@ -14,19 +14,12 @@ import ru.parallel.octotron.generators.tmpl.VarTemplate;
 public class ComplexComputeTest extends GeneralTest
 {
 	private static ModelObject object;
-	private final PersistenceService persistence_service;
-
-	public ComplexComputeTest()
-	{
-		persistence_service = new PersistenceService("test_persistence", context);
-		persistence_service.InitDummy();
-	}
 
 	@BeforeClass
 	public static void Init()
 		throws ExceptionSystemError
 	{
-		ObjectFactory self = new ObjectFactory(model_service)
+		ObjectFactory self = new ObjectFactory()
 			.Sensors(new SensorTemplate("val1", 10))
 			.Sensors(new SensorTemplate("val2", 10))
 			.Sensors(new SensorTemplate("val3", 10))

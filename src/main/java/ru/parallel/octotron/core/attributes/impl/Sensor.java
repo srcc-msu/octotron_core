@@ -89,6 +89,15 @@ public final class Sensor extends Attribute
 	}
 
 	@Override
+	public boolean IsValid()
+	{
+		if(!IsUserValid())
+			return false;
+
+		return super.IsValid();
+	}
+
+	@Override
 	public synchronized void UpdateValue(Value new_value)
 	{
 		SetIsOutdated(false);

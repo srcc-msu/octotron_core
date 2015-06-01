@@ -68,7 +68,7 @@ public final class CSVReader
 				{
 					String str_val = next_line[i];
 
-					Value val = Value.ValueFromStr(str_val);
+					Value val = Value.ValueFromString(str_val);
 
 					entity.GetBuilder().DeclareConst(fields[i], val.GetRaw());
 				}
@@ -131,7 +131,7 @@ public final class CSVReader
 					throw new ExceptionModelFail("some fields are missing: "
 						+ Arrays.toString(next_line));
 
-				ModelObjectList tmp = cache.get(Value.ValueFromStr(next_line[column[0]]));
+				ModelObjectList tmp = cache.get(Value.ValueFromString(next_line[column[0]]));
 
 				for(int i = 1; i < column.length; i++)
 				{
@@ -142,7 +142,7 @@ public final class CSVReader
 
 					String column_name = fields[column[i]];
 
-					tmp = tmp.Filter(column_name, Value.ValueFromStr(next_line[column[i]]));
+					tmp = tmp.Filter(column_name, Value.ValueFromString(next_line[column[i]]));
 				}
 
 				result.add(tmp.Only());

@@ -30,7 +30,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 	public void MakeDependencies()
 	{
-		for(Reaction reaction : entity.GetReactions())
+		for(Reaction reaction : entity.GetReaction())
 			for(String trigger_name : reaction.GetTemplate().GetTriggerNames())
 			{
 				Trigger trigger = entity.GetTrigger(trigger_name);

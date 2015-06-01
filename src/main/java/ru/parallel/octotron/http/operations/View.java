@@ -151,7 +151,7 @@ public abstract class View
 
 			List<Map<String, Object>> data = new LinkedList<>();
 
-			for(Reaction reaction : entities.Only().GetAttribute(name).GetReactions())
+			for(Reaction reaction : entities.Only().GetAttribute(name).GetReaction())
 			{
 				data.add(reaction.GetRepresentation(verbose));
 			}

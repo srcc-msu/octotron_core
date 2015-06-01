@@ -13,7 +13,7 @@ import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.generators.tmpl.ReactionCase;
 import ru.parallel.octotron.reactions.PreparedResponse;
-import ru.parallel.octotron.services.impl.ReactionService;
+import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.Map;
 
@@ -24,10 +24,9 @@ public class Reaction extends Attribute
 	private long global_stat = 0;
 
 	private String descr = "";
-	private boolean suppress = false;
+	private boolean suppressed = false;
 
 	private PreparedResponse prepared_response = null;
-	private ReactionService reaction_service;
 
 	public Reaction(ModelEntity parent, String name, ReactionAction template)
 	{
@@ -51,25 +50,27 @@ public class Reaction extends Attribute
 	@Override
 	protected synchronized void UpdateSelf()
 	{
-		boolean state = IsExecuted();
+		boolean last_state = IsExecuted();
 
 		if(ReactionNeeded(GetParent()))
 		{
-			IncGlobalStat();
+			if(last_state == false || last_state == true && template.repeatable)
+			{
+				IncGlobalStat();
 
-			if(template.response != null)
-				RegisterResponse(template.response);
+				if (template.response != null)
+					RegisterResponse(template.response);
 
-			UpdateValue(new Value(true));
+				UpdateValue(new Value(true));
+			}
 		}
 		else
 		{
-			if(state && template.recover_response != null) // was true, now false -> recover
+			if(last_state == true && template.recover_response != null) // was true, now false -> recover
 			{
 				RegisterResponse(template.recover_response);
+				UpdateValue(new Value(false));
 			}
-
-			UpdateValue(new Value(false));
 		}
 	}
 
@@ -102,9 +103,9 @@ public class Reaction extends Attribute
 		this.descr = descr;
 	}
 
-	public void SetSuppress(boolean suppress)
+	public void SetSuppressed(boolean suppressed)
 	{
-		this.suppress = suppress;
+		this.suppressed = suppressed;
 	}
 
 	public String GetDescription()
@@ -112,9 +113,9 @@ public class Reaction extends Attribute
 		return descr;
 	}
 
-	public boolean GetSuppress()
+	public boolean GetSuppressed()
 	{
-		return suppress;
+		return suppressed;
 	}
 
 //--------
@@ -133,17 +134,19 @@ public class Reaction extends Attribute
 				return false;
 		}
 
-		// now it matches
+		return true;
+
+/*		// now it matches
 
 		if(!IsExecuted() || IsExecuted() && template.repeatable)
 			return true;
 
-		return false; // executed and not repeatable
+		return false; // executed and not repeatable*/
 	}
 
 	public void RegisterResponse(Response response)
 	{
-		reaction_service.AddResponse(this, response);
+		ServiceLocator.INSTANCE.GetReactionService().AddResponse(this, response);
 	}
 
 	public void RegisterPreparedResponse(PreparedResponse new_prepared_response)
@@ -157,23 +160,11 @@ public class Reaction extends Attribute
 	}
 
 	@Override
-	public Map<String, Object> GetShortRepresentation()
-	{
-		Map<String, Object> result = super.GetShortRepresentation();
-
-		result.put("name", GetName());
-		result.put("suppress", suppress);
-
-		return result;
-	}
-
-	@Override
 	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
 
-		result.put("name", GetName());
-		result.put("suppress", suppress);
+		result.put("suppressed", suppressed);
 		result.put("descr", descr);
 		result.put("global_stat", GetGlobalStat());
 

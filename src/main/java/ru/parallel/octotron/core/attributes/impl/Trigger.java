@@ -6,6 +6,8 @@ import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.utils.JavaUtils;
 
+import java.util.Map;
+
 public class Trigger extends Attribute
 {
 	private final Rule condition;
@@ -74,5 +76,27 @@ public class Trigger extends Attribute
 			return 0;
 		else
 			return JavaUtils.GetTimestamp() - started;
+	}
+
+	@Override
+	public Map<String, Object> GetShortRepresentation()
+	{
+		Map<String, Object> result = super.GetShortRepresentation();
+
+		result.put("repeat", repeat);
+		result.put("started", started);
+
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> GetLongRepresentation()
+	{
+		Map<String, Object> result = super.GetLongRepresentation();
+
+		result.put("repeat", repeat);
+		result.put("started", started);
+
+		return result;
 	}
 }

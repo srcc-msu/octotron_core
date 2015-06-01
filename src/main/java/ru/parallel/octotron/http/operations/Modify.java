@@ -39,7 +39,7 @@ public class Modify
 			String name = params.get("name");
 			String value_str = params.get("value");
 
-			Value value = Value.ValueFromStr(value_str);
+			Value value = Value.ValueFromString(value_str);
 
 			ModelEntity target = entities.Only();
 
@@ -66,7 +66,7 @@ public class Modify
 			String name = params.get("name");
 			String value_str = params.get("value");
 
-			Value value = Value.ValueFromStr(value_str);
+			Value value = Value.ValueFromString(value_str);
 
 			ModelEntity target = entities.Only();
 

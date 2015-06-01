@@ -71,7 +71,7 @@ public final class PathParser
 		{
 			String name = matcher.group(1);
 			String op = matcher.group(2);
-			Value value = Value.ValueFromStr(matcher.group(3));
+			Value value = Value.ValueFromString(matcher.group(3));
 
 			ModelList.EQueryType type = DELIMS.get(op);
 

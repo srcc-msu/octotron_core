@@ -29,12 +29,12 @@ public class ViewRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/attribute?path=obj(AID)&names=AID");
+		String test = GetRequestResult("/view/attribute?path=obj(AID)&name=AID");
 
 		if(test == null || !test.contains("AID"))
 			fail("bad response: " + test);
 
-		test = GetRequestResult("/view/attribute?path=obj(AID)&names=AID&v");
+		test = GetRequestResult("/view/attribute?path=obj(AID)&name=AID&v");
 		if(test == null || !test.contains("AID"))
 			fail("bad response: " + test);
 	}
@@ -90,13 +90,13 @@ public class ViewRequestTest extends RequestTest
 			.Reactions(new ReactionTemplate("test_reaction", new ReactionAction())).Create();
 		model_service.EnableObjectIndex("AID");
 
-		Reaction reaction = obj.GetReactions().iterator().next();
+		Reaction reaction = obj.GetReaction().iterator().next();
 
 		String test = GetRequestResult("/view/suppressed");
 		if(test == null || test.contains("AID"))
 			fail("bad response: " + test);
 
-		reaction.SetSuppress(true);
+		reaction.SetSuppressed(true);
 
 		test = GetRequestResult("/view/suppressed");
 		if(test == null || !test.contains("suppress"))

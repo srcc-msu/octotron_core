@@ -58,6 +58,7 @@ public abstract class BaseAttribute extends ModelID<EAttributeType> implements I
 		Map<String, Object> result = new HashMap<>();
 
 		result.put(GetName(), value);
+		result.put("AID", GetID());
 
 		return result;
 	}

@@ -76,7 +76,7 @@ public class Control
 			Utils.StrictParams(params, "silent");
 
 			String mode_str = params.get("silent");
-			boolean mode = Value.ValueFromStr(mode_str).GetBoolean();
+			boolean mode = Value.ValueFromString(mode_str).GetBoolean();
 
 			ServiceLocator.INSTANCE.GetReactionService().SetSilent(mode);
 

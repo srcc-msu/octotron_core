@@ -154,11 +154,11 @@ public final class ModelService extends Service
 		long suppressed = 0;
 		long AID = -1;
 
-		for(Reaction reaction : entity.GetReactions())
+		for(Reaction reaction : entity.GetReaction())
 		{
 			if(reaction.GetName().equals(name))
 			{
-				reaction.SetSuppress(value);
+				reaction.SetSuppressed(value);
 				reaction.SetDescription(description);
 				suppressed++;
 				AID = reaction.GetID();
@@ -176,16 +176,16 @@ public final class ModelService extends Service
 		List<Reaction> reactions = new LinkedList<>();
 
 		for(ModelEntity entity : model_data.GetAllObjects())
-			for(Reaction reaction : entity.GetReactions())
+			for(Reaction reaction : entity.GetReaction())
 			{
-				if(reaction.GetSuppress())
+				if(reaction.GetSuppressed())
 					reactions.add(reaction);
 			}
 
 		for(ModelEntity entity : model_data.GetAllLinks())
-			for(Reaction reaction : entity.GetReactions())
+			for(Reaction reaction : entity.GetReaction())
 			{
-				if(reaction.GetSuppress())
+				if(reaction.GetSuppressed())
 					reactions.add(reaction);
 			}
 

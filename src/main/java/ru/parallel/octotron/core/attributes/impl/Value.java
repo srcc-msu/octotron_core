@@ -155,7 +155,7 @@ public class Value implements IValue
 			throw new ExceptionModelFail("unexpected value: " + value + " : " + my_class);
 	}
 
-	public static Value ValueFromStr(String value_str)
+	public static Value ValueFromString(String value_str)
 		throws ExceptionParseError
 	{
 		int str_len = value_str.length();

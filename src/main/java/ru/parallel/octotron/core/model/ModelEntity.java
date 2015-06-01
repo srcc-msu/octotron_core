@@ -192,7 +192,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		return result;
 	}
 
-	public Collection<Reaction> GetReactions()
+	public Collection<Reaction> GetReaction()
 	{
 		return reactions;
 	}
@@ -228,10 +228,17 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 			trigger_list.add(attribute.GetShortRepresentation());
 		}
 
+		List<Map<String, Object>> reaction_list = new LinkedList<>();
+		for(Reaction attribute : GetReaction())
+		{
+			reaction_list.add(attribute.GetShortRepresentation());
+		}
+
 		result.put("const", const_list);
 		result.put("sensor", sensor_list);
 		result.put("var", var_list);
 		result.put("trigger", trigger_list);
+		result.put("reaction", reaction_list);
 
 		return result;
 	}
@@ -267,10 +274,17 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 			trigger_list.add(attribute.GetLongRepresentation());
 		}
 
+		List<Map<String, Object>> reaction_list = new LinkedList<>();
+		for(Reaction attribute : GetReaction())
+		{
+			reaction_list.add(attribute.GetShortRepresentation());
+		}
+
 		result.put("const", const_list);
 		result.put("sensor", sensor_list);
 		result.put("var", var_list);
 		result.put("trigger", trigger_list);
+		result.put("reaction", reaction_list);
 
 		return result;
 	}

@@ -148,7 +148,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("stat", reaction.GetGlobalStat());
 
-			graph_object.UpdateAttribute("suppress", reaction.GetSuppress());
+			graph_object.UpdateAttribute("suppress", reaction.GetSuppressed());
 			graph_object.UpdateAttribute("descr", reaction.GetDescription());
 
 // info
@@ -160,7 +160,7 @@ public class GraphManager implements IPersistenceManager
 			GraphObject graph_object = CheckObject(reaction, reaction.GetType().toString());
 
 			reaction.SetGlobalStat((Long) graph_object.GetAttribute("stat"));
-			reaction.SetSuppress((Boolean) graph_object.GetAttribute("suppress"));
+			reaction.SetSuppressed((Boolean) graph_object.GetAttribute("suppress"));
 			reaction.SetDescription((String) graph_object.GetAttribute("descr"));
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
@@ -169,7 +169,7 @@ public class GraphManager implements IPersistenceManager
 
 			graph_object.UpdateAttribute("stat", reaction.GetGlobalStat());
 
-			graph_object.UpdateAttribute("suppress", reaction.GetSuppress());
+			graph_object.UpdateAttribute("suppress", reaction.GetSuppressed());
 			graph_object.UpdateAttribute("descr", reaction.GetDescription());
 		}
 	}

@@ -31,7 +31,6 @@ public class HttpRequestParser
 	private static final IOperation[] VIEW_OPERATIONS =
 	{
 		new View.count()
-		, new View.attribute()
 		, new View.attributes()
 		, new View.entity()
 		, new View.suppressed()

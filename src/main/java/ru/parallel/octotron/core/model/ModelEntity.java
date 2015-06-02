@@ -201,7 +201,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
-		result.put("AID", GetID());
+		result.put("entity AID", GetID());
 
 		List<Map<String, Object>> const_list = new LinkedList<>();
 
@@ -247,7 +247,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
-		result.put("AID", GetID());
+		result.put("entity AID", GetID());
 
 		List<Map<String, Object>> const_list = new LinkedList<>();
 

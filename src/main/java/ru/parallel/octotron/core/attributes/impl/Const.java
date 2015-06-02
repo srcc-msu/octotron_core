@@ -10,6 +10,8 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 
+import java.util.Map;
+
 public final class Const extends Attribute
 {
 	public Const(ModelEntity parent, String name, Value value)

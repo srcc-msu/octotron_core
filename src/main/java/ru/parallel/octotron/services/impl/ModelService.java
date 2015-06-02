@@ -178,14 +178,14 @@ public final class ModelService extends Service
 		for(ModelEntity entity : model_data.GetAllObjects())
 			for(Reaction reaction : entity.GetReaction())
 			{
-				if(reaction.GetSuppressed())
+				if(reaction.IsSuppressed())
 					reactions.add(reaction);
 			}
 
 		for(ModelEntity entity : model_data.GetAllLinks())
 			for(Reaction reaction : entity.GetReaction())
 			{
-				if(reaction.GetSuppressed())
+				if(reaction.IsSuppressed())
 					reactions.add(reaction);
 			}
 

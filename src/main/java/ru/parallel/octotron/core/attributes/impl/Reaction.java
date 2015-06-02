@@ -21,10 +21,10 @@ public class Reaction extends Attribute
 {
 	private final ReactionAction template;
 
-	private long global_stat = 0;
+	private long counter = 0;
 
-	private String descr = "";
-	private boolean suppressed = false;
+	private String description = "";
+	private boolean is_suppressed = false;
 
 	private PreparedResponse prepared_response = null;
 
@@ -56,7 +56,7 @@ public class Reaction extends Attribute
 		{
 			if(last_state == false || last_state == true && template.repeatable)
 			{
-				IncGlobalStat();
+				IncCounter();
 
 				if (template.response != null)
 					RegisterResponse(template.response);
@@ -76,46 +76,41 @@ public class Reaction extends Attribute
 
 //--------
 
-	private void IncGlobalStat()
+	private void IncCounter()
 	{
-		global_stat++;
+		counter++;
 	}
 
-	public long GetGlobalStat()
+	public long GetCounter()
 	{
-		return global_stat;
+		return counter;
 	}
 
-	public void SetGlobalStat(long stat)
+	public void SetCounter(long counter)
 	{
-		this.global_stat = stat;
-	}
-
-	public void ResetGlobalStat()
-	{
-		global_stat = 0;
+		this.counter = counter;
 	}
 
 //--------
 
 	public void SetDescription(String descr)
 	{
-		this.descr = descr;
+		this.description = descr;
 	}
 
 	public void SetSuppressed(boolean suppressed)
 	{
-		this.suppressed = suppressed;
+		this.is_suppressed = suppressed;
 	}
 
 	public String GetDescription()
 	{
-		return descr;
+		return description;
 	}
 
-	public boolean GetSuppressed()
+	public boolean IsSuppressed()
 	{
-		return suppressed;
+		return is_suppressed;
 	}
 
 //--------
@@ -135,13 +130,6 @@ public class Reaction extends Attribute
 		}
 
 		return true;
-
-/*		// now it matches
-
-		if(!IsExecuted() || IsExecuted() && template.repeatable)
-			return true;
-
-		return false; // executed and not repeatable*/
 	}
 
 	public void RegisterResponse(Response response)
@@ -164,9 +152,10 @@ public class Reaction extends Attribute
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
 
-		result.put("suppressed", suppressed);
-		result.put("descr", descr);
-		result.put("global_stat", GetGlobalStat());
+		result.put("ctime", GetCTime());
+		result.put("suppressed", is_suppressed);
+		result.put("description", description);
+		result.put("counter", counter);
 
 		return result;
 	}

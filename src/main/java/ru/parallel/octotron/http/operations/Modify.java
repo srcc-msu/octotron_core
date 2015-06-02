@@ -25,6 +25,31 @@ public class Modify
 	/**
 	 * adds a single import value to import queue<br>
 	 * */
+	public static class activate_op extends ModelOperation
+	{
+		public activate_op() {super("activate", false);}
+
+		@Override
+		public TypedString Execute(Map<String, String> params
+			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
+			throws ExceptionParseError
+		{
+			Utils.StrictParams(params, "name");
+
+			String name = params.get("name");
+
+			ModelEntity target = entities.Only();
+
+			ServiceLocator.INSTANCE.GetImportService().Activate(target, name);
+
+			return new TextString("added to import queue");
+		}
+	}
+
+
+	/**
+	 * adds a single import value to import queue<br>
+	 * */
 	public static class import_op extends ModelOperation
 	{
 		public import_op() {super("import", false);}
@@ -152,8 +177,8 @@ public class Modify
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Utils.RequiredParams(params, "template_id");
-			Utils.AllParams(params, "template_id", "description");
+			Utils.RequiredParams(params);
+			Utils.AllParams(params, "description");
 
 			String name = params.get("name");
 
@@ -170,13 +195,13 @@ public class Modify
 
 				if(AID != -1)
 				{
-					res += "suppressed reaction: " + AID
-						+ " with template: " + name
+					res += "suppressed reaction: " + name
+						+ " on object: " + entity.GetID()
 						+ System.lineSeparator();
 				}
 				else
 				{
-					res += "reaction with template: " + name
+					res += "reaction: " + name
 						+ " not found on object: " + entity.GetID()
 						+ System.lineSeparator();
 				}
@@ -200,10 +225,10 @@ public class Modify
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Utils.RequiredParams(params, "template_id");
-			Utils.AllParams(params, "template_id");
+			Utils.RequiredParams(params, "name");
+			Utils.AllParams(params, "name");
 
-			String name = params.get("template_id");
+			String name = params.get("name");
 
 			String res = "";
 
@@ -214,13 +239,13 @@ public class Modify
 
 				if(AID != -1)
 				{
-					res += "unsuppressed reaction: " + AID
-						+ " with template: " + name
+					res += "unsuppressed reaction: " + name
+						+ " on object: " + entity.GetID()
 						+ System.lineSeparator();
 				}
 				else
 				{
-					res += "reaction with template: " + name
+					res += "reaction: " + name
 						+ " not found on object: " + entity.GetID()
 						+ System.lineSeparator();
 				}

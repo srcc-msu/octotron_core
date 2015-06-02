@@ -57,8 +57,8 @@ public abstract class BaseAttribute extends ModelID<EAttributeType> implements I
 	{
 		Map<String, Object> result = new HashMap<>();
 
+		result.put("attribute AID", GetID());
 		result.put(GetName(), value);
-		result.put("AID", GetID());
 
 		return result;
 	}
@@ -67,7 +67,7 @@ public abstract class BaseAttribute extends ModelID<EAttributeType> implements I
 	{
 		Map<String, Object> result = new HashMap<>();
 
-		result.put("AID", GetID());
+		result.put("attribute AID", GetID());
 		result.put("name", GetName());
 		result.put("value", value);
 

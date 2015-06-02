@@ -62,10 +62,9 @@ public class ImportService extends BGService
 		}
 	}
 
-	public void Trigger(ModelEntity entity, String name)
-		throws ExceptionSystemError
+	public void Activate(ModelEntity entity, String name)
 	{
-		executor.execute(new Triggerer(entity, name));
+		executor.execute(new Activator(entity, name));
 	}
 
 	public class Importer implements Runnable
@@ -91,12 +90,12 @@ public class ImportService extends BGService
 		}
 	}
 
-	public class Triggerer implements Runnable
+	public class Activator implements Runnable
 	{
 		protected final ModelEntity entity;
 		protected final String name;
 
-		public Triggerer(ModelEntity entity, String name)
+		public Activator(ModelEntity entity, String name)
 		{
 			this.entity = entity;
 

@@ -139,9 +139,9 @@ public final class Sensor extends Attribute
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
 
-		result.put("is_user_valid", IsUserValid());
-		result.put("is_outdated", IsOutdated());
-
+		result.put("ctime", GetCTime());
+		result.put("is_user_valid", is_user_valid);
+		result.put("is_outdated", is_outdated);
 		result.put("update_interval", update_interval);
 
 		return result;

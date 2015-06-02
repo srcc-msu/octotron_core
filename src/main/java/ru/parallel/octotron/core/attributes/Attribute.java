@@ -122,12 +122,12 @@ public abstract class Attribute extends BaseAttribute
 
 	private boolean DependenciesDefined()
 	{
-		if(dependencies_defined)
+		if (dependencies_defined)
 			return true;
 
-		for(Attribute attribute : i_depend_on)
+		for (Attribute attribute : i_depend_on)
 		{
-			if(!attribute.IsDefined())
+			if (!attribute.IsDefined())
 			{
 				dependencies_defined = false;
 				return false;
@@ -137,15 +137,5 @@ public abstract class Attribute extends BaseAttribute
 		// we've got positive for all, cache it for future - it will not change back
 		dependencies_defined = true;
 		return true;
-	}
-
-	@Override
-	public Map<String, Object> GetLongRepresentation()
-	{
-		Map<String, Object> result = super.GetLongRepresentation();
-
-		result.put("ctime", ctime);
-
-		return result;
 	}
 }

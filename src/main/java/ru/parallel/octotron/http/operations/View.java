@@ -51,32 +51,8 @@ public abstract class View
 	}
 
 	/**
-	 * prints properties of the given list entities<br>
-	 * properties and format are taken from params<br>
-	 * */
-	public static class attribute extends ModelOperation
-	{
-		public attribute()
-		{
-			super("attribute", true);
-		}
-
-		@Override
-		public TypedString Execute(Map<String, String> params, boolean verbose
-			, ModelList<? extends ModelEntity, ?> entities)
-			throws ExceptionParseError
-		{
-			Utils.RequiredParams(params, "name");
-			Utils.AllParams(params, "name");
-
-			List<String> attributes = Utils.GetNames(params.get("name"));
-
-			return AutoFormat.PrintJson(Utils.GetAttributes(entities, attributes, verbose));
-		}
-	}
-	/**
-	 * prints properties of the given list entities<br>
-	 * properties and format are taken from params<br>
+	 * prints attributes of the given entity list<br>
+	 * attribute names and format are taken from params<br>
 	 * */
 	public static class attributes extends ModelOperation
 	{
@@ -96,7 +72,7 @@ public abstract class View
 			List<String> attributes = Utils.GetNames(params.get("names"));
 			String format = params.get("format");
 
-			if(format == null || format.equals("json") || format.equals("jsonp"))
+			if(format == null || format.equals(")json") || format.equals("jsonp"))
 				return AutoFormat.PrintJson(Utils.GetAttributes(entities, attributes, verbose));
 			if(format.equals("csv"))
 				return new TextString(Utils.PrintCsvAttributes(entities, attributes));

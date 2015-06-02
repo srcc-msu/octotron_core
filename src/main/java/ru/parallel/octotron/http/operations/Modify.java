@@ -177,8 +177,8 @@ public class Modify
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Utils.RequiredParams(params);
-			Utils.AllParams(params, "description");
+			Utils.RequiredParams(params, "name");
+			Utils.AllParams(params, "name", "description");
 
 			String name = params.get("name");
 

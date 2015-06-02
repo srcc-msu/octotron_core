@@ -189,7 +189,7 @@ public class GraphManager implements IPersistenceManager
 
 			Object new_value = graph_entity.GetAttribute(attribute.GetName());
 
-			attribute.SetValue(Value.Construct(new_value));
+			attribute.UpdateValue(Value.Construct(new_value));
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
@@ -224,9 +224,9 @@ public class GraphManager implements IPersistenceManager
 			attribute.SetCTime((Long)graph_object.GetAttribute("ctime"));
 
 			if(graph_object.TestAttribute("value"))
-				attribute.SetValue(Value.Construct(graph_object.GetAttribute("value")));
+				attribute.UpdateValue(Value.Construct(graph_object.GetAttribute("value")));
 			else
-				attribute.SetValue(Value.undefined);
+				attribute.UpdateValue(Value.undefined);
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{

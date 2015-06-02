@@ -24,17 +24,17 @@ public class ViewRequestTest extends RequestTest
 	}
 
 	@Test
-	public void AttributeTest() throws Exception
+	public void AttributesTest() throws Exception
 	{
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/attribute?path=obj(AID)&name=AID");
+		String test = GetRequestResult("/view/attributes?path=obj(AID)&names=AID");
 
 		if(test == null || !test.contains("AID"))
 			fail("bad response: " + test);
 
-		test = GetRequestResult("/view/attribute?path=obj(AID)&name=AID&v");
+		test = GetRequestResult("/view/attributes?path=obj(AID)&names=AID&v");
 		if(test == null || !test.contains("AID"))
 			fail("bad response: " + test);
 	}
@@ -64,25 +64,6 @@ public class ViewRequestTest extends RequestTest
 			fail("bad response: " + test);
 	}
 
-
-	@Test
-	public void ReactionTest() throws Exception
-	{
-		object_factory.Sensors(new SensorTemplate("test_sensor", -1, 0))
-			.Triggers(new TriggerTemplate("test_trigger", new Match("test_sensor", 1)))
-			.Reactions(new ReactionTemplate("test_reaction", new ReactionAction().On("test_trigger"))).Create(1);
-
-		model_service.EnableObjectIndex("AID");
-
-		String test = GetRequestResult("/view/attribute?path=obj(AID)&name=test_reaction");
-		if(test == null || !test.contains("suppress"))
-			fail("bad response: " + test);
-
-		test = GetRequestResult("/view/attribute?path=obj(AID)&name=test_reaction&v");
-		if(test == null || !test.contains("suppress"))
-			fail("bad response: " + test);
-	}
-
 	@Test
 	public void SuppressedTest() throws Exception
 	{
@@ -92,14 +73,14 @@ public class ViewRequestTest extends RequestTest
 
 		Reaction reaction = obj.GetReaction().iterator().next();
 
-		String test = GetRequestResult("/view/suppressed");
-		if(test == null || test.contains("AID"))
+		String test = GetRequestResult("/view/suppressed?v");
+		if(test == null || test.contains("suppressed\": false"))
 			fail("bad response: " + test);
 
 		reaction.SetSuppressed(true);
 
-		test = GetRequestResult("/view/suppressed");
-		if(test == null || !test.contains("suppress"))
+		test = GetRequestResult("/view/suppressed?v");
+		if(test == null || !test.contains("suppressed\": true"))
 			fail("bad response: " + test);
 	}
 

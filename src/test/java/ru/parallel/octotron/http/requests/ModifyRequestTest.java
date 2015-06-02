@@ -61,7 +61,7 @@ public class ModifyRequestTest extends RequestTest
 		object_factory.Create(1);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/modify/suppress?path=obj(AID)&template_id=1&description=spam");
+		String test = GetRequestResult("/modify/suppress?path=obj(AID)&name=1&description=spam");
 
 		if(test == null)
 			fail("bad response: result is null");
@@ -73,7 +73,7 @@ public class ModifyRequestTest extends RequestTest
 		object_factory.Create(1);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/modify/unsuppress?path=obj(AID)&template_id=1");
+		String test = GetRequestResult("/modify/unsuppress?path=obj(AID)&name=1");
 
 		if(test == null)
 			fail("bad response: result is null");

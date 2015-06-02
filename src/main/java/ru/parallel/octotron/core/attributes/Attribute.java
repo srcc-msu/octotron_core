@@ -83,7 +83,7 @@ public abstract class Attribute extends BaseAttribute
 			return Value.invalid;
 
 		if(last.ctime == 0) // last value was default
-			return new Value(0.0);
+			return Value.invalid;
 
 		if(GetCTime() - last.ctime == 0) // speed is zero
 			return new Value(0.0);

@@ -37,17 +37,13 @@ public abstract class BaseAttribute extends ModelID<EAttributeType> implements I
 		return value;
 	}
 
+
+// TODO: value can change type after getting not computable
 	public void UpdateValue(Value new_value)
 	{
 		if(value.IsComputable() && new_value.IsComputable())
 			value.CheckType(new_value);
 
-		value = new_value;
-	}
-
-	// TODO: ?
-	public void SetValue(Value new_value)
-	{
 		value = new_value;
 	}
 

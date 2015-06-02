@@ -371,4 +371,12 @@ public class Value implements IValue
 	{
 		return value;
 	}
+
+	@Override
+	public String toString()
+	{
+		String res = super.toString();
+
+		return  res + " : " + ValueToString();
+	}
 }

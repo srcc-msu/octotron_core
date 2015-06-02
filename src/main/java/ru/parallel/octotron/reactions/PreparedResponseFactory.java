@@ -44,7 +44,7 @@ public class PreparedResponseFactory
 
 	public PreparedResponse Construct(ModelEntity entity, Reaction reaction, Response response)
 	{
-		PreparedResponse prepared_response = new PreparedResponse(context, response);
+		PreparedResponse prepared_response = new PreparedResponse(context, response, reaction.IsSuppressed());
 
 		FillInfo(prepared_response, response);
 		FillModel(prepared_response, entity);

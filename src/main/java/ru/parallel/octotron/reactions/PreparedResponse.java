@@ -39,11 +39,13 @@ public class PreparedResponse implements Runnable, IPresentable
 
 	final List<String[]> scripts = new LinkedList<>();
 	final List<String> specials = new LinkedList<>();
+	private final boolean is_suppressed;
 
-	public PreparedResponse(Context context, Response response)
+	public PreparedResponse(Context context, Response response, boolean is_suppressed)
 	{
 		this.context = context;
 		this.response = response;
+		this.is_suppressed = is_suppressed;
 	}
 
 	private static final Object lock = new Object();
@@ -85,7 +87,7 @@ public class PreparedResponse implements Runnable, IPresentable
 			LOGGER.log(Level.WARNING, "could not create a log entry", e);
 		}
 
-		if(!response.IsSuppress())
+		if(!is_suppressed)
 		{
 			for(String[] command : scripts)
 			{

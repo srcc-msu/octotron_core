@@ -153,7 +153,7 @@ public class Reaction extends Attribute
 		Map<String, Object> result = super.GetLongRepresentation();
 
 		result.put("ctime", GetCTime());
-		result.put("suppressed", is_suppressed);
+		result.put("is_suppressed", is_suppressed);
 		result.put("description", description);
 		result.put("counter", counter);
 

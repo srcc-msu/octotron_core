@@ -52,21 +52,6 @@ public class Response implements IPresentable
 		return commands;
 	}
 
-	/**
-	 * suppress any scripts
-	 * does not suppress logging
-	 * */
-	public Response Suppress(boolean suppress)
-	{
-		this.suppress = suppress;
-		return this;
-	}
-
-	public boolean IsSuppress()
-	{
-		return suppress;
-	}
-
 	public Response Msg(String string)
 		throws ExceptionParseError
 	{

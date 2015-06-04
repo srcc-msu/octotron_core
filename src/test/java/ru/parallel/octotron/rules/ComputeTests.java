@@ -9,7 +9,7 @@ import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.generators.Enumerator;
 import ru.parallel.octotron.generators.LinkFactory;
@@ -17,7 +17,6 @@ import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.rules.plain.*;
-import ru.parallel.octotron.rules.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -139,20 +138,20 @@ public class ComputeTests extends GeneralTest
 	public void TestAStrictDoubleSum() throws Exception
 	{
 		AStrictDoubleSum self_rule
-			= new AStrictDoubleSum(EDependencyType.SELF, "d1", "d2");
+			= new AStrictDoubleSum("self", "d1", "d2");
 		AStrictDoubleSum in_rule
-			= new AStrictDoubleSum(EDependencyType.IN, "d1", "d2");
+			= new AStrictDoubleSum("in_n", "d1", "d2");
 		AStrictDoubleSum out_rule
-			= new AStrictDoubleSum(EDependencyType.OUT, "d1", "d2");
+			= new AStrictDoubleSum("out_n", "d1", "d2");
 		AStrictDoubleSum all_rule
-			= new AStrictDoubleSum(EDependencyType.ALL, "d1", "d2");
+			= new AStrictDoubleSum("all_n", "d1", "d2");
 		AStrictDoubleSum self_wrong_rule
-			= new AStrictDoubleSum(EDependencyType.SELF, "d1", "d2", "d1_inv");
+			= new AStrictDoubleSum("self", "d1", "d2", "d1_inv");
 
 		assertEquals(  1.0, (Double)self_rule.Compute(object), Value.EPSILON);
 		assertEquals( 63.0, (Double)  in_rule.Compute(object), Value.EPSILON);
 		assertEquals(164.0, (Double) out_rule.Compute(object), Value.EPSILON);
-		assertEquals(228.0, (Double) all_rule.Compute(object), Value.EPSILON);
+		assertEquals(227.0, (Double) all_rule.Compute(object), Value.EPSILON);
 		assertEquals(Value.invalid,  self_wrong_rule.Compute(object));
 	}
 
@@ -160,62 +159,64 @@ public class ComputeTests extends GeneralTest
 	public void TestAStrictLongSum() throws Exception
 	{
 		AStrictLongSum self_rule
-			= new AStrictLongSum(EDependencyType.SELF, "l1", "l2");
+			= new AStrictLongSum("self", "l1", "l2");
 		AStrictLongSum in_rule
-			= new AStrictLongSum(EDependencyType.IN, "l1", "l2");
+			= new AStrictLongSum("in_n", "l1", "l2");
 		AStrictLongSum out_rule
-			= new AStrictLongSum(EDependencyType.OUT, "l1", "l2");
+			= new AStrictLongSum("out_n", "l1", "l2");
 		AStrictLongSum all_rule
-			= new AStrictLongSum(EDependencyType.ALL, "l1", "l2");
+			= new AStrictLongSum("all_n", "l1", "l2");
 		AStrictLongSum self_wrong_rule
-			= new AStrictLongSum(EDependencyType.SELF, "l1", "l2", "l1_inv");
+			= new AStrictLongSum("self", "l1", "l2", "l1_inv");
 
 		assertEquals(  5L, self_rule.Compute(object));
 		assertEquals(123L,   in_rule.Compute(object));
 		assertEquals( 84L,  out_rule.Compute(object));
-		assertEquals(212L, all_rule.Compute(object));
+		assertEquals(207L, all_rule.Compute(object));
 		assertEquals(Value.invalid,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
 	public void TestAStrictMatchCount()
+		throws ExceptionParseError
 	{
 		AStrictMatchCount self_rule
-			= new AStrictMatchCount(true, EDependencyType.SELF, "b1", "b2");
+			= new AStrictMatchCount(true, "self", "b1", "b2");
 		AStrictMatchCount in_rule
-			= new AStrictMatchCount(true, EDependencyType.IN, "b1", "b2");
+			= new AStrictMatchCount(true, "in_n", "b1", "b2");
 		AStrictMatchCount out_rule
-			= new AStrictMatchCount(true, EDependencyType.OUT, "b1", "b2");
+			= new AStrictMatchCount(true, "out_n", "b1", "b2");
 		AStrictMatchCount all_rule
-			= new AStrictMatchCount(true, EDependencyType.ALL, "b1", "b2");
+			= new AStrictMatchCount(true, "all_n", "b1", "b2");
 		AStrictMatchCount self_wrong_rule
-			= new AStrictMatchCount(true, EDependencyType.SELF, "b1", "b2", "b1_inv");
+			= new AStrictMatchCount(true, "self", "b1", "b2", "b1_inv");
 
 		assertEquals(1L, self_rule.Compute(object));
 		assertEquals(6L,   in_rule.Compute(object));
 		assertEquals(0L,  out_rule.Compute(object));
-		assertEquals(7L,  all_rule.Compute(object));
+		assertEquals(6L,  all_rule.Compute(object));
 		assertEquals(Value.invalid,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
 	public void TestAStrictNotMatchCount()
+		throws ExceptionParseError
 	{
 		AStrictNotMatchCount self_rule
-			= new AStrictNotMatchCount(true, EDependencyType.SELF, "b1", "b2");
+			= new AStrictNotMatchCount(true, "self", "b1", "b2");
 		AStrictNotMatchCount in_rule
-			= new AStrictNotMatchCount(true, EDependencyType.IN, "b1", "b2");
+			= new AStrictNotMatchCount(true, "in_n", "b1", "b2");
 		AStrictNotMatchCount out_rule
-			= new AStrictNotMatchCount(true, EDependencyType.OUT, "b1", "b2");
+			= new AStrictNotMatchCount(true, "out_n", "b1", "b2");
 		AStrictNotMatchCount all_rule
-			= new AStrictNotMatchCount(true, EDependencyType.ALL, "b1", "b2");
+			= new AStrictNotMatchCount(true, "all_n", "b1", "b2");
 		AStrictNotMatchCount self_wrong_rule
-			= new AStrictNotMatchCount(true, EDependencyType.SELF, "b1", "b2", "b1_inv");
+			= new AStrictNotMatchCount(true, "self", "b1", "b2", "b1_inv");
 
 		assertEquals(1L, self_rule.Compute(object));
 		assertEquals(0L,   in_rule.Compute(object));
 		assertEquals(8L,  out_rule.Compute(object));
-		assertEquals(9L,  all_rule.Compute(object));
+		assertEquals(8L,  all_rule.Compute(object));
 		assertEquals(Value.invalid,  self_wrong_rule.Compute(object));
 	}
 
@@ -223,20 +224,20 @@ public class ComputeTests extends GeneralTest
 	public void TestASoftDoubleSum() throws Exception
 	{
 		ASoftDoubleSum self_rule
-			= new ASoftDoubleSum(EDependencyType.SELF, "d1", "d2");
+			= new ASoftDoubleSum("self", "d1", "d2");
 		ASoftDoubleSum in_rule
-			= new ASoftDoubleSum(EDependencyType.IN, "d1", "d2");
+			= new ASoftDoubleSum("in_n", "d1", "d2");
 		ASoftDoubleSum out_rule
-			= new ASoftDoubleSum(EDependencyType.OUT, "d1", "d2");
+			= new ASoftDoubleSum("out_n", "d1", "d2");
 		ASoftDoubleSum all_rule
-			= new ASoftDoubleSum(EDependencyType.ALL, "d1", "d2");
+			= new ASoftDoubleSum("all_n", "d1", "d2");
 		ASoftDoubleSum self_wrong_rule
-			= new ASoftDoubleSum(EDependencyType.SELF, "d1_inv", "d2");
+			= new ASoftDoubleSum("self", "d1_inv", "d2");
 
 		assertEquals(  1.0, (Double)self_rule.Compute(object), Value.EPSILON);
 		assertEquals( 63.0, (Double)  in_rule.Compute(object), Value.EPSILON);
 		assertEquals(164.0, (Double) out_rule.Compute(object), Value.EPSILON);
-		assertEquals(228.0, (Double) all_rule.Compute(object), Value.EPSILON);
+		assertEquals(227.0, (Double) all_rule.Compute(object), Value.EPSILON);
 		assertEquals(  1.0,  self_wrong_rule.Compute(object));
 	}
 
@@ -244,71 +245,74 @@ public class ComputeTests extends GeneralTest
 	public void TestASoftLongSum() throws Exception
 	{
 		ASoftLongSum self_rule
-			= new ASoftLongSum(EDependencyType.SELF, "l1", "l2");
+			= new ASoftLongSum("self", "l1", "l2");
 		ASoftLongSum in_rule
-			= new ASoftLongSum(EDependencyType.IN, "l1", "l2");
+			= new ASoftLongSum("in_n", "l1", "l2");
 		ASoftLongSum out_rule
-			= new ASoftLongSum(EDependencyType.OUT, "l1", "l2");
+			= new ASoftLongSum("out_n", "l1", "l2");
 		ASoftLongSum all_rule
-			= new ASoftLongSum(EDependencyType.ALL, "l1", "l2");
+			= new ASoftLongSum("all_n", "l1", "l2");
 		ASoftLongSum self_wrong_rule
-			= new ASoftLongSum(EDependencyType.SELF, "l1", "l2_inv");
+			= new ASoftLongSum("self", "l1", "l2_inv");
 
 		assertEquals(  5L, self_rule.Compute(object));
 		assertEquals(123L,   in_rule.Compute(object));
 		assertEquals( 84L,  out_rule.Compute(object));
-		assertEquals(212L, all_rule.Compute(object));
+		assertEquals(207L, all_rule.Compute(object));
 		assertEquals(  2L,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
 	public void TestASoftMatchCount()
+		throws ExceptionParseError
 	{
 		ASoftMatchCount self_rule
-			= new ASoftMatchCount(true, EDependencyType.SELF, "b1", "b2");
+			= new ASoftMatchCount(true, "self", "b1", "b2");
 		ASoftMatchCount in_rule
-			= new ASoftMatchCount(true, EDependencyType.IN, "b1", "b2");
+			= new ASoftMatchCount(true, "in_n", "b1", "b2");
 		ASoftMatchCount out_rule
-			= new ASoftMatchCount(true, EDependencyType.OUT, "b1", "b2");
+			= new ASoftMatchCount(true, "out_n", "b1", "b2");
 		ASoftMatchCount all_rule
-			= new ASoftMatchCount(true, EDependencyType.ALL, "b1", "b2");
+			= new ASoftMatchCount(true, "all_n", "b1", "b2");
 		ASoftMatchCount self_wrong_rule
-			= new ASoftMatchCount(true, EDependencyType.SELF, "b1", "b2_inv");
+			= new ASoftMatchCount(true, "self", "b1", "b2_inv");
 
 		assertEquals(1L, self_rule.Compute(object));
 		assertEquals(6L,   in_rule.Compute(object));
 		assertEquals(0L,  out_rule.Compute(object));
-		assertEquals(7L,  all_rule.Compute(object));
+		assertEquals(6L,  all_rule.Compute(object));
 		assertEquals(1L,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
 	public void TestASoftNotMatchCount()
+		throws ExceptionParseError
 	{
 		ASoftNotMatchCount self_rule
-			= new ASoftNotMatchCount(true, EDependencyType.SELF, "b1", "b2");
+			= new ASoftNotMatchCount(true, "self", "b1", "b2");
 		ASoftNotMatchCount in_rule
-			= new ASoftNotMatchCount(true, EDependencyType.IN, "b1", "b2");
+			= new ASoftNotMatchCount(true, "in_n", "b1", "b2");
 		ASoftNotMatchCount out_rule
-			= new ASoftNotMatchCount(true, EDependencyType.OUT, "b1", "b2");
+			= new ASoftNotMatchCount(true, "out_n", "b1", "b2");
 		ASoftNotMatchCount all_rule
-			= new ASoftNotMatchCount(true, EDependencyType.ALL, "b1", "b2");
+			= new ASoftNotMatchCount(true, "all_n", "b1", "b2");
 		ASoftNotMatchCount self_wrong_rule
-			= new ASoftNotMatchCount(true, EDependencyType.SELF, "b1", "b2_inv");
+			= new ASoftNotMatchCount(true, "self", "b1", "b2_inv");
 
 		assertEquals(1L, self_rule.Compute(object));
 		assertEquals(0L,   in_rule.Compute(object));
 		assertEquals(8L,  out_rule.Compute(object));
-		assertEquals(9L,  all_rule.Compute(object));
+		assertEquals(8L,  all_rule.Compute(object));
 		assertEquals(0L,  self_wrong_rule.Compute(object));
 	}
 
 	@Test
 	public void TestRequireSomeValid()
+		throws ExceptionParseError
 	{
-		RequireSomeValid rule1 = new RequireSomeValid(1, 11, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
-		RequireSomeValid rule2 = new RequireSomeValid(2, true, EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
-		RequireSomeValid rule3 = new RequireSomeValid(3, "ok", EDependencyType.SELF, "l1_inv", "l1", "l2_inv", "l2");
+		RequireSomeValid rule1 = new RequireSomeValid(1, 11, "self", "l1_inv", "l1", "l2_inv", "l2");
+		RequireSomeValid rule2 = new RequireSomeValid(2, true, "self", "l1_inv", "l1", "l2_inv", "l2");
+		RequireSomeValid rule3 = new RequireSomeValid(3, "ok", "self", "l1_inv", "l1", "l2_inv", "l2");
 
 		assertEquals(11, rule1.Compute(object));
 		assertEquals(true, rule2.Compute(object));

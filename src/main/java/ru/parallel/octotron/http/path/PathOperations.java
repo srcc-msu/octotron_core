@@ -12,7 +12,6 @@ import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.List;
@@ -43,8 +42,7 @@ public abstract class PathOperations
 
 	private interface ITransform
 	{
-		ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-				throws ExceptionParseError;
+		ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params);
 	}
 
 	/**
@@ -77,7 +75,6 @@ public abstract class PathOperations
 		}
 
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj)
-				throws ExceptionParseError
 		{
 			return transform.Transform(obj, params);
 		}
@@ -127,10 +124,9 @@ public abstract class PathOperations
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-				throws ExceptionParseError
-		{
+			{
 			if(params.size() != 1) // TODO
-				throw new ExceptionParseError("query accepts only one filter");
+				throw new ExceptionModelFail("query accepts only one filter");
 
 			if(obj instanceof ModelObjectList)
 			{
@@ -143,7 +139,7 @@ public abstract class PathOperations
 					.Filter(params.get(0).name, params.get(0).operand, params.get(0).type);
 			}
 
-			throw new ExceptionParseError(
+			throw new ExceptionModelFail(
 				"internal error: operation q is not applicable to " + obj);
 		}
 	});
@@ -157,10 +153,9 @@ public abstract class PathOperations
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-				throws ExceptionParseError
-		{
+			{
 			if(params.size() != 1)
-				throw new ExceptionParseError
+				throw new ExceptionModelFail
 					("index operation must be querying a single indexed value");
 
 			if(params.get(0).operand != null)
@@ -181,10 +176,9 @@ public abstract class PathOperations
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-				throws ExceptionParseError
-		{
+			{
 			if(params.size() != 1)
-				throw new ExceptionParseError
+				throw new ExceptionModelFail
 					("index operation must be querying a single indexed value");
 
 			if(params.get(0).operand != null)
@@ -196,23 +190,40 @@ public abstract class PathOperations
 		}
 	});
 
-/**
- * removes duplicated elements from the list<br>
- * */
+	/**
+	 * removes duplicated elements from the list<br>
+	 * */
 	public static final PathToken uniq = new PathToken("uniq", CHAIN_TYPE.E_MATCH
 		, CHAIN_TYPE.E_MATCH, new ITransform()
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-			throws ExceptionParseError
 		{
 			if(obj instanceof ModelObjectList)
 				return ToObjList(obj).Uniq();
 			else if(obj instanceof ModelLinkList)
 				return ToLinkList(obj).Uniq();
 
-			throw new ExceptionParseError(
+			throw new ExceptionModelFail(
 				"internal error: operation uniq is not applicable to " + obj);
+		}
+	});
+	/**
+	 * removes duplicated elements from the list<br>
+	 * */
+	public static final PathToken self = new PathToken("self", CHAIN_TYPE.E_START
+		, CHAIN_TYPE.E_ANY, new ITransform()
+	{
+		@Override
+		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
+		{
+			if(obj instanceof ModelObjectList)
+				return ToObjList(obj).Uniq();
+			else if(obj instanceof ModelLinkList)
+				return ToLinkList(obj).Uniq();
+
+			throw new ExceptionModelFail(
+				"internal error: operation self is not applicable to " + obj);
 		}
 	});
 
@@ -224,10 +235,9 @@ public abstract class PathOperations
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-			throws ExceptionParseError
 		{
 			if(params.size() > 1)
-				throw new ExceptionParseError("in_n accepts only one or zero params");
+				throw new ExceptionModelFail("in_n accepts only one or zero params");
 
 			if(params.size() == 1)
 				return ToObjList(obj).GetInNeighbors(params.get(0).name, params.get(0).operand);
@@ -244,10 +254,9 @@ public abstract class PathOperations
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-			throws ExceptionParseError
 		{
 			if(params.size() > 1)
-				throw new ExceptionParseError("out_n accepts only one or zero params");
+				throw new ExceptionModelFail("out_n accepts only one or zero params");
 
 			if(params.size() == 1)
 				return ToObjList(obj).GetOutNeighbors(params.get(0).name, params.get(0).operand);
@@ -264,10 +273,9 @@ public abstract class PathOperations
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-			throws ExceptionParseError
 		{
 			if(params.size() > 1)
-				throw new ExceptionParseError("u_n accepts only one or zero params");
+				throw new ExceptionModelFail("u_n accepts only one or zero params");
 
 			if(params.size() == 1)
 				return ToObjList(obj).GetUndirectedNeighbors(params.get(0).name, params.get(0).operand);
@@ -284,10 +292,9 @@ public abstract class PathOperations
 	{
 		@Override
 		public ModelList<? extends ModelEntity, ?> Transform(Object obj, List<Query> params)
-			throws ExceptionParseError
 		{
 			if(params.size() > 1)
-				throw new ExceptionParseError("all_n accepts only one or zero params");
+				throw new ExceptionModelFail("all_n accepts only one or zero params");
 
 			if(params.size() == 1)
 				return ToObjList(obj).GetAllNeighbors(params.get(0).name, params.get(0).operand);

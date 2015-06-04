@@ -8,15 +8,15 @@ package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
-import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 public class AStrictNotMatchCount extends AStrict
 {
 	private final Value value;
 
-	public AStrictNotMatchCount(Object value, EDependencyType dependency, String... attributes)
-	{
-		super(dependency, attributes);
+	public AStrictNotMatchCount(Object value, String path, String... attributes)
+		throws ExceptionParseError
+	{		super(path, attributes);
 		this.value = Value.Construct(value);
 	}
 

@@ -8,7 +8,7 @@ package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.rules.AStrictLongSum;
 import ru.parallel.octotron.services.ServiceLocator;
 
@@ -20,6 +20,7 @@ public class SelfTest
 	ModelObject obj2;
 
 	public void Init()
+		throws ExceptionParseError
 	{
 		obj1 = ServiceLocator.INSTANCE.GetModelService().AddObject();
 		obj1.GetBuilder().DeclareConst("type", "_selftest");
@@ -27,7 +28,7 @@ public class SelfTest
 
 		obj2 = ServiceLocator.INSTANCE.GetModelService().AddObject();
 		obj2.GetBuilder().DeclareConst("type", "_selftest");
-		obj2.GetBuilder().DeclareVar("check", new AStrictLongSum(EDependencyType.ALL, "test_iteration"));
+		obj2.GetBuilder().DeclareVar("check", new AStrictLongSum("in_n", "test_iteration"));
 
 		ServiceLocator.INSTANCE.GetModelService().AddLink(obj1, obj2, false);
 	}

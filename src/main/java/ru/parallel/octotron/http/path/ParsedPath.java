@@ -32,7 +32,6 @@ public class ParsedPath
 	}
 
 	public ModelList<? extends ModelEntity, ?> Execute(ModelList<? extends ModelEntity, ?> entity_list)
-		throws ExceptionParseError
 	{
 		ModelList<? extends ModelEntity, ?> result = entity_list;
 

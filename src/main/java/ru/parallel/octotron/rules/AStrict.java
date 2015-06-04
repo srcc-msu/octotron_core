@@ -9,57 +9,31 @@ package ru.parallel.octotron.rules;
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.collections.ModelObjectList;
+import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EDependencyType;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.http.path.ParsedPath;
+import ru.parallel.octotron.http.path.PathParser;
 
 import java.util.Arrays;
 
 public abstract class AStrict extends ObjectRule
 {
 	private final String[] attributes;
-	private final EDependencyType dependency;
+	private final ParsedPath parsed_path;
 
-	AStrict(EDependencyType dependency, String... attributes)
+	AStrict(String path, String... attributes)
+		throws ExceptionParseError
 	{
-		this.dependency = dependency;
+		this.parsed_path = PathParser.Parse(path);
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
 	// TODO: this is slow, add clone and caching or something
-	ModelObjectList GetCandidates(ModelObject object)
+	ModelList<? extends ModelEntity, ?> GetCandidates(ModelObject object)
 	{
-		ModelObjectList candidates = new ModelObjectList();
-
-		switch(dependency)
-		{
-			case SELF:
-				candidates.add(object);
-				break;
-
-			case OUT:
-				candidates = object.GetOutNeighbors();
-				break;
-
-			case IN:
-				candidates = object.GetInNeighbors();
-				break;
-
-			case UNDIRECTED:
-				candidates = object.GetUndirectedNeighbors();
-				break;
-
-			case ALL:
-				candidates.add(object);
-				candidates = candidates.append(object.GetAllNeighbors());
-				break;
-
-			default:
-				throw new ExceptionModelFail("unknown dependency: " + dependency);
-		}
-
-		return candidates.Uniq();
+		return parsed_path.Execute(ModelList.Single(object)).Uniq();
 	}
 
 	@Override
@@ -67,9 +41,9 @@ public abstract class AStrict extends ObjectRule
 	{
 		AttributeList<Attribute> result = new AttributeList<>();
 
-		ModelObjectList candidates = GetCandidates(object);
+		ModelList<? extends ModelEntity, ?> candidates = GetCandidates(object);
 
-		for(ModelObject obj : candidates)
+		for(ModelEntity obj : candidates)
 			for(String tmp : attributes)
 			{
 				if(!obj.TestAttribute(tmp))
@@ -86,9 +60,9 @@ public abstract class AStrict extends ObjectRule
 	{
 		Object res = GetDefaultValue();
 
-		ModelObjectList candidates = GetCandidates(object);
+		ModelList<? extends ModelEntity, ?> candidates = GetCandidates(object);
 
-		for(ModelObject obj : candidates)
+		for(ModelEntity obj : candidates)
 			for(String tmp : attributes)
 			{
 				if(!obj.TestAttribute(tmp))

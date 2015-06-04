@@ -8,15 +8,16 @@ package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
-import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 public class ASoftNotMatchCount extends ASoft
 {
 	private final Value value;
 
-	public ASoftNotMatchCount(Object value, EDependencyType dependency, String... attributes)
+	public ASoftNotMatchCount(Object value, String path, String... attributes)
+		throws ExceptionParseError
 	{
-		super(dependency, attributes);
+		super(path, attributes);
 		this.value = Value.Construct(value);
 	}
 

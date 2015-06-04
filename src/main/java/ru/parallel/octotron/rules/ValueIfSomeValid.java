@@ -4,16 +4,17 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 public class ValueIfSomeValid extends AValidCount
 {
 	private final long count;
 	private final String attribute;
 
-	public ValueIfSomeValid(String attribute, long count, EDependencyType dependency, String... attributes)
+	public ValueIfSomeValid(String attribute, long count, String path, String... attributes)
+		throws ExceptionParseError
 	{
-		super(dependency, attributes);
+		super(path, attributes);
 		this.count = count;
 		this.attribute = attribute;
 	}

@@ -7,13 +7,14 @@
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.primitive.EDependencyType;
+import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 public class AStrictDoubleSum extends AStrict
 {
-	public AStrictDoubleSum(EDependencyType dependency, String... attributes)
+	public AStrictDoubleSum(String path, String... attributes)
+		throws ExceptionParseError
 	{
-		super(dependency, attributes);
+		super(path, attributes);
 	}
 
 	@Override

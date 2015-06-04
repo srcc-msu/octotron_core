@@ -33,7 +33,7 @@ public final class PathParser
 		PathOperations.obj, PathOperations.link
 		, PathOperations.q
 		, PathOperations.in_n, PathOperations.out_n, PathOperations.all_n
-		, PathOperations.uniq
+		, PathOperations.uniq, PathOperations.self
 		, PathOperations.in_l, PathOperations.out_l, PathOperations.all_l
 		, PathOperations.source, PathOperations.target
 	};
@@ -161,8 +161,11 @@ public final class PathParser
 			last = matcher.end();
 		}
 
+		if(last == -1)
+			throw new ExceptionParseError("valid tokens not found: " + path);
+
 		if(last != path.length())
-			throw new ExceptionParseError("Unclaimed suffix: " + path.substring(last));
+			throw new ExceptionParseError("unclaimed suffix: " + path.substring(last));
 
 		return result;
 	}
@@ -179,7 +182,8 @@ public final class PathParser
 		if(tokens.isEmpty())
 			throw new ExceptionParseError("empty request");
 
-		PathOperations.CHAIN_TYPE type = PathOperations.CHAIN_TYPE.E_START;
+//		PathOperations.CHAIN_TYPE type = PathOperations.CHAIN_TYPE.E_START;
+		PathOperations.CHAIN_TYPE type = tokens.get(0).GetIn();
 
 		for(PathOperations.PathToken token : tokens)
 		{
@@ -222,7 +226,8 @@ public final class PathParser
 		}
 		catch(ExceptionParseError e)
 		{
-			String res = "could not parse path: " + e + System.lineSeparator();
+			String res = "could not parse path: " + path + System.lineSeparator()
+				+ e + System.lineSeparator();
 
 			for(StackTraceElement s : e.getStackTrace())
 				res += System.lineSeparator() + s;

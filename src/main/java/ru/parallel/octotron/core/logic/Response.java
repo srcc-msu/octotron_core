@@ -112,7 +112,7 @@ public class Response implements IPresentable
 	{
 		Map<String, Object> result = GetShortRepresentation();
 
-		result.put("messages", commands);
+		result.put("messages", messages);
 		result.put("commands", commands);
 
 		return result;

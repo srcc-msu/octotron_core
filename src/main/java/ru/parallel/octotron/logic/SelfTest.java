@@ -28,7 +28,7 @@ public class SelfTest
 
 		obj2 = ServiceLocator.INSTANCE.GetModelService().AddObject();
 		obj2.GetBuilder().DeclareConst("type", "_selftest");
-		obj2.GetBuilder().DeclareVar("check", new AStrictLongSum("in_n", "test_iteration"));
+		obj2.GetBuilder().DeclareVar("check", new AStrictLongSum("u_n", "test_iteration"));
 
 		ServiceLocator.INSTANCE.GetModelService().AddLink(obj1, obj2, false);
 	}

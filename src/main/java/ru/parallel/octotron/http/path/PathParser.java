@@ -32,9 +32,11 @@ public final class PathParser
 	{
 		PathOperations.obj, PathOperations.link
 		, PathOperations.q
-		, PathOperations.in_n, PathOperations.out_n, PathOperations.all_n
+		, PathOperations.in_n, PathOperations.out_n
+		, PathOperations.u_n, PathOperations.all_n
 		, PathOperations.uniq, PathOperations.self
-		, PathOperations.in_l, PathOperations.out_l, PathOperations.all_l
+		, PathOperations.in_l, PathOperations.out_l
+		, PathOperations.u_l, PathOperations.all_l
 		, PathOperations.source, PathOperations.target
 	};
 

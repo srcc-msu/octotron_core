@@ -51,7 +51,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 			result.add((ModelObject)entity);
 			return result;
 		}
-		else if(entity.GetType() == EModelType.OBJECT)
+		else if(entity.GetType() == EModelType.LINK)
 		{
 			ModelLinkList result = new ModelLinkList();
 			result.add((ModelLink)entity);

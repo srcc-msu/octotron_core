@@ -11,10 +11,10 @@ import ru.parallel.utils.format.TypedString;
 
 import java.util.Map;
 
-public abstract interface IOperation
+public interface IOperation
 {
 	String GetName();
 	boolean IsBlocking();
 
-	public abstract TypedString Execute(Map<String, String> params) throws ExceptionParseError;
+	TypedString Execute(Map<String, String> params) throws ExceptionParseError;
 }

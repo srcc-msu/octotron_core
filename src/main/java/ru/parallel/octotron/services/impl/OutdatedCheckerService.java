@@ -3,55 +3,25 @@ package ru.parallel.octotron.services.impl;
 import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.services.BGExecutorService;
+import ru.parallel.octotron.services.BGService;
 import ru.parallel.octotron.services.Service;
 import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.utils.JavaUtils;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class OutdatedCheckerService extends Service
+public class OutdatedCheckerService extends BGService
 {
-	static private final Object lock = new Object();
-
-	class Checker implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			synchronized(lock)
-			{
-				while(true)
-				{
-					try
-					{
-						Thread.sleep(1000);
-						lock.wait();
-					}
-					catch(InterruptedException e)
-					{
-						LOGGER.log(Level.WARNING, "outdated thread interrupted");
-						return;
-					}
-
-					Collection<Sensor> outdated_sensors = ProcessOutdatedSensors(context);
-
-					if(outdated_sensors.size() > 0)
-						LOGGER.log(Level.INFO, "outdated sensors: " + outdated_sensors.size());
-				}
-			}
-		}
-	}
-
-	private final Thread checker = new Thread(new Checker());
+	private final static Logger LOGGER = Logger.getLogger("octotron");
 
 	public OutdatedCheckerService(Context context)
 	{
-		super(context);
-
-		checker.setName("outdated_checker");
-		checker.start();
+		super(context, new BGExecutorService("outdated_checker", 1));
 	}
 
 	public static Collection<Sensor> ProcessOutdatedSensors(Context context)
@@ -74,18 +44,26 @@ public class OutdatedCheckerService extends Service
 		return outdated_sensors;
 	}
 
-	public void PerformCheck()
+	class Checker implements Runnable
 	{
-		synchronized(lock)
+		@Override
+		public void run()
 		{
-			lock.notify();
+			Collection<Sensor> outdated_sensors = ProcessOutdatedSensors(context);
+
+			if(outdated_sensors.size() > 0)
+				LOGGER.log(Level.INFO, "outdated sensors: " + outdated_sensors.size());
 		}
 	}
 
-	@Override
-	public void Finish()
+	public void PerformCheck()
 	{
-		LOGGER.log(Level.INFO, "interrupting outdated checker");
-		checker.interrupt();
+		if(executor.GetWaitingCount() > 0)
+		{
+			LOGGER.log(Level.WARNING, "outdated checker is still running, ignoring new task");
+			return;
+		}
+
+		executor.execute(new Checker());
 	}
 }

@@ -35,7 +35,7 @@ public final class ModelService extends Service
 		return model_data;
 	}
 
-	public static enum EMode
+	public enum EMode
 	{
 		CREATION, LOAD, OPERATION
 	}

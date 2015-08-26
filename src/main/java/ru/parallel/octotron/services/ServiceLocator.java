@@ -7,6 +7,7 @@ import ru.parallel.octotron.services.impl.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO: kill myself for adding this thing. i was wrong
 public class ServiceLocator
 {
 	// TODO: remove singleton

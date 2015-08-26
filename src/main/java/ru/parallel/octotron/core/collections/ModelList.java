@@ -326,7 +326,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		return list;
 	}
 
-	public static enum EQueryType { EQ, NE, LE, GE, LT, GT, NONE }
+	public enum EQueryType { EQ, NE, LE, GE, LT, GT, NONE }
 
 //--------
 //

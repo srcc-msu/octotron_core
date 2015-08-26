@@ -44,7 +44,8 @@ public class HttpRequestParser
 	 * */
 	private static final IOperation[] MODIFY_OPERATIONS =
 	{
-		new Modify.import_op()
+		new Modify.activate_op()
+		, new Modify.import_op()
 		, new Modify.unchecked_import()
 		, new Modify.set_valid()
 		, new Modify.set_invalid()

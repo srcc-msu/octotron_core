@@ -105,7 +105,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 //--------
 
-	Map<ConstTemplate, Const> static_cache = new HashMap<>();
+	final Map<ConstTemplate, Const> static_cache = new HashMap<>();
 
 	public void DeclareStatic(ConstTemplate constant)
 	{

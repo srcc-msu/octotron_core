@@ -17,6 +17,8 @@ import ru.parallel.octotron.http.path.ParsedPath;
 import ru.parallel.octotron.http.path.PathParser;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AStrict extends ObjectRule
 {
@@ -30,10 +32,15 @@ public abstract class AStrict extends ObjectRule
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
+	Map<ModelObject, ModelList<? extends ModelEntity, ?>> cache = new HashMap<>();
+
 	// TODO: this is slow, add clone and caching or something
 	ModelList<? extends ModelEntity, ?> GetCandidates(ModelObject object)
 	{
-		return parsed_path.Execute(ModelList.Single(object)).Uniq();
+		if(cache.get(object) == null)
+			cache.put(object, parsed_path.Execute(ModelList.Single(object)).Uniq());
+
+		return cache.get(object);
 	}
 
 	@Override

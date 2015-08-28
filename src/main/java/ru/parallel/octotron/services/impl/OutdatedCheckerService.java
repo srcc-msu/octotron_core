@@ -39,6 +39,8 @@ public class OutdatedCheckerService extends BGService
 				if(sensor.IsOutdated() && !last_state) // was not outdated, but now is
 					outdated_sensors.add(sensor);
 			}
+
+			try { Thread.sleep(0, 100); } catch (InterruptedException ignore) {}
 		}
 
 		return outdated_sensors;
@@ -51,8 +53,7 @@ public class OutdatedCheckerService extends BGService
 		{
 			Collection<Sensor> outdated_sensors = ProcessOutdatedSensors(context);
 
-			if(outdated_sensors.size() > 0)
-				LOGGER.log(Level.INFO, "outdated sensors: " + outdated_sensors.size());
+			LOGGER.log(Level.INFO, "outdated sensors: " + outdated_sensors.size());
 		}
 	}
 

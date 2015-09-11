@@ -40,7 +40,7 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			ServiceLocator.INSTANCE.GetImportService().Activate(target, name);
+			ServiceLocator.INSTANCE.GetModificationService().Activate(target, name);
 
 			return new TextString("added to import queue");
 		}
@@ -68,7 +68,7 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			ServiceLocator.INSTANCE.GetImportService().Import(target, name, value);
+			ServiceLocator.INSTANCE.GetModificationService().Import(target, name, value);
 
 			return new TextString("added to import queue");
 		}
@@ -97,7 +97,7 @@ public class Modify
 
 			try
 			{
-				if(ServiceLocator.INSTANCE.GetImportService().Import(target, name, value, false))
+				if(ServiceLocator.INSTANCE.GetModificationService().Import(target, name, value, false))
 					return new TextString("added to import queue");
 				else
 					return new TextString("attribute not found, but registered, import skipped");

@@ -21,7 +21,7 @@ public class ServiceLocator
 	private RequestService request_service;
 	private HttpService http_service;
 	private ReactionService reaction_service;
-	private ImportService import_service;
+	private ModificationService modification_service;
 	private OutdatedCheckerService checker_service;
 	private PersistenceService persistence_service;
 	private ScriptService script_service;
@@ -95,11 +95,11 @@ public class ServiceLocator
 		return reaction_service;
 	}
 
-	public ImportService GetImportService()
+	public ModificationService GetModificationService()
 	{
-		if(import_service == null)
-			import_service = new ImportService(context);
-		return import_service;
+		if(modification_service == null)
+			modification_service = new ModificationService(context);
+		return modification_service;
 	}
 
 	public OutdatedCheckerService GetOutdatedCheckerService()
@@ -115,7 +115,7 @@ public class ServiceLocator
 		if(request_service     != null) request_service.Finish();
 		if(http_service        != null) http_service.Finish();
 		if(reaction_service    != null) reaction_service.Finish();
-		if(import_service      != null) import_service.Finish();
+		if(modification_service != null) modification_service.Finish();
 		if(checker_service     != null) checker_service.Finish();
 		if(persistence_service != null) persistence_service.Finish();
 		if(script_service      != null) script_service.Finish();

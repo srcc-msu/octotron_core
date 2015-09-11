@@ -30,7 +30,7 @@ public final class Var extends Attribute
 	}
 
 	@Override
- 	public synchronized void UpdateSelf()
+	public void UpdateSelf()
 	{
 		super.UpdateValue(Value.Construct(rule.Compute(GetParent())));
 	}

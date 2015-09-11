@@ -24,24 +24,10 @@ public class OutdatedCheckerService extends BGService
 		super(context, new BGExecutorService("outdated_checker", 1));
 	}
 
-	public static Collection<Sensor> ProcessOutdatedSensors(Context context)
+	public static void ProcessOutdatedSensors()
 	{
-		List<Sensor> outdated_sensors = new LinkedList<>();
-
 		for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
-		{
-			for(Sensor sensor : entity.GetSensor())
-			{
-				boolean last_state = sensor.IsOutdated();
-
-				sensor.UpdateSelf();
-
-				if(sensor.IsOutdated() && !last_state) // was not outdated, but now is
-					outdated_sensors.add(sensor);
-			}
-		}
-
-		return outdated_sensors;
+			ServiceLocator.INSTANCE.GetModificationService().CheckOutdated(entity);
 	}
 
 	class Checker implements Runnable
@@ -51,9 +37,9 @@ public class OutdatedCheckerService extends BGService
 		{
 			LOGGER.log(Level.INFO, "starting outdated check");
 
-			Collection<Sensor> outdated_sensors = ProcessOutdatedSensors(context);
+			ProcessOutdatedSensors();
 
-			LOGGER.log(Level.INFO, "outdated sensors: " + outdated_sensors.size());
+			LOGGER.log(Level.INFO, "outdated check finished");
 		}
 	}
 
@@ -64,7 +50,6 @@ public class OutdatedCheckerService extends BGService
 			LOGGER.log(Level.WARNING, "outdated checker is still running, ignoring new task");
 			return;
 		}
-
 
 		executor.execute(new Checker());
 	}

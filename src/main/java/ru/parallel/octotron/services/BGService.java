@@ -6,7 +6,7 @@ public abstract class BGService extends Service
 {
 	protected final BGExecutorService executor;
 
-	public static final int DEFAULT_QUEUE_LIMIT = 100000;
+	public static final int DEFAULT_QUEUE_LIMIT = 1000000;
 
 	public BGService(Context context, BGExecutorService executor)
 	{

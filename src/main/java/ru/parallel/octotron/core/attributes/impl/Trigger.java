@@ -26,13 +26,13 @@ public class Trigger extends Attribute
 		return condition;
 	}
 
-	public synchronized void ForceTrigger()
+	public void ForceTrigger()
 	{
 		UpdateValue(new Value(true));
 	}
 
 	@Override
-	public synchronized void UpdateSelf()
+	public void UpdateSelf()
 	{
 		boolean state = IsTriggered();
 

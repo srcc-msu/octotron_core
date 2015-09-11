@@ -48,7 +48,7 @@ public class Reaction extends Attribute
 	}
 
 	@Override
-	protected synchronized void UpdateSelf()
+	protected void UpdateSelf()
 	{
 		boolean last_state = IsExecuted();
 

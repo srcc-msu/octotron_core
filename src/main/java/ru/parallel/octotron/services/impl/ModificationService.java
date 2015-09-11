@@ -13,11 +13,11 @@ import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.logging.Level;
 
-public class ImportService extends BGService
+public class ModificationService extends BGService
 {
-	public ImportService(Context context)
+	public ModificationService(Context context)
 	{
-		super(context, new BGExecutorService("import", DEFAULT_QUEUE_LIMIT));
+		super(context, new BGExecutorService("modification", DEFAULT_QUEUE_LIMIT));
 	}
 
 	public boolean Import(ModelEntity entity, String name, Value value, boolean strict)
@@ -67,6 +67,11 @@ public class ImportService extends BGService
 		executor.execute(new Activator(entity, name));
 	}
 
+	public void CheckOutdated(ModelEntity entity)
+	{
+		executor.execute(new OutdatedChecker(entity));
+	}
+
 	public class Importer implements Runnable
 	{
 		protected final ModelEntity entity;
@@ -108,6 +113,32 @@ public class ImportService extends BGService
 			Trigger trigger = entity.GetTrigger(name);
 
 			trigger.ForceTrigger();
+		}
+	}
+
+	public class OutdatedChecker implements Runnable
+	{
+		protected final ModelEntity entity;
+
+		public OutdatedChecker(ModelEntity entity)
+		{
+			this.entity = entity;
+		}
+
+		@Override
+		public void run()
+		{
+			long outdated_count = 0;
+
+			for(Sensor sensor : entity.GetSensor())
+			{
+				boolean last_state = sensor.IsOutdated();
+
+				sensor.UpdateSelf();
+
+				if(sensor.IsOutdated() && !last_state) // was not outdated, but now is
+					outdated_count++;
+			}
 		}
 	}
 }

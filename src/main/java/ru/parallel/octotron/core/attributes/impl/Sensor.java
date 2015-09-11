@@ -98,7 +98,7 @@ public final class Sensor extends Attribute
 	}
 
 	@Override
-	public synchronized void UpdateValue(Value new_value)
+	public void UpdateValue(Value new_value)
 	{
 		SetIsOutdated(false);
 

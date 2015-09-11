@@ -90,11 +90,14 @@ public class ExecutionController
 	{
 		long current_time = JavaUtils.GetTimestamp();
 
-		if(current_time - last_outdated_check > OUTDATED_CHECK_INTERVAL) // TODO: scheduler?
-		{
-			last_outdated_check = current_time;
-			ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck();
-		}
+
+		if(context.settings.GetOutdatedCheckInterval() > 0)
+			if(current_time - last_outdated_check > context.settings.GetOutdatedCheckInterval())
+			{
+				// TODO: scheduler?
+				last_outdated_check = current_time;
+				ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck();
+			}
 
 		ServiceLocator.INSTANCE.GetRuntimeService().GetStat().Process();
 

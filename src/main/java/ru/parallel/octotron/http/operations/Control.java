@@ -42,6 +42,25 @@ public class Control
 	}
 
 	/**
+	 * asks the execution control to stop the main process<br>
+	 * */
+	public static class check extends FormattedOperation
+	{
+		public check() {super("check", true);}
+
+		@Override
+		public TypedString Execute(Map<String, String> params, boolean verbose)
+			throws ExceptionParseError
+		{
+			Utils.StrictParams(params);
+
+			ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck();
+
+			return new TextString("running outdated check");
+		}
+	}
+
+	/**
 	 * asks the execution control to perform a self-test<br>
 	 * */
 	public static class selftest extends FormattedOperation

@@ -60,6 +60,7 @@ public class HttpRequestParser
 	private static final IOperation[] CONTROL_OPERATIONS =
 	{
 		new Control.quit()
+		, new Control.check()
 		, new Control.mode()
 		, new Control.snapshot()
 		, new Control.selftest()

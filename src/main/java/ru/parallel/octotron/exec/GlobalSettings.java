@@ -47,6 +47,7 @@ public class GlobalSettings
 
 	private boolean db = false;
 	private boolean start_silent = false;
+	private long outdated_check_interval = 0;
 	private boolean notify_timeout = false;
 
 	private final Map<String, String> script_map = new HashMap<>();
@@ -133,6 +134,11 @@ public class GlobalSettings
 			start_silent = JsonUtils.MustPresent(sys_conf, "start_silent").getAsBoolean();
 		}
 
+		if(JsonUtils.IsPresent(sys_conf, "outdated_check_interval"))
+		{
+			outdated_check_interval = JsonUtils.MustPresent(sys_conf, "outdated_check_interval").getAsLong();
+		}
+
 		if(JsonUtils.IsPresent(sys_conf, "notify_timeout"))
 		{
 			notify_timeout = JsonUtils.MustPresent(sys_conf, "notify_timeout").getAsBoolean();
@@ -215,6 +221,8 @@ public class GlobalSettings
 	public boolean IsStartSilent() { return start_silent; }
 
 	public boolean IsNotifyTimeout() { return notify_timeout; }
+
+	public long GetOutdatedCheckInterval() { return outdated_check_interval; }
 
 	public boolean IsDb() { return db; }
 

@@ -20,7 +20,7 @@ public class Manual extends Rule
 	}
 
 	@Override
-	public Object Compute(ModelEntity entity)
+	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
 		return false;
 	}

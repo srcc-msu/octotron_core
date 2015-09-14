@@ -27,7 +27,9 @@ public class OutdatedCheckerService extends BGService
 	public static void ProcessOutdatedSensors()
 	{
 		for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
+		{
 			ServiceLocator.INSTANCE.GetModificationService().CheckOutdated(entity);
+		}
 	}
 
 	class Checker implements Runnable
@@ -43,14 +45,16 @@ public class OutdatedCheckerService extends BGService
 		}
 	}
 
-	public void PerformCheck()
+	public boolean PerformCheck()
 	{
 		if(executor.GetWaitingCount() > 0)
 		{
 			LOGGER.log(Level.WARNING, "outdated checker is still running, ignoring new task");
-			return;
+			return false;
 		}
 
 		executor.execute(new Checker());
+
+		return true;
 	}
 }

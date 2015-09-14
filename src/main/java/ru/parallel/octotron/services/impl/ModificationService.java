@@ -17,7 +17,7 @@ public class ModificationService extends BGService
 {
 	public ModificationService(Context context)
 	{
-		super(context, new BGExecutorService("modification", DEFAULT_QUEUE_LIMIT));
+		super(context, new BGExecutorService("modification", 10000000));
 	}
 
 	public boolean Import(ModelEntity entity, String name, Value value, boolean strict)
@@ -25,7 +25,7 @@ public class ModificationService extends BGService
 	{
 		if(entity.TestAttribute(name))
 		{
-			Import(entity, name, value);
+			Import(entity.GetSensor(name), value);
 			return true;
 		}
 		else if(strict)
@@ -37,9 +37,9 @@ public class ModificationService extends BGService
 		}
 	}
 
-	public void Import(ModelEntity entity, String name, Value value)
+	public void Import(Sensor sensor, Value value)
 	{
-		executor.execute(new Importer(entity, name, value));
+		executor.execute(new Importer(sensor, value));
 	}
 
 	public void UnknownImport(ModelEntity target, String name, Value value)
@@ -52,8 +52,8 @@ public class ModificationService extends BGService
 
 		try
 		{
-			ServiceLocator.INSTANCE.GetScriptService().ExecSilent(script, Long.toString(target.GetID())
-				, name, value.toString());
+			ServiceLocator.INSTANCE.GetScriptService().ExecSilent(script
+				, Long.toString(target.GetID()), name, value.toString());
 		}
 		catch(ExceptionSystemError e)
 		{
@@ -74,23 +74,18 @@ public class ModificationService extends BGService
 
 	public class Importer implements Runnable
 	{
-		protected final ModelEntity entity;
-		protected final String name;
+		protected final Sensor sensor;
 		protected final Value value;
 
-		public Importer(ModelEntity entity, String name, Value value)
+		public Importer(Sensor sensor, Value value)
 		{
-			this.entity = entity;
-
-			this.name = name;
+			this.sensor = sensor;
 			this.value = value;
 		}
 
 		@Override
 		public void run()
 		{
-			Sensor sensor = entity.GetSensor(name);
-
 			sensor.UpdateValue(value);
 		}
 	}

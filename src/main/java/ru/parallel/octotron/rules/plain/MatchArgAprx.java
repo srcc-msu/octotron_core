@@ -36,7 +36,7 @@ public class MatchArgAprx extends Rule
 	}
 
 	@Override
-	public Object Compute(ModelEntity entity)
+	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
 		Attribute attr = entity.GetAttribute(check_attribute);
 		Attribute match_attr = entity.GetAttribute(match_attribute);

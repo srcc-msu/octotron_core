@@ -8,6 +8,7 @@ package ru.parallel.octotron.rules;
 
 
 import ru.parallel.octotron.core.attributes.Attribute;
+import ru.parallel.octotron.core.attributes.impl.Var;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -18,12 +19,12 @@ public abstract class ObjectRule extends Rule
 	protected ObjectRule() {}
 
 	@Override
-	public final Object Compute(ModelEntity entity)
+	public final Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
-		return Compute((ModelObject) entity);
+		return Compute((ModelObject) entity, rule_attribute);
 	}
 
-	public abstract Object Compute(ModelObject object);
+	public abstract Object Compute(ModelObject object, Attribute rule_attribute);
 
 	@Override
 	public final AttributeList<Attribute> GetDependency(ModelEntity entity)

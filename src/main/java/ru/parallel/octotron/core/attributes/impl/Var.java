@@ -32,7 +32,8 @@ public final class Var extends Attribute
 	@Override
 	public void UpdateSelf()
 	{
-		super.UpdateValue(Value.Construct(rule.Compute(GetParent())));
+		Object raw_value = rule.Compute(GetParent(), this);
+		super.UpdateValue(Value.Construct(raw_value));
 	}
 
 	@Override

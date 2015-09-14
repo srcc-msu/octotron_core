@@ -7,6 +7,7 @@
 package ru.parallel.octotron.core.logic;
 
 import ru.parallel.octotron.core.attributes.Attribute;
+import ru.parallel.octotron.core.attributes.impl.Var;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelEntity;
 
@@ -17,7 +18,7 @@ public abstract class Rule
 {
 	protected Rule(){}
 
-	public abstract Object Compute(ModelEntity entity);
+	public abstract Object Compute(ModelEntity entity, Attribute rule_attribute);
 
 	public abstract AttributeList<Attribute> GetDependency(ModelEntity entity);
 }

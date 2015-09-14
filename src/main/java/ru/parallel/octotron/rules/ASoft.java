@@ -7,6 +7,8 @@
 package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.attributes.Attribute;
+import ru.parallel.octotron.core.attributes.impl.Value;
+import ru.parallel.octotron.core.attributes.impl.Var;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -31,24 +33,13 @@ public abstract class ASoft extends ObjectRule
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
-	Map<ModelObject, ModelList<? extends ModelEntity, ?>> cache = new HashMap<>();
-
-	// TODO: this is slow, add clone and caching or something
-	ModelList<? extends ModelEntity, ?> GetCandidates(ModelObject object)
-	{
-
-		if(cache.get(object) == null)
-			cache.put(object, parsed_path.Execute(ModelList.Single(object)).Uniq());
-
-		return cache.get(object);
-	}
-
 	@Override
 	public AttributeList<Attribute> GetDependency(ModelObject object)
 	{
 		AttributeList<Attribute> result = new AttributeList<>();
 
-		ModelList<? extends ModelEntity, ?> candidates = GetCandidates(object);
+		ModelList<? extends ModelEntity, ?> candidates =
+			parsed_path.Execute(ModelList.Single(object)).Uniq();
 
 		for(ModelEntity obj : candidates)
 			for(String tmp : attributes)
@@ -63,22 +54,14 @@ public abstract class ASoft extends ObjectRule
 	}
 
 	@Override
-	public Object Compute(ModelObject object)
+	public Object Compute(ModelObject object, Attribute rule_attribute)
 	{
 		Object res = GetDefaultValue();
 
-		ModelList<? extends ModelEntity, ?> candidates = GetCandidates(object);
-
-		for(ModelEntity obj : candidates)
-			for(String tmp : attributes)
-			{
-				if(!obj.TestAttribute(tmp))
-					continue;
-
-				Attribute attribute = obj.GetAttribute(tmp);
-
-				res = Accumulate(res, attribute);
-			}
+		for(Attribute attribute : rule_attribute.GetIDependOn())
+		{
+			res = Accumulate(res, attribute);
+		}
 
 		return res;
 	}

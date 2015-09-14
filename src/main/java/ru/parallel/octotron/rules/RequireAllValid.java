@@ -1,6 +1,8 @@
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
+import ru.parallel.octotron.core.attributes.impl.Var;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
@@ -16,9 +18,9 @@ public class RequireAllValid extends AInvalidCount // WTF?
 	}
 
 	@Override
-	public Object Compute(ModelObject object)
+	public Object Compute(ModelObject object, Attribute rule_attribute)
 	{
-		long valid_count = (Long)super.Compute(object);
+		long valid_count = (Long)super.Compute(object, rule_attribute);
 
 		if(valid_count > 0)
 			return Value.invalid;

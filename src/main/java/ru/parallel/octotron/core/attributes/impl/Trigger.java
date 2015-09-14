@@ -36,7 +36,7 @@ public class Trigger extends Attribute
 	{
 		boolean state = IsTriggered();
 
-		Value value = Value.Construct(condition.Compute(GetParent()));
+		Value value = Value.Construct(condition.Compute(GetParent(), this));
 
 		boolean condition_met = value.IsValid() && value.GetBoolean();
 

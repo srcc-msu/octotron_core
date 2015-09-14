@@ -17,7 +17,7 @@ public abstract class LinkRule extends Rule
 	protected LinkRule() {}
 
 	@Override
-	public final Object Compute(ModelEntity entity)
+	public final Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
 		return Compute((ModelLink) entity);
 	}

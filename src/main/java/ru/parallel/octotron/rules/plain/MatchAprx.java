@@ -36,7 +36,7 @@ public class MatchAprx extends Rule
 	}
 
 	@Override
-	public Object Compute(ModelEntity entity)
+	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
 		Attribute attr = entity.GetAttribute(check_attribute);
 
@@ -45,5 +45,4 @@ public class MatchAprx extends Rule
 
 		return attr.aeq(match_value, aprx);
 	}
-
 }

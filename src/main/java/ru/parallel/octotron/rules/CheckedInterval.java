@@ -6,6 +6,7 @@
 
 package ru.parallel.octotron.rules;
 
+import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 
@@ -17,9 +18,9 @@ public class CheckedInterval extends Interval // does it smell?
 	}
 
 	@Override
-	public Object Compute(ModelEntity entity)
+	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
-		Object result = super.Compute(entity);
+		Object result = super.Compute(entity, rule_attribute);
 
 		if(result.equals(Value.invalid))
 			return Value.invalid;

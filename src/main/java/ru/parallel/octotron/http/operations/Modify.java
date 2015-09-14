@@ -68,9 +68,15 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			ServiceLocator.INSTANCE.GetModificationService().Import(target, name, value);
+			Sensor sensor = target.GetSensorOrNull(name);
 
-			return new TextString("added to import queue");
+			if(sensor != null)
+			{
+				ServiceLocator.INSTANCE.GetModificationService().Import(sensor, value);
+				return new TextString("added to import queue");
+			}
+
+			return new TextString("sensor not found");
 		}
 	}
 

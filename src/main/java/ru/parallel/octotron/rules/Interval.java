@@ -40,7 +40,7 @@ public class Interval extends Rule
 	}
 
 	@Override
-	public Object Compute(ModelEntity entity)
+	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
 		Attribute attr = entity.GetAttribute(param);
 

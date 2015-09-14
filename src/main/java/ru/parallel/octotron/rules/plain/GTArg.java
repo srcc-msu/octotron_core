@@ -34,7 +34,7 @@ public class GTArg extends Rule
 	}
 
 	@Override
-	public Object Compute(ModelEntity entity)
+	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
 		Attribute attr = entity.GetAttribute(param);
 		Attribute cmp = entity.GetAttribute(arg_threshold);
@@ -44,5 +44,4 @@ public class GTArg extends Rule
 
 		return attr.gt(cmp);
 	}
-
 }

@@ -35,7 +35,7 @@ public class ToArgPct extends Rule
 	}
 
 	@Override
-	public Object Compute(ModelEntity entity)
+	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
 		Attribute attr = entity.GetAttribute(measured_attribute);
 		Attribute max_value = entity.GetAttribute(max_value_arg);

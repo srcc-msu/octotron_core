@@ -54,9 +54,11 @@ public class Control
 		{
 			Utils.StrictParams(params);
 
-			ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck();
+			boolean result = ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck();
 
-			return new TextString("running outdated check");
+			if(result)
+				return new TextString("running outdated check");
+			return new TextString("outdated check is already running");
 		}
 	}
 

@@ -277,7 +277,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 		List<Map<String, Object>> reaction_list = new LinkedList<>();
 		for(Reaction attribute : GetReaction())
 		{
-			reaction_list.add(attribute.GetShortRepresentation());
+			reaction_list.add(attribute.GetLongRepresentation());
 		}
 
 		result.put("const", const_list);

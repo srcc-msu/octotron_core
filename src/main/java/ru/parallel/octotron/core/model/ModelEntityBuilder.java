@@ -70,6 +70,8 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 		CheckAddAttribute(reaction);
 		entity.reactions.add(reaction);
+
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterReaction(reaction);
 	}
 
 	public void AddReaction(List<ReactionTemplate> reactions)

@@ -7,22 +7,22 @@
 package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.attributes.impl.Value;
-import ru.parallel.octotron.core.model.ModelID;
-import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.IPresentable;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseAttribute extends ModelID<EAttributeType> implements IValue, IPresentable
+/**
+ * provides a storage for a pair of (name, value)
+ * and interface with different comparison functions
+ * */
+public abstract class BaseAttribute implements IValue, IPresentable
 {
 	private final String name;
 	private Value value;
 
-	BaseAttribute(EAttributeType type, String name, Value value)
+	BaseAttribute(String name, Value value)
 	{
-		super(type);
-
 		this.name = name;
 		this.value = value;
 	}
@@ -37,8 +37,12 @@ public abstract class BaseAttribute extends ModelID<EAttributeType> implements I
 		return value;
 	}
 
-
-// TODO: value can change type after getting not computable
+/**
+ * set the new value to the attribute
+ * tracks matching of the value type, if it is not invalid or undefined
+ *
+ * TODO: value can change type after getting not computable
+ * */
 	public void UpdateValue(Value new_value)
 	{
 		if(value.IsComputable() && new_value.IsComputable())
@@ -53,7 +57,6 @@ public abstract class BaseAttribute extends ModelID<EAttributeType> implements I
 	{
 		Map<String, Object> result = new HashMap<>();
 
-		result.put("attribute AID", GetID());
 		result.put(GetName(), value);
 
 		return result;
@@ -63,7 +66,6 @@ public abstract class BaseAttribute extends ModelID<EAttributeType> implements I
 	{
 		Map<String, Object> result = new HashMap<>();
 
-		result.put("attribute AID", GetID());
 		result.put("name", GetName());
 		result.put("value", value);
 

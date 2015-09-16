@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.persistence.graph.impl;
 
-import ru.parallel.octotron.core.primitive.ID;
+import ru.parallel.octotron.core.primitive.Info;
 import ru.parallel.octotron.persistence.graph.EGraphType;
 import ru.parallel.octotron.persistence.graph.IGraph;
 
@@ -19,9 +19,9 @@ import java.util.List;
  * */
 public final class GraphObject extends GraphEntity
 {
-	public GraphObject(IGraph graph, ID<EGraphType> id)
+	public GraphObject(IGraph graph, Info<EGraphType> info)
 	{
-		super(graph, id);
+		super(graph, info);
 	}
 
 	public GraphObject(IGraph graph, long id)
@@ -32,48 +32,48 @@ public final class GraphObject extends GraphEntity
 	@Override
 	public Object GetAttribute(String name)
 	{
-		return graph.GetObjectAttribute(id, name);
+		return graph.GetObjectAttribute(info, name);
 	}
 
 	public void DeleteAttribute(String name)
 	{
-		graph.DeleteObjectAttribute(id, name);
+		graph.DeleteObjectAttribute(info, name);
 	}
 
 	@Override
 	public void UpdateAttribute(String name, Object value)
 	{
-		graph.SetObjectAttribute(id, name, value);
+		graph.SetObjectAttribute(info, name, value);
 	}
 
 	@Override
 	public boolean TestAttribute(String name)
 	{
-		return graph.TestObjectAttribute(id, name);
+		return graph.TestObjectAttribute(info, name);
 	}
 
 	@Override
 	public void Delete()
 	{
-		graph.DeleteObject(id);
+		graph.DeleteObject(info);
 	}
 
 	@Override
 	public List<String> GetAttributes()
 	{
-		return graph.GetObjectAttributes(id);
+		return graph.GetObjectAttributes(info);
 	}
 
 //--------
 
 	public Collection<GraphLink> GetInLinks()
 	{
-		return GraphService.LinksFromUid(graph, graph.GetInLinks(id));
+		return GraphService.LinksFromUid(graph, graph.GetInLinks(info));
 	}
 
 	public Collection<GraphLink> GetOutLinks()
 	{
-		return GraphService.LinksFromUid(graph, graph.GetOutLinks(id));
+		return GraphService.LinksFromUid(graph, graph.GetOutLinks(info));
 	}
 
 	public Collection<GraphObject> GetInNeighbors()
@@ -100,11 +100,11 @@ public final class GraphObject extends GraphEntity
 
 	public boolean TestLabel(String label)
 	{
-		return graph.TestNodeLabel(id, label);
+		return graph.TestNodeLabel(info, label);
 	}
 
 	public void AddLabel(String label)
 	{
-		graph.AddNodeLabel(id, label);
+		graph.AddNodeLabel(info, label);
 	}
 }

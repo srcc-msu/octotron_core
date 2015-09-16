@@ -1,17 +1,11 @@
 package ru.parallel.octotron.services.impl;
 
-import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.services.BGExecutorService;
 import ru.parallel.octotron.services.BGService;
-import ru.parallel.octotron.services.Service;
 import ru.parallel.octotron.services.ServiceLocator;
-import ru.parallel.utils.JavaUtils;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

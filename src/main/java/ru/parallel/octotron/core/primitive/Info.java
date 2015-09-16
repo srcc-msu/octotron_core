@@ -6,24 +6,25 @@
 
 package ru.parallel.octotron.core.primitive;
 
-public class ID<T> implements IUniqueID<T>
+/**
+ * provides a user level typing for objects with long identifiers
+ * */
+public class Info<T>
 {
 	private final long id;
 	private final T type;
 
-	public ID(long id, T type)
+	public Info(long id, T type)
 	{
 		this.type = type;
 		this.id = id;
 	}
 
-	@Override
 	public final long GetID()
 	{
 		return id;
 	}
 
-	@Override
 	public final T GetType()
 	{
 		return type;
@@ -32,10 +33,10 @@ public class ID<T> implements IUniqueID<T>
 	@Override
 	public final boolean equals(Object object)
 	{
-		if(!(object instanceof ID))
+		if(!(object instanceof Info))
 			return false;
 
-		ID<?> cmp = ((ID<?>)object);
+		Info<?> cmp = ((Info<?>)object);
 
 		return id == cmp.id && type.equals(cmp.type);
 	}

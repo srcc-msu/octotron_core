@@ -202,13 +202,13 @@ public class Modify
 				if(AID != -1)
 				{
 					res += "suppressed reaction: " + name
-						+ " on object: " + entity.GetID()
+						+ " on object: " + entity.GetInfo().GetID()
 						+ System.lineSeparator();
 				}
 				else
 				{
 					res += "reaction: " + name
-						+ " not found on object: " + entity.GetID()
+						+ " not found on object: " + entity.GetInfo().GetID()
 						+ System.lineSeparator();
 				}
 			}
@@ -246,13 +246,13 @@ public class Modify
 				if(AID != -1)
 				{
 					res += "unsuppressed reaction: " + name
-						+ " on object: " + entity.GetID()
+						+ " on object: " + entity.GetInfo().GetID()
 						+ System.lineSeparator();
 				}
 				else
 				{
 					res += "reaction: " + name
-						+ " not found on object: " + entity.GetID()
+						+ " not found on object: " + entity.GetInfo().GetID()
 						+ System.lineSeparator();
 				}
 			}

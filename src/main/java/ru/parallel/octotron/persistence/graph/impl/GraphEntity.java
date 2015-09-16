@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.persistence.graph.impl;
 
-import ru.parallel.octotron.core.primitive.ID;
+import ru.parallel.octotron.core.primitive.Info;
 import ru.parallel.octotron.persistence.graph.EGraphType;
 import ru.parallel.octotron.persistence.graph.IGraph;
 
@@ -19,18 +19,18 @@ import java.util.List;
 public abstract class GraphEntity
 {
 	protected final IGraph graph;
-	protected final ID<EGraphType> id;
+	protected final Info<EGraphType> info;
 
 	public GraphEntity(IGraph graph, long id, EGraphType type)
 	{
 		this.graph = graph;
-		this.id = new ID<>(id, type);
+		this.info = new Info<>(id, type);
 	}
 
-	public GraphEntity(IGraph graph, ID<EGraphType> id)
+	public GraphEntity(IGraph graph, Info<EGraphType> info)
 	{
 		this.graph = graph;
-		this.id = id;
+		this.info = info;
 	}
 
 	public abstract void Delete();
@@ -52,8 +52,8 @@ public abstract class GraphEntity
 
 	public abstract void UpdateAttribute(String name, Object value);
 
-	public ID<EGraphType> GetID()
+	public Info<EGraphType> GetID()
 	{
-		return id;
+		return info;
 	}
 }

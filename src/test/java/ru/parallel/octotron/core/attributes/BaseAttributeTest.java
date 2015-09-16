@@ -92,7 +92,6 @@ public class BaseAttributeTest
 	{
 		BaseAttribute attribute = new Const(null, "const", new Value("str"));
 
-		assertEquals(attribute.GetID(), attribute.GetLongRepresentation().get("attribute AID"));
 		assertEquals("const", attribute.GetLongRepresentation().get("name"));
 		assertEquals(new Value("str"), attribute.GetLongRepresentation().get("value"));
 	}
@@ -102,7 +101,6 @@ public class BaseAttributeTest
 	{
 		BaseAttribute attribute = new Const(null, "const", new Value("str"));
 
-		assertEquals(attribute.GetID(), attribute.GetShortRepresentation().get("attribute AID"));
 		assertEquals(new Value("str"), attribute.GetShortRepresentation().get("const"));
 	}
 

@@ -45,13 +45,13 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 
 	public static ModelList<?, ?> Single(ModelEntity entity)
 	{
-		if(entity.GetType() == EModelType.OBJECT)
+		if(entity.GetInfo().GetType() == EModelType.OBJECT)
 		{
 			ModelObjectList result = new ModelObjectList();
 			result.add((ModelObject)entity);
 			return result;
 		}
-		else if(entity.GetType() == EModelType.LINK)
+		else if(entity.GetInfo().GetType() == EModelType.LINK)
 		{
 			ModelLinkList result = new ModelLinkList();
 			result.add((ModelLink)entity);
@@ -313,7 +313,7 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		Map<Long, T> map = new LinkedHashMap<>();
 
 		for(T elem : list)
-			map.put(elem.GetID(), elem);
+			map.put(elem.GetInfo().GetID(), elem);
 
 		List<T> new_list = new LinkedList<>();
 		new_list.addAll(map.values());

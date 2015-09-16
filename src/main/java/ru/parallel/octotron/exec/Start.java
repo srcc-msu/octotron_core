@@ -35,9 +35,8 @@ public class Start
 	private static final int SYS_LOG_SIZE = 10*MB; // 10 MB // orly?
 
 	private static final int DUPLICATES_LOGGING_THRESHOLD = 10000; // 10 seconds in ms
-	private static final String SEPARATOR =  System.lineSeparator() + "------------------------------------------------------------" + System.lineSeparator();
 
-	private static void ConfigLogging(String log_dir)
+	private static void ConfigLogging(String log_dir, boolean antispam)
 	{
 		try
 		{
@@ -53,7 +52,8 @@ public class Start
 			LOGGER.log(Level.CONFIG, "could not create log file in: " + log_dir, e);
 		}
 
-		LOGGER.setFilter(new AntiDuplicateLoggingFilter(DUPLICATES_LOGGING_THRESHOLD));
+		if(antispam)
+			LOGGER.setFilter(new AntiDuplicateLoggingFilter(DUPLICATES_LOGGING_THRESHOLD));
 	}
 
 /**
@@ -76,7 +76,7 @@ public class Start
 		LOGGER.log(Level.INFO, "starting Octotron using config file: " + config_fname);
 
 		Context context = CreateContext(config_fname);
-		ConfigLogging(context.settings.GetLogDir());
+		ConfigLogging(context.settings.GetLogDir(), false);
 
 		ExecutionController controller = Create(context);
 		Run(controller, context);

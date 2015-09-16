@@ -8,7 +8,6 @@ package ru.parallel.octotron.rules;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
-import ru.parallel.octotron.core.attributes.impl.Var;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -18,8 +17,6 @@ import ru.parallel.octotron.http.path.ParsedPath;
 import ru.parallel.octotron.http.path.PathParser;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class AStrict extends ObjectRule
 {

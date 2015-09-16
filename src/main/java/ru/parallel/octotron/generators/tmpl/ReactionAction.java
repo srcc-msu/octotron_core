@@ -71,7 +71,7 @@ public final class ReactionAction implements IPresentable
 	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
-		result.put("AID", GetID());
+		result.put("AID", GetInfo());
 
 		return result;
 	}
@@ -85,10 +85,10 @@ public final class ReactionAction implements IPresentable
 		result.put("wait_repeat", GetRepeat());
 		result.put("repeatable", IsRepeatable());
 
-		result.put("response", response.GetID());
+		result.put("response", response.GetInfo());
 
 		if(recover_response != null)
-			result.put("recover_response", recover_response.GetID());
+			result.put("recover_response", recover_response.GetInfo());
 		else
 			result.put("recover_response", -1);
 

@@ -70,12 +70,16 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						for(Attribute attribute : attributes)
-							if(attribute.GetType() == EAttributeType.SENSOR)
+						{
+							EAttributeType type = attribute.GetInfo().GetType();
+
+							if(type == EAttributeType.SENSOR)
 								persistence_manager.RegisterSensor((Sensor) attribute);
-							else if(attribute.GetType() == EAttributeType.VAR)
+							else if(type == EAttributeType.VAR)
 								persistence_manager.RegisterVar((Var) attribute);
 							else
-								throw new ExceptionModelFail("unsupported attribute: " + attribute.GetType());
+								throw new ExceptionModelFail("unsupported attribute: " + type);
+						}
 					}
 					catch(Exception e)
 					{
@@ -199,7 +203,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 					try
 					{
 						persistence_manager.RegisterConst(attribute);
-					} catch(Exception e)
+					} catch (Exception e)
 					{
 						LOGGER.log(Level.WARNING, "", e);
 					}

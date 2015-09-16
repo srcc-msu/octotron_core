@@ -10,10 +10,10 @@ import com.google.common.collect.Iterables;
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelInfo;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.IUniqueID;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.persistence.graph.impl.GraphEntity;
@@ -52,12 +52,12 @@ public class GraphManager implements IPersistenceManager
 		graph_service = new GraphService(graph);
 	}
 
-	private GraphObject GetObject(IUniqueID<?> id)
+	private GraphObject GetGraphObject(ModelInfo<?> id)
 	{
 		return graph_service.GetObject("AID", id.GetID());
 	}
 
-	private GraphObject CheckObject(IUniqueID<?> id, String check_label)
+	private GraphObject CheckGraphObject(ModelInfo<?> id, String check_label)
 	{
 		GraphObject graph_object = graph_service.GetObject("AID", id.GetID());
 
@@ -68,30 +68,30 @@ public class GraphManager implements IPersistenceManager
 		return graph_object;
 	}
 
-	private GraphLink GetLink(IUniqueID<?> id)
+	private GraphLink GetLink(ModelLink id)
 	{
-		return graph_service.GetLink("AID", id.GetID());
+		return graph_service.GetLink("AID", id.GetInfo().GetID());
 	}
 
-	private GraphEntity GetEntity(IUniqueID<?> id)
+	private GraphEntity GetEntity(ModelEntity id)
 	{
-		Collection<GraphLink> links = graph_service.GetLinks("AID", id.GetID());
-		Collection<GraphObject> objects = graph_service.GetObjects("AID", id.GetID());
+		Collection<GraphLink> links = graph_service.GetLinks("AID", id.GetInfo().GetID());
+		Collection<GraphObject> objects = graph_service.GetObjects("AID", id.GetInfo().GetID());
 
 		if(!links.isEmpty() && !objects.isEmpty())
-			throw new ExceptionModelFail("found few entities with the same id: " + id.GetID());
+			throw new ExceptionModelFail("found few entities with the same id: " + id.GetInfo().GetID());
 
 		if(objects.size() == 1)
 			return Iterables.get(objects, 0);
 		else if(objects.size() > 1)
-			throw new ExceptionModelFail("found multiple objects with AID: " + id.GetID());
+			throw new ExceptionModelFail("found multiple objects with AID: " + id.GetInfo().GetID());
 
 		if(links.size() == 1)
 			return Iterables.get(links, 0);
 		else if(links.size() > 1)
-			throw new ExceptionModelFail("found multiple links with AID: " + id.GetID());
+			throw new ExceptionModelFail("found multiple links with AID: " + id.GetInfo().GetID());
 
-		throw new ExceptionModelFail("could not get entity for AID: " + id.GetID());
+		throw new ExceptionModelFail("could not get entity for AID: " + id.GetInfo().GetID());
 	}
 
 	@Override
@@ -100,13 +100,13 @@ public class GraphManager implements IPersistenceManager
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
-			graph_object.AddLabel(object.GetType().toString());
+			graph_object.AddLabel(object.GetInfo().GetType().toString());
 
-			graph_object.UpdateAttribute("AID", object.GetID());
+			graph_object.UpdateAttribute("AID", object.GetInfo().GetID());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
-			CheckObject(object, object.GetType().toString());
+			CheckGraphObject(object.GetInfo(), object.GetInfo().GetType().toString());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
@@ -120,11 +120,11 @@ public class GraphManager implements IPersistenceManager
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphLink graph_object = graph_service.AddLink(
-				GetObject(link.GetObjects().get(0))
-				, GetObject(link.GetObjects().get(1))
-				, link.GetType().name());
+				GetGraphObject(link.GetObjects().get(0).GetInfo())
+				, GetGraphObject(link.GetObjects().get(1).GetInfo())
+				, link.GetInfo().GetType().name());
 
-			graph_object.UpdateAttribute("AID", link.GetID());
+			graph_object.UpdateAttribute("AID", link.GetInfo());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
@@ -141,10 +141,12 @@ public class GraphManager implements IPersistenceManager
 	{
 		RegisterMod(reaction);
 
+		ModelInfo<EAttributeType> info = reaction.GetInfo();
+
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
-			GraphObject graph_object = GetObject(reaction);
-			graph_object.AddLabel(reaction.GetType().toString());
+			GraphObject graph_object = GetGraphObject(info);
+			graph_object.AddLabel(info.GetType().toString());
 
 			graph_object.UpdateAttribute("stat", reaction.GetCounter());
 
@@ -152,12 +154,12 @@ public class GraphManager implements IPersistenceManager
 			graph_object.UpdateAttribute("descr", reaction.GetDescription());
 
 // info
-			graph_service.AddLink(GetObject(reaction), graph_object
-				, reaction.GetType().name());
+			graph_service.AddLink(GetGraphObject(info), graph_object
+				, info.GetType().name());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
-			GraphObject graph_object = CheckObject(reaction, reaction.GetType().toString());
+			GraphObject graph_object = CheckGraphObject(info, info.GetType().toString());
 
 			reaction.SetCounter((Long) graph_object.GetAttribute("stat"));
 			reaction.SetSuppressed((Boolean) graph_object.GetAttribute("suppress"));
@@ -165,7 +167,7 @@ public class GraphManager implements IPersistenceManager
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
-			GraphObject graph_object = GetObject(reaction);
+			GraphObject graph_object = GetGraphObject(info);
 
 			graph_object.UpdateAttribute("stat", reaction.GetCounter());
 
@@ -199,12 +201,14 @@ public class GraphManager implements IPersistenceManager
 
 	private void RegisterMod(Attribute attribute)
 	{
+		ModelInfo<EAttributeType> info = attribute.GetInfo();
+
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
 			GraphObject graph_object = graph_service.AddObject();
-			graph_object.AddLabel(attribute.GetType().toString());
+			graph_object.AddLabel(info.GetType().toString());
 
-			graph_object.UpdateAttribute("AID", attribute.GetID());
+			graph_object.UpdateAttribute("AID", attribute.GetInfo().GetID());
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
@@ -214,12 +218,12 @@ public class GraphManager implements IPersistenceManager
 // info
 			graph_object.UpdateAttribute("name", attribute.GetName());
 
-			graph_service.AddLink(GetObject(attribute.GetParent()), graph_object
-				, attribute.GetType().name());
+			graph_service.AddLink(GetGraphObject(attribute.GetParent().GetInfo()), graph_object
+				, info.GetType().name());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
-			GraphObject graph_object = CheckObject(attribute, attribute.GetType().toString());
+			GraphObject graph_object = CheckGraphObject(info, info.GetType().toString());
 
 			attribute.SetCTime((Long)graph_object.GetAttribute("ctime"));
 
@@ -230,7 +234,7 @@ public class GraphManager implements IPersistenceManager
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
-			GraphObject graph_object = GetObject(attribute);
+			GraphObject graph_object = GetGraphObject(info);
 
 			graph_object.UpdateAttribute("ctime", attribute.GetCTime());
 
@@ -243,19 +247,21 @@ public class GraphManager implements IPersistenceManager
 	{
 		RegisterMod(attribute);
 
+		ModelInfo<EAttributeType> info = attribute.GetInfo();
+
 		if(model_service.GetMode() == ModelService.EMode.CREATION)
 		{
-			GraphObject graph_object = GetObject(attribute);
+			GraphObject graph_object = GetGraphObject(info);
 			graph_object.UpdateAttribute("is_user_valid", attribute.IsUserValid());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
-			GraphObject graph_object = GetObject(attribute);
+			GraphObject graph_object = GetGraphObject(info);
 			attribute.SetIsUserValid((Boolean) graph_object.GetAttribute("is_user_valid"));
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
-			GraphObject graph_object = GetObject(attribute);
+			GraphObject graph_object = GetGraphObject(info);
 			graph_object.UpdateAttribute("is_user_valid", attribute.IsUserValid());
 		}
 	}
@@ -279,14 +285,14 @@ public class GraphManager implements IPersistenceManager
 	{
 		for(Attribute attribute : entity.GetAttributes())
 		{
-			if(attribute.GetType() == EAttributeType.CONST)
+			if(attribute.GetInfo().GetType() == EAttributeType.CONST)
 				continue;
 
-			GraphObject object = GetObject(attribute);
+			GraphObject object = GetGraphObject(attribute.GetInfo());
 
 			for(Attribute i_depend_on : attribute.GetIDependOn())
 			{
-				GraphObject dependency_object = GetObject(i_depend_on);
+				GraphObject dependency_object = GetGraphObject(i_depend_on.GetInfo());
 
 				graph_service.AddLink(object, dependency_object, DEPENDS);
 			}

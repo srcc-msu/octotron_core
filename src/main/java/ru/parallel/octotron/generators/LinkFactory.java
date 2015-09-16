@@ -63,13 +63,13 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 
 		if(link.IsDirected())
 		{
-			link.GetBuilder().DeclareConst("source", from.GetID());
-			link.GetBuilder().DeclareConst("target", to.GetID());
+			link.GetBuilder().DeclareConst("source", from.GetInfo().GetID());
+			link.GetBuilder().DeclareConst("target", to.GetInfo().GetID());
 		}
 		else
 		{
-			link.GetBuilder().DeclareConst("left", from.GetID());
-			link.GetBuilder().DeclareConst("right", to.GetID());
+			link.GetBuilder().DeclareConst("left", from.GetInfo().GetID());
+			link.GetBuilder().DeclareConst("right", to.GetInfo().GetID());
 		}
 
 		return link;

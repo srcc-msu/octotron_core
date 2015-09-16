@@ -8,18 +8,21 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.*;
-import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.EEventStatus;
-import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.core.primitive.IPresentable;
+import ru.parallel.octotron.core.primitive.*;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.AutoFormat;
 
 import java.util.*;
 
-public abstract class ModelEntity extends ModelID<EModelType> implements IPresentable
+/**
+ * base class for model objects and links
+ * stores attributes and provides a way to access them
+ * */
+public abstract class ModelEntity implements IPresentable
 {
+	ModelInfo<EModelType> info;
+
 	final Map<String, Attribute> attributes_map = new HashMap<>();
 
 	final Map<String, Const> const_map = new HashMap<>();
@@ -31,7 +34,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 
 	public ModelEntity(EModelType type)
 	{
-		super(type);
+		this.info = new ModelInfo<>(type);
 	}
 
 	public abstract ModelEntityBuilder<?> GetBuilder();
@@ -201,7 +204,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
-		result.put("entity AID", GetID());
+		result.put("entity AID", GetInfo().GetID());
 
 		List<Map<String, Object>> const_list = new LinkedList<>();
 
@@ -247,7 +250,7 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
-		result.put("entity AID", GetID());
+		result.put("entity AID", GetInfo().GetID());
 
 		List<Map<String, Object>> const_list = new LinkedList<>();
 
@@ -296,6 +299,24 @@ public abstract class ModelEntity extends ModelID<EModelType> implements IPresen
 			return GetLongRepresentation();
 		else
 			return GetShortRepresentation();
+	}
+
+	//--------
+
+	public ModelInfo<EModelType> GetInfo()
+	{
+		return info;
+	}
+
+	@Override
+	public final boolean equals(Object object)
+	{
+		if(!(object instanceof ModelEntity))
+			return false;
+
+		ModelEntity cmp = ((ModelEntity)object);
+
+		return info.equals(cmp.info);
 	}
 }
 

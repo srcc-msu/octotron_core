@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.persistence.graph.impl;
 
-import ru.parallel.octotron.core.primitive.ID;
+import ru.parallel.octotron.core.primitive.Info;
 import ru.parallel.octotron.persistence.graph.EGraphType;
 import ru.parallel.octotron.persistence.graph.IGraph;
 
@@ -22,53 +22,53 @@ public final class GraphLink extends GraphEntity
 		super(graph, id, EGraphType.LINK);
 	}
 
-	public GraphLink(IGraph graph, ID<EGraphType> id)
+	public GraphLink(IGraph graph, Info<EGraphType> info)
 	{
-		super(graph, id);
+		super(graph, info);
 	}
 
 	@Override
 	public Object GetAttribute(String name)
 	{
-		return graph.GetLinkAttribute(id, name);
+		return graph.GetLinkAttribute(info, name);
 	}
 
 	@Override
 	public void UpdateAttribute(String name, Object value)
 	{
-		graph.SetLinkAttribute(id, name, value);
+		graph.SetLinkAttribute(info, name, value);
 	}
 
 	@Override
 	public boolean TestAttribute(String name)
 	{
-		return graph.TestLinkAttribute(id, name);
+		return graph.TestLinkAttribute(info, name);
 	}
 
 	@Override
 	public List<String> GetAttributes()
 	{
-		return graph.GetLinkAttributes(id);
+		return graph.GetLinkAttributes(info);
 	}
 
 	@Override
 	public void Delete()
 	{
-		graph.DeleteLink(id);
+		graph.DeleteLink(info);
 	}
 
 	public GraphObject Target()
 	{
-		return new GraphObject(graph, graph.GetLinkTarget(id));
+		return new GraphObject(graph, graph.GetLinkTarget(info));
 	}
 
 	public GraphObject Source()
 	{
-		return new GraphObject(graph, graph.GetLinkSource(id));
+		return new GraphObject(graph, graph.GetLinkSource(info));
 	}
 
 	public void DeleteAttribute(String name)
 	{
-		graph.DeleteLinkAttribute(id, name);
+		graph.DeleteLinkAttribute(info, name);
 	}
 }

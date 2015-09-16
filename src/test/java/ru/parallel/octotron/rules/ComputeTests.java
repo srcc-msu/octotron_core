@@ -119,7 +119,7 @@ public class ComputeTests extends GeneralTest
 
 		for(ModelEntity entity : objects)
 			for(Attribute attr : entity.GetAttributes())
-				if(attr.GetType() == EAttributeType.SENSOR)
+				if(attr.GetInfo().GetType() == EAttributeType.SENSOR)
 					attr.UpdateDependant();
 
 		// --------------

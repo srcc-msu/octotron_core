@@ -9,24 +9,39 @@ package ru.parallel.octotron.core.attributes;
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelInfo;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Map;
 
+/**
+ * base class for all attributes on entities
+ * supports dependencies between attributes
+ * */
 public abstract class Attribute extends BaseAttribute
 {
+	private ModelInfo<EAttributeType> info;
 	private final ModelEntity parent;
 
-	private final AttributeHistory history = new AttributeHistory();
+/**
+ * last modification time
+ * */
 	private long ctime = 0;
+
+/**
+ * history, that stores last values and modification times
+ * */
+	private final AttributeHistory history = new AttributeHistory();
 
 	protected final AttributeList<Attribute> depend_on_me = new AttributeList<>();
 	protected final AttributeList<Attribute> i_depend_on = new AttributeList<>();
 
 	public Attribute(EAttributeType type, ModelEntity parent, String name, Value value)
 	{
-		super(type, name, value);
+		super(name, value);
+
+		this.info = new ModelInfo<>(type);
 
 		this.parent = parent;
 	}
@@ -72,6 +87,10 @@ public abstract class Attribute extends BaseAttribute
 
 //--------
 
+/**
+ * compute speed of the attribute, using current value and history
+ * may return invalid value if it is not possible
+ * */
 	public final Value GetSpeed()
 	{
 		if(!IsComputable())
@@ -93,6 +112,10 @@ public abstract class Attribute extends BaseAttribute
 		return new Value(diff / (GetCTime() - last.ctime));
 	}
 
+/**
+ * set the new value to the attribute, add history entry
+ * update self and all dependant attributes
+ * */
 	@Override
 	public void UpdateValue(Value new_value)
 	{
@@ -106,6 +129,9 @@ public abstract class Attribute extends BaseAttribute
 
 	protected abstract void UpdateSelf();
 
+/**
+ * update all dependant attributes, which are computable now
+ * */
 	public final void UpdateDependant()
 	{
 		for(Attribute attribute : depend_on_me)
@@ -120,22 +146,56 @@ public abstract class Attribute extends BaseAttribute
 
 	private boolean dependencies_defined = false;
 
+/**
+ * check that all needed attributes are defined
+ * attributes may be undefined only in the beginning
+ * when the check passes once - no more checks will be performed
+ * */
 	private boolean DependenciesDefined()
 	{
-		if (dependencies_defined)
+		if(dependencies_defined)
 			return true;
 
-		for (Attribute attribute : i_depend_on)
+		for(Attribute attribute : i_depend_on)
 		{
-			if (!attribute.IsDefined())
-			{
-				dependencies_defined = false;
+			if(!attribute.IsDefined())
 				return false;
-			}
 		}
 
 		// we've got positive for all, cache it for future - it will not change back
 		dependencies_defined = true;
 		return true;
+	}
+
+	public Map<String, Object> GetShortRepresentation()
+	{
+		Map<String, Object> result = super.GetShortRepresentation();
+		result.put("attribute AID", GetInfo().GetID());
+
+		return result;
+	}
+
+	public Map<String, Object> GetLongRepresentation()
+	{
+		Map<String, Object> result = super.GetLongRepresentation();
+		result.put("attribute AID", GetInfo().GetID());
+
+		return result;
+	}
+
+	public ModelInfo<EAttributeType> GetInfo()
+	{
+		return info;
+	}
+
+	@Override
+	public final boolean equals(Object object)
+	{
+		if(!(object instanceof Attribute))
+			return false;
+
+		Attribute cmp = ((Attribute)object);
+
+		return info.equals(cmp.info);
 	}
 }

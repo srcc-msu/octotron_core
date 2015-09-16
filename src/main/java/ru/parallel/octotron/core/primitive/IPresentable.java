@@ -8,6 +8,11 @@ package ru.parallel.octotron.core.primitive;
 
 import java.util.Map;
 
+/**
+ * interface for any presentable entity, which is able
+ * to provide short and detailed information about itself
+ * in form of dictionary
+ * */
 public interface IPresentable
 {
 	Map<String, Object> GetLongRepresentation();

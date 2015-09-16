@@ -123,7 +123,7 @@ public final class ModelService extends Service
 			target.GetBuilder().AddUndirectedLink(link);
 		}
 
-		link.GetBuilder().DeclareConst(new ConstTemplate("AID", link.GetID()));
+		link.GetBuilder().DeclareConst(new ConstTemplate("AID", link.GetInfo().GetID()));
 
 		return link;
 	}
@@ -135,7 +135,7 @@ public final class ModelService extends Service
 
 		model_data.Add(object);
 
-		object.GetBuilder().DeclareConst(new ConstTemplate("AID", object.GetID()));
+		object.GetBuilder().DeclareConst(new ConstTemplate("AID", object.GetInfo().GetID()));
 
 		return object;
 	}
@@ -164,7 +164,7 @@ public final class ModelService extends Service
 				reaction.SetSuppressed(value);
 				reaction.SetDescription(description);
 				suppressed++;
-				AID = reaction.GetID();
+				AID = reaction.GetInfo().GetID();
 			}
 		}
 

@@ -53,7 +53,7 @@ public class ModificationService extends BGService
 		try
 		{
 			ServiceLocator.INSTANCE.GetScriptService().ExecSilent(script
-				, Long.toString(target.GetID()), name, value.toString());
+				, Long.toString(target.GetInfo().GetID()), name, value.toString());
 		}
 		catch(ExceptionSystemError e)
 		{

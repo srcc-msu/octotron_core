@@ -11,7 +11,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.AutoIndexer;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.ReadableIndex;
-import ru.parallel.octotron.core.primitive.ID;
+import ru.parallel.octotron.core.primitive.Info;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.persistence.graph.EGraphType;
 import ru.parallel.octotron.persistence.graph.IIndex;
@@ -73,28 +73,28 @@ public class Neo4jIndex implements IIndex
 
 //--------
 
-	private static List<ID<EGraphType>> FromRelIndex(IndexHits<Relationship> it)
+	private static List<Info<EGraphType>> FromRelIndex(IndexHits<Relationship> it)
 	{
-		List<ID<EGraphType>> list = new LinkedList<>();
+		List<Info<EGraphType>> list = new LinkedList<>();
 
 		for(Relationship rel : it)
-			list.add(new ID<>(rel.getId(), EGraphType.LINK));
+			list.add(new Info<>(rel.getId(), EGraphType.LINK));
 
 		return list;
 	}
 
-	private static List<ID<EGraphType>> FromNodeIndex(IndexHits<Node> it)
+	private static List<Info<EGraphType>> FromNodeIndex(IndexHits<Node> it)
 	{
-		List<ID<EGraphType>> list = new LinkedList<>();
+		List<Info<EGraphType>> list = new LinkedList<>();
 
 		for(Node node : it)
-			list.add(new ID<>(node.getId(), EGraphType.OBJECT));
+			list.add(new Info<>(node.getId(), EGraphType.OBJECT));
 
 		return list;
 	}
 
 	@Override
-	public List<ID<EGraphType>> GetObjects(String name, Object value)
+	public List<Info<EGraphType>> GetObjects(String name, Object value)
 	{
 		ReadableIndex<Node> node_auto_index = graph.GetInnerIndex()
 			.getNodeAutoIndexer().getAutoIndex();
@@ -103,7 +103,7 @@ public class Neo4jIndex implements IIndex
 	}
 
 	@Override
-	public List<ID<EGraphType>> GetLinks(String name, Object value)
+	public List<Info<EGraphType>> GetLinks(String name, Object value)
 	{
 		ReadableIndex<Relationship> rel_auto_index = graph.GetInnerIndex()
 			.getRelationshipAutoIndexer().getAutoIndex();
@@ -114,7 +114,7 @@ public class Neo4jIndex implements IIndex
 //--------
 
 	@Override
-	public ID<EGraphType> GetObject(String name, Object value)
+	public Info<EGraphType> GetObject(String name, Object value)
 	{
 		ReadableIndex<Node> node_auto_index = graph.GetInnerIndex()
 			.getNodeAutoIndexer().getAutoIndex();
@@ -126,7 +126,7 @@ public class Neo4jIndex implements IIndex
 			throw new ExceptionModelFail
 				("element not found " + name + " with value " + value);
 
-		ID<EGraphType> obj_uid = new ID<>(iterator.next().getId(), EGraphType.OBJECT);
+		Info<EGraphType> obj_uid = new Info<>(iterator.next().getId(), EGraphType.OBJECT);
 
 		if(iterator.hasNext())
 			throw new ExceptionModelFail
@@ -136,7 +136,7 @@ public class Neo4jIndex implements IIndex
 	}
 
 	@Override
-	public ID<EGraphType> GetLink(String name, Object value)
+	public Info<EGraphType> GetLink(String name, Object value)
 	{
 		ReadableIndex<Relationship> rel_auto_index = graph.GetInnerIndex()
 			.getRelationshipAutoIndexer().getAutoIndex();
@@ -148,7 +148,7 @@ public class Neo4jIndex implements IIndex
 			throw new ExceptionModelFail
 				("element not found" + name);
 
-		ID<EGraphType> link_uid = new ID<>(iterator.next().getId(), EGraphType.LINK);
+		Info<EGraphType> link_uid = new Info<>(iterator.next().getId(), EGraphType.LINK);
 
 		if(iterator.hasNext())
 			throw new ExceptionModelFail
@@ -160,7 +160,7 @@ public class Neo4jIndex implements IIndex
 //--------
 
 	@Override
-	public List<ID<EGraphType>> QueryObjects(String name, String pattern)
+	public List<Info<EGraphType>> QueryObjects(String name, String pattern)
 	{
 		ReadableIndex<Node> node_auto_index = graph.GetInnerIndex()
 			.getNodeAutoIndexer().getAutoIndex();
@@ -169,7 +169,7 @@ public class Neo4jIndex implements IIndex
 	}
 
 	@Override
-	public List<ID<EGraphType>> QueryLinks(String name, String pattern)
+	public List<Info<EGraphType>> QueryLinks(String name, String pattern)
 	{
 		ReadableIndex<Relationship> rel_auto_index = graph.GetInnerIndex()
 			.getRelationshipAutoIndexer().getAutoIndex();
@@ -180,13 +180,13 @@ public class Neo4jIndex implements IIndex
 //--------
 
 	@Override
-	public List<ID<EGraphType>> GetObjects(String name)
+	public List<Info<EGraphType>> GetObjects(String name)
 	{
 		return QueryObjects(name, "*");
 	}
 
 	@Override
-	public List<ID<EGraphType>> GetLinks(String name)
+	public List<Info<EGraphType>> GetLinks(String name)
 	{
 		return QueryLinks(name, "*");
 	}

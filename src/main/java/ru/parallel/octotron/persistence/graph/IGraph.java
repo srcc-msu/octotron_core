@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.persistence.graph;
 
-import ru.parallel.octotron.core.primitive.ID;
+import ru.parallel.octotron.core.primitive.Info;
 
 import java.util.List;
 
@@ -16,41 +16,41 @@ import java.util.List;
  * */
 public interface IGraph
 {
-	ID<EGraphType> AddObject();
+	Info<EGraphType> AddObject();
 
-	List<ID<EGraphType>> GetOutLinks(ID<EGraphType> id);
+	List<Info<EGraphType>> GetOutLinks(Info<EGraphType> info);
 
-	List<ID<EGraphType>> GetInLinks(ID<EGraphType> id);
+	List<Info<EGraphType>> GetInLinks(Info<EGraphType> info);
 
-	List<String> GetObjectAttributes(ID<EGraphType> id);
-	void DeleteObjectAttribute(ID<EGraphType> id, String name);
-	boolean TestObjectAttribute(ID<EGraphType> id, String name);
+	List<String> GetObjectAttributes(Info<EGraphType> info);
+	void DeleteObjectAttribute(Info<EGraphType> info, String name);
+	boolean TestObjectAttribute(Info<EGraphType> info, String name);
 
-	void DeleteObject(ID<EGraphType> id);
-
-//--------
-// **********************************************************
-//--------
-
-	ID<EGraphType> AddLink(ID<EGraphType> source, ID<EGraphType> target, String link_type);
-
-	ID<EGraphType> GetLinkTarget(ID<EGraphType> id);
-	ID<EGraphType> GetLinkSource(ID<EGraphType> id);
-
-	List<String> GetLinkAttributes(ID<EGraphType> id);
-	void DeleteLinkAttribute(ID<EGraphType> id, String name);
-	boolean TestLinkAttribute(ID<EGraphType> id, String name);
-
-	void DeleteLink(ID<EGraphType> id);
+	void DeleteObject(Info<EGraphType> info);
 
 //--------
 // **********************************************************
 //--------
 
-	void AddNodeLabel(ID<EGraphType> id, String label);
-	boolean TestNodeLabel(ID<EGraphType> id, String label);
+	Info<EGraphType> AddLink(Info<EGraphType> source, Info<EGraphType> target, String link_type);
 
-	List<ID<EGraphType>> GetAllLabeledNodes(String label);
+	Info<EGraphType> GetLinkTarget(Info<EGraphType> info);
+	Info<EGraphType> GetLinkSource(Info<EGraphType> info);
+
+	List<String> GetLinkAttributes(Info<EGraphType> info);
+	void DeleteLinkAttribute(Info<EGraphType> info, String name);
+	boolean TestLinkAttribute(Info<EGraphType> info, String name);
+
+	void DeleteLink(Info<EGraphType> info);
+
+//--------
+// **********************************************************
+//--------
+
+	void AddNodeLabel(Info<EGraphType> info, String label);
+	boolean TestNodeLabel(Info<EGraphType> info, String label);
+
+	List<Info<EGraphType>> GetAllLabeledNodes(String label);
 
 //--------
 // **********************************************************
@@ -58,21 +58,21 @@ public interface IGraph
 
 	IIndex GetIndex();
 
-	List<ID<EGraphType>> GetAllObjects();
-	List<ID<EGraphType>> GetAllLinks();
+	List<Info<EGraphType>> GetAllObjects();
+	List<Info<EGraphType>> GetAllLinks();
 
-	void SetObjectAttribute(ID<EGraphType> id, String name, Object value);
+	void SetObjectAttribute(Info<EGraphType> info, String name, Object value);
 
-	Object GetObjectAttribute(ID<EGraphType> id, String name);
+	Object GetObjectAttribute(Info<EGraphType> info, String name);
 
-	Object GetLinkAttribute(ID<EGraphType> id, String name);
+	Object GetLinkAttribute(Info<EGraphType> info, String name);
 
-	void SetLinkAttribute(ID<EGraphType> id, String name, Object value);
+	void SetLinkAttribute(Info<EGraphType> info, String name, Object value);
 
 //--------
 // **********************************************************
 //--------
 
-	String ExportDot(List<ID<EGraphType>> uids);
+	String ExportDot(List<Info<EGraphType>> uids);
 }
 

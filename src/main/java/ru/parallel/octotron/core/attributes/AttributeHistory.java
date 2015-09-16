@@ -8,9 +8,12 @@ package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.attributes.impl.Value;
 
-import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * provides interface to store a Value and
+ * modification time of attribute in a size-limited queue
+ * */
 public class AttributeHistory
 {
 	private static final int HISTORY_SIZE = 1;
@@ -35,11 +38,6 @@ public class AttributeHistory
 			return history.getLast();
 		else
 			return new Entry(Value.undefined, 0);
-	}
-
-	public Collection<Entry> Get()
-	{
-		return history;
 	}
 
 	public void Add(Value value, long ctime)

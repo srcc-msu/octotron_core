@@ -2,19 +2,30 @@ package ru.parallel.octotron.core.attributes;
 
 import ru.parallel.octotron.core.attributes.impl.Value;
 
+/**
+ * interface for dynamically typed value
+ * acceptable types are: string, long, double, boolean
+ * supports special values types: undefined and invalid
+ * */
 public interface IValue
 {
 	boolean IsDefined();
 	boolean IsValid();
 	boolean IsComputable();
 
-	String ValueToString();
-
 	String GetString();
 	Long GetLong();
 	Double GetDouble();
 	Boolean GetBoolean();
 
+/**
+ * return string representation of the value
+ * */
+	String ValueToString();
+
+/**
+ * convert the value to double, if possible
+ * */
 	Double ToDouble();
 
 	boolean eq(Value new_value);

@@ -70,14 +70,14 @@ public class PreparedResponseFactory
 		ModelLinkList links = new ModelLinkList();
 		ModelObjectList objects = new ModelObjectList();
 
-		if(entity.GetType() == EModelType.LINK)
+		if(entity.GetInfo().GetType() == EModelType.LINK)
 		{
 			ModelLink link = (ModelLink) entity;
 
 			links.add(link);
 			objects.append(link.GetObjects());
 		}
-		else if(entity.GetType() == EModelType.OBJECT)
+		else if(entity.GetInfo().GetType() == EModelType.OBJECT)
 		{
 			ModelObject object = (ModelObject) entity;
 
@@ -155,7 +155,7 @@ public class PreparedResponseFactory
 	{
 		String suppress = String.format("to suppress this reaction: http://%s:%d/modify/suppress?path=obj(AID==%d)&name=%s&description=spam"
 			, context.settings.GetHost(), context.settings.GetPort()
-			, entity.GetID(), reaction.GetName());
+			, entity.GetInfo().GetID(), reaction.GetName());
 		prepared_response.specials.add(suppress);
 	}
 
@@ -169,10 +169,10 @@ public class PreparedResponseFactory
 	{
 		String where;
 
-		if(entity.GetType() == EModelType.OBJECT)
-			where = String.format("obj(AID==%d).%s.uniq()", entity.GetID(), path);
+		if(entity.GetInfo().GetType() == EModelType.OBJECT)
+			where = String.format("obj(AID==%d).%s.uniq()", entity.GetInfo().GetID(), path);
 		else
-			where = String.format("link(AID==%d).%s.uniq()", entity.GetID(), path);
+			where = String.format("link(AID==%d).%s.uniq()", entity.GetInfo().GetID(), path);
 
 		ParsedPath parsed_path;
 		ModelList<? extends ModelEntity, ?> targets;

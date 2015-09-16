@@ -6,15 +6,18 @@
 
 package ru.parallel.octotron.core.model;
 
-import ru.parallel.octotron.core.primitive.ID;
+import ru.parallel.octotron.core.primitive.Info;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class ModelID<T> extends ID<T>
+/**
+ * extends ID with a uniq identifiers generation for each new object
+ * */
+public class ModelInfo<T> extends Info<T>
 {
 	private static final AtomicLong static_id = new AtomicLong(0);
 
-	public ModelID(T type)
+	public ModelInfo(T type)
 	{
 		super(static_id.incrementAndGet(), type);
 	}

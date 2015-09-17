@@ -11,6 +11,10 @@ import ru.parallel.octotron.core.model.ModelObject;
 
 import java.util.List;
 
+/**
+ * collection for model links
+ * allows to get lists of targets or sources of links
+ * */
 public class ModelLinkList extends ModelList<ModelLink, ModelLinkList>
 {
 	public ModelLinkList()

@@ -11,7 +11,8 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 /**
- * currently Octopy supports only only one constructor for rules</br>
+ * rules describe calculation of a new value basing on entity data(neighbours/attributes)
+ * currently Octopy framework supports only only one constructor for rules
  * */
 public abstract class Rule
 {

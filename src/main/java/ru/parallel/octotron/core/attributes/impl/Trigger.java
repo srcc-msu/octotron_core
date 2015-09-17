@@ -14,6 +14,11 @@ import ru.parallel.utils.JavaUtils;
 
 import java.util.Map;
 
+/**
+ * Trigger is a special attribute, that uses boolean rules to track
+ * relationships between other attributes.
+ * Trigger tracks how many times condition persists and how long it lasts.
+ * */
 public class Trigger extends Attribute
 {
 	private final Rule condition;
@@ -37,6 +42,10 @@ public class Trigger extends Attribute
 		UpdateValue(new Value(true));
 	}
 
+/**
+ * check if condition is met or not and update
+ * the state and statistics accordingly
+ * */
 	@Override
 	public void UpdateSelf()
 	{

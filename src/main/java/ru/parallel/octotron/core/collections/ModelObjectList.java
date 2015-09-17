@@ -11,6 +11,11 @@ import ru.parallel.octotron.core.model.ModelObject;
 
 import java.util.List;
 
+/**
+ * collection for model objects, allows to form new lists,
+ * basing on graph structure of the model, e.g. - to get all neighbours by
+ * some direction and so on
+ * */
 public class ModelObjectList extends ModelList<ModelObject, ModelObjectList>
 {
 	public ModelObjectList()

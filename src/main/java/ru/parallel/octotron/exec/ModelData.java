@@ -17,6 +17,9 @@ import ru.parallel.octotron.core.model.ModelObject;
 
 import java.util.Collection;
 
+/**
+ * stores all model data
+ * */
 public final class ModelData
 {
 	final ModelCache cache;

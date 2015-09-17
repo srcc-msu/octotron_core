@@ -17,6 +17,11 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
 import java.util.*;
 
+/**
+ * base collection for storage and filtration of model entities
+ * provides some convenient functions, like selecting elements by index,
+ * selecting ranges and applying filters, basing on entities attributes
+ * */
 public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>> implements Iterable<T>
 {
 	protected final List<T> list;

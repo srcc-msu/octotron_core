@@ -16,6 +16,11 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * provides a way for fast searching of model entities by
+ * attributes names and values
+ * required names must be provided in advance
+ * */
 public class ModelCache
 {
 	private static class ObjectValueCache
@@ -114,16 +119,25 @@ public class ModelCache
 	Map<String, ObjectValueCache> object_cache = new HashMap<>();
 	Map<String, LinkValueCache> link_cache = new HashMap<>();
 
+/**
+ * enable indexing of objects by \name attribute
+ * */
 	public void EnableObjectIndex(String name, ModelObjectList data)
 	{
 		object_cache.put(name, new ObjectValueCache(name, data));
 	}
 
+/**
+ * enable indexing of links by \name attribute
+ * */
 	public void EnableLinkIndex(String name, ModelLinkList data)
 	{
 		link_cache.put(name, new LinkValueCache(name, data));
 	}
 
+/**
+ * get list of objects with \name attribute
+ * */
 	public ModelObjectList GetObjects(String name)
 	{
 		ObjectValueCache cache = object_cache.get(name);
@@ -134,6 +148,9 @@ public class ModelCache
 		return cache.Get();
 	}
 
+/**
+ * get list of links with \name attribute
+ * */
 	public ModelLinkList GetLinks(String name)
 	{
 		LinkValueCache cache = link_cache.get(name);
@@ -144,6 +161,9 @@ public class ModelCache
 		return cache.Get();
 	}
 
+/**
+ * get list of objects with \name attribute and \value
+ * */
 	public ModelLinkList GetLinks(String name, Value value)
 	{
 		LinkValueCache cache = link_cache.get(name);
@@ -154,6 +174,9 @@ public class ModelCache
 		return cache.Get(name, value);
 	}
 
+/**
+ * get list of objects with \name attribute and \value
+ * */
 	public ModelObjectList GetObjects(String name, Value value)
 	{
 		ObjectValueCache cache = object_cache.get(name);
@@ -164,6 +187,9 @@ public class ModelCache
 		return cache.Get(name, value);
 	}
 
+/**
+ * disable caching of all attributes and clear existing data
+ * */
 	public void Clean()
 	{
 		object_cache = new HashMap<>();

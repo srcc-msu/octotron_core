@@ -6,6 +6,9 @@
 
 package ru.parallel.octotron.core.primitive;
 
+/**
+ * all possible types attributes in the model
+ * */
 public enum EAttributeType
 {
 	CONST, SENSOR, VAR, TRIGGER, REACTION

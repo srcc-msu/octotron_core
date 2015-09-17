@@ -10,6 +10,10 @@ import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 
+/**
+ * model links correspond to edges of the graph model
+ * links may be directed or undirected
+ * */
 public class ModelLink extends ModelEntity
 {
 	private final ModelObjectList objects = new ModelObjectList();

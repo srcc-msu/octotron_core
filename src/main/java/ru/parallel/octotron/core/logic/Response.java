@@ -17,14 +17,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * response describes exactly what reaction will be executed:
+ * log messages to be generated and scripts to be executed
+ * */
 public class Response implements IPresentable
 {
 	private final EEventStatus status;
 
 	private final Map<String, String> messages;
 	private final List<String[]> commands = new LinkedList<>();
-
-	private boolean suppress = false;
 
 	public Response(EEventStatus status, String... strings)
 		throws ExceptionParseError

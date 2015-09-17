@@ -11,7 +11,7 @@ import ru.parallel.octotron.core.attributes.impl.Value;
 /**
  * interface for dynamically typed value
  * acceptable types are: string, long, double, boolean
- * supports special values types: undefined and invalid
+ * supports tracking of special situations: undefined or invalid value
  * */
 public interface IValue
 {

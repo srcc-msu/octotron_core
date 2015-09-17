@@ -15,6 +15,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+/**
+ * collection for storage and filtration of model attributes
+ * filtration allows to modify a list basing on attributes values
+ * */
 @SuppressWarnings("serial")
 public final class AttributeList<T extends Attribute> extends LinkedList<T>
 {

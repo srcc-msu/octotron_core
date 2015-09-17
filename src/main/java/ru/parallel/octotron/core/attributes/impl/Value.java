@@ -13,6 +13,11 @@ import ru.parallel.utils.JavaUtils;
 
 import java.text.DecimalFormat;
 
+/**
+ * dynamically typed value
+ * acceptable types are: string, long, double, boolean
+ * supports special values types: undefined and invalid
+ * */
 public class Value implements IValue
 {
 	private static class Undefined

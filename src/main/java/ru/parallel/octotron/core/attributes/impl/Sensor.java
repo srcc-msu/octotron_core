@@ -14,6 +14,14 @@ import ru.parallel.utils.JavaUtils;
 
 import java.util.Map;
 
+/**
+ * sensor attribute is an attribute, designed to store all input data
+ * sensors may be marked as invalid by user and
+ * support timeout mechanism: if the sensor is not update in required time -
+ * it turns invalid
+ * current implementation is not very accurate with that -
+ * it may take some time to realize that sensor is outdated..
+ * */
 public final class Sensor extends Attribute
 {
 	/**

@@ -11,7 +11,9 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.primitive.EModelType;
 
-
+/**
+ * model objects correspond to vertices of the graph model
+ * */
 public class ModelObject extends ModelEntity
 {
 	final ModelLinkList out_links = new ModelLinkList();

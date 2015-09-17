@@ -13,6 +13,10 @@ import ru.parallel.octotron.core.primitive.EAttributeType;
 
 import java.util.Map;
 
+/**
+ * var is an attributes, that calculates its value
+ * using a special Rule
+ * */
 public final class Var extends Attribute
 {
 	protected final Rule rule;

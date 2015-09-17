@@ -6,6 +6,10 @@
 
 package ru.parallel.octotron.core.primitive;
 
+/**
+ * predefined event statuses for the system reactions
+ * TODO: unclear if it is enough
+ * */
 public enum EEventStatus
 {
 	INFO, WARNING, DANGER, CRITICAL, RECOVER, TIMEOUT

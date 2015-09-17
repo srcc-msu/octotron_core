@@ -10,6 +10,10 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 
+/**
+ * const attributes do not have any logic
+ * they just store a value
+ * */
 public final class Const extends Attribute
 {
 	public Const(ModelEntity parent, String name, Value value)

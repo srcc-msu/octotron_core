@@ -17,10 +17,17 @@ import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.Map;
 
+/**
+ * Reaction attributes hold an action to execute when specified conditions are met.
+ * Reaction may be dynamically turned on and off through suppression mechanism.
+ * */
 public class Reaction extends Attribute
 {
 	private final ReactionAction template;
 
+	/**
+	 * tracks how many times the reaction repeats
+	 * */
 	private long counter = 0;
 
 	private String description = "";
@@ -47,6 +54,9 @@ public class Reaction extends Attribute
 		return GetBoolean();
 	}
 
+/**
+ * check if reaction must be executed in current context and executes it
+ * */
 	@Override
 	protected void UpdateSelf()
 	{
@@ -58,7 +68,7 @@ public class Reaction extends Attribute
 			{
 				IncCounter();
 
-				if (template.response != null)
+				if(template.response != null)
 					RegisterResponse(template.response);
 
 				UpdateValue(new Value(true));
@@ -115,6 +125,10 @@ public class Reaction extends Attribute
 
 //--------
 
+/**
+ * check that all required triggered are turned on
+ * and all prohibited triggers are turned off
+ * */
 	private boolean ReactionNeeded(ModelEntity entity)
 	{
 		for(ReactionCase required : template.required_triggers)

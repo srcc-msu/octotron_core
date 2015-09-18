@@ -6,6 +6,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.ExecutionController;

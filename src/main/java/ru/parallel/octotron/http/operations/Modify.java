@@ -7,6 +7,7 @@
 package ru.parallel.octotron.http.operations;
 
 import ru.parallel.octotron.core.attributes.impl.Sensor;
+import ru.parallel.octotron.core.attributes.impl.Trigger;
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
@@ -15,6 +16,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.operations.impl.ModelOperation;
 import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TextString;
 import ru.parallel.utils.format.TypedString;
 
@@ -40,12 +42,15 @@ public class Modify
 
 			ModelEntity target = entities.Only();
 
-			ServiceLocator.INSTANCE.GetModificationService().Activate(target, name);
+			Trigger trigger = target.GetTriggerOrNull(name);
 
-			return new TextString("added to import queue");
+			if(trigger == null)
+				return new TextString("trigger not found");
+
+			ServiceLocator.INSTANCE.GetModificationService().Activate(target, name);
+			return new TextString("added to modification queue");
 		}
 	}
-
 
 	/**
 	 * adds a single import value to import queue<br>
@@ -70,13 +75,11 @@ public class Modify
 
 			Sensor sensor = target.GetSensorOrNull(name);
 
-			if(sensor != null)
-			{
-				ServiceLocator.INSTANCE.GetModificationService().Import(sensor, value);
-				return new TextString("added to import queue");
-			}
+			if(sensor == null)
+				return new TextString("sensor not found");
 
-			return new TextString("sensor not found");
+			ServiceLocator.INSTANCE.GetModificationService().Import(sensor, value);
+			return new TextString("added to modification queue");
 		}
 	}
 
@@ -131,14 +134,28 @@ public class Modify
 
 			String name = params.get("name");
 
+			String res = "";
+
 			for(ModelEntity entity : entities)
 			{
-				Sensor sensor = entity.GetSensor(name);
-				sensor.SetUserValid();
-				sensor.UpdateDependant();
+				Sensor sensor = entity.GetSensorOrNull(name);
+
+				if(sensor != null)
+				{
+					sensor.SetUserValid();
+					sensor.UpdateDependant();
+
+					res += "set sensor to invalid: " + name
+						+ " on object: " + entity.GetInfo().GetID()
+						+ System.lineSeparator();
+				}
+				else
+					res += "sensor: " + name
+						+ " not found on object: " + entity.GetInfo().GetID()
+						+ System.lineSeparator();
 			}
 
-			return new TextString("set the attribute to valid for " + entities.size() + " entities");
+			return new TextString(res);
 		}
 	}
 
@@ -159,14 +176,28 @@ public class Modify
 
 			String name = params.get("name");
 
+			String res = "";
+
 			for(ModelEntity entity : entities)
 			{
-				Sensor sensor = entity.GetSensor(name);
-				sensor.SetUserInvalid();
-				sensor.UpdateDependant();
+				Sensor sensor = entity.GetSensorOrNull(name);
+
+				if(sensor != null)
+				{
+					sensor.SetUserInvalid();
+					sensor.UpdateDependant();
+
+					res += "set sensor to invalid: " + name
+						+ " on object: " + entity.GetInfo().GetID()
+						+ System.lineSeparator();
+				}
+				else
+					res += "sensor: " + name
+						+ " not found on object: " + entity.GetInfo().GetID()
+						+ System.lineSeparator();
 			}
 
-			return new TextString("set the attribute to invalid for " + entities.size() + " entities");
+			return new TextString(res);
 		}
 	}
 

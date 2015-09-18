@@ -151,7 +151,7 @@ public abstract class Attribute extends BaseAttribute
  * attributes may be undefined only in the beginning
  * when the check passes once - no more checks will be performed
  * */
-	private boolean DependenciesDefined()
+	boolean DependenciesDefined()
 	{
 		if(dependencies_defined)
 			return true;

@@ -8,13 +8,12 @@ import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.EEventStatus;
-import ru.parallel.octotron.generators.tmpl.ConstTemplate;
-import ru.parallel.octotron.generators.tmpl.ReactionAction;
-import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
-import ru.parallel.octotron.generators.tmpl.VarTemplate;
+import ru.parallel.octotron.generators.tmpl.*;
+import ru.parallel.octotron.rules.plain.Manual;
 import ru.parallel.octotron.rules.plain.Match;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class BaseFactoryTest extends GeneralTest
@@ -34,7 +33,7 @@ public class BaseFactoryTest extends GeneralTest
  * with given property
  * */
 	@Test
-	public void TestAttributes()
+	public void TestConst()
 	{
 		ConstTemplate[] attributes = { new ConstTemplate("test1", 0) };
 		ConstTemplate attr2 = new ConstTemplate("test2", 1);
@@ -56,10 +55,52 @@ public class BaseFactoryTest extends GeneralTest
 		assertTrue(link.TestAttribute("test1"));
 		assertTrue(link.TestAttribute("test2"));
 		assertTrue(link.TestAttribute("test3"));
+
+		ModelObject obj2 = f1.Create();
+
+		assertNotEquals(obj.GetAttribute("test1"), obj2.GetAttribute("test1"));
+		assertNotEquals(obj.GetAttribute("test2"), obj2.GetAttribute("test2"));
+		assertNotEquals(obj.GetAttribute("test3"), obj2.GetAttribute("test3"));
+
+	}
+
+	/**
+	 * check that object factory creates required amount of objects
+	 * with given property
+	 * */
+	@Test
+	public void TestStatic()
+	{
+		ConstTemplate[] attributes = { new ConstTemplate("test1", 0) };
+		ConstTemplate attr2 = new ConstTemplate("test2", 1);
+		ConstTemplate attr3 = new ConstTemplate("test3", 2);
+
+		ObjectFactory f1 = object_factory
+			.Statics(attributes).Statics(attr2, attr3);
+		LinkFactory f2 = link_factory
+			.Statics(attr2, attr3).Statics(attributes);
+
+		ModelObject obj = f1.Create();
+		ModelLink link = f2.Statics(new ConstTemplate("type", "1"))
+			.OneToOne(f1.Create(), f1.Create(), true);
+
+		assertTrue(obj.TestAttribute("test1"));
+		assertTrue(obj.TestAttribute("test2"));
+		assertTrue(obj.TestAttribute("test3"));
+
+		assertTrue(link.TestAttribute("test1"));
+		assertTrue(link.TestAttribute("test2"));
+		assertTrue(link.TestAttribute("test3"));
+
+		ModelObject obj2 = f1.Create();
+
+		assertEquals(obj.GetAttribute("test1"), obj2.GetAttribute("test1"));
+		assertEquals(obj.GetAttribute("test2"), obj2.GetAttribute("test2"));
+		assertEquals(obj.GetAttribute("test3"), obj2.GetAttribute("test3"));
 	}
 
 	@Test
-	public void TestVaryings()
+	public void TestVars()
 	{
 		VarTemplate[] rules = { new VarTemplate("test1", new Match("", "")) };
 		Rule rule2 = new Match("", "");
@@ -68,6 +109,23 @@ public class BaseFactoryTest extends GeneralTest
 		ObjectFactory f1 = object_factory
 			.Vars(rules)
 			.Vars(new VarTemplate("test2", rule2), new VarTemplate("test3", rule3));
+
+		ModelObject obj = f1.Create();
+
+		assertTrue(obj.TestAttribute("test1"));
+		assertTrue(obj.TestAttribute("test2"));
+		assertTrue(obj.TestAttribute("test3"));
+	}
+
+	@Test
+	public void TestTriggers()
+	{
+		TriggerTemplate[] triggers = { new TriggerTemplate("test1", new Manual()) };
+
+		ObjectFactory f1 = object_factory
+			.Triggers(triggers)
+			.Triggers(new TriggerTemplate("test2", new Manual())
+				, new TriggerTemplate("test3", new Manual()));
 
 		ModelObject obj = f1.Create();
 

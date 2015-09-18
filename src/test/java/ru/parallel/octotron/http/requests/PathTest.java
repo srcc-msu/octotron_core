@@ -107,6 +107,20 @@ public class PathTest extends RequestTest
 	}
 
 	@Test
+	public void HttpObjUndirectedLinkRequest() throws Exception
+	{
+		ModelObjectList objects = object_factory.Create(10);
+		model_service.EnableObjectIndex("AID");
+
+		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), false);
+		model_service.EnableLinkIndex("AID");
+
+		String test = GetRequestResult("/view/entity?path=obj(AID).u_l()");
+		if(test == null || !test.contains("AID"))
+			fail("bad response u_l: " + test);
+	}
+
+	@Test
 	public void HttpLinkRequest() throws Exception
 	{
 		ModelObjectList objects = object_factory.Create(10);

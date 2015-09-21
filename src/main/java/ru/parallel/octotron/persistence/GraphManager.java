@@ -124,7 +124,7 @@ public class GraphManager implements IPersistenceManager
 				, GetGraphObject(link.GetObjects().get(1).GetInfo())
 				, link.GetInfo().GetType().name());
 
-			graph_object.UpdateAttribute("AID", link.GetInfo());
+			graph_object.UpdateAttribute("AID", link.GetInfo().GetID());
 		}
 		else if(model_service.GetMode() == ModelService.EMode.LOAD)
 		{
@@ -148,10 +148,9 @@ public class GraphManager implements IPersistenceManager
 			GraphObject graph_object = GetGraphObject(info);
 			graph_object.AddLabel(info.GetType().toString());
 
-			graph_object.UpdateAttribute("stat", reaction.GetCounter());
-
-			graph_object.UpdateAttribute("suppress", reaction.IsSuppressed());
-			graph_object.UpdateAttribute("descr", reaction.GetDescription());
+			graph_object.UpdateAttribute("counter", reaction.GetCounter());
+			graph_object.UpdateAttribute("is_suppressed", reaction.IsSuppressed());
+			graph_object.UpdateAttribute("description", reaction.GetDescription());
 
 // info
 			graph_service.AddLink(GetGraphObject(info), graph_object
@@ -161,18 +160,17 @@ public class GraphManager implements IPersistenceManager
 		{
 			GraphObject graph_object = CheckGraphObject(info, info.GetType().toString());
 
-			reaction.SetCounter((Long) graph_object.GetAttribute("stat"));
-			reaction.SetSuppressed((Boolean) graph_object.GetAttribute("suppress"));
-			reaction.SetDescription((String) graph_object.GetAttribute("descr"));
+			reaction.SetCounter((Long) graph_object.GetAttribute("counter"));
+			reaction.SetSuppressed((Boolean) graph_object.GetAttribute("is_suppressed"));
+			reaction.SetDescription((String) graph_object.GetAttribute("description"));
 		}
 		else if(model_service.GetMode() == ModelService.EMode.OPERATION)
 		{
 			GraphObject graph_object = GetGraphObject(info);
 
-			graph_object.UpdateAttribute("stat", reaction.GetCounter());
-
-			graph_object.UpdateAttribute("suppress", reaction.IsSuppressed());
-			graph_object.UpdateAttribute("descr", reaction.GetDescription());
+			graph_object.UpdateAttribute("counter", reaction.GetCounter());
+			graph_object.UpdateAttribute("is_suppressed", reaction.IsSuppressed());
+			graph_object.UpdateAttribute("description", reaction.GetDescription());
 		}
 	}
 

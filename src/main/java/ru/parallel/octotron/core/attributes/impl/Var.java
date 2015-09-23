@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.services.ServiceLocator;
 
 import java.util.Map;
 
@@ -38,6 +39,8 @@ public final class Var extends Attribute
 	{
 		Object raw_value = rule.Compute(GetParent(), this);
 		super.UpdateValue(Value.Construct(raw_value));
+
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterVar(this);
 	}
 
 	@Override

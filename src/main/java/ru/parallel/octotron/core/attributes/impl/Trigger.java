@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Map;
@@ -73,6 +74,8 @@ public class Trigger extends Attribute
 
 			UpdateValue(new Value(false));
 		}
+
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterTrigger(this);
 	}
 
 	public boolean IsTriggered()

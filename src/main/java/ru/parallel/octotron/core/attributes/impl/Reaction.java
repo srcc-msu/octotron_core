@@ -86,6 +86,8 @@ public class Reaction extends Attribute
 				RegisterPreparedResponse(null); // unregister executed reaction
 			}
 		}
+
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterReaction(this);
 	}
 
 //--------

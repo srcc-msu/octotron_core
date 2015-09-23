@@ -10,6 +10,7 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Map;
@@ -73,6 +74,8 @@ public final class Sensor extends Attribute
 		UpdateDependant();
 
 		// TODO: add timeout reaction?
+
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterSensor(this);
 	}
 
 	public boolean IsOutdated()

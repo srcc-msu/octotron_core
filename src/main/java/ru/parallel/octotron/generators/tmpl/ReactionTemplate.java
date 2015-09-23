@@ -9,11 +9,11 @@ package ru.parallel.octotron.generators.tmpl;
 public class ReactionTemplate
 {
 	public final String name;
-	public final ReactionAction reaction;
+	public final ReactionAction action;
 
-	public ReactionTemplate(String name, ReactionAction reaction)
+	public ReactionTemplate(String name, ReactionAction action)
 	{
 		this.name = name;
-		this.reaction = reaction;
+		this.action = action;
 	}
 }

@@ -94,17 +94,6 @@ public class Trigger extends Attribute
 	}
 
 	@Override
-	public Map<String, Object> GetShortRepresentation()
-	{
-		Map<String, Object> result = super.GetShortRepresentation();
-
-		result.put("repeat", repeat);
-		result.put("started", started);
-
-		return result;
-	}
-
-	@Override
 	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = super.GetLongRepresentation();

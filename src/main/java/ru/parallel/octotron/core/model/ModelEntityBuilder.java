@@ -64,22 +64,6 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		entity.attributes_map.put(attribute.GetName(), attribute);
 	}
 
-	public void AddReaction(ReactionTemplate reaction_template)
-	{
-		Reaction reaction = new Reaction(entity, reaction_template.name, reaction_template.reaction);
-
-		CheckAddAttribute(reaction);
-		entity.reactions.add(reaction);
-
-		ServiceLocator.INSTANCE.GetPersistenceService().RegisterReaction(reaction);
-	}
-
-	public void AddReaction(List<ReactionTemplate> reactions)
-	{
-		for(ReactionTemplate reaction : reactions)
-			AddReaction(reaction);
-	}
-
 //--------
 
 	public void DeclareConst(String name, Object value)
@@ -205,5 +189,28 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 	public void DeclareTrigger(TriggerTemplate trigger)
 	{
 		DeclareTrigger(trigger.name, trigger.condition);
+	}
+
+//--------
+
+	public void AddReaction(String name, ReactionAction action)
+	{
+		Reaction reaction = new Reaction(entity, name, action);
+
+		CheckAddAttribute(reaction);
+		entity.reaction_map.put(name, reaction);
+
+		ServiceLocator.INSTANCE.GetPersistenceService().RegisterReaction(reaction);
+	}
+
+	public void AddReaction(ReactionTemplate reaction)
+	{
+		AddReaction(reaction.name, reaction.action);
+	}
+
+	public void AddReaction(List<ReactionTemplate> reactions)
+	{
+		for(ReactionTemplate reaction : reactions)
+			AddReaction(reaction);
 	}
 }

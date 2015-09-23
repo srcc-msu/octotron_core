@@ -98,7 +98,7 @@ public class ModelEntityTest extends GeneralTest
 		assertEquals(o.GetAttributes(EAttributeType.SENSOR).size(), 3);
 		assertEquals(o.GetAttributes(EAttributeType.VAR).size(), 4);
 		assertEquals(o.GetAttributes(EAttributeType.TRIGGER).size(), 5);
-//		assertEquals(o.GetAttributes(EAttributeType.REACTION).size(), 6); // TODO
+		assertEquals(o.GetAttributes(EAttributeType.REACTION).size(), 6);
 	}
 
 	@Test
@@ -135,7 +135,7 @@ public class ModelEntityTest extends GeneralTest
 
 		exception.expect(ExceptionModelFail.class);
 
-		o.GetConst("const");
+		o.GetConst("a");
 	}
 
 	@Test
@@ -152,7 +152,7 @@ public class ModelEntityTest extends GeneralTest
 		ModelObject o = obj_factory.Create();
 
 		assertNotNull(o.GetConstOrNull("const1"));
-		assertNull(o.GetConstOrNull("const"));
+		assertNull(o.GetConstOrNull("a"));
 		assertNull(new ObjectFactory().Create().GetConstOrNull("b"));
 	}
 
@@ -175,7 +175,7 @@ public class ModelEntityTest extends GeneralTest
 
 		exception.expect(ExceptionModelFail.class);
 
-		o.GetSensor("sensor");
+		o.GetSensor("a");
 	}
 
 	@Test
@@ -192,7 +192,7 @@ public class ModelEntityTest extends GeneralTest
 		ModelObject o = obj_factory.Create();
 
 		assertNotNull(o.GetSensorOrNull("sensor4"));
-		assertNull(o.GetSensorOrNull("sensor"));
+		assertNull(o.GetSensorOrNull("a"));
 		assertNull(new ObjectFactory().Create().GetSensorOrNull("b"));
 	}
 
@@ -215,7 +215,7 @@ public class ModelEntityTest extends GeneralTest
 
 		exception.expect(ExceptionModelFail.class);
 
-		o.GetVar("var");
+		o.GetVar("a");
 	}
 
 	@Test
@@ -232,7 +232,7 @@ public class ModelEntityTest extends GeneralTest
 		ModelObject o = obj_factory.Create();
 
 		assertNotNull(o.GetVarOrNull("var7"));
-		assertNull(o.GetVarOrNull("var"));
+		assertNull(o.GetVarOrNull("a"));
 		assertNull(new ObjectFactory().Create().GetVarOrNull("b"));
 	}
 
@@ -255,7 +255,7 @@ public class ModelEntityTest extends GeneralTest
 
 		exception.expect(ExceptionModelFail.class);
 
-		o.GetTrigger("trigger");
+		o.GetTrigger("a");
 	}
 
 	@Test
@@ -272,7 +272,7 @@ public class ModelEntityTest extends GeneralTest
 		ModelObject o = obj_factory.Create();
 
 		assertNotNull(o.GetTriggerOrNull("trigger11"));
-		assertNull(o.GetTriggerOrNull("trigger"));
+		assertNull(o.GetTriggerOrNull("a"));
 		assertNull(new ObjectFactory().Create().GetTriggerOrNull("b"));
 	}
 
@@ -287,10 +287,44 @@ public class ModelEntityTest extends GeneralTest
 // ------------------
 
 	@Test
+	public void TestGetReaction1() throws Exception
+	{
+		ModelObject o = obj_factory.Create();
+
+		assertNotNull(o.GetReaction("reaction17"));
+
+		exception.expect(ExceptionModelFail.class);
+
+		o.GetReaction("a");
+	}
+
+	@Test
+	public void TestGetReaction2() throws Exception
+	{
+		exception.expect(ExceptionModelFail.class);
+
+		new ObjectFactory().Create().GetReaction("a");
+	}
+
+	@Test
+	public void TestGetReactionOrNull() throws Exception
+	{
+		ModelObject o = obj_factory.Create();
+
+		assertNotNull(o.GetReactionOrNull("reaction17"));
+		assertNull(o.GetReactionOrNull("a"));
+		assertNull(new ObjectFactory().Create().GetReactionOrNull("b"));
+	}
+
+	@Test
 	public void TestGetReaction() throws Exception
 	{
-		// TODO
+		ModelObject o = obj_factory.Create();
+
+		assertEquals(o.GetTrigger().size(), 5);
 	}
+
+// ------------------
 
 	@Test
 	public void TestEquals() throws Exception

@@ -29,8 +29,7 @@ public abstract class ModelEntity implements IPresentable
 	final Map<String, Sensor> sensor_map = new HashMap<>();
 	final Map<String, Var> var_map = new HashMap<>();
 	final Map<String, Trigger> trigger_map = new HashMap<>();
-
-	final List<Reaction> reactions = new LinkedList<>();
+	final Map<String, Reaction> reaction_map = new HashMap<>();
 
 	public ModelEntity(EModelType type)
 	{
@@ -66,6 +65,8 @@ public abstract class ModelEntity implements IPresentable
 				return var_map.values();
 			case TRIGGER:
 				return trigger_map.values();
+			case REACTION:
+				return reaction_map.values();
 			default:
 				throw new ExceptionModelFail("unknown attribute type: " + type.toString());
 		}
@@ -129,10 +130,31 @@ public abstract class ModelEntity implements IPresentable
 		return attribute;
 	}
 
-
 	public Collection<Sensor> GetSensor()
 	{
 		return sensor_map.values();
+	}
+
+//--------
+
+	public Reaction GetReactionOrNull(String name)
+	{
+		return reaction_map.get(name);
+	}
+
+	public Reaction GetReaction(String name)
+	{
+		Reaction attribute = GetReactionOrNull(name);
+
+		if(attribute == null)
+			throw new ExceptionModelFail("sensor not found: " + name);
+
+		return attribute;
+	}
+
+	public Collection<Reaction> GetReaction()
+	{
+		return reaction_map.values();
 	}
 
 //--------
@@ -151,7 +173,6 @@ public abstract class ModelEntity implements IPresentable
 
 		return attribute;
 	}
-
 
 	public Collection<Trigger> GetTrigger()
 	{
@@ -184,7 +205,7 @@ public abstract class ModelEntity implements IPresentable
 	{
 		List<PreparedResponse> result = new LinkedList<>();
 
-		for(Reaction reaction : reactions)
+		for(Reaction reaction : reaction_map.values())
 		{
 			PreparedResponse prepared_response = reaction.GetPreparedResponseOrNull();
 
@@ -193,11 +214,6 @@ public abstract class ModelEntity implements IPresentable
 		}
 
 		return result;
-	}
-
-	public Collection<Reaction> GetReaction()
-	{
-		return reactions;
 	}
 
 	@Override

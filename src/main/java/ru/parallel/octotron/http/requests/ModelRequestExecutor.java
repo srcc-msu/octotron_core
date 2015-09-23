@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// TODO blocking and not blocking
 public class ModelRequestExecutor implements Runnable
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");

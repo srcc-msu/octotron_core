@@ -75,7 +75,7 @@ public class PreparedResponseFactory
 			ModelLink link = (ModelLink) entity;
 
 			links.add(link);
-			objects.append(link.GetObjects());
+			objects = objects.append(link.GetObjects());
 		}
 		else if(entity.GetInfo().GetType() == EModelType.OBJECT)
 		{

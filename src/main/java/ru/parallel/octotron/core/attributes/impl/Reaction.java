@@ -66,20 +66,24 @@ public class Reaction extends Attribute
 		{
 			if(last_state == false || last_state == true && template.repeatable)
 			{
+				UpdateValue(new Value(true));
+
 				IncCounter();
 
 				if(template.response != null)
 					RegisterResponse(template.response);
-
-				UpdateValue(new Value(true));
 			}
 		}
 		else
 		{
-			if(last_state == true && template.recover_response != null) // was true, now false -> recover
+			if(last_state == true)
 			{
-				RegisterResponse(template.recover_response);
 				UpdateValue(new Value(false));
+
+				if(template.recover_response != null) // was true, now false -> recover
+					RegisterResponse(template.recover_response);
+
+				RegisterPreparedResponse(null); // unregister executed reaction
 			}
 		}
 	}

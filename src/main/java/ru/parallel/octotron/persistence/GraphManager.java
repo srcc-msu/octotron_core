@@ -278,6 +278,11 @@ public class GraphManager implements IPersistenceManager
 
 	private static final String DEPENDS = "DEPENDS";
 
+
+	/**
+	 * check entity and create dependencies links between all attributes
+	 * is ignores constants, because we do not create objects for them in the graph
+	 * */
 	@Override
 	public void MakeRuleDependency(ModelEntity entity)
 	{
@@ -290,6 +295,9 @@ public class GraphManager implements IPersistenceManager
 
 			for(Attribute i_depend_on : attribute.GetIDependOn())
 			{
+				if(i_depend_on.GetInfo().GetType() == EAttributeType.CONST)
+					continue;
+
 				GraphObject dependency_object = GetGraphObject(i_depend_on.GetInfo());
 
 				graph_service.AddLink(object, dependency_object, DEPENDS);

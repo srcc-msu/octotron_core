@@ -3,7 +3,7 @@ package ru.parallel.octotron.http.requests;
 import org.junit.Test;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 /**
  * sometimes tests can fail if message did not came in time</br>
@@ -18,10 +18,9 @@ public class PathTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=obj(AID)");
+		String result = GetRequestResult("/view/entity?path=obj(AID)");
 
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -30,10 +29,9 @@ public class PathTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=obj(AID)");
+		String result = GetRequestResult("/view/entity?path=obj(AID)");
 
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -44,10 +42,9 @@ public class PathTest extends RequestTest
 
 		long AID = l.get(0).GetAttribute("AID").GetLong();
 
-		String test = GetRequestResult("/view/entity?path=obj(AID).q(AID=="+AID+")");
+		String result = GetRequestResult("/view/entity?path=obj(AID).q(AID=="+AID+")");
 
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -56,10 +53,9 @@ public class PathTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=obj(AID).uniq()");
+		String result = GetRequestResult("/view/entity?path=obj(AID).uniq()");
 
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -71,17 +67,17 @@ public class PathTest extends RequestTest
 		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), true);
 		model_service.EnableLinkIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=obj(AID).in_n()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response in_n: " + test);
+		String result = GetRequestResult("/view/entity?path=obj(AID).in_n()");
 
-		test = GetRequestResult("/view/entity?path=obj(AID).out_n()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response out_n: " + test);
+		assertTrue(result.contains("AID"));
 
-		test = GetRequestResult("/view/entity?path=obj(AID).all_n()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response all_n: " + test);
+		result = GetRequestResult("/view/entity?path=obj(AID).out_n()");
+
+		assertTrue(result.contains("AID"));
+
+		result = GetRequestResult("/view/entity?path=obj(AID).all_n()");
+
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -93,17 +89,17 @@ public class PathTest extends RequestTest
 		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), true);
 		model_service.EnableLinkIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=obj(AID).in_l()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response in_l: " + test);
+		String result = GetRequestResult("/view/entity?path=obj(AID).in_l()");
 
-		test = GetRequestResult("/view/entity?path=obj(AID).out_l()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response out_l: " + test);
+		assertTrue(result.contains("AID"));
 
-		test = GetRequestResult("/view/entity?path=obj(AID).all_l()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response all_l: " + test);
+		result = GetRequestResult("/view/entity?path=obj(AID).out_l()");
+
+		assertTrue(result.contains("AID"));
+
+		result = GetRequestResult("/view/entity?path=obj(AID).all_l()");
+
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -115,9 +111,9 @@ public class PathTest extends RequestTest
 		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), false);
 		model_service.EnableLinkIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=obj(AID).u_l()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response u_l: " + test);
+		String result = GetRequestResult("/view/entity?path=obj(AID).u_l()");
+
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -129,9 +125,9 @@ public class PathTest extends RequestTest
 		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), true);
 		model_service.EnableLinkIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=link(AID)");
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		String result = GetRequestResult("/view/entity?path=link(AID)");
+
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -142,12 +138,12 @@ public class PathTest extends RequestTest
 		link_factory.AllToAll(objects.range(0, 5), objects.range(0, 10), true);
 		model_service.EnableLinkIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=link(AID).source()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response source: " + test);
+		String result = GetRequestResult("/view/entity?path=link(AID).source()");
 
-		test = GetRequestResult("/view/entity?path=link(AID).target()");
-		if(test == null || !test.contains("AID"))
-			fail("bad response target: " + test);
+		assertTrue(result.contains("AID"));
+
+		result = GetRequestResult("/view/entity?path=link(AID).target()");
+
+		assertTrue(result.contains("AID"));
 	}
 }

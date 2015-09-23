@@ -1,11 +1,14 @@
 package ru.parallel.octotron.core.attributes;
 
 import org.junit.Test;
-import ru.parallel.octotron.core.attributes.impl.Const;
-import ru.parallel.octotron.core.attributes.impl.Sensor;
-import ru.parallel.octotron.core.attributes.impl.Value;
+import ru.parallel.octotron.core.attributes.impl.*;
+import ru.parallel.octotron.generators.tmpl.ReactionAction;
+import ru.parallel.octotron.rules.plain.Manual;
 
-import static org.junit.Assert.*;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class AttributeTest
 {
@@ -124,5 +127,60 @@ public class AttributeTest
 
 		i_on2.UpdateValue(new Value(0));
 		assertEquals(a1.DependenciesDefined(), true);
+	}
+
+	@Test
+	public void TestConstRepresentation() throws Exception
+	{
+		Const a_const = new Const(null, "", new Value(0));
+
+		Map<String, Object> short_representation = a_const.GetShortRepresentation();
+		Map<String, Object> long_representation = a_const.GetLongRepresentation();
+
+		assertNotEquals(short_representation, long_representation);
+	}
+
+	@Test
+	public void TestSensorRepresentation() throws Exception
+	{
+		Sensor a_const = new Sensor(null, "", 0, new Value(0));
+
+		Map<String, Object> short_representation = a_const.GetShortRepresentation();
+		Map<String, Object> long_representation = a_const.GetLongRepresentation();
+
+		assertNotEquals(short_representation, long_representation);
+	}
+
+	@Test
+	public void TestVarRepresentation() throws Exception
+	{
+		Var a_var = new Var(null, "", new Manual());
+
+		Map<String, Object> short_representation = a_var.GetShortRepresentation();
+		Map<String, Object> long_representation = a_var.GetLongRepresentation();
+
+		assertNotEquals(short_representation, long_representation);
+	}
+
+	@Test
+	public void TestTriggerRepresentation() throws Exception
+	{
+		Trigger a_trigger = new Trigger(null, "", new Manual());
+
+		Map<String, Object> short_representation = a_trigger.GetShortRepresentation();
+		Map<String, Object> long_representation = a_trigger.GetLongRepresentation();
+
+		assertNotEquals(short_representation, long_representation);
+	}
+
+	@Test
+	public void TestReactionRepresentation() throws Exception
+	{
+		Reaction a_reaction = new Reaction(null, "", new ReactionAction());
+
+		Map<String, Object> short_representation = a_reaction.GetShortRepresentation();
+		Map<String, Object> long_representation = a_reaction.GetLongRepresentation();
+
+		assertNotEquals(short_representation, long_representation);
 	}
 }

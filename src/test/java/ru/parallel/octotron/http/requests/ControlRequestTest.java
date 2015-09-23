@@ -2,7 +2,7 @@ package ru.parallel.octotron.http.requests;
 
 import org.junit.Test;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 public class ControlRequestTest extends RequestTest
 {
@@ -12,10 +12,9 @@ public class ControlRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/control/stat");
+		String result = GetRequestResult("/control/stat");
 
-		if(test == null)
-			fail("bad response: result is null");
+		assertTrue(result.contains("[]"));
 	}
 
 	@Test
@@ -24,10 +23,9 @@ public class ControlRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/control/mode?silent=true");
+		String result = GetRequestResult("/control/mode?silent=true");
 
-		if(test == null)
-			fail("bad response: result is null");
+		assertTrue(result.contains("activated"));
 	}
 
 	@Test
@@ -36,10 +34,9 @@ public class ControlRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/control/snapshot");
+		String result = GetRequestResult("/control/snapshot");
 
-		if(test == null)
-			fail("bad response: result is null");
+		assertTrue(result.contains("[]"));
 	}
 
 	@Test
@@ -48,10 +45,9 @@ public class ControlRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/control/timeout");
+		String result = GetRequestResult("/control/timeout");
 
-		if(test == null)
-			fail("bad response: result is null");
+		assertTrue(result.contains("[]"));
 	}
 
 	@Test
@@ -61,10 +57,9 @@ public class ControlRequestTest extends RequestTest
 
 		model_service.Operate();
 
-		String test = GetRequestResult("/control/selftest");
+		String result = GetRequestResult("/control/selftest");
 
-		if(test == null)
-			fail("bad response: result is null");
+		assertTrue(result.contains("graph_test"));
 	}
 
 	@Test
@@ -73,10 +68,9 @@ public class ControlRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/control/quit");
+		String result = GetRequestResult("/control/quit");
 
-		if(test == null)
-			fail("bad response: result is null");
+		assertTrue(result.contains("quit"));
 	}
 }
 

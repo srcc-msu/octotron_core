@@ -6,20 +6,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.exec.ExecutionController;
-import ru.parallel.octotron.services.ServiceLocator;
-import ru.parallel.octotron.services.impl.ModelService;
 import ru.parallel.octotron.generators.LinkFactory;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.http.DummyHTTPServer;
+import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.services.impl.ModelService;
 import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TypedString;
-
-import static org.junit.Assert.fail;
 
 public class RequestTest
 {
@@ -73,12 +69,10 @@ public class RequestTest
 
 		HttpExchangeWrapper exchange = http.GetExchange();
 
-		if(exchange == null)
-			fail("did not get the message");
-
 		return exchange;
 	}
 
+	/**intended for testing purpose*/
 	protected String GetRequestResult(String str_request) throws Exception
 	{
 		HttpExchangeWrapper request = GetHttpRequest(str_request);

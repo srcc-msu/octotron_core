@@ -1,13 +1,15 @@
 package ru.parallel.octotron.http.requests;
 
 import org.junit.Test;
-import ru.parallel.octotron.generators.tmpl.*;
 import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.model.ModelObject;
+import ru.parallel.octotron.generators.tmpl.ReactionAction;
+import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
+import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.generators.tmpl.VarTemplate;
 import ru.parallel.octotron.rules.Speed;
-import ru.parallel.octotron.rules.plain.Match;
 
-import static org.junit.Assert.fail;
+import static junit.framework.TestCase.assertTrue;
 
 public class ViewRequestTest extends RequestTest
 {
@@ -17,10 +19,9 @@ public class ViewRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/count?path=obj(AID)");
+		String result = GetRequestResult("/view/count?path=obj(AID)");
 
-		if(test == null || !test.contains("10"))
-			fail("bad response: " + test);
+		assertTrue(result.contains("10"));
 	}
 
 	@Test
@@ -29,14 +30,12 @@ public class ViewRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/attributes?path=obj(AID)&names=AID");
+		String result = GetRequestResult("/view/attributes?path=obj(AID)&names=AID");
 
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		assertTrue(result.contains("AID"));
 
-		test = GetRequestResult("/view/attributes?path=obj(AID)&names=AID&v");
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		result = GetRequestResult("/view/attributes?path=obj(AID)&names=AID&v");
+		assertTrue(result.contains("AID"));
 	}
 
 	@Test
@@ -47,21 +46,18 @@ public class ViewRequestTest extends RequestTest
 
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/entity?path=obj(AID)&v");
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		String result = GetRequestResult("/view/entity?path=obj(AID)&v");
+		assertTrue(result.contains("AID"));
 
-		test = GetRequestResult("/view/entity?path=obj(AID)");
-		if(test == null || !test.contains("AID") || !test.contains("sensor") || !test.contains("rule"))
-			fail("bad response: " + test);
+		result = GetRequestResult("/view/entity?path=obj(AID)");
+		assertTrue(result.contains("AID"));
+		assertTrue(result.contains("rule"));
 
-		test = GetRequestResult("/view/entity?path=obj(AID)&type=const");
-		if(test == null || !test.contains("AID"))
-			fail("bad response: " + test);
+		result = GetRequestResult("/view/entity?path=obj(AID)&type=const");
+		assertTrue(result.contains("AID"));
 
-		test = GetRequestResult("/view/entity?path=obj(AID)&type=var");
-		if(test == null || !test.contains("rule"))
-			fail("bad response: " + test);
+		result = GetRequestResult("/view/entity?path=obj(AID)&type=var");
+		assertTrue(result.contains("rule"));
 	}
 
 	@Test
@@ -73,15 +69,13 @@ public class ViewRequestTest extends RequestTest
 
 		Reaction reaction = obj.GetReaction().iterator().next();
 
-		String test = GetRequestResult("/view/suppressed?v");
-		if(test == null || test.contains("suppressed\": false"))
-			fail("bad response: " + test);
+		String result = GetRequestResult("/view/suppressed?v");
+		assertTrue(result.contains("[]"));
 
 		reaction.SetSuppressed(true);
 
-		test = GetRequestResult("/view/suppressed?v");
-		if(test == null || !test.contains("suppressed\": true"))
-			fail("bad response: " + test);
+		result = GetRequestResult("/view/suppressed?v");
+		assertTrue(result.contains("suppressed\": true"));
 	}
 
 	@Test
@@ -90,10 +84,8 @@ public class ViewRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/all_response");
-
-		if(test == null)
-			fail("bad response: result is null");
+		String result = GetRequestResult("/view/all_response");
+		assertTrue(result.contains("[]"));
 	}
 
 	@Test
@@ -102,10 +94,7 @@ public class ViewRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String test = GetRequestResult("/view/version");
-
-		if(test == null || !test.contains("version"))
-			fail("bad response: " + test);
+		String result = GetRequestResult("/view/version");
+		assertTrue(result.contains("version"));
 	}
 }
-

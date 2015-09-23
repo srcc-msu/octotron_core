@@ -1,7 +1,6 @@
 package ru.parallel.octotron.http.requests;
 
 import org.junit.Test;
-import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
@@ -9,9 +8,7 @@ import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.TriggerTemplate;
 import ru.parallel.octotron.rules.plain.Manual;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class ModifyRequestTest extends RequestTest
 {

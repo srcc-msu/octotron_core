@@ -3,8 +3,8 @@ package ru.parallel.octotron.persistence.neo4j.impl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import ru.parallel.octotron.persistence.graph.EGraphType;
 import ru.parallel.octotron.core.primitive.Info;
+import ru.parallel.octotron.persistence.graph.EGraphType;
 import ru.parallel.octotron.persistence.neo4j.Neo4jGraph;
 
 import java.util.LinkedList;

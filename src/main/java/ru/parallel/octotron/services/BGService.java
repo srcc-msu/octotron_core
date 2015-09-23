@@ -30,4 +30,9 @@ public abstract class BGService extends Service
 	{
 		return executor;
 	}
+
+	public void SetMaxWaiting(int max_waiting)
+	{
+		executor.SetMaxWaiting(max_waiting);
+	}
 }

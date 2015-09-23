@@ -61,7 +61,7 @@ public class BGExecutorService implements Executor
 		if(max_waiting > 0 && GetWaitingCount() > max_waiting)
 		{
 			LOGGER.log(Level.INFO, prefix + " executor is full, blocking the calling thread");
-			WaitQueueSize(max_waiting);
+			WaitTasks(max_waiting);
 		}
 
 		executor.execute(command);
@@ -99,14 +99,14 @@ public class BGExecutorService implements Executor
 		return result;
 	}
 
-	public void WaitAll()
+	public void WaitAllTasks()
 	{
-		WaitQueueSize(0);
+		WaitTasks(0);
 	}
 
-	public void WaitQueueSize(long size)
+	public void WaitTasks(long count)
 	{
-		while(GetTaskCount() - GetCompletedCount() > size)
+		while(GetTaskCount() - GetCompletedCount() > count)
 		{
 			try { Thread.sleep(1); }
 			catch(InterruptedException ignore) {} // NOBODY DARES TO INTERRUPT ME
@@ -118,7 +118,7 @@ public class BGExecutorService implements Executor
 		// silently ignore all new requests
 		executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
 
-		WaitAll();
+		WaitAllTasks();
 		ShutdownExecutor(executor);
 	}
 

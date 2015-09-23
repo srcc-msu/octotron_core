@@ -6,12 +6,10 @@
 
 package ru.parallel.octotron.services.impl;
 
-import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
@@ -22,7 +20,6 @@ import ru.parallel.octotron.services.BGExecutorService;
 import ru.parallel.octotron.services.BGService;
 import ru.parallel.octotron.services.ServiceLocator;
 
-import java.util.Collection;
 import java.util.logging.Level;
 
 public class PersistenceService extends BGService implements IPersistenceManager // WTF?
@@ -57,62 +54,12 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				}
 			});
 
-		executor.WaitAll();
+		executor.WaitAllTasks();
 	}
 
 	public void InitDummy()
 	{
 		this.persistence_manager = new GhostManager();
-	}
-
-	public void UpdateAttributes(final Collection<? extends Attribute> attributes)
-	{
-		executor.execute(
-			new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					try
-					{
-						for(Attribute attribute : attributes)
-						{
-							EAttributeType type = attribute.GetInfo().GetType();
-
-							if(type == EAttributeType.SENSOR)
-								persistence_manager.RegisterSensor((Sensor) attribute);
-							else if(type == EAttributeType.VAR)
-								persistence_manager.RegisterVar((Var) attribute);
-							else
-								throw new ExceptionModelFail("unsupported attribute: " + type);
-						}
-					}
-					catch(Exception e)
-					{
-						LOGGER.log(Level.WARNING, "", e);
-					}
-				}
-			});
-	}
-
-	public void UpdateReactions(final Collection<Reaction> reactions)
-	{
-		executor.execute(
-			new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					try
-					{
-						for(Reaction reaction : reactions)
-							persistence_manager.RegisterReaction(reaction);
-					} catch(Exception e)
-					{
-						LOGGER.log(Level.WARNING, "", e);
-					}
-				}
-			});
 	}
 
 	@Override
@@ -317,8 +264,8 @@ public class PersistenceService extends BGService implements IPersistenceManager
 			});
 	}
 
-	public void WaitAll()
+	public void WaitAllTasks()
 	{
-		executor.WaitAll();
+		executor.WaitAllTasks();
 	}
 }

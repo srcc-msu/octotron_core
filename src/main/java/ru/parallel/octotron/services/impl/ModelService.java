@@ -84,11 +84,11 @@ public final class ModelService extends Service
 	{
 		InitSelfTest();
 
-		ServiceLocator.INSTANCE.GetPersistenceService().WaitAll();
+		ServiceLocator.INSTANCE.GetPersistenceService().WaitAllTasks();
 
 		MakeRuleDependency();
 
-		ServiceLocator.INSTANCE.GetPersistenceService().WaitAll();
+		ServiceLocator.INSTANCE.GetPersistenceService().WaitAllTasks();
 
 		mode = EMode.OPERATION;
 	}

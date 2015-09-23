@@ -65,7 +65,7 @@ public abstract class ModelEntity implements IPresentable
 			case VAR:
 				return var_map.values();
 			case TRIGGER:
-				return var_map.values();
+				return trigger_map.values();
 			default:
 				throw new ExceptionModelFail("unknown attribute type: " + type.toString());
 		}

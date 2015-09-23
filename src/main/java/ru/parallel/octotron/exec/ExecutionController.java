@@ -77,8 +77,10 @@ public class ExecutionController
 
 		UpdateDefinedSensors();
 
+		ServiceLocator.INSTANCE.GetPersistenceService().WaitAllTasks();
+
 		// was unlimited for creation - limit it now
-		ServiceLocator.INSTANCE.GetPersistenceService().GetExecutor().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
+		ServiceLocator.INSTANCE.GetPersistenceService().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
 	}
 
 

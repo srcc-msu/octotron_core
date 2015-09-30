@@ -5,6 +5,7 @@ import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
@@ -139,6 +140,8 @@ public class ComputeTests extends GeneralTest
 		MatchArgAprx rule1 = new MatchArgAprx("d1", "d2", Value.EPSILON);
 		MatchArgAprx rule2 = new MatchArgAprx("d1", "d2", 2.0);
 
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("d1", "d2"));
+
 		assertEquals(false, rule1.Compute(object, null));
 		assertEquals(true , rule2.Compute(object, null));
 	}
@@ -148,6 +151,8 @@ public class ComputeTests extends GeneralTest
 	{
 		MatchArg rule1 = new MatchArg("l1", "l2");
 		MatchArg rule2 = new MatchArg("str1", "str2");
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("l1", "l2"));
 
 		assertEquals(false, rule1.Compute(object, null));
 		assertEquals(true , rule2.Compute(object, null));
@@ -159,17 +164,53 @@ public class ComputeTests extends GeneralTest
 		ContainsString rule1 = new ContainsString("str1", "may");
 		ContainsString rule2 = new ContainsString("str2", "bee");
 
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("str1"));
+
 		assertEquals(true , rule1.Compute(object, null));
 		assertEquals(false, rule2.Compute(object, null));
 	}
 
 	@Test
-	public void TestLogicalAnd()
+	public void TestSLogicalAnd()
 	{
 		SoftLogicalAnd rule1 = new SoftLogicalAnd("bt1", "bt2");
 		SoftLogicalAnd rule2 = new SoftLogicalAnd("bt1", "bt2", "bf1");
 		SoftLogicalAnd rule3 = new SoftLogicalAnd("bf2");
 		SoftLogicalAnd rule4 = new SoftLogicalAnd("bf1", "bf2");
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("bt1", "bt2"));
+
+		assertEquals(true , rule1.Compute(object, null));
+		assertEquals(false, rule2.Compute(object, null));
+		assertEquals(false, rule3.Compute(object, null));
+		assertEquals(false, rule4.Compute(object, null));
+	}
+
+	@Test
+	public void TestSLogicalOr()
+	{
+		SoftLogicalOr rule1 = new SoftLogicalOr("bt1", "bt2");
+		SoftLogicalOr rule2 = new SoftLogicalOr("bt1", "bt2", "bf1");
+		SoftLogicalOr rule3 = new SoftLogicalOr("bt1");
+		SoftLogicalOr rule4 = new SoftLogicalOr("bf1", "bf2");
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("bt1", "bt2"));
+
+		assertEquals(true , rule1.Compute(object, null));
+		assertEquals(true , rule2.Compute(object, null));
+		assertEquals(true , rule3.Compute(object, null));
+		assertEquals(false, rule4.Compute(object, null));
+	}
+
+	@Test
+	public void TestLogicalAnd()
+	{
+		StrictLogicalAnd rule1 = new StrictLogicalAnd("bt1", "bt2");
+		StrictLogicalAnd rule2 = new StrictLogicalAnd("bt1", "bt2", "bf1");
+		StrictLogicalAnd rule3 = new StrictLogicalAnd("bf2");
+		StrictLogicalAnd rule4 = new StrictLogicalAnd("bf1", "bf2");
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("bt1", "bt2"));
 
 		assertEquals(true , rule1.Compute(object, null));
 		assertEquals(false, rule2.Compute(object, null));
@@ -180,10 +221,12 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestLogicalOr()
 	{
-		SoftLogicalOr rule1 = new SoftLogicalOr("bt1", "bt2");
-		SoftLogicalOr rule2 = new SoftLogicalOr("bt1", "bt2", "bf1");
-		SoftLogicalOr rule3 = new SoftLogicalOr("bt1");
-		SoftLogicalOr rule4 = new SoftLogicalOr("bf1", "bf2");
+		StrictLogicalOr rule1 = new StrictLogicalOr("bt1", "bt2");
+		StrictLogicalOr rule2 = new StrictLogicalOr("bt1", "bt2", "bf1");
+		StrictLogicalOr rule3 = new StrictLogicalOr("bt1");
+		StrictLogicalOr rule4 = new StrictLogicalOr("bf1", "bf2");
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("bt1", "bt2"));
 
 		assertEquals(true , rule1.Compute(object, null));
 		assertEquals(true , rule2.Compute(object, null));
@@ -199,6 +242,8 @@ public class ComputeTests extends GeneralTest
 		GTArg rule3 = new GTArg("d1", "d2");
 		GTArg rule4 = new GTArg("d2", "d1");
 
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("l1", "l2"));
+
 		assertEquals(false, rule1.Compute(object, null));
 		assertEquals(true , rule2.Compute(object, null));
 		assertEquals(false, rule3.Compute(object, null));
@@ -212,6 +257,8 @@ public class ComputeTests extends GeneralTest
 		GT rule2 = new GT("l2", 0);
 		GT rule3 = new GT("d1", 10.0);
 		GT rule4 = new GT("d2", 0.0);
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("l1"));
 
 		assertEquals(false, rule1.Compute(object, null));
 		assertEquals(true , rule2.Compute(object, null));
@@ -228,6 +275,8 @@ public class ComputeTests extends GeneralTest
 		MatchAprx rule3 = new MatchAprx("l1", 0L, 1L);
 		MatchAprx rule4 = new MatchAprx("l2", -1L, 5L);
 
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("d1"));
+
 		assertEquals(true, rule1.Compute(object, null));
 		assertEquals(true , rule2.Compute(object, null));
 		assertEquals(false, rule3.Compute(object, null));
@@ -243,6 +292,8 @@ public class ComputeTests extends GeneralTest
 		Match rule3 = new Match("l1", 2);
 		Match rule4 = new Match("l2", -1);
 
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("d1"));
+
 		assertEquals(true , rule1.Compute(object, null));
 		assertEquals(false, rule2.Compute(object, null));
 		assertEquals(true , rule3.Compute(object, null));
@@ -252,16 +303,30 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestNotMatch()
 	{
-		Match rule1 = new Match("bt1", false);
-		Match rule2 = new Match("bf1", false);
+		NotMatch rule1 = new NotMatch("d1", 0.0);
+		NotMatch rule2 = new NotMatch("d2", 2.5);
 
-		Match rule3 = new Match("l1", -1);
-		Match rule4 = new Match("l2", 3);
+		NotMatch rule3 = new NotMatch("l1", 2);
+		NotMatch rule4 = new NotMatch("l2", -1);
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("d1"));
 
 		assertEquals(false, rule1.Compute(object, null));
 		assertEquals(true , rule2.Compute(object, null));
 		assertEquals(false, rule3.Compute(object, null));
 		assertEquals(true , rule4.Compute(object, null));
+	}
+
+	@Test
+	public void TestNotMatchArg()
+	{
+		NotMatchArg rule1 = new NotMatchArg("l1", "l2");
+		NotMatchArg rule2 = new NotMatchArg("str1", "str2");
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("l1", "l2"));
+
+		assertEquals(true, rule1.Compute(object, null));
+		assertEquals(false, rule2.Compute(object, null));
 	}
 
 	@Test
@@ -271,6 +336,8 @@ public class ComputeTests extends GeneralTest
 		LTArg rule2 = new LTArg("l2", "l1");
 		LTArg rule3 = new LTArg("d1", "d2");
 		LTArg rule4 = new LTArg("d2", "d1");
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("l1", "l2"));
 
 		assertEquals(true, rule1.Compute(object, null));
 		assertEquals(false, rule2.Compute(object, null));
@@ -286,6 +353,8 @@ public class ComputeTests extends GeneralTest
 		LT rule3 = new LT("d1", 10.0);
 		LT rule4 = new LT("d2", 0.0);
 
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("l1"));
+
 		assertEquals(true, rule1.Compute(object, null));
 		assertEquals(false, rule2.Compute(object, null));
 		assertEquals(true, rule3.Compute(object, null));
@@ -298,6 +367,8 @@ public class ComputeTests extends GeneralTest
 		MatchArgAprx rule1 = new MatchArgAprx("d1", "d2", Value.EPSILON);
 		MatchArgAprx rule2 = new MatchArgAprx("d1", "d2", 2.0);
 
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("d1", "d2"));
+
 		assertEquals(false, rule1.Compute(object, null));
 		assertEquals(true, rule2.Compute(object, null));
 	}
@@ -308,17 +379,34 @@ public class ComputeTests extends GeneralTest
 		MatchArg rule1 = new MatchArg("l1", "l2");
 		MatchArg rule2 = new MatchArg("str1", "str2");
 
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("l1", "l2"));
+
 		assertEquals(false, rule1.Compute(object, null));
 		assertEquals(true, rule2.Compute(object, null));
 	}
 
 	@Test
-	public void TestLinkedMatchArg()
+	public void TestManual()
+	{
+		Manual rule = new Manual();
+
+		assertEquals(rule.GetDependency(object), new AttributeList<>());
+
+		assertEquals(false, rule.Compute(object, null));
+	}
+
+	@Test
+	public void TestLinkedMatch()
 	{
 		LinkedMatch rule1 = new LinkedMatch("b1");
 		LinkedMatch rule2 = new LinkedMatch("b2");
 		LinkedMatch rule3 = new LinkedMatch("match_num");
 		LinkedMatch rule4 = new LinkedMatch("mismatch_num");
+
+		assertEquals(rule1.GetDependency(object.GetOutLinks().get(0))
+			, AttributeList.From(
+			object.GetAttribute("b1")
+			, object.GetOutLinks().get(0).Other(object).GetAttribute("b1")));
 
 		assertEquals(false, rule1.Compute(object.GetOutLinks().get(0)));
 		assertEquals(true , rule2.Compute(object.GetOutLinks().get(0)));
@@ -328,10 +416,33 @@ public class ComputeTests extends GeneralTest
 	}
 
 	@Test
+	public void TestLinkedNotMatch()
+	{
+		LinkedNotMatch rule1 = new LinkedNotMatch("b1");
+		LinkedNotMatch rule2 = new LinkedNotMatch("b2");
+		LinkedNotMatch rule3 = new LinkedNotMatch("match_num");
+		LinkedNotMatch rule4 = new LinkedNotMatch("mismatch_num");
+
+		assertEquals(rule1.GetDependency(object.GetOutLinks().get(0))
+			, AttributeList.From(
+			object.GetAttribute("b1")
+			, object.GetOutLinks().get(0).Other(object).GetAttribute("b1")));
+
+		assertEquals(true, rule1.Compute(object.GetOutLinks().get(0)));
+		assertEquals(false , rule2.Compute(object.GetOutLinks().get(0)));
+
+		assertEquals(false , rule3.Compute(object.GetOutLinks().get(0)));
+		assertEquals(true, rule4.Compute(object.GetOutLinks().get(0)));
+	}
+
+	@Test
 	public void TestToPct()
 	{
 		ToArgPct rule1 = new ToArgPct("l1", "l2");
 		ToPct rule2 = new ToPct("l2", 6);
+
+		assertEquals(rule1.GetDependency(object), object.GetAttributes("l1", "l2"));
+		assertEquals(rule2.GetDependency(object), object.GetAttributes("l2"));
 
 		assertEquals(66L, rule1.Compute(object, null));
 		assertEquals(50L, rule2.Compute(object, null));
@@ -342,6 +453,9 @@ public class ComputeTests extends GeneralTest
 	{
 		Speed rule_l = new Speed("mod_l1");
 		Speed rule_d = new Speed("mod_d1");
+
+		assertEquals(rule_l.GetDependency(object), object.GetAttributes("mod_l1"));
+		assertEquals(rule_d.GetDependency(object), object.GetAttributes("mod_d1"));
 
 		object.GetSensor("mod_l1").UpdateValue(10L);
 		object.GetSensor("mod_d1").UpdateValue(10.0);
@@ -367,42 +481,76 @@ public class ComputeTests extends GeneralTest
 	@Test
 	public void TestInterval()
 	{
+		Interval rule_l1 = new Interval("l1", 4);
+		Interval rule_l2 = new Interval("l1", 4, 5);
+		Interval rule_l3 = new Interval("l1", 2);
+		Interval rule_l4 = new Interval("l1", 2, 4);
+		Interval rule_l5 = new Interval("l1", 1, 2, 4);
+		Interval rule_l6 = new Interval("l1", 1, 2);
+
+		Interval rule_d1 = new Interval("d1", 0.5, 2.0);
+		Interval rule_d2 = new Interval("d1", -1.5);
+		Interval rule_d3 = new Interval("d1", -0.5, 2.0);
+		Interval rule_d4 = new Interval("d1", 0.0, 2.0);
+		Interval rule_d5 = new Interval("d1", -0.5, 0.0, 2.0);
+		Interval rule_d6 = new Interval("d1", -1.5, -0.5, 2.0);
+
+		assertEquals(rule_l1.GetDependency(object), object.GetAttributes("l1"));
+		assertEquals(rule_d1.GetDependency(object), object.GetAttributes("d1"));
+
 		// d1 = 0.0
 		// l1 = 2
 
-		assertEquals(0L, new Interval("d1", 0.5, 2.0).Compute(object, null));
-		assertEquals(1L, new Interval("d1", -1.5).Compute(object, null));
-		assertEquals(1L, new Interval("d1", -0.5, 2.0).Compute(object, null));
-		assertEquals(1L, new Interval("d1", 0.0, 2.0).Compute(object, null));
-		assertEquals(2L, new Interval("d1", -0.5, 0.0, 2.0).Compute(object, null));
-		assertEquals(2L, new Interval("d1", -1.5, -0.5, 2.0).Compute(object, null));
+		assertEquals(0L, rule_l1.Compute(object, null));
+		assertEquals(0L, rule_l2.Compute(object, null));
+		assertEquals(1L, rule_l3.Compute(object, null));
+		assertEquals(1L, rule_l4.Compute(object, null));
+		assertEquals(2L, rule_l5.Compute(object, null));
+		assertEquals(2L, rule_l6.Compute(object, null));
 
-		assertEquals(0L, new Interval("l1", 4).Compute(object, null));
-		assertEquals(0L, new Interval("l1", 4, 5).Compute(object, null));
-		assertEquals(1L, new Interval("l1", 2).Compute(object, null));
-		assertEquals(1L, new Interval("l1", 2, 4).Compute(object, null));
-		assertEquals(2L, new Interval("l1", 1, 2, 4).Compute(object, null));
-		assertEquals(2L, new Interval("l1", 1, 2).Compute(object, null));
+		assertEquals(0L, rule_d1.Compute(object, null));
+		assertEquals(1L, rule_d2.Compute(object, null));
+		assertEquals(1L, rule_d3.Compute(object, null));
+		assertEquals(1L, rule_d4.Compute(object, null));
+		assertEquals(2L, rule_d5.Compute(object, null));
+		assertEquals(2L, rule_d6.Compute(object, null));
 	}
 
 	@Test
 	public void TestCheckedInterval()
 	{
+		CheckedInterval rule_l1 = new CheckedInterval("l1", 4);
+		CheckedInterval rule_l2 = new CheckedInterval("l1", 4, 5);
+		CheckedInterval rule_l3 = new CheckedInterval("l1", 2);
+		CheckedInterval rule_l4 = new CheckedInterval("l1", 2, 4);
+		CheckedInterval rule_l5 = new CheckedInterval("l1", 1, 2, 4);
+		CheckedInterval rule_l6 = new CheckedInterval("l1", 1, 2);
+
+		CheckedInterval rule_d1 = new CheckedInterval("d1", 0.5, 2.0);
+		CheckedInterval rule_d2 = new CheckedInterval("d1", -1.5);
+		CheckedInterval rule_d3 = new CheckedInterval("d1", -0.5, 2.0);
+		CheckedInterval rule_d4 = new CheckedInterval("d1", 0.0, 2.0);
+		CheckedInterval rule_d5 = new CheckedInterval("d1", -0.5, 0.0, 2.0);
+		CheckedInterval rule_d6 = new CheckedInterval("d1", -1.5, -0.5, 2.0);
+
+		assertEquals(rule_l1.GetDependency(object), object.GetAttributes("l1"));
+		assertEquals(rule_d1.GetDependency(object), object.GetAttributes("d1"));
+
 		// d1 = 0.0
 		// l1 = 2
 
-		assertEquals(Value.invalid, new CheckedInterval("d1", 0.5, 2.0).Compute(object, null));
-		assertEquals(Value.invalid, new CheckedInterval("d1", -1.5).Compute(object, null));
-		assertEquals(1L, new CheckedInterval("d1", -0.5, 2.0).Compute(object, null));
-		assertEquals(1L, new CheckedInterval("d1", 0.0, 2.0).Compute(object, null));
-		assertEquals(2L, new CheckedInterval("d1", -0.5, 0.0, 2.0).Compute(object, null));
-		assertEquals(2L, new CheckedInterval("d1", -1.5, -0.5, 2.0).Compute(object, null));
+		assertEquals(Value.invalid, rule_d1.Compute(object, null));
+		assertEquals(Value.invalid, rule_d2.Compute(object, null));
+		assertEquals(1L, rule_d3.Compute(object, null));
+		assertEquals(1L, rule_d4.Compute(object, null));
+		assertEquals(2L, rule_d5.Compute(object, null));
+		assertEquals(2L, rule_d6.Compute(object, null));
 
-		assertEquals(Value.invalid, new CheckedInterval("l1", 4).Compute(object, null));
-		assertEquals(Value.invalid, new CheckedInterval("l1", 4, 5).Compute(object, null));
-		assertEquals(Value.invalid, new CheckedInterval("l1", 2).Compute(object, null));
-		assertEquals(1L, new CheckedInterval("l1", 2, 4).Compute(object, null));
-		assertEquals(2L, new CheckedInterval("l1", 1, 2, 4).Compute(object, null));
-		assertEquals(Value.invalid, new CheckedInterval("l1", 1, 2).Compute(object, null));
+		assertEquals(Value.invalid, rule_l1.Compute(object, null));
+		assertEquals(Value.invalid, rule_l2.Compute(object, null));
+		assertEquals(Value.invalid, rule_l3.Compute(object, null));
+		assertEquals(1L, rule_l4.Compute(object, null));
+		assertEquals(2L, rule_l5.Compute(object, null));
+		assertEquals(Value.invalid, rule_l6.Compute(object, null));
 	}
 }

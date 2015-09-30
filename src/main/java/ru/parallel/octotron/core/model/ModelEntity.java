@@ -8,6 +8,7 @@ package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.*;
+import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.EModelType;
@@ -49,6 +50,23 @@ public abstract class ModelEntity implements IPresentable
 			return result;
 
 		throw new ExceptionModelFail("attribute not found: " + name + " ; all: " + AutoFormat.FormatJson(GetShortRepresentation()));
+	}
+
+	public AttributeList<Attribute> GetAttributes(String... names)
+	{
+		AttributeList<Attribute> result = new AttributeList<>();
+
+		for(String name : names)
+		{
+			Attribute attribute = attributes_map.get(name);
+
+			if (result == null)
+				throw new ExceptionModelFail("attribute not found: " + name + " ; all: " + AutoFormat.FormatJson(GetShortRepresentation()));
+
+			result.add(attribute);
+		}
+
+		return result;
 	}
 
 	public Collection<Attribute> GetAttributes()

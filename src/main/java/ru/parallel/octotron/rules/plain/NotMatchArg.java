@@ -29,6 +29,7 @@ public class NotMatchArg extends Rule
 		AttributeList<Attribute> result = new AttributeList<>();
 
 		result.add(entity.GetAttribute(check_attribute));
+		result.add(entity.GetAttribute(match_attribute));
 
 		return result;
 	}

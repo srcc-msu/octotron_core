@@ -18,6 +18,9 @@ import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
 import ru.parallel.octotron.generators.tmpl.VarTemplate;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 
 //they do not work because invalid or wrong ctime, need to fix somehow
@@ -140,7 +143,13 @@ public class ComplexComputeTest extends GeneralTest
 			.Vars(new VarTemplate("req_s_3", new RequireSomeValid(3, "ok", "self", "l1_inv", "l1", "l2_inv", "l2")))
 			.Vars(new VarTemplate("req_a_1", new RequireAllValid(11, "self", "l1", "l2")))
 			.Vars(new VarTemplate("req_a_2", new RequireAllValid(true, "self", "l1_inv", "l1", "l2_inv", "l2")))
-			.Vars(new VarTemplate("req_a_3", new RequireAllValid("ok", "self", "l1_inv", "l1", "l2_inv", "l2")));
+			.Vars(new VarTemplate("req_a_3", new RequireAllValid("ok", "self", "l1_inv", "l1", "l2_inv", "l2")))
+			.Vars(new VarTemplate("value_s_1", new ValueIfSomeValid("b1", 1, "self", "l1_inv", "l1", "l2_inv", "l2")))
+			.Vars(new VarTemplate("value_s_2", new ValueIfSomeValid("b1", 1, "self", "l1_inv", "l1", "l2_inv", "l2")))
+			.Vars(new VarTemplate("value_s_3", new ValueIfSomeValid("b1", 1, "self", "l1_inv", "l1", "l2_inv", "l2")))
+			.Vars(new VarTemplate("value_a_1", new ValueIfAllValid("b1", "self", "l1", "l2")))
+			.Vars(new VarTemplate("value_a_2", new ValueIfAllValid("b1", "self", "l1_inv", "l1", "l2_inv", "l2")))
+			.Vars(new VarTemplate("value_a_3", new ValueIfAllValid("b1", "self", "l1_inv", "l1", "l2_inv", "l2")));
 
 		object = self.Create();
 
@@ -181,6 +190,124 @@ public class ComplexComputeTest extends GeneralTest
 		}
 
 		model_service.Operate();
+	}
+
+	@Test
+	public void TestDependencies()
+	{
+		assertEquals(new HashSet(object.GetVar("d_sum_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("d1", "d2")));
+		assertEquals(new HashSet(object.GetVar("d_sum_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetInNeighbors().GetAttributes("d1", "d2")));
+		assertEquals(new HashSet(object.GetVar("d_sum_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetOutNeighbors().GetAttributes("d1", "d2")));
+		assertEquals(new HashSet(object.GetVar("d_sum_4").GetRule().GetDependency(object))
+			, new HashSet(object.GetAllNeighbors().GetAttributes("d1", "d2")));
+		assertEquals(new HashSet(object.GetVar("d_sum_5").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("d1", "d2", "d1_inv")));
+
+		assertEquals(new HashSet(object.GetVar("l_sum_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("l_sum_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetInNeighbors().GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("l_sum_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetOutNeighbors().GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("l_sum_4").GetRule().GetDependency(object))
+			, new HashSet(object.GetAllNeighbors().GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("l_sum_5").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1", "l2", "l1_inv")));
+
+		assertEquals(new HashSet(object.GetVar("match_count_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("match_count_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetInNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("match_count_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetOutNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("match_count_4").GetRule().GetDependency(object))
+			, new HashSet(object.GetAllNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("match_count_5").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "b2", "b1_inv")));
+
+		assertEquals(new HashSet(object.GetVar("not_match_count_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("not_match_count_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetInNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("not_match_count_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetOutNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("not_match_count_4").GetRule().GetDependency(object))
+			, new HashSet(object.GetAllNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("not_match_count_5").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "b2", "b1_inv")));
+
+		assertEquals(new HashSet(object.GetVar("sd_sum_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("d1", "d2")));
+		assertEquals(new HashSet(object.GetVar("sd_sum_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetInNeighbors().GetAttributes("d1", "d2")));
+		assertEquals(new HashSet(object.GetVar("sd_sum_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetOutNeighbors().GetAttributes("d1", "d2")));
+		assertEquals(new HashSet(object.GetVar("sd_sum_4").GetRule().GetDependency(object))
+			, new HashSet(object.GetAllNeighbors().GetAttributes("d1", "d2")));
+		assertEquals(new HashSet(object.GetVar("sd_sum_5").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("d1_inv", "d2")));
+
+		assertEquals(new HashSet(object.GetVar("sl_sum_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("sl_sum_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetInNeighbors().GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("sl_sum_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetOutNeighbors().GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("sl_sum_4").GetRule().GetDependency(object))
+			, new HashSet(object.GetAllNeighbors().GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("sl_sum_5").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1", "l2_inv")));
+
+		assertEquals(new HashSet(object.GetVar("s_match_count_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("s_match_count_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetInNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("s_match_count_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetOutNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("s_match_count_4").GetRule().GetDependency(object))
+			, new HashSet(object.GetAllNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("s_match_count_5").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "b2_inv")));
+
+		assertEquals(new HashSet(object.GetVar("s_not_match_count_sum_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("s_not_match_count_sum_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetInNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("s_not_match_count_sum_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetOutNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("s_not_match_count_sum_4").GetRule().GetDependency(object))
+			, new HashSet(object.GetAllNeighbors().GetAttributes("b1", "b2")));
+		assertEquals(new HashSet(object.GetVar("s_not_match_count_sum_5").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "b2_inv")));
+
+		assertEquals(new HashSet(object.GetVar("req_s_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1_inv", "l1", "l2_inv", "l2")));
+		assertEquals(new HashSet(object.GetVar("req_s_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1_inv", "l1", "l2_inv", "l2")));
+		assertEquals(new HashSet(object.GetVar("req_s_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1_inv", "l1", "l2_inv", "l2")));
+		assertEquals(new HashSet(object.GetVar("req_a_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("req_a_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1_inv", "l1", "l2_inv", "l2")));
+		assertEquals(new HashSet(object.GetVar("req_a_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("l1_inv", "l1", "l2_inv", "l2")));
+
+		assertEquals(new HashSet(object.GetVar("value_s_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "l1_inv", "l1", "l2_inv", "l2")));
+		assertEquals(new HashSet(object.GetVar("value_s_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "l1_inv", "l1", "l2_inv", "l2")));
+		assertEquals(new HashSet(object.GetVar("value_s_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "l1_inv", "l1", "l2_inv", "l2")));
+		assertEquals(new HashSet(object.GetVar("value_a_1").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "l1", "l2")));
+		assertEquals(new HashSet(object.GetVar("value_a_2").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "l1_inv", "l1", "l2_inv", "l2")));
+		assertEquals(new HashSet(object.GetVar("value_a_3").GetRule().GetDependency(object))
+			, new HashSet(object.GetAttributes("b1", "l1_inv", "l1", "l2_inv", "l2")));
 	}
 
 	@Test
@@ -283,5 +410,23 @@ public class ComplexComputeTest extends GeneralTest
 		assertEquals(11, object.GetVar("req_a_1").GetRule().Compute(object, object.GetVar("req_a_1")));
 		assertEquals(Value.invalid, object.GetVar("req_a_2").GetRule().Compute(object, object.GetVar("req_a_2")));
 		assertEquals(Value.invalid, object.GetVar("req_a_3").GetRule().Compute(object, object.GetVar("req_a_3")));
+	}
+
+	@Test
+	public void TestValueIfSomeValid()
+		throws ExceptionParseError
+	{
+		assertEquals(true, object.GetVar("value_s_1").GetRule().Compute(object, object.GetVar("value_s_1")));
+		assertEquals(true, object.GetVar("value_s_2").GetRule().Compute(object, object.GetVar("value_s_2")));
+		assertEquals(true, object.GetVar("value_s_3").GetRule().Compute(object, object.GetVar("value_s_3")));
+	}
+
+	@Test
+	public void TestValueIfAllValid()
+		throws ExceptionParseError
+	{
+		assertEquals(true, object.GetVar("value_a_1").GetRule().Compute(object, object.GetVar("value_a_1")));
+		assertEquals(Value.invalid, object.GetVar("value_a_2").GetRule().Compute(object, object.GetVar("value_a_2")));
+		assertEquals(Value.invalid, object.GetVar("value_a_3").GetRule().Compute(object, object.GetVar("req_a_3")));
 	}
 }

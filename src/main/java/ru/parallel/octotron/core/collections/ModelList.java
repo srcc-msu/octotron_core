@@ -384,6 +384,18 @@ public abstract class ModelList<T extends ModelEntity, R extends ModelList<T, R>
 		return Instance(InnerFilter(name));
 	}
 
+	public AttributeList<Attribute> GetAttributes(String... names)
+	{
+		AttributeList<Attribute> result = new AttributeList<>();
+
+		for(ModelEntity entity : list)
+		{
+			result = result.append(entity.GetAttributes(names));
+		}
+
+		return result;
+	}
+
 	public final R Uniq()
 	{
 		return Instance(InnerUniq());

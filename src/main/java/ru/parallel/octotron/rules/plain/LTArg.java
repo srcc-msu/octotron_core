@@ -29,6 +29,7 @@ public class LTArg extends Rule
 		AttributeList<Attribute> result = new AttributeList<>();
 
 		result.add(entity.GetAttribute(param));
+		result.add(entity.GetAttribute(arg_threshold));
 
 		return result;
 	}

@@ -165,4 +165,14 @@ public final class AttributeList<T extends Attribute> extends LinkedList<T>
 	{
 		throw new IOException("NIY");
 	}
+
+	public static AttributeList<Attribute> From(Attribute... attributes)
+	{
+		AttributeList<Attribute> result = new AttributeList<>();
+
+		for(Attribute attribute : attributes)
+			result.add(attribute);
+
+		return result;
+	}
 }

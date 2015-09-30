@@ -7,6 +7,7 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.model.ModelObject;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class AttributeListTest extends GeneralTest
 {
@@ -148,5 +149,21 @@ public class AttributeListTest extends GeneralTest
 		assertEquals("a", list.get(0).GetName());
 		assertEquals("b", list.get(1).GetName());
 		assertEquals("c", list.get(2).GetName());
+	}
+
+	@Test
+	public void TestFrom()
+	{
+		object.GetBuilder().DeclareConst("c", "");
+		object.GetBuilder().DeclareSensor("s", 0, "");
+
+		AttributeList<Attribute> attributes = new AttributeList<>();
+
+		attributes.add(object.GetConst("c"));
+		attributes.add(object.GetSensor("s"));
+
+		assertEquals(AttributeList.From(), new AttributeList<Attribute>());
+		assertNotEquals(AttributeList.From(object.GetSensor("s")), new AttributeList<Attribute>());
+		assertEquals(AttributeList.From(object.GetConst("c"), object.GetSensor("s")), attributes);
 	}
 }

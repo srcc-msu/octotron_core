@@ -57,7 +57,7 @@ public class LinkFactory extends BaseFactory<LinkFactory>
 		link.GetBuilder().DeclareSensor(sensors);
 		link.GetBuilder().DeclareVar(rules);
 		link.GetBuilder().DeclareTrigger(triggers);
-		link.GetBuilder().AddReaction(reactions);
+		link.GetBuilder().DeclareReaction(reactions);
 
 		link.GetBuilder().DeclareConst("directed", link.IsDirected());
 

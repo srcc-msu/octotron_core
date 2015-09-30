@@ -40,7 +40,7 @@ public class PreparedResponseTest extends GeneralTest
 
 		entity = obj_factory.Create();
 
-		entity.GetBuilder().AddReaction(new ReactionTemplate("test_r", new ReactionAction()));
+		entity.GetBuilder().DeclareReaction(new ReactionTemplate("test_r", new ReactionAction()));
 		reaction = entity.GetReaction().iterator().next();
 	}
 

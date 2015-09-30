@@ -193,7 +193,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 //--------
 
-	public void AddReaction(String name, ReactionAction action)
+	public void DeclareReaction(String name, ReactionAction action)
 	{
 		Reaction reaction = new Reaction(entity, name, action);
 
@@ -203,14 +203,14 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		ServiceLocator.INSTANCE.GetPersistenceService().RegisterReaction(reaction);
 	}
 
-	public void AddReaction(ReactionTemplate reaction)
+	public void DeclareReaction(ReactionTemplate reaction)
 	{
-		AddReaction(reaction.name, reaction.action);
+		DeclareReaction(reaction.name, reaction.action);
 	}
 
-	public void AddReaction(List<ReactionTemplate> reactions)
+	public void DeclareReaction(List<ReactionTemplate> reactions)
 	{
 		for(ReactionTemplate reaction : reactions)
-			AddReaction(reaction);
+			DeclareReaction(reaction);
 	}
 }

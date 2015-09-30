@@ -44,7 +44,7 @@ public class ObjectFactory extends BaseFactory<ObjectFactory>
 		object.GetBuilder().DeclareSensor(sensors);
 		object.GetBuilder().DeclareVar(rules);
 		object.GetBuilder().DeclareTrigger(triggers);
-		object.GetBuilder().AddReaction(reactions);
+		object.GetBuilder().DeclareReaction(reactions);
 
 		return object;
 	}

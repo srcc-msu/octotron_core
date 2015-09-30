@@ -31,25 +31,16 @@ public class GraphManager implements IPersistenceManager
 {
 	private final static Logger LOGGER = Logger.getLogger("octotron");
 
-	final ModelService model_service;
+	private final ModelService model_service;
+	private final GraphService graph_service;
+	private final Neo4jGraph graph;
 
-	private Neo4jGraph graph;
-	private GraphService graph_service;
-
-	public GraphManager(ModelService model_service, String path, int port)
+	public GraphManager(ModelService model_service, Neo4jGraph graph)
 		throws ExceptionSystemError
 	{
 		this.model_service = model_service;
-
-		if(model_service.GetMode() == ModelService.EMode.CREATION)
-			graph = new Neo4jGraph(path, Neo4jGraph.Op.RECREATE, true, port);
-		else
-			graph = new Neo4jGraph(path, Neo4jGraph.Op.LOAD, true, port);
-
-		graph.GetIndex().EnableLinkIndex("AID");
-		graph.GetIndex().EnableObjectIndex("AID");
-
-		graph_service = new GraphService(graph);
+		this.graph_service = new GraphService(graph);
+		this.graph = graph;
 	}
 
 	private GraphObject GetGraphObject(ModelInfo<?> id)

@@ -47,7 +47,7 @@ public class ServiceLocator
 			String db_path = context.settings.GetDbPath() + "/" + context.settings.GetModelName();
 
 			if(context.settings.IsDb())
-				persistence_service.InitGraph(db_path, context.settings.GetDbPort());
+				persistence_service.InitGraph(db_path, context.settings.GetDbPort(), model_service.GetMode());
 			else
 				persistence_service.InitDummy();
 		}

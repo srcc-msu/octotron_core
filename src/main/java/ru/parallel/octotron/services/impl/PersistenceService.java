@@ -16,6 +16,8 @@ import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.persistence.GhostManager;
 import ru.parallel.octotron.persistence.GraphManager;
 import ru.parallel.octotron.persistence.IPersistenceManager;
+import ru.parallel.octotron.persistence.graph.impl.GraphService;
+import ru.parallel.octotron.persistence.neo4j.Neo4jGraph;
 import ru.parallel.octotron.services.BGExecutorService;
 import ru.parallel.octotron.services.BGService;
 import ru.parallel.octotron.services.ServiceLocator;
@@ -34,7 +36,7 @@ public class PersistenceService extends BGService implements IPersistenceManager
 		executor.LockOnThread();
 	}
 
-	public void InitGraph(final String db_path, final int port)
+	public void InitGraph(final String db_path, final int webserver_port, final ModelService.EMode mode)
 	{
 		executor.execute(
 			new Runnable()
@@ -44,7 +46,14 @@ public class PersistenceService extends BGService implements IPersistenceManager
 				{
 					try
 					{
-						persistence_manager = new GraphManager(ServiceLocator.INSTANCE.GetModelService(), db_path, port);
+						Neo4jGraph graph = new Neo4jGraph(db_path
+							, (mode == ModelService.EMode.CREATION) ? Neo4jGraph.Op.RECREATE : Neo4jGraph.Op.LOAD
+							, true, webserver_port);
+
+						graph.GetIndex().EnableLinkIndex("AID");
+						graph.GetIndex().EnableObjectIndex("AID");
+
+						persistence_manager = new GraphManager(ServiceLocator.INSTANCE.GetModelService(), graph);
 					} catch (ExceptionSystemError e)
 					{
 						LOGGER.log(Level.SEVERE, "could not init database", e);

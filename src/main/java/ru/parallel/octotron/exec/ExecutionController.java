@@ -26,8 +26,6 @@ public class ExecutionController
 
 	public final Context context;
 
-	private boolean exit = false;
-
 	public ExecutionController(Context context)
 		throws ExceptionSystemError
 	{
@@ -83,15 +81,12 @@ public class ExecutionController
 		ServiceLocator.INSTANCE.GetPersistenceService().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
 	}
 
-
-	private final long OUTDATED_CHECK_INTERVAL = 100;
 	private long last_outdated_check = JavaUtils.GetTimestamp(); // do not run at start
 
 	public void Process()
 		throws InterruptedException
 	{
 		long current_time = JavaUtils.GetTimestamp();
-
 
 		if(context.settings.GetOutdatedCheckInterval() > 0)
 			if(current_time - last_outdated_check > context.settings.GetOutdatedCheckInterval())

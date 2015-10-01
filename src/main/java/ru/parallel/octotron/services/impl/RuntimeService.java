@@ -26,17 +26,21 @@ public class RuntimeService extends Service
 {
 	public final Statistics stat = new Statistics();
 	private boolean exit;
+	private boolean db_failed = false;
 
 	public RuntimeService(Context context)
 	{
 		super(context);
 	}
 
+	public void NotifyDbFailed() { db_failed = true; }
+	public boolean IsDbFailed() { return db_failed; }
+
+
 	public void SetExit(boolean exit)
 	{
 		this.exit = exit;
 	}
-
 	public boolean ShouldExit()
 	{
 		return exit;
@@ -162,8 +166,5 @@ public class RuntimeService extends Service
 	}
 
 	@Override
-	public void Finish()
-	{
-
-	}
+	public void Finish() {}
 }

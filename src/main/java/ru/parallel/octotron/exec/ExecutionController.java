@@ -13,7 +13,6 @@ import org.python.util.PythonInterpreter;
 import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.services.BGService;
 import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.JavaUtils;
 
@@ -74,11 +73,6 @@ public class ExecutionController
 		interpreter.execfile(context.settings.GetModelPath() + '/' + context.settings.GetModelMain());
 
 		UpdateDefinedSensors();
-
-		ServiceLocator.INSTANCE.GetPersistenceService().WaitAllTasks();
-
-		// was unlimited for creation - limit it now
-		ServiceLocator.INSTANCE.GetPersistenceService().SetMaxWaiting(BGService.DEFAULT_QUEUE_LIMIT);
 	}
 
 	private long last_outdated_check = JavaUtils.GetTimestamp(); // do not run at start

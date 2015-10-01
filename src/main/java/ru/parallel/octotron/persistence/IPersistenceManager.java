@@ -22,11 +22,5 @@ public interface IPersistenceManager
 	void RegisterTrigger(Trigger trigger);
 
 	void RegisterReaction(Reaction reaction);
-
-	void Finish();
-
 	void MakeRuleDependency(ModelEntity entity);
-
-	void Wipe();
-
 }

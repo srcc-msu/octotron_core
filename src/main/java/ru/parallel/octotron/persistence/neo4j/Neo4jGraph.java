@@ -248,10 +248,10 @@ public final class Neo4jGraph implements IGraph
 		MatchType(uid, EGraphType.OBJECT);
 
 		Node node = graph_db.getNodeById(uid.GetID());
-		Iterable<Relationship> rels = node.getRelationships();
+		Iterable<Relationship> relationships = node.getRelationships();
 
-		for(Relationship rel : rels)
-			rel.delete();
+		for(Relationship relationship : relationships)
+			relationship.delete();
 
 		node.delete();
 	}
@@ -421,7 +421,7 @@ public final class Neo4jGraph implements IGraph
 		}
 	}
 
-	private static List<Info<EGraphType>> FromRelIter(Iterator<Relationship> it)
+	private static List<Info<EGraphType>> FromRelationshipIterator(Iterator<Relationship> it)
 	{
 		List<Info<EGraphType>> list = new LinkedList<>();
 
@@ -435,7 +435,7 @@ public final class Neo4jGraph implements IGraph
 		return list;
 	}
 
-	private static List<Info<EGraphType>> FromNodeIter(Iterator<Node> it)
+	private static List<Info<EGraphType>> FromNodeIterator(Iterator<Node> it)
 	{
 		List<Info<EGraphType>> list = new LinkedList<>();
 
@@ -459,7 +459,7 @@ public final class Neo4jGraph implements IGraph
 		{
 			Node node  = graph_db.getNodeById(uid.GetID());
 
-			return FromRelIter
+			return FromRelationshipIterator
 				(node.getRelationships(Direction.OUTGOING).iterator());
 		}
 		catch(NotFoundException e)
@@ -478,7 +478,7 @@ public final class Neo4jGraph implements IGraph
 		{
 			Node node  = graph_db.getNodeById(uid.GetID());
 
-			return FromRelIter
+			return FromRelationshipIterator
 				(node.getRelationships(Direction.INCOMING).iterator());
 		}
 		catch(NotFoundException e)

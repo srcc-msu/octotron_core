@@ -123,7 +123,7 @@ public class Start
 		{
 			LOGGER.log(Level.SEVERE, "could not create the model", creation_exception);
 
-			ServiceLocator.INSTANCE.GetPersistenceService().Wipe(); // clean neo4j dir on unsuccessful creation
+			ServiceLocator.INSTANCE.GetPersistenceService().Clean(); // clean neo4j dir on unsuccessful creation
 
 			if(controller != null)
 				controller.Finish();
@@ -211,6 +211,8 @@ public class Start
 			while(!ServiceLocator.INSTANCE.GetRuntimeService().ShouldExit())
 			{
 				controller.Process();
+
+				ServiceLocator.INSTANCE.GetPersistenceService().Check();
 			}
 
 			ProcessFinish(context);

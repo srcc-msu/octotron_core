@@ -8,6 +8,7 @@ package ru.parallel.octotron.services;
 
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
+import ru.parallel.octotron.persistence.IPersistenceService;
 import ru.parallel.octotron.services.impl.*;
 
 import java.util.logging.Level;
@@ -29,7 +30,7 @@ public class ServiceLocator
 	private ReactionService reaction_service;
 	private ModificationService modification_service;
 	private OutdatedCheckerService checker_service;
-	private PersistenceService persistence_service;
+	private IPersistenceService persistence_service;
 	private ScriptService script_service;
 	private RuntimeService runtime_service;
 
@@ -38,18 +39,14 @@ public class ServiceLocator
 		this.context = context;
 	}
 
-	public PersistenceService GetPersistenceService()
+	public IPersistenceService GetPersistenceService()
 	{
 		if(persistence_service == null)
 		{
-			persistence_service = new PersistenceService(context);
-
-			String db_path = context.settings.GetDbPath() + "/" + context.settings.GetModelName();
-
 			if(context.settings.IsDb())
-				persistence_service.InitGraph(db_path, context.settings.GetDbPort(), model_service.GetMode());
+				persistence_service = new Neo4jPersistenceService(context, GetModelService().GetMode());
 			else
-				persistence_service.InitDummy();
+				persistence_service = new DummyPersistenceService();
 		}
 
 		return persistence_service;
@@ -115,18 +112,6 @@ public class ServiceLocator
 		return checker_service;
 	}
 
-	public void Finish()
-	{
-		if(model_service       != null) model_service.Finish();
-		if(request_service     != null) request_service.Finish();
-		if(http_service        != null) http_service.Finish();
-		if(reaction_service    != null) reaction_service.Finish();
-		if(modification_service != null) modification_service.Finish();
-		if(checker_service     != null) checker_service.Finish();
-		if(persistence_service != null) persistence_service.Finish();
-		if(script_service      != null) script_service.Finish();
-	}
-
 	public ScriptService GetScriptService()
 	{
 		if(script_service == null)
@@ -139,5 +124,18 @@ public class ServiceLocator
 		if(runtime_service == null)
 			runtime_service = new RuntimeService(context);
 		return runtime_service;
+	}
+
+	public void Finish()
+	{
+		if(model_service        != null) model_service.Finish();
+		if(request_service      != null) request_service.Finish();
+		if(http_service         != null) http_service.Finish();
+		if(reaction_service     != null) reaction_service.Finish();
+		if(modification_service != null) modification_service.Finish();
+		if(checker_service      != null) checker_service.Finish();
+		if(persistence_service  != null) persistence_service.Finish();
+		if(script_service       != null) script_service.Finish();
+		if(runtime_service      != null) runtime_service.Finish();
 	}
 }

@@ -80,27 +80,20 @@ public final class ModelService extends Service
 	}
 
 	public void Operate()
-		throws ExceptionParseError
+		throws ExceptionParseError, ExceptionSystemError
 	{
 		InitSelfTest();
 
-		ServiceLocator.INSTANCE.GetPersistenceService().WaitAllTasks();
-
-		MakeRuleDependency();
-
-		ServiceLocator.INSTANCE.GetPersistenceService().WaitAllTasks();
-
-		mode = EMode.OPERATION;
-	}
-
-	private void MakeRuleDependency()
-	{
 		for(ModelEntity entity : model_data.GetAllEntities())
 		{
 			entity.GetBuilder().MakeDependencies();
 
 			ServiceLocator.INSTANCE.GetPersistenceService().MakeRuleDependency(entity);
 		}
+
+		ServiceLocator.INSTANCE.GetPersistenceService().Operate();
+
+		mode = EMode.OPERATION;
 	}
 
 //--------

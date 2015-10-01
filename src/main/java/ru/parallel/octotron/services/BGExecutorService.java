@@ -123,7 +123,7 @@ public class BGExecutorService implements Executor
 	}
 
 	/**
-	 * ensure that there wil be only one thread
+	 * ensure that there will be only one thread
 	 * */
 	public void LockOnThread()
 	{
@@ -135,6 +135,9 @@ public class BGExecutorService implements Executor
 				@Override
 				public Thread newThread(Runnable r)
 				{
+					executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+					executor.shutdownNow();
+					LOGGER.log(Level.SEVERE, "db thread failed, refusing to create next");
 					throw new ExceptionModelFail("db thread failed, refusing to create next");
 				}
 			});

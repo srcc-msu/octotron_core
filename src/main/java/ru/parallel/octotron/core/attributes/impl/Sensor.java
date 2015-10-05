@@ -57,6 +57,11 @@ public final class Sensor extends Attribute
 
 //--------
 
+	public long GetUpdateInterval()
+	{
+		return update_interval;
+	}
+
 	// TODO is it ok? unclear
 	private static final long TOLERANCE = 30; // 30 seconds tolerance for sensor update
 

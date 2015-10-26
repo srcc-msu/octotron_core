@@ -13,6 +13,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import java.util.LinkedList;
 import java.util.List;
 
+// TODO: _id
 public final class CommonReactions
 {
 	private CommonReactions() {}
@@ -22,7 +23,7 @@ public final class CommonReactions
 	public static Response Critical(String tag, String message)
 		throws ExceptionParseError
 	{
-		Response response = new Response(EEventStatus.CRITICAL).Msg(tag, message).Exec("on_critical");
+		Response response = new Response(EEventStatus.CRITICAL).Msg(tag, message).Msg("_id", "{_id}").Exec("on_critical");
 
 		RegisterResponse(response);
 		return response;
@@ -41,7 +42,7 @@ public final class CommonReactions
 	public static Response Danger(String tag, String message)
 		throws ExceptionParseError
 	{
-		Response response = new Response(EEventStatus.DANGER).Msg(tag, message).Exec("on_danger");
+		Response response = new Response(EEventStatus.DANGER).Msg(tag, message).Msg("_id", "{_id}").Exec("on_danger");
 
 		RegisterResponse(response);
 		return response;
@@ -50,7 +51,7 @@ public final class CommonReactions
 	public static Response Warning(String tag, String message)
 		throws ExceptionParseError
 	{
-		Response response = new Response(EEventStatus.WARNING).Msg(tag, message).Exec("on_warning");
+		Response response = new Response(EEventStatus.WARNING).Msg(tag, message).Msg("_id", "{_id}").Exec("on_warning");
 
 		RegisterResponse(response);
 		return response;
@@ -59,7 +60,7 @@ public final class CommonReactions
 	public static Response Info(String tag, String message)
 		throws ExceptionParseError
 	{
-		Response response = new Response(EEventStatus.INFO).Msg(tag, message).Exec("on_info");
+		Response response = new Response(EEventStatus.INFO).Msg(tag, message).Msg("_id", "{_id}").Exec("on_info");
 
 		RegisterResponse(response);
 		return response;
@@ -68,7 +69,7 @@ public final class CommonReactions
 	public static Response Recover(String tag, String message)
 		throws ExceptionParseError
 	{
-		Response response = new Response(EEventStatus.RECOVER).Msg(tag, message).Exec("on_recover");
+		Response response = new Response(EEventStatus.RECOVER).Msg(tag, message).Msg("_id", "{_id}").Exec("on_recover");
 
 		RegisterResponse(response);
 		return response;

@@ -154,7 +154,7 @@ public class PreparedResponse implements Runnable, IPresentable
 
 		result += JavaUtils.Quotify((String)info.get("status")) + sep;
 		result += info.get("time") + sep;
-		result += JavaUtils.Quotify((String)usr.get("loc")) + sep;
+		result += JavaUtils.Quotify((String)usr.get("_id")) + sep; // TODO: _id
 		result += JavaUtils.Quotify((String)usr.get("msg"));
 
 		return result;

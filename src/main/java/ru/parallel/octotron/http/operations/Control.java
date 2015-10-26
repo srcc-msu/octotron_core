@@ -127,7 +127,7 @@ public class Control
 				return AutoFormat.PrintJson(ServiceLocator.INSTANCE.GetRuntimeService().MakeSnapshot(verbose));
 			}
 			else if(format.equals("csv"))
-				return new CsvString(ServiceLocator.INSTANCE.GetRuntimeService().MakeCsvSnapshot());
+				return new TextString(ServiceLocator.INSTANCE.GetRuntimeService().MakeCsvSnapshot());
 			else
 				return new ErrorString("unsupported format: " + format);
 		}

@@ -133,7 +133,7 @@ public class RuntimeService extends Service
 	// TODO: unify? add some kind of json2csv conversion
 	public String MakeCsvSnapshot()
 	{
-		String result = "";
+		String result = "status,time,_id,msg" + System.lineSeparator();
 
 		for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
 		{

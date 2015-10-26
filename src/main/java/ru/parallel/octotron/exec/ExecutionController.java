@@ -72,6 +72,8 @@ public class ExecutionController
 
 		interpreter.execfile(context.settings.GetModelPath() + '/' + context.settings.GetModelMain());
 
+		interpreter.cleanup();
+
 		UpdateDefinedSensors();
 	}
 

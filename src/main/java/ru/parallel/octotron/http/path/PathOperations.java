@@ -158,12 +158,15 @@ public abstract class PathOperations
 				throw new ExceptionModelFail
 					("index operation must be querying a single indexed value");
 
-			if(params.get(0).operand != null)
+			if(params.get(0).type == ModelList.EQueryType.EQ)
 				return ServiceLocator.INSTANCE.GetModelService().GetModelData()
 					.GetObjects(params.get(0).name, params.get(0).operand);
-			else
+			else if(params.get(0).type == ModelList.EQueryType.NONE)
 				return ServiceLocator.INSTANCE.GetModelService().GetModelData()
 					.GetObjects(params.get(0).name);
+			else
+				throw new ExceptionModelFail
+					("unsupported type for obj query:" + params.get(0).type);
 		}
 	});
 
@@ -181,13 +184,16 @@ public abstract class PathOperations
 				throw new ExceptionModelFail
 					("index operation must be querying a single indexed value");
 
-			if(params.get(0).operand != null)
+			if(params.get(0).type == ModelList.EQueryType.EQ)
 				return ServiceLocator.INSTANCE.GetModelService().GetModelData()
 					.GetLinks(params.get(0).name, params.get(0).operand);
-			else
+			else if(params.get(0).type == ModelList.EQueryType.NONE)
 				return ServiceLocator.INSTANCE.GetModelService().GetModelData()
 					.GetLinks(params.get(0).name);
-		}
+			else
+				throw new ExceptionModelFail
+					("unsupported type for link query:" + params.get(0).type);
+			}
 	});
 
 	/**

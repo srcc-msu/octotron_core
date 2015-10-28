@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * simplifies statistics collection
@@ -20,7 +21,7 @@ import java.util.Map;
  * */
 public class Statistics
 {
-	private final List<BGExecutorService> registered_services = new LinkedList<>();
+	private final List<BGExecutorService> registered_services = new CopyOnWriteArrayList<>();
 
 	public static class Stat
 	{

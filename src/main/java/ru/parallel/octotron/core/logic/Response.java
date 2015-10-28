@@ -7,7 +7,6 @@
 package ru.parallel.octotron.core.logic;
 
 import com.google.common.collect.ObjectArrays;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
@@ -23,12 +22,12 @@ import java.util.Map;
  * */
 public class Response implements IPresentable
 {
-	private final EEventStatus status;
+	private final String status;
 
 	private final Map<String, String> messages;
 	private final List<String[]> commands = new LinkedList<>();
 
-	public Response(EEventStatus status, String... strings)
+	public Response(String status, String... strings)
 		throws ExceptionParseError
 	{
 		this.status = status;
@@ -39,7 +38,7 @@ public class Response implements IPresentable
 			Msg(string);
 	}
 
-	public EEventStatus GetStatus()
+	public String GetStatus()
 	{
 		return status;
 	}
@@ -104,7 +103,7 @@ public class Response implements IPresentable
 	{
 		Map<String, Object> result = new HashMap<>();
 
-		result.put("status", status.toString());
+		result.put("status", status);
 
 		return result;
 	}

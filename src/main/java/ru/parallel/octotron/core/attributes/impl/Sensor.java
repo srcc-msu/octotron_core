@@ -40,8 +40,6 @@ public final class Sensor extends Attribute
 	 * */
 	private boolean is_user_valid = true;
 
-	Reaction timeout_reaction = null;
-
 	public Sensor(ModelEntity parent, String name, long update_interval
 		, Value value)
 	{
@@ -161,10 +159,5 @@ public final class Sensor extends Attribute
 		result.put("update_interval", update_interval);
 
 		return result;
-	}
-
-	public Reaction GetTimeoutReaction()
-	{
-		return timeout_reaction;
 	}
 }

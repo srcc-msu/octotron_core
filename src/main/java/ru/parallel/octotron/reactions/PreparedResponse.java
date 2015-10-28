@@ -6,8 +6,6 @@
 
 package ru.parallel.octotron.reactions;
 
-import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
@@ -25,11 +23,8 @@ public class PreparedResponse implements Runnable, IPresentable
 
 	private static final String SHORT_LOG = "octotron.events.log";
 	private static final String LONG_LOG = "octotron.events.verbose.log";
-	private static final String TIMEOUT_LOG = "octotron.timeout.log";
 
 	private final Context context;
-
-	private final Response response;
 
 	final Map<String, Object> info = new HashMap<>();
 	final Map<String, Map<String, Object>> model = new HashMap<>();
@@ -39,12 +34,11 @@ public class PreparedResponse implements Runnable, IPresentable
 
 	final List<String[]> scripts = new LinkedList<>();
 	final List<String> specials = new LinkedList<>();
-	private final boolean is_suppressed;
+	private boolean is_suppressed;
 
-	public PreparedResponse(Context context, Response response, boolean is_suppressed)
+	public PreparedResponse(Context context, boolean is_suppressed)
 	{
 		this.context = context;
-		this.response = response;
 		this.is_suppressed = is_suppressed;
 	}
 
@@ -64,22 +58,13 @@ public class PreparedResponse implements Runnable, IPresentable
 			// TODO rework
 			synchronized(lock) // this and file reopening is not efficient, but does not happen often
 			{
-				if(response.GetStatus() == EEventStatus.TIMEOUT)
-				{
-					FileLog short_log = new FileLog(context.settings.GetLogDir(), TIMEOUT_LOG);
-					short_log.Log(short_log_string);
-					short_log.Close();
-				}
-				else
-				{
-					FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
-					short_log.Log(short_log_string);
-					short_log.Close();
+				FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);
+				short_log.Log(short_log_string);
+				short_log.Close();
 
-					FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
-					long_log.Log(long_log_string);
-					long_log.Close();
-				}
+				FileLog long_log = new FileLog(context.settings.GetLogDir(), LONG_LOG);
+				long_log.Log(long_log_string);
+				long_log.Close();
 			}
 		}
 		catch(ExceptionSystemError e)
@@ -110,11 +95,6 @@ public class PreparedResponse implements Runnable, IPresentable
 				}
 			}
 		}
-	}
-
-	public Response GetResponse()
-	{
-		return response;
 	}
 
 	@Override
@@ -158,5 +138,10 @@ public class PreparedResponse implements Runnable, IPresentable
 		result += JavaUtils.Quotify((String)usr.get("msg"));
 
 		return result;
+	}
+
+	public void SetSuppress(boolean value)
+	{
+		is_suppressed = value;
 	}
 }

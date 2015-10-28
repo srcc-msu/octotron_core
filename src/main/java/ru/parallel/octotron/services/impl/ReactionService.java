@@ -8,7 +8,6 @@ package ru.parallel.octotron.services.impl;
 
 import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.logic.Response;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.octotron.reactions.PreparedResponseFactory;
@@ -51,6 +50,11 @@ public class ReactionService extends BGService
 		executor.execute(new Responder(reaction, response));
 	}
 
+	public void AddRecoverResponse(Reaction reaction, Response response)
+	{
+		executor.execute(new RecoverResponder(reaction, response));
+	}
+
 	public class Responder implements Runnable
 	{
 		private final Reaction reaction;
@@ -66,13 +70,40 @@ public class ReactionService extends BGService
 		public void run()
 		{
 			PreparedResponse prepared_response = response_factory
-				.Construct(reaction.GetParent(), reaction, response);
+					.Construct(reaction.GetParent(), reaction, response);
 
-			if(response.GetStatus() != EEventStatus.RECOVER)
-				reaction.RegisterPreparedResponse(prepared_response);
+			reaction.RegisterPreparedResponse(prepared_response);
 
-			if(!IsSilent())
-				prepared_response.run();
+			if(IsSilent())
+				prepared_response.SetSuppress(true);
+
+			prepared_response.run();
+		}
+	}
+
+	public class RecoverResponder implements Runnable
+	{
+		private final Reaction reaction;
+		private final Response response;
+
+		public RecoverResponder(Reaction reaction, Response response)
+		{
+			this.reaction = reaction;
+			this.response = response;
+		}
+
+		@Override
+		public void run()
+		{
+			PreparedResponse prepared_response = response_factory
+					.Construct(reaction.GetParent(), reaction, response);
+
+			reaction.RegisterPreparedResponse(null);
+
+			if(IsSilent())
+				prepared_response.SetSuppress(true);
+
+			prepared_response.run();
 		}
 	}
 }

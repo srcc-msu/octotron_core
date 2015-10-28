@@ -9,17 +9,14 @@ package ru.parallel.octotron.http.operations;
 import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.attributes.impl.Sensor;
 import ru.parallel.octotron.core.collections.ModelList;
-import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.http.operations.impl.FormattedOperation;
 import ru.parallel.octotron.http.operations.impl.ModelOperation;
-import ru.parallel.octotron.reactions.CommonReactions;
 import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.JavaUtils;
-import ru.parallel.utils.format.CsvString;
 import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TextString;
 import ru.parallel.utils.format.TypedString;
@@ -232,12 +229,11 @@ public abstract class View
 		{
 			Utils.AllParams(params);
 
-			List<Response> responses = CommonReactions.GetRegisteredResponses();
-
 			List<Map<String, Object>> result = new LinkedList<>();
 
-			for(Response response : responses)
-				result.add(response.GetShortRepresentation());
+			for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
+				for(Reaction reaction : entity.GetReaction())
+					result.add(reaction.GetTemplate().response.GetShortRepresentation());
 
 			return AutoFormat.PrintJson(result);
 		}

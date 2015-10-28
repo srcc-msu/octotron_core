@@ -78,11 +78,8 @@ public class RuntimeService extends Service
 		{
 			for(Sensor sensor : entity.GetSensor())
 			{
-				PreparedResponse prepared_response
-					= sensor.GetTimeoutReaction().GetPreparedResponseOrNull();
-
-				if(prepared_response != null)
-					result.add(prepared_response.GetShortRepresentation());
+				if(sensor.IsOutdated())
+					result.add(sensor.GetShortRepresentation());
 			}
 		}
 

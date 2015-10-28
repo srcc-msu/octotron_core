@@ -44,7 +44,7 @@ public class PreparedResponseFactory
 
 	public PreparedResponse Construct(ModelEntity entity, Reaction reaction, Response response)
 	{
-		PreparedResponse prepared_response = new PreparedResponse(context, response, reaction.IsSuppressed());
+		PreparedResponse prepared_response = new PreparedResponse(context, reaction.IsSuppressed());
 
 		FillInfo(prepared_response, response);
 		FillModel(prepared_response, entity);
@@ -125,7 +125,7 @@ public class PreparedResponseFactory
 				result.add(ComposeString(command[i], entity));
 			}
 
-			result.add(response.GetStatus().toString());
+			result.add(response.GetStatus());
 
 			prepared_response.scripts.add(result.toArray(new String[0]));
 		}
@@ -139,7 +139,7 @@ public class PreparedResponseFactory
 	private void FillInfo(PreparedResponse prepared_response, Response response)
 	{
 		prepared_response.info.put("time", JavaUtils.GetTimestamp());
-		prepared_response.info.put("status", response.GetStatus().toString());
+		prepared_response.info.put("status", response.GetStatus());
 	}
 
 	private void FillUsr(PreparedResponse prepared_response, ModelEntity entity, Response response)

@@ -11,7 +11,6 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.octotron.http.operations.impl.FormattedOperation;
 import ru.parallel.octotron.services.ServiceLocator;
 import ru.parallel.utils.AutoFormat;
-import ru.parallel.utils.format.CsvString;
 import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TextString;
 import ru.parallel.utils.format.TypedString;

@@ -48,6 +48,8 @@ public class ExecutionController
 			}
 		}
 
+		ServiceLocator.INSTANCE.GetReactionService().GetExecutor().WaitAllTasks();
+
 		ServiceLocator.INSTANCE.GetReactionService().SetSilent(old_mode);
 	}
 

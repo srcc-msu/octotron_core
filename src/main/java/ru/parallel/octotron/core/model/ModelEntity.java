@@ -10,7 +10,6 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.core.primitive.EModelType;
 import ru.parallel.octotron.core.primitive.IPresentable;
 import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
@@ -60,7 +59,7 @@ public abstract class ModelEntity implements IPresentable
 		{
 			Attribute attribute = attributes_map.get(name);
 
-			if (result == null)
+			if (attribute == null)
 				throw new ExceptionModelFail("attribute not found: " + name + " ; all: " + AutoFormat.FormatJson(GetShortRepresentation()));
 
 			result.add(attribute);
@@ -230,7 +229,7 @@ public abstract class ModelEntity implements IPresentable
 		{
 			PreparedResponse prepared_response = reaction.GetPreparedResponseOrNull();
 
-			if(prepared_response != null && prepared_response.GetResponse().GetStatus() != EEventStatus.RECOVER)
+			if(prepared_response != null)
 				result.add(prepared_response);
 		}
 

@@ -9,7 +9,6 @@ import ru.parallel.octotron.core.attributes.impl.Reaction;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.generators.ObjectFactory;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
@@ -65,7 +64,7 @@ public class PreparedResponseTest extends GeneralTest
 	@Test
 	public void Test1() throws Exception
 	{
-		Response response = new Response(EEventStatus.INFO, "tst1#TAG");
+		Response response = new Response("INFO", "tst1#TAG");
 
 		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 
@@ -75,7 +74,7 @@ public class PreparedResponseTest extends GeneralTest
 	@Test
 	public void Test2() throws Exception
 	{
-		Response response = new Response(EEventStatus.INFO, "tst2#{test} {type}");
+		Response response = new Response("INFO", "tst2#{test} {type}");
 
 		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 
@@ -86,7 +85,7 @@ public class PreparedResponseTest extends GeneralTest
 	public void Test3() throws Exception
 	{
 		ModelEntity entity = obj_factory.Create();
-		Response response = new Response(EEventStatus.INFO, "tst3#{ggg} {type} {fail}");
+		Response response = new Response("INFO", "tst3#{ggg} {type} {fail}");
 
 		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 
@@ -97,7 +96,7 @@ public class PreparedResponseTest extends GeneralTest
 	public void Test4() throws Exception
 	{
 		ModelEntity entity = obj_factory.Create();
-		Response response = (new Response(EEventStatus.INFO, "tst4#t{est")).Msg("tst2#tes}t");
+		Response response = (new Response("INFO", "tst4#t{est")).Msg("tst2#tes}t");
 
 		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 

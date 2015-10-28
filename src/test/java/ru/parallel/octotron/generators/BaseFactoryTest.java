@@ -7,7 +7,6 @@ import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EEventStatus;
 import ru.parallel.octotron.generators.tmpl.*;
 import ru.parallel.octotron.rules.plain.Manual;
 import ru.parallel.octotron.rules.plain.Match;
@@ -135,9 +134,9 @@ public class BaseFactoryTest extends GeneralTest
 	@Test
 	public void TestReactions() throws Exception
 	{
-		ReactionTemplate[] reactions = { new ReactionTemplate("r1", new ReactionAction().Begin(new Response(EEventStatus.INFO))) };
-		ReactionTemplate reaction2 = new ReactionTemplate("r2", new ReactionAction().Begin(new Response(EEventStatus.INFO)));
-		ReactionTemplate reaction3 = new ReactionTemplate("r3", new ReactionAction().Begin(new Response(EEventStatus.INFO)));
+		ReactionTemplate[] reactions = { new ReactionTemplate("r1", new ReactionAction().Begin(new Response("INFO"))) };
+		ReactionTemplate reaction2 = new ReactionTemplate("r2", new ReactionAction().Begin(new Response("INFO")));
+		ReactionTemplate reaction3 = new ReactionTemplate("r3", new ReactionAction().Begin(new Response("INFO")));
 
 		ObjectFactory f1 = object_factory
 			.Reactions(reactions)

@@ -170,8 +170,7 @@ public final class AttributeList<T extends Attribute> extends LinkedList<T>
 	{
 		AttributeList<Attribute> result = new AttributeList<>();
 
-		for(Attribute attribute : attributes)
-			result.add(attribute);
+		Collections.addAll(result, attributes);
 
 		return result;
 	}

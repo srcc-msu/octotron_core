@@ -81,7 +81,7 @@ public class Reaction extends Attribute
 				UpdateValue(new Value(false));
 
 				if(template.recover_response != null) // was true, now false -> recover
-					RegisterResponse(template.recover_response);
+					RegisterRecoverResponse(template.recover_response);
 
 				RegisterPreparedResponse(null); // unregister executed reaction
 			}
@@ -155,6 +155,11 @@ public class Reaction extends Attribute
 	public void RegisterResponse(Response response)
 	{
 		ServiceLocator.INSTANCE.GetReactionService().AddResponse(this, response);
+	}
+
+	public void RegisterRecoverResponse(Response response)
+	{
+		ServiceLocator.INSTANCE.GetReactionService().AddRecoverResponse(this, response);
 	}
 
 	public void RegisterPreparedResponse(PreparedResponse new_prepared_response)

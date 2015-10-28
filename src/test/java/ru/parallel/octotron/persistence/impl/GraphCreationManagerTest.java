@@ -1,17 +1,16 @@
 package ru.parallel.octotron.persistence.impl;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
 import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.persistence.neo4j.Neo4jGraph;
-import ru.parallel.octotron.rules.plain.Manual;
 import ru.parallel.octotron.rules.plain.Match;
 import ru.parallel.octotron.rules.plain.MatchArg;
-
-import static org.junit.Assert.*;
 
 public class GraphCreationManagerTest extends GeneralTest
 {

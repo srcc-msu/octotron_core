@@ -1,6 +1,9 @@
 package ru.parallel.octotron.persistence.impl;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.model.ModelLink;

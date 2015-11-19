@@ -14,6 +14,7 @@ import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
+import ru.parallel.octotron.services.ServiceLocator;
 
 import static org.junit.Assert.assertEquals;
 import static ru.parallel.octotron.reactions.PreparedResponseFactory.ComposeString;
@@ -41,6 +42,8 @@ public class PreparedResponseTest extends GeneralTest
 
 		entity.GetBuilder().DeclareReaction(new ReactionTemplate("test_r", new ReactionAction()));
 		reaction = entity.GetReaction().iterator().next();
+
+		ServiceLocator.INSTANCE.GetModelService().CreateCache();
 	}
 
 	@Rule
@@ -51,14 +54,17 @@ public class PreparedResponseTest extends GeneralTest
 	{
 		assertEquals("1 gg", ComposeString("{test} gg", entity));
 
+		assertEquals("1 gg", ComposeString(
+			String.format("{obj(AID==%d):test} gg", entity.GetInfo().GetID()), entity));
+
 		assertEquals("!1", ComposeString("!{test}", entity));
 
 		assertEquals("{test gg", ComposeString("{test gg", entity));
 		assertEquals("test gg}", ComposeString("test gg}", entity));
 
-		assertEquals("<test gg:not_found>{", ComposeString("{test gg}{", entity));
+		assertEquals("<self:test gg - not_found>{", ComposeString("{test gg}{", entity));
 
-		assertEquals("<st gg:not_found>{", ComposeString("{te:st gg}{", entity));
+		assertEquals("<te:st gg - bad_path>{", ComposeString("{te:st gg}{", entity));
 	}
 
 	@Test
@@ -89,7 +95,7 @@ public class PreparedResponseTest extends GeneralTest
 
 		PreparedResponse prepared_response = factory.Construct(entity, reaction, response);
 
-		assertEquals("7 test <fail:not_found>", prepared_response.usr.get("tst3"));
+		assertEquals("7 test <self:fail - not_found>", prepared_response.usr.get("tst3"));
 	}
 
 	@Test

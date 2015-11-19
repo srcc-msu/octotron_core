@@ -159,32 +159,24 @@ public class PreparedResponseFactory
 		prepared_response.specials.add(suppress);
 	}
 
-	private static final String NOT_FOUND = "<%s:not_found>";
-
-	private static final Pattern PATTERN_NAME_PATH = Pattern.compile("\\{([^:{}]+):([^:{}]+)\\}");
-	private static final Pattern PATTERN_NAME = Pattern.compile("\\{([^{}]+)\\}");
+	private static final String NOT_FOUND = "<%s:%s - not_found>";
+	private static final String BAD_PATH = "<%s:%s - bad_path>";
 
 	private static String ReplaceWithPath(String path, String name
-		, ModelEntity entity)
+			, ModelEntity entity)
 	{
-		String where;
-
-		if(entity.GetInfo().GetType() == EModelType.OBJECT)
-			where = String.format("obj(AID==%d).%s.uniq()", entity.GetInfo().GetID(), path);
-		else
-			where = String.format("link(AID==%d).%s.uniq()", entity.GetInfo().GetID(), path);
-
-		ParsedPath parsed_path;
 		ModelList<? extends ModelEntity, ?> targets;
 
 		try
 		{
-			parsed_path = PathParser.Parse(where);
-			targets = parsed_path.Execute(ModelList.Single(entity));
+			if(path.startsWith("obj") || path.startsWith("link"))
+				targets = GetAbsolutePath(path);
+			else
+				targets = GetRelativePath(path, entity);
 		}
 		catch(ExceptionParseError exceptionParseError)
 		{
-			return String.format(NOT_FOUND, name);
+			return String.format(BAD_PATH, path, name);
 		}
 
 		String result = "";
@@ -204,7 +196,29 @@ public class PreparedResponseFactory
 			return result.replaceAll("\"", "");
 		}
 		else
-			return String.format(NOT_FOUND, name);
+			return String.format(NOT_FOUND, path, name);
+	}
+
+	private static ModelList<? extends ModelEntity, ?> GetRelativePath(String path
+		, ModelEntity entity) throws ExceptionParseError
+	{
+		String where;
+
+		// if request is not complete - add self object as starting
+		if (entity.GetInfo().GetType() == EModelType.OBJECT)
+			where = String.format("obj(AID==%d).%s.uniq()", entity.GetInfo().GetID(), path);
+		else
+			where = String.format("link(AID==%d).%s.uniq()", entity.GetInfo().GetID(), path);
+
+		ParsedPath parsed_path = PathParser.Parse(where);
+		return parsed_path.Execute(ModelList.Single(entity));
+	}
+
+	private static ModelList<? extends ModelEntity, ?> GetAbsolutePath(String path)
+		throws ExceptionParseError
+	{
+		ParsedPath parsed_path = PathParser.Parse(path + ".uniq()");
+		return parsed_path.Execute();
 	}
 
 	private static String ReplaceSimple(String name, ModelEntity entity)
@@ -212,8 +226,11 @@ public class PreparedResponseFactory
 		if(entity.TestAttribute(name))
 			return entity.GetAttribute(name).ValueToString().replaceAll("\"", "");
 		else
-			return String.format(NOT_FOUND, name);
+			return String.format(NOT_FOUND, "self", name);
 	}
+
+	private static final Pattern PATTERN_NAME_PATH = Pattern.compile("\\{([^:{}]+):([^:{}]+)\\}");
+	private static final Pattern PATTERN_NAME = Pattern.compile("\\{([^{}]+)\\}");
 
 	public static String ComposeString(String string, ModelEntity entity)
 	{

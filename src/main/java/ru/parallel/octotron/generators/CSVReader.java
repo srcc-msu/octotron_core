@@ -133,6 +133,9 @@ public final class CSVReader
 
 				ModelObjectList tmp = cache.get(Value.ValueFromString(next_line[column[0]]));
 
+				if(tmp == null)
+					throw new ExceptionModelFail("object is missing: " + next_line[column[0]]);
+
 				for(int i = 1; i < column.length; i++)
 				{
 					if(column[i] >= fields.length)

@@ -170,7 +170,7 @@ public abstract class Attribute extends BaseAttribute
 	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = super.GetShortRepresentation();
-		result.put("attribute AID", GetInfo().GetID());
+		result.put("parent_aid", GetParent().GetInfo().GetID());
 
 		return result;
 	}
@@ -178,7 +178,8 @@ public abstract class Attribute extends BaseAttribute
 	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = super.GetLongRepresentation();
-		result.put("attribute AID", GetInfo().GetID());
+		result.put("parent_aid", GetParent().GetInfo().GetID());
+		result.put("attribute_aid", GetInfo().GetID());
 
 		return result;
 	}

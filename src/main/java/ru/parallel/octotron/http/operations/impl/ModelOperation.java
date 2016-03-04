@@ -31,7 +31,7 @@ public abstract class ModelOperation extends FormattedOperation
 		String path = params.get("path");
 		params.remove("path");
 
-		ModelList<? extends ModelEntity, ?> entities = PathParser.Parse(path).Execute();
+		ModelList<? extends ModelEntity, ?> entities = PathParser.ParseWalk(path);
 
 		if(entities.size() == 0)
 			return new ErrorString("no entities found on path: " + path);

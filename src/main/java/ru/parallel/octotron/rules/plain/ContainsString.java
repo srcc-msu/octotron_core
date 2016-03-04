@@ -4,7 +4,7 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.rules;
+package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
@@ -12,15 +12,15 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-import java.util.Arrays;
-
-public class StrictLogicalAnd extends Rule
+public class ContainsString extends Rule
 {
-	private final String[] attributes;
+	private final String attribute;
+	private final String match_str;
 
-	public StrictLogicalAnd(String... attributes)
+	public ContainsString(String attribute, String match_str)
 	{
-		this.attributes = Arrays.copyOf(attributes, attributes.length);
+		this.attribute = attribute;
+		this.match_str = match_str;
 	}
 
 	@Override
@@ -28,8 +28,7 @@ public class StrictLogicalAnd extends Rule
 	{
 		AttributeList<Attribute> result = new AttributeList<>();
 
-		for(String attr_name : attributes)
-			result.add(entity.GetAttribute(attr_name));
+		result.add(entity.GetAttribute(attribute));
 
 		return result;
 	}
@@ -37,19 +36,11 @@ public class StrictLogicalAnd extends Rule
 	@Override
 	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
-		boolean res = true;
+		Attribute attr = entity.GetAttribute(attribute);
 
-		for(String attr_name : attributes)
-		{
-			Attribute attr = entity.GetAttribute(attr_name);
+		if(!attr.IsValid())
+			return Value.invalid;
 
-			if(!attr.IsValid())
-				return Value.invalid;
-
-			res = res & attr.GetBoolean();
-		}
-
-		return res;
+		return attr.GetString().contains(match_str);
 	}
-
 }

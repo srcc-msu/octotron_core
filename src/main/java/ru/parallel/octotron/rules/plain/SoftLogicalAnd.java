@@ -4,23 +4,22 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.rules;
+package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 
-public class ContainsString extends Rule
-{
-	private final String attribute;
-	private final String match_str;
+import java.util.Arrays;
 
-	public ContainsString(String attribute, String match_str)
+public class SoftLogicalAnd extends Rule
+{
+	private final String[] attributes;
+
+	public SoftLogicalAnd(String... attributes)
 	{
-		this.attribute = attribute;
-		this.match_str = match_str;
+		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
 
 	@Override
@@ -28,7 +27,8 @@ public class ContainsString extends Rule
 	{
 		AttributeList<Attribute> result = new AttributeList<>();
 
-		result.add(entity.GetAttribute(attribute));
+		for(String attr_name : attributes)
+			result.add(entity.GetAttribute(attr_name));
 
 		return result;
 	}
@@ -36,11 +36,19 @@ public class ContainsString extends Rule
 	@Override
 	public Object Compute(ModelEntity entity, Attribute rule_attribute)
 	{
-		Attribute attr = entity.GetAttribute(attribute);
+		boolean res = true;
 
-		if(!attr.IsValid())
-			return Value.invalid;
+		for(String attr_name : attributes)
+		{
+			Attribute attr = entity.GetAttribute(attr_name);
 
-		return attr.GetString().contains(match_str);
+			if(!attr.IsValid())
+				continue;
+
+			res = res & attr.GetBoolean();
+		}
+
+		return res;
 	}
+
 }

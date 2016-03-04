@@ -8,12 +8,15 @@ package ru.parallel.octotron.http.path;
 
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelList;
+import ru.parallel.octotron.core.model.ModelEntity;
+import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,13 +83,13 @@ public final class PathParser
 			if(type == null)
 				throw new ExceptionParseError("unsupported operation: " + op);
 
-			return new PathOperations.Query(name, value, type);
+			return new PathOperations.Query(name.intern(), value, type);
 		}
 
 		matcher = op_pattern_word.matcher(str);
 
 		if(matcher.find())
-			return new PathOperations.Query(str, null, ModelList.EQueryType.NONE);
+			return new PathOperations.Query(str.intern(), null, ModelList.EQueryType.NONE);
 
 		throw new ExceptionParseError("can not parse: " + str);
 	}
@@ -184,7 +187,6 @@ public final class PathParser
 		if(tokens.isEmpty())
 			throw new ExceptionParseError("empty request");
 
-//		PathOperations.CHAIN_TYPE type = PathOperations.CHAIN_TYPE.E_START;
 		PathOperations.CHAIN_TYPE type = tokens.get(0).GetIn();
 
 		for(PathOperations.PathToken token : tokens)
@@ -211,20 +213,31 @@ public final class PathParser
 		}
 	}
 
+// TODO: remove this cache if memory consumption is too big
+	private static Map<String, ParsedPath> parsed_path_cache = new ConcurrentHashMap();
+
 /**
- * parse Request request and returns CParsedRequest,<br>
+ * parse path request and returns ParsedRequest,<br>
  * that is ready to be executed on given input<br>
  * */
 	public static ParsedPath Parse(String path)
 		throws ExceptionParseError
 	{
+		ParsedPath parsed_path = parsed_path_cache.get(path);
+
+		if(parsed_path != null)
+			return parsed_path;
+
 		try
 		{
 			List<PathOperations.PathToken> tokens = ParseTokens(path);
 
 			TypeCheck(tokens);
 
-			return new ParsedPath(tokens);
+			parsed_path = new ParsedPath(tokens);
+			parsed_path_cache.put(path, parsed_path);
+
+			return parsed_path;
 		}
 		catch(ExceptionParseError e)
 		{
@@ -236,5 +249,28 @@ public final class PathParser
 
 			throw new ExceptionParseError(res);
 		}
+	}
+
+// TODO: check memory consumption, but this cache is important
+    private static Map<String, ModelList> path_cache = new ConcurrentHashMap();
+
+	public static ModelList ParseWalk(String path)
+	throws ExceptionParseError
+	{
+		ModelList target_list = path_cache.get(path);
+
+		if(target_list != null)
+			return target_list;
+
+		target_list = Parse(path).Execute();
+		path_cache.put(path, target_list);
+
+		return target_list;
+	}
+
+	public static ModelList ParseWalk(String path, ModelList<? extends ModelEntity, ?> entity_list)
+		throws ExceptionParseError
+	{
+		return Parse(path).Execute(entity_list);
 	}
 }

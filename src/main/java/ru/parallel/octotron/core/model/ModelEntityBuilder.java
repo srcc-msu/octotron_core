@@ -73,7 +73,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		Const attribute = new Const(entity, name, converted_value);
 
 		CheckAddAttribute(attribute);
-		entity.const_map.put(name, attribute);
+		entity.const_map.put(name.intern(), attribute);
 
 		ServiceLocator.INSTANCE.GetPersistenceService().RegisterConst(attribute);
 	}
@@ -129,7 +129,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		Sensor sensor = new Sensor(entity, name, update_time, value);
 
 		CheckAddAttribute(sensor);
-		entity.sensor_map.put(name, sensor);
+		entity.sensor_map.put(name.intern(), sensor);
 
 		ServiceLocator.INSTANCE.GetPersistenceService().RegisterSensor(sensor);
 	}
@@ -152,7 +152,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		Var var = new Var(entity, name, rule);
 
 		CheckAddAttribute(var);
-		entity.var_map.put(name, var);
+		entity.var_map.put(name.intern(), var);
 
 		ServiceLocator.INSTANCE.GetPersistenceService().RegisterVar(var);
 	}
@@ -175,7 +175,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		Trigger var = new Trigger(entity, name, condition);
 
 		CheckAddAttribute(var);
-		entity.trigger_map.put(name, var);
+		entity.trigger_map.put(name.intern(), var);
 
 		ServiceLocator.INSTANCE.GetPersistenceService().RegisterTrigger(var);
 	}
@@ -198,7 +198,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 		Reaction reaction = new Reaction(entity, name, action);
 
 		CheckAddAttribute(reaction);
-		entity.reaction_map.put(name, reaction);
+		entity.reaction_map.put(name.intern(), reaction);
 
 		ServiceLocator.INSTANCE.GetPersistenceService().RegisterReaction(reaction);
 	}

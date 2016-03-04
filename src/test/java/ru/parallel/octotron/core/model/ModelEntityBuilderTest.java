@@ -5,7 +5,7 @@ import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
-import ru.parallel.octotron.rules.StrictLogicalAnd;
+import ru.parallel.octotron.rules.plain.StrictLogicalAnd;
 import ru.parallel.octotron.rules.plain.Manual;
 import ru.parallel.octotron.rules.plain.Match;
 

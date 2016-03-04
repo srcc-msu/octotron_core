@@ -55,7 +55,7 @@ public class PreparedResponse implements Runnable, IPresentable
 
 		try
 		{
-			// TODO rework
+			// TODO: rework
 			synchronized(lock) // this and file reopening is not efficient, but does not happen often
 			{
 				FileLog short_log = new FileLog(context.settings.GetLogDir(), SHORT_LOG);

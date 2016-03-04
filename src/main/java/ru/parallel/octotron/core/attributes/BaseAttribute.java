@@ -23,7 +23,7 @@ public abstract class BaseAttribute implements IValue, IPresentable
 
 	BaseAttribute(String name, Value value)
 	{
-		this.name = name;
+		this.name = name.intern();
 		this.value = value;
 	}
 

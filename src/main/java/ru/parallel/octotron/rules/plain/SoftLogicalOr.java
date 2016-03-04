@@ -4,21 +4,20 @@
  * Distributed under the MIT License - see the accompanying file LICENSE.txt.
  ******************************************************************************/
 
-package ru.parallel.octotron.rules;
+package ru.parallel.octotron.rules.plain;
 
 import ru.parallel.octotron.core.attributes.Attribute;
-import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
 
 import java.util.Arrays;
 
-public class StrictLogicalOr extends Rule
+public class SoftLogicalOr extends Rule
 {
 	private final String[] attributes;
 
-	public StrictLogicalOr(String... attributes)
+	public SoftLogicalOr(String... attributes)
 	{
 		this.attributes = Arrays.copyOf(attributes, attributes.length);
 	}
@@ -44,7 +43,7 @@ public class StrictLogicalOr extends Rule
 			Attribute attr = entity.GetAttribute(attr_name);
 
 			if(!attr.IsValid())
-				return Value.invalid;
+				continue;
 
 			res = res | attr.GetBoolean();
 		}

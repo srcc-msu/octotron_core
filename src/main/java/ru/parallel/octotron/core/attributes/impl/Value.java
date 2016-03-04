@@ -103,7 +103,7 @@ public class Value implements IValue
 		else if(value instanceof Boolean)
 			return new Value(value, Boolean.class);
 		else if(value instanceof String)
-			return new Value(value, String.class);
+			return new Value(((String) value).intern(), String.class);
 
 		else
 			throw new ExceptionModelFail("unsupported value type: " + value + " : " + value.getClass().getName());
@@ -126,7 +126,7 @@ public class Value implements IValue
 
 	public Value(String value)
 	{
-		this(value, value.getClass());
+		this(value.intern(), value.getClass());
 	}
 
 	public Value(Integer value)
@@ -169,6 +169,8 @@ public class Value implements IValue
 	public static Value ValueFromString(String value_str)
 		throws ExceptionParseError
 	{
+		value_str = value_str.trim();
+
 		int str_len = value_str.length();
 
 		if(str_len == 0)
@@ -194,7 +196,7 @@ public class Value implements IValue
 		if(value_str.equals("True")) return new Value(true);
 		if(value_str.equals("False")) return new Value(false);
 
-		return new Value(value_str);
+		return new Value(value_str.intern());
 	}
 
 	public final Class<?> GetClass()

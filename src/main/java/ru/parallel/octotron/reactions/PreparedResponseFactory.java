@@ -210,15 +210,13 @@ public class PreparedResponseFactory
 		else
 			where = String.format("link(AID==%d).%s.uniq()", entity.GetInfo().GetID(), path);
 
-		ParsedPath parsed_path = PathParser.Parse(where);
-		return parsed_path.Execute(ModelList.Single(entity));
+		return PathParser.ParseWalk(where, ModelList.Single(entity));
 	}
 
 	private static ModelList<? extends ModelEntity, ?> GetAbsolutePath(String path)
 		throws ExceptionParseError
 	{
-		ParsedPath parsed_path = PathParser.Parse(path + ".uniq()");
-		return parsed_path.Execute();
+		return PathParser.ParseWalk(path).Uniq();
 	}
 
 	private static String ReplaceSimple(String name, ModelEntity entity)

@@ -21,7 +21,8 @@ public class ViewRequestTest extends RequestTest
 
 		String result = GetRequestResult("/view/count?path=obj(AID)");
 
-		assertTrue(result.contains("10"));
+		assertTrue(result.contains(
+			String.valueOf(model_service.GetModelData().GetAllObjects().size())));
 	}
 
 	@Test
@@ -51,13 +52,12 @@ public class ViewRequestTest extends RequestTest
 
 		result = GetRequestResult("/view/entity?path=obj(AID)");
 		assertTrue(result.contains("AID"));
-		assertTrue(result.contains("rule"));
 
 		result = GetRequestResult("/view/entity?path=obj(AID)&type=const");
 		assertTrue(result.contains("AID"));
 
 		result = GetRequestResult("/view/entity?path=obj(AID)&type=var");
-		assertTrue(result.contains("rule"));
+		assertTrue(result.contains("rule")); // name of the var
 	}
 
 	@Test

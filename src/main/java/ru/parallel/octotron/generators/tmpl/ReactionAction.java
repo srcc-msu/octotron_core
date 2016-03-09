@@ -98,13 +98,13 @@ public final class ReactionAction implements IPresentable
 	@Override
 	public Map<String, Object> GetLongRepresentation()
 	{
-		return null;
+		return null; // TODO
 	}
 
 	@Override
 	public Map<String, Object> GetShortRepresentation()
 	{
-		return null;
+		return null; // TODO
 	}
 
 	@Override

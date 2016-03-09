@@ -167,7 +167,7 @@ public abstract class Attribute extends BaseAttribute
 		return true;
 	}
 
-	public Map<String, Object> GetShortRepresentation()
+/*	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = super.GetShortRepresentation();
 		result.put("parent_aid", GetParent().GetInfo().GetID());
@@ -182,7 +182,7 @@ public abstract class Attribute extends BaseAttribute
 		result.put("attribute_aid", GetInfo().GetID());
 
 		return result;
-	}
+	}*/
 
 	public ModelInfo<EAttributeType> GetInfo()
 	{

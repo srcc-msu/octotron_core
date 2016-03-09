@@ -240,7 +240,7 @@ public abstract class ModelEntity implements IPresentable
 	public Map<String, Object> GetShortRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
-		result.put("entity AID", GetInfo().GetID());
+//		result.put("entity AID", GetInfo().GetID());
 
 		List<Map<String, Object>> const_list = new LinkedList<>();
 
@@ -286,7 +286,7 @@ public abstract class ModelEntity implements IPresentable
 	public Map<String, Object> GetLongRepresentation()
 	{
 		Map<String, Object> result = new HashMap<>();
-		result.put("entity AID", GetInfo().GetID());
+//		result.put("entity AID", GetInfo().GetID());
 
 		List<Map<String, Object>> const_list = new LinkedList<>();
 

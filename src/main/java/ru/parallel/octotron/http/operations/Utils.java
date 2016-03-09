@@ -6,12 +6,19 @@
 
 package ru.parallel.octotron.http.operations;
 
+import org.w3c.dom.Attr;
 import ru.parallel.octotron.core.attributes.Attribute;
+import ru.parallel.octotron.core.attributes.BaseAttribute;
+import ru.parallel.octotron.core.attributes.impl.Const;
+import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.reactions.PreparedResponseFactory;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * implementation of all available http operations<br>
@@ -60,12 +67,38 @@ public abstract class Utils
 	}
 
 	public static List<Attribute> GetAttributes(ModelEntity entity, List<String> names)
+		throws ExceptionParseError
+	{
+		return GetAttributes(entity, names, null);
+	}
+
+	private static final Pattern PATTERN_NAME_PATH = Pattern.compile("([^:{}]+):([^:{}]+)");
+
+	public static List<Attribute> GetAttributes(ModelEntity entity, List<String> names, String default_value_or_null)
+		throws ExceptionParseError
 	{
 		List<Attribute> result = new LinkedList<>();
 
 		for(String name : names)
 		{
-			result.add(entity.GetAttribute(name));
+			Matcher matcher = PATTERN_NAME_PATH.matcher(name);
+
+			if(matcher.find())
+			{
+				String path = matcher.group(1);
+				String param_name = matcher.group(2);
+
+				ModelList<? extends ModelEntity, ?> target = PreparedResponseFactory.GetRelativePath(path, entity);
+
+				result.add(target.Only().GetAttribute(param_name));
+			}
+			else
+			{
+				if(entity.TestAttribute(name))
+					result.add(entity.GetAttribute(name));
+				else if(default_value_or_null != null)
+					result.add(new Const(entity, "_", Value.ValueFromString(default_value_or_null)));
+			}
 		}
 
 		return result;
@@ -73,6 +106,7 @@ public abstract class Utils
 
 	public static List<List<Map<String, Object>>> GetAttributes(ModelList<? extends ModelEntity, ?> entities
 		, List<String> names, boolean verbose)
+		throws ExceptionParseError
 	{
 		List<List<Map<String, Object>>> data = new LinkedList<>();
 
@@ -117,6 +151,7 @@ public abstract class Utils
 
 	public static String PrintCsvAttributes(ModelList<? extends ModelEntity, ?> entities
 		, List<String> names)
+		throws ExceptionParseError
 	{
 		StringBuilder result = new StringBuilder();
 		String sep = ",";
@@ -132,18 +167,13 @@ public abstract class Utils
 		for(ModelEntity entity : entities)
 		{
 			prefix = "";
-			for(String name : names)
+
+			for(Attribute attribute : GetAttributes(entity, names, "<not found>"))
 			{
-				String string_value;
-
-				if(entity.TestAttribute(name))
-					string_value = entity.GetAttribute(name).ValueToString();
-				else
-					string_value = "<not found>";
-
-				result.append(prefix).append(string_value);
+				result.append(prefix).append(attribute.ValueToString());
 				prefix = sep;
 			}
+
 			result.append(System.lineSeparator());
 		}
 

@@ -72,7 +72,7 @@ public abstract class View
 			List<String> attributes = Utils.GetNames(params.get("names"));
 			String format = params.get("format");
 
-			if(format == null || format.equals(")json") || format.equals("jsonp"))
+			if(format == null || format.equals("json") || format.equals("jsonp"))
 				return AutoFormat.PrintJson(Utils.GetAttributes(entities, attributes, verbose));
 			if(format.equals("csv"))
 				return new TextString(Utils.PrintCsvAttributes(entities, attributes)); // TODO: it should be CsvString her, but it makes debugging harder

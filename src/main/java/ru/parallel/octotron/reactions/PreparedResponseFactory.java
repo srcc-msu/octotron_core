@@ -199,7 +199,7 @@ public class PreparedResponseFactory
 			return String.format(NOT_FOUND, path, name);
 	}
 
-	private static ModelList<? extends ModelEntity, ?> GetRelativePath(String path
+	public static ModelList<? extends ModelEntity, ?> GetRelativePath(String path
 		, ModelEntity entity) throws ExceptionParseError
 	{
 		String where;

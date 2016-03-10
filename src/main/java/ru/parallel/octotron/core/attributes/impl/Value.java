@@ -11,6 +11,7 @@ import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
 import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
 import ru.parallel.utils.JavaUtils;
 
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 
 /**
@@ -104,6 +105,8 @@ public class Value implements IValue
 			return new Value(value, Boolean.class);
 		else if(value instanceof String)
 			return new Value(((String) value).intern(), String.class);
+		else if(value instanceof java.math.BigInteger)
+			return new Value(((BigInteger) value).longValue(), Long.class);
 
 		else
 			throw new ExceptionModelFail("unsupported value type: " + value + " : " + value.getClass().getName());

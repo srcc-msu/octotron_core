@@ -93,17 +93,19 @@ public class Control
 		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Utils.StrictParams(params, "silent");
+			Utils.AllParams(params, "silent");
 
 			String mode_str = params.get("silent");
-			boolean mode = Value.ValueFromString(mode_str).GetBoolean();
+			if(mode_str != null)
+			{
+				boolean mode = Value.ValueFromString(mode_str).GetBoolean();
 
-			ServiceLocator.INSTANCE.GetReactionService().SetSilent(mode);
+				ServiceLocator.INSTANCE.GetReactionService().SetSilent(mode);
+			}
 
-			if(mode)
-				return new TextString("silent mode activated - no reactions will be invoked");
-			else
-				return new TextString("silent mode deactivated");
+			boolean is_silent = ServiceLocator.INSTANCE.GetReactionService().IsSilent();
+
+			return new TextString("silent mode: " + Boolean.toString(is_silent));
 		}
 	}
 

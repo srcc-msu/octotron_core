@@ -11,8 +11,8 @@ import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionParseError;
 
 import java.io.FileReader;
 import java.io.IOException;

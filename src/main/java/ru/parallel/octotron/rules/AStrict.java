@@ -12,7 +12,7 @@ import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionParseError;
 import ru.parallel.octotron.http.path.ParsedPath;
 import ru.parallel.octotron.http.path.PathParser;
 

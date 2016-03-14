@@ -8,9 +8,9 @@ package ru.parallel.octotron.logic;
 
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionParseError;
 import ru.parallel.octotron.rules.AStrictLongSum;
-import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.bg_services.ServiceLocator;
 
 public class SelfTest
 {

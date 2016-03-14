@@ -14,7 +14,7 @@ import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.generators.tmpl.ReactionTemplate;
 import ru.parallel.octotron.generators.tmpl.SensorTemplate;
-import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.bg_services.ServiceLocator;
 
 import static org.junit.Assert.assertEquals;
 import static ru.parallel.octotron.reactions.PreparedResponseFactory.ComposeString;

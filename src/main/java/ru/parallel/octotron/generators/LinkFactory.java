@@ -10,10 +10,10 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.tmpl.*;
-import ru.parallel.octotron.services.ServiceLocator;
-import ru.parallel.octotron.services.impl.ModelService;
+import ru.parallel.octotron.bg_services.ServiceLocator;
+import ru.parallel.octotron.services.ModelService;
 
 import java.util.Arrays;
 import java.util.List;

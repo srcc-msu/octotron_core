@@ -6,11 +6,11 @@
 
 package ru.parallel.octotron.http.requests;
 
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.http.operations.Control;
+import ru.parallel.octotron.exception.ExceptionParseError;
+import ru.parallel.octotron.http.operations.impl.Control;
 import ru.parallel.octotron.http.operations.IOperation;
-import ru.parallel.octotron.http.operations.Modify;
-import ru.parallel.octotron.http.operations.View;
+import ru.parallel.octotron.http.operations.impl.Modify;
+import ru.parallel.octotron.http.operations.impl.View;
 
 import java.util.HashMap;
 import java.util.Map;

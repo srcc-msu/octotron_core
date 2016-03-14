@@ -12,8 +12,8 @@ import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.model.EModelType;
+import ru.parallel.octotron.exception.ExceptionModelFail;
 
 import java.util.*;
 

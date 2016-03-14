@@ -10,10 +10,7 @@ import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.AttributeList;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelInfo;
-import ru.parallel.octotron.core.primitive.EAttributeType;
 import ru.parallel.utils.JavaUtils;
-
-import java.util.Map;
 
 /**
  * base class for all attributes on entities

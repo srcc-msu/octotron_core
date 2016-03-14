@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.reactions;
 
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exception.ExceptionSystemError;
 import ru.parallel.utils.JavaUtils;
 
 import java.io.BufferedWriter;

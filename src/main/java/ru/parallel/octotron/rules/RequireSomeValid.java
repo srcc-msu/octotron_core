@@ -9,7 +9,7 @@ package ru.parallel.octotron.rules;
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionParseError;
 
 public class RequireSomeValid extends AValidCount
 {

@@ -10,8 +10,9 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
-import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.exception.ExceptionSystemError;
+import ru.parallel.octotron.bg_services.ServiceLocator;
+import ru.parallel.octotron.services.ExecutionService;
 import ru.parallel.utils.AntiDuplicateLoggingFilter;
 import ru.parallel.utils.FileUtils;
 import ru.parallel.utils.JavaUtils;
@@ -78,7 +79,7 @@ public class Start
 		Context context = CreateContext(config_fname);
 		ConfigLogging(context.settings.GetLogDir(), false);
 
-		ExecutionController controller = Create(context);
+		ExecutionService controller = Create(context);
 		Run(controller, context);
 	}
 
@@ -99,13 +100,13 @@ public class Start
 		return Context.CreateFromConfig(json_config);
 	}
 
-	private static ExecutionController Create(Context context)
+	private static ExecutionService Create(Context context)
 	{
-		ExecutionController controller = null;
+		ExecutionService controller = null;
 
 		try
 		{
-			controller = new ExecutionController(context);
+			controller = new ExecutionService(context);
 
 			LOGGER.log(Level.INFO, "creating model...");
 
@@ -160,7 +161,7 @@ public class Start
  * created db, start main loop and shutdown, when finished<br>
  * all errors are printed and may be reported by special scripts<br>
  * */
-	private static void Run(ExecutionController controller, Context context)
+	private static void Run(ExecutionService controller, Context context)
 	{
 		try
 		{
@@ -202,7 +203,7 @@ public class Start
  * run the main program loop<br>
  * if it crashes - returns exception, otherwise returns nothing<br>
  * */
-	private static Exception MainLoop(Context context, ExecutionController controller)
+	private static Exception MainLoop(Context context, ExecutionService controller)
 	{
 		LOGGER.log(Level.INFO, "main loop started");
 
@@ -228,7 +229,7 @@ public class Start
 /**
  * shutdown the graph and all execution processes<br>
  * */
-	public static Exception Shutdown(ExecutionController controller)
+	public static Exception Shutdown(ExecutionService controller)
 	{
 		try
 		{

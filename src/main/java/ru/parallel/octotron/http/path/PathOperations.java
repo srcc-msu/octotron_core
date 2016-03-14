@@ -11,8 +11,8 @@ import ru.parallel.octotron.core.collections.ModelLinkList;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.exception.ExceptionModelFail;
+import ru.parallel.octotron.bg_services.ServiceLocator;
 
 import java.util.List;
 

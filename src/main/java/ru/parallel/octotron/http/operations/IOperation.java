@@ -6,7 +6,7 @@
 
 package ru.parallel.octotron.http.operations;
 
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionParseError;
 import ru.parallel.utils.format.TypedString;
 
 import java.util.Map;

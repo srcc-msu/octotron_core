@@ -23,9 +23,8 @@ public class ControlRequestTest extends RequestTest
 		object_factory.Create(10);
 		model_service.EnableObjectIndex("AID");
 
-		String result = GetRequestResult("/control/mode?silent=true");
-
-		assertTrue(result.contains("activated"));
+		assertTrue(GetRequestResult("/control/mode?silent=true").contains("silent mode: true"));
+		assertTrue(GetRequestResult("/control/mode?silent=false").contains("silent mode: false"));
 	}
 
 	@Test

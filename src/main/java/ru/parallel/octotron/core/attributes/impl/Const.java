@@ -8,7 +8,7 @@ package ru.parallel.octotron.core.attributes.impl;
 
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.core.attributes.EAttributeType;
 
 /**
  * const attributes do not have any logic

@@ -6,17 +6,14 @@
 
 package ru.parallel.utils;
 
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exception.ExceptionSystemError;
 
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public abstract class FileUtils
 {
-	private final static Logger LOGGER = Logger.getLogger("octotron");
-
 	public static BufferedReader InitStream(String[] command)
 		throws ExceptionSystemError
 	{

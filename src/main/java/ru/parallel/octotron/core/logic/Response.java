@@ -8,8 +8,8 @@ package ru.parallel.octotron.core.logic;
 
 import com.google.common.collect.ObjectArrays;
 import ru.parallel.octotron.core.primitive.IPresentable;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionParseError;
 
 import java.util.HashMap;
 import java.util.LinkedList;

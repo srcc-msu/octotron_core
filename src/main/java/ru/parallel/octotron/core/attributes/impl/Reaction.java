@@ -9,11 +9,11 @@ package ru.parallel.octotron.core.attributes.impl;
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.core.attributes.EAttributeType;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.generators.tmpl.ReactionCase;
 import ru.parallel.octotron.reactions.PreparedResponse;
-import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.bg_services.ServiceLocator;
 
 import java.util.Map;
 
@@ -71,7 +71,7 @@ public class Reaction extends Attribute
 				IncCounter();
 
 				if(template.response != null)
-					RegisterResponse(template.response);
+					ExecuteResponse(template.response);
 			}
 		}
 		else
@@ -81,7 +81,7 @@ public class Reaction extends Attribute
 				UpdateValue(new Value(false));
 
 				if(template.recover_response != null) // was true, now false -> recover
-					RegisterRecoverResponse(template.recover_response);
+					ExecuteRecoverResponse(template.recover_response);
 
 				RegisterPreparedResponse(null); // unregister executed reaction
 			}
@@ -152,12 +152,12 @@ public class Reaction extends Attribute
 		return true;
 	}
 
-	public void RegisterResponse(Response response)
+	public void ExecuteResponse(Response response)
 	{
 		ServiceLocator.INSTANCE.GetReactionService().AddResponse(this, response);
 	}
 
-	public void RegisterRecoverResponse(Response response)
+	public void ExecuteRecoverResponse(Response response)
 	{
 		ServiceLocator.INSTANCE.GetReactionService().AddRecoverResponse(this, response);
 	}

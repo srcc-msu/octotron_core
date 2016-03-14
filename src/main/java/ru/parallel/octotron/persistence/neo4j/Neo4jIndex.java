@@ -12,7 +12,7 @@ import org.neo4j.graphdb.index.AutoIndexer;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.ReadableIndex;
 import ru.parallel.octotron.core.primitive.Info;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionModelFail;
 import ru.parallel.octotron.persistence.graph.EGraphType;
 import ru.parallel.octotron.persistence.graph.IIndex;
 

@@ -7,8 +7,8 @@
 package ru.parallel.octotron.core.attributes.impl;
 
 import ru.parallel.octotron.core.attributes.IValue;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionParseError;
 import ru.parallel.utils.JavaUtils;
 
 import java.math.BigInteger;

@@ -9,10 +9,9 @@ package ru.parallel.octotron.core.model;
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.collections.AttributeList;
-import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.EModelType;
+import ru.parallel.octotron.core.attributes.EAttributeType;
 import ru.parallel.octotron.core.primitive.IPresentable;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionModelFail;
 import ru.parallel.octotron.reactions.PreparedResponse;
 import ru.parallel.utils.AutoFormat;
 

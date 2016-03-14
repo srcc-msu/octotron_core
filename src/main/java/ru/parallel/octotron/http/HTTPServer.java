@@ -7,15 +7,15 @@
 package ru.parallel.octotron.http;
 
 import com.sun.net.httpserver.*;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.exec.GlobalSettings;
 import ru.parallel.octotron.http.requests.HttpExchangeWrapper;
 import ru.parallel.octotron.http.requests.HttpRequestParser;
 import ru.parallel.octotron.http.requests.ParsedModelRequest;
-import ru.parallel.octotron.services.ServiceLocator;
-import ru.parallel.octotron.services.impl.HttpService;
+import ru.parallel.octotron.bg_services.ServiceLocator;
+import ru.parallel.octotron.bg_services.side.HttpService;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -65,7 +65,7 @@ public class HTTPServer
 				ServiceLocator.INSTANCE.GetRequestService().AddRequest(request);
 			}
 			else
-				ServiceLocator.INSTANCE.GetRequestService().AddBlockingRequest(request, http_exchange_wrapper);
+				ServiceLocator.INSTANCE.GetBlockingRequestService().AddRequest(request, http_exchange_wrapper);
 		}
 	}
 

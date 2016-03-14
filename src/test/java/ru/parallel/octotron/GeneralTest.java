@@ -2,8 +2,8 @@ package ru.parallel.octotron;
 
 import org.junit.BeforeClass;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.services.ServiceLocator;
-import ru.parallel.octotron.services.impl.ModelService;
+import ru.parallel.octotron.bg_services.ServiceLocator;
+import ru.parallel.octotron.services.ModelService;
 
 public class GeneralTest
 {

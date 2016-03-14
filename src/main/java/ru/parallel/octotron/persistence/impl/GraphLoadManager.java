@@ -11,11 +11,11 @@ import ru.parallel.octotron.core.attributes.impl.*;
 import ru.parallel.octotron.core.model.ModelInfo;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EAttributeType;
+import ru.parallel.octotron.core.attributes.EAttributeType;
 import ru.parallel.octotron.persistence.graph.impl.GraphEntity;
 import ru.parallel.octotron.persistence.graph.impl.GraphObject;
 import ru.parallel.octotron.persistence.neo4j.Neo4jGraph;
-import ru.parallel.octotron.services.impl.ModelService;
+import ru.parallel.octotron.services.ModelService;
 
 public class GraphLoadManager extends AbstractGraphManager
 {

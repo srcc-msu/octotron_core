@@ -6,7 +6,7 @@ import org.junit.Test;
 import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exception.ExceptionSystemError;
 import ru.parallel.octotron.generators.tmpl.ReactionAction;
 import ru.parallel.octotron.persistence.neo4j.Neo4jGraph;
 import ru.parallel.octotron.rules.plain.Match;

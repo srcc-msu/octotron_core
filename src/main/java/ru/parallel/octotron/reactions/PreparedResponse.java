@@ -7,9 +7,9 @@
 package ru.parallel.octotron.reactions;
 
 import ru.parallel.octotron.core.primitive.IPresentable;
-import ru.parallel.octotron.core.primitive.exception.ExceptionSystemError;
+import ru.parallel.octotron.exception.ExceptionSystemError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.bg_services.ServiceLocator;
 import ru.parallel.utils.AutoFormat;
 import ru.parallel.utils.JavaUtils;
 
@@ -36,7 +36,7 @@ public class PreparedResponse implements Runnable, IPresentable
 	final List<String> specials = new LinkedList<>();
 	private boolean is_suppressed;
 
-	public PreparedResponse(Context context, boolean is_suppressed)
+	PreparedResponse(Context context, boolean is_suppressed)
 	{
 		this.context = context;
 		this.is_suppressed = is_suppressed;

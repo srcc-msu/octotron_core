@@ -6,7 +6,7 @@ import ru.parallel.octotron.GeneralTest;
 import ru.parallel.octotron.core.collections.ModelObjectList;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.tmpl.ConstTemplate;
 
 import static org.junit.Assert.assertEquals;

@@ -9,8 +9,7 @@ package ru.parallel.octotron.http.path;
 import ru.parallel.octotron.core.attributes.impl.Value;
 import ru.parallel.octotron.core.collections.ModelList;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.model.ModelLink;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.exception.ExceptionParseError;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -214,7 +213,7 @@ public final class PathParser
 	}
 
 // TODO: remove this cache if memory consumption is too big
-	private static Map<String, ParsedPath> parsed_path_cache = new ConcurrentHashMap();
+	private static Map<String, ParsedPath> parsed_path_cache = new ConcurrentHashMap<>();
 
 /**
  * parse path request and returns ParsedRequest,<br>
@@ -252,12 +251,12 @@ public final class PathParser
 	}
 
 // TODO: check memory consumption, but this cache is important
-    private static Map<String, ModelList> path_cache = new ConcurrentHashMap();
+	private static Map<String, ModelList<? extends ModelEntity, ?>> path_cache = new ConcurrentHashMap<>();
 
-	public static ModelList ParseWalk(String path)
+	public static ModelList<? extends ModelEntity, ?> ParseWalk(String path)
 	throws ExceptionParseError
 	{
-		ModelList target_list = path_cache.get(path);
+		ModelList<? extends ModelEntity, ?> target_list = path_cache.get(path);
 
 		if(target_list != null)
 			return target_list;
@@ -268,7 +267,7 @@ public final class PathParser
 		return target_list;
 	}
 
-	public static ModelList ParseWalk(String path, ModelList<? extends ModelEntity, ?> entity_list)
+	public static ModelList<? extends ModelEntity, ?> ParseWalk(String path, ModelList<? extends ModelEntity, ?> entity_list)
 		throws ExceptionParseError
 	{
 		return Parse(path).Execute(entity_list);

@@ -9,8 +9,8 @@ package ru.parallel.octotron.core.attributes.impl;
 import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.core.model.ModelEntity;
-import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.services.ServiceLocator;
+import ru.parallel.octotron.core.attributes.EAttributeType;
+import ru.parallel.octotron.bg_services.ServiceLocator;
 import ru.parallel.utils.JavaUtils;
 
 import java.util.Map;

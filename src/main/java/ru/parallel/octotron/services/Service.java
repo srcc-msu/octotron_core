@@ -20,6 +20,4 @@ public abstract class Service
 	{
 		this.context = context;
 	}
-
-	public abstract void Finish();
 }

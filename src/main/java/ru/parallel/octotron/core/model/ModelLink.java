@@ -7,8 +7,7 @@
 package ru.parallel.octotron.core.model;
 
 import ru.parallel.octotron.core.collections.ModelObjectList;
-import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionModelFail;
 
 /**
  * model links correspond to edges of the graph model

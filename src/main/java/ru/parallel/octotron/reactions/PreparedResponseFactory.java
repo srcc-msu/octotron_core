@@ -15,10 +15,9 @@ import ru.parallel.octotron.core.logic.Response;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelLink;
 import ru.parallel.octotron.core.model.ModelObject;
-import ru.parallel.octotron.core.primitive.EModelType;
-import ru.parallel.octotron.core.primitive.exception.ExceptionParseError;
+import ru.parallel.octotron.core.model.EModelType;
+import ru.parallel.octotron.exception.ExceptionParseError;
 import ru.parallel.octotron.exec.Context;
-import ru.parallel.octotron.http.path.ParsedPath;
 import ru.parallel.octotron.http.path.PathParser;
 import ru.parallel.utils.JavaUtils;
 

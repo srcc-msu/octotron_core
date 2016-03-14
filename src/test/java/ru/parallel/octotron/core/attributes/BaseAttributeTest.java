@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.parallel.octotron.core.attributes.impl.Const;
 import ru.parallel.octotron.core.attributes.impl.Value;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.exception.ExceptionModelFail;
 
 import static org.junit.Assert.*;
 

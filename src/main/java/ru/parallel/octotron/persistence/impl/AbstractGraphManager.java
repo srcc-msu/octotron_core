@@ -11,15 +11,15 @@ import ru.parallel.octotron.core.attributes.Attribute;
 import ru.parallel.octotron.core.model.ModelEntity;
 import ru.parallel.octotron.core.model.ModelInfo;
 import ru.parallel.octotron.core.model.ModelLink;
-import ru.parallel.octotron.core.primitive.EAttributeType;
-import ru.parallel.octotron.core.primitive.exception.ExceptionModelFail;
+import ru.parallel.octotron.core.attributes.EAttributeType;
+import ru.parallel.octotron.exception.ExceptionModelFail;
 import ru.parallel.octotron.persistence.IPersistenceManager;
 import ru.parallel.octotron.persistence.graph.impl.GraphEntity;
 import ru.parallel.octotron.persistence.graph.impl.GraphLink;
 import ru.parallel.octotron.persistence.graph.impl.GraphObject;
 import ru.parallel.octotron.persistence.graph.impl.GraphService;
 import ru.parallel.octotron.persistence.neo4j.Neo4jGraph;
-import ru.parallel.octotron.services.impl.ModelService;
+import ru.parallel.octotron.services.ModelService;
 
 import java.util.Collection;
 import java.util.logging.Logger;

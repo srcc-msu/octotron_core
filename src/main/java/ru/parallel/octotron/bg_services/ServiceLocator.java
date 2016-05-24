@@ -15,7 +15,7 @@ import ru.parallel.octotron.bg_services.model.*;
 import ru.parallel.octotron.bg_services.side.HttpService;
 import ru.parallel.octotron.bg_services.side.ScriptService;
 import ru.parallel.octotron.services.ModelService;
-import ru.parallel.octotron.services.RuntimeService;
+import ru.parallel.octotron.services.SystemService;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +39,7 @@ public class ServiceLocator
 	private OutdatedCheckerService checker_service;
 	private IPersistenceService persistence_service;
 	private ScriptService script_service;
-	private RuntimeService runtime_service;
+	private SystemService runtime_service;
 
 	public ServiceLocator(Context context)
 	{
@@ -134,10 +134,10 @@ public class ServiceLocator
 		return script_service;
 	}
 
-	public RuntimeService GetRuntimeService()
+	public SystemService GetRuntimeService()
 	{
 		if(runtime_service == null)
-			runtime_service = new RuntimeService(context);
+			runtime_service = new SystemService(context);
 		return runtime_service;
 	}
 

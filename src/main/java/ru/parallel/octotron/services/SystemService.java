@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class RuntimeService extends Service
+public class SystemService extends Service
 {
 	public final Statistics stat = new Statistics();
 	private boolean should_stop;
 
-	public RuntimeService(Context context)
+	public SystemService(Context context)
 	{
 		super(context);
 	}
@@ -83,7 +83,7 @@ public class RuntimeService extends Service
 	public Map<String, Object> GetVersion()
 		throws ExceptionSystemError
 	{
-		InputStream stream = RuntimeService.class.getResourceAsStream("/VERSION");
+		InputStream stream = SystemService.class.getResourceAsStream("/VERSION");
 
 		if(stream == null)
 			throw new ExceptionSystemError("missing VERSION file");

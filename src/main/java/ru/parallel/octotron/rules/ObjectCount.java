@@ -20,7 +20,7 @@ public class ObjectCount extends ASoft
 	@Override
 	protected Object Accumulate(Object res, Attribute attribute)
 	{
-		return res + 1;
+		return (int)res + 1;
 	}
 
 	@Override

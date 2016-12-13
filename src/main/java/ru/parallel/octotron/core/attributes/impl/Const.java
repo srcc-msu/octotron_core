@@ -18,11 +18,11 @@ public final class Const extends Attribute
 {
 	public Const(ModelEntity parent, String name, Value value)
 	{
-		super(EAttributeType.CONST, parent, name, value);
+		super(EAttributeType.CONST, parent, name, value, 0);
 	}
 
 	@Override
-	protected void UpdateSelf()
+	protected void UpdateSelf(long current_time)
 	{
 		// nothing to see here
 	}

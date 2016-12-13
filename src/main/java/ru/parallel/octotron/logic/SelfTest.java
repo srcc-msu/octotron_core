@@ -37,7 +37,7 @@ public class SelfTest
 	{
 		test_iteration++;
 
-		obj1.GetSensor("test_iteration").UpdateValue(test_iteration);
+		obj1.GetSensor("test_iteration").Update(test_iteration, 0);
 
 		return obj2.GetAttribute("check").eq(new Value(test_iteration));
 	}

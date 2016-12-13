@@ -11,6 +11,7 @@ import ru.parallel.octotron.exec.Context;
 import ru.parallel.octotron.bg_services.BGExecutorWrapper;
 import ru.parallel.octotron.bg_services.BGService;
 import ru.parallel.octotron.bg_services.ServiceLocator;
+import ru.parallel.utils.JavaUtils;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,28 +23,35 @@ public class OutdatedCheckerService extends BGService
 		super(context, new BGExecutorWrapper("outdated_checker", 1));
 	}
 
-	public static void ProcessOutdatedSensors()
+	public static void ProcessOutdatedSensors(long current_time)
 	{
 		for(ModelEntity entity : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllEntities())
 		{
-			ServiceLocator.INSTANCE.GetModificationService().CheckOutdated(entity);
+			ServiceLocator.INSTANCE.GetModificationService().CheckOutdated(entity, current_time);
 		}
 	}
 
 	class Checker implements Runnable
 	{
+		protected final long current_time;
+
+		public Checker(long current_time)
+		{
+			this.current_time = current_time;
+		}
+
 		@Override
 		public void run()
 		{
 			LOGGER.log(Level.INFO, "starting outdated check");
 
-			ProcessOutdatedSensors();
+			ProcessOutdatedSensors(current_time);
 
 			LOGGER.log(Level.INFO, "outdated check finished");
 		}
 	}
 
-	public boolean PerformCheck()
+	public boolean PerformCheck(long current_time)
 	{
 		if(executor.GetWaitingCount() > 0)
 		{
@@ -51,7 +59,7 @@ public class OutdatedCheckerService extends BGService
 			return false;
 		}
 
-		executor.execute(new Checker());
+		executor.execute(new Checker(current_time));
 
 		return true;
 	}

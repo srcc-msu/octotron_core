@@ -30,21 +30,19 @@ public class AttributeTest
 
 		assertEquals(Value.invalid, attribute.GetSpeed());
 
-		attribute.UpdateValue(Value.invalid);
+		attribute.Update(Value.invalid, 1);
 		assertEquals(Value.invalid, attribute.GetSpeed());
 
-		attribute.UpdateValue(Value.undefined);
+		attribute.Update(Value.undefined, 1);
 		assertEquals(Value.invalid, attribute.GetSpeed());
 
-		attribute.UpdateValue(new Value(1));
+		attribute.Update(new Value(1), 1);
 		assertEquals(Value.invalid, attribute.GetSpeed());
 
-		attribute.UpdateValue(new Value(100));
+		attribute.Update(new Value(100), 1);
 		assertEquals(new Value(0.0), attribute.GetSpeed());
 
-		Thread.sleep(1000);
-
-		attribute.UpdateValue(new Value(200));
+		attribute.Update(new Value(200), 2);
 		assertNotEquals(new Value(0.0), attribute.GetSpeed());
 	}
 
@@ -53,13 +51,13 @@ public class AttributeTest
 	{
 		Attribute attribute = new Const(null, "const", new Value(0));
 
-		attribute.UpdateValue(Value.invalid);
+		attribute.Update(Value.invalid, 1);
 		assertEquals(Value.invalid, attribute.GetValue());
 
-		attribute.UpdateValue(Value.undefined);
+		attribute.Update(Value.undefined, 1);
 		assertEquals(Value.undefined, attribute.GetValue());
 
-		attribute.UpdateValue(new Value(1));
+		attribute.Update(new Value(1), 1);
 		assertEquals(new Value(1), attribute.GetValue());
 	}
 
@@ -114,18 +112,18 @@ public class AttributeTest
 	{
 		Attribute a1 = new Const(null, "", new Value(0));
 
-		Attribute i_on1 = new Sensor(null, "", 1, Value.undefined);
-		Attribute i_on2 = new Sensor(null, "", 2, Value.undefined);
+		Attribute i_on1 = new Sensor(null, "", 1, Value.undefined, 0);
+		Attribute i_on2 = new Sensor(null, "", 2, Value.undefined, 0);
 
 		a1.AddIDependOn(i_on1);
 		a1.AddIDependOn(i_on2);
 
 		assertEquals(a1.DependenciesDefined(), false);
 
-		i_on1.UpdateValue(new Value(0));
+		i_on1.Update(new Value(0), 1);
 		assertEquals(a1.DependenciesDefined(), false);
 
-		i_on2.UpdateValue(new Value(0));
+		i_on2.Update(new Value(0), 1);
 		assertEquals(a1.DependenciesDefined(), true);
 	}
 
@@ -143,7 +141,7 @@ public class AttributeTest
 	@Test
 	public void TestSensorRepresentation() throws Exception
 	{
-		Sensor a_const = new Sensor(null, "", 0, new Value(0));
+		Sensor a_const = new Sensor(null, "", 0, new Value(0), 0);
 
 		Map<String, Object> short_representation = a_const.GetShortRepresentation();
 		Map<String, Object> long_representation = a_const.GetLongRepresentation();

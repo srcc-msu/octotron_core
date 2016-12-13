@@ -41,16 +41,14 @@ public final class Sensor extends Attribute
 	private boolean is_user_valid = true;
 
 	public Sensor(ModelEntity parent, String name, long update_interval
-		, Value value)
+		, Value value, long current_time)
 	{
-		super(EAttributeType.SENSOR, parent, name, value);
+		super(EAttributeType.SENSOR, parent, name, value, current_time);
 
 		if(update_interval == -1 && !value.IsDefined())
 			throw new ExceptionModelFail("update time is set to never, default sensor value must be specified");
 
 		this.update_interval = update_interval;
-
-		SetCTime(JavaUtils.GetTimestamp());
 	}
 
 //--------
@@ -64,17 +62,17 @@ public final class Sensor extends Attribute
 	private static final long TOLERANCE = 30; // 30 seconds tolerance for sensor update
 
 	@Override
-	public void UpdateSelf()
+	public void UpdateSelf(long current_time)
 	{
 		if(update_interval == -1)
 			return;
 
-		SetIsOutdated(JavaUtils.GetTimestamp() - GetCTime() > update_interval + TOLERANCE);
+		SetIsOutdated(current_time - GetCTime() > update_interval + TOLERANCE);
 
 		if(IsOutdated()) // if timeout - turns to simply invalid
 			UpdateValue(Value.invalid);
 
-		UpdateDependant();
+		UpdateDependant(current_time);
 
 		// TODO: add timeout reaction?
 
@@ -112,16 +110,16 @@ public final class Sensor extends Attribute
 	}
 
 	@Override
-	public void UpdateValue(Value new_value)
+	public void Update(Value new_value, long current_time)
 	{
 		SetIsOutdated(false);
 
-		super.UpdateValue(new_value);
+		super.Update(new_value, current_time);
 	}
 
-	public void UpdateValue(Object new_value)
+	public void Update(Object new_value, long current_time)
 	{
-		UpdateValue(Value.Construct(new_value));
+		Update(Value.Construct(new_value), current_time);
 	}
 
 //--------

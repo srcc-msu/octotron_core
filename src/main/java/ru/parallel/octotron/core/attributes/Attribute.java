@@ -24,7 +24,7 @@ public abstract class Attribute extends BaseAttribute
 /**
  * last modification time
  * */
-	private long ctime = 0;
+	private long ctime;
 
 /**
  * history, that stores last values and modification times
@@ -34,13 +34,14 @@ public abstract class Attribute extends BaseAttribute
 	protected final AttributeList<Attribute> depend_on_me = new AttributeList<>();
 	protected final AttributeList<Attribute> i_depend_on = new AttributeList<>();
 
-	public Attribute(EAttributeType type, ModelEntity parent, String name, Value value)
+	public Attribute(EAttributeType type, ModelEntity parent, String name, Value value, long current_time)
 	{
 		super(name, value);
 
 		this.info = new ModelInfo<>(type);
 
 		this.parent = parent;
+		this.ctime = current_time;
 	}
 
 //--------
@@ -113,31 +114,30 @@ public abstract class Attribute extends BaseAttribute
  * set the new value to the attribute, add history entry
  * update self and all dependant attributes
  * */
-	@Override
-	public void UpdateValue(Value new_value)
+	public void Update(Value new_value, long current_time)
 	{
 		history.Add(GetValue(), GetCTime());
 
 		super.UpdateValue(new_value);
-		SetCTime(JavaUtils.GetTimestamp());
+		SetCTime(current_time);
 
-		UpdateDependant();
+		UpdateDependant(current_time);
 	}
 
-	protected abstract void UpdateSelf();
+	protected abstract void UpdateSelf(long current_time);
 
 /**
  * update all dependant attributes, which are computable now
  * */
-	public final void UpdateDependant()
+	public final void UpdateDependant(long current_time)
 	{
 		for(Attribute attribute : depend_on_me)
 		{
 			if(!attribute.DependenciesDefined())
 				continue;
 
-			attribute.UpdateSelf();
-			attribute.UpdateDependant();
+			attribute.UpdateSelf(current_time);
+			attribute.UpdateDependant(current_time);
 		}
 	}
 

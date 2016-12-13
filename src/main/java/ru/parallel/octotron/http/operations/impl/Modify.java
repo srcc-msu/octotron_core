@@ -16,6 +16,7 @@ import ru.parallel.octotron.exception.ExceptionParseError;
 import ru.parallel.octotron.exception.ExceptionSystemError;
 import ru.parallel.octotron.bg_services.ServiceLocator;
 import ru.parallel.octotron.http.operations.ModelOperation;
+import ru.parallel.utils.JavaUtils;
 import ru.parallel.utils.format.TextString;
 import ru.parallel.utils.format.TypedString;
 
@@ -46,7 +47,7 @@ public class Modify
 			if(trigger == null)
 				return new TextString("trigger not found");
 
-			ServiceLocator.INSTANCE.GetModificationService().Activate(target, name);
+			ServiceLocator.INSTANCE.GetModificationService().Activate(target, name, JavaUtils.GetTimestamp());
 			return new TextString("added to modification queue");
 		}
 	}
@@ -63,12 +64,19 @@ public class Modify
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Utils.StrictParams(params, "name", "value");
+			Utils.RequiredParams(params, "name", "value");
+			Utils.AllParams(params, "name", "value", "time");
 
 			String name = params.get("name");
 			String value_str = params.get("value");
+			String time_str = params.get("time");
 
 			Value value = Value.ValueFromString(value_str);
+
+			long time = -1;
+
+			if(time_str != null)
+				time = JavaUtils.GetTimestamp();
 
 			ModelEntity target = entities.Only();
 
@@ -77,7 +85,7 @@ public class Modify
 			if(sensor == null)
 				return new TextString("sensor not found");
 
-			ServiceLocator.INSTANCE.GetModificationService().Import(sensor, value);
+			ServiceLocator.INSTANCE.GetModificationService().Import(sensor, value, time);
 			return new TextString("added to modification queue");
 		}
 	}
@@ -94,18 +102,25 @@ public class Modify
 			, boolean verbose, ModelList<? extends ModelEntity, ?> entities)
 			throws ExceptionParseError
 		{
-			Utils.StrictParams(params, "name", "value");
+			Utils.RequiredParams(params, "name", "value");
+			Utils.AllParams(params, "name", "value", "time");
 
 			String name = params.get("name");
 			String value_str = params.get("value");
+			String time_str = params.get("time");
 
 			Value value = Value.ValueFromString(value_str);
+
+			long time = -1;
+
+			if(time_str != null)
+				time = JavaUtils.GetTimestamp();
 
 			ModelEntity target = entities.Only();
 
 			try
 			{
-				if(ServiceLocator.INSTANCE.GetModificationService().Import(target, name, value, false))
+				if(ServiceLocator.INSTANCE.GetModificationService().Import(target, name, value, time, false))
 					return new TextString("added to import queue");
 				else
 					return new TextString("attribute not found, but registered, import skipped");
@@ -142,7 +157,7 @@ public class Modify
 				if(sensor != null)
 				{
 					sensor.SetUserValid();
-					sensor.UpdateDependant();
+					sensor.UpdateDependant(JavaUtils.GetTimestamp());
 
 					res += "set sensor to invalid: " + name
 						+ " on object: " + entity.GetInfo().GetID()
@@ -184,7 +199,7 @@ public class Modify
 				if(sensor != null)
 				{
 					sensor.SetUserInvalid();
-					sensor.UpdateDependant();
+					sensor.UpdateDependant(JavaUtils.GetTimestamp());
 
 					res += "set sensor to invalid: " + name
 						+ " on object: " + entity.GetInfo().GetID()

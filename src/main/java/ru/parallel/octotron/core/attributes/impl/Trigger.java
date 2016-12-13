@@ -29,7 +29,7 @@ public class Trigger extends Attribute
 
 	public Trigger(ModelEntity parent, String name, Rule condition)
 	{
-		super(EAttributeType.TRIGGER, parent, name, new Value(false));
+		super(EAttributeType.TRIGGER, parent, name, new Value(false), 0);
 		this.condition = condition;
 	}
 
@@ -38,9 +38,9 @@ public class Trigger extends Attribute
 		return condition;
 	}
 
-	public void ForceTrigger()
+	public void ForceTrigger(long current_time)
 	{
-		UpdateValue(new Value(true));
+		Update(new Value(true), current_time);
 	}
 
 /**
@@ -48,7 +48,7 @@ public class Trigger extends Attribute
  * the state and statistics accordingly
  * */
 	@Override
-	public void UpdateSelf()
+	public void UpdateSelf(long current_time)
 	{
 		boolean state = IsTriggered();
 
@@ -59,9 +59,9 @@ public class Trigger extends Attribute
 		if(!state && condition_met) // first match
 		{
 			repeat = 1;
-			started = JavaUtils.GetTimestamp();
+			started = current_time;
 
-			UpdateValue(new Value(true));
+			Update(new Value(true), current_time);
 		}
 		else if(state && condition_met) // next match
 		{
@@ -72,7 +72,7 @@ public class Trigger extends Attribute
 			repeat = 0;
 			started = 0;
 
-			UpdateValue(new Value(false));
+			Update(new Value(false), current_time);
 		}
 
 		ServiceLocator.INSTANCE.GetPersistenceService().RegisterTrigger(this);
@@ -88,12 +88,12 @@ public class Trigger extends Attribute
 		return repeat;
 	}
 
-	public long GetDelay()
+	public long GetDelay(long current_time)
 	{
 		if(started == 0)
 			return 0;
 		else
-			return JavaUtils.GetTimestamp() - started;
+			return current_time - started;
 	}
 
 	@Override

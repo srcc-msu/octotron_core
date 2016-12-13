@@ -26,12 +26,12 @@ public class ModificationService extends BGService
 		super(context, new BGExecutorWrapper("modification", 10000000));
 	}
 
-	public boolean Import(ModelEntity entity, String name, Value value, boolean strict)
+	public boolean Import(ModelEntity entity, String name, Value value, long current_time, boolean strict)
 		throws ExceptionSystemError
 	{
 		if(entity.TestAttribute(name))
 		{
-			Import(entity.GetSensor(name), value);
+			Import(entity.GetSensor(name), value, current_time);
 			return true;
 		}
 		else if(strict)
@@ -43,9 +43,9 @@ public class ModificationService extends BGService
 		}
 	}
 
-	public void Import(Sensor sensor, Value value)
+	public void Import(Sensor sensor, Value value, long current_time)
 	{
-		executor.execute(new Importer(sensor, value));
+		executor.execute(new Importer(sensor, value, current_time));
 	}
 
 	public void UnknownImport(ModelEntity target, String name, Value value)
@@ -68,31 +68,33 @@ public class ModificationService extends BGService
 		}
 	}
 
-	public void Activate(ModelEntity entity, String name)
+	public void Activate(ModelEntity entity, String name, long current_time)
 	{
-		executor.execute(new Activator(entity, name));
+		executor.execute(new Activator(entity, name, current_time));
 	}
 
-	public void CheckOutdated(ModelEntity entity)
+	public void CheckOutdated(ModelEntity entity, long current_time)
 	{
-		executor.execute(new OutdatedChecker(entity));
+		executor.execute(new OutdatedChecker(entity, current_time));
 	}
 
 	public class Importer implements Runnable
 	{
 		protected final Sensor sensor;
 		protected final Value value;
+		protected final long current_time;
 
-		public Importer(Sensor sensor, Value value)
+		public Importer(Sensor sensor, Value value, long current_time)
 		{
 			this.sensor = sensor;
 			this.value = value;
+			this.current_time = current_time;
 		}
 
 		@Override
 		public void run()
 		{
-			sensor.UpdateValue(value);
+			sensor.Update(value, current_time);
 		}
 	}
 
@@ -100,12 +102,13 @@ public class ModificationService extends BGService
 	{
 		protected final ModelEntity entity;
 		protected final String name;
+		protected final long current_time;
 
-		public Activator(ModelEntity entity, String name)
+		public Activator(ModelEntity entity, String name, long current_time)
 		{
 			this.entity = entity;
-
 			this.name = name;
+			this.current_time = current_time;
 		}
 
 		@Override
@@ -113,17 +116,19 @@ public class ModificationService extends BGService
 		{
 			Trigger trigger = entity.GetTrigger(name);
 
-			trigger.ForceTrigger();
+			trigger.ForceTrigger(current_time);
 		}
 	}
 
 	public class OutdatedChecker implements Runnable
 	{
 		protected final ModelEntity entity;
+		protected final long current_time;
 
-		public OutdatedChecker(ModelEntity entity)
+		public OutdatedChecker(ModelEntity entity, long current_time)
 		{
 			this.entity = entity;
+			this.current_time = current_time;
 		}
 
 		@Override
@@ -135,7 +140,7 @@ public class ModificationService extends BGService
 			{
 				boolean last_state = sensor.IsOutdated();
 
-				sensor.UpdateSelf();
+				sensor.UpdateSelf(current_time);
 
 				if(sensor.IsOutdated() && !last_state) // was not outdated, but now is
 					outdated_count++;

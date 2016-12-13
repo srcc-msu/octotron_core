@@ -43,7 +43,7 @@ public abstract class BaseAttribute implements IValue, IPresentable
  *
  * TODO: value can change type after getting not computable
  * */
-	public void UpdateValue(Value new_value)
+	public final void UpdateValue(Value new_value)
 	{
 		if(value.IsComputable() && new_value.IsComputable())
 			value.CheckType(new_value);

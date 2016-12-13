@@ -11,6 +11,7 @@ import ru.parallel.octotron.exception.ExceptionParseError;
 import ru.parallel.octotron.bg_services.ServiceLocator;
 import ru.parallel.octotron.http.operations.FormattedOperation;
 import ru.parallel.utils.AutoFormat;
+import ru.parallel.utils.JavaUtils;
 import ru.parallel.utils.format.ErrorString;
 import ru.parallel.utils.format.TextString;
 import ru.parallel.utils.format.TypedString;
@@ -51,9 +52,16 @@ public class Control
 		public TypedString Execute(Map<String, String> params, boolean verbose)
 			throws ExceptionParseError
 		{
-			Utils.StrictParams(params);
+			Utils.AllParams(params, "time");
 
-			boolean result = ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck();
+			String time_str = params.get("time");
+
+			long time = -1;
+
+			if(time_str != null)
+				time = JavaUtils.GetTimestamp();
+
+			boolean result = ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck(time);
 
 			if(result)
 				return new TextString("running outdated check");

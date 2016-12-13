@@ -27,12 +27,12 @@ public final class ReactionCase
 		this(trigger_name, 0, 0);
 	}
 
-	public boolean Match(ModelEntity entity)
+	public boolean Match(ModelEntity entity, long current_time)
 	{
 		Trigger trigger = entity.GetTrigger(trigger_name);
 
 		return trigger.IsTriggered()
 			&& trigger.GetRepeat() >= repeat
-			&& trigger.GetDelay() >= delay;
+			&& trigger.GetDelay(current_time) >= delay;
 	}
 }

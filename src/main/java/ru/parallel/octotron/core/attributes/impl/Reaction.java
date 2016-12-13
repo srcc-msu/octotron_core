@@ -37,7 +37,7 @@ public class Reaction extends Attribute
 
 	public Reaction(ModelEntity parent, String name, ReactionAction template)
 	{
-		super(EAttributeType.REACTION, parent, name, new Value(false));
+		super(EAttributeType.REACTION, parent, name, new Value(false), 0);
 
 		this.template = template;
 	}
@@ -58,15 +58,15 @@ public class Reaction extends Attribute
  * check if reaction must be executed in current context and executes it
  * */
 	@Override
-	protected void UpdateSelf()
+	protected void UpdateSelf(long current_time)
 	{
 		boolean last_state = IsExecuted();
 
-		if(ReactionNeeded(GetParent()))
+		if(ReactionNeeded(GetParent(), current_time))
 		{
 			if(last_state == false || last_state == true && template.repeatable)
 			{
-				UpdateValue(new Value(true));
+				Update(new Value(true), current_time);
 
 				IncCounter();
 
@@ -78,7 +78,7 @@ public class Reaction extends Attribute
 		{
 			if(last_state == true)
 			{
-				UpdateValue(new Value(false));
+				Update(new Value(false), current_time);
 
 				if(template.recover_response != null) // was true, now false -> recover
 					ExecuteRecoverResponse(template.recover_response);
@@ -135,17 +135,17 @@ public class Reaction extends Attribute
  * check that all required triggered are turned on
  * and all prohibited triggers are turned off
  * */
-	private boolean ReactionNeeded(ModelEntity entity)
+	private boolean ReactionNeeded(ModelEntity entity, long current_time)
 	{
 		for(ReactionCase required : template.required_triggers)
 		{
-			if(!required.Match(entity))
+			if(!required.Match(entity, current_time))
 				return false;
 		}
 
 		for(ReactionCase prohibited : template.prohibited_triggers)
 		{
-			if(prohibited.Match(entity))
+			if(prohibited.Match(entity, current_time))
 				return false;
 		}
 

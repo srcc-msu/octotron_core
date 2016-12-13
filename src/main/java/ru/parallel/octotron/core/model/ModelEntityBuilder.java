@@ -12,6 +12,7 @@ import ru.parallel.octotron.core.logic.Rule;
 import ru.parallel.octotron.exception.ExceptionModelFail;
 import ru.parallel.octotron.generators.tmpl.*;
 import ru.parallel.octotron.bg_services.ServiceLocator;
+import ru.parallel.utils.JavaUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -126,7 +127,7 @@ public abstract class ModelEntityBuilder<T extends ModelEntity>
 
 	public void DeclareSensor(String name, long update_time, Value value)
 	{
-		Sensor sensor = new Sensor(entity, name, update_time, value);
+		Sensor sensor = new Sensor(entity, name, update_time, value, JavaUtils.GetTimestamp());
 
 		CheckAddAttribute(sensor);
 		entity.sensor_map.put(name.intern(), sensor);

@@ -24,7 +24,7 @@ public final class Var extends Attribute
 
 	public Var(ModelEntity parent, String name, Rule rule)
 	{
-		super(EAttributeType.VAR, parent, name, Value.undefined);
+		super(EAttributeType.VAR, parent, name, Value.undefined, 0);
 
 		this.rule = rule;
 	}
@@ -35,10 +35,10 @@ public final class Var extends Attribute
 	}
 
 	@Override
-	public void UpdateSelf()
+	public void UpdateSelf(long current_time)
 	{
 		Object raw_value = rule.Compute(GetParent(), this);
-		super.UpdateValue(Value.Construct(raw_value));
+		super.Update(Value.Construct(raw_value), current_time);
 
 		ServiceLocator.INSTANCE.GetPersistenceService().RegisterVar(this);
 	}

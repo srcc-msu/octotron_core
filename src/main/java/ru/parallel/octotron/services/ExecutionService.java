@@ -35,12 +35,14 @@ public class ExecutionService extends Service
 
 		ServiceLocator.INSTANCE.GetReactionService().SetSilent(true);
 
+		long current_time = JavaUtils.GetTimestamp();
+
 		for(ModelObject object : ServiceLocator.INSTANCE.GetModelService().GetModelData().GetAllObjects())
 		{
 			for(Sensor sensor : object.GetSensor())
 			{
 				if(sensor.IsComputable())
-					sensor.UpdateDependant();
+					sensor.UpdateDependant(current_time);
 			}
 		}
 
@@ -87,7 +89,7 @@ public class ExecutionService extends Service
 			{
 				// TODO: scheduler?
 				last_outdated_check = current_time;
-				ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck();
+				ServiceLocator.INSTANCE.GetOutdatedCheckerService().PerformCheck(current_time);
 			}
 
 		ServiceLocator.INSTANCE.GetRuntimeService().GetStat().Process();

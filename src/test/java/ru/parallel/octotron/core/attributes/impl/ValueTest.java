@@ -54,7 +54,7 @@ public class ValueTest
 		assertEquals("2", new Value(2L).ValueToString());
 
 		assertEquals("1.00", new Value(1.0).ValueToString());
-		assertEquals("2.34", new Value(2.345).ValueToString());
+		assertEquals("2.34", new Value(2.344).ValueToString());
 		assertEquals("3.46", new Value(3.456f).ValueToString()); // round up
 
 		assertEquals("\"str\"", new Value("str").ValueToString());

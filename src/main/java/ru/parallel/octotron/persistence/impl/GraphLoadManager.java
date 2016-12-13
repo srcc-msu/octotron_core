@@ -57,7 +57,7 @@ public class GraphLoadManager extends AbstractGraphManager
 
 		Object new_value = graph_entity.GetAttribute(attribute.GetName());
 
-		attribute.UpdateValue(Value.Construct(new_value));
+		attribute.Update(Value.Construct(new_value), 0);
 	}
 
 	private void RegisterMod(Attribute attribute)
@@ -66,12 +66,10 @@ public class GraphLoadManager extends AbstractGraphManager
 
 		GraphObject graph_object = CheckGraphObject(info, info.GetType().toString());
 
-		attribute.SetCTime((Long)graph_object.GetAttribute("ctime"));
-
 		if(graph_object.TestAttribute("value"))
-			attribute.UpdateValue(Value.Construct(graph_object.GetAttribute("value")));
+			attribute.Update(Value.Construct(graph_object.GetAttribute("value")), (Long) graph_object.GetAttribute("ctime"));
 		else
-			attribute.UpdateValue(Value.undefined);
+			attribute.Update(Value.undefined, (Long) graph_object.GetAttribute("ctime"));
 	}
 
 	public void RegisterSensor(Sensor attribute)

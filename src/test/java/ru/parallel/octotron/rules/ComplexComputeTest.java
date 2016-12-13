@@ -174,7 +174,7 @@ public class ComplexComputeTest extends GeneralTest
 		for(ModelEntity entity : objects)
 			for(Attribute attr : entity.GetAttributes())
 				if(attr.GetInfo().GetType() == EAttributeType.SENSOR)
-					attr.UpdateDependant();
+					attr.UpdateDependant(1);
 
 		// --------------
 

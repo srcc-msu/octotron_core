@@ -119,7 +119,7 @@ public class ComputeTests extends GeneralTest
 		for(ModelEntity entity : objects)
 			for(Attribute attr : entity.GetAttributes())
 				if(attr.GetInfo().GetType() == EAttributeType.SENSOR)
-					attr.UpdateDependant();
+					attr.UpdateDependant(1);
 
 		// --------------
 
@@ -457,22 +457,20 @@ public class ComputeTests extends GeneralTest
 		assertEquals(rule_l.GetDependency(object), object.GetAttributes("mod_l1"));
 		assertEquals(rule_d.GetDependency(object), object.GetAttributes("mod_d1"));
 
-		object.GetSensor("mod_l1").UpdateValue(10L);
-		object.GetSensor("mod_d1").UpdateValue(10.0);
+		object.GetSensor("mod_l1").Update(10L, 1);
+		object.GetSensor("mod_d1").Update(10.0, 1);
 
 		assertEquals(0.0, Value.Construct(rule_l.Compute(object, null)).GetDouble(), Value.EPSILON);
 		assertEquals(0.0, Value.Construct(rule_d.Compute(object, null)).GetDouble(), Value.EPSILON);
 
-		Thread.sleep(2000);
-
-		object.GetSensor("mod_l1").UpdateValue(20L);
-		object.GetSensor("mod_d1").UpdateValue(20.0);
+		object.GetSensor("mod_l1").Update(20L, 3);
+		object.GetSensor("mod_d1").Update(20.0, 3);
 
 		assertEquals(5.0, Value.Construct(rule_l.Compute(object, null)).GetDouble(), Value.EPSILON);
 		assertEquals(5.0, Value.Construct(rule_d.Compute(object, null)).GetDouble(), Value.EPSILON);
 
-		object.GetSensor("mod_l1").UpdateValue(20L);
-		object.GetSensor("mod_d1").UpdateValue(20.0);
+		object.GetSensor("mod_l1").Update(20L, 3);
+		object.GetSensor("mod_d1").Update(20.0, 3);
 
 		assertEquals(0.0, Value.Construct(rule_l.Compute(object, null)).GetDouble(), Value.EPSILON);
 		assertEquals(0.0, Value.Construct(rule_d.Compute(object, null)).GetDouble(), Value.EPSILON);
